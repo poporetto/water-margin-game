@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outlaws of the Marsh</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="game" width="960" height="720" tabindex="0"></canvas>
+<noscript>This game needs JavaScript.</noscript>
+
+<!-- core -->
+<script src="js/core/base.js"></script>
+<script src="js/core/input.js"></script>
+<script src="js/core/gfx.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/tiles.js"></script>
+<script src="js/core/sprites.js"></script>
+<script src="js/core/portraits.js"></script>
+<script src="js/core/monsters.js"></script>
+<!-- engine -->
+<script src="js/engine/ui.js"></script>
+<script src="js/engine/main.js"></script>
+<script src="js/engine/state.js"></script>
+<script src="js/engine/script.js"></script>
+<script src="js/engine/field.js"></script>
+<script src="js/engine/battle.js"></script>
+<script src="js/engine/duel.js"></script>
+<script src="js/engine/war.js"></script>
+<script src="js/engine/menu.js"></script>
+<script src="js/engine/shops.js"></script>
+<script src="js/engine/cards.js"></script>
+<script src="js/engine/game.js"></script>
+<!-- data -->
+<script src="assets/manifest.js"></script>
+<script src="js/data/music.js"></script>
+<script src="js/data/chars.js"></script>
+<script src="js/data/npcs.js"></script>
+<script src="js/data/items.js"></script>
+<script src="js/data/enemies.js"></script>
+<script src="js/data/unites.js"></script>
+<script src="js/data/chapters.js"></script>
+<script src="js/data/maps/_lib.js"></script>
+<script src="js/data/maps/world.js"></script>
+<script src="js/data/maps/kaifeng.js"></script>
+<script src="js/data/maps/shivillage.js"></script>
+<script src="js/data/maps/weizhou.js"></script>
+<!-- story: one file per chapter -->
+<script src="js/data/story/ch00_prologue.js"></script>
+<script src="js/data/story/ch01_ninedragons.js"></script>
+<script>WM.boot();</script>
+</body>
+</html>

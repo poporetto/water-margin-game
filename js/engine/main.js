@@ -1,0 +1,84 @@
+// Main loop and scene management.
+'use strict';
+(function () {
+  var G = WM.gfx, I = WM.input;
+  WM.time = 0;
+  var scene = null;
+
+  WM.scenes = WM.scenes || {};
+  WM.setScene = function (s, arg, noEnter) {
+    if (scene && scene.exit && !noEnter) scene.exit();
+    scene = s;
+    WM.scene = s;
+    if (s.enter && !noEnter) s.enter(arg);
+  };
+
+  // Promise helpers for fades used by scripts and transitions.
+  var tweens = [];
+  WM.tween = function (dur, fn) {
+    return new Promise(function (res) { tweens.push({ t: 0, dur: dur, fn: fn, res: res }); });
+  };
+  WM.fadeOut = function (dur, col) { G.fadeColor = col || '#000'; var f0 = G.fade; return WM.tween(dur == null ? 0.35 : dur, function (k) { G.fade = f0 + (1 - f0) * k; }); };
+  WM.fadeIn = function (dur) { var f0 = G.fade; return WM.tween(dur == null ? 0.35 : dur, function (k) { G.fade = f0 * (1 - k); }); };
+  WM.wait = function (sec) { return WM.tween(sec, function () {}); };
+
+  var last = 0, acc = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    var now = ts / 1000;
+    var dt = Math.min(0.05, now - (last || now));
+    last = now;
+    step(dt);
+  }
+  // One simulation + render step; exposed for automated testing (WM.step).
+  function step(dt) {
+    WM.time += dt;
+    I.beginFrame();
+    // tweens
+    for (var i = tweens.length - 1; i >= 0; i--) {
+      var tw = tweens[i]; tw.t += dt;
+      var k = Math.min(1, tw.t / tw.dur);
+      tw.fn(k);
+      if (k >= 1) { tweens.splice(i, 1); tw.res(); }
+    }
+    if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 8);
+    if (G.flash > 0) G.flash = Math.max(0, G.flash - dt * 3);
+    if (WM.state && scene && scene.countsTime) WM.state.playtime += dt;
+    try {
+      if (WM.ui.busy()) WM.ui.update(dt);
+      else if (scene && scene.update) scene.update(dt);
+      if (WM.ui.busy() && scene && scene.updateBackground) scene.updateBackground(dt);
+      G.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (scene && scene.draw) scene.draw();
+      WM.ui.draw();
+      WM.ui.drawToasts(dt);
+      G.overlay();
+      if (WM.debug && WM.debug.draw) WM.debug.draw();
+    } catch (e) {
+      console.error(e);
+      WM.lastError = e;
+      G.ctx.fillStyle = '#400'; G.ctx.fillRect(0, WM.H - 40, WM.W, 40);
+      G.text('Error: ' + e.message, 10, WM.H - 32, { size: 18 });
+    }
+    I.endFrame(dt);
+  }
+  WM.step = function (dt, n) { for (var i = 0; i < (n || 1); i++) step(dt || 1 / 60); };
+
+  WM.boot = function () {
+    var cv = document.getElementById('game');
+    G.init(cv);
+    function fit() {
+      var s = Math.min(window.innerWidth / WM.W, window.innerHeight / WM.H);
+      cv.style.width = Math.floor(WM.W * s) + 'px';
+      cv.style.height = Math.floor(WM.H * s) + 'px';
+    }
+    window.addEventListener('resize', fit); fit();
+    // optional art overrides listed in assets/manifest.js
+    var man = WM.ASSETS || {};
+    (man.portraits || []).forEach(function (id) { WM.portraits.tryOverride(id); });
+    (man.sprites || []).forEach(function (id) { WM.sprites.tryOverride(id); });
+    if (WM.validateData) WM.validateData();
+    WM.setScene(WM.scenes.title);
+    requestAnimationFrame(frame);
+  };
+})();

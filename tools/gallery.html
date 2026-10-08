@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Art Gallery</title>
+<style>body{background:#222;color:#ddd;font-family:sans-serif;margin:8px} canvas{image-rendering:pixelated;margin:4px;background:#556}</style></head>
+<body><div id="out"></div>
+<script src="../js/core/base.js"></script>
+<script src="../js/core/gfx.js"></script>
+<script src="../js/core/tiles.js"></script>
+<script src="../js/core/sprites.js"></script>
+<script src="../js/core/portraits.js"></script>
+<script>
+WM.time=0;
+var looks = {
+ lu:{skin:'#e0a878',hairStyle:'monk',beard:'full',beardColor:'#2a1a10',body:'#6a4a2a',trim:'#c89a4a',build:'big',weapon:'staff',beads:true,mark:'flowers',face:'round',brows:'thick'},
+ lin:{hairStyle:'helmet',helmColor:'#5a5a6a',beard:'short',body:'#2a3a5a',trim:'#c8c0a0',weapon:'spear',face:'long',eyes:'round',fierce:false},
+ song:{skin:'#c8946a',hairStyle:'scarf',band:'#1a1a22',beard:'mustache',body:'#5a2a2a',trim:'#d8b36a',build:'small',weapon:'sword',eyes:'narrow',face:'round'},
+ likui:{skin:'#6a4a34',hair:'#0e0a08',hairStyle:'wild',beard:'full',body:'#2a2a2a',trim:'#7a2a1a',build:'big',weapon:'axes',eyes:'round',brows:'thick',face:'square'},
+ yangzhi:{hairStyle:'helmet',beard:'short',body:'#3a4a3a',weapon:'saber',mark:'blue',face:'square',eyes:'sharp'},
+ hu:{hairStyle:'woman',hair:'#1a1210',body:'#b8384a',trim:'#f0d8a0',weapon:'twindao',dress:true,slim:true,build:'slim',face:'narrow',eyes:'normal',flower:'#e86a8a'},
+ guan:{skin:'#b8503a',hairStyle:'helmet',helmColor:'#3a6a3a',beard:'long',body:'#2a5a2a',weapon:'guandao',eyes:'narrow',face:'long'},
+ wusong:{hairStyle:'pilgrim',hair:'#18120c',beard:'none',body:'#2a2a3a',trim:'#a89a7a',weapon:'twindao',eyes:'sharp',face:'square',brows:'thick'}
+};
+var out=document.getElementById('out');
+for (var id in looks){ var s=WM.sprites.build(id,looks[id]); var c=WM.util.makeCanvas(s.width*3,s.height*3); var x=c.getContext('2d'); x.imageSmoothingEnabled=false; x.drawImage(s,0,0,s.width*3,s.height*3); out.appendChild(c);
+ ['normal','angry','smile','sad'].forEach(function(e){ var p=WM.portraits.build(looks[id],e); var pc=WM.util.makeCanvas(144,168); var px=pc.getContext('2d'); px.imageSmoothingEnabled=false; px.drawImage(p,0,0,144,168); out.appendChild(pc);});
+ out.appendChild(document.createElement('br'));}
+// tile sample map
+var rows=['^^^^^...TT~~~~','WOODW..:.T~~~~','.....:::..~B~~','..f..:==..~~r~','P.T..:==.M..mm','..I.L:==.MMp..','zzzz..==..j...','WDWW..==.FFF..'];
+var map={w:rows[0].length,h:rows.length,theme:'spring',get:function(x,y){ if(y<0||y>=rows.length||x<0||x>=rows[0].length) return null; return rows[y][x];}};
+var bk=WM.tiles.bake(map); var tc=WM.util.makeCanvas(bk.width*3,bk.height*3); var tx=tc.getContext('2d'); tx.imageSmoothingEnabled=false; tx.drawImage(bk,0,0,bk.width*3,bk.height*3);
+var ctx2=WM.util.makeCanvas(bk.width,bk.height).getContext('2d');
+out.appendChild(tc);
+// tall pass
+var tallc=WM.util.makeCanvas(bk.width,bk.height); var tcx=tallc.getContext('2d'); tcx.drawImage(bk,0,0);
+for(var y=0;y<map.h;y++)for(var x=0;x<map.w;x++){var d=WM.tiles.DEF[map.get(x,y)]; if(d&&d.tall) d.tall(tcx,x*16,y*16,x,y,WM.tiles.THEMES.spring,map);}
+var t2=WM.util.makeCanvas(bk.width*3,bk.height*3); var t2x=t2.getContext('2d'); t2x.imageSmoothingEnabled=false; t2x.drawImage(tallc,0,0,bk.width*3,bk.height*3); out.appendChild(t2);
+</script></body></html>
