@@ -72,6 +72,15 @@ function checkSpeaker(who) {
   if (expr && EXPR.indexOf(expr) < 0) err('unknown expression "' + expr + '"');
 }
 
+// ---------- the dead and the departed may not appear (except as ghosts: flag ghost:<id>) ----------
+function gone(id, what) {
+  if (!id || typeof id !== 'string' || !WM.state) return;
+  id = id.split(':')[0];
+  if (WM.state.flags['ghost:' + id] || WM.state.flags['present:' + id]) return;   // a ghost, or a departed hero met where he now lives
+  if (WM.state.dead[id] || (id === 'chaogai' && WM.state.flags.chaogai_dead)) err(what + ': ' + id + ' is dead');
+  else if (WM.state.flags['away:' + id]) err(what + ': ' + id + ' has left (away:' + id + ')');
+}
+
 // ---------- mock API ----------
 const realApi = WM.script.makeApi({});
 const resolved = Promise.resolve();
@@ -79,7 +88,7 @@ function mkApi(ctx) {
   const s = {
     S: S, ctx: ctx,
     get state() { return WM.state; },
-    say(who, text) { checkSpeaker(who); if (!text) err('empty say'); return resolved; },
+    say(who, text) { checkSpeaker(who); gone(who, 'say'); if (!text) err('empty say'); return resolved; },
     narrate(text) { if (!text) err('empty narrate'); return resolved; },
     ask(who, text, options) { checkSpeaker(who); return Promise.resolve(0); },
     choose(options) { return Promise.resolve(0); },
@@ -106,6 +115,7 @@ function mkApi(ctx) {
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); },
     lie(key) { if (!findActor(key)) err('lie: no actor "' + key + '"'); },
     spawn(key, who, tx, ty) {
+      gone(who, 'spawn');
       if (typeof who === 'string' && !D.chars[who] && !D.npcs[who]) err('spawn: unknown "' + who + '"');
       if (tile(cur.map, tx, ty) == null) err('spawn "' + key + '" outside map ' + cur.map + ' (' + tx + ',' + ty + ')');
       temp[key] = { x: tx, y: ty };
@@ -124,8 +134,8 @@ function mkApi(ctx) {
       return resolved;
     },
     battle(troop) { const t = typeof troop === 'string' ? D.troops[troop] : troop; if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
-    duel(id) { if (!D.duels[id]) err('unknown duel ' + id); else { const d = D.duels[id]; if (!D.chars[d.hero]) err('duel hero unknown ' + d.hero); if (!D.chars[d.foe] && !D.npcs[d.foe]) err('duel foe unknown ' + d.foe); } return Promise.resolve('win'); },
-    war(id) { if (!D.wars[id]) err('unknown war ' + id); else { D.wars[id].player.forEach((u) => { if (!D.chars[u.leader]) err('war ' + id + ' unknown leader ' + u.leader); (u.support || []).forEach((x) => { if (!D.chars[x]) err('war ' + id + ' unknown support ' + x); }); }); } return Promise.resolve('win'); },
+    duel(id, opt) { if (!D.duels[id]) err('unknown duel ' + id); else { const d = D.duels[id]; gone((opt && opt.hero) || d.hero, 'duel ' + id); gone(d.foe, 'duel ' + id); if (!D.chars[d.hero]) err('duel hero unknown ' + d.hero); if (!D.chars[d.foe] && !D.npcs[d.foe]) err('duel foe unknown ' + d.foe); } return Promise.resolve('win'); },
+    war(id) { if (!D.wars[id]) err('unknown war ' + id); else { D.wars[id].player.forEach((u) => { gone(u.leader, 'war ' + id); (u.support || []).forEach((x) => gone(x, 'war ' + id)); if (!D.chars[u.leader]) err('war ' + id + ' unknown leader ' + u.leader); (u.support || []).forEach((x) => { if (!D.chars[x]) err('war ' + id + ' unknown support ' + x); }); }); } return Promise.resolve('win'); },
     join(id, opt) {
       if (!D.chars[id]) { err('join unknown ' + id); return resolved; }
       if (joins[id]) err('duplicate join of ' + id + ' (first in ' + joins[id] + ')');
@@ -134,10 +144,10 @@ function mkApi(ctx) {
       return resolved;
     },
     joinMany(ids, opt) { ids.forEach((id) => s.join(id, opt)); return resolved; },
-    party(ids) { ids.forEach((id) => { if (!D.chars[id]) err('party unknown ' + id); }); S.setParty(ids); },
-    addParty(id) { if (!D.chars[id]) { err('addParty unknown ' + id); return; } if (!WM.state.chars[id]) S.initChar(id); S.addToParty(id); },
+    party(ids) { ids.forEach((id) => { gone(id, 'party'); if (!D.chars[id]) err('party unknown ' + id); }); S.setParty(ids); },
+    addParty(id) { gone(id, 'addParty'); if (!D.chars[id]) { err('addParty unknown ' + id); return; } if (!WM.state.chars[id]) S.initChar(id); S.addToParty(id); },
     removeParty(id) { S.removeFromParty(id); if (WM.state.leader === id && WM.state.party.length) WM.state.leader = WM.state.party[0]; },
-    setLeader(id) { if (!D.chars[id]) err('setLeader unknown ' + id); WM.state.leader = id; },
+    setLeader(id) { gone(id, 'setLeader'); if (!D.chars[id]) err('setLeader unknown ' + id); WM.state.leader = id; },
     inParty(id) { return WM.state.party.indexOf(id) >= 0; },
     level(id, lv) { if (!D.chars[id]) { err('level unknown ' + id); return; } const c = WM.state.chars[id] || S.initChar(id, lv); if (c.lv < lv) { c.lv = lv; S.restore(id); } },
     heal() { S.restoreParty(); },
@@ -281,6 +291,8 @@ async function main() {
   const st = D.start;
   S.setParty(st.party); WM.state.leader = st.party[0];
   cur = { map: st.map, x: st.x, y: st.y }; WM.state.map = st.map;
+  // Stars dead, and Stars departed (away:), at each chapter end (docs/STORY.md)
+  const EXPECT_DEAD = { 19: 0, 22: 0, 23: 70, 24: 75 }, EXPECT_AWAY = { 19: 0, 22: 1, 23: 11 };
   const EXPECT_STARS = { 5: 11, 8: 20, 9: 39, 10: 42, 11: 48, 12: 60, 13: 64, 14: 80, 15: 87, 16: 88, 17: 102, 18: 108 }, checkedTotals = {};
   let lastProgress = '';
   function checkTotals() {
@@ -293,7 +305,15 @@ async function main() {
       }
     }
   }
-  global.__checkTotals = checkTotals;
+  function checkGone() {
+    for (const n in EXPECT_DEAD) if (!checkedTotals['d' + n] && S.has('ch' + n + '_done')) {
+      checkedTotals['d' + n] = true;
+      const dead = D.charOrder.filter((id) => WM.state.dead[id]).length, away = D.charOrder.filter((id) => !WM.state.dead[id] && WM.state.flags['away:' + id]).length;
+      if (dead !== EXPECT_DEAD[n]) errors.push('Dead Stars after chapter ' + n + ': ' + dead + ', expected ' + EXPECT_DEAD[n]);
+      if (EXPECT_AWAY[n] != null && away !== EXPECT_AWAY[n]) errors.push('Departed Stars after chapter ' + n + ': ' + away + ', expected ' + EXPECT_AWAY[n]);
+    }
+  }
+  global.__checkTotals = function () { checkTotals(); checkGone(); };
   for (let iter = 0; iter < 5000; iter++) {
     if (S.has('ending_done')) break;
     // 1. auto events on the current map

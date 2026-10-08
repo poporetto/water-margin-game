@@ -173,6 +173,7 @@
       s.unflag('away:shijin');
       await s.join('dongping');
       s.flag('ch18_dongping');
+      await s.narrate('Song Jiang had taken his city first. By the lots, the seat of Liangshan stayed his — though he said nothing of it, and only asked after Lu Junyi.');
       await s.narrate('Then Bai Sheng came running: Lu Junyi had been beaten twice at Dongchang. Its general, Zhang Qing, the Featherless Arrow, never missed with a stone.');
       s.party(['songjiang', 'lujunyi', 'dongping', 'guansheng', 'luzhishen', 'wusong']); s.setLeader('songjiang');
       await s.warp('dongchang', 2, 12, 'right');
@@ -193,7 +194,7 @@
       await s.say('zhangqing', '...I will. And let me bring you one more: there is a horse-doctor in Dongchang, Huangfu Duan, the Purple-Bearded Earl. There is no sickness of a horse he cannot cure.');
       s.despawn('zq');
       await s.joinMany(['zhangqing', 'gongwang', 'dingdesun', 'huangfuduan']);
-      await s.narrate('So Dongchang fell. Its prefect, who was an honest man, was spared, and the grain was shared out among the people. When the army had returned to the mountain, Song Jiang counted the chiefs in the Hall of Loyalty. There were one hundred and eight.');
+      await s.narrate('So Dongchang fell, and Liu Tang was brought out of its prison unharmed. Its prefect, who was an honest man, was spared, and the grain was shared out among the people. When the army had returned to the mountain, Song Jiang counted the chiefs in the Hall of Loyalty. There were one hundred and eight.');
       s.flag('ch18_done');
       await s.endChapter();
       if (WM.data.chapters[19].begin) await WM.data.chapters[19].begin(s);

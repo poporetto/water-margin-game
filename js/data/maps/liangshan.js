@@ -41,7 +41,8 @@
   WM.data.lsSlots = SLOTS;
 
   function level() { return WM.castle ? WM.castle.level() : 1; }
-  function open(slot) { var sl = SLOTS[slot]; return sl.always || (WM.castle && WM.castle.has(sl.keeper)); }
+  // a workshop is built once its keeper joins; after the Grand Assembly the building stands even if the keeper is gone
+  function open(slot) { var sl = SLOTS[slot]; return sl.always || (WM.castle && WM.castle.has(sl.keeper)) || (S.has('grand_assembly') && S.isRecruited(sl.keeper)); }
 
   function build() {
     var lv = level();

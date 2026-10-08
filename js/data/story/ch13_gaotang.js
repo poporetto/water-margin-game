@@ -308,6 +308,7 @@
   ]);
   WM.defEvents('erxian_in', [
     { id: 'ch13_mothergs', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_erxian') && WM.state.x < 10; }, run: async function (s) {
+      s.flag('present:gongsunsheng');
       s.spawn('gm', 'gongsunmother', 4, 4, 'down');
       await s.say('gongsunmother', 'My son? He has gone travelling. He isn\'t here.');
       await s.say('daizong', '(whispering) Li Kui — she\'s lying. Frighten her a little.');
@@ -340,6 +341,7 @@
       await s.say('gongsunsheng', 'I will not forget, Master.');
       s.despawn('luo'); s.despawn('gs');
       s.unflag('away:gongsunsheng');
+      s.unflag('present:gongsunsheng');
       WM.unlock('wugang');
       s.flag('ch13_gsback');
       await s.narrate('Gongsun Sheng and Dai Zong went ahead by Dai Zong\'s magic. Li Kui, who had had enough of magic, walked.');

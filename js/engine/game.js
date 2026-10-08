@@ -21,6 +21,7 @@
   C.THRESH = [0, 20, 40, 60, 85, 105];
   C.level = function () {
     if (!WM.state) return 1;
+    if (WM.state.flags.grand_assembly) return 5;   // the fortress stays complete even as the Stars fall in the south
     var n = S.starCount(), l = 1;
     for (var i = 1; i < C.THRESH.length; i++) if (n >= C.THRESH[i]) l = i + 1;
     return Math.min(5, l);

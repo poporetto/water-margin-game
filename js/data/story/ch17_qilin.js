@@ -302,10 +302,11 @@
       await s.join('suochao');
       s.music('sad');
       await s.narrate('But Song Jiang fell ill. A boil rose on his back, and he burned with fever. One night as he lay half-asleep, a cold wind blew through the tent.');
+      s.flag('ghost:chaogai');
       s.spawn('cg', 'chaogai', 15, 6, 'down');
       await s.say('chaogai:sad', 'Brother... you have a hundred days of calamity upon you, and only a man of the south, the Earth Spirit Star, can save you. Withdraw while you can.');
       await s.say('songjiang:shock', 'Brother Chao Gai! Brother —');
-      s.despawn('cg');
+      s.despawn('cg'); s.unflag('ghost:chaogai');
       await s.say('zhangshun', 'The Earth Spirit Star... there is a physician in Jiankang, An Daoquan, the Miraculous Doctor. He cured my mother once. Let me go and fetch him.');
       s.party(['zhangshun']); s.setLeader('zhangshun'); s.level('zhangshun', 30); s.flag('protagonist', 'zhangshun');
       s.flag('ch17_doctor');
