@@ -59,7 +59,9 @@
   g.vline(32, 9, 13, ':');
   g.scatter('T', 0.06, 131, '.', [1, 1, 42, 30]); g.scatter('f', 0.03, 132, '.', [1, 1, 42, 30]);
   L.clearAround(g, ':', 'T', '.');
-  WM.defMap('cangzhou', { name: 'Cangzhou', theme: 'snow', music: 'snow', rows: g.rows(), spawn: [21, 29], battleBg: 'snow',
+  // Lin Chong is here in the snows of winter; Zhu Tong's exile (chapter 13) falls in the seventh month
+  var summer = function () { return WM.S.has('ch12_done'); };
+  WM.defMap('cangzhou', { name: 'Cangzhou', get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town' : 'snow'; }, rows: g.rows(), spawn: [21, 29], get battleBg() { return summer() ? 'town' : 'snow'; },
     exits: [WM.toWorld('cangzhou', 20, 31, 4, 1), { x: 43, y: 14, w: 1, h: 3, to: 'fodder', tx: 1, ty: 12, dir: 'right' }] });
   var gi = L.grid(56, 12, 'x');
   var gR = { camp: gi.room(1, 1, 12, 8, { floor: 'N' }), tw: gi.room(14, 1, 10, 8, { floor: 'N' }), lix: gi.room(25, 1, 10, 8), shop: gi.room(36, 1, 8, 8), inn: gi.room(45, 1, 10, 8) };
@@ -68,7 +70,7 @@
   gi.stamp(26, 3, ['h..L...h', '........', '.t..t..t', 'cc......']);
   gi.stamp(37, 3, ['hhhh..', '......', 'ccc...']);
   gi.stamp(46, 3, ['k.k.k...', '........', 'ccc.....']);
-  WM.defMap('cangzhou_in', { name: '', interior: true, theme: 'snow', music: 'snow', rows: gi.rows(), spawn: [6, 7] });
+  WM.defMap('cangzhou_in', { name: '', interior: true, get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town' : 'snow'; }, rows: gi.rows(), spawn: [6, 7] });
   [[camp, gR.camp], [tw, gR.tw], [lix, gR.lix], [shop, gR.shop], [inn, gR.inn]].forEach(function (p) { L.link({ map: 'cangzhou', x: p[0].x, y: p[0].y }, { map: 'cangzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.cangzhou = { rooms: gR };
   WM.defEvents('cangzhou_in', [

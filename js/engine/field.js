@@ -27,7 +27,7 @@
         return ch === undefined || ch === ' ' ? (this.def.fill || '.') : ch;
       }
     };
-    var key = def.cacheKey ? def.cacheKey() : 'static';
+    var key = (def.cacheKey ? def.cacheKey() : 'static') + '|' + m.theme;
     if (!def._baked || def._bakedKey !== key) { def._baked = T.bake(m); def._bakedKey = key; }
     m.baked = def._baked;
     m.talls = [];

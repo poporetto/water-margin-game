@@ -113,9 +113,11 @@
   c.scatter('T', 0.07, 221, '.', [1, 1, 42, 32]); c.scatter('f', 0.04, 222, '.', [1, 1, 42, 32]);
   L.clearAround(c, ':', 'T', '.'); L.clearAround(c, '=', 'T', '.');
   c.set(18, 30, 'I');
+  var stage = c.house(27, 28, 11, 4, { roof: 'z', wall: 'R', door: 5, windows: [2, 8] }); c.set(26, 29, 'Y'); c.set(38, 29, 'Y');   // the theatre (勾欄) the Bai family open in chapter 13
   WM.defMap('yuncheng', { name: 'Yuncheng County', theme: 'summer', music: 'town', rows: c.rows(), spawn: [21, 31], battleBg: 'town', exits: [WM.toWorld('yuncheng', 20, 33, 4, 1)] });
-  var ci = L.grid(66, 12, 'x');
-  var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(60, 1, 6, 8) };
+  var ci = L.grid(80, 12, 'x');
+  var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(60, 1, 6, 8), stage: ci.room(67, 1, 12, 10) };
+  ci.stamp(68, 3, ['..KKKKKKK.', '..KKKKKKK.', '..........', '.t.t.t.t..', '.t.t.t.t..', '..........']);
   ci.stamp(2, 3, ['h...UU....h...', '....AA........', '..t.....t.....', '..t.....t.....']);
   ci.stamp(19, 3, ['h..L...h', '.t..t...', '........', 'cc......']);
   ci.stamp(30, 3, ['k...h...X.', '........X.', '..t.....n.', '........Xk', 'j.......X.']);
@@ -123,8 +125,8 @@
   ci.stamp(54, 3, ['hhhh.', '.....', 'ccc..']);
   ci.stamp(61, 3, ['hhh.', '....', 'cc..']);
   WM.defMap('yuncheng_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: ci.rows(), spawn: [9, 9] });
-  [[office, cR.office], [tea, cR.tea], [yan, cR.yan], [inn, cR.inn], [shop, cR.shop], [store2, cR.store2]].forEach(function (p) { L.link({ map: 'yuncheng', x: p[0].x, y: p[0].y }, { map: 'yuncheng_in', x: p[1].x, y: p[1].y }); });
-  WM.data.yuncheng = { rooms: cR, doors: { office: office, tea: tea, yan: yan, inn: inn, shop: shop, store2: store2, wine: wine } };
+  [[office, cR.office], [tea, cR.tea], [yan, cR.yan], [inn, cR.inn], [shop, cR.shop], [store2, cR.store2], [stage, cR.stage]].forEach(function (p) { L.link({ map: 'yuncheng', x: p[0].x, y: p[0].y }, { map: 'yuncheng_in', x: p[1].x, y: p[1].y }); });
+  WM.data.yuncheng = { rooms: cR, doors: { office: office, tea: tea, yan: yan, inn: inn, shop: shop, store2: store2, wine: wine, stage: stage } };
   WM.defEvents('yuncheng_in', [
     L.inn('ycinn', 45, 4, 20), L.save('ycrec', 49, 6),
     L.shop('ycshop', 56, 4, 'yuncheng', 'shopkeep', 'Welcome to Yuncheng. We have everything for the road.')
