@@ -84,9 +84,11 @@ Afterwards:
 
 ## How faithful each chapter is
 
-Every chapter was written from the 120-chapter text on Wikisource (水滸傳 120回本). From Chapter 10 on, a fact sheet
-was drawn up first: who does what, with which weapon, and who kills whom. The dialogue paraphrases the novel. It is
-not a translation.
+Chapters 10–24 were written from fact sheets drawn from the 120-chapter text on Wikisource (水滸傳 120回本): who does
+what, with which weapon, and who kills whom, fetched chapter by chapter before each script was written. Chapters 0–9
+were written earlier, from the sources listed below and from knowledge of the novel. They have not been re-checked
+against the text line by line, and they are the most likely place for a small error of detail. The dialogue
+paraphrases the novel. It is not a translation.
 
 | Game ch. | Played in full | Condensed into narration |
 |---|---|---|

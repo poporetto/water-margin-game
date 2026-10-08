@@ -77,7 +77,7 @@
     await s.chapter(21);
     s.party(['songjiang', 'lujunyi', 'wuyong', 'gongsunsheng', 'guansheng', 'zhangqing']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
     ['songjiang', 'lujunyi', 'wuyong', 'gongsunsheng', 'guansheng', 'zhangqing', 'linchong', 'dongping', 'huarong'].forEach(function (id) { s.level(id, 36); });
-    await s.narrate('The ministers at court wanted the men of Liangshan scattered, or dead. But the Liao had crossed the northern border, and Marshal Su Yuanjing told the emperor: "These men are bound together like brothers. Send them north." The emperor made Song Jiang Vanguard Commander against the Liao. Song Jiang buried Chao Gai\'s spirit tablet, sent the families home, and had the forts of Liangshan pulled down.');
+    await s.narrate('The ministers at court wanted the men of Liangshan scattered, or dead. But the Liao had crossed the northern border, and Marshal Su Yuanjing told the emperor: "These men are bound together like brothers. Send them north." The emperor made Song Jiang Vanguard Commander against the Liao. Song Jiang buried Chao Gai\'s spirit tablet, sent the families home, and left the stronghold in the care of a few old soldiers.');
     await s.warp('roadinn', 12, 8, 'up', { noFade: true });
     s.spawn('rc', 'rationclerk', 12, 6, 'down'); s.spawn('sd', 'soldier', 14, 8, 'left');
     await s.fadeIn(1);

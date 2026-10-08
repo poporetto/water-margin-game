@@ -18,7 +18,7 @@
   WM.enemy('zj_ambush', 'Zhu Village Spearman', 23, WM.hum(WM.enemyLooks.soldier), { range: 'M', exp: 110, drops: [['medicine', 0.12]] });
   WM.enemy('zj_archer', 'Zhu Village Archer', 23, WM.hum(WM.enemyLooks.archer), { hp: 0.8, range: 'L', fx: 'arrow', exp: 110 });
   WM.enemy('zj_guard', 'Zhu Manor Guard', 24, WM.hum(WM.enemyLooks.soldier), { range: 'M', exp: 120, drops: [['medicine', 0.15]] });
-  WM.enemy('dz_tiger', 'Tiger of Dengzhou Hill', 23, WM.beast('tiger'), { hp: 2.1, atk: 1.05, spd: 1.2, exp: 400, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.4, fx: 'claw', sfx: 'roar' }] });
+  WM.enemy('dz_tiger', 'Tiger of Dengzhou Hill', 23, WM.beast('tiger'), { hp: 1.9, atk: 1.0, spd: 1.2, exp: 400, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.4, fx: 'claw', sfx: 'roar' }] });
   WM.enemy('dz_guard', 'Dengzhou Jailer', 22, WM.hum(WM.enemyLooks.constable), { exp: 100, drops: [['medicine', 0.12]] });
   WM.enemy('baoji_foe', 'Bao Ji', 24, WM.hum(WM.data.npcs.baoji.look), { hp: 2.2, atk: 1.0, exp: 380, gold: 300, boss: true, drops: [['ginseng', 1]], skills: [{ name: 'Jailer\'s Cudgel', chance: 0.3, type: 'phys', power: 1.4, fx: 'blunt' }] });
   var T = WM.data.troops;

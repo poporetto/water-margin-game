@@ -46,6 +46,21 @@
   // ---------- characters ----------
   S.def = function (id) { return WM.data.chars[id]; };
 
+  // the weapon level and plain gear a hero of this level has at the least (recruits join with it; the story keeps
+  // veterans up to it whenever it raises their level; the smith takes weapons beyond it)
+  S.floorWlv = function (lv) { return Math.max(2, Math.min(14, Math.floor(lv / 4) + 2)); };
+  S.kit = function (lv) {
+    return { body: lv >= 20 ? 'leather' : lv >= 10 ? 'quilted' : lv >= 4 ? 'robe' : null, head: lv >= 18 ? 'leathercap' : lv >= 8 ? 'cap' : null };
+  };
+  S.catchUp = function (id) {
+    var c = WM.state && WM.state.chars[id]; if (!c) return;
+    c.wlv = Math.max(c.wlv || 1, S.floorWlv(c.lv));
+    var kit = S.kit(c.lv), IT = WM.data.items;
+    ['body', 'head'].forEach(function (slot) {
+      var want = kit[slot], have = c.equip[slot];
+      if (want && (!have || ((IT[have] && IT[have].def) || 0) < IT[want].def)) c.equip[slot] = want;
+    });
+  };
   S.initChar = function (id, lv) {
     var d = S.def(id);
     if (!d) throw new Error('Unknown character ' + id);
@@ -53,15 +68,13 @@
     if (st.chars[id]) return st.chars[id];
     var c = {
       id: id, lv: lv || d.lv || 1, exp: 0,
-      wlv: d.wlv || Math.max(2, Math.min(14, Math.floor((lv || d.lv || 1) / 4) + 2)),
+      wlv: d.wlv || S.floorWlv(lv || d.lv || 1),
       equip: { head: null, body: null, shield: null, acc: null },
       tal: { head: null, rhand: null, lhand: null },
       status: {}
     };
     // as in Suikoden II, a hero joins already dressed for the road: plain gear that suits their level
-    var L0 = c.lv;
-    c.equip.body = L0 >= 20 ? 'leather' : L0 >= 10 ? 'quilted' : L0 >= 4 ? 'robe' : null;
-    c.equip.head = L0 >= 18 ? 'leathercap' : L0 >= 8 ? 'cap' : null;
+    var kit = S.kit(c.lv); c.equip.body = kit.body; c.equip.head = kit.head;
     if (d.equip) for (var k in d.equip) c.equip[k] = d.equip[k];
     if (d.talisman) c.tal.rhand = d.talisman;
     if (d.talismanHead) c.tal.head = d.talismanHead;

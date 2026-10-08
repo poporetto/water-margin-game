@@ -149,7 +149,7 @@ function mkApi(ctx) {
     removeParty(id) { S.removeFromParty(id); if (WM.state.leader === id && WM.state.party.length) WM.state.leader = WM.state.party[0]; },
     setLeader(id) { gone(id, 'setLeader'); if (!D.chars[id]) err('setLeader unknown ' + id); WM.state.leader = id; },
     inParty(id) { return WM.state.party.indexOf(id) >= 0; },
-    level(id, lv) { if (!D.chars[id]) { err('level unknown ' + id); return; } const c = WM.state.chars[id] || S.initChar(id, lv); if (c.lv < lv) { c.lv = lv; S.restore(id); } },
+    level(id, lv) { if (!D.chars[id]) { err('level unknown ' + id); return; } const c = WM.state.chars[id] || S.initChar(id, lv); if (c.lv < lv) { c.lv = lv; S.catchUp(id); S.restore(id); } },
     heal() { S.restoreParty(); },
     kill(id) { if (!D.chars[id]) err('kill unknown ' + id); WM.state.dead[id] = true; S.removeFromParty(id); return resolved; },
     flag(k, v) { return S.flag(k, v === undefined ? true : v); },
@@ -159,7 +159,15 @@ function mkApi(ctx) {
     take(item, n) { if (!D.items[item]) err('take unknown item ' + item); else S.take(item, n || 1); },
     count(item) { return S.count(item); },
     gold(n) { WM.state.gold = Math.max(0, WM.state.gold + n); return resolved; },
-    chapter(n) { if (!D.chapters[n]) err('unknown chapter ' + n); WM.state.chapter = n; if (VERBOSE) console.log('== Chapter ' + n + ' ' + (D.chapters[n] || {}).short); return resolved; },
+    chapter(n) {
+      // dump the party's real state (what the story alone leaves you: no grinding, no smith) for balance testing
+      if (process.argv.includes('--dump')) {
+        const fs = require('fs'), path = require('path'), dir = path.join(__dirname, 'out');
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+        const snap = {}; Object.keys(WM.state.chars).forEach((id) => { const c = WM.state.chars[id]; snap[id] = { lv: c.lv, wlv: c.wlv, equip: c.equip }; });
+        fs.writeFileSync(path.join(dir, 'chars_ch' + n + '.json'), JSON.stringify({ chars: snap, smithMax: WM.castle && WM.castle.smithMax ? WM.castle.smithMax() : null }));
+      }
+      if (!D.chapters[n]) err('unknown chapter ' + n); WM.state.chapter = n; if (VERBOSE) console.log('== Chapter ' + n + ' ' + (D.chapters[n] || {}).short); return resolved; },
     card() { return resolved; }, credits() { return resolved; }, endChapter() { if (global.__checkTotals) global.__checkTotals(); return resolved; },
     shop(id) { if (!D.shops[id]) err('unknown shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.items[i]) err('shop ' + id + ' unknown item ' + i); }); return resolved; },
     inn() { S.restoreAll(); return Promise.resolve(true); }, smith() { return resolved; },

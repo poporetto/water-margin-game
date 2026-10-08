@@ -12,7 +12,7 @@
     try { p = Promise.resolve(fn(s)); } catch (e) { p = Promise.reject(e); }
     return p.catch(function (e) { console.error('Script error', e); WM.lastError = e; })
       .then(function () {
-        SC.running--; WM.input.clear();
+        SC.running = Math.max(0, SC.running - 1); WM.input.clear();
         var F = WM.field;
         if (WM.scene === F && F.map && !SC.running) { F.refreshActors(); F.pendingAuto = true; }
       });
@@ -153,7 +153,7 @@
       removeParty: function (id) { S.removeFromParty(id); if (WM.state.leader === id && WM.state.party.length) F().setLeader(WM.state.party[0]); },
       setLeader: function (id) { WM.state.leader = id; if (F().player) F().setLeader(id); },
       inParty: function (id) { return WM.state.party.indexOf(id) >= 0; },
-      level: function (id, lv) { var c = WM.state.chars[id] || S.initChar(id, lv); if (c.lv < lv) { c.lv = lv; S.restore(id); } },
+      level: function (id, lv) { var c = WM.state.chars[id] || S.initChar(id, lv); if (c.lv < lv) { c.lv = lv; S.catchUp(id); S.restore(id); } },
       heal: function () { S.restoreParty(); WM.audio.sfx('heal'); },
       kill: function (id) { // story death
         WM.state.dead[id] = true; S.removeFromParty(id);
