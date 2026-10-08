@@ -25,7 +25,7 @@
   // ====================== 36 Heavenly Spirits ======================
   H(1, 'songjiang', '宋江', 'Song Jiang', 'Timely Rain', '天魁星 Tiankui', 'Chief Star of Heaven', 'leader', W('Sword', 'S', 0.9),
     { skin: SK.dark, hairStyle: 'scarf', band: '#1c1c24', beard: 'mustache', body: '#5a2626', trim: '#d8b36a', build: 'small', weapon: 'sword', face: 'round', eyes: 'narrow', brows: 'thick' },
-    { head: 'heavenbook', role: 'Commander of Liangshan', war: { atk: 5, def: 7, type: 'inf', ability: 'morale' }, mul: { hp: 1.1 },
+    { role: 'Commander of Liangshan', war: { atk: 5, def: 7, type: 'inf', ability: 'morale' }, mul: { hp: 1.1 },
       bio: 'A county clerk of Yuncheng, dark of face and short of stature, famed across the land as "Timely Rain" for his generosity to anyone in need. Loyalty and filial piety rule him, even when they pull him two ways.' });
   H(2, 'lujunyi', '盧俊義', 'Lu Junyi', 'Jade Qilin', '天罡星 Tiangang', 'Ruling Star of Heaven', 'warrior', W('Steel Spear', 'M', 1.15),
     { skin: SK.fair, hairStyle: 'scarf', band: '#e8e0d0', beard: 'short', body: '#e8e4dc', trim: '#3a6a9a', build: 'big', weapon: 'spear', face: 'square', eyes: 'sharp' },
