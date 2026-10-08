@@ -110,9 +110,9 @@
     G.text('OUTLAWS OF THE MARSH', 480, 378, { size: 40, bold: true, align: 'center', color: '#f2e6c8' });
     G.text('The One Hundred and Eight Stars', 480, 426, { size: 22, align: 'center', color: '#c8b890' });
     c.globalAlpha = 1;
-    if (T.mode === 'press' && T.t > 1.5) { c.globalAlpha = 0.5 + 0.5 * Math.sin(T.t * 3); G.text('Press Z / Enter', 480, 520, { size: 24, align: 'center', color: '#f2e6c8' }); c.globalAlpha = 1; }
+    if (T.mode === 'press' && T.t > 1.5) { c.globalAlpha = 0.5 + 0.5 * Math.sin(T.t * 3); G.text(WM.input.lastDevice === 'touch' ? 'Tap A' : 'Press Z / Enter', 480, 520, { size: 24, align: 'center', color: '#f2e6c8' }); c.globalAlpha = 1; }
     if (T.mode === 'menu' || (T.mode === 'busy' && T.list)) T.list.draw();
-    G.text('Z / Enter: confirm   X / Esc: cancel & menu   Shift: dash   Arrows / WASD: move', 480, 690, { size: 15, align: 'center', color: 'rgba(240,230,200,0.5)' });
+    G.text(WM.input.lastDevice === 'touch' ? 'A: confirm   B: cancel   Menu: menu   hold Dash to run   L / R: turn pages' : 'Z / Enter: confirm   X / Esc: cancel & menu   Shift: dash   Arrows / WASD: move', 480, 690, { size: 15, align: 'center', color: 'rgba(240,230,200,0.5)' });
   };
 
   // ---------- chapter card ----------

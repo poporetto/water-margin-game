@@ -31,6 +31,8 @@
     WM.audio && WM.audio.unlock();
   }
   function release(b) { held[b] = false; }
+  I.press = function (b, device) { press(b); if (device) I.lastDevice = device; };   // used by the touch controls
+  I.release = release;
 
   window.addEventListener('keydown', function (e) {
     var b = KEYMAP[e.code];

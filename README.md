@@ -30,6 +30,8 @@ Then open <http://localhost:8766>.
 
 A copy of the playable page lives in `docs/` for GitHub Pages (Settings → Pages → deploy from branch, `/docs` folder). After changing the game, refresh it with `tools/build.sh`.
 
+On phones and tablets, on-screen controls appear at the first touch: a D-pad, A (confirm), B (cancel), Menu, Dash, and L/R. In portrait the game sits above the controls. Landscape gives a larger picture, with the controls in the side bars.
+
 Saves use the browser's `localStorage`, with 8 slots. Record keepers (the scribe NPCs) and the Liangshan records office offer saves.
 
 Debug mode is `?debug`. It lets you press F2 to jump to any chapter, warp, level up, and recruit everyone.

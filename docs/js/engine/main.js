@@ -67,12 +67,28 @@
   WM.boot = function () {
     var cv = document.getElementById('game');
     G.init(cv);
+    // Fit the 4:3 canvas to the window. With touch controls on: in portrait the game sits at the top and the pad goes
+    // below it; in landscape the pad and buttons sit in the side bars (or over the game's lower corners if there is
+    // no room for bars).
     function fit() {
-      var s = Math.min(window.innerWidth / WM.W, window.innerHeight / WM.H);
-      cv.style.width = Math.floor(WM.W * s) + 'px';
-      cv.style.height = Math.floor(WM.H * s) + 'px';
+      var vw = window.innerWidth, vh = window.innerHeight, b = document.body, w;
+      b.classList.remove('portrait', 'landscape', 'overlay');
+      if (!(WM.touch && WM.touch.on)) w = Math.min(vw, vh * 4 / 3);
+      else if (vh > vw) {
+        b.classList.add('portrait');
+        w = Math.min(vw, (vh - Math.max(230, vw * 0.62)) * 4 / 3);
+      } else {
+        b.classList.add('landscape');
+        var side = Math.min(200, vw * 0.215);
+        w = Math.min(vw - 2 * side, vh * 4 / 3);
+        if (w < vh * 4 / 3 * 0.8) { w = Math.min(vw, vh * 4 / 3); b.classList.add('overlay'); }
+      }
+      w = Math.max(160, Math.floor(w));
+      cv.style.width = w + 'px';
+      cv.style.height = Math.floor(w * 3 / 4) + 'px';
     }
-    window.addEventListener('resize', fit); fit();
+    WM.fit = fit;
+    window.addEventListener('resize', fit); window.addEventListener('orientationchange', function () { setTimeout(fit, 200); }); fit();
     // optional art overrides listed in assets/manifest.js
     var man = WM.ASSETS || {};
     (man.portraits || []).forEach(function (id) { WM.portraits.tryOverride(id); });
