@@ -121,7 +121,7 @@
   var I = L.grid(70, 36, 'x');
   var ROOMS = {};
   ROOMS.hall = I.room(1, 1, 30, 16, { floor: 'N' });
-  I.stamp(2, 3, ['h....L.....AAAA.....L.....h.', '...........UUUU.............', '............................', '....KKKKKKKKKKKKKKKKKKKK....', '....KKKKKKKKKKKKKKKKKKKK....', '..t.KKKKKKKKKKKKKKKKKKKK.t..', '..t.KKKKKKKKKKKKKKKKKKKK.t..', '....KKKKKKKKKKKKKKKKKKKK....', '....KKKKKKKKKKKKKKKKKKKK....', '............................', 'j..........................j']);
+  I.stamp(2, 3, ['h....L.....AAAA.....L.....h.', '............................', '............................', '....KKKKKKKKKKKKKKKKKKKK....', '....KKKKKKKKKKKKKKKKKKKK....', '..t.KKKKKKKKKKKKKKKKKKKK.t..', '..t.KKKKKKKKKKKKKKKKKKKK.t..', '....KKKKKKKKKKKKKKKKKKKK....', '....KKKKKKKKKKKKKKKKKKKK....', '............................', 'j..........................j']);
   ROOMS.store = I.room(32, 1, 9, 7); I.stamp(33, 3, ['hhhhh..', '.......', 'ccc....']);
   ROOMS.smithy = I.room(42, 1, 9, 7); I.stamp(43, 3, ['jj..jj.', '.......', '.cccc..']);
   ROOMS.tailor = I.room(52, 1, 9, 7); I.stamp(53, 3, ['hhhhhh.', '.......', '.cccc..']);

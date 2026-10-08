@@ -304,7 +304,7 @@ async function main() {
         return;
       }
       if (!eventActive(ev)) return;
-      if (!ev.run) return;                  // plain text NPCs never progress the story
+      if (!ev.run || ev.resident) return;   // plain text NPCs and castle residents never progress the story
       candidates.push(ev);
     }));
     // nearer maps first

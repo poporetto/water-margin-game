@@ -20,9 +20,9 @@
     for (var k = 0; k < width; k++) { this.hline(x0, x1, y0 + k, ch); this.vline(x1 + k, y0, y1, ch); }
     return this;
   };
-  // Stamp an array of strings; spaces are transparent.
+  // Stamp an array of strings; ' ' and '.' are transparent (furniture over existing floor).
   Grid.prototype.stamp = function (x, y, rows) {
-    for (var j = 0; j < rows.length; j++) for (var i = 0; i < rows[j].length; i++) { var ch = rows[j][i]; if (ch !== ' ') this.set(x + i, y + j, ch); }
+    for (var j = 0; j < rows.length; j++) for (var i = 0; i < rows[j].length; i++) { var ch = rows[j][i]; if (ch !== ' ' && ch !== '.') this.set(x + i, y + j, ch); }
     return this;
   };
   // Scatter a tile over cells currently holding one of `on` characters.

@@ -201,11 +201,14 @@
           var x = 350;
           G.text(d.name + (d.zh ? '   ' + d.zh : ''), x, 236, { size: 30, bold: true, color: '#ffe0a0' });
           if (d.nick) G.text('“' + d.nick + '”', x, 278, { size: 22, color: '#e8dcc0' });
-          if (d.rank) {
+          if (d.rank && WM.state.flags.grand_assembly) {
             G.text('The ' + d.starEn + ' has appeared.', x, 320, { size: 22, color: '#f0e0b0' });
             G.text(d.star + ' · ' + (d.group === 'heaven' ? 'Heavenly Spirit ' : 'Earthly Fiend ') + d.rank, x, 352, { size: 18, color: '#c8b890' });
+          } else if (d.rank) {
+            G.text('has joined Liangshan.', x, 320, { size: 22, color: '#f0e0b0' });
+            G.text('One of the hundred and eight stars has found its place.', x, 352, { size: 17, color: '#c8b890' });
           } else G.text('has joined the party.', x, 320, { size: 22, color: '#f0e0b0' });
-          if (WM.state.flags.castle && d.rank) G.text(S.starCount() + ' / 108', 790, 400, { size: 18, align: 'right', color: '#c8b890' });
+          if (WM.state.flags.castle && d.rank) G.text(S.starCount() + (WM.state.flags.grand_assembly ? ' / 108' : ' heroes'), 790, 400, { size: 18, align: 'right', color: '#c8b890' });
           c.globalAlpha = 1;
         }
       };

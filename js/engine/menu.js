@@ -39,7 +39,7 @@
     G.text(WM.state.gold + ' taels', 920, 616, { size: 22, align: 'right', color: G.COL.gold });
     G.text(U.fmtTime(WM.state.playtime), 920, 648, { size: 20, align: 'right', color: G.COL.dim });
     var mp = WM.data.maps[WM.state.map]; if (mp && mp.name) G.text(mp.name, 620, 648, { size: 18, color: G.COL.dim });
-    if (WM.state.flags.castle) G.text(S.starCount() + ' / 108 Stars', 620, 616, { size: 20, color: '#ffe0a0' });
+    if (WM.state.flags.castle) G.text(S.starCount() + (WM.state.flags.grand_assembly ? ' / 108 Stars' : ' Heroes'), 620, 616, { size: 20, color: '#ffe0a0' });
   }
 
   function mainMenu() {
@@ -48,7 +48,7 @@
         { label: 'Items', v: 'items' }, { label: 'Equipment', v: 'equip' }, { label: 'Status', v: 'status' },
         { label: 'Formation', v: 'form' }
       ];
-      if (WM.state.flags.castle) items.push({ label: 'Stone Tablet', v: 'tablet' });
+      if (WM.state.flags.castle) items.push({ label: WM.state.flags.grand_assembly ? 'Stone Tablet' : 'Roll of Heroes', v: 'tablet' });
       if (WM.state.flags.castle) items.push({ label: 'Liangshan', v: 'castle' });
       items.push({ label: 'Options', v: 'opts' });
       if (WM.debug && WM.debug.enabled) items.push({ label: 'Debug', v: 'debug' });
@@ -228,10 +228,10 @@
     drawStatusBox(id, 20, 20);
     G.window(396, 20, 544, 680);
     var x = 420, y = 40;
-    if (d.rank) {
+    if (d.rank && WM.state.flags.grand_assembly) {
       G.text((d.group === 'heaven' ? 'Heavenly Spirit' : 'Earthly Fiend') + ' · Star ' + d.rank + ' of 108', x, y, { size: 20, color: '#ffe0a0' });
       G.text(d.starEn + ' (' + d.star + ')', x, y + 28, { size: 20, color: '#ffe0a0' });
-    } else G.text('Ally', x, y, { size: 20, color: '#ffe0a0' });
+    } else G.text(S.isRecruited(id) && d.rank ? 'Hero of Liangshan' : 'Companion', x, y, { size: 20, color: '#ffe0a0' });
     if (d.zh) G.text(d.zh, 920, y, { size: 26, align: 'right', color: G.COL.gold });
     y += 70;
     var wpn = d.weapon || { name: 'Fists', range: 'S' };
@@ -247,7 +247,7 @@
     G.text('Equipment', x, y, { size: 20, color: G.COL.dim });
     SLOTS.forEach(function (s, i) { var it = c.equip[s[0]] && WM.data.items[c.equip[s[0]]]; G.text(s[1] + ': ' + (it ? it.name : '—'), x + 120, y + i * 28, { size: 19 }); });
     y += 124;
-    if (d.role) { G.text('At Liangshan', x, y, { size: 20, color: G.COL.dim }); G.text(d.role, x + 140, y, { size: 19 }); y += 34; }
+    if (d.role && WM.state.flags.grand_assembly) { G.text('At Liangshan', x, y, { size: 20, color: G.COL.dim }); G.text(d.role, x + 140, y, { size: 19 }); y += 34; }
     var bio = G.wrap(d.bio || '', 500, 19);
     for (var i = 0; i < Math.min(bio.length, 8); i++) G.text(bio[i], x, y + i * 26, { size: 19, color: '#d8d0c0' });
   };
@@ -329,6 +329,7 @@
 
   // ---------- the Stone Tablet (108 Stars) ----------
   M.tablet = function () {
+    if (!WM.state.flags.grand_assembly) return M.roll();
     return new Promise(function (resolve) {
       var order = WM.data.charOrder;
       var idx = 0, scroll = 0, ROWS = 12;
@@ -374,6 +375,48 @@
           } else {
             G.text('This star has not yet appeared.', 720, 300, { size: 20, align: 'center', color: '#a0a098' });
           }
+        }
+      };
+      UI.push(w);
+    });
+  };
+
+  // Before the Grand Assembly no one knows which star each hero is: show the roll in order of joining.
+  M.roll = function () {
+    return new Promise(function (resolve) {
+      var ids = WM.state.recruited.filter(function (id) { return WM.data.chars[id].rank; });
+      var idx = 0, scroll = 0, ROWS = 12;
+      var w = {
+        update: function () {
+          var n = Math.max(1, ids.length);
+          if (I.pressed('up')) { idx = (idx + n - 1) % n; WM.audio.sfx('cursor'); }
+          if (I.pressed('down')) { idx = (idx + 1) % n; WM.audio.sfx('cursor'); }
+          if (idx < scroll) scroll = idx;
+          if (idx >= scroll + ROWS) scroll = idx - ROWS + 1;
+          if (I.pressed('cancel') || I.pressed('ok')) { I.clear(); UI.remove(w); resolve(); }
+        },
+        draw: function () {
+          G.window(20, 20, 920, 680, { top: '#2a2418', bottom: '#14100a' });
+          G.text('Roll of Heroes of Liangshan', 480, 36, { size: 28, bold: true, align: 'center', color: '#e8d8a0' });
+          G.text(ids.length + ' heroes have gathered', 480, 72, { size: 20, align: 'center', color: '#c8c0a0' });
+          for (var r = 0; r < ROWS; r++) {
+            var i = scroll + r; if (i >= ids.length) break;
+            var d = WM.data.chars[ids[i]], y = 110 + r * 46;
+            if (i === idx) { G.ctx.fillStyle = 'rgba(255,230,160,0.15)'; G.ctx.fillRect(40, y - 4, 500, 42); }
+            G.text((i + 1) + '.', 90, y + 4, { size: 20, align: 'right', color: '#c8c0a0' });
+            G.text(d.name, 110, y + 4, { size: 20, color: WM.state.dead[ids[i]] ? '#a07070' : '#f0e0b0' });
+            G.text('“' + d.nick + '”', 520, y + 4, { size: 18, align: 'right', color: '#c8b890' });
+          }
+          var sel = ids[idx];
+          if (sel) {
+            var sd = WM.data.chars[sel];
+            WM.portraits.drawFramed(sel, 'normal', 650, 130);
+            G.text(sd.name + (sd.zh ? '  ' + sd.zh : ''), 720, 320, { size: 24, bold: true, align: 'center', color: '#f0e0b0' });
+            G.text('“' + sd.nick + '”', 720, 352, { size: 19, align: 'center', color: '#e8e0d0' });
+            var bio = G.wrap(sd.bio || '', 340, 17);
+            for (var k = 0; k < Math.min(10, bio.length); k++) G.text(bio[k], 560, 400 + k * 24, { size: 17, color: '#e0d8c8' });
+          }
+          G.text('Which star each hero answers to is not yet known.', 480, 664, { size: 16, align: 'center', color: '#8a8070' });
         }
       };
       UI.push(w);

@@ -143,6 +143,7 @@
   window.story = async function (maxSteps) {
     for (var i = 0; i < (maxSteps || 2000); i++) {
       if (WM.scene === WM.scenes.duel) { await duelAuto(); continue; }
+      if (WM.scene === WM.scenes.war) { await warAuto(); continue; }
       if (WM.scene === WM.scenes.battle) { await battleAuto(); continue; }
       if (WM.ui.busy()) { await press('KeyZ'); await frames(6); continue; }
       if (WM.script.running || WM.scene !== WM.field) { await frames(10); continue; }
@@ -176,7 +177,7 @@
   };
   window.saveAt = function (n) { var p = WM.field.player, t = p.tile(); WM.state.x = t.x; WM.state.y = t.y; WM.state.dir = p.dir; return WM.S.save(n); };
   window.loadAt = async function (n) { WM.S.load(n); WM.script.running = 0; WM.ui.stack.length = 0; WM.gfx.fade = 0; WM.setScene(WM.field, { map: WM.state.map, x: WM.state.x, y: WM.state.y, dir: WM.state.dir, noAuto: true }); await frames(10); return info(); };
-  window.snap = function () { var c = document.getElementById('game'); var im = document.getElementById('snapimg'); if (!im) { im = document.createElement('img'); im.id = 'snapimg'; im.style.cssText = 'position:fixed;left:0;top:0;width:' + innerWidth + 'px;z-index:9;image-rendering:pixelated'; document.body.appendChild(im); } im.src = c.toDataURL(); return 'snap'; };
+  window.snap = function () { var c = document.getElementById('game'); var im = document.getElementById('snapimg'); if (!im) { im = document.createElement('img'); im.id = 'snapimg'; var wpx = Math.min(innerWidth, innerHeight * 4 / 3); im.style.cssText = 'position:fixed;left:0;top:0;width:' + wpx + 'px;height:' + (wpx * 0.75) + 'px;z-index:9;image-rendering:pixelated;background:#000'; document.body.appendChild(im); } im.src = c.toDataURL(); return 'snap'; };
   window.unsnap = function () { var im = document.getElementById('snapimg'); if (im) im.remove(); };
   // walk the player to a tile using straight moves (no pathfinding)
   // BFS path over walkable tiles, then step tile by tile
