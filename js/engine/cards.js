@@ -185,6 +185,40 @@
     });
   };
 
+  // The closing roll: all hundred and eight, by rank, with their stars and how their stories ended.
+  C.credits = function () {
+    var st = WM.state, order = WM.data.charOrder.slice().sort(function (a, b) { return S.def(a).rank - S.def(b).rank; });
+    var ROW = 64, total = order.length * ROW + WM.H + 400;
+    return new Promise(function (resolve) {
+      var t0 = WM.time, y = 0;
+      var w = {
+        update: function (dt) {
+          y += (I.down('ok') || I.down('cancel') ? 260 : 46) * (dt || 1 / 60);
+          if (y > total) { UI.remove(w); resolve(); }
+        },
+        draw: function () {
+          var c = G.ctx; c.fillStyle = '#0a0806'; c.fillRect(0, 0, WM.W, WM.H);
+          var top = WM.H - y;
+          G.text('The Hundred and Eight Stars', 480, top + 40, { size: 34, bold: true, align: 'center', color: G.COL.gold });
+          G.text('天罡三十六 · 地煞七十二', 480, top + 86, { size: 22, align: 'center', color: '#c8b890' });
+          order.forEach(function (id, i) {
+            var py = top + 160 + i * ROW; if (py < -ROW || py > WM.H + ROW) return;
+            var d = S.def(id), fate = st.dead[id] ? 'fell' : st.flags['away:' + id] ? 'departed' : 'lived';
+            var col = fate === 'fell' ? '#a89a88' : fate === 'departed' ? '#a8c0d8' : '#f0e0c0';
+            try { var im = WM.portraits.get(id, 'normal'); if (im.isOverride) G.ctx.drawImage(im, 150, py - 28, 48, 56); else WM.gfx.blit(im, 150, py - 28, 1); } catch (e) {}
+            G.text(d.starEn, 230, py - 14, { size: 18, color: '#c8b890' });
+            G.text(d.name + '  ' + d.zh, 230, py + 10, { size: 24, bold: true, color: col });
+            G.text(fate === 'fell' ? 'fell' : fate === 'departed' ? 'departed' : 'lived', 820, py, { size: 18, align: 'right', color: col, italic: true });
+          });
+          var ey = top + 160 + order.length * ROW + 160;
+          G.text('The End', 480, ey, { size: 44, bold: true, align: 'center', color: G.COL.gold });
+          G.text('水滸傳', 480, ey + 70, { size: 30, align: 'center', color: '#c8b890' });
+        }
+      };
+      UI.push(w);
+    });
+  };
+
   // "X has joined" card with portrait and star, struck with a gong.
   UI.joinCard = function (id) {
     var d = WM.data.chars[id];

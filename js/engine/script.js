@@ -181,6 +181,7 @@
       // --- presentation ---
       chapter: function (n) { WM.state.chapter = n; return WM.cards.chapter(n); },
       card: function (text, opt) { return WM.cards.text(text, opt); },
+      credits: function () { return WM.cards.credits(); },
       endChapter: function () { return WM.cards.nextTime(); },
       // --- facilities ---
       shop: function (id) { return WM.shops.open(id); },

@@ -160,7 +160,7 @@ function mkApi(ctx) {
     count(item) { return S.count(item); },
     gold(n) { WM.state.gold = Math.max(0, WM.state.gold + n); return resolved; },
     chapter(n) { if (!D.chapters[n]) err('unknown chapter ' + n); WM.state.chapter = n; if (VERBOSE) console.log('== Chapter ' + n + ' ' + (D.chapters[n] || {}).short); return resolved; },
-    card() { return resolved; }, endChapter() { if (global.__checkTotals) global.__checkTotals(); return resolved; },
+    card() { return resolved; }, credits() { return resolved; }, endChapter() { if (global.__checkTotals) global.__checkTotals(); return resolved; },
     shop(id) { if (!D.shops[id]) err('unknown shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.items[i]) err('shop ' + id + ' unknown item ' + i); }); return resolved; },
     inn() { S.restoreAll(); return Promise.resolve(true); }, smith() { return resolved; },
     talismanShop(id) { if (!D.shops[id]) err('unknown talisman shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.talismans[i]) err('talisman shop ' + id + ' unknown talisman ' + i); }); return resolved; },
@@ -363,7 +363,7 @@ async function main() {
     if (!progressed) break;
     checkTotals();
   }
-  checkTotals();
+  global.__checkTotals();
   // ---------- report ----------
   const order = D.charOrder;
   const missing = order.filter((id) => !joins[id]);

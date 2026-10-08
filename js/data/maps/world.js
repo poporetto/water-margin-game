@@ -187,6 +187,7 @@
   function exits() {
     var out = [];
     for (var id in LOC) {
+      if (!WM.data.maps[LOC[id].map]) continue;   // campaign sites fought as wars only (Youzhou, Hedong, Huaixi, Runzhou, Muzhou)
       (function (L) {
         var md = WM.data.maps[L.map], sp = (md && (md.entry || md.spawn)) || [L.sx, L.sy];
         var ex = { x: L.x, y: L.y + (L.icon === 'fortress' ? 1 : 0), to: L.map, tx: sp[0], ty: sp[1], dir: 'up',
