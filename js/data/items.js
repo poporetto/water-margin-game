@@ -62,6 +62,8 @@
 
   // ---- key items ----
   key('decree', 'Imperial Decree', 'The emperor\'s summons to the Celestial Master Zhang.');
+  key('pardon_yanqing', 'Imperial Pardon', 'In the emperor\'s own hand: "Yan Qing is pardoned of all offences. No office may arrest or question him."');
+  key('amnesty', 'Edict of Amnesty', 'The emperor\'s pardon for Song Jiang and all the men of Liangshan, brought by Marshal Su Yuanjing.');
   key('letter_chai', 'Chai Jin\'s Letter', 'A letter of introduction to Zhu Gui of Liangshan.');
   key('sabre', 'Heirloom Sabre', 'Yang Zhi\'s ancestral sabre: cuts copper and iron like mud, splits a hair blown against the edge, kills without a trace of blood.');
   key('heavenbook', 'Heavenly Books', 'Three scrolls given to Song Jiang by the Mysterious Lady of the Ninth Heaven.');

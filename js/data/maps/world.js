@@ -49,6 +49,7 @@
   loc('yinma', 'Yinma River', 90, 14, 'mountain', 'yinma', 0, 12);
   loc('wugang', 'Wugang Market', 80, 18, 'village', 'wugang', 0, 10);
   loc('lingzhou', 'Lingzhou', 92, 26, 'city', 'lingzhou', 1, 14);
+  loc('taishan', 'Mount Tai', 112, 48, 'temple', 'taishan', 17, 28);
   loc('lijia', 'Li Family Manor', 110, 40, 'manor', 'lijia', 12, 20);
   loc('dengzhou', 'Dengzhou', 138, 22, 'town', 'dengzhou', 14, 24);
   loc('gaotang', 'Gaotang', 84, 24, 'city', 'gaotang', 18, 30);
@@ -139,7 +140,7 @@
       ['qingzhou', 'qingfeng'], ['qingzhou', 'erlong'], ['qingzhou', 'kongmanor'], ['qingfeng', 'qingfengshan'], ['erlong', 'dengzhou'], ['yishui', 'qingfeng'], ['shijie', 'mangdang'], ['mangdang', 'liaoerwa'],
       ['kaifeng', 'huaixi'], ['huaixi', 'jieyang'], ['jieyang', 'jieling'], ['jieling', 'jiangzhou'], ['jiangzhou', 'whitedragon'], ['whitedragon', 'wuweijun'],
       ['jiangzhou', 'longhu'], ['liaoerwa', 'runzhou'], ['runzhou', 'hangzhou'], ['hangzhou', 'liuhe'], ['hangzhou', 'muzhou'], ['muzhou', 'qingxi'],
-      ['gaotang', 'jizhou_n'], ['jizhou_n', 'cuiping'], ['jizhou_n', 'erxian'], ['jizhou_n', 'youzhou'], ['mangdang', 'jieling'], ['jizhou_n', 'yinma'], ['yinma', 'chaimanor'], ['zhuinn', 'zhujia'], ['zhuinn', 'dongchang'], ['jizhou_n', 'wugang'], ['wugang', 'gaotang'], ['lingzhou', 'daming'], ['lingzhou', 'zengtou']
+      ['gaotang', 'jizhou_n'], ['jizhou_n', 'cuiping'], ['jizhou_n', 'erxian'], ['jizhou_n', 'youzhou'], ['mangdang', 'jieling'], ['jizhou_n', 'yinma'], ['yinma', 'chaimanor'], ['zhuinn', 'zhujia'], ['zhuinn', 'dongchang'], ['jizhou_n', 'wugang'], ['wugang', 'gaotang'], ['lingzhou', 'daming'], ['lingzhou', 'zengtou'], ['taishan', 'dongping']
     ];
     R.forEach(function (r) {
       var a = LOC[r[0]], b = LOC[r[1]];
