@@ -120,7 +120,7 @@ function mkApi(ctx) {
     warp(map, tx, ty) {
       if (!D.maps[map]) { err('warp to unknown map ' + map); return resolved; }
       if (!walkable(map, tx, ty)) err('warp lands on solid tile ' + map + '(' + tx + ',' + ty + ') "' + tile(map, tx, ty) + '"');
-      cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; freezeActors();
+      cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors();
       return resolved;
     },
     battle(troop) { const t = typeof troop === 'string' ? D.troops[troop] : troop; if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
@@ -163,38 +163,55 @@ function mkApi(ctx) {
 
 // ---------- reachability ----------
 function exitsOf(mid) { const m = D.maps[mid]; return (m && m.exits) || []; }
-let reachCache = {};
-function tileReach(mid, from) {
-  const ck = mid + '@' + from.x + ',' + from.y;
-  if (reachCache[ck]) return reachCache[ck];
-  const res = tileReachRaw(mid, from);
-  reachCache[ck] = res;
-  return res;
-}
-function tileReachRaw(mid, from) {
-  const r = rowsOf(mid); if (!r) return new Set();
+let reachCache = {};      // per iteration: mapId -> component labelling
+let reachMapsCache = null;
+function labelMap(mid) {
+  if (reachCache[mid]) return reachCache[mid];
+  const r = rowsOf(mid); const h = r.length; let w = 0; r.forEach((row) => { w = Math.max(w, row.length); });
+  const lab = new Int32Array(w * h).fill(-1);
   const blockers = new Set();
   const acts = actorsOnMap(mid);
   Object.keys(acts).forEach((k) => blockers.add(acts[k].x + ',' + acts[k].y));
-  const seen = new Set([from.x + ',' + from.y]), q = [[from.x, from.y]];
-  while (q.length) {
-    const [x, y] = q.shift();
-    [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
-      const nx = x + dx, ny = y + dy, k = nx + ',' + ny;
-      if (seen.has(k) || !walkable(mid, nx, ny) || blockers.has(k)) return;
-      seen.add(k); q.push([nx, ny]);
-    });
+  let id = 0;
+  for (let y0 = 0; y0 < h; y0++) for (let x0 = 0; x0 < w; x0++) {
+    if (lab[y0 * w + x0] !== -1 || !walkable(mid, x0, y0) || blockers.has(x0 + ',' + y0)) continue;
+    const st = [[x0, y0]]; lab[y0 * w + x0] = id;
+    while (st.length) {
+      const [x, y] = st.pop();
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= w || ny >= h || lab[ny * w + nx] !== -1) continue;
+        if (!walkable(mid, nx, ny) || blockers.has(nx + ',' + ny)) continue;
+        lab[ny * w + nx] = id; st.push([nx, ny]);
+      }
+    }
+    id++;
   }
-  return seen;
+  return (reachCache[mid] = { lab, w, h });
 }
-// all maps reachable from the current position: mapId -> arrival tile
+function tileReach(mid, from) {
+  const L = labelMap(mid);
+  const at = (x, y) => (x < 0 || y < 0 || x >= L.w || y >= L.h) ? -2 : L.lab[y * L.w + x];
+  let comp = at(from.x, from.y);
+  if (comp < 0) { // standing on a non-walkable arrival tile: use any neighbour's component
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const c = at(from.x + dx, from.y + dy); if (c >= 0) { comp = c; break; } }
+  }
+  return { has(k) { const i = k.indexOf(','); const x = +k.slice(0, i), y = +k.slice(i + 1); return comp >= 0 && at(x, y) === comp; } };
+}
+// map-level BFS through exits (with conditions), returning a path of [mapId, arrival tile]
+// all (map, arrival) states reachable from the current position: mapId -> [arrival tiles]
+// (maps with several separate rooms are reached through several arrivals)
 function reachableMaps(fromMap, fromTile) {
-  const out = new Map([[fromMap, fromTile]]); const q = [{ map: fromMap, t: fromTile }];
+  const out = new Map([[fromMap, [fromTile]]]);
+  const seen = new Set([fromMap + '@' + fromTile.x + ',' + fromTile.y]);
+  const q = [{ map: fromMap, t: fromTile }];
   while (q.length) {
     const n = q.shift();
     const reach = tileReach(n.map, n.t);
     exitsOf(n.map).forEach((e) => {
-      if (out.has(e.to) || !D.maps[e.to]) return;
+      if (!D.maps[e.to]) return;
+      const key = e.to + '@' + e.tx + ',' + e.ty;
+      if (seen.has(key)) return;
       if (e.cond) { try { if (!e.cond(S, WM.state)) return; } catch (x) { return; } }
       let ok = false;
       for (let dx = 0; dx < (e.w || 1) && !ok; dx++) for (let dy = 0; dy < (e.h || 1) && !ok; dy++) {
@@ -202,8 +219,11 @@ function reachableMaps(fromMap, fromTile) {
         if (reach.has(ex + ',' + ey) || [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([a, b]) => reach.has((ex + a) + ',' + (ey + b)))) ok = true;
       }
       if (!ok) return;
+      seen.add(key);
       const t = { x: e.tx, y: e.ty };
-      out.set(e.to, t); q.push({ map: e.to, t: t });
+      if (!out.has(e.to)) out.set(e.to, []);
+      out.get(e.to).push(t);
+      q.push({ map: e.to, t: t });
     });
   }
   return out;
@@ -268,32 +288,36 @@ async function main() {
     const autos = (D.events[cur.map] || []).filter((e) => e.trigger === 'auto' && eventActive(e));
     if (autos.length) { await runEvent(autos[0]); continue; }
     // 2. find a progressing event anywhere reachable
+    reachCache = {};
+    reachMapsCache = reachableMaps(cur.map, { x: cur.x, y: cur.y });
     const before = storyFlags();
     let progressed = false;
     const candidates = [];
     Object.keys(D.events).forEach((mid) => (D.events[mid] || []).forEach((ev) => {
-      if (ev.trigger === 'auto' && mid !== cur.map) {
-        const saved = WM.state.map; WM.state.map = mid;   // auto events may test the map they live on
-        const act = eventActive(ev); WM.state.map = saved;
+      if (ev.trigger === 'auto') {
+        const saved = [WM.state.map, WM.state.x, WM.state.y]; WM.state.map = mid;   // auto events may test where the player arrives
+        const arrs = (reachMapsCache && reachMapsCache.get(mid)) || [];
+        let act = false;
+        for (const t of arrs) { WM.state.x = t.x; WM.state.y = t.y; if (eventActive(ev)) { act = true; ev._arrival = t; break; } }
+        WM.state.map = saved[0]; WM.state.x = saved[1]; WM.state.y = saved[2];
         if (act) candidates.push(ev);
         return;
       }
-      if (ev.trigger === 'auto') return;
       if (!eventActive(ev)) return;
       if (!ev.run) return;                  // plain text NPCs never progress the story
       candidates.push(ev);
     }));
     // nearer maps first
     candidates.sort((a, b) => (a.map === cur.map ? 0 : 1) - (b.map === cur.map ? 0 : 1));
-    reachCache = {};
-    const maps = reachableMaps(cur.map, { x: cur.x, y: cur.y });
+    const maps = reachMapsCache;
     for (const ev of candidates) {
       if (!maps.has(ev.map)) continue;
-      const route = { map: ev.map, t: maps.get(ev.map) };
-      if (!eventReachable(ev, route.t)) continue;
+      const arrival = ev.trigger === 'auto' ? ev._arrival : maps.get(ev.map).find((t) => eventReachable(ev, t));
+      if (!arrival) continue;
+      const route = { map: ev.map, t: arrival };
       const snapshot = JSON.stringify(WM.state), snapCur = JSON.stringify(cur), snapTemp = JSON.stringify(temp), errCount = errors.length, joinSnap = JSON.stringify(joins);
       const prevMap = cur.map;
-      cur = { map: route.map, x: route.t.x, y: route.t.y }; WM.state.map = cur.map; if (prevMap !== cur.map) temp = {};
+      cur = { map: route.map, x: route.t.x, y: route.t.y }; WM.state.map = cur.map; WM.state.x = cur.x; WM.state.y = cur.y; if (prevMap !== cur.map) temp = {};
       await runEvent(ev);
       const after = storyFlags();
       reachCache = {};
@@ -312,6 +336,8 @@ async function main() {
   console.log('Chapter reached: ' + WM.state.chapter + ' (' + ((D.chapters[WM.state.chapter] || {}).short || '') + ')');
   console.log('Last progressing event: ' + lastProgress);
   console.log('Current map: ' + cur.map + ' (' + cur.x + ',' + cur.y + ')');
+  const fl = Object.keys(WM.state.flags).filter((f) => f.indexOf('ev:') !== 0 && f.indexOf('loc:') !== 0 && WM.state.flags[f]);
+  console.log('Latest flags: ' + fl.slice(-6).join(', '));
   console.log('Stars joined: ' + (order.length - missing.length) + ' / 108');
   if (missing.length && process.argv.includes('--missing')) console.log('Not yet joined: ' + missing.join(', '));
   const uniq = Array.from(new Set(errors));

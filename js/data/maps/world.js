@@ -19,7 +19,7 @@
   loc('boarforest', 'Wild Boar Forest', 70, 46, 'forest', 'boarforest', 4, 12);
   loc('chaimanor', 'Chai Jin\'s Manor', 92, 22, 'manor', 'chaimanor', 14, 22);
   loc('cangzhou', 'Cangzhou', 98, 16, 'town', 'cangzhou', 14, 24);
-  loc('zhugui', 'Zhu Gui\'s Tavern', 86, 44, 'inn', 'zhugui', 8, 12);
+  loc('zhugui', 'Zhu Gui\'s Tavern', 82, 44, 'inn', 'zhugui', 8, 12);
   loc('liangshan', 'Liangshan Marsh', 96, 44, 'fortress', 'liangshan', 20, 30);
   loc('daming', 'Daming Prefecture', 72, 32, 'city', 'daming', 20, 36);
   loc('dongxi', 'East Creek Village', 88, 56, 'village', 'dongxi', 12, 20);

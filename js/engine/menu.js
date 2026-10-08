@@ -170,6 +170,8 @@
           var r = list.handle(); if (!r) return;
           if (r.cancel) { UI.remove(w); resolve(); return; }
           var slot = r.ok.slot;
+          var curIt = c.equip[slot] && WM.data.items[c.equip[slot]];
+          if (curIt && curIt.locked) { WM.audio.sfx('buzz'); UI.toast(curIt.name + ' cannot be removed.'); return; }
           var inv = S.invList(function (it) { return it.type === slot && canEquip(id, it); });
           var opts = [{ label: '(Remove)', v: null }].concat(inv.map(function (e) { return { label: e.it.name, right: '+' + (e.it.def || 0) + ' x' + e.n, v: e.id, help: e.it.desc }; }));
           UI.remove(w);

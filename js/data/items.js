@@ -58,12 +58,17 @@
   eq('gauntlet', 'acc', 'Iron Gauntlets', 450, 4, 'Raises power.', { bonus: { pwr: 6 } });
   eq('beltjade', 'acc', 'Jade Belt', 1500, 4, 'An official\'s belt. Raises all stats a little.', { bonus: { pwr: 4, skl: 4, spd: 4, mgc: 4, luk: 4 } });
 
+  eq('cangue', 'acc', 'Prisoner\'s Cangue', 0, 0, 'A wooden collar locked around a convict\'s neck. It cannot be removed.', { bonus: { pwr: -8, spd: -10, skl: -6 }, locked: true });
+
   // ---- key items ----
   key('decree', 'Imperial Decree', 'The emperor\'s summons to the Celestial Master Zhang.');
   key('letter_chai', 'Chai Jin\'s Letter', 'A letter of introduction to Zhu Gui of Liangshan.');
   key('sabre', 'Heirloom Sabre', 'Yang Zhi\'s ancestral sabre: cuts copper and iron like mud, splits a hair blown against the edge, kills without a trace of blood.');
   key('heavenbook', 'Heavenly Books', 'Three scrolls given to Song Jiang by the Mysterious Lady of the Ninth Heaven.');
   key('poem', 'Rebel Poem', 'The poem Song Jiang wrote drunk on the wall of Xunyang Tower.');
+  key('precioussword', 'Precious Sword', 'The fine sword Lin Chong bought on the street — the bait that led him into the White Tiger Hall.');
+  key('knife', 'Sharp Knife', 'Bought in Cangzhou the day Li Xiaoer warned Lin Chong of strangers from the capital.');
+  key('chailetter', 'Chai Jin\'s Letter', 'A letter commending the bearer to the chiefs of Liangshan.');
   key('goldenbell', 'Golden Bell', 'The imperial envoy\'s gilded bell, borrowed for a ruse at Huazhou.');
 
   // ================= Talismans (runes) =================
