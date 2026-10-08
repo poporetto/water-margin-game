@@ -45,6 +45,8 @@
   loc('cuiping', 'Cuiping Mountain', 84, 8, 'mountain', 'cuiping', 10, 20);
   loc('erxian', 'Erxian Mountain', 70, 8, 'temple', 'erxian', 10, 22);
   loc('zhujia', 'Zhu Family Village', 104, 38, 'fort', 'zhujia', 4, 24);
+  loc('zhuinn', 'Inn below Dulong Ridge', 100, 36, 'inn', 'zhuinn', 0, 14);
+  loc('yinma', 'Yinma River', 90, 14, 'mountain', 'yinma', 0, 12);
   loc('lijia', 'Li Family Manor', 110, 40, 'manor', 'lijia', 12, 20);
   loc('dengzhou', 'Dengzhou', 138, 22, 'town', 'dengzhou', 14, 24);
   loc('gaotang', 'Gaotang', 84, 24, 'city', 'gaotang', 18, 30);
@@ -135,7 +137,7 @@
       ['qingzhou', 'qingfeng'], ['qingzhou', 'erlong'], ['qingzhou', 'kongmanor'], ['qingfeng', 'qingfengshan'], ['erlong', 'dengzhou'], ['yishui', 'qingfeng'], ['shijie', 'mangdang'], ['mangdang', 'liaoerwa'],
       ['kaifeng', 'huaixi'], ['huaixi', 'jieyang'], ['jieyang', 'jieling'], ['jieling', 'jiangzhou'], ['jiangzhou', 'whitedragon'], ['whitedragon', 'wuweijun'],
       ['jiangzhou', 'longhu'], ['liaoerwa', 'runzhou'], ['runzhou', 'hangzhou'], ['hangzhou', 'liuhe'], ['hangzhou', 'muzhou'], ['muzhou', 'qingxi'],
-      ['gaotang', 'jizhou_n'], ['jizhou_n', 'cuiping'], ['jizhou_n', 'erxian'], ['jizhou_n', 'youzhou'], ['mangdang', 'jieling']
+      ['gaotang', 'jizhou_n'], ['jizhou_n', 'cuiping'], ['jizhou_n', 'erxian'], ['jizhou_n', 'youzhou'], ['mangdang', 'jieling'], ['jizhou_n', 'yinma'], ['yinma', 'chaimanor'], ['zhuinn', 'zhujia'], ['zhuinn', 'dongchang']
     ];
     R.forEach(function (r) {
       var a = LOC[r[0]], b = LOC[r[1]];
@@ -146,6 +148,7 @@
       };
       var sx = Math.sign(x1 - x0), sy = Math.sign(y1 - y0);
       var x = x0, y = y0;
+      step(x, y);
       while (x !== x1 || y !== y1) {
         // alternate to make diagonal-ish staircase roads
         if (x !== x1 && (y === y1 || (Math.abs(x1 - x) >= Math.abs(y1 - y)))) x += sx; else y += sy;

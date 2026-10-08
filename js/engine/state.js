@@ -58,6 +58,10 @@
       tal: { head: null, rhand: null, lhand: null },
       status: {}
     };
+    // as in Suikoden II, a hero joins already dressed for the road: plain gear that suits their level
+    var L0 = c.lv;
+    c.equip.body = L0 >= 20 ? 'leather' : L0 >= 10 ? 'quilted' : L0 >= 4 ? 'robe' : null;
+    c.equip.head = L0 >= 18 ? 'leathercap' : L0 >= 8 ? 'cap' : null;
     if (d.equip) for (var k in d.equip) c.equip[k] = d.equip[k];
     if (d.talisman) c.tal.rhand = d.talisman;
     if (d.talismanHead) c.tal.head = d.talismanHead;
