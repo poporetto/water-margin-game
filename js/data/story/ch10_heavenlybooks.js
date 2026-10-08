@@ -14,13 +14,12 @@
 
   WM.enemy('zhao_constable', 'Yuncheng Constable', 22, WM.hum(WM.enemyLooks.constable), { exp: 95, drops: [['medicine', 0.12]] });
   WM.enemy('ligui_foe', 'Li Gui', 18, WM.hum(WM.data.npcs.ligui.look), { hp: 1.4, atk: 0.8, exp: 120, gold: 40 });
-  WM.enemy('tiger_cub', 'Tiger Cub', 20, WM.beast('tiger', { body: '#e8b060' }), { hp: 0.8, atk: 0.85, spd: 1.3, exp: 120, gold: 0, fx: 'claw' });
-  WM.enemy('tigress', 'Tigress of the Yi Ridge', 23, WM.beast('tiger', { body: '#d88a2a' }), { hp: 1.9, atk: 1.15, spd: 1.2, exp: 300, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.4, fx: 'claw', sfx: 'roar' }] });
-  WM.enemy('yi_tiger', 'White-Browed Tiger', 24, WM.beast('tiger', { body: '#c87a2a' }), { hp: 2.6, atk: 1.2, spd: 1.2, exp: 500, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.5, fx: 'claw', sfx: 'roar' }, { name: 'Mountain Roar', chance: 0.15, type: 'magic', power: 14, status: 'sleep', statusChance: 0.3, sfx: 'roar', fx: 'dark' }] });
+  WM.enemy('tiger_cub', 'Tiger Cub', 18, WM.beast('tiger', { body: '#e8b060' }), { hp: 0.7, atk: 0.7, spd: 1.3, exp: 120, gold: 0, fx: 'claw' });
+  WM.enemy('yi_tiger', 'White-Browed Tiger', 24, WM.beast('tiger', { body: '#c87a2a' }), { hp: 2.0, atk: 1.0, spd: 1.1, exp: 500, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.5, fx: 'claw', sfx: 'roar' }, { name: 'Mountain Roar', chance: 0.15, type: 'magic', power: 14, status: 'sleep', statusChance: 0.3, sfx: 'roar', fx: 'dark' }] });
   var T = WM.data.troops;
   T.ch10_constables = { enemies: ['zhao_constable', 'zhao_constable', 'zhao_constable'], bg: 'night', noRun: true };
   T.ch10_ligui = { enemies: ['ligui_foe'], bg: 'forest', noRun: true };
-  T.ch10_cave = { enemies: ['tiger_cub', 'tigress', 'tiger_cub'], bg: 'cave', boss: true };
+  T.ch10_cave = { enemies: ['tiger_cub', 'tiger_cub'], bg: 'cave' };
   T.ch10_tiger = { enemies: ['yi_tiger'], bg: 'forest', boss: true };
   WM.data.duels.likui_liyun = {
     hero: 'likui', foe: 'liyun', bg: 'forest', heroHp: 420, heroAtk: 46, foeHp: 420, foeAtk: 44, drawAfter: 3,
@@ -192,7 +191,8 @@
       s.music('boss');
       await s.narrate('At the mouth of the cave, two tiger cubs were gnawing on a human leg. Li Kui drew his axes with a roar.');
       await s.battle('ch10_cave', { bg: 'cave', music: 'boss' });
-      await s.narrate('He killed the cubs. When the tigress came backing into the cave, he thrust his knife into her from behind, so hard the handle went in after the blade. Then a great wind blew down from the hill, and the white-browed tiger came.');
+      await s.narrate('He killed the cubs. Then he crouched in the cave and waited, and when the tigress came backing in, tail first, he thrust his knife into her from behind, so hard the handle went in after the blade. She ran out howling and fell dead below the cliff. Then a great wind blew down from the hill, and the white-browed tiger came.');
+      s.heal();
       await s.battle('ch10_tiger', { bg: 'forest', music: 'boss', noRun: true });
       await s.narrate('Li Kui caught it with a single thrust under the jaw as it sprang, and it fell dead. He had killed four tigers in one night. Then he gathered what was left of his mother, wrapped it in his coat, and buried her behind the temple of the Mountain God, weeping like a child.');
       s.night(false);
