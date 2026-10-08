@@ -333,7 +333,7 @@
       await s.say('luozhenren', 'Did you, now?');
       await s.narrate('Luo Zhenren spread a handkerchief on the ground and told Li Kui to stand on it. It rose into the air as a cloud. Li Kui shrieked as he flew. The cloud carried him all the way to Jizhou, and dropped him through the roof of the prefecture into the courtyard. The officials took him for a demon, poured dog\'s blood and filth over him, and threw him in prison.');
       await s.say('daizong', 'Master — I beg you. He\'s a fool, but he\'s our brother.');
-      await s.say('luozhenren', 'That one is the Star of Heaven\'s Killing, come down into the world to slay men, for the sins of men. I could not kill him if I tried. ...Very well.');
+      await s.say('luozhenren', 'That one is the Killing Star of Heaven, come down into the world to slay men, for the sins of men. I could not kill him if I tried. ...Very well.');
       await s.narrate('A yellow-turbaned genie of the Way brought Li Kui back through the air, stinking and humbled. Luo Zhenren called Gongsun Sheng to him.');
       s.spawn('gs', 'gongsunsheng', 16, 5, 'right');
       await s.say('luozhenren', 'Go and save Song Jiang\'s brothers. I give you the method of the Five Thunders of the Heart of Heaven. And remember eight words: "Meet You, and stop. Meet Bian, and return." Do not forget them.');
