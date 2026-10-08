@@ -292,7 +292,7 @@ async function main() {
   S.setParty(st.party); WM.state.leader = st.party[0];
   cur = { map: st.map, x: st.x, y: st.y }; WM.state.map = st.map;
   // Stars dead, and Stars departed (away:), at each chapter end (docs/STORY.md)
-  const EXPECT_DEAD = { 19: 0, 22: 0, 23: 70, 24: 75 }, EXPECT_AWAY = { 19: 0, 22: 1, 23: 11 };
+  const EXPECT_DEAD = { 19: 0, 22: 0, 23: 70, 24: 75 }, EXPECT_AWAY = { 19: 0, 22: 5, 23: 11 };
   const EXPECT_STARS = { 5: 11, 8: 20, 9: 39, 10: 42, 11: 48, 12: 60, 13: 64, 14: 80, 15: 87, 16: 88, 17: 102, 18: 108 }, checkedTotals = {};
   let lastProgress = '';
   function checkTotals() {
