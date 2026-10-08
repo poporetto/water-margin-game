@@ -82,6 +82,38 @@ Afterwards:
 - **Song Jiang** is given poisoned imperial wine and makes Li Kui drink with him.
 - **Wu Yong and Hua Rong** hang themselves at Song Jiang's grave at Liaoerwa.
 
+## How faithful each chapter is
+
+Every chapter was written from the 120-chapter text on Wikisource (水滸傳 120回本). From Chapter 10 on, a fact sheet
+was drawn up first: who does what, with which weapon, and who kills whom. The dialogue paraphrases the novel. It is
+not a translation.
+
+| Game ch. | Played in full | Condensed into narration |
+|---|---|---|
+| 0–9 | Every main episode, as listed in the chapter map | Gao Qiu's rise; some travel |
+| 10 | The temple and the dream; Li Kui's journey, the false Li Kui, the four tigers, Squire Cao, Zhu Fu and Li Yun | The rescue at Huandao |
+| 11 | All of it | The Di manor and other side stops on the road |
+| 12 | The scouting and the maze, both wars, the Dengzhou jailbreak, Sun Li's ruse, the wedding | The Li Ying ruse; the massacre at the Hu manor (stated plainly) |
+| 13 | All of it | Li Kui's beef and the charms; the cloud that drops him in the prefecture |
+| 14 | All of it, including Shi Xiu's heist as a choice sequence | Peach Blossom Mountain (moved to the hills west of Qingzhou) |
+| 15–16 | All of it | Mount Mangdang's negotiations |
+| 17 | The gauntlet, the betrayal, the crossbow, the leap, Guan Sheng, the doctor, the Lantern Festival, Lingzhou | Zhang Heng's raid; the capture of the Ruans; Han Bolong |
+| 18–19 | All of it | — |
+| 20 | Li Shishi; the riot; Niutou; Mount Tai; the village wine; Tong Guan; Gao Qiu's fleet; Yan Qing and the emperor; Su Yuanjing | The Di manor "ghost"; Li Kui as magistrate; Gao Qiu's first two campaigns; the rescue of Xiao Rang and Yue He |
+| 21 | Chenqiao; Tanzhou; Luo Zhenren; both battles of the Great Unity and the Lady's dream; Wutai | Bazhou; Li Kui's capture and exchange; the bribes that end the war |
+| 22 | The illusory sea; Qiao Daoqing; Qiongying and Zhang Qing; Tian Hu's fall; Nanfeng; Li Jun's ferry; the geese; Gongsun Sheng's departure | **Most of Hedong and Huaixi (novel ch. 91–109).** The individual sieges, Sun An and the defectors, Qiongying's revenge, and Wang Qing's background are told in narration |
+| 23 | Runzhou; Suzhou; Zhang Shun at the Yongjin Gate; Hangzhou; Muzhou; the Yuling Pass; Qingxi; Fang La's capture; the tide | Each death is narrated where the text places it. Chai Jin as Fang La's son-in-law and Yan Qing's infiltration are told in narration |
+| 24 | Chuzhou; Liaoerwa; the emperor's dream | The fates of the other survivors |
+
+Deliberate departures from the novel:
+- **Liangshan stays as the game's hub after the amnesty.** In the novel the stronghold is given up when the army goes to
+  the capital. After the Grand Assembly the castle keeps its full size even as the Stars die or leave. A workshop
+  closes when its keeper is gone.
+- **Peach Blossom Mountain.** Its fights with Huyan Zhuo take place on the Qingzhou map, because the world map puts
+  Peach Blossom Village far to the west.
+- **The Heavenly Books.** The Mysterious Lady tells Song Jiang to burn them when his work is done. The game never shows
+  them being burned, because no scene in the source text was found for it.
+
 ## Sources
 
 - [List of Water Margin characters](https://en.wikipedia.org/wiki/List_of_Water_Margin_characters) and [108 Stars of Destiny](https://en.wikipedia.org/wiki/108_Stars_of_Destiny) (Wikipedia): roster, star names, ranks and designations.
