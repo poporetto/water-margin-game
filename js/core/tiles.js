@@ -126,6 +126,18 @@
       px(c, x + 8 - w + 2, yy + 5, 2, 1, lite);
     }
   }
+  // the white poplar (白楊樹): a tall, narrow tree with a pale, dark-eyed trunk — the guide through the Zhu maze
+  function poplarBase(c, x, y, tx, ty, th) {
+    grass(c, x, y, tx, ty, th);
+    c.fillStyle = 'rgba(0,0,0,0.22)'; c.beginPath(); c.ellipse(x + 8, y + 13, 5, 2, 0, 0, Math.PI * 2); c.fill();
+    px(c, x + 7, y + 2, 3, 12, '#e8e4d8'); px(c, x + 9, y + 2, 1, 12, '#b8b4a8');
+    px(c, x + 7, y + 6, 2, 1, '#3a3630'); px(c, x + 8, y + 10, 2, 1, '#3a3630');
+  }
+  function poplarTall(c, x, y) {
+    px(c, x + 7, y - 6, 3, 9, '#ecebe2'); px(c, x + 9, y - 6, 1, 9, '#b8b4a8'); px(c, x + 7, y - 3, 2, 1, '#3a3630');
+    blob(c, x + 8, y - 13, 5, 9, '#7a9a70'); blob(c, x + 7, y - 15, 4, 7, '#b4c8a4'); blob(c, x + 7, y - 19, 2, 3, '#e0e8d4');
+    px(c, x + 5, y - 10, 1, 2, '#e0e8d4'); px(c, x + 10, y - 13, 1, 2, '#e0e8d4');
+  }
   function bamboo(c, x, y, tx, ty, th) {
     grass(c, x, y, tx, ty, th);
     for (var i = 0; i < 4; i++) {
@@ -425,6 +437,7 @@
     'T': { draw: treeBase, tall: treeTall, solid: true },
     'P': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); px(c, x + 7, y + 10, 2, 5, '#5a3a20'); }, tall: pineTall, solid: true },
     'b': { draw: bamboo, solid: true },
+    'H': { draw: poplarBase, tall: poplarTall, solid: true },
     'm': { draw: rock, solid: true },
     'M': { draw: mountain, solid: true },
     '^': { draw: roof, solid: true },
