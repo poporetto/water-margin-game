@@ -132,7 +132,7 @@
       ['daming', 'huangni'], ['huangni', 'zhugui'], ['huangni', 'jingyang'], ['jingyang', 'yanggu'], ['yanggu', 'yuncheng'], ['yuncheng', 'songfarm'],
       ['yuncheng', 'dongxi'], ['dongxi', 'shijie'], ['songfarm', 'huandao'], ['kaifeng', 'yuncheng'], ['daming', 'dongchang'], ['dongchang', 'zhugui'],
       ['zhujia', 'lijia'], ['lijia', 'yishui'], ['dongping', 'zhujia'], ['dongping', 'zengtou'], ['zengtou', 'cangzhou'], ['dongping', 'qingzhou'],
-      ['qingzhou', 'qingfeng'], ['qingzhou', 'erlong'], ['erlong', 'dengzhou'], ['yishui', 'qingfeng'], ['shijie', 'mangdang'], ['mangdang', 'liaoerwa'],
+      ['qingzhou', 'qingfeng'], ['qingzhou', 'erlong'], ['qingzhou', 'kongmanor'], ['erlong', 'dengzhou'], ['yishui', 'qingfeng'], ['shijie', 'mangdang'], ['mangdang', 'liaoerwa'],
       ['kaifeng', 'huaixi'], ['huaixi', 'jieyang'], ['jieyang', 'jieling'], ['jieling', 'jiangzhou'], ['jiangzhou', 'whitedragon'], ['whitedragon', 'wuweijun'],
       ['jiangzhou', 'longhu'], ['liaoerwa', 'runzhou'], ['runzhou', 'hangzhou'], ['hangzhou', 'liuhe'], ['hangzhou', 'muzhou'], ['muzhou', 'qingxi'],
       ['gaotang', 'jizhou_n'], ['jizhou_n', 'cuiping'], ['jizhou_n', 'erxian'], ['jizhou_n', 'youzhou'], ['mangdang', 'jieling']

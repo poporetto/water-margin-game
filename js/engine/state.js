@@ -94,13 +94,17 @@
     });
     o.atk = o.pwr + S.weaponPower(id, c.wlv);
     o.dfs = o.def + arm;
-    o.range = d.weapon ? d.weapon.range : 'S';
+    o.range = S.weapon(id).range || 'S';
     return o;
   };
 
+  // A character's current weapon: a story override (e.g. Wu Song's fists) or their own.
+  S.weapon = function (id) {
+    var c = WM.state && WM.state.chars[id], d = S.def(id);
+    return (c && c.weapon) || d.weapon || { name: 'Fists', range: 'S', pow: 1 };
+  };
   S.weaponPower = function (id, wlv) {
-    var d = S.def(id);
-    var base = (d.weapon && d.weapon.pow) || 1;
+    var base = S.weapon(id).pow || 1;
     return Math.floor((6 + wlv * 9 + wlv * wlv * 0.6) * base);
   };
 

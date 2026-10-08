@@ -131,7 +131,7 @@
     return new Promise(function (resolve) {
       var mk = function () {
         return new UI.List(WM.state.party.map(function (id) {
-          var c = WM.state.chars[id], d = S.def(id), w = d.weapon || { name: 'Fists' };
+          var c = WM.state.chars[id], d = S.def(id), w = S.weapon(id);
           var can = c.wlv < maxLv && c.wlv < S.MAX_WLV;
           return { label: d.name + ' — ' + w.name + ' Lv' + c.wlv, right: can ? SH.cost(c.wlv) : 'Max', disabled: !can, id: id };
         }), { x: 40, y: 90, w: 720, title: 'Sharpen weapons (up to Lv ' + maxLv + ')' });
@@ -145,7 +145,7 @@
           if (WM.state.gold < cost) { WM.audio.sfx('buzz'); UI.toast('Not enough silver.'); return; }
           WM.state.gold -= cost; c.wlv++;
           WM.audio.sfx('block'); setTimeout(function () { WM.audio.sfx('block'); }, 150); setTimeout(function () { WM.audio.sfx('item'); }, 320);
-          UI.toast(S.def(r.ok.id).weapon.name + ' sharpened to Lv ' + c.wlv + '.');
+          UI.toast(S.weapon(r.ok.id).name + ' sharpened to Lv ' + c.wlv + '.');
           var k = list.idx; list = mk(); list.idx = k;
         },
         draw: function () { list.draw(); goldBox(); }

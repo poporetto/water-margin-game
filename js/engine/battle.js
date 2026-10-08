@@ -525,7 +525,7 @@
       var dx = (t.pos[0] - u.pos[0]) * (u.range === 'L' ? 0.15 : 0.55), dy = (t.pos[1] - u.pos[1]) * (u.range === 'L' ? 0.15 : 0.55);
       await tweenAnim(u, dx, dy, 0.16);
       var res = physDamage(u, t);
-      var weaponFx = u.side === 'party' ? (S.def(u.id).weapon || {}).fx : (u.def.fx);
+      var weaponFx = u.side === 'party' ? S.weapon(u.id).fx : (u.def.fx);
       if (u.range === 'L' && (weaponFx === 'arrow' || weaponFx === 'stone')) { fx(weaponFx, t.pos[0], t.pos[1] - 50, { from: [u.pos[0] + dx, u.pos[1] - 50 + dy] }); WM.audio.sfx('arrow'); await WM.wait(0.18); }
       if (res.miss) { WM.audio.sfx('miss'); pop(t, 'Miss', '#c0c0c0'); }
       else {

@@ -130,3 +130,27 @@
     L.shop('ycshop', 56, 4, 'yuncheng', 'shopkeep', 'Welcome to Yuncheng. We have everything for the road.')
   ]);
 })();
+
+// ---------------- the Song family farm (Song Jiang's home, chapter 6) ----------------
+(function () {
+  var L = WM.mapLib;
+  var f = L.grid(32, 26, '.');
+  f.border('T', 1, [{ side: 's', from: 14, to: 16 }]);
+  f.rect(14, 15, 3, 11, ':');
+  f.frame(4, 3, 24, 12, 'F'); f.rect(14, 14, 3, 1, ':');
+  var hall = f.house(6, 4, 12, 5, { roof: '^', door: 6, windows: [2, 9] });
+  var shrine = f.house(20, 4, 6, 5, { roof: 'v', wall: 'R', door: 3 });     // the Buddha hall with the cellar beneath
+  f.hline(12, 23, 10, ':'); f.vline(12, 9, 13, ':'); f.vline(23, 9, 10, ':');
+  f.stamp(5, 11, ['f.T.f.', 'T.f.T.']); f.stamp(20, 11, ['.f.T.f', '.T.f.T']);
+  f.rect(3, 17, 9, 6, 'y'); f.rect(19, 17, 10, 6, 'y');
+  f.scatter('T', 0.06, 231, '.', [1, 1, 30, 24]); L.clearAround(f, ':', 'T', '.');
+  WM.defMap('songfarm', { name: 'Song Family Farm', theme: 'summer', music: 'field', rows: f.rows(), spawn: [15, 24], battleBg: 'plains', exits: [WM.toWorld('songfarm', 14, 25, 3, 1)] });
+  var fi = L.grid(30, 10, 'x');
+  var fR = { hall: fi.room(1, 1, 14, 8, { floor: 'K' }), shrine: fi.room(16, 1, 9, 8, { floor: 'N' }) };
+  fi.stamp(2, 3, ['h..A.....A..', '............', '..t......t..', 'k..........k']);
+  fi.stamp(17, 3, ['.UUU...', '.AAA...', '.......', '....S..']);
+  WM.defMap('songfarm_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: fi.rows(), spawn: [8, 7] });
+  L.link({ map: 'songfarm', x: hall.x, y: hall.y }, { map: 'songfarm_in', x: fR.hall.x, y: fR.hall.y });
+  L.link({ map: 'songfarm', x: shrine.x, y: shrine.y }, { map: 'songfarm_in', x: fR.shrine.x, y: fR.shrine.y });
+  WM.data.songfarm = { rooms: fR };
+})();

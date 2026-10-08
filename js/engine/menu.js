@@ -234,7 +234,7 @@
     } else G.text(S.isRecruited(id) && d.rank ? 'Hero of Liangshan' : 'Companion', x, y, { size: 20, color: '#ffe0a0' });
     if (d.zh) G.text(d.zh, 920, y, { size: 26, align: 'right', color: G.COL.gold });
     y += 70;
-    var wpn = d.weapon || { name: 'Fists', range: 'S' };
+    var wpn = S.weapon(id);
     G.text('Weapon', x, y, { size: 20, color: G.COL.dim });
     G.text(wpn.name + '  Lv ' + c.wlv + '  (' + wpn.range + ')', x + 120, y, { size: 20 });
     y += 34;
@@ -302,7 +302,7 @@
         var ids = pool();
         return new UI.List(ids.map(function (id) {
           var d = S.def(id), inP = st.party.indexOf(id) >= 0;
-          return { label: (inP ? '★ ' : '   ') + d.name, right: 'LV ' + st.chars[id].lv + ' ' + (d.weapon ? d.weapon.range : ''), id: id, help: d.nick ? '“' + d.nick + '”  ' + (d.weapon ? d.weapon.name : '') : '' };
+          return { label: (inP ? '★ ' : '   ') + d.name, right: 'LV ' + st.chars[id].lv + ' ' + S.weapon(id).range, id: id, help: d.nick ? '“' + d.nick + '”  ' + S.weapon(id).name : '' };
         }), { x: 600, y: 20, w: 344, rows: 13, rowH: 36, help: true, size: 20 });
       };
       var list = mkList();
