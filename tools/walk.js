@@ -281,7 +281,18 @@ async function main() {
   const st = D.start;
   S.setParty(st.party); WM.state.leader = st.party[0];
   cur = { map: st.map, x: st.x, y: st.y }; WM.state.map = st.map;
+  const EXPECT_STARS = { 5: 11, 8: 20, 9: 39, 10: 42, 11: 48, 12: 60, 13: 64, 14: 80, 15: 87, 16: 88, 17: 102, 18: 108 }, checkedTotals = {};
   let lastProgress = '';
+  function checkTotals() {
+    // running total of Stars at each chapter end must match docs/STORY.md
+    for (const n in EXPECT_STARS) {
+      if (!checkedTotals[n] && S.has('ch' + n + '_done')) {
+        checkedTotals[n] = true;
+        const got = D.charOrder.filter((id) => joins[id]).length;
+        if (got !== EXPECT_STARS[n]) errors.push('Stars after chapter ' + n + ': ' + got + ', expected ' + EXPECT_STARS[n]);
+      }
+    }
+  }
   for (let iter = 0; iter < 5000; iter++) {
     if (S.has('ending_done')) break;
     // 1. auto events on the current map
@@ -329,7 +340,9 @@ async function main() {
       Object.keys(joins).forEach((k) => delete joins[k]); Object.assign(joins, JSON.parse(joinSnap));
     }
     if (!progressed) break;
+    checkTotals();
   }
+  checkTotals();
   // ---------- report ----------
   const order = D.charOrder;
   const missing = order.filter((id) => !joins[id]);
