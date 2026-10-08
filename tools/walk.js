@@ -150,7 +150,7 @@ function mkApi(ctx) {
     count(item) { return S.count(item); },
     gold(n) { WM.state.gold = Math.max(0, WM.state.gold + n); return resolved; },
     chapter(n) { if (!D.chapters[n]) err('unknown chapter ' + n); WM.state.chapter = n; if (VERBOSE) console.log('== Chapter ' + n + ' ' + (D.chapters[n] || {}).short); return resolved; },
-    card() { return resolved; }, endChapter() { return resolved; },
+    card() { return resolved; }, endChapter() { if (global.__checkTotals) global.__checkTotals(); return resolved; },
     shop(id) { if (!D.shops[id]) err('unknown shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.items[i]) err('shop ' + id + ' unknown item ' + i); }); return resolved; },
     inn() { S.restoreAll(); return Promise.resolve(true); }, smith() { return resolved; },
     talismanShop(id) { if (!D.shops[id]) err('unknown talisman shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.talismans[i]) err('talisman shop ' + id + ' unknown talisman ' + i); }); return resolved; },
@@ -293,6 +293,7 @@ async function main() {
       }
     }
   }
+  global.__checkTotals = checkTotals;
   for (let iter = 0; iter < 5000; iter++) {
     if (S.has('ending_done')) break;
     // 1. auto events on the current map

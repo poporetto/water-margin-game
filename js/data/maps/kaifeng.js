@@ -49,13 +49,13 @@
   g.stamp(15, 28, ['TfT', '.U.', 'TfT']);
   // south: residences
   var wangDoor = g.house(4, 36, 7, 5, { door: 3, windows: [1, 5] });
-  g.house(13, 36, 6, 5, { door: false, windows: [1, 4] });
+  var xuDoor = g.house(13, 36, 6, 5, { door: 3, windows: [1, 4] });   // Xu Ning, instructor of the Imperial Guard (chapter 14)
   g.house(20, 36, 6, 5, { roof: 'z', door: false, windows: [2] });
   var linDoor = g.house(34, 36, 7, 5, { door: 3, windows: [1, 5] });
   g.house(43, 36, 6, 5, { door: false, windows: [1, 4] });
   g.house(51, 36, 6, 5, { roof: 'z', door: false, windows: [3] });
   g.hline(2, 57, 41, ':');
-  [wangDoor, linDoor].forEach(function (d) { g.vline(d.x, d.y + 1, 41, ':'); });
+  [wangDoor, linDoor, xuDoor].forEach(function (d) { g.vline(d.x, d.y + 1, 41, ':'); });
   g.stamp(12, 42, ['T..f..T']); g.stamp(36, 42, ['f..T']);
   // lanterns along the main avenue
   for (var y = 15; y < 43; y += 5) { if (y >= 22 && y <= 26) continue; if (y === 12 || y === 13 || y === 33 || y === 34) continue; g.set(27, y, 'L'); g.set(32, y, 'L'); }
@@ -69,7 +69,7 @@
     name: 'The Eastern Capital', theme: 'spring', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [29, 40],
     exits: [{ x: 28, y: 44, w: 4, h: 2, to: 'world', tx: 62, ty: 59, dir: 'down' }]
   });
-  WM.data.kaifengDoors = { gao: gaoDoor, fan: fanDoor, li: liDoor, shop: shopDoor, smith: smithDoor, inn: innDoor, tal: talDoor, luqian: luDoor, yue: yueDoor, xiangguo: xgDoor, wang: wangDoor, lin: linDoor };
+  WM.data.kaifengDoors = { gao: gaoDoor, fan: fanDoor, li: liDoor, shop: shopDoor, smith: smithDoor, inn: innDoor, tal: talDoor, luqian: luDoor, yue: yueDoor, xiangguo: xgDoor, wang: wangDoor, lin: linDoor, xu: xuDoor };
 
   // ---------------- interiors ----------------
   var I = L.grid(64, 30, 'x');
@@ -84,11 +84,12 @@
   R.fan = I.room(11, 11, 15, 10); I.stamp(12, 13, ['h..L.....L..h', '.............', '.t..t..t..t..', '.............', '.t..t..t..t..', 'cccc.........']);
   R.li = I.room(27, 11, 10, 8, { floor: 'K' }); I.stamp(28, 13, ['h.k..h', '......', '..t...']);
   R.yue = I.room(38, 11, 12, 9, { floor: 'N' }); I.stamp(39, 13, ['L..UU..L.', '...AA....', '.........', 'j.......j']);
+  R.xu = I.room(51, 11, 12, 9); I.stamp(52, 13, ['k..h..j...', '..........', '...t......', 'h.........']);
   WM.defMap('kaifeng_in', { name: '', interior: true, theme: 'spring', music: 'town', rows: I.rows(), battleBg: 'interior', spawn: [6, 6] });
   WM.data.kaifengRooms = R;
 
   var d = WM.data.kaifengDoors;
-  [['wang', 'wang'], ['lin', 'lin'], ['luqian', 'luqian'], ['inn', 'inn'], ['shop', 'shop'], ['smith', 'smith'], ['tal', 'tal'], ['fan', 'fan'], ['li', 'li'], ['yue', 'yue']].forEach(function (p) {
+  [['wang', 'wang'], ['lin', 'lin'], ['luqian', 'luqian'], ['inn', 'inn'], ['shop', 'shop'], ['smith', 'smith'], ['tal', 'tal'], ['fan', 'fan'], ['li', 'li'], ['yue', 'yue'], ['xu', 'xu']].forEach(function (p) {
     L.link({ map: 'kaifeng', x: d[p[0]].x, y: d[p[0]].y }, { map: 'kaifeng_in', x: R[p[1]].x, y: R[p[1]].y });
   });
 
