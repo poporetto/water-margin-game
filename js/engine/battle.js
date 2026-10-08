@@ -257,6 +257,7 @@
       }
       if (!living(bt.enemies).length) result = 'win';
       else if (!living(bt.party).length) result = 'lose';
+      else if (bt.opt.rounds && bt.round >= bt.opt.rounds) result = 'timeout';
       if (bt.auto && (I.down('cancel') || I.pressed('cancel'))) { bt.auto = false; I.clear(); }
     }
     await finish(bt, result);
@@ -673,8 +674,8 @@
       WM.state.gold += gold;
       drops.forEach(function (d) { S.give(d, 1); });
       await victoryScreen(bt, gold, drops, gains);
-    } else if (result === 'lose') {
-      if (bt.opt.canLose) {
+    } else if (result === 'lose' || result === 'timeout') {
+      if (bt.opt.canLose || result === 'timeout') {
         // keep party alive at 1 HP for story losses
         bt.party.forEach(function (u) { WM.state.chars[u.id].hp = Math.max(1, WM.state.chars[u.id].hp); });
       }

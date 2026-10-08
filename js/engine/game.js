@@ -150,6 +150,29 @@
     }
     return info();
   };
+  // play a war crudely: every unit advances toward the nearest enemy and attacks if it can
+  window.warAuto = async function () {
+    for (var t = 0; t < 400 && WM.war.cur; t++) {
+      var wr = WM.war.cur, top = WM.ui.top();
+      if (!top) { await frames(10); continue; }
+      if (wr.phase !== 'player' || wr.busy || !top.isWarInput) { if (!top.isWarInput) await press('KeyZ'); await frames(10); continue; }
+      if (wr.mode === 'cursor') {
+        var mine = wr.units.filter(function (u) { return u.side === 'player' && u.losses < 2 && !u.done; })[0];
+        if (!mine) { await frames(10); continue; }
+        wr.cursor = { x: mine.x, y: mine.y }; await press('KeyZ');
+        if (wr.mode !== 'move') { await press('KeyZ'); continue; }
+        var foes = wr.units.filter(function (u) { return u.side === 'enemy' && u.losses < 2; });
+        var best = null, bd = 1e9;
+        for (var k in wr.reach) { var p = k.split(',').map(Number); foes.forEach(function (e) { var d = Math.abs(e.x - p[0]) + Math.abs(e.y - p[1]); if (d < bd) { bd = d; best = p; } }); }
+        wr.cursor = { x: best[0], y: best[1] }; await press('KeyZ'); await frames(4);
+        if (WM.ui.top() && !WM.ui.top().isWarInput) { await press('KeyZ'); await frames(4); }   // first action (Attack if available, else Wait)
+        if (wr.mode === 'target') { await press('KeyZ'); }
+        await frames(80);
+      } else { await press('KeyZ'); await frames(10); }
+    }
+    for (var j = 0; j < 30 && WM.scene !== WM.field; j++) { if (WM.ui.busy()) await press('KeyZ'); await frames(10); }
+    return info();
+  };
   window.saveAt = function (n) { var p = WM.field.player, t = p.tile(); WM.state.x = t.x; WM.state.y = t.y; WM.state.dir = p.dir; return WM.S.save(n); };
   window.loadAt = async function (n) { WM.S.load(n); WM.script.running = 0; WM.ui.stack.length = 0; WM.gfx.fade = 0; WM.setScene(WM.field, { map: WM.state.map, x: WM.state.x, y: WM.state.y, dir: WM.state.dir, noAuto: true }); await frames(10); return info(); };
   window.snap = function () { var c = document.getElementById('game'); var im = document.getElementById('snapimg'); if (!im) { im = document.createElement('img'); im.id = 'snapimg'; im.style.cssText = 'position:fixed;left:0;top:0;width:' + innerWidth + 'px;z-index:9;image-rendering:pixelated'; document.body.appendChild(im); } im.src = c.toDataURL(); return 'snap'; };
@@ -193,3 +216,30 @@
     return true;
   };
 })();
+
+// A small war used only to exercise the army-battle engine in debug sessions.
+WM.data.wars.debugwar = {
+  name: 'Debug Skirmish', goal: 'rout', turns: 12,
+  map: [
+    '..............',
+    '..TT......mm..',
+    '......~~......',
+    '..::::BB::::..',
+    '......~~......',
+    '..mm......TT..',
+    '..............'
+  ],
+  player: [
+    { leader: 'shijin', support: ['chenda'], type: 'cav', x: 1, y: 2, commander: true },
+    { leader: 'zhuwu', support: ['yangchun'], type: 'inf', x: 1, y: 4 },
+    { leader: 'andaoquan', type: 'inf', x: 0, y: 3 },
+    { leader: 'huarong', type: 'arch', x: 2, y: 3 }
+  ],
+  enemy: [
+    { name: 'Officer Wang', type: 'cav', atk: 70, def: 60, x: 12, y: 2, commander: true, portrait: 'officer' },
+    { name: 'Archers', type: 'arch', atk: 55, def: 45, x: 12, y: 4 },
+    { name: 'Spearmen', type: 'inf', atk: 60, def: 60, x: 11, y: 3 }
+  ],
+  intro: [[null, 'A debug skirmish. Rout every enemy unit.']],
+  win: [[null, 'Victory.']], lose: [[null, 'Defeat.']]
+};

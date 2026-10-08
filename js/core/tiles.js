@@ -462,6 +462,7 @@
     'V': { draw: tent, solid: true },
     'y': { draw: cropField },
     '_': { draw: mapEdgeDark, solid: true },
+    'C': { draw: function (c, x, y, tx, ty, th, m) { px(c, x, y, S, S, '#4a4a2a'); for (var i = 0; i < 5; i++) px(c, x + Math.floor(U.hash2(tx + i, ty, 70) * 13), y + Math.floor(U.hash2(tx, ty + i, 71) * 13), 3, 1, '#6a6a3a'); var nb = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'C'; }; if (!nb(0, -1)) px(c, x, y, S, 2, '#5a4a30'); if (!nb(-1, 0)) px(c, x, y, 2, S, '#5a4a30'); if (!nb(1, 0)) px(c, x + 14, y, 2, S, '#5a4a30'); if (!nb(0, 1)) px(c, x, y + 14, S, 2, '#5a4a30'); }, solid: true },
     'Q': { draw: function (c, x, y, tx, ty, th, m) { if (m.interior) floorStone(c, x, y, tx, ty); else grass(c, x, y, tx, ty, th); }, tall: steleTall, solid: true }
   };
 

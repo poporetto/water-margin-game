@@ -465,6 +465,9 @@
   guest('wangjin', 'Wang Jin', '王進', 'Arms Instructor', 'warrior', W('Staff', 'S', 1.1, 'blunt'),
     { skin: SK.light, hairStyle: 'topknot', beard: 'short', body: '#4a4a5a', trim: '#c8c0a0', weapon: 'staff', face: 'long', eyes: 'narrow' },
     { lv: 12, bio: 'Arms instructor of the Imperial Guard, whose father once beat the street-tough Gao Qiu. When Gao rose to Marshal, Wang Jin fled with his mother.' });
+  guest('luda', 'Lu Da', '魯達', 'Major of Weizhou', 'brute', W('Fists', 'S', 1.2, 'blunt'),
+    { skin: '#d8a070', hairStyle: 'scarf', band: '#2a4a2a', beard: 'full', beardColor: '#2a1a10', body: '#3a5a3a', trim: '#c89a4a', build: 'big', weapon: 'fists', face: 'round', eyes: 'round', brows: 'thick' },
+    { lv: 8, mul: { pwr: 1.25, hp: 1.2, spd: 0.85 }, bio: 'A major in the Weizhou garrison under Minister Chong: loud, generous, and quick with his fists. He will soon have another name.' });
   guest('chaogai', 'Chao Gai', '晁蓋', 'Heavenly King Who Carries the Pagoda', 'warrior', W('Sword', 'S', 1.05),
     { skin: SK.mid, hairStyle: 'scarf', band: '#3a2a1a', beard: 'full', body: '#6a5a2a', trim: '#d8b36a', build: 'big', weapon: 'sword', face: 'square', eyes: 'round' },
     { lv: 6, role: 'First Chief of Liangshan', war: { atk: 7, def: 7, type: 'inf', ability: 'morale' },

@@ -13,7 +13,6 @@
   WM.npc('wangsi', 'Wang Si', { skin: '#d8a070', hairStyle: 'topknot', body: '#6a6a4a', trim: '#4a3a2a', eyes: 'narrow', face: 'round' }, { face: true });
   WM.npc('liji', 'Li Ji the Hunter', { skin: '#c8905e', hairStyle: 'headband', band: '#5a4a2a', body: '#6a5a3a', trim: '#8a6a4a', weapon: 'bow', beard: 'stubble', eyes: 'narrow', face: 'narrow' }, { face: true });
   WM.npc('dutyA', 'Duty Officer', { skin: '#c8905e', hairStyle: 'scarf', band: '#1a1a1a', body: '#2a2a2a', trim: '#c8302a', weapon: 'dao', beard: 'short' }, { face: true });
-  WM.npc('luda', 'Lu Da', { skin: '#d8a070', hairStyle: 'scarf', band: '#2a4a2a', beard: 'full', beardColor: '#2a1a10', body: '#3a5a3a', trim: '#c89a4a', build: 'big', face: 'round', eyes: 'round', brows: 'thick' }, { face: true });
   WM.npc('gaoofficer', 'Guard Officer', { skin: '#d8a070', hairStyle: 'helmet', helmColor: '#8a7a3a', tassel: '#c8302a', body: '#6a2a2a', trim: '#d8b36a', weapon: 'spear' });
   WM.npc('zhangservant', 'Servant Zhang', { skin: '#d8a070', hairStyle: 'topknot', body: '#5a5a4a', trim: '#e8e0d0' });
 

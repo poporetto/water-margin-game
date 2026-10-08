@@ -13,6 +13,7 @@
   loc('shaohua', 'Mount Shaohua', 18, 46, 'mountain', 'shaohua', 10, 22);
   loc('weizhou', 'Weizhou', 8, 40, 'town', 'weizhou', 15, 25);
   loc('wutai', 'Mount Wutai', 30, 18, 'temple', 'wutai_town', 12, 22);
+  loc('yanmen', 'Yanmen County', 22, 22, 'town', 'yanmen', 12, 20);
   loc('peach', 'Peach Blossom Village', 42, 34, 'village', 'peach', 12, 20);
   loc('waguan', 'Waguan Monastery', 52, 44, 'ruin', 'waguan', 12, 22);
   loc('boarforest', 'Wild Boar Forest', 70, 46, 'forest', 'boarforest', 4, 12);
@@ -126,7 +127,7 @@
     // roads between locations (dirt), with bridges over water
     var R = [
       ['kaifeng', 'mengzhou'], ['mengzhou', 'crossslope'], ['mengzhou', 'shivillage'], ['shivillage', 'shaohua'], ['shivillage', 'huazhou'], ['huazhou', 'xiyue'],
-      ['shaohua', 'weizhou'], ['weizhou', 'wutai'], ['wutai', 'peach'], ['peach', 'waguan'], ['waguan', 'kaifeng'], ['wutai', 'hedong'],
+      ['shaohua', 'weizhou'], ['weizhou', 'yanmen'], ['yanmen', 'wutai'], ['wutai', 'peach'], ['peach', 'waguan'], ['waguan', 'kaifeng'], ['wutai', 'hedong'],
       ['kaifeng', 'boarforest'], ['boarforest', 'daming'], ['daming', 'gaotang'], ['gaotang', 'chaimanor'], ['chaimanor', 'cangzhou'],
       ['daming', 'huangni'], ['huangni', 'zhugui'], ['huangni', 'jingyang'], ['jingyang', 'yanggu'], ['yanggu', 'yuncheng'], ['yuncheng', 'songfarm'],
       ['yuncheng', 'dongxi'], ['dongxi', 'shijie'], ['songfarm', 'huandao'], ['kaifeng', 'yuncheng'], ['daming', 'dongchang'], ['dongchang', 'zhugui'],

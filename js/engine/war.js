@@ -45,6 +45,7 @@
     'G': { name: 'Gate', def: 0.4, col: '#7a5a3a', col2: '#5a3a1a' },
     'H': { name: 'Fort', def: 0.35, col: '#a7a49a', col2: '#8a877e' },
     ':': { name: 'Road', def: 0, col: '#b99b66', col2: '#a88a58' },
+    'B': { name: 'Bridge', def: 0, col: '#9a6a3c', col2: '#7a4e28' },
     's': { name: 'Snow', def: 0, col: '#e6ecf2', col2: '#cdd6e2' },
     'x': { name: 'Cliff', def: 0, col: '#5f5243', col2: '#4f4233', block: true }
   };
@@ -217,7 +218,9 @@
   function playerPhase(wr) {
     return new Promise(function (resolve) {
       wr.mode = 'cursor';
+      wr._resolvePhase = resolve;
       var w = {
+        isWarInput: true,
         update: function () {
           if (wr.busy) return;
           if (wr.mode === 'cursor') {
@@ -249,7 +252,7 @@
             if (I.pressed('ok')) {
               I.clear(); var act = wr.pendingAct; wr.mode = 'busy';
               wr.busy = true;
-              doAction(wr, wr.sel, t, act).then(function () { wr.busy = false; finishUnit(wr, w, resolve); });
+              doAction(wr, wr.sel, t, act).then(function () { wr.busy = false; finishUnit(wr, w); });
             }
             if (I.pressed('cancel')) { I.clear(); actionMenu(wr, w); }
           }
@@ -297,15 +300,13 @@
     });
   }
 
-  function finishUnit(wr, w, resolve) {
+  function finishUnit(wr, w) {
     if (wr.sel) wr.sel.done = true;
     wr.sel = null; wr.reach = null; wr.mode = 'cursor';
-    if (checkEnd(wr)) { UI.remove(w); (wr._resolvePhase || resolve || function () {})(); return; }
-    if (!active('player').some(function (u) { return !u.done; })) { UI.remove(w); (wr._resolvePhase || resolve)(); }
+    if (checkEnd(wr) || !active('player').some(function (u) { return !u.done; })) { UI.remove(w); wr._resolvePhase(); }
   }
 
   function openPhaseMenu(wr, w, resolve) {
-    wr._resolvePhase = resolve;
     UI.remove(w);
     UI.choose([{ label: 'End Turn' }, { label: 'Unit List' }, { label: 'Battle Objective' }, { label: 'Resume' }], { x: 700, y: 120 }).then(function (k) {
       if (k === 0) { resolve(); return; }

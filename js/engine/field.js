@@ -410,14 +410,9 @@
       fn = async function (s) { for (var i = 0; i < lines.length; i++) await s.say(who, lines[i]); };
     }
     if (!fn) return;
-    WM.script.run(fn, { ev: ev, actor: actor }).then(function () {
-      if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true);
-      if (WM.scene === F && F.map) {
-        // refresh actors whose conditions may have changed
-        F.refreshActors();
-        F.pendingAuto = true;
-      }
-    });
+    var body = fn;
+    // mark once-events done as soon as their script finishes (before actors refresh)
+    WM.script.run(async function (s) { await body(s); if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true); }, { ev: ev, actor: actor });
   };
 
   // Keep existing actors' positions but add/remove according to current conditions.
@@ -457,6 +452,7 @@
     F.transitioning = true;
     return WM.battle.start(troop, opt).then(function (res) {
       F.transitioning = false;
+      if (res === 'lose') return WM.gameOver().then(function () { return res; });
       return res;
     });
   };

@@ -214,7 +214,7 @@
       await s.say('hongxin:angry', 'Wretched boy! Don\'t lie to me!');
       await s.say('oxboy_boy', '...');
       s.sfx('wind');
-      await s.move('oxboy', 'U3', { speed: 40 });
+      await s.move('oxboy', 'U2', { speed: 40 });
       s.despawn('oxboy');
       await s.say('hongxin', 'How could a child know of the decree? Unless... Bah. The summit is still far and my legs are finished. I shall go down and ask the abbot.');
       s.flag('pro_met');
