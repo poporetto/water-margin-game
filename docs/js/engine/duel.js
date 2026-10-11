@@ -183,8 +183,8 @@
     var cw = sheet.isOverride ? sheet.cw : WM.sprites.CW, ch = sheet.isOverride ? sheet.ch : WM.sprites.CH;
     var fr = Math.abs(f.ox) > 4 ? 1 : 0;
     c.fillStyle = 'rgba(0,0,0,0.3)'; c.beginPath(); c.ellipse(x + f.ox, y, 40, 10, 0, 0, 7); c.fill();
-    c.drawImage(sheet, fr * cw, row * ch, cw, ch, x + f.ox - cw * P / 2, y - ch * P + 5, cw * P, ch * P);
-    if (f.flash > 0) { c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(sheet, fr * cw, row * ch, cw, ch, x + f.ox - cw * P / 2, y - ch * P + 5, cw * P, ch * P); c.restore(); }
-    if (f.pose !== 'idle') G.text(MOVE_NAME[f.pose], x + f.ox, y - ch * P - 10, { size: 22, bold: true, align: 'center', color: f.pose === 'wild' ? '#ffb070' : f.pose === 'defend' ? '#a0d0ff' : '#ffffff' });
+    c.drawImage(sheet, fr * cw, row * ch, cw, ch, x + f.ox - cw * P / 2, y - (sheet.isOverride ? ch : WM.sprites.FOOT) * P + 5, cw * P, ch * P);
+    if (f.flash > 0) { c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(sheet, fr * cw, row * ch, cw, ch, x + f.ox - cw * P / 2, y - (sheet.isOverride ? ch : WM.sprites.FOOT) * P + 5, cw * P, ch * P); c.restore(); }
+    if (f.pose !== 'idle') G.text(MOVE_NAME[f.pose], x + f.ox, y - (sheet.isOverride ? ch : WM.sprites.FOOT) * P - 10, { size: 22, bold: true, align: 'center', color: f.pose === 'wild' ? '#ffb070' : f.pose === 'defend' ? '#a0d0ff' : '#ffffff' });
   }
 })();

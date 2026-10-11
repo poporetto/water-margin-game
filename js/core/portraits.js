@@ -1,4 +1,4 @@
-// Procedural pixel portraits (48x56) from the same look descriptor as the sprites.
+// Illustrated portrait overrides with procedural pixel portraits (48x56) as fallback.
 // Expressions: normal, angry, sad, smile, shock. Drop-in override: assets/portraits/<id>.png (any size, shown scaled to 144x168).
 'use strict';
 (function () {
@@ -231,6 +231,18 @@
     img.src = 'assets/portraits/' + id + '.png';
   };
 
+  // Preserve painted portrait proportions and smooth downsampling at every UI size.
+  PT.drawOverride = function (img, x, y, w, h) {
+    var c = WM.gfx.ctx;
+    var s = Math.max(w / img.width, h / img.height);
+    c.save();
+    c.beginPath(); c.rect(x, y, w, h); c.clip();
+    c.imageSmoothingEnabled = true;
+    c.imageSmoothingQuality = 'high';
+    c.drawImage(img, x + (w - img.width * s) / 2, y, img.width * s, img.height * s);
+    c.restore();
+  };
+
   // Draw framed portrait on UI canvas at (x,y) sized 144x168.
   PT.drawFramed = function (id, expr, x, y, flip) {
     var c = WM.gfx.ctx;
@@ -243,8 +255,7 @@
     c.fillStyle = gr; c.fillRect(x, y, 144, 168);
     c.imageSmoothingEnabled = !img.isOverride ? false : true;
     if (img.isOverride) {
-      var s = Math.max(144 / img.width, 168 / img.height);
-      c.drawImage(img, x + (144 - img.width * s) / 2, y + (168 - img.height * s), img.width * s, img.height * s);
+      PT.drawOverride(img, x, y, 144, 168);
     } else WM.gfx.blit(img, x, y, 3, flip);
     c.restore();
   };

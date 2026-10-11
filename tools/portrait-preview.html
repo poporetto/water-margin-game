@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><base href="../"><title>Character portrait preview</title>
+<style>body{margin:24px;background:#141c2b;color:#f2ead8;font:16px Georgia,serif}h1{font-size:26px}#portraits{display:flex;gap:24px;flex-wrap:wrap}figure{margin:0}figcaption{text-align:center;margin:8px}canvas{max-width:100%;height:auto}button{padding:10px;margin:6px;background:#26344b;color:#f2ead8;border:1px solid #d8b36a;cursor:pointer}</style></head>
+<body><h1>Character portraits</h1><p>Choose a character to preview the game’s dialogue frame. Small images show menu and battle sizes.</p><div id="portraits"></div><canvas id="dialogue" width="960" height="720"></canvas><p id="status">Loading portraits…</p>
+<script src="js/core/base.js"></script><script src="js/core/gfx.js"></script><script src="js/core/sprites.js"></script><script src="js/core/portraits.js"></script><script src="js/data/chars.js"></script><script src="js/engine/ui.js"></script><script src="assets/manifest.js"></script>
+<script>
+WM.time=0; WM.gfx.init(document.getElementById('dialogue'));
+const ids=WM.ASSETS.portraits;
+function show(id){WM.gfx.ctx= document.getElementById('dialogue').getContext('2d');WM.gfx.ctx.clearRect(0,0,960,720);WM.ui.stack=[];WM.ui.message(id,'The road to Liangshan awaits.');WM.ui.top().tick;WM.ui.top().update(10);WM.ui.draw();}
+Promise.all(ids.map(id=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{im.isOverride=true;WM.portraits.overrides[id]=im;resolve();};im.onerror=reject;im.src='assets/portraits/'+id+'.png';}))).then(()=>{
+ ids.forEach(id=>{const f=document.createElement('figure');const c=document.createElement('canvas');c.width=170;c.height=282;WM.gfx.ctx=c.getContext('2d');WM.portraits.drawFramed(id,'normal',13,8);WM.portraits.drawOverride(WM.portraits.get(id),12,198,64,76);WM.portraits.drawOverride(WM.portraits.get(id),94,198,64,72);f.append(c);const b=document.createElement('button');b.textContent=WM.data.chars[id].name;b.onclick=()=>show(id);const cap=document.createElement('figcaption');cap.append(b);f.append(cap);document.getElementById('portraits').append(f);});
+ document.getElementById('status').textContent=ids.length+' portraits loaded successfully.';show(ids[0]);
+}).catch(()=>{document.getElementById('status').textContent='Portrait loading failed.';});
+</script></body></html>

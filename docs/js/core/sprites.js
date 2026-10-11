@@ -270,8 +270,9 @@
     return g;
   }
 
-  // Sheet: frames are 24x30 cells (16x24 sprite + padding). rows: down,left,right,up; cols: stand, step1, step2
-  SP.CW = 24; SP.CH = 30; SP.OX = 4; SP.OY = 6;
+  // Sheet: frames are 24x32 cells (16x24 sprite + hats above + the feet's outline and shadow row below).
+  // rows: down,left,right,up; cols: stand, step1, step2. FOOT is the row the feet stand on, for anchoring.
+  SP.CW = 24; SP.CH = 32; SP.OX = 4; SP.OY = 6; SP.FOOT = 30;
   SP.build = function (id, lk) {
     var L = look(lk || {});
     var cv = U.makeCanvas(SP.CW * 3, SP.CH * 4);
@@ -298,7 +299,7 @@
     var col = WALK[animStep & 3];
     var cw = SP.CW, ch = SP.CH;
     if (sheet.isOverride) { cw = sheet.cw; ch = sheet.ch; }
-    var dx = Math.round(x - cw / 2), dy = Math.round(y - ch + (sheet.isOverride ? 0 : 1));
+    var dx = Math.round(x - cw / 2), dy = Math.round(sheet.isOverride ? y - ch : y - SP.FOOT + 1);
     c.drawImage(sheet, col * cw, row * ch, cw, ch, dx, dy, cw, ch);
   };
 

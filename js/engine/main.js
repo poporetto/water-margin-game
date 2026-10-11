@@ -50,9 +50,9 @@
       if (WM.ui.busy() && scene && scene.updateBackground) scene.updateBackground(dt);
       G.ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (scene && scene.draw) scene.draw();
+      G.overlay();   // fade and flash go under the UI, so lines spoken over a black screen can still be read
       WM.ui.draw();
       WM.ui.drawToasts(dt);
-      G.overlay();
       if (WM.debug && WM.debug.draw) WM.debug.draw();
     } catch (e) {
       console.error(e);

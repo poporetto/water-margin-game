@@ -154,6 +154,7 @@
     if (ch === null) return true;
     return T.solid(ch);
   }
+  F.tileSolid = function (tx, ty) { return tileSolid(tx, ty); };
   var HB_W = 5, HB_H = 4; // half-width, height of feet hitbox
   function blockedAt(a, x, y) {
     var x0 = Math.floor((x - HB_W) / TS), x1 = Math.floor((x + HB_W - 1) / TS);
@@ -273,7 +274,7 @@
             a.path.push({ x: nx, y: ny }); a.speed = 30;
           } else a.dir = pick[2];
         }
-      } else if (!a.isPlayer) a.moving = false;
+      } else if (!a.isPlayer || frozen || WM.script.running) a.moving = false;   // the player stands still while a dialogue or event runs
       if (a.moving) { a.animT += dt * 6.5 * (a.animSpeed || 1); a.anim = Math.floor(a.animT) & 3; }
       else { a.anim = 0; a.animT = 0; }
       if (a.emoteT > 0) { a.emoteT -= dt; if (a.emoteT <= 0) a.emote = null; }

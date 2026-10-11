@@ -783,11 +783,11 @@
       if (Math.abs(u.anim.ox) > 2) frame = Math.floor(WM.time * 8) % 2 ? 1 : 2;
       if (ko) {
         c.translate(x, y - 10); c.rotate(u.side === 'party' ? Math.PI / 2 : -Math.PI / 2);
-        c.drawImage(sh, 0, 1 * ch, cw, ch, -cw * PXH / 2, -ch * PXH + 30, cw * PXH, ch * PXH);
+        c.drawImage(sh, 0, 1 * ch, cw, ch, -cw * PXH / 2, -(sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 30, cw * PXH, ch * PXH);
         c.setTransform(1, 0, 0, 1, 0, 0);
       } else {
         var bob2 = u.status.sleep ? 0 : Math.round(Math.sin(WM.time * 4 + u.idx * 1.3) * 1.5);
-        c.drawImage(sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - ch * PXH + 5 + bob2, cw * PXH, ch * PXH);
+        c.drawImage(sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - (sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 5 + bob2, cw * PXH, ch * PXH);
         if (u.anim.flash > 0) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - ch * PXH + 5, cw * PXH, ch * PXH); c.globalCompositeOperation = 'source-over'; }
         if (u.anim.glow > 0) { c.globalAlpha = 0.5; c.fillStyle = '#ffe8a0'; c.beginPath(); c.ellipse(x, y - 40, 40, 60, 0, 0, 7); c.fill(); }
       }
@@ -870,7 +870,7 @@
       var img = WM.portraits.get(u.id, u.hp <= 0 ? 'sad' : 'normal');
       c.save(); c.beginPath(); c.rect(x, y, 64, 72); c.clip();
       c.fillStyle = '#26304a'; c.fillRect(x, y, 64, 72);
-      if (img.isOverride) c.drawImage(img, 0, 0, img.width, img.height * 0.75, x, y, 64, 72);
+      if (img.isOverride) WM.portraits.drawOverride(img, x, y, 64, 72);
       else c.drawImage(img, 8, 4, 32, 36, x, y, 64, 72);
       if (u.hp <= 0) { c.fillStyle = 'rgba(80,0,0,0.5)'; c.fillRect(x, y, 64, 72); }
       c.restore();

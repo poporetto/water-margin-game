@@ -44,14 +44,14 @@ which arcs are played and which are condensed. Each game chapter is one file in 
 
 ## Art
 
-Every sprite, portrait, tile and monster is drawn procedurally in code. To replace the art for any character, drop
+Song Jiang, Lin Chong, Lu Zhishen, Wu Song, Wu Yong and Hua Rong use illustrated portraits. Other portraits, sprites, tiles and monsters are drawn procedurally in code. To replace the art for any character, drop
 in a PNG and list its id in `assets/manifest.js`:
 
 ```js
 WM.ASSETS = { portraits: ['linchong', 'songjiang'], sprites: ['linchong'] };
 ```
 
-- `assets/portraits/<id>.png` can be any size. It is shown scaled into the 144x168 portrait frame, bottom-aligned, and
+- `assets/portraits/<id>.png` can be any size. It is shown scaled into the 144x168 portrait frame, top-aligned without stretching, and
   the same image is used for every expression.
 - `assets/sprites/<id>.png` is a field sprite sheet of 3 columns (stand, step, step) by 4 rows (down, left, right, up).
   Each cell is drawn at the procedural sprite's size, so 24x30 cells (a 72x120 sheet) fit best.

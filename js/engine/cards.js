@@ -205,7 +205,7 @@
             var py = top + 160 + i * ROW; if (py < -ROW || py > WM.H + ROW) return;
             var d = S.def(id), fate = st.dead[id] ? 'fell' : st.flags['away:' + id] ? 'departed' : 'lived';
             var col = fate === 'fell' ? '#a89a88' : fate === 'departed' ? '#a8c0d8' : '#f0e0c0';
-            try { var im = WM.portraits.get(id, 'normal'); if (im.isOverride) G.ctx.drawImage(im, 150, py - 28, 48, 56); else WM.gfx.blit(im, 150, py - 28, 1); } catch (e) {}
+            try { var im = WM.portraits.get(id, 'normal'); if (im.isOverride) WM.portraits.drawOverride(im, 150, py - 28, 48, 56); else WM.gfx.blit(im, 150, py - 28, 1); } catch (e) {}
             G.text(d.starEn, 230, py - 14, { size: 18, color: '#c8b890' });
             G.text(d.name + '  ' + d.zh, 230, py + 10, { size: 24, bold: true, color: col });
             G.text(fate === 'fell' ? 'fell' : fate === 'departed' ? 'departed' : 'lived', 820, py, { size: 18, align: 'right', color: col, italic: true });

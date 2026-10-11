@@ -21,7 +21,7 @@
       var img = WM.portraits.get(id, c.hp <= 0 ? 'sad' : 'normal');
       var cx = G.ctx;
       cx.save(); cx.beginPath(); cx.rect(x + 22, yy, 64, 76); cx.clip(); cx.fillStyle = '#26304a'; cx.fillRect(x + 22, yy, 64, 76);
-      if (img.isOverride) cx.drawImage(img, 0, 0, img.width, img.height * 0.75, x + 22, yy, 64, 76); else cx.drawImage(img, 8, 4, 32, 38, x + 22, yy, 64, 76);
+      if (img.isOverride) WM.portraits.drawOverride(img, x + 22, yy, 64, 76); else cx.drawImage(img, 8, 4, 32, 38, x + 22, yy, 64, 76);
       cx.restore();
       G.text(d.name, x + 100, yy + 2, { size: 22, bold: true, color: c.hp <= 0 ? '#c06050' : G.COL.text });
       G.text('LV ' + c.lv, x + 330, yy + 4, { size: 20 });
