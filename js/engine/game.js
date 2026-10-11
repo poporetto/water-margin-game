@@ -76,6 +76,42 @@
 
   // ---------- debug (F2) ----------
   var D = WM.debug = { enabled: /debug/.test(location.search) };
+
+  // ---------- debug chapter picker (a button in the corner; only with ?debug) ----------
+  // Jumps straight into any chapter with that chapter's debug party, from the title screen or mid-game.
+  D.jump = function (n) {
+    WM.ui.stack.length = 0; WM.script.running = 0; WM.gfx.fade = 0; WM.gfx.flash = 0;
+    if (WM.field) { WM.field.draw.hook = null; WM.field.transitioning = false; }
+    if (WM.battle) WM.battle.cur = null; if (WM.war) WM.war.cur = null; if (WM.duel) WM.duel.cur = null;
+    WM.audio.stop();
+    if (n === 0) { WM.newGame(); return; }
+    WM.script.run(function (s) { return WM.data.chapters[n].debugStart(s); });
+  };
+  D.buildPicker = function () {
+    if (!D.enabled || typeof document === 'undefined' || !document.body || document.getElementById('dbg-chapters')) return;
+    var st = document.createElement('style');
+    st.textContent = '#dbg-chapters{position:fixed;top:8px;left:8px;z-index:50;padding:6px 12px;font:bold 13px Georgia,serif;color:#f4e6c4;background:#5a1a12;border:2px solid #d8b36a;border-radius:6px;cursor:pointer;opacity:.85}' +
+      '#dbg-panel{position:fixed;top:44px;left:8px;z-index:51;max-height:calc(100vh - 60px);overflow-y:auto;background:rgba(18,12,8,.96);border:2px solid #d8b36a;border-radius:8px;padding:6px;display:none;-webkit-overflow-scrolling:touch;touch-action:pan-y}' +
+      '#dbg-panel button{display:block;width:250px;text-align:left;margin:2px 0;padding:7px 10px;font:14px Georgia,serif;color:#f0e0c0;background:#2a1e14;border:1px solid #6a5030;border-radius:4px;cursor:pointer}' +
+      '#dbg-panel button:hover,#dbg-panel button:active{background:#6a2a1a}#dbg-panel b{color:#d8b36a;margin-right:6px}';
+    document.head.appendChild(st);
+    var btn = document.createElement('div'); btn.id = 'dbg-chapters'; btn.textContent = 'Chapters ▾';
+    var panel = document.createElement('div'); panel.id = 'dbg-panel';
+    WM.data.chapters.forEach(function (c, i) {
+      if (i > 0 && !c.debugStart) return;
+      var b = document.createElement('button');
+      b.innerHTML = '<b>' + (i === 0 ? 'Prologue' : 'Ch ' + i) + '</b>' + (c.short || '');
+      b.addEventListener('click', function (e) { e.stopPropagation(); panel.style.display = 'none'; D.jump(i); });
+      panel.appendChild(b);
+    });
+    var toggle = function (e) { e.preventDefault(); e.stopPropagation(); panel.style.display = panel.style.display === 'block' ? 'none' : 'block'; };
+    btn.addEventListener('click', toggle);
+    ['touchstart', 'touchend', 'touchmove'].forEach(function (ev) { panel.addEventListener(ev, function (e) { e.stopPropagation(); }, { passive: true }); });
+    document.body.appendChild(btn); document.body.appendChild(panel);
+  };
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', D.buildPicker); else setTimeout(D.buildPicker, 0);
+  }
   D.open = function () {
     if (!D.enabled) return;
     WM.script.run(async function (s) {

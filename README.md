@@ -34,7 +34,7 @@ On phones and tablets, on-screen controls appear at the first touch: a D-pad, A 
 
 Saves use the browser's `localStorage`, with 8 slots. Record keepers (the scribe NPCs) and the Liangshan records office offer saves.
 
-Debug mode is `?debug`. It lets you press F2 to jump to any chapter, warp, level up, and recruit everyone.
+Debug mode is `?debug` (for example <http://localhost:8766/?debug>). A **Chapters** button appears in the top-left corner: tap it to jump straight into any chapter, from the title screen or mid-game. F2 opens the full debug menu, which can also warp, level up, and recruit everyone. Without `?debug` none of this is shown.
 
 ## Story
 
