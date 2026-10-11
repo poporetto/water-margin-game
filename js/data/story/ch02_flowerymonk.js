@@ -26,11 +26,11 @@
 
   // ---------------- enemies, troops, duels ----------------
   WM.enemy('wutai_monk', 'Monk of Wutai', 5, WM.hum(WM.data.npcs.wutaimonk.look), { hp: 0.9, atk: 0.85, exp: 70, gold: 0, fx: 'blunt', drops: [['bun', 0.4]] });
-  WM.enemy('wutai_monk2', 'Wutai Warrior-Monk', 7, WM.hum(WM.enemyLooks.monkThug), { exp: 80, gold: 0, fx: 'blunt', drops: [['bun', 0.3]] });
-  WM.enemy('peach_bandit', 'Peach Blossom Bandit', 6, WM.hum(WM.enemyLooks.bandit), { exp: 90, drops: [['beef', 0.2]] });
-  WM.enemy('zhoutong_boss', 'Zhou Tong', 8, WM.hum(WM.data.chars.zhoutong.look), { hp: 3.5, range: 'M', exp: 240, gold: 80, boss: true, drops: [['medicine', 1]], skills: [{ name: 'Little Conqueror\'s Thrust', chance: 0.25, type: 'phys', power: 1.5 }] });
-  WM.enemy('cui_boss', 'Cui Daocheng', 10, WM.hum(WM.data.npcs.cuidaocheng.look), { hp: 3.8, atk: 1.1, exp: 280, gold: 120, boss: true, drops: [['medicine', 1]], skills: [{ name: 'Iron Buddha Cleave', chance: 0.25, type: 'phys', power: 1.6 }] });
-  WM.enemy('qiu_boss', 'Qiu Xiaoyi', 10, WM.hum(WM.data.npcs.qiuxiaoyi.look), { hp: 3.0, spd: 1.2, exp: 260, gold: 100, boss: true, drops: [['antidote', 2]], skills: [{ name: 'Flying Yaksha', chance: 0.3, type: 'phys', power: 1.3, target: 'all' }] });
+  WM.enemy('wutai_monk2', 'Wutai Warrior-Monk', 7, WM.hum(WM.enemyLooks.monkThug), { atk: 0.62, exp: 80, gold: 0, fx: 'blunt', drops: [['bun', 0.3]] });
+  WM.enemy('peach_bandit', 'Peach Blossom Bandit', 6, WM.hum(WM.enemyLooks.bandit), { atk: 0.7, exp: 90, drops: [['beef', 0.2]] });
+  WM.enemy('zhoutong_boss', 'Zhou Tong', 8, WM.hum(WM.data.chars.zhoutong.look), { hp: 2.0, atk: 0.85, range: 'M', exp: 240, gold: 80, boss: true, drops: [['medicine', 1]], skills: [{ name: 'Little Conqueror\'s Thrust', chance: 0.25, type: 'phys', power: 1.5 }] });
+  WM.enemy('cui_boss', 'Cui Daocheng', 10, WM.hum(WM.data.npcs.cuidaocheng.look), { hp: 1.9, atk: 0.7, exp: 280, gold: 120, boss: true, drops: [['medicine', 1]], skills: [{ name: 'Iron Buddha Cleave', chance: 0.25, type: 'phys', power: 1.6 }] });
+  WM.enemy('qiu_boss', 'Qiu Xiaoyi', 10, WM.hum(WM.data.npcs.qiuxiaoyi.look), { hp: 1.5, atk: 0.62, spd: 1.2, exp: 260, gold: 100, boss: true, drops: [['antidote', 2]], skills: [{ name: 'Flying Yaksha', chance: 0.3, type: 'phys', power: 1.3, target: 'all' }] });
   WM.enemy('cui_strong', 'Cui Daocheng', 10, WM.hum(WM.data.npcs.cuidaocheng.look), { hpAbs: 9999, atk: 1.0, exp: 0, gold: 0, boss: true });
   WM.enemy('qiu_strong', 'Qiu Xiaoyi', 10, WM.hum(WM.data.npcs.qiuxiaoyi.look), { hpAbs: 9999, atk: 0.9, exp: 0, gold: 0, boss: true });
   WM.enemy('rascal', 'Garden Rascal', 4, WM.hum(WM.enemyLooks.thug), { hp: 0.8, atk: 0.8, exp: 60, gold: 15, fx: 'blunt' });

@@ -136,6 +136,8 @@
       if (c !== '.' && c !== '=' && c !== ',') continue;
       var near = false;
       for (var dy = -1; dy <= 1 && !near; dy++) for (var dx = -1; dx <= 1 && !near; dx++) { var n = rows[y + dy] && rows[y + dy][xx + dx]; if (n === ':' || n === 'D' || n === 'G' || n === 'T' || n === 'B') near = true; }
+      // and well clear of the Stone Tablet: they wander two tiles from home, and must never stand where it is examined
+      for (dy = -3; dy <= 3 && !near; dy++) for (dx = -3; dx <= 3 && !near; dx++) if (rows[y + dy] && rows[y + dy][xx + dx] === 'Q') near = true;
       if (near) continue;
       if ((xx + y * 3) % 4) continue;   // spread them out
       out.push([xx, y]);

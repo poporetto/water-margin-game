@@ -41,6 +41,7 @@
     var errs = [];
     var d = WM.data;
     if (d.charOrder.length !== 108) errs.push('Expected 108 stars, have ' + d.charOrder.length);
+    (WM.dupEnemies || []).forEach(function (id) { errs.push('Enemy id defined twice: ' + id); });
     for (var mid in d.maps) {
       var m = d.maps[mid];
       (m.exits || []).forEach(function (e) { if (!d.maps[e.to]) errs.push('Map ' + mid + ' exit to missing map ' + e.to); });

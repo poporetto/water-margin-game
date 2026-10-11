@@ -172,7 +172,7 @@
         // already standing there since the scene was set (see Field.stage)
         if (ex && ex.ev && ex.ev.staged) {
           var et = ex.tile();
-          if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; if (dir) ex.dir = dir; return ex; }
+          if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; ex.solid = true; if (dir) ex.dir = dir; return ex; }
           f.actors = f.actors.filter(function (o) { return o !== ex; });
         }
         var back = (f.actors || []).filter(function (o) { return o.leavingKey && o.sheetWho === who; })[0];

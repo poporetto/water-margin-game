@@ -129,7 +129,7 @@
     Object.keys(want).forEach(function (k) {
       if (F.findActor(k)) return;
       var sp = want[k], a = F.addActor(k, sp.who, sp.x, sp.y, sp.dir);
-      a.ev.staged = true; a.sheetWho = sp.who;
+      a.ev.staged = true; a.sheetWho = sp.who; a.solid = false;   // never in the way of the player walking up to their scene
     });
   };
 
@@ -352,6 +352,8 @@
       var w = e.w || 1, h = e.h || 1;
       if (t.x >= e.x && t.x < e.x + w && t.y >= e.y && t.y < e.y + h) {
         if (e.cond && !e.cond(S, WM.state)) {
+          // a locked place on the world map may sit on the only road: say so, but let the traveller walk on
+          if (e.passable) { var m0 = typeof e.blocked === 'function' ? e.blocked(S) : e.blocked; if (m0) WM.ui.toast((m0 && m0.text) || m0); continue; }
           if (e.blocked) { F.bump(e); return true; }
           continue;
         }
@@ -495,7 +497,9 @@
     if (Math.random() > (enc.rate || 0.06)) return false;
     var troops = typeof enc.troops === 'function' ? enc.troops(S) : enc.troops;
     var troop = U.pick(troops);
-    // Suikoden II style: weak encounters can be avoided automatically when far over-levelled? No - always fight.
+    // a hero travelling alone (or in a pair) meets as many foes as they have companions, not a full band
+    var n = WM.state.party.length;
+    if (n && n < 3 && troop.length > n) troop = troop.slice(0, n);
     F.startBattle(troop, { bg: F.map.def.battleBg || F.map.theme, canRun: true });
     return true;
   };

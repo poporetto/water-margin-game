@@ -16,9 +16,9 @@
 
   var hum = WM.hum, C = WM.data.chars;
   WM.enemy('kf_guard', 'Palace Guard', 33, hum(WM.enemyLooks.soldier), { range: 'M', exp: 190, drops: [['medicine', 0.15]] });
-  WM.enemy('niutou_bandit', 'Niutou Bandit', 31, hum(WM.enemyLooks.bandit2), { exp: 170, fx: 'blunt' });
-  WM.enemy('wangjiang_foe', 'Wang Jiang', 32, hum(WM.enemyLooks.bandit), { hp: 1.5, atk: 0.9, exp: 300, gold: 300, boss: true });
-  WM.enemy('donghai_foe', 'Dong Hai', 32, hum(WM.enemyLooks.bandit2), { hp: 1.5, atk: 0.9, exp: 300, gold: 300, boss: true, fx: 'blunt' });
+  WM.enemy('niutou_bandit', 'Niutou Bandit', 31, hum(WM.enemyLooks.bandit2), { hp: 0.7, atk: 0.65, exp: 170, fx: 'blunt' });
+  WM.enemy('wangjiang_foe', 'Wang Jiang', 32, hum(WM.enemyLooks.bandit), { hp: 1.2, atk: 0.7, exp: 300, gold: 300, boss: true });
+  WM.enemy('donghai_foe', 'Dong Hai', 32, hum(WM.enemyLooks.bandit2), { hp: 1.2, atk: 0.7, exp: 300, gold: 300, boss: true, fx: 'blunt' });
   WM.enemy('gaofleet', 'Marine of the Sea-Eel Ships', 34, hum(WM.enemyLooks.soldier), { range: 'M', exp: 200 });
   var T = WM.data.troops;
   T.ch20_riot = { enemies: ['kf_guard', 'kf_guard', 'kf_guard'], bg: 'night', noRun: true };

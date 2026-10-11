@@ -72,6 +72,7 @@
   };
   T.update = function (dt) {
     T.t += dt;
+    if (WM.script.running) return;   // a chapter is being started (debug picker): the title takes no input
     if (T.mode === 'press') {
       if (I.pressed('ok')) {
         I.clear(); WM.audio.unlock(); WM.audio.sfx('ok'); WM.audio.play('title');

@@ -16,8 +16,8 @@
   WM.npc('linren', 'Lin Ren', { skin: '#c8905e', hairStyle: 'scarf', band: '#1a1a1a', body: '#3a3a3a', trim: '#8a6a3a', face: 'round' }, { face: true });
   WM.npc('cangzhouboy', 'The Little Master', { skin: '#f6e2cc', hairStyle: 'bun', body: '#c83a3a', trim: '#f0d080', build: 'small', face: 'round' }, { face: true });
 
-  WM.enemy('yin_thug', 'Yin Tianxi\'s Bully', 23, WM.hum(WM.enemyLooks.thug), { hp: 0.8, atk: 0.8, exp: 90, fx: 'blunt', drops: [['wine', 0.3]] });
-  WM.enemy('yin_boss', 'Yin Tianxi', 22, WM.hum(WM.data.npcs.yintianxi.look), { hp: 1.6, atk: 0.7, exp: 260, gold: 300, boss: true, drops: [['silkrobe', 1]] });
+  WM.enemy('yin_thug', 'Yin Tianxi\'s Bully', 23, WM.hum(WM.enemyLooks.thug), { hp: 0.65, atk: 0.62, exp: 90, fx: 'blunt', drops: [['wine', 0.3]] });
+  WM.enemy('yin_boss', 'Yin Tianxi', 22, WM.hum(WM.data.npcs.yintianxi.look), { hp: 1.4, atk: 0.6, exp: 260, gold: 300, boss: true, drops: [['silkrobe', 1]] });
   WM.enemy('well_bat', 'Well Bat', 18, WM.beast('bat'), { hp: 0.5, spd: 1.4, atk: 0.55, exp: 70, gold: 0, fx: 'claw', range: 'M' });
   var T = WM.data.troops;
   T.ch13_yin = { enemies: ['yin_thug', 'yin_boss', 'yin_thug'], bg: 'town', noRun: true };

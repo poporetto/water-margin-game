@@ -10,11 +10,11 @@
   WM.npc('qingzhouprefect', 'Prefect Murong', { skin: '#f0c49a', hairStyle: 'futou', beard: 'long', body: '#7a1a1a', trim: '#d8b36a' }, { face: true });
   WM.npc('zhaoneng', 'Constable Zhao', { skin: '#c8905e', hairStyle: 'scarf', band: '#1a1a1a', body: '#2a2a2a', trim: '#c8302a', weapon: 'dao' }, { face: true });
 
-  WM.enemy('qz_soldier', 'Qingzhou Soldier', 18, WM.hum(WM.enemyLooks.soldier), { range: 'M', exp: 95, drops: [['medicine', 0.12]] });
-  WM.enemy('qz_archer', 'Qingzhou Archer', 18, WM.hum(WM.enemyLooks.archer), { hp: 0.8, range: 'L', fx: 'arrow', exp: 95 });
+  WM.enemy('qz_soldier', 'Qingzhou Soldier', 18, WM.hum(WM.enemyLooks.soldier), { hp: 0.8, atk: 0.72, range: 'M', exp: 95, drops: [['medicine', 0.12]] });
+  WM.enemy('qz_archer', 'Qingzhou Archer', 18, WM.hum(WM.enemyLooks.archer), { hp: 0.7, atk: 0.55, range: 'L', fx: 'arrow', exp: 95 });
   WM.enemy('liugao_guard', 'Liu Gao\'s Guard', 17, WM.hum(WM.enemyLooks.constable), { exp: 90 });
-  WM.enemy('huangxin_boss', 'Huang Xin', 20, WM.hum(WM.data.chars.huangxin.look), { hp: 2.6, exp: 450, gold: 200, boss: true, skills: [{ name: 'Mourning Sword', chance: 0.3, type: 'phys', power: 1.5 }] });
-  WM.enemy('liugao_boss', 'Liu Gao', 18, WM.hum(WM.data.npcs.liugao.look), { hp: 1.8, exp: 300, gold: 300, boss: true });
+  WM.enemy('huangxin_boss', 'Huang Xin', 20, WM.hum(WM.data.chars.huangxin.look), { hp: 1.9, atk: 0.75, exp: 450, gold: 200, boss: true, skills: [{ name: 'Mourning Sword', chance: 0.3, type: 'phys', power: 1.5 }] });
+  WM.enemy('liugao_boss', 'Liu Gao', 18, WM.hum(WM.data.npcs.liugao.look), { hp: 1.2, atk: 0.7, exp: 300, gold: 300, boss: true });
   var T = WM.data.troops;
   T.ch8_liugao = { enemies: ['liugao_guard', 'liugao_guard', 'liugao_guard'], bg: 'snow', noRun: true };
   T.ch8_escort = { enemies: ['qz_soldier', 'huangxin_boss', 'liugao_boss', 'qz_archer'], bg: 'snow', boss: true };

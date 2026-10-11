@@ -23,9 +23,10 @@
   WM.npc('wanglun', 'Wang Lun', { skin: '#f0c49a', hairStyle: 'scarf', band: '#1a1a2a', beard: 'mustache', body: '#3a4a6a', trim: '#e8e0d0', build: 'slim', face: 'long', eyes: 'narrow', brows: 'angled' }, { face: true });
   WM.npc('gaoofficer2', 'Officer of the Residence', { skin: '#d8a070', hairStyle: 'futou', body: '#2a3a5a', trim: '#d8b36a' }, { face: true });
 
-  WM.enemy('luqian_foe', 'Lu Qian', 9, WM.hum(WM.data.npcs.luqian.look), { hp: 2.4, atk: 0.9, exp: 200, gold: 100, boss: true });
-  WM.enemy('fuan_foe', 'Fu An', 8, WM.hum(WM.data.npcs.fuan.look), { hp: 1.8, atk: 0.85, exp: 160, gold: 60, boss: true });
-  WM.enemy('overseer_foe', 'Overseer', 8, WM.hum(WM.data.npcs.overseer.look), { hp: 1.8, atk: 0.85, exp: 160, gold: 40, boss: true, drops: [['beef', 1]] });
+  WM.enemy('luqian_foe', 'Lu Qian', 9, WM.hum(WM.data.npcs.luqian.look), { hp: 1.4, atk: 0.5, exp: 200, gold: 100, boss: true });
+  WM.enemy('fuan_foe', 'Fu An', 8, WM.hum(WM.data.npcs.fuan.look), { hp: 1.0, atk: 0.48, exp: 160, gold: 60, boss: true });
+  WM.enemy('overseer_foe', 'Overseer', 8, WM.hum(WM.data.npcs.overseer.look), { hp: 1.0, atk: 0.48, exp: 160, gold: 40, boss: true, drops: [['beef', 1]] });
+  // Lin Chong bursts out of the temple on three men who think he is burning to death: they are taken by surprise
   WM.data.troops.ch3_temple = { enemies: ['fuan_foe', 'luqian_foe', 'overseer_foe'], bg: 'snow', boss: true, noRun: true };
 
   WM.data.duels.lin_hong = {

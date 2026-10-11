@@ -190,7 +190,7 @@
       if (!WM.data.maps[LOC[id].map]) continue;   // campaign sites fought as wars only (Youzhou, Hedong, Huaixi, Runzhou, Muzhou)
       (function (L) {
         var md = WM.data.maps[L.map], sp = (md && (md.entry || md.spawn)) || [L.sx, L.sy];
-        var ex = { x: L.x, y: L.y + (L.icon === 'fortress' ? 1 : 0), to: L.map, tx: sp[0], ty: sp[1], dir: 'up',
+        var ex = { x: L.x, y: L.y + (L.icon === 'fortress' ? 1 : 0), to: L.map, tx: sp[0], ty: sp[1], dir: 'up', passable: true,
           cond: function (S2) { return S2.has('loc:' + L.id) && WM.data.maps[L.map]; },
           blocked: function (S2) { return { text: S2.has('loc:' + L.id) ? L.name + '. (Not yet passable.)' : L.name + '. There is no reason to go there now.' }; } };
         out.push(ex);
@@ -208,9 +208,11 @@
     encounters: {
       rate: 0.05,
       troops: function (S2) {
-        var ch = WM.state.chapter;
-        var key = 'world' + Math.min(9, Math.floor(ch / 2.5));
-        return WM.data.worldTroops[key] || WM.data.worldTroops.world0;
+        // the roads grow more dangerous as the story goes on, but never far beyond the party that walks them
+        var T = WM.data.worldTroops, n = Math.min(9, Math.floor(WM.state.chapter / 2.5)), lv = WM.S.partyAvgLv();
+        var top = function (k) { return Math.max.apply(null, T['world' + k].reduce(function (a, t) { return a.concat(t); }, []).map(function (id) { return WM.data.enemies[id].lv; })); };
+        while (n > 0 && top(n) > lv + 2) n--;
+        return T['world' + n];
       }
     }
   });

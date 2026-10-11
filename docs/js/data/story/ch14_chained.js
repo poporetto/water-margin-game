@@ -11,10 +11,10 @@
   WM.enemy('gunner', 'Ling Zhen\'s Gunner', 25, WM.hum(WM.enemyLooks.soldier), { hp: 0.9, range: 'L', fx: 'fire', exp: 120, drops: [['medicine', 0.12]] });
   WM.enemy('lingzhen_foe', 'Ling Zhen', 26, WM.hum(WM.data.chars.lingzhen.look), { hp: 2.4, exp: 420, gold: 200, boss: true, range: 'L', skills: [{ name: 'Wind-and-Fire Cannon', chance: 0.35, type: 'magic', power: 40, target: 'all', fx: 'fire', sfx: 'cannon' }] });
   WM.enemy('qz_guard', 'Qingzhou Guard', 26, WM.hum(WM.enemyLooks.soldier), { range: 'M', exp: 130, drops: [['medicine', 0.15]] });
-  WM.enemy('qz_archer', 'Qingzhou Archer', 26, WM.hum(WM.enemyLooks.archer), { hp: 0.8, range: 'L', fx: 'arrow', exp: 130 });
+  WM.enemy('qz_archer2', 'Qingzhou Archer', 26, WM.hum(WM.enemyLooks.archer), { hp: 0.8, range: 'L', fx: 'arrow', exp: 130 });
   var T = WM.data.troops;
   T.ch14_lingzhen = { enemies: ['gunner', 'lingzhen_foe', 'gunner'], bg: 'river', boss: true };
-  T.ch14_qingzhou = { enemies: ['qz_guard', 'qz_archer', 'qz_guard', 'qz_guard'], bg: 'town', noRun: true };
+  T.ch14_qingzhou = { enemies: ['qz_guard', 'qz_archer2', 'qz_guard', 'qz_guard'], bg: 'town', noRun: true };
 
   WM.data.duels.linchong_huyan = {
     hero: 'linchong', foe: 'huyanzhuo', bg: 'field', heroHp: 640, heroAtk: 52, foeHp: 680, foeAtk: 52, drawAfter: 4,

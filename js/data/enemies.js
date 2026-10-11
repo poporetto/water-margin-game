@@ -5,6 +5,7 @@
   // E(id, name, lv, sprite, mods)
   WM.enemy = function (id, name, lv, sprite, m) {
     m = m || {};
+    if (E[id]) (WM.dupEnemies = WM.dupEnemies || []).push(id);   // a second definition would silently replace the first
     var hp = Math.round((20 + lv * 12) * (m.hp || 1));
     E[id] = {
       id: id, name: name, lv: lv, sprite: sprite,

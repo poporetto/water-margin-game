@@ -23,21 +23,21 @@
   WM.npc('tavernkeep', 'Tavern Keeper', { skin: '#d8a070', hairStyle: 'scarf', band: '#5a2a1a', body: '#6a3a2a', trim: '#c8b890', beard: 'mustache' }, { face: true });
 
   // ---------------- enemies ----------------
-  WM.enemy('jy_tiger', 'Tiger of Jingyang Ridge', 16, WM.beast('tiger'), { hp: 2.3, atk: 1.1, spd: 1.2, exp: 600, gold: 0, boss: true, fx: 'claw', skills: [
+  WM.enemy('jy_tiger', 'Tiger of Jingyang Ridge', 16, WM.beast('tiger'), { hp: 1.6, atk: 0.8, spd: 1.2, exp: 600, gold: 0, boss: true, fx: 'claw', skills: [
     { name: 'Pounce', chance: 0.3, type: 'phys', power: 1.4, fx: 'claw', sfx: 'roar' },
     { name: 'Tail Lash', chance: 0.2, type: 'phys', power: 1.1, fx: 'blunt' },
     { name: 'Mountain Roar', chance: 0.15, type: 'magic', power: 10, status: 'sleep', statusChance: 0.3, sfx: 'roar', fx: 'dark' }] });
-  WM.enemy('ximen_boss', 'Ximen Qing', 17, WM.hum(WM.data.npcs.ximenqing.look), { hp: 2.4, spd: 1.2, exp: 400, gold: 300, boss: true, drops: [['jadering', 1]], skills: [{ name: 'Rich Man\'s Kick', chance: 0.3, type: 'phys', power: 1.4 }] });
-  WM.enemy('ximen_guard', 'Ximen\'s Bodyguard', 15, WM.hum(WM.enemyLooks.thug), { exp: 90, fx: 'blunt' });
-  WM.enemy('jiang_boss', 'Jiang the Door God', 18, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 3.2, atk: 1.2, spd: 0.8, exp: 480, gold: 250, boss: true, fx: 'blunt', drops: [['tigerwine', 2]], skills: [{ name: 'Door God\'s Charge', chance: 0.3, type: 'phys', power: 1.5 }] });
-  WM.enemy('jiang_man', 'Happy Forest Tough', 16, WM.hum(WM.enemyLooks.thug), { exp: 95, fx: 'blunt', drops: [['wine', 0.3]] });
-  WM.enemy('escort_killer', 'Hired Killer', 17, WM.hum(WM.enemyLooks.bandit), { exp: 100, drops: [['medicine', 0.3]] });
-  WM.enemy('escort_guard', 'Crooked Escort', 16, WM.hum(WM.enemyLooks.constable), { exp: 95 });
-  WM.enemy('zhangdu_boss', 'Commander Zhang', 19, WM.hum(WM.data.npcs.zhangdujian.look), { hp: 2.6, exp: 500, gold: 400, boss: true, drops: [['goodwine', 1]] });
-  WM.enemy('zhangtuan_boss', 'Militia Captain Zhang', 18, WM.hum(WM.data.npcs.zhangtuanlian.look), { hp: 2.2, exp: 400, gold: 200, boss: true });
-  WM.enemy('jiang_boss2', 'Jiang the Door God', 19, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 2.4, atk: 1.1, exp: 450, gold: 200, boss: true, fx: 'blunt' });
-  WM.enemy('daoist_boss', 'Daoist of Centipede Ridge', 19, WM.hum(WM.data.npcs.daoistwang.look), { hp: 2.4, mgc: 1.5, exp: 450, gold: 220, boss: true, skills: [{ name: 'Twin Swords', chance: 0.3, type: 'phys', power: 1.4 }, { name: 'Black Wind', chance: 0.2, type: 'magic', power: 40, element: 'wind', fx: 'wind' }] });
-  WM.enemy('daoist_boy', 'Daoist Acolyte', 16, WM.hum({ skin: '#e8b48a', hairStyle: 'topknot', body: '#4a2a4a', trim: '#c8a040', weapon: 'sword', build: 'small' }), { hp: 0.8, exp: 80 });
+  WM.enemy('ximen_boss', 'Ximen Qing', 17, WM.hum(WM.data.npcs.ximenqing.look), { hp: 1.5, atk: 0.55, spd: 1.2, exp: 400, gold: 300, boss: true, drops: [['jadering', 1]], skills: [{ name: 'Rich Man\'s Kick', chance: 0.3, type: 'phys', power: 1.4 }] });
+  WM.enemy('ximen_guard', 'Ximen\'s Bodyguard', 15, WM.hum(WM.enemyLooks.thug), { hp: 0.55, atk: 0.45, exp: 90, fx: 'blunt' });
+  WM.enemy('jiang_boss', 'Jiang the Door God', 18, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 1.7, atk: 0.62, spd: 0.8, exp: 480, gold: 250, boss: true, fx: 'blunt', drops: [['tigerwine', 2]], skills: [{ name: 'Door God\'s Charge', chance: 0.3, type: 'phys', power: 1.5 }] });
+  WM.enemy('jiang_man', 'Happy Forest Tough', 16, WM.hum(WM.enemyLooks.thug), { hp: 0.55, atk: 0.45, exp: 95, fx: 'blunt', drops: [['wine', 0.3]] });
+  WM.enemy('escort_killer', 'Hired Killer', 17, WM.hum(WM.enemyLooks.bandit), { hp: 0.6, atk: 0.52, exp: 100, drops: [['medicine', 0.3]] });
+  WM.enemy('escort_guard', 'Crooked Escort', 16, WM.hum(WM.enemyLooks.constable), { hp: 0.6, atk: 0.5, exp: 95 });
+  WM.enemy('zhangdu_boss', 'Commander Zhang', 19, WM.hum(WM.data.npcs.zhangdujian.look), { hp: 1.0, atk: 0.4, exp: 500, gold: 400, boss: true, drops: [['goodwine', 1]] });
+  WM.enemy('zhangtuan_boss', 'Militia Captain Zhang', 18, WM.hum(WM.data.npcs.zhangtuanlian.look), { hp: 0.8, atk: 0.38, exp: 400, gold: 200, boss: true });
+  WM.enemy('jiang_boss2', 'Jiang the Door God', 19, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 0.9, atk: 0.42, exp: 450, gold: 200, boss: true, fx: 'blunt' });
+  WM.enemy('daoist_boss', 'Daoist of Centipede Ridge', 19, WM.hum(WM.data.npcs.daoistwang.look), { hp: 1.35, atk: 0.55, mgc: 0.95, exp: 450, gold: 220, boss: true, skills: [{ name: 'Twin Swords', chance: 0.3, type: 'phys', power: 1.4 }, { name: 'Black Wind', chance: 0.2, type: 'magic', power: 40, element: 'wind', fx: 'wind' }] });
+  WM.enemy('daoist_boy', 'Daoist Acolyte', 16, WM.hum({ skin: '#e8b48a', hairStyle: 'topknot', body: '#4a2a4a', trim: '#c8a040', weapon: 'sword', build: 'small' }), { hp: 0.6, atk: 0.55, exp: 80 });
   var T = WM.data.troops;
   T.ch7_tiger = { enemies: ['jy_tiger'], bg: 'forest', boss: true };
   T.ch7_lion = { enemies: ['ximen_guard', 'ximen_boss', 'ximen_guard'], bg: 'interior', boss: true };
