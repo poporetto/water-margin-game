@@ -168,7 +168,14 @@
       lie: function (key, on) { snap(key); actor(key).static = on === false ? null : 'down'; },
       spawn: function (key, who, tx, ty, dir) {
         // the same character still walking off from an earlier despawn turns round and walks to the new spot
-        var f = F(), back = (f.actors || []).filter(function (o) { return o.leavingKey && o.sheetWho === who; })[0];
+        var f = F(), ex = f.findActor(key);
+        // already standing there since the scene was set (see Field.stage)
+        if (ex && ex.ev && ex.ev.staged) {
+          var et = ex.tile();
+          if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; if (dir) ex.dir = dir; return ex; }
+          f.actors = f.actors.filter(function (o) { return o !== ex; });
+        }
+        var back = (f.actors || []).filter(function (o) { return o.leavingKey && o.sheetWho === who; })[0];
         var a = f.addActor(key, who, tx, ty, dir); a.sheetWho = who;
         if (back) {
           var from = { x: Math.floor(back.x / TS), y: Math.floor((back.y - 1) / TS) };
@@ -203,7 +210,8 @@
         opt = opt || {};
         var go = function () { F().loadMap(map, tx, ty, dir || 'down', true); if (WM.scene !== F()) WM.setScene(F(), { map: map, x: tx, y: ty, dir: dir, noAuto: true }); };
         if (opt.noFade) { go(); return Promise.resolve(); }
-        return WM.fadeOut(opt.fade || 0.4).then(function () { go(); return WM.fadeIn(opt.fade || 0.4); });
+        // the fade-in starts but the script goes on at once, so whoever it places next is already there when the picture appears
+        return WM.fadeOut(opt.fade || 0.4).then(function () { go(); WM.fadeIn(opt.fade || 0.4); });
       },
       // --- combat ---
       battle: function (troop, opt) {

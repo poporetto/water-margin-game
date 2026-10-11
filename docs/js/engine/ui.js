@@ -38,7 +38,8 @@
       var hasPortrait = sp && sp.portrait;
       var boxX = 24, boxW = WM.W - 48, boxH = 196, boxY = opt.top ? 20 : WM.H - boxH - 18;
       var textX = boxX + (hasPortrait ? 190 : 34), textW = boxW - (hasPortrait ? 214 : 68);
-      var pages = paginate(text, textW, 25, 5);
+      var named = !!(sp && sp.name), textY = boxY + (named ? 60 : 26);   // the name sits level with the top of the portrait; text below it
+      var pages = paginate(text, textW, 25, named ? 4 : 5);
       var page = 0, shown = 0, speed = opt.speed || 55, blipT = 0;
       var w = {
         update: function (dt) {
@@ -59,18 +60,13 @@
           if (hasPortrait) {
             WM.portraits.drawFramed(sp.portrait, sp.expr, boxX + 20, boxY + 14);
           }
-          if (sp && sp.name) {
-            var nw = G.measure(sp.name, 22, true) + 36;
-            var nx = hasPortrait ? textX - 8 : boxX + 20;
-            G.window(nx, boxY - 30, nw, 40, { top: '#3a2a1a', bottom: '#1e140c' });
-            G.text(sp.name, nx + 18, boxY - 21, { size: 22, bold: true, color: G.COL.gold });
-          }
+          if (named) drawName(sp.name, textX, boxY + 14, textW);
           var lines = pages[page], left = Math.floor(shown);
           for (var i = 0; i < lines.length; i++) {
             if (left <= 0) break;
             var s = lines[i].substring(0, left);
             left -= lines[i].length + 1;
-            G.text(s, textX, boxY + 26 + i * 33, { size: 25, color: opt.color });
+            G.text(s, textX, textY + i * 33, { size: 25, color: opt.color });
           }
           var full = pages[page].join('\n').length;
           if (shown >= full) {
@@ -231,19 +227,21 @@
       UI.choose(options, opt).then(function (i) { UI.remove(msgW); resolve(i); });
     });
   };
+  // the speaker's name, in gold, with a thin rule under it, at the top of the text column
+  function drawName(name, x, y, w) {
+    G.text(name, x, y, { size: 23, bold: true, color: G.COL.gold });
+    var c = G.ctx; c.fillStyle = 'rgba(216,179,106,0.35)'; c.fillRect(x, y + 34, Math.min(w, G.measure(name, 23, true) + 60), 1);
+  }
   function drawStaticMessage(sp, text) {
     var hasPortrait = sp && sp.portrait;
     var boxX = 24, boxW = WM.W - 48, boxH = 196, boxY = WM.H - boxH - 18;
     var textX = boxX + (hasPortrait ? 190 : 34), textW = boxW - (hasPortrait ? 214 : 68);
     G.window(boxX, boxY, boxW, boxH);
     if (hasPortrait) WM.portraits.drawFramed(sp.portrait, sp.expr, boxX + 20, boxY + 14);
-    if (sp && sp.name) {
-      var nw = G.measure(sp.name, 22, true) + 36, nx = hasPortrait ? textX - 8 : boxX + 20;
-      G.window(nx, boxY - 30, nw, 40, { top: '#3a2a1a', bottom: '#1e140c' });
-      G.text(sp.name, nx + 18, boxY - 21, { size: 22, bold: true, color: G.COL.gold });
-    }
+    var named = !!(sp && sp.name), textY = boxY + (named ? 60 : 26);
+    if (named) drawName(sp.name, textX, boxY + 14, textW);
     var lines = G.wrap(text, textW, 25);
-    for (var i = 0; i < Math.min(5, lines.length); i++) G.text(lines[i], textX, boxY + 26 + i * 33, { size: 25 });
+    for (var i = 0; i < Math.min(named ? 4 : 5, lines.length); i++) G.text(lines[i], textX, textY + i * 33, { size: 25 });
   }
 
   // Short centred notice ("Lin Chong joined!"), auto or ok-dismissed.

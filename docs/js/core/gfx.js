@@ -16,6 +16,7 @@
     canvas.width = WM.W; canvas.height = WM.H;
     G.ctx = canvas.getContext('2d');
     G.ctx.imageSmoothingEnabled = false;
+    G.k = 1;
     G.low = U.makeCanvas(WM.LOW_W, WM.LOW_H);
     G.lctx = G.low.getContext('2d');
     G.fade = 0;          // 0 = clear, 1 = black
@@ -24,6 +25,18 @@
     G.shake = 0;
     G.tint = null;       // e.g. 'rgba(255,120,40,0.2)' for burning scenes
   };
+
+  // The game draws in 960x720 coordinates. The canvas itself is sized to the real pixels it covers on screen
+  // (CSS size x devicePixelRatio), and every frame starts from a transform that scales the 960x720 space onto it, so
+  // text and illustrated portraits are drawn at full screen resolution while the pixel art stays crisp.
+  G.resize = function (cssW) {
+    var dpr = Math.min(3, window.devicePixelRatio || 1);
+    var k = Math.max(0.5, cssW * dpr / WM.W);
+    var w = Math.round(WM.W * k), h = Math.round(WM.H * k);
+    if (G.canvas.width !== w || G.canvas.height !== h) { G.canvas.width = w; G.canvas.height = h; }
+    G.k = k; G.base(); G.ctx.imageSmoothingEnabled = false;
+  };
+  G.base = function () { G.ctx.setTransform(G.k, 0, 0, G.k, 0, 0); };
 
   // Blit the low-res buffer to screen (called by scenes that use the world view).
   G.present = function () {

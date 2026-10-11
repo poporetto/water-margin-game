@@ -143,7 +143,7 @@
   function transitionIn() {
     // Suikoden-like shatter: screen breaks into tiles that fall away
     var shot = U.makeCanvas(WM.W, WM.H);
-    shot.getContext('2d').drawImage(G.canvas, 0, 0);
+    shot.getContext('2d').drawImage(G.canvas, 0, 0, WM.W, WM.H);
     var tiles = [];
     for (var y = 0; y < 6; y++) for (var x = 0; x < 8; x++) tiles.push({ x: x * 120, y: y * 120, vx: (Math.random() - 0.5) * 300, vy: -100 - Math.random() * 200, r: 0, vr: (Math.random() - 0.5) * 6, delay: (x + y) * 0.02 });
     var t0 = WM.time;
@@ -784,7 +784,7 @@
       if (ko) {
         c.translate(x, y - 10); c.rotate(u.side === 'party' ? Math.PI / 2 : -Math.PI / 2);
         c.drawImage(sh, 0, 1 * ch, cw, ch, -cw * PXH / 2, -(sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 30, cw * PXH, ch * PXH);
-        c.setTransform(1, 0, 0, 1, 0, 0);
+        G.base();
       } else {
         var bob2 = u.status.sleep ? 0 : Math.round(Math.sin(WM.time * 4 + u.idx * 1.3) * 1.5);
         c.drawImage(sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - (sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 5 + bob2, cw * PXH, ch * PXH);

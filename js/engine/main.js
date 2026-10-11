@@ -18,8 +18,10 @@
   WM.tween = function (dur, fn) {
     return new Promise(function (res) { tweens.push({ t: 0, dur: dur, fn: fn, res: res }); });
   };
-  WM.fadeOut = function (dur, col) { G.fadeColor = col || '#000'; var f0 = G.fade; return WM.tween(dur == null ? 0.35 : dur, function (k) { G.fade = f0 + (1 - f0) * k; }); };
-  WM.fadeIn = function (dur) { var f0 = G.fade; return WM.tween(dur == null ? 0.35 : dur, function (k) { G.fade = f0 * (1 - k); }); };
+  // a newer fade takes over from one still running
+  var fadeGen = 0;
+  WM.fadeOut = function (dur, col) { G.fadeColor = col || '#000'; var f0 = G.fade, g = ++fadeGen; return WM.tween(dur == null ? 0.35 : dur, function (k) { if (g === fadeGen) G.fade = f0 + (1 - f0) * k; }); };
+  WM.fadeIn = function (dur) { var f0 = G.fade, g = ++fadeGen; return WM.tween(dur == null ? 0.35 : dur, function (k) { if (g === fadeGen) G.fade = f0 * (1 - k); }); };
   WM.wait = function (sec) { return WM.tween(sec, function () {}); };
 
   var last = 0, acc = 0;
@@ -48,7 +50,7 @@
       if (WM.ui.busy()) WM.ui.update(dt);
       else if (scene && scene.update) scene.update(dt);
       if (WM.ui.busy() && scene && scene.updateBackground) scene.updateBackground(dt);
-      G.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      G.base();
       if (scene && scene.draw) scene.draw();
       G.overlay();   // fade and flash go under the UI, so lines spoken over a black screen can still be read
       WM.ui.draw();
@@ -86,6 +88,7 @@
       w = Math.max(160, Math.floor(w));
       cv.style.width = w + 'px';
       cv.style.height = Math.floor(w * 3 / 4) + 'px';
+      G.resize(w);
     }
     WM.fit = fit;
     window.addEventListener('resize', fit); window.addEventListener('orientationchange', function () { setTimeout(fit, 200); }); fit();

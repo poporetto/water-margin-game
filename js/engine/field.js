@@ -83,6 +83,56 @@
     });
   };
 
+  // ---------- staging ----------
+  // Characters an event places before its first line of dialogue are already in the room when the scene opens, so
+  // they are set on the map as soon as the event becomes possible (on arrival, or when the story moves on) instead
+  // of appearing when it fires. The event's own spawn() then finds them standing there.
+  var SPAWN_RE = /s\.spawn\(\s*'([^']+)'\s*,\s*'([^']+)'\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*'(\w+)')?\s*\)/g;
+  function leadSpawns(ev) {
+    if (ev._lead) return ev._lead;
+    var src = '', out = [];
+    try { src = ev.run.toString(); } catch (e) {}
+    var body = src.slice(src.indexOf('{') + 1), cut = body.search(/\bawait\b|s\.warp\(|s\.night\(|s\.tint\(/);
+    var lead = cut >= 0 ? body.slice(0, cut) : body, m;
+    SPAWN_RE.lastIndex = 0;
+    while ((m = SPAWN_RE.exec(lead))) { if (lead.indexOf("'ghost:" + m[2] + "'") >= 0) continue; out.push({ key: m[1], who: m[2], x: +m[3], y: +m[4], dir: m[5] || 'down' }); }
+    return (ev._lead = out);
+  }
+  // could this event fire on this map now, wherever the player stands?
+  function couldFire(ev) {
+    if (ev.once && F.evDone(ev)) return false;
+    if (!ev.cond) return true;
+    var st = WM.state, sx = st.x, sy = st.y, ok = false;
+    try { ok = !!ev.cond(S, st); } catch (e) {}
+    if (!ok && /\.x\b|\.y\b/.test(ev.cond.toString())) {
+      for (var y = 0; y < F.map.h && !ok; y++) for (var x = 0; x < F.map.w && !ok; x++) {
+        if (tileSolid(x, y)) continue;
+        st.x = x; st.y = y; try { ok = !!ev.cond(S, st); } catch (e) {}
+      }
+      st.x = sx; st.y = sy;
+    }
+    return ok;
+  }
+  F.stage = function () {
+    if (!F.map || F.map.def.world) return;
+    var want = {};
+    (WM.data.events[F.map.id] || []).forEach(function (ev) {
+      if (!ev.run || ev.resident || !(ev.trigger === 'auto' || ev.trigger === 'touch' || ev.trigger === 'check')) return;
+      var lead = leadSpawns(ev); if (!lead.length || !couldFire(ev)) return;
+      lead.forEach(function (sp) {
+        if (want[sp.key] || (!WM.data.chars[sp.who] && !WM.data.npcs[sp.who])) return;
+        want[sp.key] = sp;
+      });
+    });
+    // drop staged characters whose scene can no longer happen; add the new ones
+    F.actors = F.actors.filter(function (a) { return !(a.ev && a.ev.staged && !want[a.ev.id]); });
+    Object.keys(want).forEach(function (k) {
+      if (F.findActor(k)) return;
+      var sp = want[k], a = F.addActor(k, sp.who, sp.x, sp.y, sp.dir);
+      a.ev.staged = true; a.sheetWho = sp.who;
+    });
+  };
+
   F.findActor = function (key) {
     for (var i = 0; i < F.actors.length; i++) {
       var a = F.actors[i];
@@ -130,6 +180,7 @@
     F.player.isPlayer = true;
     st.x = tx; st.y = ty; st.dir = dir;
     F.spawnActors();
+    F.stage();
     F.cam = { x: 0, y: 0 };
     F.updateCamera(true);
     F.encSteps = 0;
@@ -433,6 +484,7 @@
       keep.push(a);
     });
     F.actors = keep;
+    F.stage();
   };
 
   // ---------- encounters ----------
