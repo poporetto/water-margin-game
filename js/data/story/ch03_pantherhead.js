@@ -9,7 +9,7 @@
   WM.npc('gaoyanei', 'Gao Yanei', { skin: '#f6e2cc', hairStyle: 'scarf', band: '#c8302a', body: '#d870a0', trim: '#f0d080', build: 'slim', face: 'long', eyes: 'narrow', brows: 'angled' }, { face: true });
   WM.npc('linwife', 'Lady Zhang', { skin: '#f6e2cc', hairStyle: 'woman', body: '#5a7aaa', trim: '#e8e0f0', dress: true, build: 'slim', face: 'narrow', eyes: 'normal', pin: '#d8d8e8' }, { face: true });
   WM.npc('zhangjiaotou', 'Instructor Zhang', { skin: '#e0a880', hair: '#c0c0b8', hairStyle: 'topknot', beard: 'long', beardColor: '#d0d0c8', body: '#4a4a5a', trim: '#c8c0a0', eyes: 'narrow' }, { face: true });
-  WM.npc('luqian', 'Lu Qian', { skin: '#e8b48a', hairStyle: 'scarf', band: '#2a2a3a', beard: 'mustache', body: '#4a3a5a', trim: '#c8b890', face: 'long', eyes: 'narrow', brows: 'angled' }, { face: true });
+  WM.npc('luqian', 'Lu Qian', { skin: '#e8b48a', hairStyle: 'scarf', band: '#2a2a3a', body: '#4a3a5a', trim: '#c8b890', face: 'long', eyes: 'narrow', brows: 'angled' }, { face: true });
   WM.npc('fuan', 'Fu An', { skin: '#e8b48a', hairStyle: 'scarf', band: '#5a2a1a', body: '#6a4a3a', trim: '#c8b890', face: 'narrow', eyes: 'narrow' }, { face: true });
   WM.npc('swordseller', 'Sword Seller', { skin: '#c8905e', hairStyle: 'headband', band: '#3a3a3a', body: '#3a4a3a', trim: '#a89070', beard: 'full', weapon: 'sword', build: 'big' }, { face: true });
   WM.npc('dongchao', 'Dong Chao', { skin: '#c8905e', hairStyle: 'scarf', band: '#1a1a1a', body: '#2a2a2a', trim: '#8a3a2a', beard: 'stubble', weapon: 'pole', face: 'square', eyes: 'narrow' }, { face: true });
@@ -74,7 +74,7 @@
       await s.move('player', 'U2', { run: true });
       await s.narrate('Lin Chong seized the young man by the shoulder and spun him round, his fist raised — and saw who it was. Gao Yanei, the adopted son of Grand Marshal Gao Qiu. His hand would not come down.');
       await s.say('gaoyanei', 'Lin Chong? What business is it of yours?');
-      await s.say('servant', '(whispering) Instructor, don\'t you know who this is? It\'s the Yanei! He didn\'t know she was your wife. Let it go!');
+      await s.say('servant:concerned', '(whispering) Instructor, don\'t you know who this is? It\'s the Yanei! He didn\'t know she was your wife. Let it go!');
       await s.narrate('Gao Yanei and his lackeys sauntered out of the temple, laughing. Lin Chong stood shaking with rage, then took his wife by the arm and turned to go.');
       s.despawn('gaoyanei'); s.despawn('lackey1'); s.despawn('lackey2');
       s.spawn('luzhishen', 'luzhishen', 44, 18, 'up');
@@ -144,7 +144,7 @@
       await s.say('swordseller', '...I need the money. A thousand it is.');
       await s.give('precioussword', 1);
       s.despawn('seller');
-      await s.say('luzhishen', 'A fine blade, brother. But a man doesn\'t sell a sword like that on a street corner for nothing. Be careful.');
+      await s.say('luzhishen:concerned', 'A fine blade, brother. But a man doesn\'t sell a sword like that on a street corner for nothing. Be careful.');
       s.despawn('lu');
       await s.fadeOut(0.8);
       await s.narrate('Lin Chong could not take his eyes from the sword all evening. "Gao Qiu has a precious sword too, they say, and he will show it to no one. One day I\'ll compare mine with his."');
@@ -302,11 +302,11 @@
   WM.defEvents('cangzhou_in', [
     { id: 'ch3_whisper', x: 29, y: 6, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_lixiaoer'); }, run: async function (s) {
       s.spawn('lix', 'lixiaoer', 31, 4, 'down'); s.spawn('wife', 'lixiaoerwife', 32, 6, 'left');
-      await s.say('lixiaoer', 'Master Lin, sit down, sit down. I\'ve been waiting for you — something odd happened yesterday.');
-      await s.say('lixiaoer', 'Two men came in, dressed like officials, talking with the accent of the capital. They had me fetch the camp warden and the overseer of the guards, and the four of them sat in the back room drinking and whispering.');
-      await s.say('lixiaoerwife', 'I listened at the door. I couldn\'t hear much — only "Gao Taiwei" — the Marshal — and one of them said, "Don\'t worry, it will all be finished in a day or two." One of them was a short man, pale, with no beard.');
+      await s.say('lixiaoer:concerned', 'Master Lin, sit down, sit down. I\'ve been waiting for you — something odd happened yesterday.');
+      await s.say('lixiaoer:concerned', 'Two men came in, dressed like officials, talking with the accent of the capital. They had me fetch the camp warden and the overseer of the guards, and the four of them sat in the back room drinking and whispering.');
+      await s.say('lixiaoerwife:concerned', 'I listened at the door. I couldn\'t hear much — only "Gao Taiwei" — the Marshal — and one of them said, "Don\'t worry, it will all be finished in a day or two." One of them was a short man, pale, with no beard.');
       await s.say('linchong:angry', 'Short, pale, without a beard... Lu Qian! That dog has come all the way here to finish me. If I meet him, I\'ll cut him to pieces!');
-      await s.say('lixiaoer', 'Master Lin, be careful. Don\'t do anything rash.');
+      await s.say('lixiaoer:concerned', 'Master Lin, be careful. Don\'t do anything rash.');
       s.despawn('lix'); s.despawn('wife');
       await s.give('knife', 1);
       await s.narrate('Lin Chong went straight to the market and bought a sharp knife, which he carried at his waist. For three days he searched the streets and lanes of Cangzhou from morning till night. Nothing. Gradually his anger cooled.');
@@ -325,7 +325,7 @@
       await s.move('player', 'R12');
       s.place('player', 27, 17, 'down'); s.faceEach('player', 'old');
       await s.say('oldsoldier', 'You\'re the new keeper? Here are the keys, and the tally of the stacks. The hut\'s old — mind the roof in this snow.');
-      await s.say('oldsoldier', 'If you want a drink, go east of here two or three li, past the old temple of the Mountain God, and there\'s a village with wine. Take my gourd. Keep warm.');
+      await s.say('oldsoldier:smile', 'If you want a drink, go east of here two or three li, past the old temple of the Mountain God, and there\'s a village with wine. Take my gourd. Keep warm.');
       s.despawn('old');
       await s.narrate('Lin Chong went into the hut. The wind howled through the cracked walls and the snow drifted in. "This place won\'t last the winter. I\'ll get some wine, and send for a builder tomorrow." He hung the gourd on his spear, locked the hut and set off through the snow.');
       s.flag('ch3_wine');
@@ -344,9 +344,9 @@
       s.tint('fire'); s.sfx('fire');
       await s.say('linchong:shock', '(The depot! It\'s on fire!)');
       await s.narrate('He was reaching to pull the stone from the door when he heard footsteps in the snow outside, and voices. Three men had come to stand in front of the temple, to watch the fire.');
-      await s.say('overseer', '(outside) Wasn\'t that well done? I set fire to the hay at all four corners. He can\'t get out of that.');
+      await s.say('overseer:smile', '(outside) Wasn\'t that well done? I set fire to the hay at all four corners. He can\'t get out of that.');
       await s.say('luqian', '(outside) This time the Instructor is finished. The Marshal will be pleased. When the Yanei is well again, you\'ll both be rewarded.');
-      await s.say('fuan', '(outside) Even if he got out of the hut alive, burning the Imperial fodder depot is a capital crime. Either way, he\'s done.');
+      await s.say('fuan:smile', '(outside) Even if he got out of the hut alive, burning the Imperial fodder depot is a capital crime. Either way, he\'s done.');
       await s.say('luqian', '(outside) Let\'s wait a little, then pick a few bones out of the ashes and take them back to the capital, so the Marshal and the Yanei know he\'s dead.');
       await s.say('linchong:angry', '(...Lu Qian. Fu An. The overseer. If the hut had not fallen in, I would be dead in that fire, by their hands.)');
       s.sfx('hit'); await s.shake(5, 0.4);
@@ -367,7 +367,7 @@
       s.spawn('chaijin', 'chaijin', 10, 5, 'down');
       s.tint(null);
       await s.fadeIn(1);
-      await s.say('chaijin', 'Instructor Lin! Untie him, you fools! ...So it\'s true. The depot burned, and you killed three men. The whole of Cangzhou is out looking for you.');
+      await s.say('chaijin:shock', 'Instructor Lin! Untie him, you fools! ...So it\'s true. The depot burned, and you killed three men. The whole of Cangzhou is out looking for you.');
       await s.say('linchong:sad', 'Lord Chai. I am a dead man in this world.');
       await s.say('chaijin', 'Not yet. In Shandong there is a marsh called Liangshan, eight hundred li of water, and on it a stronghold of bold fellows. The chief is Wang Lun, the Scholar in White, with Du Qian and Song Wan. They are friends of mine. I will give you a letter. Go to them.');
       await s.give('chailetter', 1);
@@ -421,7 +421,7 @@
       await s.move('player', 'U4');
       await s.say('zhugui', 'Brothers, this is Lin Chong, Arms Instructor of the Imperial Guard, with a letter from Lord Chai.');
       await s.say('wanglun', '(reading) "...an upright man, wronged by Gao Qiu..." Hm.');
-      await s.say('wanglun', '(to himself) I am a failed scholar. Du Qian and Song Wan are no great fighters. If this Imperial Instructor stays, he\'ll see how little we are, and sooner or later he\'ll take the mountain from us...');
+      await s.say('wanglun:concerned', '(to himself) I am a failed scholar. Du Qian and Song Wan are no great fighters. If this Imperial Instructor stays, he\'ll see how little we are, and sooner or later he\'ll take the mountain from us...');
       await s.say('wanglun:smile', 'Instructor Lin, Lord Chai is our benefactor, and you are welcome. But our mountain is small — our grain is short and our houses few. We could not do you justice. Here are fifty taels of silver. Find a bigger stronghold elsewhere.');
       await s.say('zhugui', 'Brother, Lord Chai has done so much for us. If we turn away the man he sends, how will that look?');
       await s.say('duqian', 'We are short of good men, not of grain. Let him stay.');
@@ -440,7 +440,7 @@
     { id: 'ch3_yangzhi', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch3_head'); }, run: async function (s) {
       s.weather(null);
       s.spawn('guide', 'outlaw', 10, 17, 'down');
-      await s.say('outlaw', 'Today\'s the last day, chief. If no one comes...');
+      await s.say('outlaw:concerned', 'Today\'s the last day, chief. If no one comes...');
       await s.wait(0.6);
       s.spawn('porter', 'servant', 9, 21, 'up');
       await s.move('porter', 'U1');

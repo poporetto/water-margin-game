@@ -13,7 +13,7 @@
   WM.npc('wangsi', 'Wang Si', { skin: '#d8a070', hairStyle: 'topknot', body: '#6a6a4a', trim: '#4a3a2a', eyes: 'narrow', face: 'round' }, { face: true });
   WM.npc('liji', 'Li Ji the Hunter', { skin: '#c8905e', hairStyle: 'headband', band: '#5a4a2a', body: '#6a5a3a', trim: '#8a6a4a', weapon: 'bow', beard: 'stubble', eyes: 'narrow', face: 'narrow' }, { face: true });
   WM.npc('dutyA', 'Duty Officer', { skin: '#c8905e', hairStyle: 'scarf', band: '#1a1a1a', body: '#2a2a2a', trim: '#c8302a', weapon: 'dao', beard: 'short' }, { face: true });
-  WM.npc('gaoofficer', 'Guard Officer', { skin: '#d8a070', hairStyle: 'helmet', helmColor: '#8a7a3a', tassel: '#c8302a', body: '#6a2a2a', trim: '#d8b36a', weapon: 'spear' });
+  WM.npc('gaoofficer', 'Guard Officer', { skin: '#d8a070', hairStyle: 'helmet', helmColor: '#8a7a3a', tassel: '#c8302a', body: '#6a2a2a', trim: '#d8b36a', weapon: 'spear' }, { face: true });
   WM.npc('zhangservant', 'Servant Zhang', { skin: '#d8a070', hairStyle: 'topknot', body: '#5a5a4a', trim: '#e8e0d0' });
 
   // ---------------- enemies, troops, duels ----------------
@@ -81,7 +81,7 @@
       await s.say('wangjin', 'I would not dare, Excellency. I have been truly ill, and I am not yet recovered —');
       await s.say('gaoqiu:angry', 'If you were ill, how did you walk here? Guards! Take him out and beat him!');
       await s.emote('o1', '!');
-      await s.say('gaoofficer', 'Your Excellency, today is your first day in office — the most auspicious of days. We beg you, spare him this once.');
+      await s.say('gaoofficer:concerned', 'Your Excellency, today is your first day in office — the most auspicious of days. We beg you, spare him this once.');
       await s.say('gaoqiu', '...Hmph. For the sake of the officers, I will let it pass today. Tomorrow I will deal with you. Get out.');
       await s.move('player', 'D2');
       await s.face('player', 'up');
@@ -321,7 +321,7 @@
     { id: 'ch1_yardfight', x: 12, y: 15, w: 9, h: 2, trigger: 'touch', once: true, cond: fireActive, run: async function (s) {
       s.sfx('fire');
       s.spawn('d1', 'dutyA', 14, 17, 'up'); s.spawn('d2', 'dutyA', 16, 17, 'up');
-      await s.say({ name: 'Constable' }, 'There they are! Don\'t let them escape!');
+      await s.say('dutyA:angry', 'There they are! Don\'t let them escape!');
       await s.battle('ch1_yard', { bg: 'fire' });
       s.despawn('d1'); s.despawn('d2');
     } },

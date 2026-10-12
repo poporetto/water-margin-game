@@ -5,7 +5,7 @@
 
   WM.data.start = { party: ['hongxin'], map: 'longhu', x: 15, y: 27, dir: 'up', items: [], gold: 0 };
   WM.npc('abbot', 'Abbot of Shangqing', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#c8a040', beard: 'long', beardColor: '#d8d8d0', hair: '#c8c8c0', body: '#6a5a9a', trim: '#e8d8a0' }, { face: true });
-  WM.npc('daoistA', 'Daoist', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#6a6a6a', body: '#4a5a7a', trim: '#e8e0d0' });
+  WM.npc('daoistA', 'Daoist', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#6a6a6a', body: '#4a5a7a', trim: '#e8e0d0' }, { face: true });
   WM.npc('hongguard', 'Escort', { skin: '#c8905e', hairStyle: 'helmet', helmColor: '#8a7a3a', tassel: '#c8302a', body: '#7a1a1a', trim: '#d8b36a', weapon: 'spear' });
 
   // ---------------- Shangqing Temple at the foot of the mountain ----------------
@@ -147,7 +147,7 @@
       s.spawn('abbotT', 'abbot', 3, 6, 'down');
       await s.move('abbotT', 'D3', { speed: 90 });
       s.faceEach('player', 'abbotT');
-      await s.say('abbot', 'Your Excellency! Did you meet the Master?');
+      await s.say('abbot:concerned', 'Your Excellency! Did you meet the Master?');
       await s.say('hongxin:angry', 'Your mountain nearly killed me twice over! First a great tiger with hanging eyes and a white forehead sprang at me from the pines. Then a snake as thick as a rice bucket came hissing out of the bamboo. If my life were not so precious to the dynasty, I would be bones on that path now.');
       await s.say('hongxin', 'And at the end of it all, a little herd-boy riding backwards on an ox, playing a flute, tells me the Master already left this morning, riding a crane to the capital! The insolence of these mountain children!');
       await s.say('abbot:shock', 'Your Excellency... that herd-boy was the Celestial Master himself!');
@@ -208,11 +208,11 @@
       s.spawnBeast('oxboy', 'oxboy', 11, 0, 'right');
       await s.say(null, '(From around the bend comes the sound of a flute, sweet and clear.)');
       await s.move('oxboy', 'D2', { speed: 30 });
-      await s.say('oxboy_boy', 'Are you the man who has come to see the Celestial Master?');
+      await s.say('oxboy_boy:smile', 'Are you the man who has come to see the Celestial Master?');
       await s.say('hongxin', 'You are only a herd-boy. How would you know who I am?');
       await s.say('oxboy_boy', 'This morning the Master said to me, "The emperor has sent Marshal Hong with a decree for me to go to the capital and pray away the plague. I shall ride a crane there at once." He has gone already. There is no one up the mountain to see, and there are many tigers and serpents on these paths. You had better go back down before you lose your life.');
       await s.say('hongxin:angry', 'Wretched boy! Don\'t lie to me!');
-      await s.say('oxboy_boy', '...');
+      await s.say('oxboy_boy:smile', '...');
       s.sfx('wind');
       await s.move('oxboy', 'U2', { speed: 40 });
       s.despawn('oxboy');

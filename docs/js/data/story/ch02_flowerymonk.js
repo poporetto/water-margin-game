@@ -238,7 +238,7 @@
       s.spawn('m1', 'wutaimonk', 31, 6, 'right'); s.spawn('m2', 'wutaimonk', 37, 6, 'left'); s.spawn('m3', 'wutaimonk', 31, 8, 'right'); s.spawn('m4', 'wutaimonk', 37, 8, 'left');
       await s.move('player', 'U2');
       await s.say('zhaoyuanwai', 'Reverend Abbot, this is a cousin of mine, Lu Da, who has seen the emptiness of the world and wishes to leave it. I beg you to accept him as a monk.');
-      await s.say('wutaimonk', '(whispering) Look at him. That face. Those eyes. He\'s no monk — he\'s a killer. Ordain him and he\'ll bring the whole monastery down on our heads.');
+      await s.say('wutaimonk:concerned', '(whispering) Look at him. That face. Those eyes. He\'s no monk — he\'s a killer. Ordain him and he\'ll bring the whole monastery down on our heads.');
       await s.say('zhizhen', 'Light the incense. I will sit in meditation and see.');
       s.sfx('gong');
       await s.narrate('The Abbot sat cross-legged on his couch, closed his eyes and murmured a spell, and was still for as long as it takes an incense stick to burn down. Then he opened his eyes.');
@@ -281,7 +281,7 @@
       s.despawn('m1'); s.despawn('m2');
       s.spawn('zhizhen', 'zhizhen', 17, 15, 'down');
       await s.move('zhizhen', 'D2');
-      await s.say('zhizhen', 'Zhishen! Stop this at once.');
+      await s.say('zhizhen:angry', 'Zhishen! Stop this at once.');
       await s.say('luzhishen', '...Abbot. I had a little wine, but I didn\'t pick the quarrel. They hit me first.');
       await s.say('zhizhen', 'Go and sleep. We will speak tomorrow.');
       await s.narrate('Next day the Abbot called him in and spoke to him gravely. "Squire Zhao brought you here to be a monk. Wine brings confusion; it is the first of the precepts. If it happens again, you cannot stay." Zhishen knelt and said he would never dare again.');
@@ -347,7 +347,7 @@
       await s.move('zhizhen', 'D2');
       await s.say('zhizhen', 'Zhishen.');
       await s.narrate('At the sound of the Abbot\'s voice, the staff fell from his hands. "I didn\'t start it, Abbot. They attacked me." But he was sober enough to see what he had done.');
-      await s.say('zhizhen', 'Zhishen, you have wrecked the guardian kings, broken the pavilion and beaten your brothers. Squire Zhao will pay for the statues. But you cannot stay among us any longer.');
+      await s.say('zhizhen:concerned', 'Zhishen, you have wrecked the guardian kings, broken the pavilion and beaten your brothers. Squire Zhao will pay for the statues. But you cannot stay among us any longer.');
       await s.say('zhizhen', 'I have a fellow disciple, the Abbot Zhiqing of the Great Xiangguo Monastery in the Eastern Capital. I will give you a letter to him; he will find you a post. And I give you four lines of verse to carry with you for the rest of your life. Remember them.');
       await s.say('zhizhen', '"Meet forest, and rise. Meet mountain, and prosper. Meet water, and flourish. Meet river, and stop."');
       await s.say('luzhishen', '...I will remember them, Abbot.');
@@ -376,7 +376,7 @@
       s.spawn('liu', 'liutaigong', 9, 5, 'down');
       await s.say('liutaigong:sad', 'I have only one daughter, nineteen this year. On the mountain nearby there are bandits, and their second chief, Zhou Tong, the Little Conqueror, came down and saw her and sent twenty taels and a bolt of red silk as bride-gifts. He is coming tonight to marry her. I cannot fight him. That is why we are all in tears.');
       await s.say('luzhishen', 'So that\'s it! Old man, I learned the art of talking men round from the Abbot of Wutai himself. Hide your daughter, and let me go into her room. I\'ll persuade the bridegroom to change his mind.');
-      await s.say('liutaigong', '...You would do that? He is a fierce one, Reverend.');
+      await s.say('liutaigong:concerned', '...You would do that? He is a fierce one, Reverend.');
       await s.say('luzhishen', 'I am fiercer. Bring me some wine and a goose first. A man can\'t talk on an empty stomach.');
       s.despawn('liu');
       await s.fadeOut(0.8);
@@ -424,7 +424,7 @@
       await s.say('luzhishen', 'Three days? In a monastery this size? Where are the monks? Where is the grain?');
       await s.say('oldmonk:sad', 'This was a great monastery once. Then a wandering monk called Cui Daocheng — they call him the Iron Buddha — and a Daoist called Qiu Xiaoyi — the Flying Yaksha — came and took it. They drove off the monks, sold the lands, and live in the back with a woman they keep. We are too old to go anywhere. We are waiting to die.');
       await s.say('luzhishen:angry', 'A monk and a Daoist playing at bandits in a house of the Buddha! Where are they?');
-      await s.say('oldmonk', 'In the back court, under the locust tree... Reverend, they are strong. Be careful.');
+      await s.say('oldmonk:concerned', 'In the back court, under the locust tree... Reverend, they are strong. Be careful.');
       s.flag('ch2_heardcui');
     } }
   ]);

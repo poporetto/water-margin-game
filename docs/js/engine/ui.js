@@ -33,6 +33,14 @@
 
   UI.message = function (speaker, text, opt) {
     opt = opt || {};
+    var pendingSpeaker = resolveSpeaker(speaker);
+    var portraitId = pendingSpeaker && pendingSpeaker.portrait;
+    var sheet = WM.ASSETS && WM.ASSETS.portraitSheets && WM.ASSETS.portraitSheets[portraitId];
+    if (sheet && !WM.portraits.sheetSettled[portraitId]) {
+      return WM.portraits.tryExpressionSheet(portraitId, sheet).then(function () {
+        return UI.message(speaker, text, opt);
+      });
+    }
     return new Promise(function (resolve) {
       var sp = resolveSpeaker(speaker);
       var hasPortrait = sp && sp.portrait;

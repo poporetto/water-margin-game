@@ -32,13 +32,13 @@
   WM.npc('official', 'Official', { skin: SK.fair, hairStyle: 'futou', body: '#7a1a1a', trim: '#d8b36a', beard: 'long' }, { face: true });
   WM.npc('constable', 'Constable', { skin: SK.tan, hairStyle: 'scarf', band: '#1a1a1a', body: '#2a2a2a', trim: '#c8302a', weapon: 'dao' }, { face: true });
   WM.npc('bandit', 'Bandit', { skin: SK.tan, hairStyle: 'headband', band: '#7a2a1a', body: '#5a4a3a', trim: '#3a2a1a', beard: 'stubble', weapon: 'dao' });
-  WM.npc('servant', 'Servant', { skin: SK.light, hairStyle: 'topknot', body: '#5a5a4a', trim: '#e8e0d0' });
+  WM.npc('servant', 'Servant', { skin: SK.light, hairStyle: 'topknot', body: '#5a5a4a', trim: '#e8e0d0' }, { face: true });
   WM.npc('maid', 'Maid', { skin: SK.fair, hairStyle: 'woman', body: '#7a9a7a', trim: '#e8e0d0', dress: true });
   WM.npc('boatman', 'Boatman', { skin: SK.tan, hairStyle: 'hat', hatColor: '#a8905a', body: '#5a6a6a', trim: '#4a3a2a', chest: true });
   WM.npc('hunter', 'Hunter', { skin: SK.tan, hairStyle: 'headband', band: '#5a4a2a', body: '#6a5a3a', trim: '#8a6a4a', weapon: 'bow' });
   WM.npc('drunk', 'Drunkard', { skin: '#e0907a', hairStyle: 'wild', hair: '#3a2a1a', body: '#7a6a5a', trim: '#5a4a3a', beard: 'stubble' });
   WM.npc('gambler', 'Gambler', { skin: SK.light, hairStyle: 'headband', band: '#3a3a3a', body: '#6a3a5a', trim: '#d8b36a' });
-  WM.npc('outlaw', 'Liangshan Man', { skin: SK.tan, hairStyle: 'headband', band: '#c8302a', body: '#4a4a3a', trim: '#c8302a', weapon: 'spear' });
+  WM.npc('outlaw', 'Liangshan Man', { skin: SK.tan, hairStyle: 'headband', band: '#c8302a', body: '#4a4a3a', trim: '#c8302a', weapon: 'spear' }, { face: true });
   WM.npc('outlawW', 'Liangshan Woman', { skin: SK.light, hairStyle: 'woman', body: '#6a3a3a', trim: '#c8302a', dress: true });
   WM.npc('recorder', 'Record Keeper', { skin: SK.fair, hairStyle: 'scarf', band: '#2a2a3a', body: '#4a4a5a', trim: '#e8e0d0', beard: 'long', build: 'slim' }, { face: true });
 })();

@@ -213,6 +213,9 @@
 
   PT.get = function (id, expr) {
     expr = expr || 'normal';
+    if (PT.overrides[id + ':' + expr]) return PT.overrides[id + ':' + expr];
+    var sheets = WM.ASSETS && WM.ASSETS.portraitSheets;
+    if (sheets && sheets[id]) PT.tryExpressionSheet(id, sheets[id]);
     if (PT.overrides[id]) return PT.overrides[id];
     var key = id + ':' + expr;
     if (!PT.cache[key]) {
@@ -227,8 +230,39 @@
 
   PT.tryOverride = function (id) {
     var img = new Image();
-    img.onload = function () { img.isOverride = true; PT.overrides[id] = img; };
+    img.onload = function () {
+      img.isOverride = true;
+      if (!PT.overrides[id + ':normal']) PT.overrides[id] = img;
+    };
     img.src = 'assets/portraits/' + id + '.png';
+  };
+
+  // Expression sheets share one image download; each cell becomes a cached portrait.
+  PT.sheetLoads = {};
+  PT.sheetSettled = {};
+  PT.tryExpressionSheet = function (id, spec) {
+    if (PT.sheetLoads[id]) return PT.sheetLoads[id];
+    PT.sheetLoads[id] = new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        var cw = img.width / spec.columns, ch = img.height / spec.rows;
+        spec.expressions.forEach(function (expr, i) {
+          var tile = U.makeCanvas(Math.round(cw), Math.round(ch));
+          tile.getContext('2d').drawImage(img, (i % spec.columns) * cw,
+            Math.floor(i / spec.columns) * ch, cw, ch, 0, 0, tile.width, tile.height);
+          tile.isOverride = true;
+          PT.overrides[id + ':' + expr] = tile;
+          if (expr === 'normal') PT.overrides[id] = tile;
+        });
+        PT.sheetSettled[id] = true;
+        resolve(true);
+      };
+      img.onerror = function () { PT.sheetSettled[id] = true; resolve(false); };
+      // never hold up a line of dialogue on art: if the sheet is slow, go on with the plain portrait
+      setTimeout(function () { if (!PT.sheetSettled[id]) { PT.sheetSettled[id] = true; resolve(false); } }, 2500);
+      img.src = 'assets/portraits/' + id + '-expressions.png';
+    });
+    return PT.sheetLoads[id];
   };
 
   // Preserve painted portrait proportions and smooth downsampling at every UI size.

@@ -95,6 +95,10 @@
     // optional art overrides listed in assets/manifest.js
     var man = WM.ASSETS || {};
     (man.portraits || []).forEach(function (id) { WM.portraits.tryOverride(id); });
+    // Preload the opening cast; later chapters load portraits on first use.
+    ((man.portraitGroups && man.portraitGroups.prologue) || Object.keys(man.portraitSheets || {})).forEach(function (id) {
+      WM.portraits.tryExpressionSheet(id, man.portraitSheets[id]);
+    });
     (man.sprites || []).forEach(function (id) { WM.sprites.tryOverride(id); });
     if (WM.validateData) WM.validateData();
     WM.setScene(WM.scenes.title);

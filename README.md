@@ -44,6 +44,13 @@ which arcs are played and which are condensed. Each game chapter is one file in 
 
 ## Art
 
+The prologue has six illustrated expressions each for Hong Xin, the Abbot of Shangqing,
+the Herd-Boy and the temple Daoist. Preview them at `tools/prologue-portraits.html`.
+Their `assets/portraits/<id>-expressions.png` sheets use a 3-column, 2-row layout:
+normal, angry, sad, smile, shock, concerned. `assets/manifest.js` declares the layout;
+dialogue tags such as `hongxin:shock` select a cell, with normal as the fallback.
+Run `node tools/test-portrait-expressions.js` to check expression selection and prologue coverage.
+
 Song Jiang, Lin Chong, Lu Zhishen, Wu Song, Wu Yong and Hua Rong use illustrated portraits. Other portraits, sprites, tiles and monsters are drawn procedurally in code. To replace the art for any character, drop
 in a PNG and list its id in `assets/manifest.js`:
 
@@ -85,3 +92,22 @@ node tools/headless.js map <id>
 ```
 
 Prints a map as ASCII.
+
+Chapter 1 illustrated portraits cover 16 characters with six expressions each (96 cells).
+Preview and test dialogue at `tools/chapter1-portraits.html`. Sheets load once on first use;
+dialogue waits for its portrait, with procedural fallback if loading fails.
+Lu Da retains hair and military clothing for his pre-monastery appearance.
+Run `node tools/test-portrait-expressions.js` to check sheet mapping, fallback, and dialogue loading.
+
+Chapter 2 adds 22 expression sheets and reuses four returning cast sheets: 26 characters,
+156 expressions in `tools/chapter2-portraits.html`. The cast uses distinct facial designs
+within the established painted anime style. Wang Jin, the duty officer and guard officer
+also have revised identities; Wang Jin has a short beard, the duty officer a leaner build,
+and the guard officer a more mature face. Generation prompts are in
+`output/imagegen/chapter2-expression-prompts.json` and `chapter1-face-refinements.json`.
+
+Chapter 3 adds 23 expression sheets and reuses seven returning cast sheets: 30 characters,
+180 expressions in `tools/chapter3-portraits.html`. Story and duel dialogue use the same
+six-expression mapping. The servant and Liangshan guide now show portraits too.
+Lu Qian is clean-shaven to match his description in the chapter. Generated with the built-in
+image tool; the complete prompt set is `output/imagegen/chapter3-expression-prompts.json`.
