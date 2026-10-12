@@ -11,7 +11,10 @@
   const mc = new MessageChannel(); let tickRes = null; mc.port1.onmessage = () => { const r = tickRes; tickRes = null; r && r(); };
   const tick = () => new Promise((r) => { tickRes = r; mc.port2.postMessage(0); });
   let fcount = 0;
-  const frames = async (n) => { for (let i = 0; i < n; i++) { WM.step(1 / 60, 1); for (let k = 0; k < 12; k++) await null; if (++fcount % 20 === 0) await tick(); } };
+  // ...but message-channel ticks run ahead of timers and image loads, so every so often give those a turn as well,
+  // or a portrait sheet never finishes loading and the line of dialogue waiting on it never appears
+  const breathe = () => new Promise((r) => setTimeout(r, 0));
+  const frames = async (n) => { for (let i = 0; i < n; i++) { WM.step(1 / 60, 1); for (let k = 0; k < 12; k++) await null; if (++fcount % 20 === 0) await tick(); if (fcount % 120 === 0) await breathe(); } };
   const sceneName = () => Object.keys(WM.scenes).filter((k) => WM.scenes[k] === WM.scene)[0];
   const F = () => WM.field;
 
@@ -293,7 +296,7 @@
       if (res === 'busy') {
         const sig = storySig() + '|' + WM.state.map + '|' + JSON.stringify(F().player && F().player.tile()) + '|' + sceneName();
         busyN = sig === busySig ? busyN + 1 : 0; busySig = sig;
-        if (busyN > 1500) { note('fail', 'looping without progress (repeating dialogue?)'); busyN = 0; if (!opt.skipOnFail) break; curCh = Math.min(24, curCh + 1); if (curCh > to) break; WM.debug.jump(curCh); await frames(60); }
+        if (busyN > 1500) { note('fail', 'looping without progress: ' + JSON.stringify({ scene: sceneName(), run: WM.script.running, ui: WM.ui.stack.length, ev: (F().playing || []).map((e) => e.id).join(','), at: F().player && F().player.tile(), near: (F().actors || []).filter((a) => a.visible && (a.entering || a.path.length)).map((a) => (a.sheetWho || a.name) + '@' + a.tile().x + ',' + a.tile().y + (a.entering ? ' entering' : '') + ' path' + a.path.length) })); busyN = 0; if (!opt.skipOnFail) break; curCh = Math.min(24, curCh + 1); if (curCh > to) break; WM.debug.jump(curCh); await frames(60); }
         continue;
       }
       if (res === 'moved' || res === 'fired' || res === 'nudged') { fails = 0; busyN = 0; continue; }

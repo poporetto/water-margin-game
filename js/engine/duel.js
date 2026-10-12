@@ -106,7 +106,7 @@
     var s = f.ox;
     return WM.tween(dur, function (k) { f.ox = s + dir * dist * Math.sin(k * Math.PI); });
   }
-  function pop(f, text, col) { D.cur.pops.push({ x: f.x + f.ox, y: 210, text: String(text), col: col || '#fff', t: 0 }); }
+  function pop(f, text, col) { if (D.cur) D.cur.pops.push({ x: f.x + f.ox, y: 210, text: String(text), col: col || '#fff', t: 0 }); }
   function hit(f, dmg, big) {
     f.hp = Math.max(0, f.hp - dmg); f.flash = 0.3;
     pop(f, dmg, big ? '#ffd040' : '#ffffff');
