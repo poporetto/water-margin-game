@@ -42,6 +42,7 @@
     var d = WM.data;
     if (d.charOrder.length !== 108) errs.push('Expected 108 stars, have ' + d.charOrder.length);
     (WM.dupEnemies || []).forEach(function (id) { errs.push('Enemy id defined twice: ' + id); });
+    Object.keys(d.chars).forEach(function (id) { if (d.chars[id].combat !== false && (d.skills[id] || []).length !== 3) errs.push('Hero needs three skills: ' + id); });
     for (var mid in d.maps) {
       var m = d.maps[mid];
       (m.exits || []).forEach(function (e) { if (!d.maps[e.to]) errs.push('Map ' + mid + ' exit to missing map ' + e.to); });

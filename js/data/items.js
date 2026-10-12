@@ -26,7 +26,8 @@
   use('lime', 'Lime Powder', 50, { damage: 40, status: 'silence', chance: 0.5 }, 'enemy1', null, 'Thrown in the eyes. Damages and may silence.', { sfx: 'miss', fx: 'sand' });
   use('firepot', 'Fire Pot', 120, { damage: 160 }, 'enemyAll', null, 'An earthen pot of burning oil. Damages all enemies.', { sfx: 'fire', fx: 'fire' });
   use('tigerwine', 'Tiger-Bone Wine', 90, { buff: 'atkUp' }, 'ally1', null, 'Fiery wine steeped with tiger bone. Raises attack for a few rounds.');
-  use('incense', 'Calming Incense', 400, { mp: true }, null, 'ally1', 'Restores all talisman charges for one person.');
+  use('incense', 'Calming Incense', 300, { mp: true }, 'ally1', 'ally1', 'Restores all skill uses for one person.');
+  use('templeincense', 'Temple Incense', 1200, { mp: true }, 'allyAll', 'allyAll', 'Incense from a great temple. Restores all skill uses for the whole party.');
 
   // ---- equipment ----
   eq('cap', 'head', 'Cloth Cap', 30, 2, 'A plain cloth cap.');
@@ -126,14 +127,14 @@
   SH.weizhou = { name: 'Weizhou Market', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'cap', 'bandana', 'robe', 'quilted', 'buckler', 'straw'] };
   SH.wutai = { name: 'Wutai Town', items: ['bun', 'medicine', 'antidote', 'wine', 'monkrobe', 'quilted', 'leathercap', 'buckler'] };
   SH.kaifeng = { name: 'Eastern Capital Bazaar', items: ['beef', 'medicine', 'antidote', 'needle', 'wine', 'goodwine', 'soulcharm', 'lime', 'leathercap', 'hairpin', 'quilted', 'leather', 'silkrobe', 'rattan', 'jadering', 'amulet'] };
-  SH.kaifeng_t = { name: 'Daoist of the Eastern Capital', items: ['fire', 'water', 'wind', 'earth', 'hawk', 'turtle'] };
+  SH.kaifeng_t = { name: 'Daoist of the Eastern Capital', items: ['incense', 'templeincense', 'soulcharm'] };
   SH.cangzhou = { name: 'Cangzhou Store', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'quilted', 'leathercap', 'buckler', 'straw'] };
   SH.daming = { name: 'Daming Market', items: ['beef', 'medicine', 'needle', 'goodwine', 'soulcharm', 'lime', 'tigerwine', 'ironhelm', 'leather', 'lamellar', 'rattan', 'gauntlet', 'amulet'] };
-  SH.daming_t = { name: 'Daming Talisman Shop', items: ['fire', 'water', 'wind', 'earth', 'fury', 'hawk', 'turtle', 'swallow'] };
+  SH.daming_t = { name: 'Daming Incense Shop', items: ['incense', 'templeincense', 'soulcharm'] };
   SH.yuncheng = { name: 'Yuncheng Store', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'menghan', 'bandana', 'leathercap', 'quilted', 'leather', 'buckler', 'straw'] };
   SH.liangshan = { name: 'Liangshan Stores', items: ['beef', 'medicine', 'ginseng', 'needle', 'wine', 'goodwine', 'soulcharm', 'menghan', 'lime', 'firepot', 'tigerwine', 'incense'] };
   SH.liangshan_armor = { name: 'Hou Jian\'s Tailor', items: ['ironhelm', 'phoenixhelm', 'hairpin', 'daoistcrown', 'lamellar', 'brigandine', 'daoistrobe', 'silkrobe', 'ironshield', 'rattan', 'jadering', 'legcharm', 'gauntlet', 'beltjade', 'amulet'] };
-  SH.liangshan_t = { name: 'Jin Dajian\'s Engraving', items: ['fire', 'water', 'wind', 'earth', 'fury', 'hawk', 'turtle', 'swallow'] };
+  SH.liangshan_t = { name: 'Jin Dajian\'s Workshop', items: ['incense', 'templeincense', 'soulcharm'] };
   SH.jiangzhou = { name: 'Jiangzhou Market', items: ['beef', 'medicine', 'needle', 'goodwine', 'soulcharm', 'firepot', 'ironhelm', 'leather', 'lamellar', 'rattan', 'jadering', 'legcharm'] };
   SH.south = { name: 'Jiangnan Market', items: ['medicine', 'ginseng', 'needle', 'goodwine', 'soulcharm', 'firepot', 'incense', 'phoenixhelm', 'brigandine', 'silkrobe', 'ironshield', 'beltjade'] };
 })();

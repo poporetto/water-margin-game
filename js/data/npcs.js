@@ -22,7 +22,7 @@
   WM.npc('waiter', 'Waiter', { skin: SK.light, hairStyle: 'headband', band: '#e8e0d0', body: '#e8e0d0', trim: '#3a3a3a', pants: '#3a3a3a' }, { face: true });
   WM.npc('innkeep', 'Innkeeper', { skin: SK.mid, hairStyle: 'scarf', band: '#5a2a1a', body: '#6a3a2a', trim: '#c8b890', beard: 'mustache', build: 'big' }, { face: true });
   WM.npc('smith', 'Blacksmith', { skin: SK.tan, hairStyle: 'headband', band: '#3a3a3a', body: '#4a3a2a', trim: '#8a6a4a', chest: true, build: 'big', beard: 'short' }, { face: true });
-  WM.npc('talismaster', 'Talisman Master', { skin: SK.fair, hairStyle: 'daoist', crown: '#3a3a3a', body: '#3a3a6a', trim: '#e8e0d0', beard: 'long', beardColor: '#d8d8d0' }, { face: true });
+  WM.npc('talismaster', 'Incense Daoist', { skin: SK.fair, hairStyle: 'daoist', crown: '#3a3a3a', body: '#3a3a6a', trim: '#e8e0d0', beard: 'long', beardColor: '#d8d8d0' }, { face: true });
   WM.npc('monk', 'Monk', { skin: SK.light, hairStyle: 'bald', body: '#8a6a3a', trim: '#c89a4a', beads: true }, { face: true });
   WM.npc('daoist', 'Daoist', { skin: SK.light, hairStyle: 'daoist', crown: '#8a7a4a', body: '#4a5a7a', trim: '#e8e0d0', beard: 'short' }, { face: true });
   WM.npc('scholar', 'Scholar', { skin: SK.fair, hairStyle: 'scarf', band: '#1a1a2a', body: '#3a4a6a', trim: '#e8e0d0', beard: 'mustache', build: 'slim' }, { face: true });

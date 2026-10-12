@@ -289,7 +289,7 @@
       shop: function (id) { return WM.shops.open(id); },
       inn: function (price, who) { return WM.shops.inn(price, who); },
       smith: function (maxLv, who) { return WM.shops.smith(maxLv, who); },
-      talismanShop: function (id) { return WM.shops.talismans(id); },
+      talismanShop: function (id) { return WM.shops.open(id); },   // talismans gave way to skills: the old masters sell incense
       saveMenu: function () { return WM.menu.saveMenu(); },
       roster: function () { return WM.menu.partyEdit(); },
       tablet: function () { return WM.menu.tablet(); }

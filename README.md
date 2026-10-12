@@ -5,7 +5,7 @@ hundred and eight demons on Dragon-Tiger Mountain to the graves at Liaoerwa. The
 
 - **Field.** Free 8-direction movement, dashing, towns, dungeons and a world map.
 - **Battles.** Turn-based, with a 6-member party in front and back rows, and weapon ranges (short, medium, long).
-- **Rune-style talismans.** Charges per spell level. Unite attacks. A round menu of Fight / Bribe / Run / Auto / Let Go.
+- **Skills.** Every hero who fights has three skills of their own, taken from their deeds in the novel (Lu Zhishen's Three Punches, Hua Rong's arrow through the wild goose, Li Kui's Black Whirlwind). The second opens at level 8 and the third at level 18. Like Suikoden's rune charges, each skill level has a number of uses, restored at an inn or with incense. Also Unite attacks, and a round menu of Fight / Bribe / Run / Auto / Let Go.
 - **Duels.** One-on-one fights read from the enemy's lines: Attack beats Defend, Wild beats Attack, Defend beats Wild.
 - **War battles.** Grid-based army battles where each unit is led by a hero with supporting heroes, terrain matters,
   and leaders have special abilities.

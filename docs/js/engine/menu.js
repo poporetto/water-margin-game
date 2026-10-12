@@ -29,10 +29,11 @@
       G.text('HP ' + c.hp + '/' + st.mhp, x + 100, yy + 34, { size: 19, color: G.hpColor(c.hp / st.mhp) });
       G.bar(x + 100, y + 16 + i * 92 + 60, 220, 8, c.hp / st.mhp, G.hpColor(c.hp / st.mhp));
       G.text('EXP ' + c.exp, x + 330, yy + 34, { size: 18, color: G.COL.dim });
-      if (B_spells(id)) G.text('MP ' + c.mp.join('/'), x + 330, yy + 56, { size: 17, color: '#a0c0ff' });
+      var nk = B_skills(id); if (nk) G.text('Skills ' + c.mp.slice(0, nk).join('/'), x + 330, yy + 56, { size: 17, color: '#a0c0ff' });
     }
   }
-  function B_spells(id) { var c = WM.state.chars[id]; return ['head', 'rhand', 'lhand'].some(function (s) { var t = c.tal[s] && WM.data.talismans[c.tal[s]]; return t && t.spells; }); }
+  // how many of the hero's skills are open (skill N opens with the level-N uses)
+  function B_skills(id) { var mm = S.maxMp(id); return (WM.data.skills[id] || []).filter(function (sk, i) { return mm[i] > 0; }).length; }
 
   function infoBar() {
     G.window(600, 600, 344, 104);
@@ -238,11 +239,13 @@
     G.text('Weapon', x, y, { size: 20, color: G.COL.dim });
     G.text(wpn.name + '  Lv ' + c.wlv + '  (' + wpn.range + ')', x + 120, y, { size: 20 });
     y += 34;
-    G.text('Talismans', x, y, { size: 20, color: G.COL.dim });
-    [['head', 'Head'], ['rhand', 'R.Hand'], ['lhand', 'L.Hand']].forEach(function (s, i) {
-      var t = c.tal[s[0]] && WM.data.talismans[c.tal[s[0]]];
-      G.text(s[1] + ': ' + (t ? t.name : '—'), x + 120, y + i * 28, { size: 19 });
+    G.text('Skills', x, y, { size: 20, color: G.COL.dim });
+    var mm = S.maxMp(id);
+    (WM.data.skills[id] || []).forEach(function (sk, i) {
+      var open = mm[i] > 0;
+      G.text(open ? sk.name + '  (' + c.mp[i] + ')' : '— opens at level ' + [1, 8, 18][i] + ' —', x + 120, y + i * 28, { size: 19, color: open ? G.COL.text : G.COL.dim });
     });
+    if (!(WM.data.skills[id] || []).length) G.text('—', x + 120, y, { size: 19 });
     y += 96;
     G.text('Equipment', x, y, { size: 20, color: G.COL.dim });
     SLOTS.forEach(function (s, i) { var it = c.equip[s[0]] && WM.data.items[c.equip[s[0]]]; G.text(s[1] + ': ' + (it ? it.name : '—'), x + 120, y + i * 28, { size: 19 }); });

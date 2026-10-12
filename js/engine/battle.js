@@ -1,5 +1,5 @@
 // Turn-based battle modelled on Suikoden II:
-// six-member party in front/back rows, weapon ranges S/M/L, per-level talisman charges,
+// six-member party in front/back rows, weapon ranges S/M/L, each hero's own skills with uses per skill level,
 // Unite attacks, and the Fight / Bribe / Run / Auto / Let Go round menu.
 'use strict';
 (function () {
@@ -189,13 +189,14 @@
   function hurt(u) { u.anim.flash = 0.3; u.anim.shake = 0.25; }
 
   // ---------- damage ----------
-  function physDamage(a, t, mult) {
+  function physDamage(a, t, mult, opt) {
+    opt = opt || {};
     var hit = U.clamp(0.93 + (a.skl - t.spd) / 400, 0.72, 0.99);
-    if (t.status.sleep) hit = 1;
+    if (t.status.sleep || opt.sure) hit = 1;
     if (Math.random() > hit) return { miss: true };
     var raw = a.atk * (0.9 + Math.random() * 0.2) * (mult || 1);
     if (a.status.atkUp) raw *= 1.3;
-    var dmg = raw - t.dfs * 0.55 * (t.status.defUp ? 1.6 : 1);
+    var dmg = raw - t.dfs * (opt.pierce ? 0.2 : 0.55) * (t.status.defUp ? 1.6 : 1);
     dmg = Math.max(raw * 0.12, dmg);
     var crit = Math.random() < U.clamp(0.04 + (a.skl - t.spd) / 600 + a.luk / 2000, 0.02, 0.2);
     if (crit) dmg *= 1.6;
@@ -332,10 +333,10 @@
   function commandFor(bt, u, usedByUnite) {
     return new Promise(function (resolve) {
       var unites = availableUnites(bt, u, usedByUnite);
-      var tals = talismanSpells(u);
+      var arts = skillsOf(u), silenced = !!u.status.silence;
       var items = [
         { label: 'Attack', v: 'attack', disabled: !canAttack(u), help: canAttack(u) ? (u.range + '-range weapon') : 'Out of reach from the back row.' },
-        { label: 'Talisman', v: 'tal', disabled: !tals.length || u.status.silence, help: tals.length ? 'Use talisman magic.' : 'No talisman equipped.' },
+        { label: 'Skill', v: 'tal', disabled: !arts.length, help: arts.length ? arts.map(function (a) { return a.name; }).join(', ') : 'No skills.' },
         { label: 'Item', v: 'item', disabled: !S.invList(function (it) { return it.battle; }).length },
         { label: 'Defend', v: 'defend' },
         { label: 'Unite', v: 'unite', disabled: !unites.length, help: unites.length ? unites.map(function (x) { return x.name; }).join(', ') : 'No unite partners in the party.' }
@@ -357,7 +358,7 @@
           } else if (v === 'defend') { UI.remove(w); resolve({ u: u, type: 'defend' }); }
           else if (v === 'tal') {
             UI.remove(w);
-            pickSpell(bt, u, tals).then(function (sp) {
+            pickSpell(bt, u, arts).then(function (sp) {
               if (!sp) { UI.push(w); return; }
               if (sp.target === 'enemy1' || sp.target === 'ally1' || sp.target === 'allyKO') {
                 var pool = sp.target === 'enemy1' ? living(foes(u)) : sp.target === 'allyKO' ? allies(u).filter(function (a) { return a.hp <= 0; }) : living(allies(u));
@@ -425,24 +426,22 @@
     });
   }
 
-  function talismanSpells(u) {
-    var out = [];
-    if (u.side !== 'party') return out;
-    ['head', 'rhand', 'lhand'].forEach(function (slot) {
-      var tid = u.tal[slot]; if (!tid) return;
-      var t = WM.data.talismans[tid]; if (!t || !t.spells) return;
-      t.spells.forEach(function (sp, li) { if (sp) out.push(Object.assign({ talisman: tid, lvl: sp.lvl || li + 1 }, sp)); });
-    });
-    return out;
+  // the hero's own skills (js/data/skills.js): skill N uses the level-N charges, and opens once there are any
+  function skillsOf(u) {
+    if (u.side !== 'party' || !u.mp) return [];
+    var max = S.maxMp(u.id);
+    return (WM.data.skills[u.id] || []).map(function (sk, i) { return Object.assign({ lvl: i + 1 }, sk); })
+      .filter(function (sk) { return max[sk.lvl - 1] > 0; });
   }
-  B.talismanSpells = talismanSpells;
+  B.skillsOf = skillsOf;
+  function magical(sk) { return sk.effect !== 'phys'; }
 
   function pickSpell(bt, u, spells) {
     var items = spells.map(function (sp) {
-      var charges = sp.free ? '∞' : u.mp[sp.lvl - 1];
-      return { label: 'Lv' + sp.lvl + ' ' + sp.name, right: charges, disabled: !sp.free && u.mp[sp.lvl - 1] <= 0, help: sp.desc };
+      var hush = u.status.silence && magical(sp);
+      return { label: sp.name, right: u.mp[sp.lvl - 1], disabled: u.mp[sp.lvl - 1] <= 0 || hush, help: hush ? 'Silenced.' : sp.desc };
     });
-    return UI.choose(items, { x: 250, y: 120, w: 420, help: true, title: 'Talisman' }).then(function (k) { return k < 0 ? null : spells[k]; });
+    return UI.choose(items, { x: 250, y: 120, w: 460, help: true, title: 'Skills' }).then(function (k) { return k < 0 ? null : spells[k]; });
   }
   function pickItem(bt, u) {
     var inv = S.invList(function (it) { return it.battle; });
@@ -538,7 +537,7 @@
       await tweenAnim(u, 0, 0, 0.14);
       return;
     }
-    if (a.type === 'tal') { await castSpell(bt, u, a.spell, a.target); return; }
+    if (a.type === 'tal') { if (a.spell.effect === 'phys') await useArt(bt, u, a.spell, a.target); else await castSpell(bt, u, a.spell, a.target); return; }
     if (a.type === 'item') { await useItem(bt, u, a.item, a.target); return; }
     if (a.type === 'unite') { await doUnite(bt, a.unite); return; }
     if (a.type === 'skill') { await enemySkill(bt, u, a.skill); return; }
@@ -569,13 +568,53 @@
     targets.forEach(function (t) {
       if (!t) return;
       if (sp.effect === 'damage') { var d = magicDamage(u, t, sp.power, sp.element); pop(t, d, '#ffb070'); applyDamage(t, d); if (sp.status && t.hp > 0 && Math.random() < (sp.statusChance || 0.5)) { t.status[sp.status] = 3; pop(t, statusName(sp.status), '#c0a0ff'); } }
-      else if (sp.effect === 'heal') applyHeal(t, Math.round(sp.power * (1 + u.mgc / 80)));
+      else if (sp.effect === 'heal') { if (sp.cure) t.status = {}; applyHeal(t, Math.round(sp.power * (1 + u.mgc / 80))); }
       else if (sp.effect === 'revive') { if (t.hp <= 0) { t.hp = Math.round(t.mhp * (sp.power || 0.5)); pop(t, 'Revived', '#7fe07a'); } else applyHeal(t, Math.round(t.mhp * 0.5)); }
       else if (sp.effect === 'cure') { t.status = {}; pop(t, 'Cured', '#7fe07a'); if (sp.power) applyHeal(t, Math.round(sp.power * (1 + u.mgc / 80))); }
       else if (sp.effect === 'status') { if (Math.random() < (sp.statusChance || 0.6) && !(t.def && t.def.boss && sp.status === 'sleep')) { t.status[sp.status] = 3; pop(t, statusName(sp.status), '#c0a0ff'); } else pop(t, 'Resisted', '#c0c0c0'); }
-      else if (sp.effect === 'buff') { t.status[sp.status] = sp.turns || 3; pop(t, statusName(sp.status), '#a0e0ff'); }
+      else if (sp.effect === 'buff') { t.status[sp.status] = sp.turns || 3; if (sp.also) t.status[sp.also] = sp.turns || 3; pop(t, statusName(sp.status), '#a0e0ff'); }
     });
     await WM.wait(0.5);
+  }
+  // a weapon skill: one or more blows at `power` times a normal attack
+  async function useArt(bt, u, sk, target) {
+    if (u.mp[sk.lvl - 1] <= 0) { pop(u, 'No uses left', '#c0c0c0'); return; }
+    u.mp[sk.lvl - 1]--;
+    await banner(sk.name);
+    u.anim.glow = 0.5;
+    var pool = function () { return living(foes(u)); };
+    var single = sk.target === 'enemy1';
+    var first = single ? (target && target.hp > 0 ? target : U.pick(pool())) : null;
+    if (single && !first) return;
+    var dirX = u.side === 'party' ? -1 : 1, near = !sk.shot && u.range !== 'L';
+    var aim = first || { pos: [u.pos[0] + dirX * 160, u.pos[1]] };
+    var dx = (aim.pos[0] - u.pos[0]) * (near ? 0.55 : 0.15), dy = (aim.pos[1] - u.pos[1]) * (near ? 0.55 : 0.15);
+    await tweenAnim(u, dx, dy, 0.16);
+    if (sk.screen) { G.flash = 0.5; G.shake = 3; }
+    var hits = sk.hits || 1;
+    for (var h = 0; h < hits; h++) {
+      var targets = single ? [sk.scatter ? U.pick(pool()) : first] : pool();
+      targets = targets.filter(function (t) { return t && t.hp > 0; });
+      if (!targets.length && single && !sk.scatter) targets = [U.pick(pool())].filter(Boolean);   // the first one fell: go on to the next
+      if (!targets.length) break;
+      if (sk.shot) { targets.forEach(function (t) { fx(sk.shot, t.pos[0], t.pos[1] - 50, { from: [u.pos[0] + dx, u.pos[1] - 50 + dy] }); }); WM.audio.sfx('arrow'); await WM.wait(0.16); }
+      var anyCrit = false;
+      targets.forEach(function (t) {
+        var r = physDamage(u, t, sk.power, sk);
+        if (r.miss) { pop(t, 'Miss', '#c0c0c0'); return; }
+        fx(sk.fx || (sk.shot ? 'burst' : 'slash'), t.pos[0], t.pos[1] - 50, { flip: dirX > 0 });
+        if (r.crit) anyCrit = true;
+        pop(t, r.dmg, r.crit ? '#ffd040' : '#ffe0a0', r.crit);
+        applyDamage(t, r.dmg);
+        if (sk.status && t.hp > 0 && Math.random() < (sk.statusChance || 0.5) && !(t.def && t.def.boss && sk.status === 'sleep' && Math.random() < 0.6)) { t.status[sk.status] = sk.status === 'sleep' ? 1 : 3; pop(t, statusName(sk.status), '#c0a0ff'); }
+      });
+      WM.audio.sfx(anyCrit ? 'crit' : 'hit');
+      if (anyCrit) G.shake = 2;
+      await WM.wait(hits > 1 ? 0.2 : 0.3);
+    }
+    if (sk.selfStatus) { u.status[sk.selfStatus] = 3; pop(u, statusName(sk.selfStatus), '#a0e0ff'); }
+    await tweenAnim(u, 0, 0, 0.14);
+    await WM.wait(0.2);
   }
   function statusName(s) { return { poison: 'Poison', sleep: 'Sleep', silence: 'Silence', atkUp: 'Power Up', defUp: 'Guard Up', unbalanced: 'Unbalanced' }[s] || s; }
 
@@ -596,6 +635,7 @@
       if (e.status) { if (!(t.def && t.def.boss) && Math.random() < (e.chance || 0.75)) { t.status[e.status] = 3; pop(t, statusName(e.status), '#c0a0ff'); } else pop(t, 'Resisted', '#c0c0c0'); }
       if (e.damage) { var d = Math.round(e.damage * (0.9 + Math.random() * 0.2)); pop(t, d, '#ffb070'); applyDamage(t, d); }
       if (e.buff) { t.status[e.buff] = 3; pop(t, statusName(e.buff), '#a0e0ff'); }
+      if (e.mp && t.mp && t.side === 'party') { var mm = S.maxMp(t.id); for (var i = 0; i < 4; i++) t.mp[i] = mm[i]; pop(t, 'Spirit restored', '#a0c0ff'); }
     });
     await WM.wait(0.45);
   }
@@ -880,10 +920,11 @@
       var fr = u.hp / u.mhp;
       G.text(u.hp + '/' + u.mhp, x + 286, y + 26, { size: 18, align: 'right', color: G.hpColor(fr) });
       G.bar(x + 74, y + 50, 212, 9, fr, G.hpColor(fr));
-      // talisman charges (if any spells)
-      if (talismanSpells(u).length) {
+      // skill uses, one count per skill level
+      var arts = skillsOf(u);
+      if (arts.length) {
         var mm = u.mp, s2 = '';
-        for (var k = 0; k < 4; k++) s2 += (k ? '/' : '') + mm[k];
+        for (var k = 0; k < arts.length; k++) s2 += (k ? '/' : '') + mm[k];
         G.text(s2, x + 74, y + 26, { size: 16, color: '#a0c0ff' });
       }
       var stt = Object.keys(u.status).filter(function (k2) { return ['poison', 'sleep', 'silence', 'atkUp', 'defUp'].indexOf(k2) >= 0; });

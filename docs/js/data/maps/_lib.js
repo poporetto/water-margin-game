@@ -116,7 +116,7 @@
     return { id: id, x: x, y: y, npc: npc || 'smith', run: async function (s) { await s.say(npc || 'smith', line || 'Want that blade of yours sharper? I can take it as far as level ' + maxLv + '.'); await s.smith(maxLv, npc || 'smith'); } };
   };
   L.talis = function (id, x, y, shopId, npc) {
-    return { id: id, x: x, y: y, npc: npc || 'talismaster', run: async function (s) { await s.say(npc || 'talismaster', 'Talismans are bound into the head or the hands. Each holds magic of its own.'); await s.talismanShop(shopId); } };
+    return { id: id, x: x, y: y, npc: npc || 'talismaster', run: async function (s) { await s.say(npc || 'talismaster', 'A fighter\'s great blows spend the spirit. Burn incense, and it returns.'); await s.shop(shopId); } };
   };
   L.save = function (id, x, y, npc) {
     return { id: id, x: x, y: y, npc: npc || 'recorder', run: async function (s) { var k = await s.ask(npc || 'recorder', 'Shall I set down the record of your journey?', ['Write a record', 'Not now']); if (k === 0) await s.saveMenu(); } };
