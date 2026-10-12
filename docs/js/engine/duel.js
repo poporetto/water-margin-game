@@ -42,13 +42,19 @@
     });
   };
 
+  // 'hero' and 'foe' stand for the two fighters, with or without an expression ('hero:sad', 'foe:shock')
+  function who(du, sp) {
+    if (typeof sp !== 'string') return sp;
+    var p = sp.split(':'), id = p[0] === 'hero' ? du.heroId : p[0] === 'foe' ? du.foeId : p[0];
+    return p.length > 1 ? id + ':' + p[1] : id;
+  }
   function speaker(du) { return WM.data.chars[du.foeId] ? du.foeId : du.foeId; }
 
   async function run(du) {
     var d = du.d;
     for (var i = 0; i < (d.intro || []).length; i++) {
       var ln = d.intro[i];
-      await UI.message(ln[0] === 'hero' ? du.heroId : ln[0] === 'foe' ? du.foeId : ln[0], ln[1]);
+      await UI.message(who(du, ln[0]), ln[1]);
     }
     var pattern = d.pattern ? d.pattern.slice() : null;
     while (true) {
@@ -67,7 +73,7 @@
   async function outro(du, lines) {
     for (var i = 0; i < (lines || []).length; i++) {
       var ln = lines[i];
-      await UI.message(ln[0] === 'hero' ? du.heroId : ln[0] === 'foe' ? du.foeId : ln[0], ln[1]);
+      await UI.message(who(du, ln[0]), ln[1]);
     }
   }
   function weighted(w) {
