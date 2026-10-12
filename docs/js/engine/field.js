@@ -134,11 +134,13 @@
     }
     return ok;
   }
+  F.playing = [];   // events whose scripts are running now
   F.stage = function () {
     if (!F.map || F.map.def.world) return;
     var want = {};
     (WM.data.events[F.map.id] || []).forEach(function (ev) {
       if (!ev.run || ev.resident || !(ev.trigger === 'auto' || ev.trigger === 'touch' || ev.trigger === 'check')) return;
+      if (F.playing.indexOf(ev) >= 0) return;   // a scene already under way (it may warp back into this room) does not set its stage again
       var lead = leadSpawns(ev); if (!lead.length || !couldFire(ev)) return;
       lead.forEach(function (sp) {
         if (want[sp.key] || (!WM.data.chars[sp.who] && !WM.data.npcs[sp.who])) return;
@@ -487,7 +489,11 @@
     if (!fn) return;
     var body = fn;
     // mark once-events done as soon as their script finishes (before actors refresh)
-    WM.script.run(async function (s) { await body(s); if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true); }, { ev: ev, actor: actor });
+    WM.script.run(async function (s) {
+      F.playing.push(ev);
+      try { await body(s); } finally { F.playing = F.playing.filter(function (e) { return e !== ev; }); }
+      if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true);
+    }, { ev: ev, actor: actor });
   };
 
   // Keep existing actors' positions but add/remove according to current conditions.
@@ -599,7 +605,7 @@
       G.ctx.globalAlpha = al;
       var tw = G.measure(F.nameBanner.text, 26, true) + 70;
       G.window((WM.W - tw) / 2, 40, tw, 58, { top: '#2a1e12', bottom: '#120c06' });
-      G.text(F.nameBanner.text, WM.W / 2, 54, { size: 26, bold: true, align: 'center', color: G.COL.gold });
+      G.text(F.nameBanner.text, WM.W / 2, 40 + 29 + 1, { size: 26, bold: true, align: 'center', baseline: 'middle', color: G.COL.gold });   // centred in the plate
       G.ctx.globalAlpha = 1;
     }
     if (F.map.def.world) drawWorldLabel();

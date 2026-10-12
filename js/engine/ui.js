@@ -231,7 +231,8 @@
   // the speaker's name, in gold, with a thin rule under it, at the top of the text column
   function drawName(name, x, y, w) {
     G.text(name, x, y, { size: 23, bold: true, color: G.COL.gold });
-    var c = G.ctx; c.fillStyle = 'rgba(216,179,106,0.35)'; c.fillRect(x, y + 34, Math.min(w, G.measure(name, 23, true) + 60), 1);
+    // the rule is as long as the name, and sits halfway between the name's baseline (y+18) and the first line (y+46)
+    var c = G.ctx; c.fillStyle = 'rgba(216,179,106,0.45)'; c.fillRect(x, y + 32, Math.min(w, G.measure(name, 23, true)), 1);
   }
   function drawStaticMessage(sp, text) {
     var hasPortrait = sp && sp.portrait;
