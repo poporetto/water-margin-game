@@ -88,7 +88,7 @@
     return pages.length ? pages : [['']];
   }
 
-  // Narration: the storyteller's voice, centred, on a scroll-like panel.
+  // Narration: the storyteller's voice, on a scroll-like panel at the top of the screen.
   UI.narrate = function (text, opt) {
     opt = opt || {};
     return new Promise(function (resolve) {
@@ -109,7 +109,7 @@
         draw: function () {
           var ls = pages[page];
           var h = ls.length * 34 + 60;
-          var y = opt.y != null ? opt.y : (WM.H - h) / 2;
+          var y = opt.y != null ? opt.y : 24;   // at the top, clear of the scene being told
           var c = G.ctx;
           c.save(); c.globalAlpha = alpha;
           // paper scroll
