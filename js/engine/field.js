@@ -647,10 +647,20 @@
       c.restore();
       return;
     }
-    SP.shadow(c, x, Math.round(a.y - cy), a.big ? 7 : 5);
+    if (a.boat) y += Math.round(Math.sin(WM.time * 2 + a.x) * 0.8);   // riding the swell
+    else SP.shadow(c, x, Math.round(a.y - cy), a.big ? 7 : 5);
     if (a.alpha != null) c.globalAlpha = a.alpha;
     SP.draw(c, a.sheet(), a.dir, a.anim, x, y);
     c.globalAlpha = 1;
+    if (a.boat) drawBoat(c, x, y);
+  }
+  // a small boat around a character's legs, for scenes on the water
+  function drawBoat(c, x, y) {
+    c.fillStyle = 'rgba(255,255,255,0.35)'; c.fillRect(x - 14, y + 2, 28, 1);
+    c.fillStyle = '#3a200e'; c.fillRect(x - 13, y - 9, 26, 3);
+    c.fillStyle = '#8a5a2c'; c.fillRect(x - 13, y - 9, 26, 1);
+    c.fillStyle = '#5a3418'; c.fillRect(x - 12, y - 6, 24, 6); c.fillRect(x - 10, y, 20, 2);
+    c.fillStyle = '#6e4220'; c.fillRect(x - 12, y - 6, 24, 1);
   }
 
   var EMOTES = {

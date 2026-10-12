@@ -15,6 +15,14 @@ WM.fadeOut = WM.fadeIn = function () { return Promise.resolve(); };
 
 const errors = [];
 const warn = [];
+// staging problems a player would see: people standing in walls, on top of each other, in another room, or talking
+// while nowhere to be seen. Printed as a list to review (some are intended: a voice outside, a letter read aloud).
+const scene = [];
+function sceneWarn(msg) { scene.push('[' + curEvent + '] ' + msg); }
+let pendingWet = [];   // someone placed on water: fine if the scene seats them in a boat (s.boat), else reported
+const SCENES = process.argv.includes('--scenes');
+const FLOW = process.argv.includes('--flow');   // print the story as played: each scene that moves it on, with its first line
+let firstLine = '';
 let curEvent = '(none)';
 function err(msg) { errors.push('[' + curEvent + '] ' + msg); }
 
@@ -31,6 +39,33 @@ function rowsOf(mid) {
 }
 function tile(mid, x, y) { const r = rowsOf(mid); if (!r || y < 0 || x < 0 || !r[y] || x >= r[y].length) return null; const c = r[y][x]; return c === ' ' ? (D.maps[mid].fill || '.') : c; }
 function walkable(mid, x, y) { const c = tile(mid, x, y); return c != null && !WM.tiles.solid(c); }
+// interiors hold several rooms walled off by void ('x'): which room a tile is in (-1 outside any, or not an interior)
+const roomCache = {};
+function roomOf(mid, x, y) {
+  const m = D.maps[mid]; if (!m || !m.interior) return -1;
+  let R = roomCache[mid];
+  if (!R) {
+    const r = rowsOf(mid), h = r.length; let w = 0; r.forEach((row) => { w = Math.max(w, row.length); });
+    const lab = new Int32Array(w * h).fill(-1); let n = 0;
+    for (let y0 = 0; y0 < h; y0++) for (let x0 = 0; x0 < w; x0++) {
+      if (lab[y0 * w + x0] >= 0 || (tile(mid, x0, y0) || 'x') === 'x') continue;
+      const st = [[x0, y0]]; lab[y0 * w + x0] = n;
+      while (st.length) { const [cx, cy] = st.pop(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = cx + dx, ny = cy + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h || lab[ny * w + nx] >= 0 || (tile(mid, nx, ny) || 'x') === 'x') continue; lab[ny * w + nx] = n; st.push([nx, ny]); } }
+      n++;
+    }
+    R = roomCache[mid] = { lab, w, h };
+  }
+  return x < 0 || y < 0 || x >= R.w || y >= R.h ? -1 : R.lab[y * R.w + x];
+}
+// is this character somewhere in the scene the player is looking at?
+function present(id) {
+  if (!id || typeof id !== 'string') return true;
+  id = id.split(':')[0];
+  if (id === WM.state.leader || WM.state.party.indexOf(id) >= 0) return true;   // the party is with the leader
+  const pr = roomOf(cur.map, cur.x, cur.y), here = (a) => pr < 0 || roomOf(cur.map, a.x, a.y) === pr || roomOf(cur.map, a.x, a.y) < 0;
+  if (Object.keys(temp).some((k) => (temp[k].who === id || id.indexOf(temp[k].who + '_') === 0) && here(temp[k]))) return true;   // a beast's rider ('oxboy' -> 'oxboy_boy')
+  const f = frozen[id]; return !!(f && here(f));
+}
 
 // ---------- world simulation ----------
 let cur = { map: null, x: 0, y: 0 };
@@ -90,8 +125,12 @@ function mkApi(ctx) {
   const s = {
     S: S, ctx: ctx,
     get state() { return WM.state; },
-    say(who, text) { checkSpeaker(who); gone(who, 'say'); if (!text) err('empty say'); return resolved; },
-    narrate(text) { if (!text) err('empty narrate'); return resolved; },
+    say(who, text) {
+      checkSpeaker(who); gone(who, 'say'); if (!text) err('empty say');
+      if (who && typeof who === 'string' && !present(who) && !/^\((outside|off|offstage|from|voice|inside|behind|far|calling|shouting|letter)/i.test(text || '')) sceneWarn('"' + who.split(':')[0] + '" speaks but is not in the scene on ' + cur.map);
+      return resolved;
+    },
+    narrate(text) { if (!text) err('empty narrate'); if (!firstLine) firstLine = text; return resolved; },
     ask(who, text, options) { checkSpeaker(who); return Promise.resolve(0); },
     choose(options) { return Promise.resolve(0); },
     notice() { return resolved; }, wait() { return resolved; }, fadeOut() { return resolved; }, fadeIn() { return resolved; },
@@ -99,7 +138,13 @@ function mkApi(ctx) {
     move(key, steps) {
       const a = findActor(key); if (!a) { err('move: no actor "' + key + '" on ' + cur.map); return resolved; }
       const parse = Array.isArray(steps) ? steps : steps.trim().split(/\s+/).map((tk) => { const d = tk[0].toUpperCase(), n = parseInt(tk.slice(1) || '1', 10); return d === 'R' ? [n, 0] : d === 'L' ? [-n, 0] : d === 'U' ? [0, -n] : [0, n]; });
-      parse.forEach((st) => { a.x += st[0]; a.y += st[1]; });
+      let hit = null;
+      parse.forEach((st) => {
+        const n = Math.abs(st[0]) + Math.abs(st[1]), sx = Math.sign(st[0]), sy = Math.sign(st[1]);
+        for (let i = 0; i < n; i++) { a.x += sx; a.y += sy; if (!hit && !a.boat && !walkable(cur.map, a.x, a.y)) hit = [a.x, a.y]; }
+      });
+      if (hit && key !== 'player') sceneWarn('"' + (a.who || key) + '" walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
+      else if (hit) sceneWarn('the player walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
       if (a.x < 0 || a.y < 0) err('move: "' + key + '" leaves the map');
       return resolved;
     },
@@ -116,13 +161,24 @@ function mkApi(ctx) {
     show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); },
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); },
     lie(key) { if (!findActor(key)) err('lie: no actor "' + key + '"'); },
+    boat(key) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = true; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },
     spawn(key, who, tx, ty) {
       gone(who, 'spawn');
       if (typeof who === 'string' && !D.chars[who] && !D.npcs[who]) err('spawn: unknown "' + who + '"');
       if (tile(cur.map, tx, ty) == null) err('spawn "' + key + '" outside map ' + cur.map + ' (' + tx + ',' + ty + ')');
-      temp[key] = { x: tx, y: ty };
+      else {
+        const wid = typeof who === 'string' ? who : key;
+        const tc = tile(cur.map, tx, ty), wet = WM.tiles.DEF[tc] && WM.tiles.DEF[tc].water;
+        if (!walkable(cur.map, tx, ty)) (wet ? pendingWet : scene).push((wet ? '' : '[' + curEvent + '] ') + '"' + wid + '" placed on a solid tile "' + tc + '" at ' + cur.map + '(' + tx + ',' + ty + ')' + (wet ? '|' + key : ''));
+        if (cur.x === tx && cur.y === ty) sceneWarn('"' + wid + '" placed on the player\'s tile ' + cur.map + '(' + tx + ',' + ty + ')');
+        const on = Object.keys(temp).filter((k) => k !== key && temp[k].x === tx && temp[k].y === ty);
+        if (on.length) sceneWarn('"' + wid + '" placed on top of "' + on.join('", "') + '" at ' + cur.map + '(' + tx + ',' + ty + ')');
+        const pr = roomOf(cur.map, cur.x, cur.y), ar = roomOf(cur.map, tx, ty);
+        if (pr >= 0 && ar >= 0 && pr !== ar) sceneWarn('"' + wid + '" placed in another room from the player (' + cur.map + ' ' + tx + ',' + ty + ' vs player ' + cur.x + ',' + cur.y + ')');
+      }
+      temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key };
     },
-    spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty }; },
+    spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
     despawn(key) { if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); delete temp[key]; },
     leader(id) { if (!D.chars[id]) err('leader: unknown char ' + id); },
     shake() { return resolved; }, flash() { return resolved; },
@@ -169,6 +225,15 @@ function mkApi(ctx) {
         const snap = {}; Object.keys(WM.state.chars).forEach((id) => { const c = WM.state.chars[id]; snap[id] = { lv: c.lv, wlv: c.wlv, equip: c.equip }; });
         fs.writeFileSync(path.join(dir, 'chars_ch' + n + '.json'), JSON.stringify({ chars: snap, smithMax: WM.castle && WM.castle.smithMax ? WM.castle.smithMax() : null }));
       }
+      const was = WM.state.chapter; WM.state.chapter = n;
+      if (process.argv.includes('--stale')) Object.keys(D.events).forEach((mid) => (D.events[mid] || []).forEach((ev) => {
+        if (!ev.once || !ev.run || ev.resident || S.has('ev:' + mid + ':' + ev.id) || mid + ':' + ev.id === curEvent) return;
+        const m = /^ch(\d+)_/.exec(ev.id), from = m ? +m[1] : (/^ls_|^res_/.test(ev.id) ? 99 : 0);
+        if (from >= n) return;
+        let on = true; try { on = !ev.cond || ev.cond(S, WM.state); } catch (e) { on = false; }
+        if (on) console.log('  armed at chapter ' + n + ': ' + mid + ':' + ev.id + ' (' + (ev.trigger || 'talk') + ')');
+      }));
+      if (FLOW) console.log('== Chapter ' + n + ' ' + (D.chapters[n] || {}).short);
       if (!D.chapters[n]) err('unknown chapter ' + n); WM.state.chapter = n; if (VERBOSE) console.log('== Chapter ' + n + ' ' + (D.chapters[n] || {}).short); return resolved; },
     card() { return resolved; }, credits() { return resolved; }, endChapter() { if (global.__checkTotals) global.__checkTotals(); return resolved; },
     shop(id) { if (!D.shops[id]) err('unknown shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.items[i]) err('shop ' + id + ' unknown item ' + i); }); return resolved; },
@@ -292,7 +357,9 @@ async function runEvent(ev) {
   freezeActors();
   const fn = ev.run || (ev.text ? async (s) => { (Array.isArray(ev.text) ? ev.text : [ev.text]).forEach((t) => s.say(ev.char || ev.npc || null, t)); } : null);
   if (!fn) return;
+  pendingWet = []; firstLine = '';
   try { await fn(mkApi({ ev })); } catch (e) { err('script threw: ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e)); }
+  pendingWet.forEach((m) => sceneWarn(m.split('|')[0] + ' (on water, not in a boat)'));
   if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true);
 }
 
@@ -360,11 +427,21 @@ async function main() {
       const snapshot = JSON.stringify(WM.state), snapCur = JSON.stringify(cur), snapTemp = JSON.stringify(temp), errCount = errors.length, joinSnap = JSON.stringify(joins);
       const prevMap = cur.map;
       cur = { map: route.map, x: route.t.x, y: route.t.y }; WM.state.map = cur.map; WM.state.x = cur.x; WM.state.y = cur.y; if (prevMap !== cur.map) temp = {};
+      // where the player actually stands when it fires: inside a touch area, or beside the one they talk to
+      if (ev.trigger !== 'auto') {
+        const rch = tileReach(ev.map, arrival), spots = [];
+        for (let dx = 0; dx < (ev.w || 1); dx++) for (let dy = 0; dy < (ev.h || 1); dy++) {
+          const x = ev.x + dx, y = ev.y + dy;
+          if (ev.trigger === 'touch') spots.push([x, y]); else [[0, 1], [-1, 0], [1, 0], [0, -1], [0, 2], [-2, 0], [2, 0], [0, -2]].forEach(([a, b]) => spots.push([x + a, y + b]));   // across a counter, too
+        }
+        const st = spots.find(([x, y]) => rch.has(x + ',' + y));
+        if (st) { cur.x = st[0]; cur.y = st[1]; WM.state.x = cur.x; WM.state.y = cur.y; }
+      }
       await runEvent(ev);
       const after = storyFlags();
       reachCache = {};
       if (after !== before || S.has('ev:' + ev.map + ':' + ev.id) && ev.once) {
-        if (after !== before) { progressed = true; lastProgress = curEvent; break; }
+        if (after !== before) { progressed = true; lastProgress = curEvent; if (FLOW) console.log('  ' + curEvent + '  — ' + (firstLine || '').slice(0, 110)); break; }
       }
       // revert a non-progressing trial (but keep the errors it found)
       WM.state = JSON.parse(snapshot); cur = JSON.parse(snapCur); temp = JSON.parse(snapTemp);
@@ -384,6 +461,17 @@ async function main() {
   console.log('Latest flags: ' + fl.slice(-6).join(', '));
   console.log('Stars joined: ' + (order.length - missing.length) + ' / 108');
   if (missing.length && process.argv.includes('--missing')) console.log('Not yet joined: ' + missing.join(', '));
+  // optional one-time scenes the story never needed, which could still fire now, long after their chapter
+  if (process.argv.includes('--stale')) {
+    Object.keys(D.events).forEach((mid) => (D.events[mid] || []).forEach((ev) => {
+      if (!ev.once || !ev.run || ev.resident || S.has('ev:' + mid + ':' + ev.id)) return;
+      let on = true; try { on = !ev.cond || ev.cond(S, WM.state); } catch (e) { on = false; }
+      if (on) console.log('  still armed: ' + mid + ':' + ev.id + ' (' + (ev.trigger || 'talk') + ')');
+    }));
+  }
+  const sc = Array.from(new Set(scene));
+  if (sc.length) console.log('\nScene staging to review: ' + sc.length + (SCENES ? '' : ' (list them with --scenes)'));
+  if (SCENES) sc.forEach((e) => console.log('  ' + e));
   const uniq = Array.from(new Set(errors));
   if (uniq.length) { console.log('\nERRORS (' + uniq.length + '):'); uniq.forEach((e) => console.log('  ' + e)); process.exitCode = 1; }
   else console.log('No script errors.');

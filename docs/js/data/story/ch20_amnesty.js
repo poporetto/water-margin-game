@@ -112,7 +112,9 @@
     s.party(['songjiang', 'chaijin', 'daizong', 'yanqing', 'likui']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
     ['songjiang', 'chaijin', 'daizong', 'yanqing', 'likui'].forEach(function (id) { s.level(id, 34); });
     await s.narrate('Some months after the Grand Assembly, travellers came through with lanterns from Laizhou for the capital. Song Jiang, against everyone\'s advice, decided to see the Lantern Festival in the Eastern Capital with his own eyes — and perhaps find a way to the emperor\'s ear. He went in disguise, with Chai Jin, Dai Zong, Yan Qing and Li Kui; and Shi Jin, Mu Hong, Lu Zhishen, Wu Song, Zhu Tong and Liu Tang followed in twos and threes.');
+    s.spawn('wy', 'wuyong', 32, 13, 'down');
     await s.say('wuyong', 'Brother Li Kui, you will stay at the inn and guard the door, and you will not move.');
+    s.despawn('wy');
     WM.unlock('kaifeng');
     s.night(true);
     s.flag('ch20_lantern');
@@ -234,7 +236,7 @@
       await s.say('lishishi', 'You again — the steward from Shandong. You brought me a burned house last time.');
       await s.say('yanqing', 'And today I bring the truth, sister. Song Jiang never meant you or His Majesty any harm. All we want is the pardon — and every time it comes, Cai Jing and Gao Qiu spoil it.');
       await s.narrate('Li Shishi took Yan Qing as her sworn younger brother. That night the emperor came through the tunnel again, and she presented her "brother" to him. Yan Qing played the flute and sang for him, and then knelt and told him everything — the village wine, the misplaced comma, the battles Tong Guan and Gao Qiu had lost and reported as victories.');
-      s.spawn('hz', 'huizong', 33, 13, 'down');
+      s.spawn('hz', 'huizong', 33, 14, 'down');
       await s.say('huizong', '...So my ministers have been deceiving me. Brush and paper.');
       await s.give('pardon_yanqing', 1);
       await s.narrate('The emperor wrote in his own hand: "Yan Qing is pardoned of all offences. No office may arrest or question him." Then Yan Qing and Dai Zong went by night to the house of Marshal Su Yuanjing — the envoy whose golden bells they had borrowed in Huazhou — with gold and a letter from Wen Huanzhang. And Dai Zong bribed one of Gao Qiu\'s servants, and before dawn Xiao Rang and Yue He came down over the garden wall on a rope.');

@@ -159,7 +159,7 @@
       await s.say('likui:sad', 'Mother! It\'s me, Iron Ox! I\'ve come home!');
       await s.say('likuimother:sad', 'I\'ve cried my eyes blind for you, my son. Where have you been all these years?');
       await s.say('likui', 'I\'m an official now, Mother! I\'ve come to take you to live in comfort! I\'ll carry you on my back.');
-      s.spawn('lida', 'lida', 5, 6, 'up');
+      s.spawn('lida', 'lida', 6, 6, 'left');   // in at the door, beside Li Kui
       await s.say('lida:angry', 'Iron Ox! You killed a man and ran, and the county has hounded me ever since! Now there\'s a reward of three thousand strings for you. You\'re no official — you\'re a bandit! I\'m going to the squire!');
       s.despawn('lida');
       await s.say('likui', '(No time. Brother will bring the whole village.) Up you come, Mother. We\'re going over the Yi Ridge tonight.');

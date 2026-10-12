@@ -181,7 +181,7 @@
   ]);
   WM.defEvents('zhujia_in', [
     { id: 'ch12_zhongli', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_scout') && WM.state.x >= 33; }, run: async function (s) {
-      s.spawn('zl', 'zhongli', 35, 4, 'down');
+      s.spawn('zl', 'zhongli', 35, 5, 'down');
       await s.say('shixiu', 'Grandfather, I\'m a stranger selling firewood. Every road here turns back on itself. How does anyone get out?');
       await s.say('zhongli', 'Young man, leave quickly! Liangshan is about to attack, and the Zhu family are taking every stranger as a spy. "Fine is the Zhu Family Village, and every road winds round" — so the song goes. Go wrong, and you walk onto caltrops, and the men in the bamboo take you.');
       await s.say('shixiu:sad', 'Then I\'m dead either way. Grandfather, save me.');
@@ -307,7 +307,7 @@
       await s.say('gudasao:angry', 'My cousins? Husband! Sun Xin! Get in here!');
       s.spawn('sx', 'sunxin', 33, 5, 'left');
       await s.say('sunxin', 'We\'ll have to break them out. And for that we need my elder brother, Sun Li, the commander of the garrison. And Zou Yuan and Zou Run of Denglong Mountain.');
-      s.spawn('zy', 'zouyuan', 29, 5, 'right'); s.spawn('zr', 'zourun', 29, 6, 'right');
+      s.spawn('zy', 'zouyuan', 29, 5, 'right'); s.spawn('zr', 'zourun', 29, 7, 'right');
       await s.say('zouyuan', 'Zou Yuan, the Forest-Emerging Dragon. This is my nephew Zou Run, the Single-Horned Dragon — he can knock a pine tree down with his head. We\'re in.');
       await s.narrate('Gu Dasao sent word to Sun Li that she was gravely ill. He came at once, with his wife.');
       s.spawn('sl', 'sunli', 31, 7, 'up');
@@ -375,10 +375,11 @@
       await s.say('zhubiao', 'We have seven of their chiefs in the cages already. When we have Song Jiang, we\'ll send them all to the capital together.');
       await s.narrate('On the third day the Liangshan army came again, and a chief rode out to the bridge and challenged the manor. It was Shi Xiu.');
       await s.say('sunli', 'Let me go out. I\'ll show the Zhu family what a Dengzhou commander can do.');
-      s.despawn('sz'); s.despawn('zl'); s.despawn('zh'); s.despawn('zb'); s.despawn('lt');
+      s.despawn('zl'); s.despawn('zh'); s.despawn('zb'); s.despawn('lt');
       s.level('sunli', 25);
       await s.duel('sunli_shixiu', { hero: 'sunli', canLose: true });
       await s.say('squirezhu:smile', 'Magnificent! Into the cage with him! Commander, you are our saviour!');
+      s.despawn('sz');
       s.flag('ch12_staged');
       await s.narrate('So Sun Li won the Zhu family\'s trust. Inside the manor, Zou Yuan and Zou Run learned where the prison was, and Yue He where the keys were kept. On the fifth day, at the signal, Song Jiang attacked from four sides at once.');
       s.music('battle');

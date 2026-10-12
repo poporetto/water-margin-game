@@ -106,7 +106,7 @@
   ]);
   WM.defEvents('weiriver', [
     { id: 'ch15_envoy', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch15_taken'); }, run: async function (s) {
-      s.spawn('su', 'suyuanjing', 15, 12, 'up');
+      s.spawn('su', 'suyuanjing', 15, 12, 'up'); s.boat('su');   // the envoy's barge
       await s.narrate('Li Jun, Zhang Shun and Yang Chun had seized the ferry boats. When the envoy\'s barge came down the river, Song Jiang stood on the bank and bowed.');
       await s.say('songjiang', 'Song Jiang of Liangshan begs an audience with the Marshal.');
       await s.say('suyuanjing', 'I am on the emperor\'s business. What business have I with bandits?');
@@ -149,7 +149,10 @@
       await s.joinMany(['shijin', 'zhuwu', 'chenda', 'yangchun']);
       s.flag('ch15_freed');
       await s.narrate('Back at Liangshan, news came from the south: three bandit chiefs on Mount Mangdang had sworn to swallow Liangshan — Fan Rui, the Demon King Who Roils the World, a sorcerer; Xiang Chong, the Eight-Armed Nezha; and Li Gun, the Great Sage Who Flies in the Sky, whose shields bristled with throwing knives and javelins.');
+      await s.warp('liangshan_in', 16, 12, 'up');
+      s.spawn('sj', 'shijin', 16, 10, 'down');
       await s.say('shijin', 'Let me go. I\'ve only just come up the mountain, and I\'ve done nothing yet.');
+      s.despawn('sj');
       s.party(['shijin', 'zhuwu', 'chenda', 'yangchun']); s.setLeader('shijin'); s.flag('protagonist', 'shijin');
       ['shijin', 'zhuwu', 'chenda', 'yangchun'].forEach(function (id) { s.level(id, 27); });
       WM.unlock('mangdang');

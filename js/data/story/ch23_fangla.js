@@ -185,7 +185,9 @@
       s.night(true); s.music('sad');
       await s.narrate('That night, under a bright moon, a sound like ten thousand drums came up the river. Lu Zhishen leapt up and seized his staff, thinking it was the enemy.');
       await s.say('luzhishen:shock', 'War drums!');
+      s.spawn('mk', 'monk', 17, 12, 'left');
       await s.say('monk', 'Master, that is the tide of the Qiantang. It comes at the same hour every day and every night, and it never fails. We call it the tide\'s signal — the tide\'s faith.');
+      s.despawn('mk');
       await s.say('luzhishen', '..."Hear the tide, and be complete. See the signal, and be still." The tide\'s faith... the signal. Master Zhizhen, I understand now.');
       await s.narrate('Lu Zhishen asked for hot water and bathed, and put on the new robe the emperor had given him, and lit incense. Then he wrote a verse, and sat down in the meditation chair with his legs crossed.');
       await s.say('luzhishen', '"All my life I did no good deeds; I only loved to kill and burn. Today my golden chains are broken; today my jade locks are undone. Ah! On the Qiantang River the tide\'s signal came — and today, at last, I know that I am I."');

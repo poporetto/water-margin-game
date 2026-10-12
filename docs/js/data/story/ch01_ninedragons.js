@@ -197,7 +197,7 @@
       await s.say('wangjin', 'You have learned all I know. Practise every day. And one more thing — a man\'s art is for protecting the weak. Do not let it lead you into trouble.');
       await s.say('shitaigong', 'Take this silver for the journey, Instructor. One hundred taels — no, don\'t refuse. You have given my son more than silver can pay for.');
       await s.say('wangmother:smile', 'May Heaven repay your kindness, Taigong.');
-      await s.move('wangjinA', 'D9', { wait: false }); await s.move('mother', 'D9');
+      await s.move('wangjinA', 'D9', { wait: false }); await s.move('mother', 'R1 D9');   // down the village road
       s.despawn('wangjinA'); s.despawn('mother');
       await s.say('shijin:sad', 'Farewell, Master...');
       await s.fadeOut(1);
@@ -225,7 +225,7 @@
       s.despawn('villagerA');
       s.music('tense');
       s.spawn('chenda', 'chenda', 30, 3, 'down');
-      s.spawn('b1', 'bandit', 29, 2, 'down'); s.spawn('b2', 'bandit', 31, 2, 'down');
+      s.spawn('b1', 'bandit', 30, 1, 'down'); s.spawn('b2', 'bandit', 31, 2, 'down');   // in file behind Chen Da, over the bridge
       await s.moveTo('player', 30, 9, { run: true, yFirst: false });
       await s.move('chenda', 'D3'); s.move('b1', 'D3', { wait: false }); await s.move('b2', 'D3');
       await s.say('chenda', 'We of Mount Shaohua are short of grain. We mean to borrow from Huayin county, and your village lies on the road. Let us pass and we won\'t touch a blade of grass.');
@@ -243,8 +243,10 @@
     } },
     { id: 'ch1_bound', x: 13, y: 14, char: 'chenda', dir: 'down', cond: function (S2) { return S2.has('ch1_captured') && !S2.has('ch1_oath'); }, text: ['(Chen Da glowers at you from the pillar he is tied to.)'] },
     { id: 'ch1_plea', x: 14, y: 22, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_captured'); }, run: async function (s) {
-      s.spawn('zhuwu', 'zhuwu', 14, 30, 'up'); s.spawn('yangchun', 'yangchun', 15, 30, 'up');
+      s.spawn('zhuwu', 'zhuwu', 15, 30, 'up'); s.spawn('yangchun', 'yangchun', 16, 30, 'up');
+      s.spawn('sv', 'servant', 16, 21, 'left');
       await s.say('servant', 'Young master! Two men from the mountain at the gate — on foot, unarmed! They say they\'ve come to... to surrender themselves.');
+      s.despawn('sv');
       await s.face('player', 'down');
       await s.move('zhuwu', 'U5', { wait: false }); await s.move('yangchun', 'U5');
       await s.narrate('Zhu Wu and Yang Chun came before Shi Jin and dropped to their knees, tears running down their faces.');
@@ -318,8 +320,10 @@
     } },
     { id: 'ch1_yardfight', x: 12, y: 15, w: 9, h: 2, trigger: 'touch', once: true, cond: fireActive, run: async function (s) {
       s.sfx('fire');
+      s.spawn('d1', 'dutyA', 14, 17, 'up'); s.spawn('d2', 'dutyA', 16, 17, 'up');
       await s.say({ name: 'Constable' }, 'There they are! Don\'t let them escape!');
       await s.battle('ch1_yard', { bg: 'fire' });
+      s.despawn('d1'); s.despawn('d2');
     } },
     { id: 'ch1_bossfight', x: 12, y: 24, w: 5, h: 2, trigger: 'touch', once: true, cond: fireActive, run: async function (s) {
       s.spawn('liji', 'liji', 14, 27, 'up'); s.spawn('d1', 'dutyA', 13, 27, 'up'); s.spawn('d2', 'dutyA', 15, 27, 'up');
@@ -370,7 +374,7 @@
   // ---------------- Weizhou: Shi Jin meets Lu Da ----------------
   WM.defEvents('weizhou_in', [
     { id: 'ch1_tea', x: 6, y: 5, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_toweizhou'); }, run: async function (s) {
-      s.spawn('waiterT', 'waiter', 3, 6, 'right');
+      s.spawn('waiterT', 'waiter', 3, 7, 'right');
       await s.say('waiter', 'Tea, sir? What can I bring you?');
       await s.say('shijin', 'A pot of the strong stuff. And tell me — where is the garrison commander\'s office? I\'m looking for an instructor from the Eastern Capital named Wang Jin. Is he here?');
       await s.say('waiter', 'Lots of instructors in the garrison, sir. Three or four named Wang. Ah — there\'s the man to ask. The Major\'s just come in.');

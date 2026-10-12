@@ -215,7 +215,7 @@
       await s.say('linchong:sad', '...Heaven. Is this how it ends?');
       await s.move('xue', 'U1');
       s.sfx('wind'); await s.wait(0.3);
-      s.spawn('lu', 'luzhishen', 26, 8, 'left');
+      s.spawn('lu', 'luzhishen', 25, 8, 'left');
       s.sfx('crit'); await s.shake(6, 0.5);
       await s.narrate('As Xue Ba raised his staff, there was a thunderclap from behind the tree, and an iron staff came flying out and struck the staff from his hands. A huge monk leapt from the undergrowth: "I\'ve been listening in the woods for a long time!"');
       await s.move('lu', 'L3', { run: true });
@@ -231,7 +231,7 @@
       await s.say('luzhishen', 'Let\'s go. The road east leads out of the forest.');
     } },
     { id: 'ch3_pine', x: 33, y: 12, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_saved'); }, run: async function (s) {
-      s.spawn('dong', 'dongchao', 31, 13, 'right'); s.spawn('xue', 'xueba', 31, 14, 'right');
+      s.spawn('dong', 'dongchao', 31, 13, 'right'); s.spawn('xue', 'xueba', 31, 15, 'right');
       await s.narrate('For seventeen or eighteen days Lu Zhishen escorted them. When Cangzhou was only seventy li away, and the road was busy with people, he stopped.');
       await s.say('luzhishen', 'From here on the road\'s too busy for any mischief. I\'ll leave you. You two — look at that pine.');
       s.sfx('crit'); await s.shake(6, 0.5);
@@ -353,10 +353,12 @@
       await s.narrate('Lin Chong pulled the stone away, threw open the door, and stood in the snow with his spear in his hand. "Where are you going, you dogs?"');
       s.music('boss');
       await s.battle('ch3_temple', { bg: 'snow', music: 'boss' });
+      s.spawn('luqian', 'luqian', 5, 7, 'up');   // at the temple door, in the snow
       await s.narrate('The overseer fell first. Fu An ran, and Lin Chong brought him down in a dozen strides. Lu Qian had gone only three or four paces before his legs gave way beneath him.');
       await s.say('luqian:shock', 'Brother! It wasn\'t my idea! The Marshal ordered it — how could I refuse?');
       await s.say('linchong:angry', 'You and I were friends from childhood. And you came all the way here to burn me alive. "How could you refuse?" You could have refused.');
       await s.narrate('Lin Chong killed Lu Qian there in the snow. He laid the three heads on the altar of the Mountain God, put on his white felt hat, drank the last of the cold wine, and walked out into the snow towards the east, leaving the depot burning behind him.');
+      s.despawn('luqian');
       s.tint(null);
       s.flag('ch3_killed');
       WM.state.chars.linchong.equip.acc = null; S.restore('linchong');

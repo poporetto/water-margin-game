@@ -238,6 +238,7 @@
       await s.narrate('Liangshan\'s men "invited" the scholar and the carver, and their families followed soon after. Xiao Rang wrote the letter in Cai Jing\'s hand, and Jin Dajian carved Cai Jing\'s seal. Dai Zong took it and ran back to Jiangzhou with his charms on his legs.');
       s.despawn('chaogai'); s.despawn('zhugui');
       await s.joinMany(['xiaorang', 'jindajian']);
+      s.spawn('xr', 'xiaorang', 15, 9, 'up'); s.spawn('jd', 'jindajian', 17, 9, 'up');
       await s.say('wuyong:shock', '...Wait. Which seal did you put on the letter?');
       await s.say('jindajian', 'The one with his name and title: "Cai Jing, Hanlin Academician."');
       await s.say('wuyong:shock', 'Aiya! That is the seal for his public writings! No father writes to his own son under his name and title. The prefect will see it at once — Dai Zong is running to his death! Gather everyone! We go to Jiangzhou ourselves!');
@@ -278,10 +279,10 @@
     { id: 'ch9_gathering', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_temple'); }, run: async function (s) {
       await s.narrate('They shut themselves in the temple. Then, down the river, came three great boats under sail, packed with armed men — Zhang Shun and Zhang Heng, Li Jun, the Tong brothers, the Mu brothers, Xue Yong and Li Li, who had heard of the execution and come to rescue Song Jiang themselves.');
       await s.narrate('Twenty-nine heroes met at the White Dragon Temple that day. The storytellers call it "the small gathering at the White Dragon Temple."');
-      s.spawn('sj', 'songjiang', 15, 9, 'down');
+      s.spawn('sj', 'songjiang', 15, 9, 'down'); s.spawn('lk', 'likui', 16, 10, 'up');
       await s.say('songjiang', 'Brothers... I owe you my life. All of you.');
       await s.say('likui', 'Brother! Let\'s go back and kill the prefect, and Huang Wenbing too!');
-      s.despawn('sj');
+      s.despawn('sj'); s.despawn('lk');
       ['zhangshun', 'zhangheng', 'lijun', 'tongwei', 'tongmeng', 'muhong', 'muchun', 'xueyong', 'lili'].forEach(function (id) { S.initChar(id, 20); });
       await s.war('ch9_river');
       await s.narrate('The Jiangzhou army broke and fled. That night, guided by Hou Jian — a tailor from Hongdu who worked in Huang Wenbing\'s house and was Xue Yong\'s pupil — they crossed the river to Wuweijun.');

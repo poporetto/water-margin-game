@@ -121,7 +121,7 @@
   // ---------------- East Creek: Liu Tang and Lei Heng ----------------
   WM.defEvents('dongxi', [
     { id: 'ch5_liutang', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 5; }, run: async function (s) {
-      s.spawn('liutang', 'liutang', 13, 13, 'right');
+      s.spawn('liutang', 'liutang', 13, 14, 'right');
       s.spawn('serv', 'chaoservant', 17, 12, 'left');
       await s.say('chaoservant', 'Master, Constable Lei is at breakfast in the hall. He caught a thief in the temple and hung him in the gatehouse. That\'s him there.');
       await s.say('chaogai', '(A big man with a red birthmark on his face and red hair... no ordinary thief.)');
@@ -168,11 +168,11 @@
       await s.say('ruanxiaoer:smile', 'Professor Wu! What wind brings you here?');
       await s.say('wuyong', 'I\'m teaching at a rich man\'s house now. He needs a dozen big golden carp for a feast, fourteen or fifteen catties each, and I came to buy them from you.');
       await s.say('ruanxiaoer', 'Carp that size? Not these days. Let\'s find my brothers, and drink, and I\'ll tell you why.');
-      s.spawn('r7', 'ruanxiaoqi', 13, 18, 'left'); s.spawn('r5', 'ruanxiaowu', 13, 12, 'left');
+      s.spawn('r7', 'ruanxiaoqi', 12, 12, 'left'); s.boat('r7'); s.spawn('r5', 'ruanxiaowu', 8, 12, 'left');   // Xiaoqi punting out of the reeds; Xiaowu back from the gambling den
       await s.narrate('Ruan Xiaoer took a boat, and they rowed out among the reeds, calling for the others. Ruan Xiaoqi came punting out of the reeds singing, and they found Ruan Xiaowu coming back from the gambling den, his shirt open on the leopard tattooed on his chest. The four went to a tavern built on stilts over the water.');
       s.despawn('r2'); s.despawn('r5'); s.despawn('r7');
       await s.warp('shijie_in', 25, 6, 'up');
-      s.spawn('r2', 'ruanxiaoer', 24, 5, 'right'); s.spawn('r5', 'ruanxiaowu', 26, 5, 'left'); s.spawn('r7', 'ruanxiaoqi', 25, 3, 'down');
+      s.spawn('r2', 'ruanxiaoer', 24, 6, 'right'); s.spawn('r5', 'ruanxiaowu', 26, 5, 'left'); s.spawn('r7', 'ruanxiaoqi', 25, 3, 'down');
       await s.say('ruanxiaowu', 'Big carp? They\'re all out in the deep water of Liangshan Marsh, and we can\'t go there.');
       await s.say('wuyong', 'Why not? The marsh is wide. Who could stop you?');
       await s.say('ruanxiaoqi:angry', 'The bandits. A failed scholar called Wang Lun has five or seven hundred men up there now. They don\'t let anyone fish their waters. We\'ve had to put away our nets.');
@@ -243,7 +243,7 @@
       await s.narrate('At noon they reached the top of Yellow Earth Ridge. The soldiers dropped their loads and threw themselves down in the shade of the pines, and no amount of beating would make them get up.');
       await s.say('yangzhi:angry', 'Up! This is the worst place on the whole road — Yellow Earth Ridge! Bandits rob here in broad daylight!');
       await s.say('laoduguan:angry', 'Let them rest, Officer Yang! You\'re always talking of bandits. Where are they?');
-      s.spawn('m1', 'chaogai', 24, 6, 'down'); s.spawn('m2', 'liutang', 25, 7, 'left'); s.spawn('m3', 'ruanxiaoqi', 23, 6, 'down');
+      s.spawn('m1', 'chaogai', 24, 6, 'down'); s.spawn('m2', 'liutang', 24, 7, 'left'); s.spawn('m3', 'ruanxiaoqi', 23, 6, 'down');
       await s.emote('player', '!');
       await s.say('yangzhi:angry', 'You see? There\'s someone watching us in the trees! Who are you?');
       await s.say('chaogai', 'Who are you, then? We\'re seven brothers from Haozhou, taking dates to the capital to sell. We stopped here to rest in the shade. We heard there were robbers on this ridge, and when we saw you, we were afraid you were the robbers!');
@@ -326,7 +326,7 @@
   // ---------------- Yuncheng: Song Jiang's warning ----------------
   WM.defEvents('yuncheng_in', [
     { id: 'ch5_teahouse', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch5_hetao') && WM.state.x >= 18 && WM.state.x <= 27; }, run: async function (s) {
-      s.spawn('hetao', 'hetao', 23, 4, 'down');
+      s.spawn('hetao', 'hetao', 23, 5, 'down');
       await s.narrate('Song Jiang was a clerk of the Yuncheng county office: short and dark-skinned, filial to his father, generous with his money to anyone in need. Throughout Shandong and Hebei he was known as "Timely Rain," because, like rain in a drought, he came to the help of those in trouble.');
       await s.say('hetao', 'Clerk Song, I am He Tao, inspector of the Jizhou prefecture. I have urgent business for the magistrate — a warrant for seven robbers of the birthday gifts. The ringleader lives in your county: Chao Gai, headman of East Creek village.');
       await s.say('songjiang:shock', '(Chao Gai! My sworn brother! If they take him, he\'s a dead man.)');

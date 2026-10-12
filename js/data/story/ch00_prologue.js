@@ -116,8 +116,8 @@
       s.spawn('abbotT', 'abbot', 15, 24, 'down');
       s.spawn('dA', 'daoistA', 13, 24, 'down');
       s.spawn('dB', 'daoistA', 17, 24, 'down');
-      s.spawn('esc1', 'hongguard', 14, 29, 'up');
-      s.spawn('esc2', 'hongguard', 17, 29, 'up');
+      s.spawn('esc1', 'hongguard', 15, 29, 'up');
+      s.spawn('esc2', 'hongguard', 16, 29, 'up');
       await s.move('player', 'U2');
       await s.say('abbot', 'The Daoists of Shangqing welcome the Grand Marshal. Bells, drums and incense have been prepared for the reception of the decree.');
       await s.say('hongxin', 'I bear the Son of Heaven\'s summons for the Celestial Master. Where is he? Bring him here at once.');
@@ -174,24 +174,24 @@
   ]);
 
   WM.defEvents('longhu_path', [
-    { id: 'tiger', x: 4, y: 28, w: 5, h: 3, trigger: 'touch', once: true, run: async function (s) {
+    { id: 'tiger', x: 4, y: 28, w: 5, h: 3, trigger: 'touch', once: true, cond: function () { return (WM.state.chapter || 0) === 0; }, run: async function (s) {
       s.sfx('wind');
       await s.wait(0.4);
-      s.spawnBeast('tiger', 'tiger', 1, 26, 'right');
+      s.spawnBeast('tiger', 'tiger', 3, 24, 'right');
       s.sfx('roar');
       await s.shake(4, 0.6);
-      await s.move('tiger', 'R3', { speed: 140 });
+      await s.move('tiger', 'R2 D2', { speed: 140 });   // out of the trees at the foot of the cliff
       await s.emote('player', '!');
       await s.say('hongxin:shock', 'A tiger! A tiger with hanging eyes and a white forehead!');
       await s.narrate('A gust of wind tore through the pines, and from the trees leapt a huge tiger, its eyes like hanging lamps, its forehead white. The Marshal tumbled to the ground, the censer flying from his hands. His teeth chattered like a woodpecker on a hollow tree.');
       await s.wait(0.4);
       s.sfx('roar');
-      await s.move('tiger', 'U4 L4', { speed: 120 });
+      await s.move('tiger', 'U2 L2', { speed: 120 });   // and back into them
       s.despawn('tiger');
       await s.say('hongxin', '...It... it has gone. It circled me, roared, and went off down the slope. Heaven preserve me.');
       await s.say('hongxin:angry', 'I am a Grand Marshal of the realm! Why must I crawl up a mountain like a woodcutter? If that Daoist sent me here to be eaten...');
     } },
-    { id: 'snake', x: 13, y: 15, w: 6, h: 3, trigger: 'touch', once: true, run: async function (s) {
+    { id: 'snake', x: 13, y: 15, w: 6, h: 3, trigger: 'touch', once: true, cond: function () { return (WM.state.chapter || 0) === 0; }, run: async function (s) {
       s.sfx('wind');
       s.spawnBeast('snake', 'snake', 19, 14, 'left', { body: '#e8e8e0' });
       await s.move('snake', 'L2', { speed: 80 });
@@ -199,11 +199,11 @@
       await s.narrate('He had not gone fifty paces when a hissing came from the bamboo, and a great serpent, white and thick as a rice bucket, slid across the path and coiled before him, its eyes like flames, its tongue flickering at his face.');
       await s.say('hongxin:shock', 'Aaah! Gods and spirits, protect me!');
       s.sfx('wind');
-      await s.move('snake', 'R3 U2', { speed: 70 });
+      await s.move('snake', 'R2 U2', { speed: 70 });
       s.despawn('snake');
       await s.say('hongxin:sad', 'Gone again... My legs will not stop shaking. Very well, Hong Xin, onwards. Onwards.');
     } },
-    { id: 'boy', x: 8, y: 5, w: 7, h: 4, trigger: 'touch', once: true, run: async function (s) {
+    { id: 'boy', x: 8, y: 5, w: 7, h: 4, trigger: 'touch', once: true, cond: function () { return (WM.state.chapter || 0) === 0; }, run: async function (s) {
       s.music('field');
       s.spawnBeast('oxboy', 'oxboy', 11, 0, 'right');
       await s.say(null, '(From around the bend comes the sound of a flute, sweet and clear.)');

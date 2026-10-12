@@ -134,16 +134,20 @@
     await s.join('pengqi');
     await s.war('ch14_chained', { canLose: true });
     await s.narrate('The Liangshan army fled across the water with heavy losses. Huyan Zhuo sent to the capital for Ling Zhen, the greatest gunner of the empire, and soon his "wind-and-fire" cannon were dropping shot on the Liangshan forts.');
+    s.spawn('wy', 'wuyong', 15, 6, 'down');
     await s.say('wuyong', 'Ling Zhen\'s guns are on the shore. Li Jun, Zhang Heng — draw him to the water. The Ruan brothers will be waiting under it.');
+    s.despawn('wy');
     s.party(['ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'lijun', 'zhangheng']); s.setLeader('ruanxiaoer');
     ['ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'lijun', 'zhangheng'].forEach(function (id) { s.level(id, 25); });
     await s.battle('ch14_lingzhen', { bg: 'river' });
     await s.narrate('Ling Zhen chased the boats out into the reeds — and the Ruan brothers came up from under the water and tipped his boat over. He was dragged up the mountain, soaked to the skin.');
+    s.spawn('sj', 'songjiang', 16, 6, 'down'); s.spawn('lz', 'lingzhen', 17, 8, 'up'); s.spawn('wy', 'wuyong', 15, 6, 'down'); s.spawn('tl', 'tanglong', 14, 8, 'right');
     await s.say('lingzhen', 'My family is in the capital. If I stay, Gao Qiu will kill them.');
     await s.say('songjiang', 'Then we will bring them here.');
     await s.join('lingzhen');
     await s.say('tanglong', 'Brother — there is a way to beat the chained horses. The hooked lance. And only one man in the empire knows how to use it: my cousin Xu Ning, instructor of the Imperial Guard. And he would never leave the capital — unless he lost his family\'s treasure, the goose-feather armour he keeps in a leather box on the beam over his bed.');
     await s.say('wuyong:smile', 'Then we send someone to take it. Shi Qian!');
+    s.despawn('sj'); s.despawn('lz'); s.despawn('wy'); s.despawn('tl');
     s.party(['shiqian']); s.setLeader('shiqian'); s.level('shiqian', 25); s.flag('protagonist', 'shiqian');
     s.flag('ch14_heist');
     WM.unlock('kaifeng');
@@ -261,7 +265,7 @@
     { id: 'ch14_pit', x: 4, y: 4, w: 10, h: 8, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch14_pitplan'); }, run: async function (s) {
       s.spawn('hy', 'huyanzhuo', 22, 13, 'left');
       await s.say('huyanzhuo:angry', 'There! On the hill — Song Jiang himself! Follow me!');
-      await s.move('hy', 'L10');
+      await s.move('hy', 'L5 D1 L5 U1');   // round the trees to the pit
       s.sfx('earth'); await s.shake(6, 0.4);
       s.despawn('hy');
       await s.narrate('The earth gave way under Snow-Treading Black\'s hooves, and Huyan Zhuo, horse and all, went down into the pit. Hooks came out of the grass on both sides, and he was hauled up and bound.');

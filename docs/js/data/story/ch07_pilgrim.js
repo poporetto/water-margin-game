@@ -332,7 +332,7 @@
   ]);
   WM.defEvents('crossslope_in', [
     { id: 'ch7_pilgrim', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_fugitive'); }, run: async function (s) {
-      s.spawn('erniang', 'sunerniang', 7, 4, 'down'); s.spawn('zhangqing2', 'zhangqing2', 9, 4, 'down');
+      s.spawn('erniang', 'sunerniang', 7, 4, 'down'); s.spawn('zhangqing2', 'zhangqing2', 9, 5, 'down');
       await s.say('sunerniang:shock', 'Brother Wu Song?! Lads, let him go!');
       await s.say('zhangqing2', 'Every road in Mengzhou is watched. Posters with your face, and a reward of three thousand strings. You can\'t go anywhere as you are.');
       await s.say('sunerniang', 'Two years ago a pilgrim monk came through here, and... well, he left behind his things. A black robe, a headband, a string of a hundred and eight beads of human skull-bone, a certificate of ordination, and two snowflake steel swords that sing in the night. Let your hair down over your brand and wear them, and you\'ll be the pilgrim.');

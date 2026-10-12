@@ -430,7 +430,7 @@
   ]);
   WM.defEvents('waguan', [
     { id: 'ch2_cui1', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_heardcui'); }, run: async function (s) {
-      s.spawn('cui', 'cuidaocheng', 23, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
+      s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
       await s.say('cuidaocheng', 'A monk? Sit down, sit down, brother. Share our wine.');
       await s.say('luzhishen:angry', 'You two have ruined this monastery and starved the old monks!');
       await s.say('cuidaocheng', 'Who told you that? Those old men lie. They lost the lands themselves, gambling and drinking...');
@@ -444,11 +444,11 @@
       await s.say(null, '(The red pine forest lies to the south of the monastery.)');
     } },
     { id: 'ch2_shijin', x: 14, y: 23, w: 7, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled_cui'); }, run: async function (s) {
-      s.spawn('shijinH', 'shijin', 21, 24, 'left');
+      s.spawn('shijinH', 'shijin', 21, 23, 'left');
       await s.move('shijinH', 'L3', { run: true });
       await s.duel('lu_shijin', { canLose: true });
       s.despawn('shijinH');
-      s.spawn('shijinH', 'shijin', 17, 24, 'left');
+      s.spawn('shijinH', 'shijin', 17, 25, 'left');
       await s.say('shijin', 'Brother! After we parted at Weizhou, I went to Yan\'an to look for Master Wang and never found him. My money ran out, so I\'ve been... borrowing from travellers on the road.');
       await s.say('luzhishen', 'Ha! And I have been a monk. Here — do you have anything to eat? I\'ve had nothing all day.');
       await s.narrate('Shi Jin brought out dried meat and flatbread, and Zhishen ate it all. Then he told Shi Jin about the Waguan Monastery and the two villains.');
@@ -460,7 +460,7 @@
       await s.notice('Shi Jin joined the party.', { auto: 1.6 });
     } },
     { id: 'ch2_cui2', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_withshijin'); }, run: async function (s) {
-      s.spawn('cui', 'cuidaocheng', 23, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
+      s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
       await s.say('cuidaocheng:angry', 'Back again, and with a friend? We beat you once already!');
       await s.say('luzhishen:angry', 'Now my belly\'s full. Let\'s see who wins this time!');
       await s.battle('ch2_waguan2', { bg: 'forest', music: 'boss' });
@@ -480,11 +480,13 @@
   // ---------------- Kaifeng: the Great Xiangguo Monastery ----------------
   WM.defEvents('xiangguo', [
     { id: 'ch2_xg_arrive', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch2_waguanwin'); }, run: async function (s) {
+      s.spawn('mk', 'monk', 15, 25, 'right');
       await s.say('monk', 'A monk from Mount Wutai, with a letter for the Abbot? This way. The Abbot\'s quarters are at the top of the court.');
+      s.despawn('mk');
     } },
     { id: 'ch2_rascals', x: 17, y: 16, w: 6, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_gardener'); }, run: async function (s) {
       s.spawn('zhangsan', 'zhangsan', 26, 16, 'left'); s.spawn('lisi', 'lisi', 26, 17, 'left');
-      s.spawn('r1', 'drunk', 27, 15, 'left'); s.spawn('r2', 'gambler', 27, 18, 'left');
+      s.spawn('r1', 'drunk', 27, 15, 'left'); s.spawn('r2', 'gambler', 28, 17, 'left');
       await s.say('zhangsan:smile', 'Congratulations, congratulations, Reverend! We\'re your neighbours. We\'ve come to welcome you to the garden.');
       await s.say('luzhishen', '(They\'re standing round the edge of the cesspit... smiling like cats at a fishpond. Hm.)');
       await s.say('luzhishen', 'Neighbours! Then come closer and let me greet you properly.');
@@ -515,6 +517,7 @@
       s.spawn('linchong', 'linchong', 24, 2, 'down');
       await s.say('linchong', 'Splendid! Splendid staff-work!');
       await s.say('luzhishen', 'Who\'s that, over the wall?');
+      s.spawn('zs', 'zhangsan', 18, 5, 'up');
       await s.say('zhangsan', 'That\'s the Arms Instructor of the Eight Hundred Thousand Imperial Guards, Master Lin Chong.');
       await s.say('luzhishen', 'Then come in, Instructor, come in!');
       await s.move('linchong', 'R1');
@@ -527,7 +530,7 @@
       await s.say('jiner:shock', 'Master! Master, come quickly! At the Temple of the Eastern Peak — a man has stopped the Mistress and won\'t let her go!');
       await s.say('linchong:angry', 'What?!');
       await s.say('linchong', 'Brother, forgive me — I must go!');
-      s.despawn('jiner'); s.despawn('linchong');
+      s.despawn('jiner'); s.despawn('linchong'); s.despawn('zs');
       s.flag('ch2_done');
       await s.endChapter();
       if (WM.data.chapters[3].begin) await WM.data.chapters[3].begin(s);

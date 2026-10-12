@@ -84,7 +84,7 @@
   ]);
   WM.defEvents('yinma_in', [
     { id: 'ch11_peixuan', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_metdeng'); }, run: async function (s) {
-      s.spawn('px', 'peixuan', 6, 4, 'down'); s.spawn('mk', 'mengkang', 8, 5, 'down'); s.spawn('df', 'dengfei', 4, 5, 'down');
+      s.spawn('px', 'peixuan', 6, 5, 'down'); s.spawn('mk', 'mengkang', 8, 5, 'down'); s.spawn('df', 'dengfei', 4, 5, 'down');
       await s.say('dengfei', 'This is Meng Kang of Zhending, the Jade Flagpole — tall and white as a mast. He built boats for the Flower-and-Rock convoys, and when the official over him drove the shipwrights too hard, he killed him and ran.');
       await s.say('mengkang', 'I can build anything that floats. Gladly met.');
       await s.say('dengfei', 'And our chief, Pei Xuan of Jingzhao — the Iron-Faced Clerk. He was a clerk in the prefecture who would never bend the law. A new prefect framed him and sent him to Shamen Island. We heard he was passing on the road, killed his escorts, and made him our chief.');
@@ -156,7 +156,7 @@
     } },
     { id: 'ch11_service', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_brothers') && WM.state.x < 15; }, run: async function (s) {
       await s.narrate('Two months went by. Then Old Pan held a service for the second anniversary of the death of Qiaoyun\'s first husband, Clerk Wang. The monks came from Baoen Temple.');
-      s.spawn('qy', 'qiaoyun', 5, 7, 'right'); s.spawn('pr', 'peiruhai', 8, 6, 'left'); s.spawn('pg', 'pangong', 4, 5, 'right');
+      s.spawn('qy', 'qiaoyun', 5, 7, 'right'); s.spawn('pr', 'peiruhai', 8, 6, 'left'); s.spawn('pg', 'pangong', 4, 6, 'right');
       await s.say('peiruhai:smile', 'Elder Sister! I have brought some fine incense, and some dates from the capital, for the service.');
       await s.say('qiaoyun:smile', 'Brother Pei, you shouldn\'t have. Come, sit.');
       await s.say('pangong', 'Brother Shi Xiu — that is Pei Ruhai. His master is my sworn godfather, so he calls my daughter "Elder Sister."');
@@ -271,7 +271,7 @@
   ]);
   WM.defEvents('zhuinn_in', [
     { id: 'ch11_rooster', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_cuiping'); }, run: async function (s) {
-      s.spawn('ky', 'innkeep', 4, 6, 'right');
+      s.spawn('ky', 'innkeep', 4, 5, 'right');
       await s.say('shixiu', 'Keeper, why do you have so many weapons hanging up?');
       await s.say('innkeep', 'This is the land of the Zhu Family Village. That\'s Dulong Ridge behind us, and the Zhu master and his three sons have five or seven hundred tenants who can fight. Liangshan isn\'t far. Every house in the village keeps a weapon or two, in case the bandits come.');
       await s.say('shiqian', 'Any meat?');

@@ -139,7 +139,7 @@
 
   WM.defEvents('armycamp', [
     { id: 'ch22_fisherman', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch22_ferry'); }, run: async function (s) {
-      s.spawn('wq', 'wangqing', 31, 12, 'right'); s.spawn('lj', 'lijun', 33, 13, 'left');
+      s.spawn('wq', 'wangqing', 31, 12, 'right'); s.spawn('lj', 'lijun', 33, 13, 'left'); s.boat('lj');   // the 'fisherman' in his boat
       await s.say('wangqing', 'Fisherman! A boat! I still have three cities on the far side — take me over and you\'ll be rich!');
       await s.say('lijun:smile', 'Splendid — more wine money! Get in, get in.');
       await s.narrate('On the bank of the Qing River, the "fisherman" was Li Jun, and the man at the oar was Tong Wei. Halfway across, the nets came up — over Wang Qing.');

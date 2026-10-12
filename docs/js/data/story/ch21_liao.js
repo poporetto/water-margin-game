@@ -108,7 +108,7 @@
 
   WM.defEvents('erxian_in', [
     { id: 'ch21_luo', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch21_luo'); }, run: async function (s) {
-      s.spawn('luo', 'luozhenren', 18, 4, 'down'); s.spawn('gs', 'gongsunsheng', 16, 5, 'right');
+      s.spawn('luo', 'luozhenren', 18, 5, 'down'); s.spawn('gs', 'gongsunsheng', 16, 5, 'right');
       await s.say('songjiang', 'Master, I have brought gold and silk.');
       await s.say('luozhenren', 'A man of the Way has no use for gold. ...General, your loyalty is great, but your fate is thin. Your life will not end in full. When you are at the height of your success, step back. Do not linger over riches and rank.');
       await s.narrate('He gave Song Jiang eight lines of verse that none of them could understand. "In time, you will."');
@@ -140,6 +140,7 @@
       await s.narrate('Hua Rong\'s arrow glanced off Wuyan Guang\'s breastplate. Zhang Qing\'s stones knocked him onto his horse\'s neck. Guan Sheng\'s blade cut him through the waist, and Zhang Qing finished him with his spear. Hu Sanniang took a Liao princess; Lu Junyi took a Liao prince.');
       await s.narrate('The Liao king, beaten, did not surrender to Song Jiang. His chancellor went to the capital with gold for Cai Jing, Tong Guan, Gao Qiu and Yang Jian, and the four of them persuaded the emperor that Liao should be left as a buffer in the north. Su Yuanjing brought the order: the war was over. Every conquered city was handed back.');
       await s.say('songjiang:sad', 'I do not blame the court. Only... all that we did is undone.');
+      s.spawn('lz', 'luzhishen', 13, 8, 'left');
       await s.say('luzhishen', 'Brother, Mount Wutai is near. Let me go and see my old master.');
       await s.say('songjiang', 'Then I will come with you.');
       s.flag('ch21_wutai');

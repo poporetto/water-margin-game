@@ -27,7 +27,7 @@
   var houseB = g.house(18, 23, 6, 4, { roof: 'z', door: 2, windows: [4] });
   g.rect(26, 23, 11, 7, 'y'); g.frame(25, 22, 13, 9, 'F'); g.set(31, 22, ':');
   g.rect(2, 28, 9, 3, 'y');
-  g.rect(28, 4, 6, 4, '~'); g.set(27, 5, 'r'); g.set(34, 6, 'r');
+  g.rect(28, 4, 6, 4, '~'); g.set(27, 5, 'r'); g.set(34, 6, 'r'); g.rect(30, 4, 2, 4, 'B');   // the north road crosses the pond on a bridge
   g.house(33, 10, 5, 4, { roof: 'z', door: false, windows: [2] });
   g.set(17, 28, 'p');
   g.scatter('T', 0.1, 21, '.', [1, 1, 38, 30]);

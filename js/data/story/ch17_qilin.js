@@ -193,7 +193,7 @@
       s.flag('ch17_hill');
     } },
     { id: 'ch17_g5', x: 36, y: 7, w: 3, h: 5, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_hill'); }, run: async function (s) {
-      s.spawn('sj', 'songjiang', 37, 3, 'down'); s.spawn('wy', 'wuyong', 36, 4, 'down'); s.spawn('gs', 'gongsunsheng', 38, 4, 'down');
+      s.spawn('sj', 'songjiang', 37, 4, 'down'); s.spawn('wy', 'wuyong', 36, 4, 'down'); s.spawn('gs', 'gongsunsheng', 38, 4, 'down');
       await s.say('wuyong', 'Squire Lu! Brother Song Jiang has long admired you. The fortune-teller was me. Come up the mountain, and share our righteous cause.');
       await s.say('lujunyi:angry', 'Bandits! Come down and fight me!');
       s.spawn('hr', 'huarong', 35, 5, 'down');
@@ -307,7 +307,9 @@
       await s.say('chaogai:sad', 'Brother... you have a hundred days of calamity upon you, and only a man of the south, the Earth Spirit Star, can save you. Withdraw while you can.');
       await s.say('songjiang:shock', 'Brother Chao Gai! Brother —');
       s.despawn('cg'); s.unflag('ghost:chaogai');
+      s.spawn('zs', 'zhangshun', 17, 7, 'left');
       await s.say('zhangshun', 'The Earth Spirit Star... there is a physician in Jiankang, An Daoquan, the Miraculous Doctor. He cured my mother once. Let me go and fetch him.');
+      s.despawn('zs');
       s.party(['zhangshun']); s.setLeader('zhangshun'); s.level('zhangshun', 30); s.flag('protagonist', 'zhangshun');
       s.flag('ch17_doctor');
       await s.narrate('Zhang Shun went south through the snow and reached the Yangtze at dusk.');
@@ -369,7 +371,7 @@
   WM.defEvents('yangtze', [
     { id: 'ch17_revenge', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_return'); }, run: async function (s) {
       s.addParty('wangdingliu'); s.level('wangdingliu', 28);
-      s.spawn('zw', 'zhangwang', 19, 19, 'down');
+      s.spawn('zw', 'zhangwang', 19, 19, 'down'); s.boat('zw');   // the ferry
       await s.say('zhangwang', 'Ferry across? Get in, get in.');
       await s.say('zhangshun:angry', 'Zhang Wang. Remember me?');
       await s.say('zhangwang:shock', 'You — you\'re dead!');
@@ -456,9 +458,9 @@
       s.party(['guansheng', 'likui']); s.setLeader('guansheng'); s.level('guansheng', 31); s.flag('protagonist', 'guansheng');
       s.spawn('st', 'shantinggui', 16, 14, 'left');
       await s.duel('guansheng_shan', { hero: 'guansheng', canLose: true });
-      s.despawn('st');
       await s.narrate('Guan Sheng lifted Shan Tinggui from the ground, and spoke to him as one soldier to another. Shan Tinggui knelt to him. With the fire behind them in Lingzhou, Wei Dingguo\'s fire-troops broke, and he fled to Zhongling.');
       await s.say('shantinggui', 'Let me go to him. He will listen to me.');
+      s.despawn('st');
       await s.narrate('Wei Dingguo listened to Shan Tinggui, but he said: "If Guan Sheng wants me, let him come himself." Guan Sheng went alone, unarmed, into Zhongling. Wei Dingguo came out and knelt.');
       await s.joinMany(['shantinggui', 'weidingguo', 'jiaoting', 'baoxu']);
       s.flag('ch17_ling');
