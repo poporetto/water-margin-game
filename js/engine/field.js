@@ -31,6 +31,7 @@
     if (!def._baked || def._bakedKey !== key) { def._baked = T.bake(m); def._bakedKey = key; }
     m.baked = def._baked;
     m.talls = [];
+    if (m.interior) m.rooms = rooms(m);
     for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) {
       var d = T.DEF[m.get(x, y)];
       if (d && d.tall) m.talls.push({ x: x, y: y, d: d });
@@ -38,6 +39,26 @@
     return m;
   }
   F.buildMap = buildMap;
+  // An interior map holds several rooms side by side, each walled off by void ('x'). Number them, so that only the
+  // room the player stands in is drawn: the house next door is not visible through the wall.
+  function rooms(m) {
+    var id = new Int16Array(m.w * m.h).fill(-1), n = 0;
+    for (var sy = 0; sy < m.h; sy++) for (var sx = 0; sx < m.w; sx++) {
+      if (id[sy * m.w + sx] >= 0 || m.get(sx, sy) === 'x') continue;
+      var q = [sx, sy]; id[sy * m.w + sx] = n;
+      while (q.length) {
+        var y0 = q.pop(), x0 = q.pop();
+        [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) {
+          var x1 = x0 + d[0], y1 = y0 + d[1];
+          if (x1 < 0 || y1 < 0 || x1 >= m.w || y1 >= m.h || id[y1 * m.w + x1] >= 0 || m.get(x1, y1) === 'x') return;
+          id[y1 * m.w + x1] = n; q.push(x1, y1);
+        });
+      }
+      n++;
+    }
+    return n > 1 ? id : null;
+  }
+  function roomAt(m, x, y) { return m.rooms && x >= 0 && y >= 0 && x < m.w && y < m.h ? m.rooms[y * m.w + x] : -1; }
 
   // ---------- actors ----------
   function Actor(o) {
@@ -523,6 +544,10 @@
     c.drawImage(F.map.baked, -cx, -cy);
     T.animateWater(c, F.map, cx, cy, WM.time);
 
+    // in an interior, only the player's own room is drawn
+    var pt = F.player.tile(), room = roomAt(F.map, pt.x, pt.y);
+    var elsewhere = function (x, y) { var r = roomAt(F.map, x, y); return room >= 0 && r >= 0 && r !== room; };
+
     // y-sorted pass
     var list = [];
     var th = T.THEMES[F.map.theme] || T.THEMES.spring;
@@ -530,6 +555,7 @@
       var tt = F.map.talls[i];
       var sx = tt.x * TS - cx, sy = tt.y * TS - cy;
       if (sx < -32 || sy < -48 || sx > WM.LOW_W + 32 || sy > WM.LOW_H + 32) continue;
+      if (elsewhere(tt.x, tt.y)) continue;
       list.push({ y: tt.y * TS + 14, kind: 't', t: tt, sx: sx, sy: sy });
     }
     var all = F.actors.concat([F.player]);
@@ -537,6 +563,7 @@
       var a = all[i];
       if (!a.visible) continue;
       if (a.hiddenPlayer) continue;
+      if (!a.isPlayer && elsewhere(Math.floor(a.x / TS), Math.floor((a.y - 1) / TS))) continue;
       list.push({ y: a.y + (a.layer || 0), kind: 'a', a: a });
     }
     list.sort(function (p, q) { return p.y - q.y; });
@@ -547,6 +574,13 @@
     }
     // emotes on top
     for (i = 0; i < all.length; i++) if (all[i].emote && all[i].visible) drawEmote(c, all[i], cx, cy);
+    if (room >= 0) {
+      c.fillStyle = '#000';
+      var x0 = Math.max(0, Math.floor(cx / TS)), y0 = Math.max(0, Math.floor(cy / TS));
+      for (var ty = y0; ty <= y0 + Math.ceil(WM.LOW_H / TS) && ty < F.map.h; ty++)
+        for (var tx = x0; tx <= x0 + Math.ceil(WM.LOW_W / TS) && tx < F.map.w; tx++)
+          if (elsewhere(tx, ty)) c.fillRect(tx * TS - cx, ty * TS - cy, TS, TS);
+    }
 
     // weather & lighting
     if (F.map.def.weather === 'snow' || WM.state.flags.weather === 'snow') drawSnow(c);

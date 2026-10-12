@@ -137,7 +137,8 @@
     this.rows = this.opt.rows || Math.min(items.length, 9);
     this.rowH = this.opt.rowH || 38;
     this.w = this.opt.w || 300;
-    this.x = this.opt.x == null ? (WM.W - this.w) / 2 : this.opt.x;
+    if (this.opt.title) this.w = Math.max(this.w, G.measure(this.opt.title, 22, true) + 48);   // the title fits inside the frame
+    this.x = this.opt.x == null ? (WM.W - this.w) / 2 : Math.min(this.opt.x, WM.W - this.w - 8);
     this.h = this.rows * this.rowH + 32 + (this.opt.title ? 40 : 0);
     this.y = this.opt.y == null ? (WM.H - this.h) / 2 : this.opt.y;
     this.active = true;
