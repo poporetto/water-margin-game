@@ -62,7 +62,9 @@ function findActor(key) {
 }
 
 // ---------- speaker validation ----------
+// the drawn faces, plus any extra expression an illustrated portrait sheet provides (assets/manifest.js)
 const EXPR = ['normal', 'angry', 'sad', 'smile', 'shock'];
+Object.values((WM.ASSETS && WM.ASSETS.portraitSheets) || {}).forEach((sh) => (sh.expressions || []).forEach((e) => { if (EXPR.indexOf(e) < 0) EXPR.push(e); }));
 function checkSpeaker(who) {
   if (who == null) return;
   if (typeof who === 'object') { if (!who.name) err('speaker object without name'); return; }
