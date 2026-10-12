@@ -16,7 +16,7 @@
   WM.enemy('lu_muhong', 'Mu Hong', 27, hum(C.muhong.look), { hp: 1.3, atk: 0.62, exp: 300, gold: 0, boss: true });
   WM.enemy('lu_liying', 'Li Ying', 27, hum(C.liying.look), { hp: 1.3, atk: 0.62, exp: 300, gold: 0, boss: true, range: 'L', fx: 'arrow' });
   WM.enemy('dm_guard', 'Daming Guard', 27, hum(WM.enemyLooks.soldier), { atk: 0.85, range: 'M', exp: 150, drops: [['medicine', 0.15]] });
-  WM.enemy('dm_jailer', 'Daming Jailer', 26, hum(WM.enemyLooks.constable), { hp: 0.8, atk: 0.8, exp: 150 });
+  WM.enemy('dm_jailer', 'Daming Jailer', 26, hum(WM.enemyLooks.constable), { hp: 0.7, atk: 0.62, exp: 150 });
   WM.enemy('zhangwang_foe', 'Zhang Wang', 27, hum(WM.data.npcs.zhangwang.look), { hp: 2.0, exp: 360, gold: 400, boss: true });
   WM.enemy('sunwu_foe', 'Sun Wu', 25, hum(WM.enemyLooks.thug), { hp: 1.2, exp: 200, gold: 100, fx: 'blunt' });
   WM.enemy('lz_soldier', 'Lingzhou Soldier', 30, hum(WM.enemyLooks.soldier), { range: 'M', exp: 160, drops: [['medicine', 0.15]] });

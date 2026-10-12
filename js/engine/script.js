@@ -108,7 +108,7 @@
     var path = (!instant(a.sheetWho) && a.visible && !a.static) ? wayIn(t.x, t.y) : null;
     if (!path || path.length < 3) { f.removeActor(key); return; }
     path.reverse();                                     // from where they stand to the way out
-    a.ev.id = '__leaving' + (++leaving); a.leavingKey = key;
+    a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false;   // never stands in the player's way on the way out
     walk(a, path, function () { f.actors = f.actors.filter(function (o) { return o !== a; }); });
   }
 

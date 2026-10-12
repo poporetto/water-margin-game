@@ -36,7 +36,7 @@
   WM.enemy('zhangdu_boss', 'Commander Zhang', 19, WM.hum(WM.data.npcs.zhangdujian.look), { hp: 1.0, atk: 0.4, exp: 500, gold: 400, boss: true, drops: [['goodwine', 1]] });
   WM.enemy('zhangtuan_boss', 'Militia Captain Zhang', 18, WM.hum(WM.data.npcs.zhangtuanlian.look), { hp: 0.8, atk: 0.38, exp: 400, gold: 200, boss: true });
   WM.enemy('jiang_boss2', 'Jiang the Door God', 19, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 0.9, atk: 0.42, exp: 450, gold: 200, boss: true, fx: 'blunt' });
-  WM.enemy('daoist_boss', 'Daoist of Centipede Ridge', 19, WM.hum(WM.data.npcs.daoistwang.look), { hp: 1.35, atk: 0.55, mgc: 0.95, exp: 450, gold: 220, boss: true, skills: [{ name: 'Twin Swords', chance: 0.3, type: 'phys', power: 1.4 }, { name: 'Black Wind', chance: 0.2, type: 'magic', power: 40, element: 'wind', fx: 'wind' }] });
+  WM.enemy('daoist_boss', 'Daoist of Centipede Ridge', 19, WM.hum(WM.data.npcs.daoistwang.look), { hp: 1.25, atk: 0.5, mgc: 0.9, exp: 450, gold: 220, boss: true, skills: [{ name: 'Twin Swords', chance: 0.3, type: 'phys', power: 1.4 }, { name: 'Black Wind', chance: 0.2, type: 'magic', power: 40, element: 'wind', fx: 'wind' }] });
   WM.enemy('daoist_boy', 'Daoist Acolyte', 16, WM.hum({ skin: '#e8b48a', hairStyle: 'topknot', body: '#4a2a4a', trim: '#c8a040', weapon: 'sword', build: 'small' }), { hp: 0.6, atk: 0.55, exp: 80 });
   var T = WM.data.troops;
   T.ch7_tiger = { enemies: ['jy_tiger'], bg: 'forest', boss: true };

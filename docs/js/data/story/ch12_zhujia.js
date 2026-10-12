@@ -68,12 +68,12 @@
       { leader: 'likui', type: 'inf', x: 3, y: 3 }
     ],
     enemy: [
-      { name: 'Hu Sanniang', portrait: 'husanniang', type: 'cav', atk: 112, def: 92, x: 9, y: 2, commander: true },
-      { name: 'Luan Tingyu', portrait: 'luantingyu', type: 'cav', atk: 120, def: 100, x: 11, y: 3 },
-      { name: 'Zhu Long', portrait: 'zhulong', type: 'cav', atk: 96, def: 86, x: 10, y: 1 },
-      { name: 'Zhu Biao', portrait: 'zhubiao', type: 'cav', atk: 100, def: 84, x: 10, y: 5 },
-      { name: 'Zhu Village Foot', type: 'inf', atk: 82, def: 86, x: 11, y: 4 },
-      { name: 'Zhu Village Archers', type: 'arch', atk: 84, def: 60, x: 12, y: 2 }
+      { name: 'Hu Sanniang', portrait: 'husanniang', type: 'cav', atk: 100, def: 78, x: 9, y: 2, commander: true },
+      { name: 'Luan Tingyu', portrait: 'luantingyu', type: 'cav', atk: 112, def: 92, x: 11, y: 3 },
+      { name: 'Zhu Long', portrait: 'zhulong', type: 'cav', atk: 88, def: 80, x: 10, y: 1 },
+      { name: 'Zhu Biao', portrait: 'zhubiao', type: 'cav', atk: 92, def: 78, x: 10, y: 5 },
+      { name: 'Zhu Village Foot', type: 'inf', atk: 76, def: 80, x: 11, y: 4 },
+      { name: 'Zhu Village Archers', type: 'arch', atk: 76, def: 56, x: 12, y: 2 }
     ],
     intro: [['songjiang', 'Wang Ying is taken. We must not be beaten twice. Brother Lin Chong — the girl general on the red horse is the heart of their army.'], ['linchong', 'Leave her to me.'], [null, 'Victory: rout Hu Sanniang\'s unit. Beware Luan Tingyu, the Zhu instructor.']],
     events: [

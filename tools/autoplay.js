@@ -39,7 +39,7 @@
       if (!ev.run || ev.resident || DEAD.test(ev.id)) continue;
       const talk = !ev.trigger || ev.trigger === 'talk';
       if (!(ev.trigger === 'auto' || ev.trigger === 'touch' || ev.trigger === 'check' || talk)) continue;
-      if (ev.once ? S.has('ev:' + ev.map + ':' + ev.id) : (!ev.cond || talk || !/^(ch\d+_|tablet$)/.test(ev.id))) continue;   // repeatable: only chapter story, never shops and keepers
+      if (ev.once ? S.has('ev:' + ev.map + ':' + ev.id) : (!ev.cond || !/^(ch\d+_|tablet$)/.test(ev.id))) continue;   // repeatable: only chapter story, never shops and keepers (one that changes nothing is ignored below)
       const ig = ignored[ev.map + ':' + ev.id]; if (ig && ig === storySig()) continue;
       // only this chapter's story (a chapter jump never marks earlier chapters' one-time events as done)
       const cm = /^ch(\d+)_/.exec(ev.id), cur = WM.state.chapter || 0;
@@ -142,7 +142,11 @@
         prev[k] = c; if (isGoal) { found = [nx, ny]; break; } q.push([nx, ny]);
       }
     }
-    if (!found) return 'nopath';
+    if (!found) {
+      // say who stands in the way: actors on any tile next to the explored area
+      const by = f.actors.filter((a) => { const t = a.tile(); return a.visible && a.solid && !a.isPlayer && [[1, 0], [-1, 0], [0, 1], [0, -1]].some((d) => key(t.x + d[0], t.y + d[1]) in prev); });
+      return 'nopath' + (by.length ? ' (blocked by ' + by.map((a) => (a.ev && (a.ev.id || a.ev.char)) || a.name || '?').join(', ') + ')' : '');
+    }
     const path = []; let cur = found; while (cur) { path.unshift(cur); cur = prev[key(cur[0], cur[1])]; }
     for (let i = 1; i < path.length; i++) {
       const p = path[i];
@@ -205,7 +209,7 @@
       const e = r[0], goals = [];
       for (let y = e.y; y < e.y + (e.h || 1); y++) for (let x = e.x; x < e.x + (e.w || 1); x++) goals.push([x, y]);
       const res = await walkToAny(goals, { step: true });
-      if (res === 'nopath' || String(res).startsWith('stuck')) return 'route-fail:' + here + '->' + e.to + ' ' + res + ' (for ' + ev.map + ':' + ev.id + ')';
+      if (String(res).startsWith('nopath') || String(res).startsWith('stuck')) return 'route-fail:' + here + '->' + e.to + ' ' + res + ' (for ' + ev.map + ':' + ev.id + ')';
       await frames(40);
       return 'moved';
     }
