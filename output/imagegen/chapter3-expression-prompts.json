@@ -1,0 +1,102 @@
+{
+  "mode": "built-in image_gen",
+  "styleReferences": [
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/shijin-expressions.png",
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/wangmother-expressions.png"
+  ],
+  "basePrompt": "Use case: stylized-concept. Generate ONE finished game portrait expression sheet of the described Chinese Water Margin character. EXACT 3 equal columns x 2 equal rows, no gutters/borders/text. Row-major expressions: normal, angry, sad, smile, shock, concerned. Six portraits of SAME identity and outfit, camera pose stable across cells, distinctly readable facial expressions appropriate to personality. Bust crops head fully visible with space above cap, hands/props only low in frame. Refined mature anime JRPG ink outlines, soft painted cel shading, subtle light ivory and blue-gray Chinese paper texture background. Neutral peach or natural neutral tan skin NOT yellow/orange. The two attached sheets are STYLE AND GRID references only; do not copy their faces, hair, outfits, age or poses. Unique character facial anatomy is essential; not Song Jiang, not generic handsome anime male. No scenery, no pixelation, no photorealism, no labels. Subject: ",
+  "characters": [
+    {
+      "id": "gaoyanei",
+      "description": "Gao Yanei, spoiled entitled aristocrat age 25. Narrow pear-shaped face, weak receding chin, heavy-lidded small eyes, thin arched eyebrows, small pursed mouth, clean shaven. Rose silk robes gold trim red soft cap. Chin tilted up, dismissive raised hand. Normal smug entitlement, smile unpleasant smirk."
+    },
+    {
+      "id": "linwife",
+      "description": "Lady Zhang, Lin Chong’s wife, dignified resolute adult woman age 29. Long oval face, straight firm brows, almond eyes, broad forehead small rounded chin. Dark hair elegant pinned bun silver hairpin, slate blue robes pale lavender collar. Three-quarter facing left, hand holding sleeve near chest. Normal poised strength, angry defiant, sad grief not helpless prettiness."
+    },
+    {
+      "id": "zhangjiaotou",
+      "description": "Instructor Zhang, veteran teacher and protective father age 60. Rectangular weathered face, long broad nose, white thick straight brows, kindly deep-set eyes, gray topknot and long white beard. Charcoal martial robe beige edging. Slight forward lean both hands resting atop staff low in frame."
+    },
+    {
+      "id": "luqian",
+      "description": "Lu Qian, duplicitous childhood friend age 35. SHORT man with PALE skin and NO BEARD, completely clean shaven per story. Small compact oval face, close-set thin eyes, narrow mouth, shallow chin, receding temples. Black wrapped cap purple gray robe. Torso turned away head glancing back, wine cup low in frame. Normal calculated faux friendliness, smile insincere, shock terrified begging."
+    },
+    {
+      "id": "fuan",
+      "description": "Fu An, conniving lackey age 40. Long wedge shaped face, protruding ears, hooked nose, thin eyebrows, small shifty eyes, tiny sparse chin hairs but no moustache. Rust cloth cap earth brown robe. Hunched leaning forward rubbing hands."
+    },
+    {
+      "id": "swordseller",
+      "description": "Sword Seller, imposing disguised soldier age 45. Broad pentagonal face, flattened broken nose, deeply set eyes, thick full squared black beard with few grays, dark soldier cloth cap. Forest gray robe. Holds sheathed sword vertically at side, sideways skeptical appraising gaze."
+    },
+    {
+      "id": "dongchao",
+      "description": "Dong Chao, cruel escort age 43. Heavy rectangular skull, wide flat nose, small deep-set eyes, thick blunt brows, rough black stubble, short thick neck but fit build. Black headwrap black uniform rusty red trim. Facing right gripping escort pole at shoulder, normal hard suspicion."
+    },
+    {
+      "id": "xueba",
+      "description": "Xue Ba, cruel escort age 36. Long very lean face with prominent cheekbones, pointed chin, thin hooked nose, narrow slanted eyes, clean-shaven. Black scarf black uniform rusty red edging. Facing left with head lowered looking up menacingly, rope loop at shoulder. Different from broad Dong Chao."
+    },
+    {
+      "id": "hongjiaotou",
+      "description": "Instructor Hong, arrogant martial instructor age 42. Square muscular face broad jaw cleft chin, bold outward swept brows, sharp eyes, short dense chin beard and thick moustache. Burgundy headcloth brick red martial robes gold trim. Arms crossed staff tucked against shoulder, chin proudly elevated. Smile boastful, shock humiliated."
+    },
+    {
+      "id": "warden",
+      "description": "Camp Warden, self-serving bureaucrat age 50. Pear shaped face full cheeks but ordinary build, small pinched lips thin drooping moustache, tiny calculating eyes under sparse brows. Black winged futou indigo official robe dull gold trim. Frontward stiff posture holding ledger low."
+    },
+    {
+      "id": "lixiaoer",
+      "description": "Li Xiaoer, grateful tavern keeper age 31. Round face broad cheekbones, short upturned nose, open round eyes, thick curved brows, clean-shaven. Cream headband tousled short tied hair brown apron over taupe robe. Welcoming three quarter stance with towel across shoulder."
+    },
+    {
+      "id": "lixiaoerwife",
+      "description": "Li Xiaoer’s Wife, practical observant tavern keeper age 33. Broad oval face, strong softly square jaw, wide-set intelligent eyes, full eyebrows, slightly broad nose. Dark hair simple low bun beige cloth tie. Muted plum brown work robe cream collar, sleeves rolled, head tilted listening, hand at waist. Not glamorous court lady."
+    },
+    {
+      "id": "overseer",
+      "description": "Depot Overseer, corrupt guard supervisor age 47. Narrow bony face with long chin, drooping eyelids, crooked nose, thin short patchy salt pepper beard. Charcoal headwrap drab olive robe brown belt. Slouched shoulders, glancing sideways, one hand clutching keys."
+    },
+    {
+      "id": "oldsoldier",
+      "description": "Old Soldier, worn but kind veteran age 62. Broad weathered face, broken nose, one bushy brow slightly higher, laugh lines and gray short beard, gray topknot. Faded olive quilted winter coat. Bent forward offering small wine gourd, tired steady normal expression."
+    },
+    {
+      "id": "wanglun",
+      "description": "Wang Lun, jealous failed scholar and bandit chief age 38. Exceptionally long narrow face, high forehead, sharply pointed chin, thin straight moustache ONLY no beard, small anxious calculating eyes, fine downward brows. Tall black scholar headwrap WHITE robes blue gray edging. Upright guarded posture holding folded paper letter, body facing left gaze sidelong. Smile forced hospitality."
+    },
+    {
+      "id": "gaoofficer2",
+      "description": "Officer of the Residence, secretive official age 44. Broad diamond shaped clean-shaven face, high cheekbones, thin lips, broad straight nose, hooded eyes and restrained brows, subtle age lines. Black Song futou dark navy robe ochre gold trim. Formal three-quarter pose one open palm directing visitor, professionally unreadable."
+    },
+    {
+      "id": "chaijin",
+      "description": "Chai Jin, generous aristocratic patron age 36. Distinct broad oval face with high cheeks, wide-set elegant eyes, fine upturned moustache no chin beard, graceful full lips. Purple soft headwrap and rich violet silk robe restrained gold embroidery. Relaxed open shoulders, hand politely extended welcome, noble generous normal expression."
+    },
+    {
+      "id": "yangzhi",
+      "description": "Yang Zhi, proud embittered veteran age 37. Rugged square face, prominent cheekbones, strong broad nose, keen small eyes under straight heavy brows, short rough beard. Large irregular BLUE BIRTHMARK covering LEFT TEMPLE and cheek, same side every cell, not glowing. Dull green soldier helmet black tassel olive armored robe. Sabre hilt held at chest, tense upright pose, normal stern determination."
+    },
+    {
+      "id": "songwan",
+      "description": "Song Wan, towering broad powerful outlaw age 40. Very wide square face, broad flat nose, large mouth, thick full bushy beard, big straightforward eyes. Brown headband earth brown martial robe. Broad shoulders frontward slightly leaned back arms loosely folded. Honest rough normal expression, huge hearty smile."
+    },
+    {
+      "id": "duqian",
+      "description": "Du Qian, exceptionally tall lean outlaw age 38. Long rectangular face long straight nose, high forehead, deep cheek hollows, small dark eyes, short neat jaw beard. Rust headband ochre brown martial robe. Tall narrow shoulders at leftward angle, sabre across back. Reserved plainspoken normal expression. Distinct from broad Song Wan."
+    },
+    {
+      "id": "zhugui",
+      "description": "Zhu Gui, shrewd tavern keeper and lookout age 41. Rounded skull but lean weathered cheeks, wide low nose, thin sharp eyes, short close beard and uneven moustache. Brown headscarf tawny robe cream trim. Turned looking over shoulder, one hand holding wine jug at lower edge, alert wary normal."
+    },
+    {
+      "id": "servant",
+      "description": "Adult household servant age 30. Small round chin, large ears, wide-set attentive eyes, slightly concave nose, clean-shaven, hair tied simple topknot. Plain gray olive robe cream collar. Modest lowered head and clasped hands, cautious attentive normal. No aristocratic beauty."
+    },
+    {
+      "id": "outlaw",
+      "description": "Liangshan guide age 34. Lean angular face with broad cheekbones, narrow chin, sun-weathered neutral tan skin, short unruly stubble, deep eyes, eyebrow scar. Red cloth headband dull olive rough robe. Quarter turn looking back over shoulder gripping spear, watchful practical expression."
+    }
+  ]
+}

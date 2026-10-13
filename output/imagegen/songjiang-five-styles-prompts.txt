@@ -1,0 +1,19 @@
+Generated using the built-in image generation tool.
+
+Shared prompt:
+Create a single Song Jiang from Water Margin character selection portrait for a Chinese historical RPG. Clearly ANIME, not realistic or painterly realism. Chinese man around 35-40, warm tan complexion, black cloth headscarf, black eyebrows, neat small thin moustache, burgundy crossed-collar Chinese robes with restrained gold trim, cream inner collar. Kindly intelligent leader. Head and shoulders, slight three-quarter view, full head visible, centered square composition, plain pale ivory background. No text, labels, borders, weapons or extra characters. Strong readable silhouette and face for a small game dialogue portrait. 
+
+01-retro-jrpg
+1990s hand-drawn JRPG anime portrait reminiscent of Suikoden II: stylized angular anime eyes, simplified nose, expressive clean ink contours, flat cel colors and only two shadow tones. Modest proportions, nostalgic character design. Absolutely no skin texture, watercolor grain or realistic facial rendering.
+
+02-modern-shonen
+Modern shonen anime character portrait: bold dynamic tapered linework, angular handsome face, larger expressive anime eyes, sharp graphic cel shading, rich saturated colors, confident friendly half smile. Clearly drawn animation character, no realistic textures.
+
+03-soft-shojo
+Soft shojo anime character portrait: elegant fine clean linework, larger luminous expressive anime eyes, gently rounded mature face, graceful stylized features, soft pastel cel shading, warm approachable smile. Masculine adult character, delicate illustration, no realistic textures.
+
+04-chibi
+Super-deformed chibi anime portrait: oversized round head, tiny shoulders, large sparkling anime eyes, tiny simplified nose, adorable neat moustache, cheerful benevolent expression, thick clean outlines, simple flat colors and crisp cel shadows. Strong cute compact game avatar design.
+
+05-retro-tv-anime
+Classic 1980s and early 1990s adventure TV anime character portrait: broad expressive face, strong thick brows, large stylized eyes, pronounced graphic cheek shapes, small simplified nose, sturdy charming adult anime character design, confident warm smile, bold ink outlines, warm limited cel palette, crisp flat shading. No grain or realistic painting.

@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Chapter 5 expressions</title>
+<style>body{margin:24px;background:#141c2b;color:#f2ead8;font:16px Georgia,serif}section{margin:24px 0}.row{display:flex;flex-wrap:wrap;gap:16px}button{background:#26344b;border:1px solid #d8b36a;color:#f2ead8;padding:8px;cursor:pointer}button span{display:block;margin-top:8px}canvas{display:block;width:144px;height:168px}iframe{width:960px;max-width:100%;height:auto;aspect-ratio:4/3;border:0}#status{color:#d8b36a}</style></head>
+<body><h1>Chapter 5 portrait expressions</h1><p>Yellow paper: 108 Stars · Blue paper: other characters.</p><p><a href="chapter6-portraits.html" style="color:#d8b36a">Chapter 6 portraits</a></p><p><a href="chapter4-portraits.html" style="color:#d8b36a">Chapter 4 portraits</a></p><p>Choose an expression to see it in the game’s dialogue frame.</p><p id="status">Loading…</p><main id="gallery"></main><iframe id="game" src="../index.html" title="Game dialogue preview"></iframe>
+<script>
+const frame=document.getElementById('game');
+frame.onload=()=>{
+ const W=frame.contentWindow.WM, specs=W.ASSETS.portraitSheets;
+ const ids=W.ASSETS.portraitGroups.chapter5;
+ ids.forEach(id=>W.portraits.tryExpressionSheet(id,specs[id]));
+ const started=Date.now();
+ const timer=setInterval(()=>{
+  const ready=ids.every(id=>specs[id].expressions.every(e=>W.portraits.overrides[id+':'+e]));
+  if(!ready){if(Date.now()-started>30000){clearInterval(timer);document.getElementById('status').textContent='Portrait loading failed or timed out.';}return;}
+  clearInterval(timer);let count=0;
+  ids.forEach(id=>{
+   const section=document.createElement('section'),heading=document.createElement('h2'),row=document.createElement('div');row.className='row';heading.textContent=(W.data.chars[id]||W.data.npcs[id]).name;section.append(heading,row);
+   specs[id].expressions.forEach(expr=>{
+    const button=document.createElement('button'),canvas=document.createElement('canvas'),label=document.createElement('span');canvas.width=288;canvas.height=336;canvas.getContext('2d').drawImage(W.portraits.get(id,expr),0,0,288,336);label.textContent=expr;button.append(canvas,label);button.onclick=()=>{W.ui.stack=[];W.ui.message(id+':'+expr,heading.textContent+' — '+expr,{speed:1000});frame.scrollIntoView({behavior:'smooth',block:'center'});};row.append(button);count++;
+   });document.getElementById('gallery').append(section);
+  });document.getElementById('status').textContent=count+' expressions loaded across '+ids.length+' characters.';
+ },100);
+};
+</script></body></html>

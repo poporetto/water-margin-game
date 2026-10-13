@@ -44,6 +44,11 @@ which arcs are played and which are condensed. Each game chapter is one file in 
 
 ## Art
 
+Illustrated members of the 108 Stars use muted yellow Chinese paper backgrounds;
+other characters use blue paper. Preserve natural skin tones, distinct facial features,
+and character-specific expressions and poses. Lu Da shares Lu Zhishen’s Star status;
+Chao Gai is not one of the 108 Stars and keeps blue.
+
 The prologue has six illustrated expressions each for Hong Xin, the Abbot of Shangqing,
 the Herd-Boy and the temple Daoist. Preview them at `tools/prologue-portraits.html`.
 Their `assets/portraits/<id>-expressions.png` sheets use a 3-column, 2-row layout:
@@ -111,3 +116,20 @@ Chapter 3 adds 23 expression sheets and reuses seven returning cast sheets: 30 c
 six-expression mapping. The servant and Liangshan guide now show portraits too.
 Lu Qian is clean-shaven to match his description in the chapter. Generated with the built-in
 image tool; the complete prompt set is `output/imagegen/chapter3-expression-prompts.json`.
+
+Chapter 4 adds six expression sheets and reuses Yang Zhi and Gao Qiu: eight characters,
+48 expressions in `tools/chapter4-portraits.html`. All story speakers and the three
+duels have portrait coverage. Prompts: `output/imagegen/chapter4-expression-prompts.json`.
+
+Chapter 5 adds 18 expression sheets (including Song Jiang and Wu Yong expanded from their
+approved portraits), plus seven returning sets: 25 characters and 150 expressions in
+`tools/chapter5-portraits.html`. Story, duel and war speakers are covered. Wu Yong keeps
+his feather fan; the Ruan brothers have individual facial designs. Built-in image generation
+prompts are saved in `output/imagegen/chapter5-expression-prompts.json`.
+
+Chapter 6 adds eight expression sheets, including Wu Song expanded from his approved
+portrait, and reuses four returning sets: 12 characters and 72 expressions in
+`tools/chapter6-portraits.html`. Every story speaker has portrait coverage; expressions
+follow the chapter's emotional beats. Built-in image generation prompts and facial-design
+refinements are saved in `output/imagegen/chapter6-expression-prompts.json` and
+`output/imagegen/chapter6-refinements.json`.

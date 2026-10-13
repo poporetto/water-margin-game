@@ -9,7 +9,7 @@
   var SK = { fair: '#f0c49a', light: '#e8b48a', mid: '#d8a070', tan: '#c8905e', dark: '#9a6a48' };
 
   // ---- generic folk ----
-  WM.npc('villager', 'Villager', { skin: SK.tan, hairStyle: 'topknot', body: '#7a6a4a', trim: '#5a4a3a', pants: '#4a3a2a' });
+  WM.npc('villager', 'Villager', { skin: SK.tan, hairStyle: 'topknot', body: '#7a6a4a', trim: '#5a4a3a', pants: '#4a3a2a' }, { face: true });
   WM.npc('villager2', 'Villager', { skin: SK.mid, hairStyle: 'headband', band: '#e8e0d0', body: '#5a6a7a', trim: '#e8e0d0' });
   WM.npc('farmer', 'Farmer', { skin: SK.tan, hairStyle: 'hat', hatColor: '#c8b070', body: '#8a7a5a', trim: '#5a4a3a', beard: 'stubble' });
   WM.npc('woman', 'Village Woman', { skin: SK.light, hairStyle: 'woman', body: '#8a5a6a', trim: '#e8d8c0', dress: true });
@@ -26,7 +26,7 @@
   WM.npc('monk', 'Monk', { skin: SK.light, hairStyle: 'bald', body: '#8a6a3a', trim: '#c89a4a', beads: true }, { face: true });
   WM.npc('daoist', 'Daoist', { skin: SK.light, hairStyle: 'daoist', crown: '#8a7a4a', body: '#4a5a7a', trim: '#e8e0d0', beard: 'short' }, { face: true });
   WM.npc('scholar', 'Scholar', { skin: SK.fair, hairStyle: 'scarf', band: '#1a1a2a', body: '#3a4a6a', trim: '#e8e0d0', beard: 'mustache', build: 'slim' }, { face: true });
-  WM.npc('soldier', 'Soldier', { skin: SK.tan, hairStyle: 'helmet', helmColor: '#6a6a72', tassel: '#c8302a', body: '#8a2a2a', trim: '#c8b890', weapon: 'spear' });
+  WM.npc('soldier', 'Soldier', { skin: SK.tan, hairStyle: 'helmet', helmColor: '#6a6a72', tassel: '#c8302a', body: '#8a2a2a', trim: '#c8b890', weapon: 'spear' }, { face: true });
   WM.npc('guard', 'Guard', { skin: SK.mid, hairStyle: 'helmet', helmColor: '#5a5a62', tassel: '#2a2a2a', body: '#3a3a5a', trim: '#c8b890', weapon: 'spear' });
   WM.npc('officer', 'Officer', { skin: SK.light, hairStyle: 'futou', body: '#2a3a6a', trim: '#d8b36a', beard: 'short' }, { face: true });
   WM.npc('official', 'Official', { skin: SK.fair, hairStyle: 'futou', body: '#7a1a1a', trim: '#d8b36a', beard: 'long' }, { face: true });

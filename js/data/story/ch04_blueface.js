@@ -67,7 +67,7 @@
       await s.warp('kaifeng_in', 40, 7, 'up', { noFade: true });
       s.spawn('keep', 'kfinnkeep', 37, 4, 'down');
       await s.say('yangzhi:sad', '(Wang Lun was right. And now I have nothing. Not one coin for the inn, nor for the road home.)');
-      await s.say('kfinnkeep', 'Officer Yang, you owe for three weeks. I can\'t feed you on promises.');
+      await s.say('kfinnkeep:concerned', 'Officer Yang, you owe for three weeks. I can\'t feed you on promises.');
       await s.say('yangzhi:sad', '(All I have left is the sabre my ancestors handed down. ...So be it. I will sell it, and go home.)');
       s.despawn('keep');
       s.flag('ch4_sell');
@@ -80,7 +80,7 @@
       s.place('player', 10, 22, 'down');
       s.spawn('c1', 'villager', 8, 21, 'right'); s.spawn('c2', 'woman', 12, 21, 'left'); s.spawn('c3', 'merchant', 13, 22, 'left');
       await s.wait(0.5);
-      await s.say('villager', 'Run! Hide! The Tiger\'s coming!');
+      await s.say('villager:shock', 'Run! Hide! The Tiger\'s coming!');
       s.despawn('c1'); s.despawn('c2'); s.despawn('c3');
       await s.narrate('The crowd scattered like chickens before a hawk. Yang Zhi turned and saw a great black lout lurching down the street, half drunk. This was Niu Er, the "Hairless Tiger," the most notorious bully in the capital. Even the magistrates gave him a wide berth.');
       s.spawn('niuer', 'niuer', 10, 26, 'up');
@@ -133,7 +133,7 @@
       await s.duel('yz_zhoujin');
       await s.narrate('Then the Governor ordered them to contest with the bow. Zhou Jin shot three arrows at Yang Zhi, one after another. The first Yang Zhi knocked aside with his bow, the second he dodged by leaning back in the saddle, and the third he caught in his hand.');
       await s.narrate('Then it was Yang Zhi\'s turn. He shot only once — and the arrow struck Zhou Jin in the left shoulder and knocked him from his horse.');
-      await s.say('liangzhongshu', 'Splendid! Yang Zhi shall have Zhou Jin\'s post!');
+      await s.say('liangzhongshu:smile', 'Splendid! Yang Zhi shall have Zhou Jin\'s post!');
       await s.duel('yz_suochao');
       await s.narrate('For more than fifty bouts Suo Chao\'s battle-axe and Yang Zhi\'s spear met and parted, and neither could gain the advantage. The soldiers on both sides shouted themselves hoarse. "In all our years in the army," the old officers said, "we have never seen a fight like this one."');
       await s.say('liangzhongshu:smile', 'Both are heroes! Both shall be made captains of my guard!');
@@ -150,7 +150,7 @@
       await s.say('yangzhi', 'Excellency... with banners and carts, every bandit between here and the capital will know what we carry. On the road there are the Purple Gold Mountain, the Twin Dragon Mountain, the Peach Blossom Mountain, the Umbrella Cover Mountain, the Yellow Earth Ridge, the White Sand Bank, the Wild Cloud Ford... all bandit country. Ten thousand men could not guard it.');
       await s.say('yangzhi', 'Let me pack it in loads, and have eleven strong soldiers carry them on poles, disguised as porters. I and they will go as merchants, quietly. That way we may get through.');
       await s.say('liangzhongshu:smile', 'Excellent. It shall be as you say. And my wife\'s steward, and two officers from the household, will go with you.');
-      await s.say('yangzhi', '(The steward and the household officers... they will not take orders from me. This will be trouble.)');
+      await s.say('yangzhi:concerned', '(The steward and the household officers... they will not take orders from me. This will be trouble.)');
       s.despawn('liang');
       s.flag('ch4_done');
       await s.endChapter();

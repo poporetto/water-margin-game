@@ -54,7 +54,7 @@
     { id: 'ch6_yanhouse', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch6_yan') && WM.state.x >= 29 && WM.state.x <= 40; }, run: async function (s) {
       s.spawn('yanpo', 'yanpo', 32, 6, 'right'); s.spawn('poxi', 'yanpoxi', 36, 4, 'down');
       s.night(true);
-      await s.say('yanpo', 'Daughter! Look who\'s here! Your Third Brother Song!');
+      await s.say('yanpo:smile', 'Daughter! Look who\'s here! Your Third Brother Song!');
       await s.say('yanpoxi', '...Oh. Him.');
       await s.narrate('Yan Poxi had been waiting for Zhang Wenyuan. When she saw it was Song Jiang, she went cold, and sat with her back to him. The old woman fussed with wine and dishes. Song Jiang drank a cup or two in silence.');
       await s.narrate('At last the old woman locked them in together and went downstairs. Song Jiang sat on the stool all night in his clothes, and Yan Poxi lay facing the wall. Neither spoke a word. At the fifth watch, Song Jiang got up, washed his face, and went out without a word — and in his anger, he left his document pouch hanging on the bedpost.');
@@ -62,7 +62,7 @@
       s.night(false);
       await s.warp('yuncheng', 36, 15, 'down');
       s.spawn('wang', 'oldwang', 34, 16, 'right');
-      await s.say('oldwang', 'Clerk Song! Up so early? Here, have a bowl of hot herb soup, on the house.');
+      await s.say('oldwang:smile', 'Clerk Song! Up so early? Here, have a bowl of hot herb soup, on the house.');
       await s.say('songjiang', 'Thank you, Old Wang. ...I promised you money for a coffin. Wait, let me get it for you — it\'s in my pouch...');
       await s.emote('player', '!');
       await s.say('songjiang:shock', '(My pouch! The pouch with Chao Gai\'s letter in it — I left it in her room!)');
@@ -70,9 +70,9 @@
       await s.move('player', 'U1', { run: true });
       await s.warp('yuncheng_in', 34, 7, 'up', { fade: 0.25 });
       s.spawn('poxi', 'yanpoxi', 37, 5, 'left');
-      await s.say('yanpoxi', 'Looking for something, Third Brother?');
+      await s.say('yanpoxi:smile', 'Looking for something, Third Brother?');
       await s.say('songjiang', 'Give me my pouch. It\'s mine.');
-      await s.say('yanpoxi', 'Your pouch... and this letter in it? From Chao Gai, the bandit chief of Liangshan Marsh? And a bar of gold? "To our benefactor Song Jiang"... My, my. You\'re a friend of robbers, Third Brother.');
+      await s.say('yanpoxi:smile', 'Your pouch... and this letter in it? From Chao Gai, the bandit chief of Liangshan Marsh? And a bar of gold? "To our benefactor Song Jiang"... My, my. You\'re a friend of robbers, Third Brother.');
       await s.say('songjiang', '...What do you want?');
       await s.say('yanpoxi', 'Three things. First, give me back the paper that made me your woman, and write that you\'ll let me marry Zhang Wenyuan. Second, all the clothes and jewels you\'ve given me are mine. Third — the hundred taels of gold Liangshan sent you. All of it.');
       await s.say('songjiang', 'The first two, yes. But the gold — I took only one bar. I sent the rest back.');
@@ -90,7 +90,7 @@
       s.spawn('yanpo', 'yanpo', 34, 8, 'up');
       await s.say('yanpo:shock', '...What was that noise? ...Daughter?');
       await s.say('songjiang:sad', 'Your daughter was insolent to me. I have killed her.');
-      await s.say('yanpo', '...She was a bad girl, Clerk. I won\'t blame you. But who will support me now?');
+      await s.say('yanpo:sad', '...She was a bad girl, Clerk. I won\'t blame you. But who will support me now?');
       await s.say('songjiang', 'I will look after you, as long as you live. You have my word.');
       await s.say('yanpo', 'Then... then come with me now to Wang\'s shop for a coffin, before anyone wakes.');
       s.despawn('yanpo');
@@ -127,7 +127,7 @@
       await s.fadeIn(0.6);
       await s.narrate('The board lifted. A lamp shone down. It was Zhu Tong, alone.');
       await s.say('zhutong', 'Brother Song. I thought you\'d be here. Your father told me about this cellar once, after too much wine. I sent Lei Heng to search the front, and came myself.');
-      await s.say('zhutong', 'This is no safe place — if I could guess it, others will. Where will you go?');
+      await s.say('zhutong:concerned', 'This is no safe place — if I could guess it, others will. Where will you go?');
       await s.say('songjiang', 'I have thought of three places. Lord Chai Jin of Cangzhou. The Kong family at White Tiger Mountain in Qingzhou. And Hua Rong, the deputy commander of Qingfeng Fort, my sworn brother.');
       await s.say('zhutong', 'Chai Jin first. His iron writ protects anyone under his roof. Go tonight. I will tell the magistrate you have fled the county, and Lei Heng will say the same.');
       await s.say('songjiang', 'Zhu Tong... You let Chao Gai go, and now me. How can I ever repay you?');
@@ -157,8 +157,8 @@
       await s.say('wusong:angry', 'What dog\'s turtle-spawn —! You want to die?!');
       await s.narrate('The man leapt up, seized Song Jiang by the collar, and raised a fist like a hammer.');
       s.spawn('lamp', 'servant', 9, 12, 'right');
-      await s.say('servant', 'Stop! Stop! This is the master\'s honoured guest, Clerk Song!');
-      await s.say('wusong', '"Clerk Song"? Which Clerk Song?');
+      await s.say('servant:shock', 'Stop! Stop! This is the master\'s honoured guest, Clerk Song!');
+      await s.say('wusong:concerned', '"Clerk Song"? Which Clerk Song?');
       await s.say('servant', 'Song Jiang of Yuncheng! Timely Rain!');
       await s.say('wusong:shock', '...Song Jiang? Timely Rain Song Gongming? ...You — you are Song Jiang?');
       await s.say('songjiang', 'I am.');

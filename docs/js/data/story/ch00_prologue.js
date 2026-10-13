@@ -158,8 +158,12 @@
       await s.fadeOut(1);
       s.place('player', 16, 20, 'up'); s.place('abbotT', 17, 20, 'up');
       await s.fadeIn(1);
+      // the two of them walk round the pond to the sealed hall while the tour is told
+      s.move('abbotT', 'R9 U6 L3', { wait: false });
+      var walk = s.move('player', 'R10 U6 L2');
       await s.narrate('The next day the abbot led the Marshal through the Hall of the Three Pure Ones and the halls of the Nine Heavens, and he was greatly impressed. At last they came to the north-east corner of the grounds, where a small hall stood apart, its red walls stained, its doors sealed with a great iron lock and layer upon layer of paper charms.');
-      s.place('player', 24, 14, 'up'); s.place('abbotT', 25, 14, 'up');
+      await walk;
+      s.face('player', 'up'); s.face('abbotT', 'up');
       await s.wait(0.3);
       await s.say('hongxin', 'And what is this? Why is it locked so tightly? Whose seals are these?');
       await s.say('abbot', 'This is the Hall of Subdued Demons. Long ago the Ancestral Master imprisoned demon kings within it. Each Master since has added another seal over the last. In eight or nine generations no one has dared to open it.');

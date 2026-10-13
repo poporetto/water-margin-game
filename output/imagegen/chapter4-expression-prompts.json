@@ -1,0 +1,34 @@
+{
+  "mode": "built-in image_gen",
+  "basePrompt": "Create a game portrait expression sheet, exactly THREE columns TWO rows of equal-sized borderless cells no gutters, six bust portraits of same character. Order top normal, angry, sad; bottom smile, shock, concerned. Maintain identity clothing pose across six cells, clearly different expressions. Refined mature anime JRPG fine ink outlines and soft painted cel shading, neutral peach/tan skin not yellow, light ivory and blue gray Chinese paper texture background. No scenery or text or pixelation. Reference sheets for ART STYLE only, not facial anatomy; deliberately distinct face from references and Song Jiang. Fully show head with space above headwear in each cell, props low. Subject: ",
+  "references": [
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/shijin-expressions.png",
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/wangmother-expressions.png"
+  ],
+  "characters": [
+    [
+      "niuer",
+      "Niu Er the drunken street bully, age 44. Huge muscular thick-necked man with blunt irregular square skull, broken flattened nose red from drink, heavy low brow, small round bloodshot eyes, jagged uneven teeth, rough sparse stubble. Untidy short wild hair with receding hairline, no elegant swept fringe. Open ragged earthy brown robe showing chest. Leaning aggressively toward viewer fists at lower chest. Normal hostile sneer, angry bellow, smile nasty gloating laugh. Realistic strong build not comically fat."
+    ],
+    [
+      "zhoujin",
+      "Zhou Jin proud deputy military commander age 38. Long narrow rectangular face prominent long nose thin lips sharp close-set eyes, narrow straight brows, small clipped moustache and short chin beard. Gray steel helmet red tassel, dark oxblood lamellar armor gold trim. Torso turned left face nearly profile looking toward viewer, spear vertical at far side. Normal competitive haughty stare, angry tightly clenched teeth, smile smug, sad humiliated."
+    ],
+    [
+      "liangzhongshu",
+      "Liang Zhongshu powerful governor age 48. Broad round face full cheeks, small narrow hooded eyes, thin elegant brows, broad short nose, long straight black beard hanging from chin and neat drooping moustache. Black Song official winged futou deep crimson formal robe gold embroidery. Frontal composed seated bust holding a closed ivory tablet low, one hand touching beard. Normal calculating authority, smile restrained pleased approval. Mature not frail, full face not obese."
+    ],
+    [
+      "kfinnkeep",
+      "Kaifeng innkeeper age 50. Weathered broad trapezoidal face, receding temples under rust cloth cap, thick drooping moustache with no chin beard, wide nose slightly crooked, pronounced smile lines and small tired eyes. Simple russet robe beige collar dark apron. Sturdy ordinary build, body turned right head tilted left, hands holding account book low. Normal businesslike firm expectant look, angry exasperated, concerned counting losses, smile warm genuine."
+    ],
+    [
+      "suochao",
+      "Suo Chao Impatient Vanguard fierce powerful warrior age 37. Very broad square jaw and forehead, thick bristly eyebrows, round intense eyes, broad blunt nose, dense SHORT full black beard cut square not long pointed goatee. Bronze-gold military helmet RED plume, mustard brown armor gold trim. Broad muscular shoulders squared forward head turned left, golden battle axe held across shoulder. Normal impatient fierce readiness, angry roaring, smile hearty warrior camaraderie, sad solemn, shock astonished, concerned focused. Different face from Yang Zhi no blue mark."
+    ],
+    [
+      "villager",
+      "Male Kaifeng villager age 46. Long thin weathered face, high cheekbones hollow cheeks long bulb-tipped nose, large protruding ears, sparse eyebrows small anxious eyes, patchy gray-black jaw stubble. Small untidy topknot, plain faded taupe robe dark collar patched shoulder. Slight stoop head turned looking back over right shoulder clutching cloth bundle low. Normal cautious, angry indignant, sad downcast, smile relieved, shock alarmed shouting warning, concerned apprehensive. Humble ordinary face not handsome hero."
+    ]
+  ]
+}

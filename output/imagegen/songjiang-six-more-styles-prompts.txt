@@ -1,0 +1,22 @@
+Generated with built-in image generation.
+
+Shared prompt:
+Generate ONE original Song Jiang from Water Margin portrait for a video game. Chinese adult male leader, black cloth headscarf, small neat moustache, burgundy traditional Chinese crossed-collar robe, subtle gold trim. Head and shoulders profile picture, square canvas. No text, labels, watermark, montage or extra characters. Disregard all earlier reference images and previous portrait designs: this is a fresh independent design exploration. 
+
+06-rounded-adventure
+STYLE: charming hand-drawn adventure ANIME, strongly rounded character design. Broad round face, warm brown skin, small soft nose, big expressive black eyes, thick curved brows, friendly humble smile, slightly stocky shoulders. Simplified clean dark outlines, flat cel colors, warm cream background. Strong stylization, no realism, no detailed skin, no pointed chin or goatee. Like an approachable middle-aged animated storybook protagonist, appealing and full of character.
+
+07-sharp-manga
+STYLE: dramatic black-and-white shonen MANGA with selective burgundy robe accents. Angular graphic anime face, sharp confident eyes, bold brush contour lines, high contrast black shadow shapes, sparse screentone, white background with one muted red circle. Mature clever charismatic leader, subtle smirk. Close head-and-shoulders crop. Clearly manga, stylized anatomy, no photorealism, no gradients, no gold frame.
+
+08-watercolor-anime
+STYLE: elegant watercolor ANIME concept portrait. Very visibly stylized large anime eyes, small simplified nose and mouth, soft rounded face, calm thoughtful smile. Delicate economical pencil and ink contours, loose translucent washes in burgundy, charcoal and muted amber, white paper negative space, lightly unfinished shoulders. Gentle poetic hand-painted animation character design, not realistic anatomy or realistic skin. No beard beyond a small thin moustache.
+
+09-pixel-art
+STYLE: authentic low-resolution hand-placed PIXEL ART JRPG dialogue portrait, visibly coarse pixel grid, roughly 80x80 native pixel aesthetic enlarged with perfectly crisp nearest-neighbor edges. Restricted 24-color palette, stepped clusters, no smooth lines or anti-aliasing, no painted textures. Expressive anime eyes, rounded mature Chinese face, warm dark tan skin, black headscarf, thin moustache, kind authoritative expression. Tight face-and-collar crop on flat deep blue background, no frame.
+
+10-bold-animation
+STYLE: bold graphic 2D animated adventure character design. Exaggerated broad face and compact forehead, huge expressive thick eyebrows, small narrow amused eyes, rounded nose, short tiny moustache, warm earthy brown skin, big warm smile, stout modest shoulders. Thick tapered outlines, large geometric color shapes, only one hard shadow tone, burnt orange circular backdrop on pale cream. Cartoon-anime hybrid with strong personality and shape language, not handsome generic realistic man, no goatee, no intricate textures.
+
+11-modern-fantasy-anime
+STYLE: polished modern fantasy ANIME game avatar, unmistakably stylized anime design. Graceful mature masculine face with large luminous amber-brown anime eyes, small angular nose, very small neat moustache, slightly tousled black locks emerging from a simple tied headscarf. Elegant burgundy and ivory Chinese robes, refined restrained gold detailing. Calm charismatic expression. Clean fine linework, vivid jewel colors, luminous cel shading with restrained rim light, deep plum simple background. No photorealistic face or skin, no armor, no frame.

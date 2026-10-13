@@ -1,0 +1,86 @@
+{
+  "mode": "built-in image_gen",
+  "basePrompt": "Generate ONE production portrait expression sheet for Water Margin game. EXACT three equal columns two equal rows borderless grid, no gutters labels text. Row-major normal angry sad smile shock concerned. Same identity outfit and pose across six cells, visibly distinct expressions. Full head and hat within every cell, chest-up portrait props low. Refined mature anime JRPG fine ink soft painted cel shadows, neutral natural peach/tan skin NOT yellow, subtle light ivory blue-gray Chinese paper backdrop. No scenery pixels photorealism. Reference sheets supply ART STYLE and GRID only, do NOT copy their facial anatomy. Unique facial structure and character appropriate pose essential. Subject: ",
+  "styleReferences": [
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/shijin-expressions.png",
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/wangmother-expressions.png"
+  ],
+  "identityReferences": {
+    "songjiang": "assets/portraits/songjiang.png",
+    "wuyong": "assets/portraits/wuyong.png"
+  },
+  "characters": [
+    [
+      "chaogai",
+      "Chao Gai, generous fearless village headman age 42. Broad rectangular face, large straight nose wide nostrils, thick level brows wide steady eyes, dense short box beard. Powerful neck athletic broad shoulders. Ochre and dark brown fine martial robe, rust headcloth. Frontal open stance one fist in palm salute. Dignified confidence normal, hearty smile, commanding anger. No Song Jiang face."
+    ],
+    [
+      "liutang",
+      "Liu Tang Red-Haired Devil age 32. Rugged trapezoid face large mouth blunt chin, unruly rust-red hair and red stubble, conspicuous red birthmark on right temple cheek consistent all cells. Round fierce eyes uneven eyebrows. Charcoal sleeveless martial robe rust trim, muscular arm and halberd shaft, leaning forward hotheaded. Fierce normal, explosive angry, raucous smile."
+    ],
+    [
+      "leiheng",
+      "Lei Heng Winged Tiger constable age 39. Compact square face broad low nose thick cheeks, small round eyes and blunt thick brows, dark stubble. Black wrapped constable cap brown black uniform muted brass trim. One hand at sabre belt torso angled left. Stern pride normal. Strong fit build."
+    ],
+    [
+      "gongsunsheng",
+      "Gongsun Sheng Daoist age 40. Exceptionally long lean face high forehead prominent aquiline nose widely spaced narrow eyes under long fine brows, long flowing dark beard, tied hair gold Daoist crown. Lavender indigo robes white collar, sword on back. Turn left two fingers raised in ritual gesture low in frame. Serene uncanny normal, restrained smile, forceful angry."
+    ],
+    [
+      "ruanxiaoer",
+      "Ruan Xiaoer oldest fisherman brother age 38. Square weathered face broad cheekbones flattened nose heavy straight brows small patient eyes, close dark stubble. Ochre headband short tied hair faded sage green open fisherman robe, broad muscular shoulders. Resting fish spear beside shoulder, near frontal stoic protective normal."
+    ],
+    [
+      "ruanxiaowu",
+      "Ruan Xiaowu middle fisherman brother age 31. Narrow diamond face sharp cheekbones pointed chin slightly hooked nose, thin sly eyes fine sloping brows, clean shaven. Charcoal headband slate blue loose robe open chest displaying BLACK LEOPARD tattoo. Lean wiry shoulders turning right glancing back with small gambling dice in hand low. Shrewd confident normal, mischievous smile."
+    ],
+    [
+      "ruanxiaoqi",
+      "Ruan Xiaoqi youngest fisherman brother age 27 adult. Wide heart shaped face blunt chin wide mouth slightly gapped teeth, broad nose lively round eyes high thick eyebrows, sparse chin stubble. Wild short black hair tied loosely no hat, dark gray open fisherman robe. Lean strong torso leftward hand on oar at shoulder. Defiant lively normal, huge fearless laugh smile. Not boyish, distinct from brothers."
+    ],
+    [
+      "baisheng",
+      "Bai Sheng Daylight Rat age 37. Very narrow triangular face pointed chin long thin nose large sticking-out ears, tiny shifty eyes sparse brows short patchy moustache stubble. Worn wide straw hat brown patched robe. Hunched forward carrying pole over shoulder, crafty smirk normal and grin smile. No heroic handsome face."
+    ],
+    [
+      "caozheng",
+      "Cao Zheng clever butcher and innkeeper age 36. Broad rounded face with firm square chin, short wide nose, small alert eyes, thick curved brows, short rounded black beard. Cream headband cream work robe rust trim dark leather apron. Forearms folded butcher knife sheathed at waist low, relaxed resourceful normal. Sturdy muscular not obese."
+    ],
+    [
+      "hetao",
+      "He Tao prefectural inspector age 45. Long bony rectangular face high cheekbones deep-set small eyes thin severe brows long straight nose, small clipped beard and moustache. Black winged futou dark blue gray official robe tan trim. Three-quarter left holding rolled warrant low. Suspicious purposeful normal, angry commanding, smile thin politeness."
+    ],
+    [
+      "laoduguan",
+      "Old Steward age 65. Thin long pinched face hooked nose downturned mouth narrow judgmental eyes heavy gray brows, long wispy gray beard. Black cloth headwrap brown silk robe tan edging. Stooped body one index finger raised scolding, normal disdainful, angry indignant, smile smug. Clearly elderly but not caricature."
+    ],
+    [
+      "denglong",
+      "Deng Long renegade monk Gold-Eyed Tiger age 44. Bald broad low skull, deep golden brown small fierce eyes, thick joined brows broad crooked nose dense forked black beard. Heavy muscular body charcoal maroon sleeveless monk robe big dark prayer beads. Leaning back imperious pose iron staff side. Brutal arrogant normal nasty laughing smile. Face distinct from Lu Zhishen: low forehead very narrow eyes and wide flattened nose."
+    ],
+    [
+      "huangan",
+      "Huang An naval commander age 48. Wide angular diamond face strong high cheeks cleft chin small mouth thin straight moustache short trimmed chin beard salt pepper. Steel blue helmet red tassel navy silver military armor. Upright rigid pose holding command baton low facing right. Hardened formal normal, angry barking orders, shock panic."
+    ],
+    [
+      "chaoservant",
+      "Chao Gai household servant adult age 28. Rounded small face big ears snub nose wide attentive eyes soft curved brows clean shaven. Dark hair tidy low topknot brown tie, simple olive brown robe cream collar. Lean slightly forward clasped hands at waist worried attentive normal. Distinct nonheroic face, modest cheerful smile."
+    ],
+    [
+      "soldier",
+      "Escort soldier age 34. Long oval face strong chin thick nose, small tired eyes low heavy brows rough stubble. Steel gray helmet short red tassel faded brick red military coat cream collar, plain lamellar shoulder. Three-quarter left tired shoulders holding spear shaft low, normal weary vigilance, concerned exhausted, smile relieved. Ordinary experienced foot soldier not glamorous general."
+    ],
+    [
+      "erlongguard",
+      "Mount Erlong bandit monk gate guard age 35. Shaved head round broad face with crooked flat nose, prominent ears, one eyebrow nick, small mean eyes patchy chin beard no moustache. Ragged rusty gray monk robe tied over sturdy torso. Over shoulder glance hand gripping gate staff low, suspicious normal taunting smile, alarmed shock. Not Lu Zhishen face."
+    ],
+    [
+      "songjiang",
+      "Song Jiang: preserve EXACT identity outfit beard black headwrap red gold robe and neutral peach skin of attached identity reference. Mature intelligent warm leader, normal calm assured, angry firm outrage, sad sorrow, smile warmly hopeful, shock startled, concerned urgent worried. Same bust angle as identity reference."
+    ],
+    [
+      "wuyong",
+      "Wu Yong: preserve EXACT identity of attached identity reference, narrow cunning eyes, thin moustache pointed beard, navy scholar headwrap teal robes. MUST retain his white feather fan in every cell below chin, never covering expression. Normal clever calculating look, smile knowing sly smile, angry cold piercing glare, sad subdued, shock surprised, concerned analytical worry."
+    ]
+  ]
+}

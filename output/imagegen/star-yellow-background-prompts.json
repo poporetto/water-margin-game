@@ -1,0 +1,179 @@
+{
+  "mode": "built-in image tool",
+  "stars": "muted yellow Chinese paper",
+  "nonStars": "blue Chinese paper",
+  "sheetPrompt": "Use case: precise-object-edit. Change ONLY the blue-gray paper BACKGROUND in this character expression sheet to soft muted yellow parchment matching the approved Song Jiang palette: pale ivory straw yellow, low saturation desaturated ochre watercolor mottling and fine Chinese paper fibres. Keep the SAME paper texture. Preserve EXACTLY the character identity, face features, natural skin tone, all six expressions, clothing and prop colors, pose and composition. No yellow cast on skin or clothing. Keep exact 3-column 2-row layout, no borders or labels, same dimensions. Background hue change only; do not redraw or redesign the subject.",
+  "staticPrompt": "Edit ONLY the blue-gray paper background of this single portrait to muted yellow parchment: pale ivory straw yellow with gentle desaturated ochre watercolor mottling and identical fine Chinese paper texture. Preserve exact face identity, expression, natural skin color, clothes, props, pose and framing. NO yellow cast on character. No redesign. Same dimensions. No text.",
+  "entries": [
+    {
+      "id": "shijin",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-118343df-3b13-4b40-ab50-fa065eb772d9.png",
+      "target": "assets/portraits/shijin-expressions.png"
+    },
+    {
+      "id": "zhuwu",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-76a47086-18bc-4e62-b033-f7db92705db7.png",
+      "target": "assets/portraits/zhuwu-expressions.png"
+    },
+    {
+      "id": "chenda",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-6669ec94-7caf-446f-a9e2-f3c8ac77033d.png",
+      "target": "assets/portraits/chenda-expressions.png"
+    },
+    {
+      "id": "yangchun",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-99ecc97e-73b7-4e8c-8834-4e84f9ac3ac8.png",
+      "target": "assets/portraits/yangchun-expressions.png"
+    },
+    {
+      "id": "luda",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-ccbae832-9ad7-4fbb-ae6d-e8570e03e674.png",
+      "target": "assets/portraits/luda-expressions.png"
+    },
+    {
+      "id": "lizhong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-daaea674-ce85-490e-bcb0-2bd8e118737a.png",
+      "target": "assets/portraits/lizhong-expressions.png"
+    },
+    {
+      "id": "luzhishen",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-a9fd8f8f-e0b4-41ba-a2d0-0ee3a7186ecc.png",
+      "target": "assets/portraits/luzhishen-expressions.png"
+    },
+    {
+      "id": "zhoutong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-c1257221-0a95-4891-a03d-ed2666d7e73e.png",
+      "target": "assets/portraits/zhoutong-expressions.png"
+    },
+    {
+      "id": "linchong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-144903a6-476b-4d5c-8a69-99dc19843de9.png",
+      "target": "assets/portraits/linchong-expressions.png"
+    },
+    {
+      "id": "chaijin",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-b7e3e1d8-7604-49d4-a715-7830bb449065.png",
+      "target": "assets/portraits/chaijin-expressions.png"
+    },
+    {
+      "id": "yangzhi",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-8807ff3b-457f-4250-9d1c-81331b82e128.png",
+      "target": "assets/portraits/yangzhi-expressions.png"
+    },
+    {
+      "id": "songwan",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-6043d299-4d1a-45b3-9bc5-3f2fb44fb9f2.png",
+      "target": "assets/portraits/songwan-expressions.png"
+    },
+    {
+      "id": "duqian",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-a92eab5f-073f-4c3f-9003-9d339b66c04f.png",
+      "target": "assets/portraits/duqian-expressions.png"
+    },
+    {
+      "id": "zhugui",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-b9cff88f-aa02-48e5-9ce4-dab150d3d1fa.png",
+      "target": "assets/portraits/zhugui-expressions.png"
+    },
+    {
+      "id": "suochao",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-857bdd34-1355-4798-890e-e3d7fd855029.png",
+      "target": "assets/portraits/suochao-expressions.png"
+    },
+    {
+      "id": "liutang",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-a257eeee-cd56-41e4-8b5b-330fc82cf823.png",
+      "target": "assets/portraits/liutang-expressions.png"
+    },
+    {
+      "id": "leiheng",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-9b2818a1-e3d5-491a-8d44-d2d0f3a47d08.png",
+      "target": "assets/portraits/leiheng-expressions.png"
+    },
+    {
+      "id": "gongsunsheng",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-20f5c80d-f3f1-4c56-86dc-38b2ff72074c.png",
+      "target": "assets/portraits/gongsunsheng-expressions.png"
+    },
+    {
+      "id": "ruanxiaoer",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-6fe2ed58-2d9c-4afd-b4ef-0480e6fe9f82.png",
+      "target": "assets/portraits/ruanxiaoer-expressions.png"
+    },
+    {
+      "id": "ruanxiaowu",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-8dad34a4-9dac-4971-bc13-a3e0d505581a.png",
+      "target": "assets/portraits/ruanxiaowu-expressions.png"
+    },
+    {
+      "id": "ruanxiaoqi",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-40ea8146-9c19-4223-a8e4-345d439ad5f6.png",
+      "target": "assets/portraits/ruanxiaoqi-expressions.png"
+    },
+    {
+      "id": "baisheng",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-d49bd261-a1cc-4d2d-8e47-46ea335637d7.png",
+      "target": "assets/portraits/baisheng-expressions.png"
+    },
+    {
+      "id": "caozheng",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-135a48f5-811d-4ad7-add4-c194362a778a.png",
+      "target": "assets/portraits/caozheng-expressions.png"
+    },
+    {
+      "id": "songjiang",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-5a4a6146-3e3e-4024-af0b-03ba8dbaea5b.png",
+      "target": "assets/portraits/songjiang-expressions.png"
+    },
+    {
+      "id": "wuyong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-2a63ecfc-15c5-4c73-8e9a-3acd8036cbf4.png",
+      "target": "assets/portraits/wuyong-expressions.png"
+    },
+    {
+      "id": "songqing",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-47770776-ed11-4b80-b934-e481fe802b45.png",
+      "target": "assets/portraits/songqing-expressions.png"
+    },
+    {
+      "id": "zhutong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-184f9c93-bb1d-4061-879f-2eddd0c76bff.png",
+      "target": "assets/portraits/zhutong-expressions.png"
+    },
+    {
+      "id": "wusong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-ad42e6d3-940c-47e7-b04c-ef5c737e49cc.png",
+      "target": "assets/portraits/wusong-expressions.png"
+    },
+    {
+      "id": "linchong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-ea848235-d525-493e-9ea3-282505cdd56d.png",
+      "target": "assets/portraits/linchong.png"
+    },
+    {
+      "id": "luzhishen",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-35cad61b-db67-4547-96ae-6abe2fa0641e.png",
+      "target": "assets/portraits/luzhishen.png"
+    },
+    {
+      "id": "wusong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-d4f3bc6d-31ba-4223-bdf7-beb0229aecab.png",
+      "target": "assets/portraits/wusong.png"
+    },
+    {
+      "id": "wuyong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-84d559b9-4bdf-4961-a7fa-c93b8399437e.png",
+      "target": "assets/portraits/wuyong.png"
+    },
+    {
+      "id": "huarong",
+      "source": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-f845c89e-a5a1-4148-90e0-ee7d53793292.png",
+      "target": "assets/portraits/huarong.png"
+    },
+    {
+      "id": "songjiang",
+      "source": "output/imagegen/songjiang-yellow-background-preview.png",
+      "target": "assets/portraits/songjiang.png"
+    }
+  ]
+}

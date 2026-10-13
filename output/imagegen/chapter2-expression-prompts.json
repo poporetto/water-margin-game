@@ -1,0 +1,109 @@
+{
+  "base": "Use case: stylized-concept, new character design in an established game's art direction. The references are ONLY a style guide for fine dark ink contours, mature anime facial rendering, soft cel-painted shadows, neutral skin undertones, and ivory/blue-gray Chinese paper texture. Invent a completely different person's anatomy described below; never copy a reference face, eye shape, nose or jaw. No generic handsome Song Jiang face. No pixelation or photorealism. OUTPUT: a regular seamless 3-column by 2-row atlas, landscape 9:7; six equal 6:7 head-and-shoulder portraits, no gutters, borders, lettering. Same identity, pose, costume, framing and lighting across the six cells; change facial expression only. Reading order NORMAL (personality-specific), ANGRY, SAD, SMILE, SHOCK, CONCERNED. Clear facial acting readable at 144x168. Full head and hair with safe margins inside each cell, upper torso at bottom, paper-only backdrop. All characters Chinese, Song dynasty clothing. SUBJECT DESIGN: ",
+  "characters": [
+    [
+      "wangjin",
+      "Redesign Wang Jin completely: male 41 disciplined veteran instructor. LONG RECTANGULAR face, high broad forehead, deep-set SMALL monolid eyes below STRAIGHT low brows, prominent wide straight nose with slightly flattened bridge, broad thin lips, square chin. CLEAN SHAVEN, absolutely no moustache/goatee. Modest crow's feet, taut weathered cheeks, slightly protruding ears. Quiet watchful dignity. Hair pulled tight into practical topknot with gray tie. Slate blue plain martial robes. Three-quarter view facing LEFT, head level, holding staff at chest. Restrained reassuring smile only smile cell."
+    ],
+    [
+      "dutyA",
+      "Redesign Duty Officer completely: male 48 stocky hard-nosed petty constable. SHORT WIDE trapezoid face, heavy sagging jowls, FLAT broad bulbous nose, very SMALL close-set hooded eyes, sparse short eyebrows, thick lower lip and DOUBLE CHIN. Thin drooping straight moustache only, NO chin beard. Frontal pose shoulders squared and chin tucked, severe disapproving scowl; smile smug tight-lipped. Low black fitted cap and black/red working uniform, dao hilt at side. Looks ordinary and coarse, not handsome or heroic."
+    ],
+    [
+      "gaoofficer",
+      "Redesign Guard Officer completely: male 26 earnest young soldier, CLEAN SHAVEN no facial hair. BROAD ROUND face, short chin, wide-set ROUND dark eyes, thick short horizontal brows, small upturned nose, full lips, prominent rounded ears. Upright sympathetic expression, slight worried frown normal. Bronze helmet short red tassel, burgundy lamellar armor. Body angled RIGHT, face toward viewer, one open hand raised at chest pleading for mercy. Youthful adult but not child, not angular aristocratic man."
+    ],
+    [
+      "oldjin",
+      "Old Jin, impoverished father and traveling singer, male 64. Narrow pear-shaped head, sunken temples and deeply hollow cheeks, long slightly crooked nose, downward drooping small eyes, thin gray eyebrows, sparse whiskery white chin beard, receding hair tied tiny gray knot. Frail bent shoulders turned left, clasped hands at chest; worn faded taupe robe, cream patched collar. Normal weary worried dignity, smile tremulous relief. Not a polished handsome elder."
+    ],
+    [
+      "cuilian",
+      "Jin Cuilian, young adult woman 23, resilient singer recovering from hardship. Long oval face with softly square chin, wide-set almond monolid eyes, fine straight brows, broad soft nose tip, small natural lips. Black hair neatly swept into low bun with tiny pink blossom. Dusty rose robe ivory collar, one hand gathering sleeve at chest. Three-quarter facing right, upright gentle dignity; normal guarded calm, sad real grief, smile relieved gratitude. Natural adult face, no doll proportions."
+    ],
+    [
+      "zhengtu",
+      "Zheng the Butcher, bullying male 39, heavyset muscular. Huge broad fleshy face, thick neck, broad FLATTENED nose, tiny deep-set eyes under thick ragged eyebrows, heavy cheeks and big mouth; coarse bristly full SHORT beard all around jaw. Burgundy bandana, dirty ivory butcher apron over rolled brown shirt, crossed thick forearms low in frame. Nearly frontal looming pose, normal arrogant challenge, smile ingratiating greedy grin, angry rage. Distinct from bald Lu Zhishen, has shaggy hair and bandana."
+    ],
+    [
+      "innwaiter",
+      "Inn Boy, petty young male inn attendant age 20, wiry. Triangular narrow face with pointed chin, prominent big ears, buck teeth visible when smiling, high small nose, close-set narrow eyes, uneven thin eyebrows. Black hair short untidy fringe cream headband, drab brown tunic. Shoulders hunched forward, face turned left, towel bunched in one hand. Normal suspicious self-important pout, angry petulant, smile sly. Not same face as friendly waiter."
+    ],
+    [
+      "zhaoyuanwai",
+      "Squire Zhao, prosperous generous male landowner age 50. ROUND pear-shaped face, plump cheeks, small mouth and thin neatly drooping moustache, no chin beard, broad small nose, crescent gentle eyes, softly curved sparse brows. Purple cloth cap with small jade clasp, muted plum silk robe understated gold border. Three-quarter facing left, hands lightly together at chest. Calm benevolent assurance, smile warm, concerned sympathetic."
+    ],
+    [
+      "zhizhen",
+      "Abbot Zhizhen, wise elder monk male 76. VERY LONG slender face, large high bald dome, LONG wispy white eyebrows drooping past eyes, half-lidded small wise eyes, long narrow nose, elongated earlobes, long thin flowing WHITE beard. Upright three-quarter left, one hand in gentle teaching gesture. Burgundy Buddhist robe with muted gold mantle and small dark beads. Serene insightful normal; angry restrained sternness, smile subtle knowing compassion, shock widened eyes still dignified."
+    ],
+    [
+      "wutaimonk",
+      "Wutai disciplinary monk male 34, lean tall stern. BALD square skull, angular cheekbones, very long straight vertical nose, small downturned mouth, thick joined straight brows, narrow wary eyes; entirely clean-shaven. Tawny ochre plain monk robe, wooden staff vertical at side. Rigid frontal posture arms folded. Normal disapproving, angry clenched teeth, smile awkward rare relieved smile. Clearly distinct from elderly abbots and huge bearded Lu Zhishen."
+    ],
+    [
+      "peddler",
+      "Wine Peddler male 47 outdoors worker. Broad flat face, high cheekbones, broad low nose, crow's feet around wide-set squinting eyes, thin eyebrows, crooked friendly mouth, sparse jaw stubble. Tan NEUTRAL brown skin no yellow cast. Wide weathered straw hat, gray green rough tunic, carrying bamboo shoulder pole diagonally behind neck with one hand holding it. Facing right looking back over shoulder, wary practical normal, gap-toothed good-humored smile."
+    ],
+    [
+      "liutaigong",
+      "Liu Taigong, frightened village patriarch male 69. Tall narrow forehead, distinctly LONG drooping cheeks, pear-shaped jaw, rounded hooked nose, thin white moustache curling DOWN and medium split white beard. Heavy bags under small eyes, arched expressive white brows. Black low cloth headwrap, plain dark brown robe tan trim. Slight hunch turned RIGHT, fingers clutching collar anxiously. Worried normal, relieved smile. Not broad jovial Shi Taigong."
+    ],
+    [
+      "oldmonk",
+      "Old monk of ruined Waguan, male 80, impoverished frail. Bald small oval skull, deeply sunken cheeks and eye sockets, prominent cheekbones and large ears, very thin lips, small bony nose, sparse white stubble but NO long beard. Pale neutral skin and deep wrinkles. Ragged faded brown patched monk robe. Bent body facing left, head slightly bowed looking up. Normal exhausted sad, smile tiny fragile relief, angry weary protest."
+    ],
+    [
+      "cuidaocheng",
+      "Cui Daocheng, brutal false monk bandit male 44. Enormous bald SQUARE skull with low forehead, protruding heavy brow ridge, thick downward brows, very narrow mean eyes, broad broken flattened nose, heavy jaw, jagged BLACK box-shaped beard cropped at chest. Large thick neck, dark charcoal sleeveless monk clothes over brown underrobe with dull brass edging. Body angled left with huge shoulder forward, arrogant tooth-baring sneer normal. No prayer beads, no tattoos, distinct from Lu Zhishen's rounder humane face."
+    ],
+    [
+      "qiuxiaoyi",
+      "Qiu Xiaoyi, corrupt Daoist accomplice male 37. Extremely NARROW angular diamond face, high sharp cheekbones, long pointed nose, close-set slit eyes, thin high sloping eyebrows, narrow lips, pointed chin with tiny thin goatee but NO moustache. Black hair pulled into tall small Daoist crown. Dark bottle-green robe russet collar, hand resting on narrow sword hilt. Side-on shoulders looking back toward viewer, cold calculating normal, malicious asymmetric smile."
+    ],
+    [
+      "zhiqing",
+      "Abbot Zhiqing, practical monastery administrator male 55. Bald broad round skull, broad cheeks, short wide nose, small sharp eyes with crow's feet, level thick gray eyebrows, short salt-gray squared chin beard, clean upper lip. Gold ochre robe dark russet collar, small prayer beads. Body turned RIGHT, hands tucked into sleeves, reserved managerial skeptical normal, polite restrained smile. No long white beard, distinct from Zhizhen."
+    ],
+    [
+      "zhangsan",
+      "Zhang San, local garden rascal male 29. Narrow ratlike face, high cheekbones, long thin crooked nose, tiny quick eyes, one eyebrow slightly raised, receding corners under messy tiny topknot, coarse chin stubble, uneven front teeth. Olive drab rough vest over brown robe. Leaning sideways LEFT with one shoulder up, scheming smirk normal, shocked panicked, smile sheepish after respect. Not noble or handsome."
+    ],
+    [
+      "lisi",
+      "Li Si, garden rascal male 25. Broad ROUND flat face, wide round eyes, low thick eyebrows, stubby broad nose, large ears, wide mouth with pronounced upper lip, NO facial hair. Shaggy short black hair green headband, moss green tunic black collar. Facing front neck craned forward, naive cocky normal, shocked comically alarmed, smile hearty. Contrast thin angular Zhang San."
+    ],
+    [
+      "jiner",
+      "Jin'er, Lin family's young adult female maid age 19. Small ROUND face, full cheeks, wide bright round eyes, short straight eyebrows, button nose and full small lips, black hair in two modest side buns with cream ribbons, no ornaments. Plain sage green working robe ivory collar. Leaning forward urgently facing LEFT, one hand at chest. Normal attentive earnestness, shock frightened urgency, smile friendly. Distinct from Cuilian's long face and elegant low bun."
+    ],
+    [
+      "zhoutong",
+      "Zhou Tong, Little Conqueror swaggering bandit male 28. Wide heart-shaped face, broad forehead tapering to short square chin, bushy wing-shaped eyebrows, large ROUND fierce eyes, short broad nose and thick lips, short uneven chin stubble. Messy high ponytail tied red ribbon. Rust-red traveling martial robe muted yellow trim, spear over shoulder. Chin raised, body angled RIGHT, cocky puffed chest; smile overconfident toothy grin, shock humbled frightened."
+    ],
+    [
+      "luzhishen",
+      "Lu Zhishen, the exact SAME identity as the Lu Da reference attached specially for this asset, now a monk. Preserve his massive broad face, heavy angled brows, wide nose, dark full beard and fierce eyes. Shave head completely bald; ochre Buddhist robe with one tattooed shoulder visible and large dark wooden prayer beads. Huge shoulders frontal, chin lowered powerfully. Normal fierce determined scowl, angry roaring, sad troubled compassion, smile booming open laugh, shock surprise, concerned protective focus. This is the one identity-continuity exception."
+    ],
+    [
+      "linchong",
+      "Lin Chong the Panther Head, honorable martial instructor male 34. Distinct LONG athletic face, high cheekbones, strong broad square jaw, large round deep-set eyes, dense level brows slightly lifting at outer ends, long broad-bridged nose, small firm mouth, compact rounded black beard on jaw with a short straight moustache. Blue-gray cloth headband under tied black hair. Navy robe pale silver edging, serpent-spear shaft at edge. Body side-on toward LEFT, head turned toward viewer, measured composed normal, rare warm smile. Not the tapered almond eyes or pointed goatee of Song Jiang."
+    ],
+    [
+      "smith",
+      "Blacksmith male 46, thick muscular neck, WIDE rectangular face, rugged heavy jaw, large rounded nose and heavy forehead, big uneven eyebrows, small squinting eyes, short curly black beard, brown neutral skin with soot smudges. Black headband, leather apron over gray-brown work shirt, one bare forearm holding hammer at chest. Frontal sturdy pose, skeptical practical normal, jovial broad smile."
+    ],
+    [
+      "monk",
+      "Ordinary temple monk male 24, totally clean-shaven bald egg-shaped head, long neck, large ears, soft straight eyebrows, big gentle monolid eyes, small straight nose, small rounded chin. Plain ochre brown robe and modest beads. Three-quarter RIGHT with palms together. Gentle observant normal, smile peaceful, angry hurt indignation. Distinct from square-faced stern Wutai monk."
+    ],
+    [
+      "scholar",
+      "Traveling scholar male 32, slim heart-shaped face, high broad forehead, delicate thin arching brows, long narrow monolid eyes, tiny straight nose, thin lips and receding small chin, tiny pencil moustache only. Black soft scholar cap, dusty blue robe white collar, holding rolled scroll against chest. Tilted thoughtful head facing LEFT, reserved curious normal, amused knowing smile. No warrior jaw, no pointed beard."
+    ]
+  ],
+  "styleReferences": [
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/shijin-expressions.png",
+    "/Users/andriastaniwan/Documents/github/water-margin-game/assets/portraits/wangmother-expressions.png"
+  ]
+}

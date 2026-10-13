@@ -1,0 +1,15 @@
+Created with built-in image generation. Song Jiang uses the user-supplied reference image. Lin Chong uses the restrained, unsmiling revision. Remaining portraits use the prompts below.
+
+New single Water Margin game profile portrait. Supplied Song Jiang is ART STYLE ONLY: refined mature anime ink drawing, softly painted cel shading, ivory/blue-gray textured Chinese paper background, smooth nonpixelated. DO NOT copy reference pose or face. Personality-specific expression, distinct anatomy. Vertical 6:7 close bust, face large and unobscured, full head with top margin, no text/borders. 
+
+luzhishen
+Lu Zhishen, fierce burly Chinese warrior monk late-30s: bald head, massive neck, broad square-round face, broad nose, thick bristling full black beard, heavy knitted brows, medium neutral brown skin. Ochre monk robe with one muscular shoulder and faint floral tattoo visible, huge wooden beads. POSE: almost straight frontal, shoulders square to viewer, leaning slightly forward with chin lowered and intense upward gaze. EXPRESSION: fierce scowl, tight closed mouth, NO SMILE, no laugh. Imposing righteous anger and fearlessness.
+
+wuyong
+Wu Yong, cunning brilliant Chinese scholar strategist mid-30s, slender elongated face, high cheekbones, narrow clever eyes, fine arched brows, thin moustache and small chin beard. Navy scholar cap, teal robes ivory trim, neutral light peach skin. POSE: torso and face turned toward viewer's LEFT, head slightly inclined, eyes glancing sidelong back at viewer. Hold a clearly visible broad white FEATHER FAN (individual long feathers, not folding paper fan) upright across lower chest, hand visible. EXPRESSION: subtle asymmetric knowing smirk, one raised brow, calculating intelligence, not generic warm smile. Keep fan below chin so face visible.
+
+wusong
+Wu Song, intense fearless Chinese pilgrim warrior early-30s, clean-shaven square face, strong jaw, thick brows, sharp eyes, long loose black hair held by charcoal headband. Dark indigo pilgrim robe tan trim, wooden prayer beads. Natural neutral peach skin. POSE: shoulder pushed forward, torso turned toward viewer's RIGHT while head turns sharply back LEFT, chin slightly lowered, ready stance. EXPRESSION: unsmiling tightly set lips, penetrating resolute eyes, stern controlled anger. Distinct rugged muscular young adult, no beard, no smiling.
+
+huarong
+Hua Rong, poised disciplined Chinese archer around 30, clean-shaven elegant oval face, sleek eyebrows, sharp attentive eyes, black topknot white ribbon, ivory-lavender military robes sky-blue trim and light silver shoulder armor. Natural neutral peach skin. POSE: three-quarter profile toward viewer's LEFT, chin lifted slightly, gaze focused on a distant target off-frame, one shoulder back with subtle bow curve behind that shoulder. EXPRESSION: composed serious alert confidence, closed neutral lips, no smile. Graceful athletic adult, not boy.

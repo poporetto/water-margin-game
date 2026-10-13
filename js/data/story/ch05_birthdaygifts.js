@@ -9,7 +9,9 @@
   WM.npc('laoduguan', 'Old Steward', { skin: '#e0a880', hair: '#c0c0b8', hairStyle: 'scarf', band: '#2a2a2a', beard: 'long', beardColor: '#d0d0c8', body: '#5a4a3a', trim: '#c8b890', eyes: 'narrow' }, { face: true });
   WM.npc('denglong', 'Deng Long', { skin: '#d8a070', hairStyle: 'bald', beard: 'full', body: '#3a2a2a', trim: '#8a3a2a', build: 'big', weapon: 'staff', face: 'square', eyes: 'fierce', fierce: true }, { face: true });
   WM.npc('huangan', 'Huang An', { skin: '#e0a880', hairStyle: 'helmet', helmColor: '#5a5a6a', tassel: '#c8302a', beard: 'short', body: '#3a3a5a', trim: '#d8b36a', face: 'square' }, { face: true });
-  WM.npc('chaoservant', 'Chao Gai\'s Servant', { skin: '#d8a070', hairStyle: 'topknot', body: '#5a5a3a', trim: '#e8e0d0' });
+  WM.npc('chaoservant', 'Chao Gai\'s Servant', { skin: '#d8a070', hairStyle: 'topknot', body: '#5a5a3a', trim: '#e8e0d0' }, { face: true });
+
+  WM.npc('erlongguard', 'Gate Guard', { skin: '#d8a070', hairStyle: 'bald', beard: 'stubble', body: '#6a4a3a', trim: '#4a3a2a', weapon: 'staff' }, { face: true });
 
   WM.enemy('escort_soldier', 'Escort Soldier', 10, WM.hum(WM.enemyLooks.soldier), { exp: 90, range: 'M' });
   WM.enemy('denglong_boss', 'Deng Long', 14, WM.hum(WM.data.npcs.denglong.look), { hp: 3.4, atk: 1.1, exp: 320, gold: 200, boss: true, fx: 'blunt', drops: [['medicine', 2]], skills: [{ name: 'Gold-Eyed Tiger\'s Staff', chance: 0.25, type: 'phys', power: 1.6 }] });
@@ -263,7 +265,7 @@
       await s.narrate('The soldiers bought the second bucket, and shared it out; the old steward drank, and the officers, and in the end Yang Zhi, hot and tired, drank half a bowl himself.');
       s.sfx('wind');
       await s.say(null, 'Falling... falling...');
-      await s.say('chaogai', '(laughing) Down you go! Down you go!');
+      await s.say('chaogai:smile', '(laughing) Down you go! Down you go!');
       s.lie('steward'); s.lie('s1'); s.lie('s2'); s.lie('s3'); s.lie('player');
       await s.fadeOut(1.5);
       await s.narrate('The soldiers fell one after another. Yang Zhi could see, but he could not move a finger. The seven merchants tipped the dates out of their carts, loaded the eleven packs of gold and pearls in their place, covered them with the dates, and pushed the carts away down the ridge.');
@@ -293,7 +295,7 @@
     } },
     { id: 'ch5_erlonggate', x: 13, y: 14, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_toerlong'); }, run: async function (s) {
       await s.say('caozheng', 'Open up! We\'ve brought the monk who kicked your chief!');
-      await s.say({ name: 'Gate Guard' }, 'Ha! Bring him in, bring him in! The chief will skin him alive!');
+      await s.say('erlongguard:smile', 'Ha! Bring him in, bring him in! The chief will skin him alive!');
       await s.narrate('The gate swung open. They passed three gates and came into the courtyard of the Baozhu Temple. Deng Long sat in the hall in a tiger-skin chair.');
       s.flag('ch5_erlonginside');
     } }
@@ -341,7 +343,7 @@
     { id: 'ch5_warned', x: 14, y: 15, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_warn'); }, run: async function (s) {
       s.spawn('chaogai', 'chaogai', 15, 13, 'down');
       await s.say('chaogai', 'Brother Song! Why are you riding so hard in this heat?');
-      await s.say('songjiang', 'Brother, there\'s no time. The birthday gifts — Bai Sheng has confessed. He Tao is sitting in the teahouse in town with a warrant for you, waiting for the magistrate. I\'ve delayed him as long as I can. Go! Go now, all of you!');
+      await s.say('songjiang:concerned', 'Brother, there\'s no time. The birthday gifts — Bai Sheng has confessed. He Tao is sitting in the teahouse in town with a warrant for you, waiting for the magistrate. I\'ve delayed him as long as I can. Go! Go now, all of you!');
       await s.say('chaogai:shock', '...Brother, I will never forget this.');
       await s.say('songjiang', 'Don\'t waste time with thanks. Run!');
       s.despawn('chaogai');
@@ -389,7 +391,7 @@
       await s.narrate('Wang Lun received them with a great feast. But when Chao Gai told him all their story, Wang Lun said little, and his face grew uneasy. Lin Chong watched him.');
       await s.say('wanglun:smile', 'Gentlemen, it is an honour. But our little stronghold is a pond too small for such dragons. Here are some bars of silver for each of you. Find a greater mountain than ours.');
       await s.say('chaogai', 'We came to ask for shelter, not silver. If you will not have us, we will go.');
-      await s.say('wuyong', '(quietly, to Lin Chong) Instructor, they say you were the fourth chief here, and that Wang Lun has never treated you as you deserve. Is that so?');
+      await s.say('wuyong:smile', '(quietly, to Lin Chong) Instructor, they say you were the fourth chief here, and that Wang Lun has never treated you as you deserve. Is that so?');
       await s.say('linchong:angry', '...Wang Lun! When I came, you would not have me unless I brought you a head. Now heroes like these come to us, and again you send them away with a handful of silver. You are jealous of every man better than yourself — a failed scholar with no ability. What right have you to lead Liangshan?');
       await s.say('wanglun:angry', 'Lin Chong! You are drunk! You dare to insult me before guests?');
       await s.say('linchong:angry', 'Jealous, narrow little man. You\'re not fit to lead anyone!');
@@ -421,7 +423,7 @@
       await s.join('baisheng');
       await s.say('chaogai', 'We have a home, and silver, and brothers. But we owe our lives to Song Jiang of Yuncheng, who rode through the heat to warn us — and to Zhu Tong and Lei Heng, who let us go. We must not forget them.');
       await s.say('liutang', 'Let me take him a letter, and a hundred taels of gold.');
-      await s.say('wuyong', 'Go, then. But be careful in Yuncheng. Your face is on every wall.');
+      await s.say('wuyong:concerned', 'Go, then. But be careful in Yuncheng. Your face is on every wall.');
       s.flag('ch5_done');
       await s.endChapter();
       if (WM.data.chapters[6].begin) await WM.data.chapters[6].begin(s);

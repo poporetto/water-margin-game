@@ -1,0 +1,38 @@
+{
+  "mode": "built-in image_gen",
+  "basePrompt": "Create one production game portrait expression sheet, exact borderless 3 columns x 2 rows equal cells, 1422x1106, no margins labels text. Order normal, angry, sad, smile, shock, concerned. Same identity outfit pose across cells with clearly readable expressions. Chest-up full head visible. Refined mature anime JRPG fine ink soft painted shadows, neutral peach/tan skin never yellow, light ivory blue-gray Chinese paper backdrop no scenery. Reference is ART STYLE and GRID only, do not copy facial anatomy. Distinct facial structure and personality essential. ",
+  "characters": [
+    [
+      "yanpo",
+      "Old Mother Yan, woman around 58. Broad pear-shaped face, heavy lower cheeks but lean shoulders, small close-set calculating eyes, short upturned nose, thin pursed lips, mole by left mouth. Black hair streaked silver in tight high bun, plum brown robe cream trim, one hand gesturing insistently. Pushy theatrical pragmatic mother. Smile ingratiating, anger outraged, sadness real grief. Not the reference elderly woman's face."
+    ],
+    [
+      "yanpoxi",
+      "Yan Poxi, adult woman 25. Distinct heart-shaped face high cheekbones pointed chin, long wide-set almond eyes with sharply lifted outer corners, straight small nose and defined full rose lips. Black hair elaborate pinned bun with coral flower and gold pin. Raspberry pink Song dynasty silk robe ivory gold edging. Three-quarter torso turned away, face glancing back chin lifted, one hand holding folded letter below neckline. Cool aloof normal, knowing sardonic smile, defiant anger. Refined mature adult no childlike features."
+    ],
+    [
+      "tangniuer",
+      "Tang Niu'er ginger seller age 29. Compact sturdy man, wide pentagonal face flat broad nose, prominent ears, thick straight brows, lively round eyes, clean-shaven with a small notch in upper lip. Brown narrow cloth headband messy short hair, olive work shirt and rough brown apron. Three-quarter leaning forward, one fist clenched low against chest, protective energetic loyal. Normal alert, grin lopsided, angry indignant. Not a noble gentleman."
+    ],
+    [
+      "songtaigong",
+      "Song Taigong elderly farmer patriarch 70. Long rectangular lined face, tall broad forehead, deeply hooded narrow eyes, long broad-tipped nose, long straight fine white beard and thin white moustache. Dark charcoal headwrap ivory hair at temples, sober warm brown robe cream collar. Slight stoop with both hands over a plain wooden cane low in frame. Dignified weathered cautious caring father, restrained smile. Distinct from broad-faced son Song Jiang."
+    ],
+    [
+      "oldwang",
+      "Old Wang soup seller age 65. Small wiry elderly man triangular face narrow chin, large rounded ears, wide rounded nose, kind crescent eyes, sparse short silver chin stubble with NO long beard, receding gray hair tiny topknot. Taupe work robe with pale tan apron, holding plain earthenware soup bowl low in hands, shoulders angled left face right. Open kindly face with deep smile lines, humble kindly smile worried anger. Not wealthy official."
+    ],
+    [
+      "songqing",
+      "Song Qing younger brother of Song Jiang age 30. Soft round-oval face, broad smooth cheeks, short rounded chin, gently downturned narrow eyes, low straight brows, small straight nose, CLEAN SHAVEN. Dark brown cloth cap/scarf neatly tied, chestnut red plain domestic robe subtle ochre trim. Frontal shoulders turned slightly left, closed dark iron folding fan held at chest. Calm practical family man, concerned protective, modest warm smile. No Song Jiang moustache/goatee, not his facial clone."
+    ],
+    [
+      "zhutong",
+      "Zhu Tong Lord of Beautiful Beard constable 38. Tall dignified man with elongated rectangular face prominent high cheekbones, long straight aquiline nose, narrow phoenix eyes, long horizontal brows. Warm naturally ruddy complexion not orange. Magnificent silky straight black beard flowing from jaw to mid chest, long tapered moustache blending into beard, meticulously groomed NO shaggy beard. Black headscarf, indigo constable robe cream edging, right hand lightly resting on beard low in portrait, upright three-quarter pose. Courageous decent perceptive, controlled normal, restrained compassionate smile, firm commanding anger. Face unique not Song Jiang."
+    ],
+    [
+      "wusong",
+      "Wu Song. Expand the supplied single portrait into six expressions, preserve his approved identity EXACTLY: strong square clean-shaven jaw, straight nose, thick sharply angled eyebrows, youthful mature adult face, untamed black hair dark headband, navy robe and wooden beads, same over-shoulder three-quarter pose. Fierce normal, furious angry, subdued sad, rare confident warm smile, startled shock, guarded concerned. Identity reference is authoritative."
+    ]
+  ]
+}

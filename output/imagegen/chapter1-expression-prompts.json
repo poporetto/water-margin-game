@@ -1,0 +1,57 @@
+{
+  "base": "Create a production game portrait expression atlas exactly 3 equal columns x 2 equal rows with no gaps, labels, text or borders. Landscape 9:7, six 6:7 head-and-shoulder cells. Same character costume pose in all cells; only face changes. Reading order NORMAL, ANGRY, SAD, SMILE, SHOCK, CONCERNED, clearly readable. Smooth refined mature anime ink lines and soft painted cel shading, neutral peach skin, pale ivory blue-gray Chinese paper background. Match reference rendering style ONLY. Absolutely DO NOT depict reference's red-robed man. Full head within each cell. NEW SUBJECT: ",
+  "characters": [
+    [
+      "zhuwu",
+      "Zhu Wu, clever bandit strategist age 33. Narrow clean-shaven face, pointed chin, thoughtful narrow eyes. Long black hair half tied in a small topknot, NO headscarf. Plain muted olive green scholar robes, ivory collar. Turned toward viewer's LEFT, chin lowered, fingers touching chin thoughtfully. Calculating neutral look, restrained knowing smile in smile cell."
+    ],
+    [
+      "chenda",
+      "Chen Da, fierce muscular bandit age 35. Broad square face, wide nose, heavy stubble, rough short black hair tied with a rust-red headband. Brown rough sleeveless brigand vest over dark ochre shirt. Broad shoulders facing FRONT, chin thrust forward defiantly, spear shaft at left edge. Angry hotheaded normal look; smile is brash toothy grin."
+    ],
+    [
+      "yangchun",
+      "Yang Chun, quiet lean swordsman age 30. Long narrow clean-shaven face, arched brows, slender eyes, black hair in high topknot with ivory ribbon. Ivory traveling robes with blue-gray trim. Turned toward viewer's RIGHT, one hand resting on sword hilt at chest. Reserved watchful normal, slight smile."
+    ],
+    [
+      "wangsi",
+      "Wang Si, careless servant messenger age 28. Round chubby clean-shaven face, small nose, short messy black topknot, olive green plain homespun tunic and brown collar. Slight slouched posture facing left holding a wine gourd at chest. Sheepish normal, embarrassed sad, friendly foolish grin."
+    ],
+    [
+      "liji",
+      "Li Ji the hunter age 40, greedy informer. Lean weathered angular face, hooked nose, patchy short stubble, beady narrow eyes. Brown cloth headband, rough khaki brown hunting clothes, bow diagonally behind shoulder. Hunched turned right, looking sideways suspiciously. Greedy narrow-lipped grin only smile cell."
+    ],
+    [
+      "luda",
+      "Lu Da before becoming monk Lu Zhishen: muscular imposing Chinese military officer age 33, large broad face, heavy black brows, short full black beard, broad nose. Has black hair under dark green military headscarf, NOT bald, no prayer beads. Dark forest green military robe over cream collar, massive shoulders, frontal stance chin lowered, stern fierce normal. Angry furious, smile booming fearless laugh. Match fierce face of second reference but change hair/clothes."
+    ],
+    [
+      "lizhong",
+      "Li Zhong, modest traveling martial arts performer and medicine seller age 35. Thin wiry face, modest short moustache, no goatee. Brown cloth cap and faded tan working robes dark brown collar. Body angled LEFT, holding a small folded medicine-paper packet by chest. Cautious humble normal, self-conscious smile."
+    ],
+    [
+      "dutyA",
+      "Duty Officer, harsh county constable age 42. Broad blocky face, thick eyebrows, short squared beard. Black cloth uniform cap, black tunic with dark red edging. Rigid upright frontal chest, hand on dao sword grip. Stern accusing normal, bullying sneer smile."
+    ],
+    [
+      "gaoofficer",
+      "Guard Officer, decent middle-aged palace guard age 36. Oval face, straight nose, short black moustache, bronze helmet with red tassel. Burgundy lamellar armor gold edges, broad shoulders angled right, head toward left, open palm subtly visible pleading. Concerned dutiful normal, restrained relieved smile."
+    ],
+    [
+      "waiter",
+      "Young male Chinese inn waiter age 23. Slim oval clean-shaven face, short bangs and hair tied behind cream cloth headband. Cream work shirt with blue vest and white towel over shoulder. Friendly alert normal, leaning slightly toward viewer LEFT, cheerful smile, expressive startled eyes."
+    ],
+    [
+      "recorder",
+      "Older imperial male clerk age 56. Long narrow face, graying thin moustache, fine wrinkles, scholarly black cap, slate blue plain court robe. Angled toward viewer RIGHT, holding ledger and writing brush at chest. Dry sober observant normal, small pleased smile."
+    ],
+    [
+      "gaoqiu",
+      "Gao Qiu, vain vindictive court official age 45. Distinct long bony face, very narrow foxlike eyes, thin high eyebrows, hooked nose, thin pencil moustache, clean-shaven chin NO goatee. Wears rigid black Song dynasty official FUTOU hat with short horizontal stiff wings visible at BOTH sides, NO fabric headscarf or ribbons. Purple brocade court robes with gold trim. Upright frontal pose chin raised looking down condescendingly at viewer. Neutral is cold sneer, smile malicious satisfaction. Entire hat fits in cell."
+    ],
+    [
+      "wangjin",
+      "Wang Jin, disciplined martial arts instructor age 38. Distinct rectangular lean face, straight horizontal eyebrows, slight under-eye tiredness, short neat full jaw beard rather than pointed goatee. Hair in practical high topknot with gray tie, NO hat or headscarf. Simple slate blue training robe and ivory collar. Body turned toward viewer LEFT, firm upright posture with hand holding wooden staff vertically at right edge. Humble dignified normal, restrained reassuring smile, deeply tired sad."
+    ]
+  ]
+}
