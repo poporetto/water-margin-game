@@ -112,9 +112,10 @@
     s.party(['songjiang', 'chaijin', 'daizong', 'yanqing', 'likui']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
     ['songjiang', 'chaijin', 'daizong', 'yanqing', 'likui'].forEach(function (id) { s.level(id, 34); });
     await s.narrate('Some months after the Grand Assembly, travellers came through with lanterns from Laizhou for the capital. Song Jiang, against everyone\'s advice, decided to see the Lantern Festival in the Eastern Capital with his own eyes — and perhaps find a way to the emperor\'s ear. He went in disguise, with Chai Jin, Dai Zong, Yan Qing and Li Kui; and Shi Jin, Mu Hong, Lu Zhishen, Wu Song, Zhu Tong and Liu Tang followed in twos and threes.');
-    s.spawn('wy', 'wuyong', 32, 13, 'down');
+    var atTablet = WM.field.map && WM.field.map.id === 'liangshan';   // (a chapter jump starts here with no map yet)
+    if (atTablet) s.spawn('wy', 'wuyong', 32, 13, 'down');
     await s.say('wuyong', 'Brother Li Kui, you will stay at the inn and guard the door, and you will not move.');
-    s.despawn('wy');
+    if (atTablet) s.despawn('wy');
     WM.unlock('kaifeng');
     s.night(true);
     s.flag('ch20_lantern');

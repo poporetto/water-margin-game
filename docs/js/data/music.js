@@ -205,4 +205,27 @@
       { inst: 'zheng', oct: 3, vol: 0.12, notes: '1 5 1\' - 3\' - - - | 6, 3 6 - 1\' - - - | 5, 2 5 - 6 - - - | 6, 3 6 - 1\' - - - | 1 5 1\' - 3\' - - - | 6, 3 6 - 1\' - - - | 5, 2 5 - 6 - - - | 6, 3 6 - - - - -' }
     ]
   });
+
+  // titles and moods, for the music room and for anyone re-scoring the game
+  var NAMES = {
+    title: ['Moon over the Marsh', 'Title screen and chapter cards: calm, moonlit, the whole saga ahead.'],
+    field: ['Willows along the Highway', 'Country roads and hillsides between towns: light and pastoral.'],
+    town: ['Market Day in the County Town', 'A busy ordinary town: stalls, porters, a lively crowd.'],
+    world: ['Roads under Heaven', 'The world map: setting out on a long journey.'],
+    battle: ['Clash of Blades', 'Ordinary fights: fast and driving.'],
+    boss: ['The Tiger Bares Its Teeth', 'Boss fights: faster and heavier, real danger.'],
+    victory: ['Wine for the Victors', 'A short fanfare after a battle is won.'],
+    castle: ['The Hall of Loyalty', 'Liangshan itself: home, brotherhood, pride.'],
+    sad: ['Rain on a Fresh Grave', 'Deaths and partings, Game Over: grief.'],
+    duel: ['Thirty Bouts, No Victor', 'One-on-one duels: tense and pulsing.'],
+    war: ['Drums along the Riverbank', 'Army battles: marching drums.'],
+    dungeon: ['Into the Darkened Halls', 'Caves, deep woods and closed halls: wary and dark.'],
+    snow: ['Snow on the Mountain God\'s Temple', 'Lin Chong in the snow: cold and alone.'],
+    inn: ['Lamplight at the Inn', 'Inns and rest: cosy and quiet.'],
+    tense: ['Footsteps in the Dark', 'Plots, ambushes and chases: suspense.'],
+    heroic: ['Bare Fists on Jingyang Ridge', 'Heroic deeds: rousing and triumphant.'],
+    palace: ['Incense in the Jade Hall', 'The court and great ceremonies: stately.'],
+    ending: ['Their Names Fill the Land', 'The last card and the credits: elegy for the 108.']
+  };
+  Object.keys(NAMES).forEach(function (id) { if (A.tracks[id]) { A.tracks[id].title = NAMES[id][0]; A.tracks[id].desc = NAMES[id][1]; } });
 })();

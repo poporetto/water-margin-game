@@ -194,7 +194,7 @@ function mkApi(ctx) {
     warp(map, tx, ty) {
       if (!D.maps[map]) { err('warp to unknown map ' + map); return resolved; }
       if (!walkable(map, tx, ty)) err('warp lands on solid tile ' + map + '(' + tx + ',' + ty + ') "' + tile(map, tx, ty) + '"');
-      cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors();
+      cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors(); syncField();
       return resolved;
     },
     battle(troop) { lagging(); const t = typeof troop === 'string' ? D.troops[troop] : troop; if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
@@ -357,8 +357,10 @@ function eventReachable(ev, arrival) {
 // ---------- the walk ----------
 function storyFlags() { return Object.keys(WM.state.flags).filter((f) => f.indexOf('ev:') !== 0 && WM.state.flags[f]).sort().join('|'); }
 
+// scenes may ask which map is loaded (WM.field.map.id): answer as the real field would
+function syncField() { WM.field.map = cur.map ? { id: cur.map } : null; }
 async function runEvent(ev) {
-  curEvent = ev.map + ':' + ev.id;
+  curEvent = ev.map + ':' + ev.id; syncField();
   if (VERBOSE) console.log('  run ' + curEvent + ' (ch ' + WM.state.chapter + ')');
   freezeActors();
   const fn = ev.run || (ev.text ? async (s) => { (Array.isArray(ev.text) ? ev.text : [ev.text]).forEach((t) => s.say(ev.char || ev.npc || null, t)); } : null);
