@@ -121,7 +121,8 @@
     // a pine as Song painters drew it: a crooked trunk carrying flat, layered pads of needles
     var snow = th === THEMES.snow;
     var dark = snow ? '#2f4f42' : '#1f4a33', mid = snow ? '#456c5a' : '#2e6644', lite = snow ? '#eef4f8' : '#4a8a5a', bark = '#5a3a20';
-    px(c, x + 7, y - 4, 2, 8, bark); px(c, x + 8, y - 10, 2, 7, bark); px(c, x + 7, y - 16, 2, 7, bark); px(c, x + 7, y - 4, 1, 8, '#7a5230');
+    // the trunk runs down unbroken to the foot drawn on the ground tile (which starts 10px into the tile)
+    px(c, x + 7, y - 4, 2, 15, bark); px(c, x + 8, y - 10, 2, 7, bark); px(c, x + 7, y - 16, 2, 7, bark); px(c, x + 7, y - 4, 1, 15, '#7a5230');
     px(c, x + 3, y - 8, 5, 1, bark); px(c, x + 10, y - 13, 4, 1, bark); px(c, x + 4, y - 17, 4, 1, bark);
     var pad = function (cx, cy, w) { blob(c, cx, cy, w, 2, dark); blob(c, cx, cy - 1, w - 1, 1, mid); px(c, cx - w + 2, cy - 2, 3, 1, lite); };
     pad(x + 4, y - 8, 6); pad(x + 11, y - 9, 4); pad(x + 12, y - 14, 6); pad(x + 4, y - 15, 4); pad(x + 6, y - 18, 6); pad(x + 10, y - 22, 5);
