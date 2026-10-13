@@ -13,7 +13,7 @@
   walk(function (x, y) { j.set(x, y, ':'); j.set(x + 1, y, ':'); });
   // the tavern at the foot: "three bowls and you can't cross the ridge"
   j.rect(4, 37, 22, 7, '.');
-  var tav = j.house(5, 37, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); j.set(12, 38, 'Y'); j.set(13, 39, 'I');
+  var tav = j.house(5, 37, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); j.set(12, 38, 'J'); j.set(13, 39, 'I');
   j.hline(8, 14, 41, ':');
   // the temple of the Mountain God halfway up, with the notice about the tiger
   j.rect(20, 23, 6, 5, '.'); var tmp = j.house(21, 22, 4, 3, { roof: 'v', wall: 'R', door: false, wallRows: 1 }); j.set(23, 25, 'I');
@@ -65,7 +65,7 @@
   var c = L.grid(28, 20, '.');
   c.border('T', 1, [{ side: 's', from: 12, to: 14 }]);
   c.rect(12, 12, 3, 8, ':'); c.rect(1, 12, 26, 2, ':');
-  var cs = c.house(8, 5, 12, 6, { roof: 'z', door: 5, windows: [2, 9] }); c.set(20, 6, 'Y');
+  var cs = c.house(8, 5, 12, 6, { roof: 'z', door: 5, windows: [2, 9] }); c.set(20, 6, 'J');
   c.vline(13, 11, 11, ':');
   c.stamp(3, 3, ['TT', 'T.', 'TT']); c.stamp(23, 3, ['TT', '.T', 'TT']);
   c.scatter('T', 0.12, 261, '.', [1, 1, 26, 18]); L.clearAround(c, ':', 'T', '.');
@@ -89,10 +89,10 @@
   m.set(37, 9, 'L'); m.set(52, 9, 'L');
   // the road of taverns to the Happy Forest (south, eastwards)
   var taverns = [];
-  [[4, 19], [12, 19], [20, 19], [28, 19]].forEach(function (q, i) { m.house(q[0], q[1], 6, 4, { roof: 'z', door: false, windows: [2] }); m.set(q[0] + 6, q[1] + 1, 'Y'); taverns.push([q[0] + 3, q[1] + 4]); });
+  [[4, 19], [12, 19], [20, 19], [28, 19]].forEach(function (q, i) { m.house(q[0], q[1], 6, 4, { roof: 'z', door: false, windows: [2] }); m.set(q[0] + 6, q[1] + 1, 'J'); taverns.push([q[0] + 3, q[1] + 4]); });
   m.hline(1, 54, 24, ':'); taverns.forEach(function (t) { m.set(t[0], t[1], ':'); });
   m.rect(38, 17, 16, 10, 'T'); m.rect(40, 19, 12, 7, '.');
-  var happy = m.house(42, 19, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); m.set(41, 19, 'Y');
+  var happy = m.house(42, 19, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); m.set(41, 19, 'J');
   m.vline(46, 23, 24, ':'); m.hline(38, 46, 24, ':');
   m.scatter('T', 0.05, 271, '.', [1, 1, 54, 28]); L.clearAround(m, ':', 'T', '.'); m.vline(44, 9, 10, ':');
   WM.defMap('mengzhou', { name: 'Mengzhou', theme: 'autumn', music: 'town', rows: m.rows(), spawn: [1, 14], battleBg: 'town',
@@ -133,7 +133,7 @@
   k.rect(14, 12, 3, 12, ':'); k.rect(1, 18, 30, 2, '~'); k.rect(14, 18, 3, 2, 'B');
   k.frame(5, 2, 22, 10, 'F'); k.rect(14, 11, 3, 1, ':');
   var km = k.house(8, 3, 16, 6, { roof: '^', door: 7, windows: [2, 5, 10, 13] }); k.vline(15, 9, 11, ':');
-  k.house(3, 13, 6, 4, { roof: 'z', door: false, windows: [2] }); k.set(9, 14, 'Y');       // the village inn where Wu Song drank
+  k.house(3, 13, 6, 4, { roof: 'z', door: false, windows: [2] }); k.set(9, 14, 'J');       // the village inn where Wu Song drank
   k.scatter('T', 0.08, 301, '.', [1, 1, 30, 22]); L.clearAround(k, ':', 'T', '.');
   WM.defMap('kongmanor', { name: 'Kong Family Manor', theme: 'snow', music: 'field', rows: k.rows(), spawn: [15, 22], battleBg: 'snow', exits: [WM.toWorld('kongmanor', 14, 23, 3, 1)] });
   var ki = L.grid(18, 11, 'x'); var kR = ki.room(1, 1, 16, 9, { floor: 'K' }); ki.stamp(2, 3, ['h..A......A.h.', '..............', '..t...KKK..t..', '..............', 'j............j']);

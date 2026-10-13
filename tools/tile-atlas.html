@@ -46,7 +46,9 @@
     ['f', 'Flowers', ['..f..', '.fff.', '..f..']],
     ['L', 'Lantern post', ['=====', '.L=L.', '=====']],
     ['I', 'Signboard', ['.....', '..I..', '.....']],
-    ['Y', 'Banner', ['.....', '..Y..', '.....']],
+    ['Y', 'War banner (elsewhere)', ['.....', '..Y..', '.....']],
+    ['Y', 'Liangshan banner (on Liangshan)', ['.....', '..Y..', '.....'], false, 'liangshan'],
+    ['J', 'Wine flag (taverns)', ['.zzzz', '.WWDW', 'J....']],
     ['F', 'Fence', ['.......', '.FFFFF.', '.F...F.', '.FFFFF.']],
     ['p', 'Well', ['=====', '==p==', '=====']],
     ['T', 'Broadleaf tree', ['.....', '.T.T.', '.....']],
@@ -81,14 +83,14 @@
     ['S', 'Stairs', ['XXXXX', 'nnSnn', 'nnnnn'], true],
     ['L', 'Lantern (indoors)', ['XXXXX', 'nnLnn', 'nnnnn'], true]
   ];
-  function tileMap(rows, interior) {
+  function tileMap(rows, interior, id) {
     var w = 0; rows.forEach(function (r) { w = Math.max(w, r.length); });
-    return { w: w, h: rows.length, theme: 'spring', interior: !!interior, def: {}, rows: rows,
+    return { id: id || 'atlas', w: w, h: rows.length, theme: 'spring', interior: !!interior, def: {}, rows: rows,
       get: function (x, y) { if (y < 0 || y >= this.h || x < 0 || x >= this.w) return null; var c = this.rows[y][x]; return c === undefined || c === ' ' ? '.' : c; } };
   }
   var grid = document.getElementById('grid');
   SAMPLES.forEach(function (sm) {
-    var m = tileMap(sm[2], sm[3]);
+    var m = tileMap(sm[2], sm[3], sm[4]);
     var base = T.bake(m), cv = document.createElement('canvas');
     cv.width = m.w * S; cv.height = m.h * S + 16;                      // room above for what overhangs the top row
     var c = cv.getContext('2d'); c.imageSmoothingEnabled = false;

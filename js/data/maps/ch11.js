@@ -33,7 +33,7 @@
   var temple = g.house(30, 3, 12, 6, { roof: 'v', wall: 'R', door: 6 }); g.set(29, 8, 'L'); g.set(42, 8, 'L');   // Baoen Temple
   var yang = g.house(5, 25, 10, 5, { roof: '^', door: 3, windows: [1, 7] });     // Yang Xiong's house, the shop on the street side
   g.set(15, 28, 'I');
-  var tavern = g.house(29, 25, 9, 5, { roof: 'z', door: 4, windows: [1, 7] }); g.set(38, 26, 'Y');
+  var tavern = g.house(29, 25, 9, 5, { roof: 'z', door: 4, windows: [1, 7] }); g.set(38, 26, 'J');
   var lodge = g.house(33, 32, 8, 4, { roof: 'z', door: 3, windows: [1, 6] });
   g.house(5, 33, 7, 4, { roof: '^', door: false, windows: [3] }); g.house(39, 11, 6, 4, { roof: '^', door: false, windows: [2] }); g.house(5, 11, 7, 4, { roof: '^', door: false, windows: [2] });
   [prefect, temple].forEach(function (d) { g.vline(d.x, d.y + 1, 15, ':'); });
@@ -72,7 +72,7 @@
   var z = L.grid(36, 24, '.');
   z.rect(0, 13, 36, 3, ':');
   z.rect(0, 0, 36, 5, 'M'); z.scatter('P', 0.5, 441, '.', [0, 5, 36, 3]);       // Dulong Ridge behind
-  var inn = z.house(10, 6, 10, 5, { roof: 'z', door: 4, windows: [1, 8] }); z.vline(14, 11, 12, ':'); z.set(20, 7, 'Y'); z.set(21, 11, 'I');
+  var inn = z.house(10, 6, 10, 5, { roof: 'z', door: 4, windows: [1, 8] }); z.vline(14, 11, 12, ':'); z.set(20, 7, 'J'); z.set(21, 11, 'I');
   z.frame(21, 8, 4, 3, 'F'); z.set(22, 10, '.');                                // the hen-coop yard
   z.rect(30, 12, 6, 5, '.'); z.frame(31, 11, 5, 7, '#'); z.rect(31, 13, 1, 3, 'G');   // the road on to Zhu Family Village (barred)
   z.scatter('T', 0.12, 442, '.', [0, 16, 30, 8]); z.scatter('b', 0.04, 443, '.', [0, 16, 30, 8]);
@@ -92,7 +92,7 @@
   m.rect(21, 17, 3, 1, 'B'); m.rect(21, 16, 3, 1, ':'); m.vline(22, 18, 19, ':'); m.vline(21, 18, 19, ':'); m.vline(23, 18, 19, ':');
   var hall = m.house(15, 4, 14, 6, { roof: 'Z', wall: 'R', door: 7 }); m.vline(22, 10, 14, ':'); m.set(14, 9, 'L'); m.set(29, 9, 'L');
   m.house(13, 11, 5, 3, { roof: '^', door: false, windowsUpper: [], wallRows: 1 }); m.house(26, 11, 5, 3, { roof: '^', door: false, wallRows: 1 });
-  var shop = m.house(3, 23, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); m.set(10, 24, 'Y');   // the village tavern
+  var shop = m.house(3, 23, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); m.set(10, 24, 'J');   // the village tavern
   m.rect(36, 18, 8, 6, '.');                                                    // the fields towards Zhu Family Village
   m.rect(14, 23, 18, 7, 'y');
   m.scatter('T', 0.06, 451, '.', [0, 22, 44, 10]); m.scatter('T', 0.05, 452, '.', [34, 0, 10, 18]); m.scatter('T', 0.05, 453, '.', [0, 0, 10, 18]);

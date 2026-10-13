@@ -8,7 +8,7 @@
   // ---------------- a roadside inn (Zhu Tong lets Lei Heng go) ----------------
   var r = L.grid(26, 16, 'T');
   r.rect(0, 7, 26, 3, '.'); r.hline(0, 25, 8, ':');
-  r.rect(7, 2, 12, 5, '.'); var rinn = r.house(8, 2, 9, 4, { roof: 'z', door: 4, windows: [1, 7] }); r.set(17, 3, 'Y'); r.vline(12, 6, 7, ':');
+  r.rect(7, 2, 12, 5, '.'); var rinn = r.house(8, 2, 9, 4, { roof: 'z', door: 4, windows: [1, 7] }); r.set(17, 3, 'J'); r.vline(12, 6, 7, ':');
   r.scatter('.', 0.25, 481, 'T', [0, 0, 26, 16]); r.rect(0, 7, 26, 3, '.'); r.hline(0, 25, 8, ':'); r.vline(12, 6, 7, ':');
   WM.defMap('roadinn', { name: 'Roadside Inn', theme: 'summer', music: 'field', rows: r.rows(), spawn: [1, 8], battleBg: 'forest' });
   var ri = L.grid(12, 8, 'x'); var rR = ri.room(1, 1, 10, 7);

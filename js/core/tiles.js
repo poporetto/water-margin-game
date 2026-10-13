@@ -446,13 +446,29 @@
   }
 
   function bannerTall(c, x, y, tx, ty, th, m) {
-    // Liangshan's apricot-yellow banner, bordered in red: "Act on Heaven's Behalf" (替天行道)
+    // on Liangshan's own ground, its apricot-yellow banner bordered in red: "Act on Heaven's Behalf" (替天行道);
+    // anywhere else, a plain red war banner of whoever holds the place
+    var ls = !!(m && m.id && (/^liangshan/.test(m.id) || m.id === 'world'));
     px(c, x + 7, y - 24, 2, 38, '#4a2a16'); px(c, x + 6, y - 25, 4, 2, '#c8a050');
     var wave = Math.sin((WM.time || 0) * 3 + tx) * 1.5;
-    px(c, x + 9, y - 22, 9, 22, '#b02a1e');
-    px(c, x + 10, y - 21, 7, 20, '#e0a838');
-    c.fillStyle = '#3a200e';
+    px(c, x + 9, y - 22, 9, 22, ls ? '#b02a1e' : '#3a2010');
+    px(c, x + 10, y - 21, 7, 20, ls ? '#e0a838' : '#b02a1e');
+    c.fillStyle = ls ? '#3a200e' : '#e8c060';
     for (var i = 0; i < 4; i++) c.fillRect(x + 12 + Math.round(wave * (i / 4)), y - 19 + i * 5, 3, 3);
+  }
+  function wineFlagTall(c, x, y, tx, ty) {
+    // a tavern's wine flag (酒旗): a dark blue cloth with a white border and the character 酒, on a bamboo pole
+    px(c, x + 3, y - 22, 2, 36, '#a08a50'); px(c, x + 3, y - 22, 1, 36, '#c8b070');
+    for (var n = y - 18; n < y + 12; n += 7) px(c, x + 3, n, 2, 1, '#6a5a30');                 // bamboo joints
+    px(c, x + 3, y - 21, 12, 1, '#6a5a30');                                                    // the crossbar
+    var wave = Math.round(Math.sin((WM.time || 0) * 2.6 + tx * 1.7) * 1.2);
+    var fx = x + 5, fy = y - 20;
+    px(c, fx, fy, 9, 15, '#e8e0d0'); px(c, fx + 1, fy, 7, 14, '#24365e');                      // cloth and border
+    px(c, fx + 1 + wave, fy + 14, 2, 3, '#24365e'); px(c, fx + 5 + wave, fy + 14, 2, 3, '#24365e');   // swallow-tail ends
+    c.fillStyle = '#f0e8d8';                                                                   // 酒: water radical and the wine jar
+    c.fillRect(fx + 2, fy + 3, 1, 1); c.fillRect(fx + 2, fy + 6, 1, 1); c.fillRect(fx + 2, fy + 9, 1, 2);
+    c.fillRect(fx + 4, fy + 2, 4, 1); c.fillRect(fx + 4, fy + 4, 1, 7); c.fillRect(fx + 7, fy + 4, 1, 7);
+    c.fillRect(fx + 4, fy + 4, 4, 1); c.fillRect(fx + 4, fy + 7, 4, 1); c.fillRect(fx + 4, fy + 10, 4, 1); c.fillRect(fx + 5, fy + 2, 1, 3); c.fillRect(fx + 6, fy + 2, 1, 3);
   }
 
   function altar(c, x, y, tx, ty) {
@@ -575,6 +591,7 @@
     'p': { draw: well, solid: true },
     'L': { draw: function (c, x, y, tx, ty, th, m) { if (m.interior) floorWood(c, x, y, tx, ty); else pave(c, x, y, tx, ty); }, tall: lanternTall, solid: true },
     'Y': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); }, tall: bannerTall, solid: true },
+    'J': { draw: function (c, x, y, tx, ty, th, m) { if (m.get(tx, ty + 1) === '=' || m.get(tx, ty - 1) === '=') pave(c, x, y, tx, ty); else grass(c, x, y, tx, ty, th); }, tall: wineFlagTall, solid: true },
     'A': { draw: altar, solid: true },
     'U': { draw: function (c, x, y, tx, ty) { floorStone(c, x, y, tx, ty); }, tall: statueTall, solid: true },
     'g': { draw: grave, solid: true },

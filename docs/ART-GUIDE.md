@@ -113,8 +113,9 @@ Each letter is how the tile is written in the map files. Use it when you replace
 | `=` | Paving | Rectangular stone slabs; courtyards and official streets |
 | `:` | Dirt road | Packed earth with cart ruts |
 | `L` | Lantern post | Red paper lantern on a wooden post |
-| `I` | Signboard | A tall notice board under a little tiled roof; for taverns, ideally a cloth wine flag reading 酒 on a pole (a separate tile would be worth adding) |
-| `Y` | Banner | Liangshan's apricot-yellow 替天行道 banner, red border |
+| `I` | Signboard | A tall notice board under a little tiled roof |
+| `J` | Wine flag | A tavern's sign: a dark blue cloth with a white border and the character 酒, hanging from a crossbar on a bamboo pole |
+| `Y` | Banner | On Liangshan's own maps, its apricot-yellow 替天行道 banner with a red border; elsewhere, the red war banner of a camp, fort or yamen |
 | `F` | Fence | Bamboo or wattle for villages; a palisade of logs for strongholds |
 | `p` | Well | Stone curb, wooden windlass |
 | `j` | Jar | Big glazed storage jar (wine, grain, pickles) |

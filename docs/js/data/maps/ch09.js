@@ -8,7 +8,7 @@
   var j = L.grid(28, 20, 'P');
   j.rect(0, 8, 28, 4, '.'); j.hline(0, 27, 9, ':'); j.hline(0, 27, 10, ':');
   j.rect(9, 3, 10, 5, '.');
-  var inn = j.house(10, 3, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); j.set(18, 4, 'Y'); j.vline(14, 7, 8, ':');
+  var inn = j.house(10, 3, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); j.set(18, 4, 'J'); j.vline(14, 7, 8, ':');
   j.scatter('m', 0.04, 331, '.'); L.clearAround(j, ':', 'Pm', '.');
   WM.defMap('jieling', { name: 'Jieling Ridge', theme: 'south', music: 'tense', rows: j.rows(), spawn: [1, 9], battleBg: 'forest', exits: [WM.toWorld('jieling', 0, 8, 1, 4), WM.toWorld('jieling', 27, 8, 1, 4)] });
   var ji = L.grid(12, 8, 'x'); var jR = ji.room(1, 1, 10, 7);

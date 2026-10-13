@@ -59,7 +59,7 @@
   var yamen = d.house(19, 13, 8, 5, { roof: 'Z', wall: 'R', door: 4 });
   var jail = d.house(30, 13, 7, 5, { roof: 'v', wall: '#', door: 3 });
   d.house(19, 24, 6, 4, { roof: 'z', door: false, windows: [2] }); d.house(31, 25, 5, 4, { roof: 'z', door: false, windows: [2] });
-  var gdt = d.house(40, 18, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); d.set(39, 19, 'Y');   // Gu Dasao's tavern, outside the east gate
+  var gdt = d.house(40, 18, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); d.set(39, 19, 'J');   // Gu Dasao's tavern, outside the east gate
   d.rect(38, 20, 10, 3, ':'); d.vline(43, 21, 22, ':');
   d.hline(0, 26, 20, ':'); d.hline(0, 26, 21, ':'); d.vline(9, 19, 21, ':'); d.vline(8, 19, 21, ':');
   [yamen, jail].forEach(function (h) { d.vline(h.x, h.y + 1, 19, '='); });

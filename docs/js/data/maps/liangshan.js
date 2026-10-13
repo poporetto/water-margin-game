@@ -12,7 +12,7 @@
   }
   z.scatter('r', 0.4, 151, '~', [0, 3, 30, 5]);
   z.rect(13, 3, 2, 5, 'B'); z.set(12, 5, 'o'); z.set(15, 4, 'o');   // the landing where the boat comes
-  var tav = z.house(4, 10, 10, 5, { roof: 'z', door: 5, windows: [1, 3, 7] }); z.set(15, 10, 'Y');
+  var tav = z.house(4, 10, 10, 5, { roof: 'z', door: 5, windows: [1, 3, 7] }); z.set(15, 10, 'J');
   z.rect(13, 8, 2, 2, ':'); z.vline(9, 15, 21, ':'); z.hline(9, 14, 15, ':'); z.vline(14, 8, 15, ':');
   z.scatter('T', 0.1, 152, '.', [0, 9, 30, 13]); z.scatter(',', 0.2, 153, '.', [0, 9, 30, 13]);
   L.clearAround(z, ':', 'T', '.');

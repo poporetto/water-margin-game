@@ -52,7 +52,7 @@
   var tw = g.house(28, 3, 9, 6, { roof: 'v', wall: 'R', door: 4 });
   g.set(27, 7, 'L'); g.set(37, 7, 'L');
   // Li Xiaoer's tavern and shops (south)
-  var lix = g.house(3, 19, 9, 5, { roof: 'z', door: 4, windows: [1, 7] }); g.set(12, 19, 'Y');
+  var lix = g.house(3, 19, 9, 5, { roof: 'z', door: 4, windows: [1, 7] }); g.set(12, 19, 'J');
   var shop = g.house(26, 19, 7, 5, { roof: 'z', door: 3, windows: [1, 5] });
   var inn = g.house(34, 19, 8, 5, { roof: '^', door: 4, windows: [1, 6] });
   g.hline(2, 41, 25, ':'); [lix, shop, inn].forEach(function (d) { g.vline(d.x, d.y + 1, 25, ':'); });

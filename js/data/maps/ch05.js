@@ -106,7 +106,7 @@
   var inn = c.house(3, 20, 9, 5, { roof: '^', door: 4, windows: [1, 7] });
   var shop = c.house(13, 20, 6, 5, { roof: 'z', door: 3, windows: [1] });
   var store2 = c.house(26, 20, 7, 5, { roof: 'z', door: 3, windows: [1, 5] });
-  var wine = c.house(34, 20, 7, 5, { roof: 'z', door: 3, windows: [1, 5] }); c.set(33, 20, 'Y');
+  var wine = c.house(34, 20, 7, 5, { roof: 'z', door: 3, windows: [1, 5] }); c.set(33, 20, 'J');
   [tea, yan].forEach(function (q) { c.vline(q.x, q.y + 1, 15, ':'); });
   c.hline(2, 41, 26, ':'); [inn, shop, store2, wine].forEach(function (q) { c.vline(q.x, q.y + 1, 26, ':'); });
   c.vline(22, 9, 9, '=');
