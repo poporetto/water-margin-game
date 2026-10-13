@@ -414,6 +414,7 @@
       s.gold(120, true);
       s.flag('ch2_peachdone');
       await s.warp('peach', 14, 15, 'down');
+      await s.say(null, '(Take the road south-east, towards the Eastern Capital.)');
     } }
   ]);
 
@@ -474,6 +475,7 @@
       s.removeParty('shijin');
       s.flag('ch2_waguanwin');
       await s.warp('world', 52, 45, 'down');
+      await s.say(null, '(The Great Xiangguo Monastery is in the Eastern Capital, to the south-east.)');
     } }
   ]);
 

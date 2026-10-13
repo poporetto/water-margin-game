@@ -23,6 +23,8 @@ let pendingWet = [];   // someone placed on water: fine if the scene seats them 
 const SCENES = process.argv.includes('--scenes');
 const FLOW = process.argv.includes('--flow');   // print the story as played: each scene that moves it on, with its first line
 let firstLine = '';
+// --hints: when a scene ends and the story goes on somewhere else, does the player get told where?
+const HINTS = process.argv.includes('--hints'); const flowLog = []; let hinted = false, spoken = '';
 let curEvent = '(none)';
 function err(msg) { errors.push('[' + curEvent + '] ' + msg); }
 
@@ -133,13 +135,15 @@ function mkApi(ctx) {
     get state() { return WM.state; },
     say(who, text) {
       checkSpeaker(who); gone(who, 'say'); if (!text) err('empty say');
+      if (who == null && /^\(/.test(text || '')) hinted = true;
+      spoken += ' ' + (text || '');
       if (who && typeof who === 'string' && !present(who) && !/^\((outside|off|offstage|from|voice|inside|behind|far|calling|shouting|letter)/i.test(text || '')) sceneWarn('"' + who.split(':')[0] + '" speaks but is not in the scene on ' + cur.map);
       return resolved;
     },
-    narrate(text) { if (!text) err('empty narrate'); if (!firstLine) firstLine = text; return resolved; },
+    narrate(text) { if (!text) err('empty narrate'); if (!firstLine) firstLine = text; spoken += ' ' + (text || ''); return resolved; },
     ask(who, text, options) { checkSpeaker(who); return Promise.resolve(0); },
     choose(options) { return Promise.resolve(0); },
-    notice() { return resolved; }, wait() { return resolved; }, fadeOut() { return resolved; }, fadeIn() { return resolved; },
+    notice() { hinted = true; return resolved; }, wait() { return resolved; }, fadeOut() { return resolved; }, fadeIn() { return resolved; },
     actor(key) { const a = findActor(key); if (!a) err('no actor "' + key + '" on ' + cur.map); return a || {}; },
     move(key, steps) {
       const a = findActor(key); if (!a) { err('move: no actor "' + key + '" on ' + cur.map); return resolved; }
@@ -357,6 +361,13 @@ function eventReachable(ev, arrival) {
 // ---------- the walk ----------
 function storyFlags() { return Object.keys(WM.state.flags).filter((f) => f.indexOf('ev:') !== 0 && WM.state.flags[f]).sort().join('|'); }
 
+// what a player would call a map: its name, the world location it belongs to, and that location's short name
+function placeNames(mid) {
+  const out = [], m = D.maps[mid]; if (m && m.name) out.push(m.name);
+  const outer = Object.keys(D.maps).filter((k) => exitsOf(k).some((e) => e.to === mid)).concat([mid]);
+  Object.keys(D.locations || {}).forEach((id) => { const L = D.locations[id]; if (outer.indexOf(L.map) >= 0) { out.push(L.name); out.push(L.name.split(/[ ,(]/)[0]); } });
+  return Array.from(new Set(out.filter((n) => n && n.length > 3 && !/^(The|Mount|Inn)$/.test(n))));
+}
 // scenes may ask which map is loaded (WM.field.map.id): answer as the real field would
 function syncField() { WM.field.map = cur.map ? { id: cur.map } : null; }
 async function runEvent(ev) {
@@ -365,7 +376,7 @@ async function runEvent(ev) {
   freezeActors();
   const fn = ev.run || (ev.text ? async (s) => { (Array.isArray(ev.text) ? ev.text : [ev.text]).forEach((t) => s.say(ev.char || ev.npc || null, t)); } : null);
   if (!fn) return;
-  pendingWet = []; firstLine = '';
+  pendingWet = []; firstLine = ''; hinted = false; spoken = '';
   try { await fn(mkApi({ ev })); } catch (e) { err('script threw: ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e)); }
   pendingWet.forEach((m) => sceneWarn(m.split('|')[0] + ' (on water, not in a boat)'));
   if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true);
@@ -403,7 +414,11 @@ async function main() {
     if (S.has('ending_done')) break;
     // 1. auto events on the current map
     const autos = (D.events[cur.map] || []).filter((e) => e.trigger === 'auto' && eventActive(e));
-    if (autos.length) { await runEvent(autos[0]); continue; }
+    if (autos.length) {
+      await runEvent(autos[0]);
+      if (HINTS) flowLog.push({ ev: curEvent, endMap: cur.map, hinted: hinted, ch: WM.state.chapter, text: spoken });
+      continue;
+    }
     // 2. find a progressing event anywhere reachable
     reachCache = {};
     reachMapsCache = reachableMaps(cur.map, { x: cur.x, y: cur.y });
@@ -449,7 +464,12 @@ async function main() {
       const after = storyFlags();
       reachCache = {};
       if (after !== before || S.has('ev:' + ev.map + ':' + ev.id) && ev.once) {
-        if (after !== before) { progressed = true; lastProgress = curEvent; if (FLOW) console.log('  ' + curEvent + '  — ' + (firstLine || '').slice(0, 110)); break; }
+        if (after !== before) {
+          progressed = true; lastProgress = curEvent;
+          if (FLOW) console.log('  ' + curEvent + '  — ' + (firstLine || '').slice(0, 110));
+          if (HINTS) flowLog.push({ ev: curEvent, endMap: cur.map, hinted: hinted, ch: WM.state.chapter, text: spoken });
+          break;
+        }
       }
       // revert a non-progressing trial (but keep the errors it found)
       WM.state = JSON.parse(snapshot); cur = JSON.parse(snapCur); temp = JSON.parse(snapTemp);
@@ -476,6 +496,19 @@ async function main() {
       let on = true; try { on = !ev.cond || ev.cond(S, WM.state); } catch (e) { on = false; }
       if (on) console.log('  still armed: ' + mid + ':' + ev.id + ' (' + (ev.trigger || 'talk') + ')');
     }));
+  }
+  if (HINTS) {
+    console.log('\nScenes after which the story moves to another map without a hint:');
+    for (let i = 0; i < flowLog.length - 1; i++) {
+      const a = flowLog[i], b = flowLog[i + 1], next = b.ev.split(':')[0];
+      if (a.hinted || next === a.endMap || b.ch !== a.ch) continue;
+      // one doorway away (a house in the same town, the yard outside): the player can see where to go
+      const nearby = exitsOf(a.endMap).some((e) => e.to === next) || exitsOf(next).some((e) => e.to === a.endMap);
+      // or the scene named the place it sends you to
+      const names = placeNames(next);
+      const named = names.some((n) => n && a.text.toLowerCase().indexOf(n.toLowerCase()) >= 0);
+      if (!nearby && !named) console.log('  ch' + a.ch + ' ' + a.ev + ' (ends on ' + a.endMap + ') -> next: ' + b.ev + '   [' + names.join(' / ') + ']');
+    }
   }
   const sc = Array.from(new Set(scene));
   if (sc.length) console.log('\nScene staging to review: ' + sc.length + (SCENES ? '' : ' (list them with --scenes)'));

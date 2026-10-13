@@ -179,9 +179,26 @@
       await s.fadeOut(1);
       s.flag('ch7_away');
       await s.narrate('While Wu Song was away, the story went on without him, as such stories do.');
+      // the street outside Wu Dalang's house, while Wu Song is away: watch it happen
+      await s.warp('yanggu', 10, 24, 'left', { noFade: true }); s.hide('player');
+      s.spawn('jinlian', 'panjinlian', 6, 23, 'down'); s.spawn('wangpo', 'wangpo', 14, 23, 'down'); s.spawn('ximen', 'ximenqing', 12, 24, 'left');
+      await s.fadeIn(0.8);
+      await s.move('ximen', 'L4');
+      s.sfx('hit'); await s.emote('ximen', '!');
+      await s.say('panjinlian:shock', 'Oh! Forgive me, sir — the pole slipped from my hand!');
+      await s.say('ximenqing:smile', 'No harm done, lady. ...None at all.');
       await s.narrate('One day, as Pan Jinlian lowered the bamboo pole that held up the curtain at her window, it slipped from her hand and struck a passer-by on the head. He was Ximen Qing, a rich, idle man who kept a medicine shop by the county office, and who was in with every official in the town. He looked up, and smiled.');
+      await s.emote('wangpo', '...');
       await s.narrate('Next door, Granny Wang, who kept the teashop and was a matchmaker, midwife and procuress, saw everything. For ten taels of silver she laid a plan for Ximen Qing, step by step, and within a month Ximen Qing and Pan Jinlian were meeting in her back room every afternoon. The whole street knew it — except Wu Dalang.');
+      // she steps back inside; he strolls off down the street, with a look back
+      s.move('jinlian', 'U1', { wait: false }); await s.move('ximen', 'R12');   // off the edge of the screen
+      s.hide('jinlian'); s.despawn('jinlian'); s.hide('ximen'); s.despawn('ximen');
+      s.spawn('dalang', 'wudalang', 9, 24, 'right');
+      await s.move('dalang', 'R4');
       await s.narrate('Yun Ge, a boy who sold pears and whom Granny Wang had boxed on the ears, told Wu Dalang the truth. Wu Dalang went to the teashop to catch them. Ximen Qing burst out of the door and kicked him in the chest. He fell, and was carried home, and lay sick for days, and no one came to him.');
+      s.sfx('hit'); await s.shake(4, 0.3); s.lie('dalang');
+      await s.fadeOut(1);
+      s.despawn('dalang'); s.despawn('wangpo'); s.show('player');
       await s.narrate('"When my brother comes home," Wu Dalang said, "he will know what to do." The lovers heard. Ximen Qing brought arsenic from his shop. Pan Jinlian put it in Wu Dalang\'s medicine, and held the quilt over him until he was still.');
       await s.narrate('The coroner, He Jiu, was called to examine the body. Ximen Qing slipped him ten taels of silver. He Jiu saw at once that the dead man\'s face was purple and his lips black — and he took the silver, said nothing, and quietly kept two of the burned bones.');
       s.flag('ch7_return');
@@ -228,6 +245,7 @@
       s.flag('ch7_exiled');
       WM.unlock('crossslope', 'mengzhou');
       await s.warp('world', 46, 55, 'up');
+      await s.say(null, '(Wu Song is sent to Mengzhou. The road north passes the inn at Cross Slope.)');
     } }
   ]);
 
