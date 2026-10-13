@@ -95,6 +95,8 @@
           G.text(du.foe.name, boxX + 24, boxY + 18, { size: 22, bold: true, color: G.COL.gold });
           var ls = G.wrap('“' + line + '”', boxW - 60, 25);
           for (var i = 0; i < ls.length; i++) G.text(ls[i], boxX + 24, boxY + 56 + i * 32, { size: 25 });
+          // read his words for his next move: the rule, for anyone new to duels
+          G.text('Attack beats Defend  ·  Wild beats Attack  ·  Defend beats Wild', boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.dim });
           list.draw();
         }
       };
@@ -175,6 +177,7 @@
       var f = z[0], x = z[1];
       G.window(x, 20, 360, 70);
       G.text(f.name, x + 20, 30, { size: 22, bold: true, color: G.COL.gold });
+      G.text(Math.max(0, Math.round(f.hp)) + ' / ' + f.mhp, x + 340, 32, { size: 18, align: 'right', color: G.hpColor(f.hp / f.mhp) });
       G.bar(x + 20, 62, 320, 14, f.hp / f.mhp, G.hpColor(f.hp / f.mhp));
     });
     G.text('VS', 480, 40, { size: 34, bold: true, align: 'center', color: '#e0573f' });
