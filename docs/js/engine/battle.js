@@ -9,6 +9,7 @@
   WM.scenes.battle = SCN;
 
   var STAGE_H = 520, PX = 4, PXH = 5; // battle pixel scale: beasts x4, people x5
+  var MENU_W = 170, MENU_X = 480 - MENU_W / 2;   // the round and command menus, centred between the enemy and the party
   var POS = {
     party: [[600, 300], [672, 372], [744, 444], [744, 256], [816, 328], [888, 400]],
     enemy: [[364, 280], [292, 352], [220, 424], [226, 236], [154, 308], [82, 380]],
@@ -275,7 +276,8 @@
       items.push({ label: 'Auto', v: 'auto' });
       var maxE = 0; bt.enemies.forEach(function (e) { maxE = Math.max(maxE, e.lv); });
       if (!bt.tdef.boss && S.partyAvgLv() >= maxE + 12) items.push({ label: 'Let Go', v: 'letgo' });
-      var list = new UI.List(items, { x: 24, y: 220, w: 210, cancel: false });
+      // menus sit in the clear column between the two sides, so no fighter is hidden behind them
+      var list = new UI.List(items, { x: MENU_X, y: 170, w: MENU_W, cancel: false });
       list.idx = bt.lastRound || 0;
       var w = {
         update: function () {
@@ -341,7 +343,7 @@
         { label: 'Defend', v: 'defend' },
         { label: 'Unite', v: 'unite', disabled: !unites.length, help: unites.length ? unites.map(function (x) { return x.name; }).join(', ') : 'No unite partners in the party.' }
       ];
-      var list = new UI.List(items, { x: 24, y: 196, w: 210, help: true });
+      var list = new UI.List(items, { x: MENU_X, y: 196, w: MENU_W, help: true });
       list.idx = u.lastCmd || (canAttack(u) ? 0 : 3);
       var w = {
         update: function () {
@@ -395,9 +397,9 @@
     });
   }
   function drawCmdHeader(u) {
-    var tw = G.measure(u.name, 22, true) + 40;
-    G.window(24, 150, Math.max(210, tw), 44, { top: '#3a2a1a', bottom: '#1e140c' });
-    G.text(u.name, 44, 160, { size: 22, bold: true, color: G.COL.gold });
+    var tw = Math.max(MENU_W, G.measure(u.name, 22, true) + 40), x = 480 - tw / 2;
+    G.window(x, 150, tw, 44, { top: '#3a2a1a', bottom: '#1e140c' });
+    G.text(u.name, 480, 160, { size: 22, bold: true, align: 'center', color: G.COL.gold });
   }
 
   function pickTarget(bt, u, pool) {
@@ -436,10 +438,17 @@
   B.skillsOf = skillsOf;
   function magical(sk) { return sk.effect !== 'phys'; }
 
+  // what a skill reaches, in a few words, ahead of its description
+  function reach(sp) {
+    var who = { enemy1: 'One enemy', enemyAll: 'All enemies', ally1: 'One ally', allyAll: 'The party', allyKO: 'A fallen ally', self: 'Self' }[sp.target] || '';
+    if (sp.hits > 1) who = sp.scatter ? sp.hits + ' blows at random' : who + ', ' + sp.hits + ' blows';
+    if (sp.status && sp.effect === 'phys') who += ', may ' + ({ sleep: 'stun', poison: 'poison', silence: 'silence' }[sp.status] || sp.status);
+    return who;
+  }
   function pickSpell(bt, u, spells) {
     var items = spells.map(function (sp) {
       var hush = u.status.silence && magical(sp);
-      return { label: sp.name, right: u.mp[sp.lvl - 1], disabled: u.mp[sp.lvl - 1] <= 0 || hush, help: hush ? 'Silenced.' : sp.desc };
+      return { label: sp.name, right: u.mp[sp.lvl - 1], disabled: u.mp[sp.lvl - 1] <= 0 || hush, help: hush ? 'Silenced.' : reach(sp) + ' — ' + sp.desc };
     });
     return UI.choose(items, { x: 250, y: 120, w: 460, help: true, title: 'Skills' }).then(function (k) { return k < 0 ? null : spells[k]; });
   }
@@ -925,6 +934,7 @@
       if (arts.length) {
         var mm = u.mp, s2 = '';
         for (var k = 0; k < arts.length; k++) s2 += (k ? '/' : '') + mm[k];
+        s2 = 'Uses ' + s2;
         G.text(s2, x + 74, y + 26, { size: 16, color: '#a0c0ff' });
       }
       var stt = Object.keys(u.status).filter(function (k2) { return ['poison', 'sleep', 'silence', 'atkUp', 'defUp'].indexOf(k2) >= 0; });

@@ -84,12 +84,16 @@
     a.onArrive = onDone;
     if (!a.path.length) { a.onArrive = null; onDone(); }
   }
+  var batch = {};   // ways in already used by people entering together: the next one through waits his turn
   function enter(a, who, tx, ty, dir) {
     if (instant(who)) return;
     var path = wayIn(tx, ty); if (!path || path.length < 3) return;
+    if (!arrivals.length) batch = {};
+    var k = path[0][0] + ',' + path[0][1]; batch[k] = (batch[k] || 0) + 1;
+    a.hold = (batch[k] - 1) * 0.35;   // single file, not all at once on top of each other
     a.finalDir = dir || 'down';
     a.entering = new Promise(function (res) {
-      a.finishEntrance = function () { a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; a.onArrive = null; a.dir = a.finalDir; a.entering = null; a.finishEntrance = null; res(); };
+      a.finishEntrance = function () { a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; a.onArrive = null; a.dir = a.finalDir; a.entering = null; a.finishEntrance = null; a.hold = 0; res(); };
       walk(a, path, function () { if (a.finishEntrance) a.finishEntrance(); });
     });
     arrivals.push(a.entering);

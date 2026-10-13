@@ -107,17 +107,18 @@
   var ABBOT_X = 16, ABBOT_Y = 21;
   WM.defEvents('longhu', [
     { id: 'arrive', trigger: 'auto', once: true, x: 0, y: 0, run: async function (s) {
+      // the abbot and his Daoists wait at the temple gate; the Marshal's escort has come up the road with him
+      s.spawn('abbotT', 'abbot', 15, 24, 'down');
+      s.spawn('dA', 'daoistA', 13, 24, 'down');
+      s.spawn('dB', 'daoistA', 17, 24, 'down');
+      s.spawn('esc1', 'hongguard', 15, 29, 'up');
+      s.spawn('esc2', 'hongguard', 16, 29, 'up');
       s.music('title');
       await s.chapter(0);
       await s.narrate('In the reign of Emperor Renzong of the Song, when the realm had known peace for generations, a great pestilence swept the land. From the Yangtze to the Huai, from the Eastern Capital to the far provinces, the people died in their thousands.');
       await s.narrate('On the advice of Fan Zhongyan, the emperor resolved to summon the Celestial Master Zhang, the thirty-first of his line, from Dragon-Tiger Mountain in Jiangxi, that he might come to the capital and hold the great rites to drive out the plague.');
       await s.narrate('Grand Marshal Hong Xin was charged with carrying the imperial decree. After many days on the road, he came at last to the Shangqing Temple at the foot of the mountain.');
       s.music('palace');
-      s.spawn('abbotT', 'abbot', 15, 24, 'down');
-      s.spawn('dA', 'daoistA', 13, 24, 'down');
-      s.spawn('dB', 'daoistA', 17, 24, 'down');
-      s.spawn('esc1', 'hongguard', 15, 29, 'up');
-      s.spawn('esc2', 'hongguard', 16, 29, 'up');
       await s.move('player', 'U2');
       await s.say('abbot', 'The Daoists of Shangqing welcome the Grand Marshal. Bells, drums and incense have been prepared for the reception of the decree.');
       await s.say('hongxin', 'I bear the Son of Heaven\'s summons for the Celestial Master. Where is he? Bring him here at once.');
@@ -140,7 +141,7 @@
       await s.move('player', 'U1');
     } },
     { id: 'pondmsg', x: 14, y: 27, trigger: 'check', text: ['Shangqing Temple, seat of the Celestial Masters of the Zhang family since the Han dynasty.'] },
-    { id: 'dao1', x: 7, y: 19, npc: 'daoistA', wander: true, cond: function (S2) { return S2.has('pro_climb'); }, text: ['The Hall of Subdued Demons? The first Celestial Master sealed something there long ago. Every Master since has added a seal. No one goes near it.'] },
+    { id: 'dao1', x: 11, y: 17, npc: 'daoistA', wander: true, cond: function (S2) { return S2.has('pro_climb'); }, text: ['The Hall of Subdued Demons? The first Celestial Master sealed something there long ago. Every Master since has added a seal. No one goes near it.'] },
     { id: 'dao2', x: 24, y: 15, npc: 'daoistA', cond: function (S2) { return S2.has('pro_climb'); }, text: ['On the mountain there are tigers and serpents, Excellency. But they say a man with a sincere heart passes untouched.'] },
     // return from the mountain
     { id: 'returned', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('pro_met') && WM.state.map === 'longhu'; }, run: async function (s) {

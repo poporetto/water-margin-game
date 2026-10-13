@@ -328,6 +328,7 @@
     var all = F.actors.concat([F.player]);
     for (var i = 0; i < all.length; i++) {
       var a = all[i];
+      if (a.hold > 0) { a.hold -= dt; a.moving = false; continue; }   // waiting to come in behind someone
       if (a.path.length) {
         var tgt = a.path[0];
         var dx = tgt.x - a.x, dy = tgt.y - a.y;
@@ -568,7 +569,7 @@
     for (i = 0; i < all.length; i++) {
       var a = all[i];
       if (!a.visible) continue;
-      if (a.hiddenPlayer) continue;
+      if (a.hiddenPlayer || a.hold > 0) continue;
       if (!a.isPlayer && elsewhere(Math.floor(a.x / TS), Math.floor((a.y - 1) / TS))) continue;
       list.push({ y: a.y + (a.layer || 0), kind: 'a', a: a });
     }
@@ -613,7 +614,7 @@
   };
 
   function drawWorldLabel() {
-    var p = F.player.tile(), best = null, bd = 3;
+    var p = F.player.tile(), best = null, bd = 4;   // name the place you are standing beside
     var LOC = WM.data.locations;
     for (var id in LOC) {
       var L = LOC[id];

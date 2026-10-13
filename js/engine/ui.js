@@ -200,8 +200,9 @@
       if (this.scroll + this.rows < totalRows) { var by = y0 + this.rows * this.rowH; c.beginPath(); c.moveTo(this.x + this.w / 2 - 8, by - 2); c.lineTo(this.x + this.w / 2 + 8, by - 2); c.lineTo(this.x + this.w / 2, by + 6); c.fill(); }
     }
     if (o.help && this.items[this.idx] && this.items[this.idx].help) {
-      G.window(this.x, this.y + this.h + 6, this.w, 52);
-      G.text(this.items[this.idx].help, this.x + 20, this.y + this.h + 20, { size: 20, color: G.COL.text });
+      var hl = G.wrap(this.items[this.idx].help, this.w - 40, 20);   // long descriptions wrap inside the box
+      G.window(this.x, this.y + this.h + 6, this.w, 28 + hl.length * 25);
+      for (var hi = 0; hi < hl.length; hi++) G.text(hl[hi], this.x + 20, this.y + this.h + 20 + hi * 25, { size: 20, color: G.COL.text });
     }
   };
 

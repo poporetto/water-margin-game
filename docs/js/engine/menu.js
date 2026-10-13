@@ -29,18 +29,24 @@
       G.text('HP ' + c.hp + '/' + st.mhp, x + 100, yy + 34, { size: 19, color: G.hpColor(c.hp / st.mhp) });
       G.bar(x + 100, y + 16 + i * 92 + 60, 220, 8, c.hp / st.mhp, G.hpColor(c.hp / st.mhp));
       G.text('EXP ' + c.exp, x + 330, yy + 34, { size: 18, color: G.COL.dim });
-      var nk = B_skills(id); if (nk) G.text('Skills ' + c.mp.slice(0, nk).join('/'), x + 330, yy + 56, { size: 17, color: '#a0c0ff' });
+      var nk = B_skills(id); if (nk) G.text('Skill uses ' + c.mp.slice(0, nk).join(' / '), x + 330, yy + 56, { size: 17, color: '#a0c0ff' });
     }
   }
   // how many of the hero's skills are open (skill N opens with the level-N uses)
   function B_skills(id) { var mm = S.maxMp(id); return (WM.data.skills[id] || []).filter(function (sk, i) { return mm[i] > 0; }).length; }
 
   function infoBar() {
-    G.window(600, 600, 344, 104);
-    G.text(WM.state.gold + ' taels', 920, 616, { size: 22, align: 'right', color: G.COL.gold });
-    G.text(U.fmtTime(WM.state.playtime), 920, 648, { size: 20, align: 'right', color: G.COL.dim });
-    var mp = WM.data.maps[WM.state.map]; if (mp && mp.name) G.text(mp.name, 620, 648, { size: 18, color: G.COL.dim });
-    if (WM.state.flags.castle) G.text(S.starCount() + (WM.state.flags.grand_assembly ? ' / 108 Stars' : ' Heroes'), 620, 616, { size: 20, color: '#ffe0a0' });
+    // gold and Stars, then play time, then where you are on a line of its own (long place names would run into the time)
+    G.window(600, 584, 344, 120);
+    G.text(WM.state.gold + ' taels', 920, 598, { size: 22, align: 'right', color: G.COL.gold });
+    if (WM.state.flags.castle) G.text(S.starCount() + (WM.state.flags.grand_assembly ? ' / 108 Stars' : ' Heroes'), 620, 598, { size: 20, color: '#ffe0a0' });
+    G.text(U.fmtTime(WM.state.playtime), 920, 628, { size: 20, align: 'right', color: G.COL.dim });
+    var mp = WM.data.maps[WM.state.map];
+    if (mp && mp.name) {
+      var nm = mp.name;
+      while (nm.length > 4 && G.measure(nm, 18) > 300) nm = nm.slice(0, -2).replace(/[ ,]+$/, '') + '…';
+      G.text(nm, 620, 660, { size: 18, color: G.COL.dim });
+    }
   }
 
   function mainMenu() {

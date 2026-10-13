@@ -26,15 +26,16 @@
     var it = WM.data.items[itemId];
     if (['head', 'body', 'shield', 'acc'].indexOf(it.type) < 0) return;
     var p = WM.state.party;
-    G.window(40, 400, 620, 300);
-    G.text('Party', 60, 414, { size: 20, color: G.COL.gold });
+    // beside the list, under the purse: the description box below the list stays readable
+    G.window(700, 162, 240, 56 + p.length * 34);
+    G.text('Defence', 718, 176, { size: 20, color: G.COL.gold });
     p.forEach(function (id, i) {
       var cur = WM.state.chars[id].equip[it.type];
       var cd = cur ? (WM.data.items[cur].def || 0) : 0;
       var diff = (it.def || 0) - cd;
       var ok = !it.who || (it.who === 'women' ? S.def(id).female : it.who === 'men' ? !S.def(id).female : (Array.isArray(it.who) && (it.who.indexOf(S.def(id).cls) >= 0 || it.who.indexOf(id) >= 0)));
-      G.text(S.def(id).name, 60, 450 + i * 38, { size: 20, color: ok ? G.COL.text : G.COL.dim });
-      G.text(ok ? (diff > 0 ? '+' + diff : diff < 0 ? String(diff) : '=') : 'Cannot equip', 640, 450 + i * 38, { size: 20, align: 'right', color: !ok ? G.COL.dim : diff > 0 ? G.COL.green : diff < 0 ? G.COL.red : G.COL.text });
+      G.text(S.def(id).name, 718, 210 + i * 34, { size: 19, color: ok ? G.COL.text : G.COL.dim });
+      G.text(ok ? (diff > 0 ? '+' + diff : diff < 0 ? String(diff) : '=') : 'Can\'t wear', 922, 210 + i * 34, { size: 19, align: 'right', color: !ok ? G.COL.dim : diff > 0 ? G.COL.green : diff < 0 ? G.COL.red : G.COL.text });
     });
   }
 
