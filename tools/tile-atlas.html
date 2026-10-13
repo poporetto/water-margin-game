@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tile Atlas</title>
+<!-- Every map tile drawn the way the game draws it, each in a small patch of its usual surroundings, with its code. -->
+<style>
+  :root { --bg: #14100c; --panel: #1e1813; --line: #3a2f24; --text: #ece3d3; --dim: #a39684; --gold: #d8b36a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 Georgia, 'Times New Roman', serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-weight: normal; color: var(--gold); margin: 0 0 4px; }
+  p.lead { color: var(--dim); margin: 0 0 18px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px; }
+  canvas { width: 100%; image-rendering: pixelated; display: block; background: #000; border-radius: 3px; }
+  figcaption { margin-top: 6px; } code { color: var(--gold); font-size: 14px; } .d { color: var(--dim); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Tile Atlas</h1>
+  <p class="lead">Each map tile as the game draws it (16 × 16 px, shown at 4×), in a little scene. The code is the letter a map file uses. See <code>docs/ART-GUIDE.md</code> for what each should look like.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<script src="../js/core/base.js"></script>
+<script src="../js/core/tiles.js"></script>
+<script>
+  var T = WM.tiles, S = 16;
+  // [code, name, rows (the tile in its setting), interior?]
+  var SAMPLES = [
+    ['^', 'Grey tiled roof', ['.......', '.^^^^^.', '.^^^^^.', '.WOWDW.', '.......']],
+    ['Z', 'Gold glazed roof (palace)', ['.......', '.ZZZZZ.', '.ZZZZZ.', '.RRDRR.', '.......']],
+    ['v', 'Red-brown roof (temple)', ['.......', '.vvvvv.', '.vvvvv.', '.RRDRR.', '.......']],
+    ['z', 'Thatch', ['.......', '.zzzzz.', '.zzzzz.', '.WOWDW.', '.......']],
+    ['W', 'House wall', ['.^^^^^.', '.WWWWW.', '.WWWWW.', '.......']],
+    ['O', 'Wall with window', ['.^^^^^.', '.WOWOW.', '.......']],
+    ['D', 'Door', ['.^^^^^.', '.WWDWW.', '.......']],
+    ['R', 'Red wall', ['.......', '.RRRRR.', '.R...R.', '.R...R.', '.......']],
+    ['#', 'Stone wall', ['.......', '.#####.', '.##G##.', '.......']],
+    ['G', 'City gate', ['#######', '###G###', '...:...']],
+    ['=', 'Paving', ['=====', '=====', '=====']],
+    [':', 'Dirt road', ['.....', ':::::', ':::::', '.....']],
+    ['.', 'Grass', ['.....', '..,..', '.....']],
+    ['f', 'Flowers', ['..f..', '.fff.', '..f..']],
+    ['L', 'Lantern post', ['=====', '.L=L.', '=====']],
+    ['I', 'Signboard', ['.....', '..I..', '.....']],
+    ['Y', 'Banner', ['.....', '..Y..', '.....']],
+    ['F', 'Fence', ['.......', '.FFFFF.', '.F...F.', '.FFFFF.']],
+    ['p', 'Well', ['=====', '==p==', '=====']],
+    ['T', 'Broadleaf tree', ['.....', '.T.T.', '.....']],
+    ['P', 'Pine', ['.....', '.P.P.', '.....']],
+    ['H', 'Poplar', ['.....', '.H.H.', '.....']],
+    ['b', 'Bamboo', ['.....', '.bbb.', '.....']],
+    ['m', 'Rock', ['.....', '.m.m.', '.....']],
+    ['M', 'Mountain', ['MMMMM', 'MMMMM', '.....']],
+    ['~', 'Water', ['.....', '.~~~.', '.~~~.', '.....']],
+    ['w', 'Deep water', ['~~~~~', '~www~', '~~~~~']],
+    ['r', 'Reeds', ['~~~~~', '~rrr~', '~~~~~']],
+    ['B', 'Bridge', ['~~~~~', 'BBBBB', '~~~~~']],
+    ['o', 'Boat', ['~~~~~', '~~o~~', '~~~~~']],
+    ['s', 'Sand / snow ground', ['sssss', 'sssss']],
+    ['y', 'Crop field', ['yyyyy', 'yyyyy']],
+    ['g', 'Grave', ['.....', '.g.g.', '.....']],
+    ['e', 'Dead tree', ['.....', '..e..', '.....']],
+    ['V', 'Tent', ['.....', '.V.V.', '.....']],
+    ['Q', 'Stone tablet', ['.....', '..Q..', '.....']],
+    ['C', 'Rough ground', ['.....', '.CCC.', '.CCC.', '.....']],
+    ['n', 'Wooden floor', ['XXXXX', 'nnnnn', 'nnnnn'], true],
+    ['N', 'Stone floor', ['XXXXX', 'NNNNN', 'NNNNN'], true],
+    ['K', 'Carpet', ['XXXXX', 'NKKKN', 'NKKKN', 'NNNNN'], true],
+    ['X', 'Interior wall', ['XXXXX', 'XXXXX', 'nnnnn'], true],
+    ['t', 'Table', ['XXXXX', 'nntnn', 'nnnnn'], true],
+    ['c', 'Counter', ['XXXXX', 'ncccn', 'nnnnn'], true],
+    ['h', 'Shelf', ['XXXXX', 'hnnhn', 'nnnnn'], true],
+    ['k', 'Bed', ['XXXXX', 'nknnn', 'nnnnn'], true],
+    ['j', 'Jar', ['XXXXX', 'njjnn', 'nnnnn'], true],
+    ['A', 'Altar', ['XXXXX', 'NNANN', 'NNNNN'], true],
+    ['U', 'Statue', ['XXXXX', 'NNUNN', 'NNNNN'], true],
+    ['S', 'Stairs', ['XXXXX', 'nnSnn', 'nnnnn'], true],
+    ['L', 'Lantern (indoors)', ['XXXXX', 'nnLnn', 'nnnnn'], true]
+  ];
+  function tileMap(rows, interior) {
+    var w = 0; rows.forEach(function (r) { w = Math.max(w, r.length); });
+    return { w: w, h: rows.length, theme: 'spring', interior: !!interior, def: {}, rows: rows,
+      get: function (x, y) { if (y < 0 || y >= this.h || x < 0 || x >= this.w) return null; var c = this.rows[y][x]; return c === undefined || c === ' ' ? '.' : c; } };
+  }
+  var grid = document.getElementById('grid');
+  SAMPLES.forEach(function (sm) {
+    var m = tileMap(sm[2], sm[3]);
+    var base = T.bake(m), cv = document.createElement('canvas');
+    cv.width = m.w * S; cv.height = m.h * S + 16;                      // room above for what overhangs the top row
+    var c = cv.getContext('2d'); c.imageSmoothingEnabled = false;
+    c.fillStyle = '#000'; c.fillRect(0, 0, cv.width, cv.height);
+    c.drawImage(base, 0, 16);
+    var th = T.THEMES.spring;
+    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { var d = T.DEF[m.get(x, y)]; if (d && d.tall) d.tall(c, x * S, y * S + 16, x, y, th, m); }
+    var f = document.createElement('figure');
+    f.appendChild(cv);
+    var cap = document.createElement('figcaption');
+    cap.innerHTML = '<code></code> <span class="n"></span>';
+    cap.querySelector('code').textContent = sm[0]; cap.querySelector('.n').textContent = sm[1];
+    f.appendChild(cap); grid.appendChild(f);
+  });
+</script>
+</body>
+</html>

@@ -118,14 +118,15 @@
     px(c, x + 3, cy + 3, 2, 1, t[2]); px(c, x + 11, cy - 1, 2, 1, t[2]); px(c, x + 9, cy + 5, 2, 1, t[0]);
   }
   function pineTall(c, x, y, tx, ty, th) {
-    var dark = th === THEMES.snow ? '#2f4f42' : '#1f4a33', mid = th === THEMES.snow ? '#456c5a' : '#2e6644', lite = th === THEMES.snow ? '#eef4f8' : '#4a8a5a';
-    for (var i = 0; i < 4; i++) {
-      var w = 3 + i * 2, yy = y - 12 + i * 5;
-      tri(c, x + 8, yy, w, 6, dark);
-      tri(c, x + 8, yy, w - 1, 4, mid);
-      px(c, x + 8 - w + 2, yy + 5, 2, 1, lite);
-    }
+    // a pine as Song painters drew it: a crooked trunk carrying flat, layered pads of needles
+    var snow = th === THEMES.snow;
+    var dark = snow ? '#2f4f42' : '#1f4a33', mid = snow ? '#456c5a' : '#2e6644', lite = snow ? '#eef4f8' : '#4a8a5a', bark = '#5a3a20';
+    px(c, x + 7, y - 4, 2, 8, bark); px(c, x + 8, y - 10, 2, 7, bark); px(c, x + 7, y - 16, 2, 7, bark); px(c, x + 7, y - 4, 1, 8, '#7a5230');
+    px(c, x + 3, y - 8, 5, 1, bark); px(c, x + 10, y - 13, 4, 1, bark); px(c, x + 4, y - 17, 4, 1, bark);
+    var pad = function (cx, cy, w) { blob(c, cx, cy, w, 2, dark); blob(c, cx, cy - 1, w - 1, 1, mid); px(c, cx - w + 2, cy - 2, 3, 1, lite); };
+    pad(x + 4, y - 8, 6); pad(x + 11, y - 9, 4); pad(x + 12, y - 14, 6); pad(x + 4, y - 15, 4); pad(x + 6, y - 18, 6); pad(x + 10, y - 22, 5);
   }
+
   // the white poplar (白楊樹): a tall, narrow tree with a pale, dark-eyed trunk — the guide through the Zhu maze
   function poplarBase(c, x, y, tx, ty, th) {
     grass(c, x, y, tx, ty, th);
@@ -134,19 +135,25 @@
     px(c, x + 7, y + 6, 2, 1, '#3a3630'); px(c, x + 8, y + 10, 2, 1, '#3a3630');
   }
   function poplarTall(c, x, y) {
-    px(c, x + 7, y - 6, 3, 9, '#ecebe2'); px(c, x + 9, y - 6, 1, 9, '#b8b4a8'); px(c, x + 7, y - 3, 2, 1, '#3a3630');
-    blob(c, x + 8, y - 13, 5, 9, '#7a9a70'); blob(c, x + 7, y - 15, 4, 7, '#b4c8a4'); blob(c, x + 7, y - 19, 2, 3, '#e0e8d4');
-    px(c, x + 5, y - 10, 1, 2, '#e0e8d4'); px(c, x + 10, y - 13, 1, 2, '#e0e8d4');
+    // a northern white poplar: pale bark marked with dark 'eyes', a tall dark-green column of leaves
+    px(c, x + 7, y - 6, 3, 9, '#e4e0d2'); px(c, x + 9, y - 6, 1, 9, '#b8b4a8'); px(c, x + 7, y - 3, 2, 1, '#3a3630');
+    blob(c, x + 8, y - 15, 4, 10, '#2f5a2c'); blob(c, x + 7, y - 17, 3, 8, '#3f7436');
+    px(c, x + 6, y - 22, 2, 3, '#5a9446'); px(c, x + 5, y - 16, 1, 3, '#5a9446'); px(c, x + 9, y - 12, 1, 2, '#5a9446');
   }
+
   function bamboo(c, x, y, tx, ty, th) {
+    // a clump of bamboo: jointed green stems, sprays of narrow leaves
     grass(c, x, y, tx, ty, th);
     for (var i = 0; i < 4; i++) {
-      var bx = x + 1 + i * 4 + Math.floor(U.hash2(tx, ty + i, 70) * 2);
-      px(c, bx, y, 2, S, i % 2 ? '#6fa04a' : '#5a8a3a');
-      for (var k = 2; k < 16; k += 5) px(c, bx, y + k, 2, 1, '#3d6a2a');
-      px(c, bx + 2, y + 3 + i * 3 % 12, 3, 1, '#8ac060');
+      var bx = x + 1 + i * 4 + Math.floor(U.hash2(tx, ty + i, 70) * 2), o = (i * 5 + tx) % 4;
+      px(c, bx, y, 2, S, i % 2 ? '#5f9a3a' : '#4e8530'); px(c, bx, y, 1, S, '#7fbf55');
+      for (var k = o; k < 16; k += 4) px(c, bx, y + k, 2, 1, '#2e5a1e');   // joints
+      var ly = 1 + (i * 7 + ty * 3) % 9;
+      px(c, bx + 2, ly + y, 3, 1, '#3d7a2a'); px(c, bx + 3, ly + y - 1, 2, 1, '#6aaa48');
+      px(c, bx - 2, ly + y + 5, 2, 1, '#3d7a2a'); px(c, bx - 3, ly + y + 6, 2, 1, '#6aaa48');
     }
   }
+
   function rock(c, x, y, tx, ty, th, m) {
     grass(c, x, y, tx, ty, th);
     var base = th === THEMES.snow ? '#9aa4b0' : '#8a7c6a', lite = th === THEMES.snow ? '#f4f8fb' : '#ad9f88', dark = '#5e5446';
@@ -206,6 +213,7 @@
     // (the tiled coping along the top is drawn by wallRedOver; a wall running north-south is one unbroken face)
   }
   function wallStone(c, x, y, tx, ty, th, m) {
+    // a city wall of rammed earth faced with brick, battlemented along the top
     px(c, x, y, S, S, '#8a8478');
     c.fillStyle = '#6a655b';
     for (var r = 0; r < 4; r++) {
@@ -215,15 +223,38 @@
     }
     c.fillStyle = '#a49e90';
     for (r = 0; r < 4; r++) c.fillRect(x + 1, y + r * 4, 14, 1);
-    if (m.get(tx, ty - 1) !== '#') { px(c, x, y, S, 3, '#5d584f'); for (var k = 0; k < 16; k += 4) px(c, x + k, y - 2, 3, 2, '#6a655b'); }
+    if (m.get(tx, ty - 1) !== '#' && m.get(tx, ty - 1) !== 'G') {
+      px(c, x, y, S, 3, '#5d584f');
+      for (var k = 0; k < 16; k += 6) { px(c, x + k + 1, y - 4, 4, 4, '#7a756a'); px(c, x + k + 1, y - 4, 4, 1, '#a49e90'); px(c, x + k + 4, y - 4, 1, 4, '#5d584f'); }   // merlons
+    }
   }
+
   function cityGate(c, x, y, tx, ty, th, m) {
-    px(c, x, y, S, S, '#3a2a1e');
-    px(c, x, y, S, 2, '#5d584f');
-    px(c, x + 1, y + 2, 14, 14, '#24180f');
-    pave(c, x + 0, y + 10, tx, ty); // threshold peeking
-    px(c, x, y + 10, S, 6, '#7d7a72');
+    // a Song gate passage: flat-topped, framed in timber, the leaves of the gate pushed back inside
+    px(c, x, y, S, S, '#8a8478');
+    var G = function (dx) { return m.get(tx + dx, ty) === 'G'; };
+    var l = G(-1) ? 0 : 2, r = G(1) ? 16 : 14;
+    px(c, x + l, y + 2, r - l, 14, '#1e140c');
+    px(c, x + l, y + 2, r - l, 2, '#6a3e22');                       // the lintel beam
+    if (!G(-1)) { px(c, x + 1, y + 2, 2, 14, '#6a3e22'); px(c, x + 3, y + 5, 2, 9, '#7a3a22'); }
+    if (!G(1)) { px(c, x + 13, y + 2, 2, 14, '#6a3e22'); px(c, x + 11, y + 5, 2, 9, '#7a3a22'); }
+    px(c, x + l, y + 12, r - l, 4, '#7d7a72');                      // the road through
   }
+  // the gate tower: a tiled roof on the wall over the passage
+  function cityGateOver(c, x, y, tx, ty, th, m) {
+    if (m.get(tx, ty - 1) === 'G') return;
+    var G = function (dx) { return m.get(tx + dx, ty) === 'G'; };
+    var x0 = x - (G(-1) ? 0 : 6), x1 = x + 16 + (G(1) ? 0 : 6);
+    px(c, x0, y - 13, x1 - x0, 2, '#2f3542');                       // ridge
+    px(c, x0, y - 11, x1 - x0, 6, '#5b6476');
+    for (var k = x0 + 1; k < x1; k += 4) px(c, k, y - 11, 2, 6, '#7b8598');
+    px(c, x0, y - 5, x1 - x0, 2, '#2f3542');                        // eave
+    px(c, x0 + 3, y - 3, x1 - x0 - 6, 3, '#9c2f25');                 // the tower's red front
+    for (var q = x0 + 4; q < x1 - 4; q += 5) px(c, q, y - 3, 1, 3, '#5c1a14');
+    if (!G(-1)) { px(c, x0 - 2, y - 7, 3, 2, '#2f3542'); px(c, x0 - 3, y - 8, 2, 1, '#2f3542'); }
+    if (!G(1)) { px(c, x1 - 1, y - 7, 3, 2, '#2f3542'); px(c, x1 + 1, y - 8, 2, 1, '#2f3542'); }
+  }
+
   function roof(c, x, y, tx, ty, th, m, ch) {
     var pal = roofPal(ch);
     var R = function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === ch; };
@@ -336,16 +367,28 @@
     px(c, x, y + 2, S, 12, '#6a3a1c'); px(c, x, y + 2, S, 3, '#8a5a2c'); px(c, x, y + 13, S, 1, '#3a200e');
   }
   function bed(c, x, y, tx, ty) {
+    // a canopied bed: a dark wooden frame, the bed-curtains drawn back, a quilt and a hard pillow
     floorWood(c, x, y, tx, ty);
-    px(c, x + 1, y + 1, 14, 14, '#5a3218'); px(c, x + 2, y + 2, 12, 12, '#c8b8a0'); px(c, x + 3, y + 3, 10, 3, '#f0e8da'); px(c, x + 2, y + 7, 12, 7, '#3a5a8a'); px(c, x + 2, y + 7, 12, 1, '#5a7aaa');
+    px(c, x + 1, y + 1, 14, 14, '#4a2614');
+    px(c, x + 1, y + 1, 14, 3, '#7a2a20'); px(c, x + 1, y + 1, 14, 1, '#9a3a2a');   // canopy
+    px(c, x + 1, y + 4, 3, 11, '#a8483a'); px(c, x + 12, y + 4, 3, 11, '#a8483a');   // curtains
+    px(c, x + 4, y + 5, 8, 9, '#d8b06a'); px(c, x + 4, y + 9, 8, 5, '#a86a3a'); px(c, x + 5, y + 10, 6, 1, '#c8885a');
+    px(c, x + 5, y + 5, 6, 2, '#e8e0d0');
   }
+
   function shelf(c, x, y, tx, ty) {
+    // a scholar's shelf: rolled scrolls, stacks of stitched books lying flat, a little jar
     px(c, x, y, S, S, '#4a2a16');
     for (var r = 0; r < 3; r++) {
-      px(c, x + 1, y + 1 + r * 5, 14, 4, '#2a180c');
-      for (var k = 0; k < 4; k++) px(c, x + 2 + k * 3, y + 2 + r * 5, 2, 3, ['#c84a3a', '#d8b36a', '#5a8ac8', '#e8e0d0'][(k + r + tx) % 4]);
+      var yy = y + 1 + r * 5;
+      px(c, x + 1, yy, 14, 4, '#2a180c');
+      var kind = (r + tx) % 3;
+      if (kind === 0) for (var k = 0; k < 4; k++) { px(c, x + 2 + k * 3, yy + 1, 2, 3, '#e8dcc0'); px(c, x + 2 + k * 3, yy + 2, 1, 1, '#8a6a4a'); }   // scroll ends
+      else if (kind === 1) { px(c, x + 2, yy + 1, 6, 3, '#3a4a6a'); px(c, x + 2, yy + 2, 6, 1, '#e8e0d0'); px(c, x + 9, yy + 1, 5, 3, '#4a3a2a'); px(c, x + 9, yy + 2, 5, 1, '#e8e0d0'); }   // thread-bound books
+      else { px(c, x + 3, yy, 4, 4, '#8a6a4a'); px(c, x + 4, yy - 1, 2, 1, '#8a6a4a'); px(c, x + 9, yy + 1, 5, 3, '#3a4a6a'); px(c, x + 9, yy + 2, 5, 1, '#e8e0d0'); }
     }
   }
+
   function jar(c, x, y, tx, ty, th, m) {
     var under = m.get(tx, ty + 1);
     if (m.interior) floorWood(c, x, y, tx, ty); else dirt(c, x, y, tx, ty, th, m);
@@ -353,30 +396,38 @@
     px(c, x + 5, y + 2, 6, 3, '#4a3018'); px(c, x + 6, y + 1, 4, 1, '#c84a3a');
   }
   function fence(c, x, y, tx, ty, th, m) {
+    // a village fence of woven wattle between sharpened stakes
     grass(c, x, y, tx, ty, th);
     var F = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'F'; };
     var horiz = F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1));
     if (horiz) {
-      px(c, x, y + 6, S, 2, '#8a6038'); px(c, x, y + 10, S, 2, '#8a6038');
-      px(c, x + 2, y + 4, 2, 10, '#6a4424'); px(c, x + 12, y + 4, 2, 10, '#6a4424');
+      for (var i = 0; i < 16; i += 2) { px(c, x + i, y + 6 + (i % 4 ? 1 : 0), 2, 5, i % 4 ? '#a8885a' : '#8a6a40'); }
+      px(c, x, y + 6, S, 1, '#c8a870'); px(c, x, y + 11, S, 1, '#6a4a2a');
+      for (var k = 1; k < 16; k += 6) { px(c, x + k, y + 3, 2, 11, '#6a4a2a'); px(c, x + k, y + 2, 1, 1, '#6a4a2a'); }
     } else {
-      px(c, x + 6, y, 2, S, '#8a6038'); px(c, x + 9, y, 2, S, '#8a6038');
-      px(c, x + 5, y + 2, 6, 2, '#6a4424'); px(c, x + 5, y + 11, 6, 2, '#6a4424');
+      for (var j = 0; j < 16; j += 2) { px(c, x + 5 + (j % 4 ? 1 : 0), y + j, 5, 2, j % 4 ? '#a8885a' : '#8a6a40'); }
+      px(c, x + 5, y, 1, S, '#c8a870'); px(c, x + 10, y, 1, S, '#6a4a2a');
+      for (var q = 1; q < 16; q += 6) px(c, x + 6, y + q, 3, 2, '#6a4a2a');
     }
   }
+
   function bridge(c, x, y, tx, ty, th, m) {
+    // a timber bridge with a railing of posts and rails along both sides
     var vert = T.isWaterChar(m.get(tx - 1, ty)) && T.isWaterChar(m.get(tx + 1, ty));
     water(c, x, y, tx, ty, th, m);
     if (vert) {
       px(c, x + 1, y, 14, S, '#9a6a3c');
       for (var i = 0; i < 16; i += 3) px(c, x + 1, y + i, 14, 1, '#7a4e28');
       px(c, x, y, 2, S, '#5a3418'); px(c, x + 14, y, 2, S, '#5a3418');
+      px(c, x, y + 2, 2, 3, '#c8965a'); px(c, x + 14, y + 2, 2, 3, '#c8965a'); px(c, x, y + 10, 2, 3, '#c8965a'); px(c, x + 14, y + 10, 2, 3, '#c8965a');
     } else {
       px(c, x, y + 1, S, 14, '#9a6a3c');
       for (var j = 0; j < 16; j += 3) px(c, x + j, y + 1, 1, 14, '#7a4e28');
       px(c, x, y, S, 2, '#5a3418'); px(c, x, y + 14, S, 2, '#5a3418');
+      px(c, x + 2, y - 1, 3, 3, '#c8965a'); px(c, x + 10, y - 1, 3, 3, '#c8965a'); px(c, x + 2, y + 13, 3, 3, '#c8965a'); px(c, x + 10, y + 13, 3, 3, '#c8965a');
     }
   }
+
   function stairs(c, x, y) {
     px(c, x, y, S, S, '#6a655b');
     for (var i = 0; i < 4; i++) { px(c, x, y + i * 4, S, 3, '#a7a49a'); px(c, x, y + i * 4, S, 1, '#c4c1b8'); }
@@ -387,18 +438,23 @@
     px(c, x + 2, y + 1, 2, 8, '#5a3418'); px(c, x + 12, y + 1, 2, 8, '#5a3418'); px(c, x + 2, y, 12, 2, '#7a4e28');
   }
   function lanternTall(c, x, y) {
-    px(c, x + 7, y - 6, 2, 20, '#3a2a1e');
-    px(c, x + 4, y - 10, 8, 6, '#c8392a'); px(c, x + 5, y - 9, 6, 4, '#f08a3a'); px(c, x + 6, y - 11, 4, 1, '#3a2a1e'); px(c, x + 6, y - 4, 4, 1, '#d8b36a');
+    // a round red paper lantern hanging from a post
+    px(c, x + 6, y - 6, 2, 20, '#3a2a1e'); px(c, x + 7, y - 12, 5, 1, '#3a2a1e');
+    blob(c, x + 11, y - 7, 3, 4, '#c8392a'); px(c, x + 10, y - 9, 1, 4, '#f08a3a');
+    px(c, x + 9, y - 11, 5, 1, '#2a1a10'); px(c, x + 9, y - 3, 5, 1, '#2a1a10');
+    px(c, x + 11, y - 2, 1, 2, '#d8b36a');
   }
+
   function bannerTall(c, x, y, tx, ty, th, m) {
-    // "Act on behalf of Heaven" banner pole (替天行道)
-    px(c, x + 7, y - 24, 2, 38, '#4a2a16');
+    // Liangshan's apricot-yellow banner, bordered in red: "Act on Heaven's Behalf" (替天行道)
+    px(c, x + 7, y - 24, 2, 38, '#4a2a16'); px(c, x + 6, y - 25, 4, 2, '#c8a050');
     var wave = Math.sin((WM.time || 0) * 3 + tx) * 1.5;
-    px(c, x + 9, y - 22, 9, 22, '#c8a02a');
-    px(c, x + 10, y - 21, 7, 20, '#b02a1e');
-    c.fillStyle = '#f0d890';
+    px(c, x + 9, y - 22, 9, 22, '#b02a1e');
+    px(c, x + 10, y - 21, 7, 20, '#e0a838');
+    c.fillStyle = '#3a200e';
     for (var i = 0; i < 4; i++) c.fillRect(x + 12 + Math.round(wave * (i / 4)), y - 19 + i * 5, 3, 3);
   }
+
   function altar(c, x, y, tx, ty) {
     floorStone(c, x, y, tx, ty);
     px(c, x + 1, y + 4, 14, 10, '#6a1a14'); px(c, x + 1, y + 4, 14, 2, '#d8b36a');
@@ -419,23 +475,42 @@
   }
   function voidT(c, x, y) { px(c, x, y, S, S, '#000'); }
   function steleTall(c, x, y) {
-    px(c, x + 2, y + 9, 12, 5, '#5a564e'); px(c, x + 2, y + 9, 12, 1, '#7a766c');
-    px(c, x + 4, y - 14, 8, 23, '#8a867a'); px(c, x + 4, y - 14, 8, 2, '#a8a496'); px(c, x + 11, y - 14, 1, 23, '#6a665c');
-    for (var i = 0; i < 6; i++) px(c, x + 6 + (i % 2) * 2, y - 10 + i * 3, 2, 1, '#4a463e');
+    // a stele with a rounded, dragon-carved head, standing on the back of a stone tortoise (bixi)
+    blob(c, x + 8, y + 11, 7, 3, '#5f5b52'); blob(c, x + 8, y + 10, 6, 2, '#6f6b60');
+    px(c, x + 6, y + 13, 4, 2, '#5f5b52'); px(c, x + 7, y + 14, 2, 1, '#3a3630');   // the tortoise's head
+    px(c, x + 3, y + 10, 1, 1, '#4a463e'); px(c, x + 12, y + 10, 1, 1, '#4a463e');
+    px(c, x + 4, y - 12, 8, 21, '#8a867a'); px(c, x + 11, y - 12, 1, 21, '#6a665c');
+    px(c, x + 5, y - 14, 6, 2, '#8a867a'); px(c, x + 6, y - 15, 4, 1, '#8a867a');
+    px(c, x + 5, y - 13, 6, 2, '#6a665c'); px(c, x + 6, y - 12, 4, 1, '#a8a496');   // the carved head
+    for (var i = 0; i < 6; i++) px(c, x + 6 + (i % 2) * 2, y - 8 + i * 3, 2, 1, '#4a463e');
   }
+
   function boat(c, x, y, tx, ty, th, m) {
+    // a river sampan: a long hull, and an arched awning of woven bamboo over the middle
     water(c, x, y, tx, ty, th, m);
-    blob(c, x + 8, y + 9, 8, 4, '#5a3418'); px(c, x + 1, y + 7, 14, 2, '#8a5a2c'); px(c, x + 3, y + 8, 10, 2, '#3a200e');
+    blob(c, x + 8, y + 10, 8, 3, '#4a2a12'); px(c, x + 1, y + 8, 14, 2, '#8a5a2c'); px(c, x + 2, y + 9, 12, 2, '#3a200e');
+    px(c, x + 5, y + 3, 7, 6, '#7a6a48'); px(c, x + 6, y + 2, 5, 1, '#7a6a48');
+    px(c, x + 5, y + 5, 7, 1, '#5a4a30'); px(c, x + 5, y + 7, 7, 1, '#5a4a30'); px(c, x + 6, y + 3, 4, 1, '#a89a70');
   }
+
   function signTall(c, x, y) {
+    // a notice board: a tall board on a post, sheltered by a little tiled roof
     px(c, x + 7, y + 4, 2, 10, '#4a2a16');
-    px(c, x + 2, y - 4, 12, 9, '#6a3a1c'); px(c, x + 3, y - 3, 10, 7, '#d8c49a');
-    px(c, x + 5, y - 2, 6, 1, '#3a200e'); px(c, x + 5, y, 6, 1, '#3a200e'); px(c, x + 5, y + 2, 4, 1, '#3a200e');
+    px(c, x + 3, y - 9, 10, 13, '#5a3418'); px(c, x + 4, y - 8, 8, 11, '#d8c49a');
+    for (var i = 0; i < 3; i++) { px(c, x + 5 + i * 2, y - 6, 1, 7, '#3a200e'); }
+    px(c, x + 2, y - 11, 12, 2, '#424a5a'); px(c, x + 1, y - 12, 2, 1, '#424a5a'); px(c, x + 13, y - 12, 2, 1, '#424a5a');
   }
+
   function tent(c, x, y, tx, ty, th, m) {
+    // an army tent of the Song: a ridged cloth hall with its door flap open, a pennant on the pole
     grass(c, x, y, tx, ty, th);
-    tri(c, x + 8, y, 8, 15, '#d8d0b8'); tri(c, x + 8, y + 2, 3, 13, '#5a4a3a'); px(c, x + 7, y, 2, 2, '#b02a1e');
+    px(c, x + 1, y + 14, 14, 2, 'rgba(0,0,0,0.25)');
+    px(c, x + 1, y + 6, 14, 8, '#c8bfa0'); px(c, x + 1, y + 6, 14, 2, '#d8d0b4');
+    px(c, x + 1, y + 4, 14, 2, '#7a6a4a'); px(c, x, y + 5, 1, 2, '#7a6a4a'); px(c, x + 15, y + 5, 1, 2, '#7a6a4a');
+    px(c, x + 6, y + 8, 4, 6, '#3a2a1e'); px(c, x + 5, y + 8, 1, 6, '#a89a78'); px(c, x + 10, y + 8, 1, 6, '#a89a78');
+    px(c, x + 2, y - 3, 1, 8, '#4a2a16'); px(c, x + 3, y - 3, 4, 2, '#b02a1e');
   }
+
   function cropField(c, x, y, tx, ty, th) {
     px(c, x, y, S, S, '#7a5a34');
     for (var r = 0; r < 4; r++) { px(c, x, y + r * 4 + 2, S, 1, '#5a4024'); for (var k = 1; k < 16; k += 3) px(c, x + k, y + r * 4, 1, 2, th === THEMES.autumn ? '#d8b04a' : '#7ab04a'); }
@@ -482,7 +557,7 @@
     'O': { draw: wallPlaster, solid: true, wall: true },
     'R': { draw: wallRed, over: wallRedOver, solid: true, wall: true },
     '#': { draw: wallStone, solid: true, wall: true },
-    'G': { draw: cityGate },
+    'G': { draw: cityGate, over: cityGateOver },
     'D': { draw: door },
     'n': { draw: floorWood },
     'N': { draw: floorStone },

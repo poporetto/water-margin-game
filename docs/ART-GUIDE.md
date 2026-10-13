@@ -96,7 +96,7 @@ List new art in `assets/manifest.js`. Character ids are in `js/data/chars.js` an
 
 ## The map tiles, one by one
 
-Each letter is how the tile is written in the map files. Use it when you replace a tile.
+Each letter is how the tile is written in the map files. Use it when you replace a tile. To see how every tile is drawn now, in a small scene of its own, open `tools/tile-atlas.html` while the game is served (for example <http://localhost:8766/tools/tile-atlas.html>).
 
 | Code | What it is | Song pointers |
 |---|---|---|
@@ -113,7 +113,7 @@ Each letter is how the tile is written in the map files. Use it when you replace
 | `=` | Paving | Rectangular stone slabs; courtyards and official streets |
 | `:` | Dirt road | Packed earth with cart ruts |
 | `L` | Lantern post | Red paper lantern on a wooden post |
-| `I` | Signboard | For taverns, a cloth wine flag reading 酒 on a pole; for shops, a vertical board |
+| `I` | Signboard | A tall notice board under a little tiled roof; for taverns, ideally a cloth wine flag reading 酒 on a pole (a separate tile would be worth adding) |
 | `Y` | Banner | Liangshan's apricot-yellow 替天行道 banner, red border |
 | `F` | Fence | Bamboo or wattle for villages; a palisade of logs for strongholds |
 | `p` | Well | Stone curb, wooden windlass |
