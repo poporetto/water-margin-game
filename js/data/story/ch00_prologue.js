@@ -6,6 +6,7 @@
   WM.data.start = { party: ['hongxin'], map: 'longhu', x: 15, y: 27, dir: 'up', items: [], gold: 0 };
   WM.npc('abbot', 'Abbot of Shangqing', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#c8a040', beard: 'long', beardColor: '#d8d8d0', hair: '#c8c8c0', body: '#6a5a9a', trim: '#e8d8a0' }, { face: true });
   WM.npc('daoistA', 'Daoist', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#6a6a6a', body: '#4a5a7a', trim: '#e8e0d0' }, { face: true });
+  WM.npc('workman', 'Workman', WM.data.npcs.villager.look);
   WM.npc('hongguard', 'Escort', { skin: '#c8905e', hairStyle: 'helmet', helmColor: '#8a7a3a', tassel: '#c8302a', body: '#7a1a1a', trim: '#d8b36a', weapon: 'spear' });
 
   // ---------------- Shangqing Temple at the foot of the mountain ----------------
@@ -232,10 +233,22 @@
   ]);
   WM.data.npcs.oxboy_boy = { id: 'oxboy_boy', name: 'Herd-Boy', look: { skin: '#f0c49a', hairStyle: 'topknot', body: '#3a6a3a', trim: '#e8e0d0', build: 'small' }, face: true };
 
+  // in the hall before the tablet is opened: the abbot and the two workmen who broke the lock, each with a word to say
+  var beforeOpening = function (S2) { return S2.has('pro_tour') && !S2.has('pro_opened'); };
   WM.defEvents('demonhall', [
-    { id: 'tablet', x: 7, y: 3, trigger: 'check', cond: function (S2) { return S2.has('pro_tour') && !S2.has('pro_opened'); }, run: async function (s) {
-      s.spawn('abbot', 'abbot', 8, 8, 'up');
-      s.spawn('w1', 'villager', 5, 6, 'up'); s.spawn('w2', 'villager', 10, 6, 'up');
+    { id: 'abbot', x: 8, y: 8, npc: 'abbot', dir: 'up', cond: beforeOpening, text: [
+      'Excellency, I beg you once more. Let the workmen close the doors and we will seal them again tonight. Nothing that was buried here was buried by accident.',
+      'Eight Masters, one after another, have laid their seals on this door. In all those generations no one has walked where you are standing.'
+    ] },
+    { id: 'w1', x: 5, y: 6, npc: 'workman', dir: 'up', cond: beforeOpening, text: [
+      'The lock was rusted solid, sir. We had to break it with hammers. Nobody has opened this door in my grandfather\'s time, nor his grandfather\'s.',
+      '...Is it only me, or is it colder in here than outside? And not a single bird on the roof.'
+    ] },
+    { id: 'w2', x: 10, y: 6, npc: 'workman', dir: 'up', cond: beforeOpening, text: [
+      'Look at the writing on that tablet, sir. Like dragons and tadpoles. Not one of us can read a word of it.',
+      'The old monks say that on still nights you can hear something breathing under the floor. ...I always thought they were joking.'
+    ] },
+    { id: 'tablet', x: 7, y: 3, trigger: 'check', cond: beforeOpening, run: async function (s) {
       await s.say(null, 'In the middle of the empty hall stands a stone tablet five or six feet high, set on a stone turtle half buried in the earth. The front is covered in ancient seal characters no one can read.');
       await s.say('hongxin', 'Bring torches round the back. Is there writing there too?');
       await s.say(null, 'On the back, four large characters are cut deep into the stone: 遇洪而開 — "Opened when Hong arrives."');
