@@ -139,7 +139,8 @@
     } }
   ]);
   WM.defEvents('weizhou', [
-    { id: 'ch2_zheng', x: 30, y: 23, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_tobutcher'); }, run: async function (s) {
+    { id: 'ch2_zheng', x: 30, y: 23, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_tobutcher'); }, idle: { helper1: 'Best pork in Weizhou, sir. Master Zheng supplies the garrison and the Commissioner\'s own kitchen.', helper2: '(He is sharpening a cleaver, and keeps glancing at his master behind the chopping block.)' },
+      run: async function (s) {
       s.spawn('zhengtu', 'zhengtu', 32, 23, 'down');
       s.spawn('helper1', 'servant', 29, 24, 'right'); s.spawn('helper2', 'servant', 34, 24, 'left');
       s.place('player', 32, 25, 'up');
@@ -188,7 +189,8 @@
 
   // ---------------- Yanmen: the wanted poster and Squire Zhao ----------------
   WM.defEvents('yanmen', [
-    { id: 'ch2_poster', x: 11, y: 11, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled'); }, run: async function (s) {
+    { id: 'ch2_poster', x: 11, y: 11, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled'); }, idle: { c1: 'A thousand strings for one man! What did he do?', c2: 'Killed the butcher of Weizhou with three blows of his fist, they say. Three!', c3: 'The notice? Here, I\'ll read it to you. Most folk in Yanmen can\'t make out a word of it.' },
+      run: async function (s) {
       s.spawn('c1', 'villager', 11, 10, 'up'); s.spawn('c2', 'merchant', 13, 10, 'up'); s.spawn('c3', 'scholar', 12, 9, 'down');
       await s.say('scholar', '(reading aloud) "...By order of the Military Commissioner of Taiyuan: the criminal Lu Da, formerly a major in the Weizhou garrison, killed Zheng Tu with his fists and fled. A reward of one thousand strings is offered to whoever harbours or seizes him..."');
       await s.say('luda', '(...Me. That\'s me. And I can\'t even read it myself.)');
@@ -227,7 +229,8 @@
   // ---------------- Mount Wutai ----------------
   var wutaiRooms = function () { return WM.data.wutai.rooms; };
   WM.defEvents('wutai', [
-    { id: 'ch2_arrive', x: 15, y: 19, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_towutai'); }, run: async function (s) {
+    { id: 'ch2_arrive', x: 15, y: 19, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_towutai'); }, idle: { zhao: 'Up the steps, brother. The Abbot Zhizhen is a holy man. Keep your voice down, and let them shave your head without a word.' },
+      run: async function (s) {
       s.spawn('zhao', 'zhaoyuanwai', 16, 22, 'up');
       s.spawn('m1', 'wutaimonk', 17, 11, 'down'); s.spawn('m2', 'wutaimonk', 18, 11, 'down');
       await s.say('wutaimonk', 'Squire Zhao! Welcome. The Abbot is expecting you in the Hall.');
@@ -430,7 +433,8 @@
     } }
   ]);
   WM.defEvents('waguan', [
-    { id: 'ch2_cui1', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_heardcui'); }, run: async function (s) {
+    { id: 'ch2_cui1', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_heardcui'); }, idle: { cui: 'A wandering monk? This monastery has nothing left for beggars. Sit down, brother, if you want a cup.', qiu: '(Qiu Xiaoyi, the Flying Yaksha, rests a hand on his sword and smiles at you.)' },
+      run: async function (s) {
       s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
       await s.say('cuidaocheng', 'A monk? Sit down, sit down, brother. Share our wine.');
       await s.say('luzhishen:angry', 'You two have ruined this monastery and starved the old monks!');
@@ -444,7 +448,8 @@
       await s.say('luzhishen:sad', '(If I\'d had a meal in my belly, those two... I\'ll find something to eat and come back.)');
       await s.say(null, '(The red pine forest lies to the south of the monastery.)');
     } },
-    { id: 'ch2_shijin', x: 14, y: 23, w: 7, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled_cui'); }, run: async function (s) {
+    { id: 'ch2_shijin', x: 14, y: 23, w: 7, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled_cui'); }, idle: { shijinH: '(A man in a broad hat is waiting among the pines with a halberd.) You there, monk! Anyone who passes through these trees pays the toll.' },
+      run: async function (s) {
       s.spawn('shijinH', 'shijin', 21, 23, 'left');
       await s.move('shijinH', 'L3', { run: true });
       await s.duel('lu_shijin', { canLose: true });
@@ -460,7 +465,8 @@
       s.flag('ch2_withshijin');
       await s.notice('Shi Jin joined the party.', { auto: 1.6 });
     } },
-    { id: 'ch2_cui2', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_withshijin'); }, run: async function (s) {
+    { id: 'ch2_cui2', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_withshijin'); }, idle: { cui: 'Still on your feet, fat monk? Those old men filled your ears with lies.', qiu: '(This time Qiu Xiaoyi has his sword drawn across his knees.)' },
+      run: async function (s) {
       s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
       await s.say('cuidaocheng:angry', 'Back again, and with a friend? We beat you once already!');
       await s.say('luzhishen:angry', 'Now my belly\'s full. Let\'s see who wins this time!');
@@ -486,7 +492,8 @@
       await s.say('monk', 'A monk from Mount Wutai, with a letter for the Abbot? This way. The Abbot\'s quarters are at the top of the court.');
       s.despawn('mk');
     } },
-    { id: 'ch2_rascals', x: 17, y: 16, w: 6, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_gardener'); }, run: async function (s) {
+    { id: 'ch2_rascals', x: 17, y: 16, w: 6, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_gardener'); }, idle: { zhangsan: 'Reverend! Welcome, welcome! Come over here, by the edge, where we can greet you properly.', lisi: '(Li Si grins and edges round behind the cesspit.)', r1: 'Heh. Heh heh. The new gardener.', r2: 'Twenty cash says he goes in head first.' },
+      run: async function (s) {
       s.spawn('zhangsan', 'zhangsan', 26, 16, 'left'); s.spawn('lisi', 'lisi', 26, 17, 'left');
       s.spawn('r1', 'drunk', 27, 15, 'left'); s.spawn('r2', 'gambler', 28, 17, 'left');
       await s.say('zhangsan:smile', 'Congratulations, congratulations, Reverend! We\'re your neighbours. We\'ve come to welcome you to the garden.');
@@ -501,7 +508,8 @@
       s.despawn('zhangsan'); s.despawn('lisi'); s.despawn('r1'); s.despawn('r2');
       s.flag('ch2_rascalsdone');
     } },
-    { id: 'ch2_willow', x: 28, y: 6, w: 5, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_rascalsdone'); }, run: async function (s) {
+    { id: 'ch2_willow', x: 28, y: 6, w: 5, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_rascalsdone'); }, idle: { zhangsan: 'Reverend, we know our betters now. Every one of us will do as you say.', lisi: 'Those crows in the willow, Reverend. Cawing from dawn to dark. It\'s bad luck, they say.' },
+      run: async function (s) {
       s.spawn('zhangsan', 'zhangsan', 26, 8, 'right'); s.spawn('lisi', 'lisi', 27, 9, 'right');
       s.sfx('wind');
       await s.say('lisi', 'Those cursed crows in the willow — cawing day and night. People say it\'s bad luck. We\'ll fetch a ladder and pull the nest down.');

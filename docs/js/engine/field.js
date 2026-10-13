@@ -144,7 +144,7 @@
       var lead = leadSpawns(ev); if (!lead.length || !couldFire(ev)) return;
       lead.forEach(function (sp) {
         if (want[sp.key] || (!WM.data.chars[sp.who] && !WM.data.npcs[sp.who])) return;
-        want[sp.key] = sp;
+        want[sp.key] = { key: sp.key, who: sp.who, x: sp.x, y: sp.y, dir: sp.dir, scene: ev };
       });
     });
     // drop staged characters whose scene can no longer happen; add the new ones
@@ -153,6 +153,7 @@
       if (F.findActor(k)) return;
       var sp = want[k], a = F.addActor(k, sp.who, sp.x, sp.y, sp.dir);
       a.ev.staged = true; a.sheetWho = sp.who; a.solid = false;   // never in the way of the player walking up to their scene
+      a.ev.idle = sp.scene.idle && sp.scene.idle[k];               // what they say if spoken to before it begins
     });
   };
 
@@ -438,7 +439,7 @@
       if (best) return;
       for (var i = 0; i < F.actors.length; i++) {
         var a = F.actors[i];
-        if (!a.visible || !a.ev || a.ev.temp) continue;
+        if (!a.visible || !a.ev || (a.ev.temp && !a.ev.idle) || a.leavingKey || a.entering) continue;
         var d = Math.abs(a.x - pt.x) + Math.abs(a.y - 4 - pt.y);
         if (d < 14 && d < bd) { best = a; bd = d; }
       }
@@ -453,7 +454,7 @@
         var px2 = ctx[0] * TS + 8 + fx * 16, py2 = ctx[1] * TS + 11 + fy * 16;
         for (var i = 0; i < F.actors.length; i++) {
           var a = F.actors[i];
-          if (!a.visible || !a.ev) continue;
+          if (!a.visible || !a.ev || (a.ev.temp && !a.ev.idle) || a.leavingKey || a.entering) continue;
           var d = Math.abs(a.x - px2) + Math.abs(a.y - 4 - py2);
           if (d < 14 && d < bd) { best = a; bd = d; }
         }
@@ -463,6 +464,8 @@
       if (best.ev.trigger === 'touch' || best.ev.trigger === 'auto') return;
       var dirTo = { left: 'right', right: 'left', up: 'down', down: 'up' }[p.dir];
       if (!best.ev.fixedDir) best.dir = dirTo;
+      // someone waiting for their scene, or still standing where one left them: a line of their own
+      if (best.ev.temp) { var said = best.ev.idle, who = best.sheetWho || best.ev.id; F.runEvent({ id: best.ev.id, map: F.map.id, run: async function (s) { await s.say(who, said); } }, best); return; }
       F.runEvent(best.ev, best);
       return;
     }

@@ -140,7 +140,8 @@
 
   // ---------------- Yishui ----------------
   WM.defEvents('yishui', [
-    { id: 'ch10_ligui', x: 2, y: 26, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch10_likui'); }, run: async function (s) {
+    { id: 'ch10_ligui', x: 2, y: 26, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch10_likui'); }, idle: { ligui: '(A man with a blackened face crouches among the trees with two axes, waiting for travellers.)' },
+      run: async function (s) {
       s.spawn('ligui', 'ligui', 9, 26, 'left');
       await s.say('ligui:angry', 'Halt! I am Li Kui, the Black Whirlwind! Leave your silver and go, or I\'ll chop you in two!');
       await s.say('likui:angry', '...What? Who did you say you were?');
@@ -175,16 +176,17 @@
       s.spawn('mother', 'likuimother', 28, 10, 'down');
       await s.say('likuimother', 'Son... I\'m so thirsty. Is there water?');
       await s.say('likui', 'Rest here on this rock, Mother. There\'s a stream down in the valley. I\'ll bring you some.');
+      s.idle('mother', 'Tie\'niu? Back already? ...No? Go on, then, son. I\'ll sit here on the rock and wait for you.');
       s.heal();
       s.flag('ch10_water');
       await s.say(null, '(The stream is in the valley to the west.)');
     } },
     { id: 'ch10_stream', x: 14, y: 12, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch10_water'); }, run: async function (s) {
       await s.narrate('Li Kui found the stream, but had nothing to carry water in. He climbed to a little shrine to the Great Sage of Sizhou on the hillside, wrenched the stone incense burner off its base, washed it in the stream, and filled it, and carried it carefully back up the slope.');
+      s.hide('mother'); s.despawn('mother');   // while he was gone: nobody on the rock when he climbs back
       s.flag('ch10_back2');
     } },
     { id: 'ch10_gone', x: 26, y: 8, w: 8, h: 5, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch10_back2'); }, run: async function (s) {
-      s.despawn('mother');
       s.music('sad');
       await s.say('likui:shock', 'Mother? Mother! Where are you?!');
       await s.narrate('The rock was empty. Thirty paces away, in the grass, there was blood, and a strand of grey hair. And from the hillside above came the sound of beasts, eating.');

@@ -76,7 +76,8 @@
     } }
   ]);
   WM.defEvents('kaifeng', [
-    { id: 'ch4_bridge', x: 9, y: 20, w: 4, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch4_sell'); }, run: async function (s) {
+    { id: 'ch4_bridge', x: 9, y: 20, w: 4, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch4_sell'); }, idle: { c1: 'If you\'re selling, officer, sell quickly and go home. This bridge belongs to the Tiger.', c2: 'It\'s a fine blade... but three thousand strings? Nobody on this bridge has that kind of money.', c3: 'Three thousand strings for a sabre! What does it do, cut gold?' },
+      run: async function (s) {
       s.place('player', 10, 22, 'down');
       s.spawn('c1', 'villager', 8, 21, 'right'); s.spawn('c2', 'woman', 12, 21, 'left'); s.spawn('c3', 'merchant', 13, 22, 'left');
       await s.wait(0.5);

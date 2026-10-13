@@ -77,8 +77,13 @@
   ]);
   WM.defEvents('daming', [
     L.sign('dmsign', 25, 42, 'Daming Prefecture, the Northern Capital. Governor: the Honourable Liang Zhongshu.'),
-    { id: 'dm1', x: 33, y: 20, npc: 'merchant', wander: true, text: ['The Governor is the Prime Minister Cai Jing\'s son-in-law. Every year he sends his father-in-law a birthday present worth a hundred thousand strings. Every year!'] },
-    { id: 'dm2', x: 12, y: 33, npc: 'woman2', wander: true, text: ['The Cuiyun Tower is the finest tavern in the north. On the night of the Lantern Festival you can see the whole city lit up from its balconies.'] },
-    { id: 'dm3', x: 40, y: 34, npc: 'soldier', text: ['The drill ground is at the north-east of the city. The Governor reviews the troops there.'] }
+    // what Daming talks about: the birthday gifts, Yang Zhi, and the Lantern Festival when Liangshan came in
+    { id: 'dm1', x: 33, y: 20, npc: 'merchant', wander: true, cond: function (S2) { return !S2.has('ch5_gifts'); }, text: ['The Governor is the Prime Minister Cai Jing\'s son-in-law. Every year he sends his father-in-law a birthday present worth a hundred thousand strings. Every year!'] },
+    { id: 'dm1b', x: 33, y: 20, npc: 'merchant', wander: true, cond: function (S2) { return S2.has('ch5_gifts'); }, text: ['The Governor\'s birthday gifts were robbed on Yellow Earth Ridge — a hundred thousand strings, taken with a bucket of drugged wine. Twice now! The Prime Minister is said to be beside himself.'] },
+    { id: 'dm2', x: 12, y: 33, npc: 'woman2', wander: true, cond: function (S2) { return !S2.has('ch17_fire'); }, text: ['The Cuiyun Tower is the finest tavern in the north. On the night of the Lantern Festival you can see the whole city lit up from its balconies.'] },
+    { id: 'dm2b', x: 12, y: 33, npc: 'woman2', wander: true, cond: function (S2) { return S2.has('ch17_fire'); }, text: ['On the night of the Lantern Festival the Cuiyun Tower went up like a torch. Then the beggars and pedlars in the crowd drew swords — Liangshan men, every one of them.'] },
+    { id: 'dm3', x: 40, y: 34, npc: 'soldier', cond: function (S2) { return !S2.has('ch4_done'); }, text: ['The drill ground is at the north-east of the city. The Governor reviews the troops there.'] },
+    { id: 'dm3b', x: 40, y: 34, npc: 'soldier', cond: function (S2) { return S2.has('ch4_done') && !S2.has('ch5_gifts'); }, text: ['You should have seen the contest on the drill ground! Yang Zhi and Suo Chao fought fifty bouts and neither could win. The Governor made them both captains on the spot.'] },
+    { id: 'dm3c', x: 40, y: 34, npc: 'soldier', cond: function (S2) { return S2.has('ch5_gifts'); }, text: ['Captain Yang Zhi took the birthday gifts south, and never came back. The Governor has put a price on his head. A good soldier, that one. Unlucky.'] }
   ]);
 })();

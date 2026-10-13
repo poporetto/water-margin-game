@@ -105,7 +105,8 @@
       await s.say('daizong', 'One more day in the city. Let\'s try the main street.');
       s.flag('ch11_searched');
     } },
-    { id: 'ch11_brawl', x: 21, y: 22, w: 5, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_searched'); }, run: async function (s) {
+    { id: 'ch11_brawl', x: 21, y: 22, w: 5, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_searched'); }, idle: { yx: '(Yang Xiong walks at the head of the procession, his red-tasselled sword at his hip. He nods to you, but does not stop.)', zb: 'Out of my way. I\'ve business with the warden.', t1: 'Heh. Zhang Bao\'s going to have a word with the executioner about all that silk.', t2: 'Silk! Bolts of it! Somebody has a lot of friends...' },
+      run: async function (s) {
       s.spawn('yx', 'yangxiong', 18, 22, 'right'); s.spawn('zb', 'zhangbao', 20, 22, 'left'); s.spawn('t1', 'gambler', 19, 23, 'up'); s.spawn('t2', 'drunk', 17, 23, 'up');
       await s.narrate('A procession was coming down the street: a tall, sallow-faced officer with a red-tasselled sword, behind him men carrying bolts of silk and satin — gifts from his friends. People called him the Sick Guan Suo: Yang Xiong, warden of the two prisons of Jizhou, and the executioner of the city.');
       await s.say('zhangbao', 'Brother Yang Xiong! Congratulations on all these presents. Lend me a hundred strings of cash.');
@@ -204,7 +205,8 @@
     } }
   ]);
   WM.defEvents('jizhou_n', [
-    { id: 'ch11_lane', x: 1, y: 30, w: 8, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_watch'); }, run: async function (s) {
+    { id: 'ch11_lane', x: 1, y: 30, w: 8, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_watch'); }, idle: { hd: '(tok... tok...) The sky is bright, all beings, rise and pray... (He sees you, and the fish falls silent.)' },
+      run: async function (s) {
       s.spawn('hd', 'hudao', 3, 30, 'right');
       await s.say('hudao', '(tok... tok...)');
       await s.say('shixiu:angry', 'Not a sound. Tell me the truth, or you die.');
@@ -217,7 +219,8 @@
       await s.fadeIn(1);
       await s.say('shixiu', '(Brother will come over the state bridge on his way to the prison.)');
     } },
-    { id: 'ch11_bridge', x: 22, y: 15, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_proof'); }, run: async function (s) {
+    { id: 'ch11_bridge', x: 22, y: 15, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_proof'); }, idle: { yx: '(Yang Xiong is pacing at the end of the bridge, searching every face that passes. He hasn\'t seen you yet.)' },
+      run: async function (s) {
       s.spawn('yx', 'yangxiong', 23, 18, 'up');
       await s.say('yangxiong', 'Brother! I\'ve been looking for you. I was a fool, and I listened to a woman. Those two dead monks — I know now.');
       await s.say('shixiu', 'Brother, these are the clothes of the monk and of Hu Dao. Now you know I did not lie to you. But I want her to say it to your face, so that my name is clear.');

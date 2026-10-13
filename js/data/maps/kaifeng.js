@@ -128,7 +128,10 @@
     { id: 'kv1', x: 24, y: 30, npc: 'merchant', wander: true, text: ['The Bian River carries grain and stone from the south all year. The capital never sleeps!'] },
     { id: 'kv2', x: 34, y: 20, npc: 'woman2', wander: true, text: ['They say the Fan Tower has five buildings joined by flying bridges. I have only ever seen it from the street.'] },
     { id: 'kv3', x: 15, y: 27, npc: 'oldman', text: ['When I was young the street-toughs played football in the alleys. Now one of them is a Marshal. Strange world.'] },
-    { id: 'kv4', x: 44, y: 34, npc: 'monk', text: ['The Great Xiangguo Monastery is the largest in the realm. Its vegetable garden is plagued by idle rascals, I hear.'] },
+    // the vegetable garden of the Xiangguo Monastery, before and after Lu Zhishen keeps it
+    { id: 'kv4', x: 44, y: 34, npc: 'monk', cond: function (S2) { return !S2.has('ch2_rascalsdone'); }, text: ['The Great Xiangguo Monastery is the largest in the realm. Its vegetable garden is plagued by idle rascals, I hear.'] },
+    { id: 'kv4b', x: 44, y: 34, npc: 'monk', cond: function (S2) { return S2.has('ch2_rascalsdone') && !S2.has('ch3_saved'); }, text: ['The new keeper of the Xiangguo vegetable garden is a monk from Mount Wutai. He threw the rascals into the cesspit and pulled up a willow by the roots. Now they bring him wine.'] },
+    { id: 'kv4c', x: 44, y: 34, npc: 'monk', cond: function (S2) { return S2.has('ch3_saved'); }, text: ['The big monk of the vegetable garden has gone. He left the same month Instructor Lin was sent to Cangzhou. Marshal Gao\'s men came asking for him.'] },
     L.sign('ksign1', 26, 40, 'South Gate — the Eastern Capital, Kaifeng. Seat of the Son of Heaven.'),
     L.sign('ksign2', 26, 20, 'The Zhou Bridge over the Bian River.')
   ]);

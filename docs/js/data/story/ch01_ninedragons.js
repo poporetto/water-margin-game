@@ -104,7 +104,8 @@
     { id: 'ch1_home', x: 4, y: 4, trigger: 'check', cond: function (S2) { return S2.has('ch1_flee') && !S2.has('ch1_fled'); }, text: ['Everything we can carry is already on the horse. There is nothing more to take.'] }
   ]);
   WM.defEvents('kaifeng', [
-    { id: 'ch1_gate', x: 28, y: 42, w: 4, h: 1, trigger: 'touch', cond: function (S2) { return S2.has('ch1_flee') && !S2.has('ch1_fled'); }, run: async function (s) {
+    { id: 'ch1_gate', x: 28, y: 42, w: 4, h: 1, trigger: 'touch', cond: function (S2) { return S2.has('ch1_flee') && !S2.has('ch1_fled'); }, idle: { mother: 'I have tied up what we can carry. Don\'t look back at the house, son. Gao Qiu never forgets a grudge.' },
+      run: async function (s) {
       s.spawn('mother', 'wangmother', 30, 40, 'down');
       await s.say('wangmother', 'The gate guards are asleep. Go, my son. Go quickly.');
       s.flag('ch1_fled'); s.night(false);
@@ -217,7 +218,8 @@
     { id: 'v_sign', x: 12, y: 21, trigger: 'check', text: ['Shi Family Village, Huayin County. To the north-east, Mount Shaohua.'] },
     { id: 'v_yardsign', x: 12, y: 16, trigger: 'check', text: ['A rack of weapons: spear, staff, sabre, halberd... Shi Jin practises with all eighteen.'] },
     // the raid
-    { id: 'ch1_raid', x: 28, y: 18, w: 6, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_shijin'); }, run: async function (s) {
+    { id: 'ch1_raid', x: 28, y: 18, w: 6, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_shijin'); }, idle: { villagerA: '(He is bent double by the gate, gasping.) Young master — the north road — let me get my breath —' },
+      run: async function (s) {
       s.spawn('villagerA', 'villager2', 33, 19, 'left');
       await s.move('villagerA', 'L2', { run: true });
       await s.say('villager2', 'Young master! Bandits from Mount Shaohua! A hundred and more, coming down the north road! They say their chief is the one called Chen Da!');
@@ -242,7 +244,8 @@
       await s.say('shijin', 'Tie him to a pillar in the yard. When we have the other two as well, we\'ll hand all three to the magistrate and claim the reward.');
     } },
     { id: 'ch1_bound', x: 13, y: 14, char: 'chenda', dir: 'down', cond: function (S2) { return S2.has('ch1_captured') && !S2.has('ch1_oath'); }, text: ['(Chen Da glowers at you from the pillar he is tied to.)'] },
-    { id: 'ch1_plea', x: 14, y: 22, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_captured'); }, run: async function (s) {
+    { id: 'ch1_plea', x: 14, y: 22, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_captured'); }, idle: { zhuwu: 'We have come on foot, without weapons. Tell Master Shi that Zhu Wu and Yang Chun of Mount Shaohua are at his gate.', yangchun: '(Yang Chun stands in the road with his empty hands at his sides, and says nothing.)', sv: 'Young master! There are two men at the gate — from the mountain!' },
+      run: async function (s) {
       s.spawn('zhuwu', 'zhuwu', 15, 30, 'up'); s.spawn('yangchun', 'yangchun', 16, 30, 'up');
       s.spawn('sv', 'servant', 16, 21, 'left');
       await s.say('servant', 'Young master! Two men from the mountain at the gate — on foot, unarmed! They say they\'ve come to... to surrender themselves.');
@@ -325,7 +328,8 @@
       await s.battle('ch1_yard', { bg: 'fire' });
       s.despawn('d1'); s.despawn('d2');
     } },
-    { id: 'ch1_bossfight', x: 12, y: 24, w: 5, h: 2, trigger: 'touch', once: true, cond: fireActive, run: async function (s) {
+    { id: 'ch1_bossfight', x: 12, y: 24, w: 5, h: 2, trigger: 'touch', once: true, cond: fireActive, idle: { liji: 'Not one step further, Shi Jin. The constables hold every gate, and the reward is as good as mine.', d1: 'Stand back! By order of the magistrate of Huayin county!', d2: '(The duty officer\'s spear shakes in the firelight.)' },
+      run: async function (s) {
       s.spawn('liji', 'liji', 14, 27, 'up'); s.spawn('d1', 'dutyA', 13, 27, 'up'); s.spawn('d2', 'dutyA', 15, 27, 'up');
       await s.say('liji', 'Shi Jin! Give yourself up! You\'re harbouring bandits — the reward\'s already as good as mine!');
       await s.say('shijin:angry', 'Li Ji, you treacherous dog! I\'ll settle with you first!');
@@ -373,7 +377,8 @@
 
   // ---------------- Weizhou: Shi Jin meets Lu Da ----------------
   WM.defEvents('weizhou_in', [
-    { id: 'ch1_tea', x: 6, y: 5, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_toweizhou'); }, run: async function (s) {
+    { id: 'ch1_tea', x: 6, y: 5, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_toweizhou'); }, idle: { waiterT: 'Tea, sir? Sit where you like. The garrison officers come in about this hour.' },
+      run: async function (s) {
       s.spawn('waiterT', 'waiter', 3, 7, 'right');
       await s.say('waiter', 'Tea, sir? What can I bring you?');
       await s.say('shijin', 'A pot of the strong stuff. And tell me — where is the garrison commander\'s office? I\'m looking for an instructor from the Eastern Capital named Wang Jin. Is he here?');

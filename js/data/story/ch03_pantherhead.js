@@ -230,7 +230,8 @@
       await s.notice('Lu Zhishen joined the party.', { auto: 1.6 });
       await s.say('luzhishen', 'Let\'s go. The road east leads out of the forest.');
     } },
-    { id: 'ch3_pine', x: 33, y: 12, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_saved'); }, run: async function (s) {
+    { id: 'ch3_pine', x: 33, y: 12, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_saved'); }, idle: { dong: '(Dong Chao will not meet your eyes.) We were only following orders, Instructor. Lu Qian\'s orders.', xue: 'Is the monk still behind us? ...Don\'t tell him I asked.' },
+      run: async function (s) {
       s.spawn('dong', 'dongchao', 31, 13, 'right'); s.spawn('xue', 'xueba', 31, 15, 'right');
       await s.narrate('For seventeen or eighteen days Lu Zhishen escorted them. When Cangzhou was only seventy li away, and the road was busy with people, he stopped.');
       await s.say('luzhishen', 'From here on the road\'s too busy for any mischief. I\'ll leave you. You two — look at that pine.');

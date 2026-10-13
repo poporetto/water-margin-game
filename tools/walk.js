@@ -24,6 +24,8 @@ const SCENES = process.argv.includes('--scenes');
 const FLOW = process.argv.includes('--flow');   // print the story as played: each scene that moves it on, with its first line
 let firstLine = '';
 // --hints: when a scene ends and the story goes on somewhere else, does the player get told where?
+// --leftover: people a scene leaves standing on the map when it ends (the player can walk up to them)
+const LEFT = process.argv.includes('--leftover'); const leftLog = [];
 const HINTS = process.argv.includes('--hints'); const flowLog = []; let hinted = false, spoken = '';
 let curEvent = '(none)';
 function err(msg) { errors.push('[' + curEvent + '] ' + msg); }
@@ -190,6 +192,7 @@ function mkApi(ctx) {
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
     despawn(key) { if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); delete temp[key]; },
+    idle(key, lines) { if (!temp[key]) err('idle: no actor "' + key + '"'); else if (!lines || !lines.length) err('idle: no line for "' + key + '"'); else temp[key].idle = true; },
     leader(id) { if (!D.chars[id]) err('leader: unknown char ' + id); },
     shake() { return resolved; }, flash() { return resolved; },
     sfx() {}, music(id) { if (id && !WM.audio.tracks[id]) err('unknown music "' + id + '"'); }, stopMusic() {},
@@ -358,6 +361,42 @@ function eventReachable(ev, arrival) {
   return false;
 }
 
+// ---------- people with nothing to say ----------
+// Characters a scene places before its first line stand on the map from the moment it could fire (Field.stage).
+// If the player can walk up to one without setting the scene off, they need a line of their own: ev.idle[key].
+const LEAD_RE = /s\.spawn\(\s*'([^']+)'\s*,\s*'([^']+)'\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*'(\w+)')?\s*\)/g;
+function leadSpawns(ev) {
+  const src = ev.run.toString(), body = src.slice(src.indexOf('{') + 1), cut = body.search(/\bawait\b|s\.warp\(|s\.night\(|s\.tint\(/);
+  const lead = cut >= 0 ? body.slice(0, cut) : body, out = []; let m;
+  LEAD_RE.lastIndex = 0;
+  while ((m = LEAD_RE.exec(lead))) { if (lead.indexOf("'ghost:" + m[2] + "'") >= 0 || (!D.chars[m[2]] && !D.npcs[m[2]])) continue; out.push({ key: m[1], who: m[2], x: +m[3], y: +m[4] }); }
+  return out;
+}
+function silentStaged(ev, arrival) {
+  if (!ev.run || ev.resident || !/^(auto|touch|check)$/.test(ev.trigger || '')) return [];
+  const missing = leadSpawns(ev).filter((sp) => !(ev.idle && ev.idle[sp.key]));
+  if (!missing.length) return [];
+  const byPlace = ev.trigger === 'auto' && ev.cond && /\.x\b|\.y\b/.test(ev.cond.toString());
+  if (ev.trigger === 'auto' && !byPlace) return [];   // it fires the moment the player arrives
+  const st = WM.state, sx = st.x, sy = st.y, sm = st.map;
+  const fires = (x, y) => {
+    if (ev.trigger === 'touch') return x >= ev.x && x < ev.x + (ev.w || 1) && y >= ev.y && y < ev.y + (ev.h || 1);
+    if (!byPlace) return false;
+    st.map = ev.map; st.x = x; st.y = y; let on = false; try { on = !!ev.cond(S, st); } catch (e) {} st.map = sm; st.x = sx; st.y = sy; return on;
+  };
+  const acts = actorsOnMap(ev.map), block = new Set(Object.keys(acts).map((k) => acts[k].x + ',' + acts[k].y));
+  const ok = (x, y) => walkable(ev.map, x, y) && !block.has(x + ',' + y) && !fires(x, y);
+  if (!ok(arrival.x, arrival.y)) return [];
+  const seen = new Set([arrival.x + ',' + arrival.y]), q = [[arrival.x, arrival.y]];
+  while (q.length) {
+    const [x, y] = q.pop();
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = (x + dx) + ',' + (y + dy); if (!seen.has(k) && ok(x + dx, y + dy)) { seen.add(k); q.push([x + dx, y + dy]); } }
+  }
+  const over = (x, y) => ['c', 't'].indexOf(tile(ev.map, x, y)) >= 0;
+  return missing.filter((sp) => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) =>
+    seen.has((sp.x + dx) + ',' + (sp.y + dy)) || (over(sp.x + dx, sp.y + dy) && seen.has((sp.x + 2 * dx) + ',' + (sp.y + 2 * dy)))));
+}
+
 // ---------- the walk ----------
 function storyFlags() { return Object.keys(WM.state.flags).filter((f) => f.indexOf('ev:') !== 0 && WM.state.flags[f]).sort().join('|'); }
 
@@ -460,6 +499,7 @@ async function main() {
         const st = spots.find(([x, y]) => rch.has(x + ',' + y));
         if (st) { cur.x = st[0]; cur.y = st[1]; WM.state.x = cur.x; WM.state.y = cur.y; }
       }
+      const silent = silentStaged(ev, arrival);
       await runEvent(ev);
       const after = storyFlags();
       reachCache = {};
@@ -468,6 +508,10 @@ async function main() {
           progressed = true; lastProgress = curEvent;
           if (FLOW) console.log('  ' + curEvent + '  — ' + (firstLine || '').slice(0, 110));
           if (HINTS) flowLog.push({ ev: curEvent, endMap: cur.map, hinted: hinted, ch: WM.state.chapter, text: spoken });
+          if (LEFT) Object.keys(temp).forEach((k) => { if (D.chars[temp[k].who] || D.npcs[temp[k].who]) leftLog.push('ch' + WM.state.chapter + ' ' + curEvent + ' leaves ' + k + (k === temp[k].who ? '' : '=' + temp[k].who) + ' on ' + cur.map); });
+          // the player can talk to anyone left standing, and to anyone waiting for this scene
+          Object.keys(temp).forEach((k) => { if ((D.chars[temp[k].who] || D.npcs[temp[k].who]) && !temp[k].idle) err('"' + k + '" is left standing after the scene with nothing to say (s.idle)'); });
+          silent.forEach((sp) => errors.push('[' + ev.map + ':' + ev.id + '] "' + sp.key + '" (' + sp.who + ') waits at ' + sp.x + ',' + sp.y + ' where the player can talk to them first, with nothing to say (idle.' + sp.key + ')'));
           break;
         }
       }
@@ -497,6 +541,7 @@ async function main() {
       if (on) console.log('  still armed: ' + mid + ':' + ev.id + ' (' + (ev.trigger || 'talk') + ')');
     }));
   }
+  if (LEFT) { console.log('\nPeople left standing after a scene:'); leftLog.forEach((l) => console.log('  ' + l)); }
   if (HINTS) {
     console.log('\nScenes after which the story moves to another map without a hint:');
     for (let i = 0; i < flowLog.length - 1; i++) {

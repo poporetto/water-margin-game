@@ -292,7 +292,8 @@
     } }
   ]);
   WM.defEvents('wuweijun', [
-    { id: 'ch9_huang', x: 20, y: 9, w: 5, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch9_wuwei'); }, run: async function (s) {
+    { id: 'ch9_huang', x: 20, y: 9, w: 5, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch9_wuwei'); }, idle: { houjian: '(whispering) Not here — the watch passes along this wall. Come round to the back gate and I\'ll open it.' },
+      run: async function (s) {
       s.spawn('houjian', 'houjian', 22, 11, 'up');
       await s.say('houjian', 'The back gate is open. Huang Wenbing is inside. Only he and his household — his brother Huang Wenye is a good man, spare him.');
       s.despawn('houjian');

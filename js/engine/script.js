@@ -177,7 +177,7 @@
         // already standing there since the scene was set (see Field.stage)
         if (ex && ex.ev && ex.ev.staged) {
           var et = ex.tile();
-          if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; ex.solid = true; if (dir) ex.dir = dir; return ex; }
+          if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; ex.ev.idle = null; ex.solid = true; if (dir) ex.dir = dir; return ex; }
           f.actors = f.actors.filter(function (o) { return o !== ex; });
         }
         var back = (f.actors || []).filter(function (o) { return o.leavingKey && o.sheetWho === who; })[0];
@@ -193,6 +193,8 @@
         return a;
       },
       despawn: function (key) { leave(key); },
+      // what someone left standing after the scene says when the player talks to them (a line, or several)
+      idle: function (key, lines) { var a = F().findActor(key); if (a && a.ev) a.ev.idle = lines; },
       spawnBeast: function (key, art, tx, ty, dir, params) { var a = F().addBeast(key, art, tx, ty, dir, params); enter(a, null, tx, ty, dir); return a; },
       leader: function (id) { F().setLeader(id); },
       // --- screen ---

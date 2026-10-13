@@ -64,7 +64,8 @@
 
   WM.defEvents('shivillage_in', [
     L.shop('vstore', 33, 4, 'village', 'shopkeep', 'Buns, beef and a few odds and ends. We are a long way from the capital.'),
-    { id: 'housewife', x: 25, y: 5, npc: 'woman', text: ['The young master trains with that staff from dawn until dark. The Taigong despairs of him ever minding the farm.'] }
+    { id: 'housewife', x: 25, y: 5, npc: 'woman', cond: function (S2) { return !S2.has('ch1_escaped'); }, text: ['The young master trains with that staff from dawn until dark. The Taigong despairs of him ever minding the farm.'] },
+    { id: 'housewife2', x: 25, y: 5, npc: 'woman', cond: function (S2) { return S2.has('ch1_escaped'); }, text: ['The manor is ashes, and the young master has gone up Mount Shaohua with the bandit chiefs. The Taigong would have wept to see it. And Li Ji the hunter, who sold him to the constables for a reward — the young master cut him down in the gateway.'] }
   ]);
 
   // ---------------- Mount Shaohua ----------------

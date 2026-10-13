@@ -239,7 +239,8 @@
       s.despawn('steward'); s.despawn('s1'); s.despawn('s2');
       await s.say(null, '(Lead the escort over the ridge. The pine grove at the crest offers shade.)');
     } },
-    { id: 'ch5_ridge', x: 19, y: 7, w: 7, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_escort'); }, run: async function (s) {
+    { id: 'ch5_ridge', x: 19, y: 7, w: 7, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_escort'); }, idle: { steward: 'You drive these men too hard, Officer Yang. The Governor\'s lady would not want them to die on the road.', s1: 'Officer Yang, the sun is splitting the stones. Only a little rest in the shade...', s2: '(The soldier groans under his carrying pole and does not look up.)', s3: 'Bandits, bandits! He beats us with his rattan and shouts about bandits. I\'ve seen nothing but dust.' },
+      run: async function (s) {
       s.music('tense');
       s.spawn('steward', 'laoduguan', 20, 9, 'up'); s.spawn('s1', 'soldier', 21, 10, 'up'); s.spawn('s2', 'soldier', 23, 10, 'up'); s.spawn('s3', 'soldier', 19, 10, 'right');
       await s.narrate('At noon they reached the top of Yellow Earth Ridge. The soldiers dropped their loads and threw themselves down in the shade of the pines, and no amount of beating would make them get up.');

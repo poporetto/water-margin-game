@@ -263,7 +263,8 @@
       s.flag('ch14_pitplan');
       await s.say(null, '(Go up the little hill north-west of the camp.)');
     } },
-    { id: 'ch14_pit', x: 4, y: 4, w: 10, h: 8, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch14_pitplan'); }, run: async function (s) {
+    { id: 'ch14_pit', x: 4, y: 4, w: 10, h: 8, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch14_pitplan'); }, idle: { hy: '(Huyan Zhuo sits his black horse at the edge of the trees, watching the hill. He has not seen you.)' },
+      run: async function (s) {
       s.spawn('hy', 'huyanzhuo', 22, 13, 'left');
       await s.say('huyanzhuo:angry', 'There! On the hill — Song Jiang himself! Follow me!');
       await s.move('hy', 'L5 D1 L5 U1');   // round the trees to the pit

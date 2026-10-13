@@ -54,9 +54,12 @@
 
   WM.defEvents('weizhou', [
     L.sign('wzsign', 17, 29, 'Weizhou — garrison prefecture of the Jingyuan circuit, under the command of Minister Chong the Younger.'),
-    { id: 'wz1', x: 14, y: 13, npc: 'soldier', wander: true, text: ['Major Lu of the garrison? Big as a bear and twice as loud. Good man, though. Pays for his wine.'] },
+    // the town's talk moves on once Lu Da has killed the butcher and fled
+    { id: 'wz1', x: 14, y: 13, npc: 'soldier', wander: true, cond: function (S2) { return !S2.has('ch2_fled'); }, text: ['Major Lu of the garrison? Big as a bear and twice as loud. Good man, though. Pays for his wine.'] },
+    { id: 'wz1b', x: 14, y: 13, npc: 'soldier', wander: true, cond: function (S2) { return S2.has('ch2_fled'); }, text: ['Major Lu killed Zheng the butcher with three blows of his fist, and ran. The Commissioner was fond of him, too. Now there\'s a thousand strings on his head.'] },
     { id: 'wz2', x: 35, y: 9, npc: 'merchant', wander: true, text: ['Wool from the frontier, horses from the Xia! Weizhou is the last proper town before the passes.'] },
-    { id: 'wz3', x: 9, y: 13, npc: 'oldwoman', text: ['That butcher by the bridge calls himself "Lord of the West" now. Lord! He was a pig-sticker when I was a girl.'] }
+    { id: 'wz3', x: 9, y: 13, npc: 'oldwoman', cond: function (S2) { return !S2.has('ch2_fled'); }, text: ['That butcher by the bridge calls himself "Lord of the West" now. Lord! He was a pig-sticker when I was a girl.'] },
+    { id: 'wz3b', x: 9, y: 13, npc: 'oldwoman', cond: function (S2) { return S2.has('ch2_fled'); }, text: ['"Lord of the West"! He lay in his own shop like one of his pigs. And old Jin and his girl got clean away. I won\'t pretend I wept.'] }
   ]);
   WM.defEvents('weizhou_in', [
     L.inn('wzinn', 47, 4, 15),
