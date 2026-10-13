@@ -96,6 +96,7 @@
   WM.defEvents('liangshan', [
     { id: 'ch24_end', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch24_temple'); }, run: async function (s) {
       await s.narrate('The people of the marsh came to the temple in spring and autumn, and burned incense, and said that prayers there were always answered. On windy nights, the fishermen said, they could hear voices on the water, and the sound of horses on the hill, and banners flapping where there were no banners.');
+      s.music('ending');   // the closing theme, for the last card and the roll of names
       await s.card('"Their bodies lie in Liaoerwa; their names fill the land under heaven." — The hundred and eight Stars came down from the sky, and went back to the sky. Here ends the Water Margin.', { min: 2, size: 26 });
       s.flag('ch24_done');
       await s.credits();
