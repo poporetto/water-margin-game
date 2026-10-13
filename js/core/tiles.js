@@ -170,26 +170,40 @@
     if (dn !== 'M') { px(c, x, y + 12, S, 4, dark); for (var k = 0; k < 16; k += 3) px(c, x + k, y + 11, 2, 1, dark); }
   }
   function wallPlaster(c, x, y, tx, ty, th, m, ch) {
-    px(c, x, y, S, S, '#e6dcc4');
-    px(c, x, y, S, 2, '#6a3e22');       // beam under the eave
-    px(c, x, y + 14, S, 2, '#7a6a58');   // plinth
-    px(c, x, y + 13, S, 1, '#b8ab90');
+    // a Song house front: whitewashed infill between timber columns, a vermilion beam resting on small brackets
+    // under the eave, and the whole raised on a stone base
+    px(c, x, y, S, S, '#ebe2ca');
+    // a front two tiles high is one storey: the beam goes along the top row only, the stone base along the bottom
+    var top = !T.isWallChar(m.get(tx, ty - 1)) && m.get(tx, ty - 1) !== 'D', bottom = !T.isWallChar(m.get(tx, ty + 1));
+    var y0 = top ? 2 : 0, y1 = bottom ? 13 : 16;
+    if (top) {
+      px(c, x, y, S, 2, '#8e2f22'); px(c, x, y, S, 1, '#a8402e');            // beam under the eave
+      for (var b = 1; b < 16; b += 5) px(c, x + b, y + 2, 3, 1, '#5a2418');   // bracket blocks (dougong)
+    }
+    if (bottom) { px(c, x, y + 13, S, 3, '#8c877c'); px(c, x, y + 13, S, 1, '#a9a498'); }   // stone base
     var l = m.get(tx - 1, ty), r = m.get(tx + 1, ty);
-    if (!T.isWallChar(l)) px(c, x, y, 2, S, '#6a3e22');
-    if (!T.isWallChar(r)) px(c, x + 14, y, 2, S, '#6a3e22');
-    if (ch === 'O') { // lattice window
-      px(c, x + 3, y + 4, 10, 8, '#5a3820');
-      px(c, x + 4, y + 5, 8, 6, '#efe3c0');
-      c.fillStyle = '#5a3820';
-      c.fillRect(x + 6, y + 5, 1, 6); c.fillRect(x + 9, y + 5, 1, 6); c.fillRect(x + 4, y + 7, 8, 1); c.fillRect(x + 4, y + 9, 8, 1);
+    var column = function (cx) { px(c, cx, y + y0, 2, y1 - y0, '#6e2a1c'); px(c, cx, y + y0, 1, y1 - y0, '#8a3a26'); };
+    if (!T.isWallChar(l)) column(x);
+    if (!T.isWallChar(r)) column(x + 14);
+    // columns along a long front, where the wall is plain from eave to base (not through a window or a door)
+    var plain = function (dy) { var q = m.get(tx, ty + dy); return !T.isWallChar(q) || q === 'W'; };
+    if (tx % 3 === 0 && T.isWallChar(l) && T.isWallChar(r) && ch === 'W' && plain(-1) && plain(1)) column(x + 7);
+    if (ch === 'O') { // a vertical-slat window (zhiling chuang), the common Song window
+      px(c, x + 3, y + 4, 10, 8, '#4a2a18');
+      px(c, x + 4, y + 5, 8, 6, '#f0e6c6');
+      c.fillStyle = '#4a2a18';
+      for (var sl = x + 5; sl < x + 12; sl += 2) c.fillRect(sl, y + 5, 1, 6);
+      px(c, x + 3, y + 11, 10, 1, '#6a4028');
     }
   }
-  function wallRed(c, x, y, tx, ty) {
+  function wallRed(c, x, y, tx, ty, th, m) {
+    // the vermilion wall of a temple or a government office, capped with grey tiles
     px(c, x, y, S, S, '#9c2f25');
-    px(c, x, y, S, 2, '#5c1a14');
-    px(c, x, y + 14, S, 2, '#6b5a48');
-    px(c, x + 2, y + 2, 3, 12, '#b8463a'); px(c, x + 11, y + 2, 3, 12, '#b8463a');
-    px(c, x + 2, y + 2, 1, 12, '#d0604f');
+    var base = !m || m.get(tx, ty + 1) !== 'R';   // the stone footing only where the wall meets the ground
+    px(c, x + 2, y, 3, base ? 14 : 16, '#b8463a'); px(c, x + 11, y, 3, base ? 14 : 16, '#b8463a');
+    px(c, x + 2, y, 1, base ? 14 : 16, '#d0604f');
+    if (base) px(c, x, y + 14, S, 2, '#6b5a48');
+    // (the tiled coping along the top is drawn by wallRedOver; a wall running north-south is one unbroken face)
   }
   function wallStone(c, x, y, tx, ty, th, m) {
     px(c, x, y, S, S, '#8a8478');
@@ -211,46 +225,66 @@
     px(c, x, y + 10, S, 6, '#7d7a72');
   }
   function roof(c, x, y, tx, ty, th, m, ch) {
-    var pal = ch === 'Z' ? ['#c99a2e', '#e8bf4a', '#9a7020', '#7a5418'] :
-              ch === 'z' ? ['#a88d5a', '#c4aa72', '#857048', '#6a5838'] :
-              ch === 'v' ? ['#7a3a2a', '#9a4e38', '#5a2a1e', '#401a12'] :
-                           ['#5b6476', '#7b8598', '#424a5a', '#2f3542'];
+    var pal = roofPal(ch);
     var R = function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === ch; };
     px(c, x, y, S, S, pal[0]);
     if (ch === 'z') { // thatch: streaky straw
       for (var i = 0; i < 16; i += 2) px(c, x + i, y, 1, S, i % 4 ? pal[1] : pal[2]);
       for (var j = 3; j < 16; j += 5) px(c, x, y + j, S, 1, pal[2]);
     } else {
-      // rows of curved tiles
-      for (var row = 0; row < 16; row += 4) {
-        px(c, x, y + row + 3, S, 1, pal[2]);
-        for (var col = (row / 4) % 2 ? 2 : 0; col < 16; col += 4) { px(c, x + col, y + row, 2, 3, pal[1]); px(c, x + col, y + row, 1, 3, U.shade(pal[1], 0.15)); }
+      // Song roofs: rows of round tube tiles running down the slope, with channels of flat tiles between them
+      for (var col = 0; col < 16; col += 4) {
+        px(c, x + col, y, 2, S, pal[1]); px(c, x + col, y, 1, S, U.shade(pal[1], 0.18));   // the tube tile, lit on one side
+        px(c, x + col + 2, y, 1, S, pal[2]);                                                   // shadow beside it
       }
+      for (var row = 3 + (ty % 2) * 2; row < 16; row += 5) px(c, x, y + row, S, 1, U.shade(pal[0], -0.12));   // courses
     }
-    if (!R(0, -1)) { // ridge
-      px(c, x, y, S, 4, pal[3]); px(c, x, y + 1, S, 1, pal[2]);
-      if (!R(-1, 0)) { px(c, x - 0, y - 3, 3, 3, pal[3]); px(c, x, y - 4, 2, 1, pal[3]); } // upturned ridge ends
-      if (!R(1, 0)) { px(c, x + 13, y - 3, 3, 3, pal[3]); px(c, x + 14, y - 4, 2, 1, pal[3]); }
+    if (!R(0, -1)) { // the main ridge, with a curled ornament (chiwen) rising at each end
+      px(c, x, y, S, 4, pal[3]); px(c, x, y, S, 1, U.shade(pal[3], 0.25)); px(c, x, y + 3, S, 1, pal[2]);
     }
-    if (!R(0, 1)) { // eave
+    if (!R(0, 1)) { // the eave: a dark edge of round tile-ends, sweeping up and out at the corners
       px(c, x, y + 13, S, 3, pal[3]);
-      for (var k = 1; k < 16; k += 3) px(c, x + k, y + 13, 1, 2, pal[1]);
-      if (!R(-1, 0)) { px(c, x - 2, y + 11, 3, 3, pal[3]); }
-      if (!R(1, 0)) { px(c, x + 15, y + 11, 3, 3, pal[3]); }
+      for (var k = 1; k < 16; k += 4) { px(c, x + k, y + 14, 2, 2, pal[1]); px(c, x + k, y + 14, 1, 1, U.shade(pal[1], 0.25)); }
     }
     if (!R(-1, 0)) px(c, x, y, 1, S, pal[3]);
     if (!R(1, 0)) px(c, x + 15, y, 1, S, pal[3]);
+  }
+  function roofPal(ch) {
+    return ch === 'Z' ? ['#c99a2e', '#e8bf4a', '#9a7020', '#7a5418'] : ch === 'z' ? ['#a88d5a', '#c4aa72', '#857048', '#6a5838'] :
+           ch === 'v' ? ['#7a3a2a', '#9a4e38', '#5a2a1e', '#401a12'] : ['#5b6476', '#7b8598', '#424a5a', '#2f3542'];
+  }
+  // drawn after every tile is down, so the next tile cannot cover them: the curled ornaments (chiwen) at the ends
+  // of the ridge, and the eave corners sweeping up and out
+  function roofOver(c, x, y, tx, ty, th, m, ch) {
+    if (ch === 'z') return;   // thatch has neither
+    var pal = roofPal(ch), R = function (dx, dy) { return m.get(tx + dx, ty + dy) === ch; }, hi = U.shade(pal[3], 0.3);
+    if (!R(0, -1)) {
+      if (!R(-1, 0)) { px(c, x, y - 4, 2, 5, pal[3]); px(c, x + 1, y - 6, 2, 2, pal[3]); px(c, x + 3, y - 6, 1, 2, pal[3]); px(c, x + 1, y - 6, 1, 1, hi); }
+      if (!R(1, 0)) { px(c, x + 14, y - 4, 2, 5, pal[3]); px(c, x + 13, y - 6, 2, 2, pal[3]); px(c, x + 12, y - 6, 1, 2, pal[3]); px(c, x + 14, y - 6, 1, 1, hi); }
+    }
+    if (!R(0, 1)) {
+      if (!R(-1, 0)) { px(c, x - 2, y + 12, 3, 3, pal[3]); px(c, x - 4, y + 10, 3, 3, pal[3]); px(c, x - 5, y + 8, 2, 3, pal[3]); px(c, x - 5, y + 8, 1, 1, hi); }
+      if (!R(1, 0)) { px(c, x + 15, y + 12, 3, 3, pal[3]); px(c, x + 17, y + 10, 3, 3, pal[3]); px(c, x + 19, y + 8, 2, 3, pal[3]); px(c, x + 20, y + 8, 1, 1, hi); }
+    }
+  }
+  function wallRedOver(c, x, y, tx, ty, th, m) {
+    if (m.get(tx, ty - 1) === 'R') return;
+    px(c, x, y - 2, S, 5, '#4a5262'); px(c, x, y - 2, S, 1, '#6a7488');
+    for (var k = 1; k < 16; k += 4) px(c, x + k, y + 1, 2, 2, '#7b8598');
   }
   function door(c, x, y, tx, ty, th, m) {
     var wallUp = m.get(tx, ty - 1);
     var outdoorWall = T.isWallChar(m.get(tx - 1, ty)) || T.isWallChar(m.get(tx + 1, ty)) || wallUp === '^' || wallUp === 'z' || wallUp === 'Z' || wallUp === 'v';
     if (outdoorWall) {
-      px(c, x, y, S, S, '#e6dcc4');
-      px(c, x, y, S, 2, '#6a3e22');
-      px(c, x + 2, y + 2, 12, 14, '#4a2a16');
-      px(c, x + 3, y + 3, 5, 13, '#7a4a28'); px(c, x + 8, y + 3, 5, 13, '#7a4a28');
-      px(c, x + 7, y + 8, 1, 2, '#d8b36a'); px(c, x + 8, y + 8, 1, 2, '#d8b36a');
-      px(c, x + 3, y + 3, 10, 1, '#94603a');
+      px(c, x, y, S, S, '#ebe2ca');
+      px(c, x, y, S, 2, '#8e2f22');
+      px(c, x + 1, y + 2, 14, 14, '#3a2012');                                   // the door frame
+      px(c, x + 2, y + 5, 6, 11, '#7a3a22'); px(c, x + 8, y + 5, 6, 11, '#7a3a22');   // two leaves
+      px(c, x + 2, y + 5, 12, 1, '#94503a');
+      c.fillStyle = '#d8b36a';
+      for (var sr = 0; sr < 3; sr++) for (var sc = 0; sc < 2; sc++) { c.fillRect(x + 3 + sc * 3, y + 7 + sr * 3, 1, 1); c.fillRect(x + 10 + sc * 3, y + 7 + sr * 3, 1, 1); }   // door studs
+      px(c, x + 6, y + 10, 1, 2, '#c8a050'); px(c, x + 9, y + 10, 1, 2, '#c8a050');   // ring knockers
+      px(c, x + 4, y + 2, 8, 3, '#2a1a10'); px(c, x + 4, y + 2, 8, 1, '#c8a050'); px(c, x + 6, y + 3, 4, 1, '#c8a050');   // name plaque
     } else {
       // interior exit mat
       px(c, x, y, S, S, '#3a2a1e'); px(c, x + 2, y + 4, 12, 12, '#7a5a3a'); px(c, x + 3, y + 5, 10, 10, '#8f6c46');
@@ -440,13 +474,13 @@
     'H': { draw: poplarBase, tall: poplarTall, solid: true },
     'm': { draw: rock, solid: true },
     'M': { draw: mountain, solid: true },
-    '^': { draw: roof, solid: true },
-    'Z': { draw: roof, solid: true },
-    'z': { draw: roof, solid: true },
-    'v': { draw: roof, solid: true },
+    '^': { draw: roof, over: roofOver, solid: true },
+    'Z': { draw: roof, over: roofOver, solid: true },
+    'z': { draw: roof, over: roofOver, solid: true },
+    'v': { draw: roof, over: roofOver, solid: true },
     'W': { draw: wallPlaster, solid: true, wall: true },
     'O': { draw: wallPlaster, solid: true, wall: true },
-    'R': { draw: wallRed, solid: true, wall: true },
+    'R': { draw: wallRed, over: wallRedOver, solid: true, wall: true },
     '#': { draw: wallStone, solid: true, wall: true },
     'G': { draw: cityGate },
     'D': { draw: door },
@@ -494,7 +528,11 @@
       var d = T.DEF[ch] || T.DEF['.'];
       d.draw(c, tx * S, ty * S, tx, ty, th, map, ch);
     }
-    // second pass: roof ornaments that overhang (ridge tips) were drawn in-place; nothing else.
+    // second pass: what overhangs its own tile (eave corners, ridge ornaments, wall copings), so later tiles cannot cover it
+    for (ty = 0; ty < h; ty++) for (tx = 0; tx < w; tx++) {
+      ch = map.get(tx, ty); d = T.DEF[ch];
+      if (d && d.over) d.over(c, tx * S, ty * S, tx, ty, th, map, ch);
+    }
     return cv;
   };
 
