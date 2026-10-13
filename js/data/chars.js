@@ -229,10 +229,10 @@
     { skin: SK.light, hairStyle: 'topknot', beard: 'stubble', body: '#3a5a4a', trim: '#c8c0a0', weapon: 'spear', face: 'oval', eyes: 'sharp' },
     { lv: 18, role: 'Patrol Commander', war: { atk: 5, def: 5, type: 'inf' },
       bio: 'A wandering bandit of Zhangde who met Dai Zong on the road and joined Liangshan\'s cause.' });
-  H(52, 'lingzhen', '凌振', 'Ling Zhen', 'Heaven-Shaking Thunder', '地軸星 Dizhou', 'Axle Star of Earth', 'archer', W('Fire Cannon', 'L', 1.1, 'stone'),
+  H(52, 'lingzhen', '凌振', 'Ling Zhen', 'Heaven-Shaking Thunder', '地軸星 Dizhou', 'Axle Star of Earth', 'archer', W('Fire Trebuchet', 'L', 1.1, 'stone'),
     { skin: SK.mid, hairStyle: 'helmet', helmColor: '#3a3a3a', beard: 'full', body: '#4a3a2a', trim: '#c8302a', build: 'big', weapon: 'none', face: 'round', eyes: 'round' },
     { lv: 24, role: 'Master of Artillery', war: { atk: 7, def: 4, type: 'arch', ability: 'cannon' },
-      bio: 'The finest cannoneer of the realm, whose shells reach fourteen or fifteen li. Captured in the reeds when he came to bombard Liangshan.' });
+      bio: 'The finest artillerist of the realm, whose trebuchets hurl fire-bombs fourteen or fifteen li. Captured in the reeds when he came to bombard Liangshan.' });
   H(53, 'jiangjing', '蔣敬', 'Jiang Jing', 'Divine Mathematician', '地會星 Dihui', 'Gathering Star of Earth', 'civil', W('Abacus', 'S', 0.5, 'blunt'),
     { skin: SK.fair, hairStyle: 'scarf', band: '#3a3a2a', beard: 'mustache', body: '#4a5a3a', trim: '#e8e0d0', build: 'slim', weapon: 'none', face: 'long', eyes: 'narrow' },
     { combat: false, role: 'Accountant — the granaries & treasury', war: { atk: 2, def: 3, type: 'inf' },

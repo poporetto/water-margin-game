@@ -69,7 +69,7 @@
     { name: 'Southern Cavalry', type: 'cav', atk: 130, def: 118, x: 10, y: 2 }, { name: 'Southern Cavalry', type: 'cav', atk: 130, def: 118, x: 10, y: 4 },
     { name: 'Muzhou Guard', type: 'inf', atk: 126, def: 130, x: 13, y: 1 }
   ], [['wuyong', 'Zheng Biao and his master Bao Daoyi are sorcerers. Bao Daoyi\'s sword flies by itself.'], [null, 'Victory: rout Zheng Biao.']],
-  [{ turn: 2, run: async function (s, api) { await s.say(null, 'Ling Zhen\'s cannon roared, and the shot fell on the sorcerer Bao Daoyi where he stood on the wall.'); s.sfx('cannon'); api.rout('Bao Daoyi'); api.weaken('enemy', 0.85); } }],
+  [{ turn: 2, run: async function (s, api) { await s.say(null, 'Ling Zhen\'s trebuchet loosed, and a thunderclap bomb burst on the sorcerer Bao Daoyi where he stood on the wall.'); s.sfx('cannon'); api.rout('Bao Daoyi'); api.weaken('enemy', 0.85); } }],
   [['guansheng', 'Zheng Biao is dead. Muzhou has fallen.']]);
   WM.data.wars.ch23_qingxi = W('Qingxi', 12, [
     { leader: 'songjiang', support: ['wuyong'], type: 'inf', x: 0, y: 3, commander: true },
@@ -145,7 +145,7 @@
       await fall(s, ['liutang', 'baoxu', 'dengfei', 'suochao'], 'At the Houchao Gate, Liu Tang rode in as the portcullis rope was cut, and horse and man died together under the gate. At the North Gate, Shi Bao cut Bao Xu in two, and then Deng Fei; and Suo Chao, the Vanguard Hothead, fell to Shi Bao\'s hammer.');
       await s.narrate('Hangzhou fell. Zhang Heng, possessed by his dead brother\'s spirit, cut off Fang Tianding\'s head and brought it to Song Jiang. Then a plague broke out in the city, and six chiefs fell sick: Zhang Heng, Mu Hong, Kong Ming, Zhu Gui, Yang Lin and Bai Sheng. Mu Chun and Zhu Fu stayed behind to nurse them.');
       await fall(s, ['houjian', 'duanjingzhu'], 'Ruan Xiaoqi came back from the coast. His boat had been wrecked on the way to Haiyan, and Hou Jian the tailor and Duan Jingzhu the horse-thief, who could not swim, had drowned in the sea.');
-      await fall(s, ['ruanxiaoer', 'mengkang', 'xiezhen', 'xiebao'], 'At the river below Wulong Ridge, fire-rafts came down on the navy. Ruan Xiao\'er, surrounded, cut his own throat rather than be taken. A cannon shot struck Meng Kang\'s helmet. Xie Zhen, climbing the cliff by night, was hooked from above, cut his rope, and fell a hundred feet; Xie Bao died under stones and arrows in the bamboo at the foot of the ridge. Hunters all their lives, they died together on the mountain.');
+      await fall(s, ['ruanxiaoer', 'mengkang', 'xiezhen', 'xiebao'], 'At the river below Wulong Ridge, fire-rafts came down on the navy. Ruan Xiao\'er, surrounded, cut his own throat rather than be taken. A fire-bomb from the bank struck Meng Kang\'s helmet. Xie Zhen, climbing the cliff by night, was hooked from above, cut his rope, and fell a hundred feet; Xie Bao died under stones and arrows in the bamboo at the foot of the ridge. Hunters all their lives, they died together on the mountain.');
       s.flag('ch23_muzhou');
       await s.war('ch23_muzhou');
       await fall(s, ['wangying', 'husanniang', 'xiangchong', 'ligun'], 'Before Muzhou, the Demon Lord Zheng Biao speared Wang Ying from his horse. Hu Sanniang, his wife, rode after Zheng Biao to avenge him, and a gilded brick from his sorcery struck her down. Xiang Chong and Li Gun, chasing the enemy across a stream, fell in: Xiang Chong was hacked to pieces, Li Gun shot full of arrows.');

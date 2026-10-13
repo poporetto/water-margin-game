@@ -207,7 +207,7 @@
       await s.say('likui', 'The bridge is up and the gate\'s shut! Not a man on the walls! They\'re scared of us!');
       await s.say('songjiang:shock', '...No. Not a soldier, not a light — this is a trap. Turn back! Turn back at once!');
       s.sfx('cannon'); await s.shake(6, 0.5);
-      await s.narrate('A signal cannon boomed from the manor. Arrows poured down from the wall, and behind them the roads they had come by were full of torches and shouting.');
+      await s.narrate('A signal bomb burst over the manor. Arrows poured down from the wall, and behind them the roads they had come by were full of torches and shouting.');
       s.spawn('sx', 'shixiu', 30, 18, 'up');
       await s.say('shixiu', 'Brother! I found you! Don\'t take the wide roads — wherever you see a white poplar, turn there! That\'s the living road!');
       await s.say('huarong', 'And look — wherever that red lantern on the pole goes, their men follow it.');

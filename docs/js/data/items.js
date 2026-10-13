@@ -14,11 +14,11 @@
   // ---- consumables ----
   use('bun', 'Steamed Bun', 10, { heal: 60 }, 'ally1', 'ally1', 'A meat-filled bun. Restores 60 HP.');
   use('beef', 'Sliced Beef', 35, { heal: 180 }, 'ally1', 'ally1', 'Two catties of boiled beef, as heroes order it. Restores 180 HP.');
-  use('medicine', 'Medicine', 60, { heal: 300 }, 'ally1', 'ally1', 'A packet of herbal medicine. Restores 300 HP.');
+  use('medicine', 'Golden Wound Salve', 60, { heal: 300 }, 'ally1', 'ally1', 'The salve every travelling fighter carries, for cuts and blows. Restores 300 HP.');
   use('ginseng', 'Wild Ginseng', 220, { heal: 800 }, 'ally1', 'ally1', 'A root from the northern mountains. Restores 800 HP.');
   use('wine', 'Village Wine', 30, { heal: 70 }, 'allyAll', 'allyAll', 'A jug of country wine passed around. Restores 70 HP to everyone.');
   use('goodwine', 'Fine Wine', 140, { heal: 260 }, 'allyAll', 'allyAll', 'Aged wine from a famous cellar. Restores 260 HP to everyone.');
-  use('antidote', 'Antidote', 20, { cure: ['poison'] }, 'ally1', 'ally1', 'Cures poison.');
+  use('antidote', 'Antidote Pills', 20, { cure: ['poison'] }, 'ally1', 'ally1', 'Black pills from an apothecary\'s drawer. Cures poison.');
   use('needle', 'Silver Needle', 40, { cure: ['poison', 'sleep', 'silence'] }, 'ally1', 'ally1', 'An acupuncture needle. Cures all ailments.');
   use('soulcharm', 'Soul-Calling Charm', 300, { revive: 0.5 }, 'allyKO', 'ally1', 'A Daoist charm that calls back a fallen comrade with half HP.');
   use('panacea', 'An\'s Panacea', 0, { revive: 1, heal: 'full' }, 'allyKO', 'ally1', 'Divine Physician An Daoquan\'s remedy. Full revival.');
@@ -30,34 +30,34 @@
   use('templeincense', 'Temple Incense', 1200, { mp: true }, 'allyAll', 'allyAll', 'Incense from a great temple. Restores all skill uses for the whole party.');
 
   // ---- equipment ----
-  eq('cap', 'head', 'Cloth Cap', 30, 2, 'A plain cloth cap.');
+  eq('cap', 'head', 'Cloth Kerchief', 30, 2, 'The plain headcloth every commoner ties over his topknot.');
   eq('bandana', 'head', 'Red Headband', 60, 3, 'A fighter\'s headband.', { bonus: { spd: 1 } });
-  eq('leathercap', 'head', 'Leather Cap', 120, 5, 'Hardened leather.');
-  eq('ironhelm', 'head', 'Iron Helmet', 380, 9, 'An officer\'s iron helm.', { who: ['warrior', 'brute', 'leader'] });
-  eq('phoenixhelm', 'head', 'Phoenix Helmet', 1200, 15, 'A gilded helm of the Imperial Guard.', { who: ['warrior', 'brute', 'leader', 'archer'] });
+  eq('leathercap', 'head', 'Fanyang Felt Hat', 120, 5, 'A broad felt hat with a red tassel, like the one Yang Zhi wore on the road.');
+  eq('ironhelm', 'head', 'Iron Helmet', 380, 9, 'An officer\'s iron helm with neck-guard flaps.', { who: ['warrior', 'brute', 'leader'] });
+  eq('phoenixhelm', 'head', 'Phoenix-Wing Helmet', 1200, 15, 'A gilded general\'s helm with upswept phoenix wings at the sides.', { who: ['warrior', 'brute', 'leader', 'archer'] });
   eq('hairpin', 'head', 'Silver Hairpin', 220, 5, 'A lady\'s hairpin.', { who: 'women', bonus: { luk: 4 } });
   eq('daoistcrown', 'head', 'Daoist Crown', 500, 7, 'Raises magic.', { who: ['mage', 'scholar'], bonus: { mgc: 6 } });
 
-  eq('robe', 'body', 'Cotton Robe', 40, 3, 'Everyday clothing.');
-  eq('quilted', 'body', 'Quilted Coat', 140, 7, 'A padded winter coat.');
-  eq('leather', 'body', 'Leather Armour', 320, 11, 'Studded leather armour.');
-  eq('lamellar', 'body', 'Lamellar Armour', 900, 18, 'Iron plates laced in rows.', { who: ['warrior', 'brute', 'leader'] });
+  eq('robe', 'body', 'Hemp Robe', 40, 3, 'Everyday clothing of hemp cloth.');
+  eq('quilted', 'body', 'Padded Coat', 140, 7, 'A winter coat padded with silk floss.');
+  eq('leather', 'body', 'Lacquered Leather Armour', 320, 11, 'Plates of lacquered hide laced with cord.');
+  eq('lamellar', 'body', 'Iron Lamellar Armour', 900, 18, 'Small iron plates laced in rows with leather thongs.', { who: ['warrior', 'brute', 'leader'] });
   eq('goosefeather', 'body', 'Goose-Feather Armour', 0, 26, 'Xu Ning\'s heirloom armour: light as feathers, hard as iron.', { who: ['xuning', 'warrior', 'swift'] });
-  eq('monkrobe', 'body', 'Monk\'s Robe', 180, 8, 'A heavy cotton kasaya.', { bonus: { hp: 20 } });
+  eq('monkrobe', 'body', 'Monk\'s Robe', 180, 8, 'A kasaya of patched cloth, as the monks of Wutai wear.', { bonus: { hp: 20 } });
   eq('daoistrobe', 'body', 'Daoist Robe', 420, 10, 'Embroidered with the Eight Trigrams.', { who: ['mage', 'scholar'], bonus: { mgc: 5 } });
   eq('silkrobe', 'body', 'Silk Robe', 600, 9, 'Fine Suzhou silk.', { bonus: { luk: 6 } });
-  eq('brigandine', 'body', 'Brigandine', 1600, 24, 'Steel plates riveted inside cloth.', { who: ['warrior', 'brute', 'leader', 'archer', 'swift'] });
+  eq('brigandine', 'body', 'Infantry Iron Armour', 1600, 24, 'The heavy armour of the imperial foot: nearly two thousand iron scales, head to knee.', { who: ['warrior', 'brute', 'leader', 'archer', 'swift'] });
 
-  eq('buckler', 'shield', 'Wooden Buckler', 80, 3, 'A small round shield.');
+  eq('buckler', 'shield', 'Wooden Shield', 80, 3, 'A light shield of planks, painted with a beast\'s face.');
   eq('rattan', 'shield', 'Rattan Shield', 300, 7, 'Light and tough.');
-  eq('ironshield', 'shield', 'Iron Shield', 900, 12, 'Heavy but strong.', { who: ['warrior', 'brute'] });
+  eq('ironshield', 'shield', 'Iron-Bound Shield', 900, 12, 'A tall infantry shield bound with iron. Heavy but strong.', { who: ['warrior', 'brute'] });
 
-  eq('jadering', 'acc', 'Jade Ring', 300, 1, 'Raises luck.', { bonus: { luk: 8 } });
-  eq('straw', 'acc', 'Straw Sandals', 60, 0, 'Light shoes. Raises speed.', { bonus: { spd: 4 } });
-  eq('legcharm', 'acc', 'Swift-Walk Charm', 600, 0, 'A paper charm like Dai Zong\'s. Raises speed greatly.', { bonus: { spd: 12 } });
+  eq('jadering', 'acc', 'Jade Pendant', 300, 1, 'A carved jade hung from the belt, for good fortune. Raises luck.', { bonus: { luk: 8 } });
+  eq('straw', 'acc', 'Hemp Sandals', 60, 0, 'Light travelling shoes of plaited hemp. Raises speed.', { bonus: { spd: 4 } });
+  eq('legcharm', 'acc', 'Paper Horse Charm', 600, 0, 'A printed paper horse tied to the leg, like Dai Zong\'s marching charms. Raises speed greatly.', { bonus: { spd: 12 } });
   eq('amulet', 'acc', 'Peach-Wood Amulet', 250, 3, 'Wards off evil. Raises magic defence.', { bonus: { mgc: 4 } });
-  eq('gauntlet', 'acc', 'Iron Gauntlets', 450, 4, 'Raises power.', { bonus: { pwr: 6 } });
-  eq('beltjade', 'acc', 'Jade Belt', 1500, 4, 'An official\'s belt. Raises all stats a little.', { bonus: { pwr: 4, skl: 4, spd: 4, mgc: 4, luk: 4 } });
+  eq('gauntlet', 'acc', 'Iron Bracers', 450, 4, 'Iron arm-guards from wrist to elbow. Raises power.', { bonus: { pwr: 6 } });
+  eq('beltjade', 'acc', 'Jade-Plaque Belt', 1500, 4, 'A high official\'s belt set with jade plaques. Raises all stats a little.', { bonus: { pwr: 4, skl: 4, spd: 4, mgc: 4, luk: 4 } });
 
   eq('cangue', 'acc', 'Prisoner\'s Cangue', 0, 0, 'A wooden collar locked around a convict\'s neck. It cannot be removed.', { bonus: { pwr: -8, spd: -10, skl: -6 }, locked: true });
 
@@ -126,7 +126,7 @@
   SH.village = { name: 'Village Store', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'cap', 'robe', 'straw'] };
   SH.weizhou = { name: 'Weizhou Market', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'cap', 'bandana', 'robe', 'quilted', 'buckler', 'straw'] };
   SH.wutai = { name: 'Wutai Town', items: ['bun', 'medicine', 'antidote', 'wine', 'monkrobe', 'quilted', 'leathercap', 'buckler'] };
-  SH.kaifeng = { name: 'Eastern Capital Bazaar', items: ['beef', 'medicine', 'antidote', 'needle', 'wine', 'goodwine', 'soulcharm', 'lime', 'leathercap', 'hairpin', 'quilted', 'leather', 'silkrobe', 'rattan', 'jadering', 'amulet'] };
+  SH.kaifeng = { name: 'Xiangguo Temple Market', items: ['beef', 'medicine', 'antidote', 'needle', 'wine', 'goodwine', 'soulcharm', 'lime', 'leathercap', 'hairpin', 'quilted', 'leather', 'silkrobe', 'rattan', 'jadering', 'amulet'] };
   SH.kaifeng_t = { name: 'Daoist of the Eastern Capital', items: ['incense', 'templeincense', 'soulcharm'] };
   SH.cangzhou = { name: 'Cangzhou Store', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'quilted', 'leathercap', 'buckler', 'straw'] };
   SH.daming = { name: 'Daming Market', items: ['beef', 'medicine', 'needle', 'goodwine', 'soulcharm', 'lime', 'tigerwine', 'ironhelm', 'leather', 'lamellar', 'rattan', 'gauntlet', 'amulet'] };

@@ -271,8 +271,8 @@
     P('Road of Zhangde', 3.3, 'He met Dai Zong on the road and never looked back.')
   ]);
   sk('lingzhen', [
-    P('Fire Cannon', 2.0, 'A shell from the finest cannoneer in the realm.', { fx: 'fire', sure: true }),
-    PA('Mother-and-Son Cannon', 1.2, 'Shells that burst in the air.', { fx: 'fire' }),
+    P('Heaven-Shaking Thunder', 2.0, 'A thunderclap bomb from the finest artillerist in the realm.', { fx: 'fire', sure: true }),
+    PA('Mother-and-Son Bombs', 1.2, 'A great bomb that bursts into small ones over the enemy.', { fx: 'fire' }),
     PA('Heaven-Shaking Thunder', 1.75, 'His shells reach fifteen li.', { fx: 'fire', screen: true })
   ]);
   sk('lufang', [

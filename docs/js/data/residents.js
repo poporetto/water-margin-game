@@ -55,7 +55,7 @@
     dengfei: 'My eyes are red from the wine, not from eating men. Mostly.',
     yanshun: 'I traded cattle once. Now I trade blows.',
     yanglin: 'Dai Zong found me on the road. Best meeting of my life.',
-    lingzhen: 'My shells fly fourteen li. Stand back when I light the fuse.',
+    lingzhen: 'My fire-bombs fly fourteen li. Stand back when I light the fuse.',
     jiangjing: 'Grain for forty days, silver for ninety. Don\'t ask me to count the arrows again.',
     lufang: 'Red halberd, red armour. Guo Sheng wears white so we can tell ourselves apart.',
     guosheng: 'Our tassels tangled and Hua Rong shot them apart. That arrow made us brothers.',

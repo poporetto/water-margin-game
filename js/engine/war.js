@@ -27,7 +27,7 @@
     sorcery: 'Sorcery: ranged magic (3).',
     fire: 'Holy Fire: ranged fire (2).',
     water: 'Sacred Water: ranged water (2).',
-    cannon: 'Fire Cannon: once per turn bombard at range 4.',
+    cannon: 'Fire Trebuchet: once per turn bombard at range 4.',
     stratagem: 'Stratagem: once per battle, all allied units may act again.',
     infiltrate: 'Infiltrate: weaken an adjacent enemy unit\'s defence for the rest of the battle.',
     naval: 'Water Warriors: unit can cross water.',
@@ -275,7 +275,7 @@
     var items = [];
     var melee = enemiesInRange(u, 1), ranged = enemiesInRange(u, rangeOf(u));
     if (ranged.length) items.push({ label: rangeOf(u) > 1 ? 'Attack (range ' + rangeOf(u) + ')' : 'Attack', v: 'attack' });
-    if (u.abil.indexOf('cannon') >= 0 && !u.cannonUsed && enemiesInRange(u, 4).length) items.push({ label: 'Fire Cannon', v: 'cannon' });
+    if (u.abil.indexOf('cannon') >= 0 && !u.cannonUsed && enemiesInRange(u, 4).length) items.push({ label: 'Fire Trebuchet', v: 'cannon' });
     if (u.abil.indexOf('heal') >= 0 && !u.usedAbil.heal && active('player').some(function (a) { return a.losses > 0 && dist(a, u) <= 1; })) items.push({ label: 'Treat Wounded', v: 'heal' });
     if (u.abil.indexOf('infiltrate') >= 0 && melee.length) items.push({ label: 'Infiltrate', v: 'infiltrate' });
     if (u.abil.indexOf('stratagem') >= 0 && !wr.stratUsed) items.push({ label: 'Stratagem', v: 'stratagem' });

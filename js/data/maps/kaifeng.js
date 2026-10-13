@@ -117,7 +117,7 @@
   WM.defEvents('kaifeng_in', [
     L.inn('inn', 36, 4, 20),
     L.save('innrec', 43, 7),
-    L.shop('shop', 49, 4, 'kaifeng', 'shopkeep', 'Everything a traveller needs, straight from the bazaar by the Zhou Bridge.'),
+    L.shop('shop', 49, 4, 'kaifeng', 'shopkeep', 'Everything a traveller needs, straight from the market by the Zhou Bridge.'),
     L.smith('smith', 59, 4, 8),
     L.talis('tal', 4, 14, 'kaifeng_t'),
     { id: 'fanwaiter', x: 15, y: 18, npc: 'waiter', text: ['Welcome to the Fan Tower, finest wine in the capital! Up the stairs and the whole city is at your feet.'] }

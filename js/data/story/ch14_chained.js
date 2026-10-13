@@ -1,5 +1,5 @@
 // Chapter 14 — "Chained Cavalry" (novel chapters 54–58).
-// Huyan Zhuo, Han Tao and Peng Qi; Hu Sanniang's lasso; the chained horses; Ling Zhen's cannon; Shi Qian steals Xu
+// Huyan Zhuo, Han Tao and Peng Qi; Hu Sanniang's lasso; the chained horses; Ling Zhen's fire-bombs; Shi Qian steals Xu
 // Ning's armour; the hooked lances; Huyan Zhuo's lost horse; the three mountains at Qingzhou; the pit.
 'use strict';
 (function () {
@@ -8,8 +8,8 @@
   WM.npc('kongbin', 'Kong Bin', { skin: '#e0a880', hair: '#c8c8c0', hairStyle: 'scarf', band: '#3a3a2a', beard: 'long', beardColor: '#d8d8d0', body: '#5a4a3a', trim: '#c8b890', face: 'round' }, { face: true });
   WM.npc('xuwife', 'Xu Ning\'s Wife', { skin: '#f6e2cc', hairStyle: 'woman', body: '#4a6a8a', trim: '#e8e0d0', dress: true, build: 'slim', face: 'oval' }, { face: true });
 
-  WM.enemy('gunner', 'Ling Zhen\'s Gunner', 25, WM.hum(WM.enemyLooks.soldier), { hp: 0.9, range: 'L', fx: 'fire', exp: 120, drops: [['medicine', 0.12]] });
-  WM.enemy('lingzhen_foe', 'Ling Zhen', 26, WM.hum(WM.data.chars.lingzhen.look), { hp: 2.4, exp: 420, gold: 200, boss: true, range: 'L', skills: [{ name: 'Wind-and-Fire Cannon', chance: 0.35, type: 'magic', power: 40, target: 'all', fx: 'fire', sfx: 'cannon' }] });
+  WM.enemy('gunner', 'Ling Zhen\'s Bombardier', 25, WM.hum(WM.enemyLooks.soldier), { hp: 0.9, range: 'L', fx: 'fire', exp: 120, drops: [['medicine', 0.12]] });
+  WM.enemy('lingzhen_foe', 'Ling Zhen', 26, WM.hum(WM.data.chars.lingzhen.look), { hp: 2.4, exp: 420, gold: 200, boss: true, range: 'L', skills: [{ name: 'Wind-and-Fire Bombs', chance: 0.35, type: 'magic', power: 40, target: 'all', fx: 'fire', sfx: 'cannon' }] });
   WM.enemy('qz_guard', 'Qingzhou Guard', 26, WM.hum(WM.enemyLooks.soldier), { range: 'M', exp: 130, drops: [['medicine', 0.15]] });
   WM.enemy('qz_archer2', 'Qingzhou Archer', 26, WM.hum(WM.enemyLooks.archer), { hp: 0.8, range: 'L', fx: 'arrow', exp: 130 });
   var T = WM.data.troops;
@@ -76,7 +76,7 @@
         s.sfx('drum'); api.weaken('player', 0.85);
       } },
       { turn: 4, run: async function (s, api) {
-        await s.say(null, 'From across the water came a sound like thunder: Ling Zhen, the Heaven-Shaking Thunder, had set up his cannon, and the shot fell among the Liangshan camp.');
+        await s.say(null, 'From across the water came a sound like thunder: Ling Zhen, the Heaven-Shaking Thunder, had set up his trebuchets, and the fire-bombs fell among the Liangshan camp.');
         s.sfx('cannon'); await s.shake(6, 0.5); api.weaken('player', 0.9);
       } }
     ],
@@ -105,7 +105,7 @@
     intro: [['xuning', 'Into the reeds and the brush. When the chained horses come, hook the legs of one horse — and the whole chain goes down.'], ['songjiang', 'Lure them into the reeds!'], [null, 'Victory: rout Huyan Zhuo.']],
     events: [
       { turn: 1, run: async function (s, api) {
-        await s.say(null, 'The chained cavalry charged into the reeds after the fleeing Liangshan men — and out of the reeds came the hooked lances. One horse went down, and the thirty chained to it fell over one another. Ling Zhen\'s cannon roared from behind.');
+        await s.say(null, 'The chained cavalry charged into the reeds after the fleeing Liangshan men — and out of the reeds came the hooked lances. One horse went down, and the thirty chained to it fell over one another. Ling Zhen\'s fire-bombs burst behind them.');
         s.sfx('cannon'); api.weaken('enemy', 0.6);
       } },
       { turn: 3, run: async function (s, api) {
@@ -133,9 +133,9 @@
     await s.narrate('Peng Qi was led up the mountain. Song Jiang untied him with his own hands, and Peng Qi, moved, agreed to stay.');
     await s.join('pengqi');
     await s.war('ch14_chained', { canLose: true });
-    await s.narrate('The Liangshan army fled across the water with heavy losses. Huyan Zhuo sent to the capital for Ling Zhen, the greatest gunner of the empire, and soon his "wind-and-fire" cannon were dropping shot on the Liangshan forts.');
+    await s.narrate('The Liangshan army fled across the water with heavy losses. Huyan Zhuo sent to the capital for Ling Zhen, the greatest artillerist of the empire, and soon his trebuchets were dropping "wind-and-fire" bombs on the Liangshan forts.');
     s.spawn('wy', 'wuyong', 15, 6, 'down');
-    await s.say('wuyong', 'Ling Zhen\'s guns are on the shore. Li Jun, Zhang Heng — draw him to the water. The Ruan brothers will be waiting under it.');
+    await s.say('wuyong', 'Ling Zhen\'s trebuchets are on the shore. Li Jun, Zhang Heng — draw him to the water. The Ruan brothers will be waiting under it.');
     s.despawn('wy');
     s.party(['ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'lijun', 'zhangheng']); s.setLeader('ruanxiaoer');
     ['ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'lijun', 'zhangheng'].forEach(function (id) { s.level(id, 25); });
