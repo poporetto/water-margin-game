@@ -4,8 +4,20 @@
     {
       "name": "game",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["tools/serve.py", "8766"],
+      "runtimeArgs": [
+        "tools/serve.py",
+        "8766"
+      ],
       "port": 8766
+    },
+    {
+      "name": "game-test",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "tools/serve.py",
+        "8770"
+      ],
+      "port": 8770
     }
   ]
 }

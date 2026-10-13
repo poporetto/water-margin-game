@@ -176,6 +176,7 @@
       await s.narrate('Song Jiang had taken his city first. By the lots, the seat of Liangshan stayed his — though he said nothing of it, and only asked after Lu Junyi.');
       await s.narrate('Then Bai Sheng came running: Lu Junyi had been beaten twice at Dongchang. Its general, Zhang Qing, the Featherless Arrow, never missed with a stone.');
       s.party(['songjiang', 'lujunyi', 'dongping', 'guansheng', 'luzhishen', 'wusong']); s.setLeader('songjiang');
+      s.level('luzhishen', 34); s.level('wusong', 34);
       await s.warp('dongchang', 2, 12, 'right');
     } }
   ]);

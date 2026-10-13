@@ -251,6 +251,7 @@
       s.flag('ch14_three');
       await s.fadeOut(1);
       s.party(['songjiang', 'wuyong', 'qinming', 'huarong', 'linchong', 'luzhishen']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
+      s.level('wuyong', 25);
       await s.narrate('Kong Liang ran all the way to Liangshan and threw himself at Song Jiang\'s feet. Song Jiang came at once with Wu Yong, Qin Ming, Hua Rong, Lin Chong and three thousand men, and the three mountains came out to meet him.');
       await s.warp('qingzhou', 10, 22, 'up', { noFade: true });
       s.spawn('ys', 'yangzhi', 8, 22, 'right'); s.spawn('ws', 'wusong', 12, 22, 'left'); s.spawn('lz', 'lizhong', 7, 23, 'right'); s.spawn('zt', 'zhoutong', 13, 23, 'left');

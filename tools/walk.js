@@ -58,6 +58,12 @@ function roomOf(mid, x, y) {
   return x < 0 || y < 0 || x >= R.w || y >= R.h ? -1 : R.lab[y * R.w + x];
 }
 // is this character somewhere in the scene the player is looking at?
+// a hero who rejoins after a long absence keeps the level they left with: report anyone far behind the party at fights
+function lagging() {
+  const lv = (WM.state.party || []).map((id) => [id, WM.state.chars[id] ? WM.state.chars[id].lv : 0]);
+  const top = Math.max(0, ...lv.map((x) => x[1]));
+  lv.forEach(([id, l]) => { if (l && top - l > 6) sceneWarn('"' + id + '" is level ' + l + ' in a party led at level ' + top); });
+}
 function present(id) {
   if (!id || typeof id !== 'string') return true;
   id = id.split(':')[0];
@@ -191,9 +197,9 @@ function mkApi(ctx) {
       cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors();
       return resolved;
     },
-    battle(troop) { const t = typeof troop === 'string' ? D.troops[troop] : troop; if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
+    battle(troop) { lagging(); const t = typeof troop === 'string' ? D.troops[troop] : troop; if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
     duel(id, opt) { if (!D.duels[id]) err('unknown duel ' + id); else { const d = D.duels[id]; gone((opt && opt.hero) || d.hero, 'duel ' + id); gone(d.foe, 'duel ' + id); if (!D.chars[d.hero]) err('duel hero unknown ' + d.hero); if (!D.chars[d.foe] && !D.npcs[d.foe]) err('duel foe unknown ' + d.foe); } return Promise.resolve('win'); },
-    war(id) { if (!D.wars[id]) err('unknown war ' + id); else { D.wars[id].player.forEach((u) => { gone(u.leader, 'war ' + id); (u.support || []).forEach((x) => gone(x, 'war ' + id)); if (!D.chars[u.leader]) err('war ' + id + ' unknown leader ' + u.leader); (u.support || []).forEach((x) => { if (!D.chars[x]) err('war ' + id + ' unknown support ' + x); }); }); } return Promise.resolve('win'); },
+    war(id) { lagging(); if (!D.wars[id]) err('unknown war ' + id); else { D.wars[id].player.forEach((u) => { gone(u.leader, 'war ' + id); (u.support || []).forEach((x) => gone(x, 'war ' + id)); if (!D.chars[u.leader]) err('war ' + id + ' unknown leader ' + u.leader); (u.support || []).forEach((x) => { if (!D.chars[x]) err('war ' + id + ' unknown support ' + x); }); }); } return Promise.resolve('win'); },
     join(id, opt) {
       if (!D.chars[id]) { err('join unknown ' + id); return resolved; }
       if (joins[id]) err('duplicate join of ' + id + ' (first in ' + joins[id] + ')');

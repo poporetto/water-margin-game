@@ -15,7 +15,7 @@
   WM.enemy('zhao_constable', 'Yuncheng Constable', 22, WM.hum(WM.enemyLooks.constable), { exp: 95, drops: [['medicine', 0.12]] });
   WM.enemy('ligui_foe', 'Li Gui', 18, WM.hum(WM.data.npcs.ligui.look), { hp: 1.4, atk: 0.8, exp: 120, gold: 40 });
   WM.enemy('tiger_cub', 'Tiger Cub', 18, WM.beast('tiger', { body: '#e8b060' }), { hp: 0.7, atk: 0.7, spd: 1.3, exp: 120, gold: 0, fx: 'claw' });
-  WM.enemy('yi_tiger', 'White-Browed Tiger', 24, WM.beast('tiger', { body: '#c87a2a' }), { hp: 1.8, atk: 0.95, spd: 1.1, exp: 500, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.5, fx: 'claw', sfx: 'roar' }, { name: 'Mountain Roar', chance: 0.15, type: 'magic', power: 14, status: 'sleep', statusChance: 0.3, sfx: 'roar', fx: 'dark' }] });
+  WM.enemy('yi_tiger', 'White-Browed Tiger', 24, WM.beast('tiger', { body: '#c87a2a' }), { hp: 1.5, atk: 0.75, spd: 1.1, exp: 500, gold: 0, boss: true, fx: 'claw', skills: [{ name: 'Pounce', chance: 0.3, type: 'phys', power: 1.5, fx: 'claw', sfx: 'roar' }, { name: 'Mountain Roar', chance: 0.15, type: 'magic', power: 14, status: 'sleep', statusChance: 0.3, sfx: 'roar', fx: 'dark' }] });
   var T = WM.data.troops;
   T.ch10_constables = { enemies: ['zhao_constable', 'zhao_constable', 'zhao_constable'], bg: 'night', noRun: true };
   T.ch10_ligui = { enemies: ['ligui_foe'], bg: 'forest', noRun: true };

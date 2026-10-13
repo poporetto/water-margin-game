@@ -29,7 +29,7 @@
     { name: 'Mountain Roar', chance: 0.15, type: 'magic', power: 10, status: 'sleep', statusChance: 0.3, sfx: 'roar', fx: 'dark' }] });
   WM.enemy('ximen_boss', 'Ximen Qing', 17, WM.hum(WM.data.npcs.ximenqing.look), { hp: 1.5, atk: 0.55, spd: 1.2, exp: 400, gold: 300, boss: true, drops: [['jadering', 1]], skills: [{ name: 'Rich Man\'s Kick', chance: 0.3, type: 'phys', power: 1.4 }] });
   WM.enemy('ximen_guard', 'Ximen\'s Bodyguard', 15, WM.hum(WM.enemyLooks.thug), { hp: 0.55, atk: 0.45, exp: 90, fx: 'blunt' });
-  WM.enemy('jiang_boss', 'Jiang the Door God', 18, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 1.7, atk: 0.62, spd: 0.8, exp: 480, gold: 250, boss: true, fx: 'blunt', drops: [['tigerwine', 2]], skills: [{ name: 'Door God\'s Charge', chance: 0.3, type: 'phys', power: 1.5 }] });
+  WM.enemy('jiang_boss', 'Jiang the Door God', 18, WM.hum(WM.data.npcs.jiangmenshen.look), { hp: 1.6, atk: 0.57, spd: 0.8, exp: 480, gold: 250, boss: true, fx: 'blunt', drops: [['tigerwine', 2]], skills: [{ name: 'Door God\'s Charge', chance: 0.3, type: 'phys', power: 1.5 }] });
   WM.enemy('jiang_man', 'Happy Forest Tough', 16, WM.hum(WM.enemyLooks.thug), { hp: 0.55, atk: 0.45, exp: 95, fx: 'blunt', drops: [['wine', 0.3]] });
   WM.enemy('escort_killer', 'Hired Killer', 17, WM.hum(WM.enemyLooks.bandit), { hp: 0.6, atk: 0.52, exp: 100, drops: [['medicine', 0.3]] });
   WM.enemy('escort_guard', 'Crooked Escort', 16, WM.hum(WM.enemyLooks.constable), { hp: 0.6, atk: 0.5, exp: 95 });

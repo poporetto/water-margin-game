@@ -342,6 +342,7 @@
       s.despawn('luo'); s.despawn('gs');
       s.unflag('away:gongsunsheng');
       s.unflag('present:gongsunsheng');
+      s.level('gongsunsheng', 26);   // back from Luo Zhenren with the Five Thunders of the Heart of Heaven
       WM.unlock('wugang');
       s.flag('ch13_gsback');
       await s.narrate('Gongsun Sheng and Dai Zong went ahead by Dai Zong\'s magic. Li Kui, who had had enough of magic, walked.');

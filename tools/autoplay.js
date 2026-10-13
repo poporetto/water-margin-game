@@ -7,14 +7,11 @@
   const S = WM.S, D = WM.data, T = WM.tiles;
   const log = [];
   const note = (kind, msg, extra) => { const e = Object.assign({ kind, ch: WM.state && WM.state.chapter, map: WM.state && WM.state.map, msg }, extra || {}); log.push(e); console.log('[autoplay]', kind, msg, extra || ''); };
-  // let the browser breathe now and then (a message-channel tick is not throttled in a hidden tab the way timers are)
-  const mc = new MessageChannel(); let tickRes = null; mc.port1.onmessage = () => { const r = tickRes; tickRes = null; r && r(); };
-  const tick = () => new Promise((r) => { tickRes = r; mc.port2.postMessage(0); });
+  // give the browser a turn every few frames: timers, image loads and the debugger all wait on it. (Message-channel
+  // ticks would be faster, but the browser runs them ahead of everything else, so a long run starves the page.)
+  const tick = () => new Promise((r) => setTimeout(r, 0));
   let fcount = 0;
-  // ...but message-channel ticks run ahead of timers and image loads, so every so often give those a turn as well,
-  // or a portrait sheet never finishes loading and the line of dialogue waiting on it never appears
-  const breathe = () => new Promise((r) => setTimeout(r, 0));
-  const frames = async (n) => { for (let i = 0; i < n; i++) { WM.step(1 / 60, 1); for (let k = 0; k < 12; k++) await null; if (++fcount % 20 === 0) await tick(); if (fcount % 120 === 0) await breathe(); } };
+  const frames = async (n) => { for (let i = 0; i < n; i++) { WM.step(1 / 60, 1); for (let k = 0; k < 12; k++) await null; if (++fcount % 15 === 0) await tick(); } };
   const sceneName = () => Object.keys(WM.scenes).filter((k) => WM.scenes[k] === WM.scene)[0];
   const F = () => WM.field;
 
@@ -46,7 +43,7 @@
       const ig = ignored[ev.map + ':' + ev.id]; if (ig && ig === storySig()) continue;
       // only this chapter's story (a chapter jump never marks earlier chapters' one-time events as done)
       const cm = /^ch(\d+)_/.exec(ev.id), cur = WM.state.chapter || 0;
-      if (cm ? +cm[1] !== cur : cur > 0 && /^(arrive|boy|snake|tiger|returned|tablet|gate|clouds)$/.test(ev.id)) continue;
+      if (cm ? +cm[1] !== cur : !(cur === 0 && /^(arrive|boy|snake|tiger|returned|tablet|gate|clouds)$/.test(ev.id))) continue;   // optional jars and the like are not story
       out.push(ev);
     }
     return out;
@@ -255,7 +252,7 @@
   // finds every fight that is too hard rather than stopping at the first.
   function hookFights() {
     if (WM.__apHooked) return; WM.__apHooked = true;
-    const partyInfo = () => (WM.state.party || []).map((id) => id + ' L' + (WM.state.chars[id] ? WM.state.chars[id].lv : '?')).join(', ');
+    const partyInfo = () => (WM.state.party || []).map((id) => { const c = WM.state.chars[id]; if (!c) return id + ' L?'; const st = S.stats(id); return id + ' L' + c.lv + ' hp' + c.hp + '/' + st.mhp + ' atk' + st.atk + ' def' + st.dfs + ' w' + c.wlv; }).join(', ');
     const wrap = (obj, name, kind) => {
       const f0 = obj.start;
       obj.start = function (id, o) {
@@ -335,7 +332,9 @@
             const inR = foes.filter((e) => dist(e, p[0], p[1]) <= rng(mine));
             const near = Math.min(...foes.map((e) => dist(e, p[0], p[1])));
             const adj = foes.filter((e) => dist(e, p[0], p[1]) <= 1).length;
-            let sc = inR.length ? 100 + Math.max(...inR.map((e) => e.losses * 20 - e.def / 10)) : -near * 5;
+            const hunt = wr.d.goal === 'commander' && foes.find((e) => e.commander);   // when only the commander counts, go for him
+            const value = (e) => e.losses * 20 - e.def / 10 + (hunt === e ? 60 : 0);
+            let sc = inR.length ? 100 + Math.max(...inR.map(value)) : (hunt ? -dist(hunt, p[0], p[1]) * 5 : -near * 5);
             if (rng(mine) > 1) sc -= adj * 30;                     // archers keep out of reach
             if (mine.losses && inR.length) sc -= adj * 15;         // a hurt unit avoids being swarmed
             const tr = WM.war.cur.d.map[p[1]] && WM.war.cur.d.map[p[1]][p[0]];
@@ -346,7 +345,7 @@
         wr.cursor = { x: best[0], y: best[1] }; await press('KeyZ'); await frames(4);
         if (WM.ui.top() && !WM.ui.top().isWarInput) { await press('KeyZ'); await frames(4); }   // Attack if there is one, else Wait
         if (wr.mode === 'target') {
-          let bi = 0; wr.targets.forEach((e, i) => { const b0 = wr.targets[bi]; if (e.losses > b0.losses || (e.losses === b0.losses && e.def < b0.def)) bi = i; });
+          let bi = 0; wr.targets.forEach((e, i) => { const b0 = wr.targets[bi]; if (b0.commander && wr.d.goal === 'commander') return; if ((e.commander && wr.d.goal === 'commander') || e.losses > b0.losses || (e.losses === b0.losses && e.def < b0.def)) bi = i; });
           wr.tIdx = bi; await press('KeyZ');
         }
         await frames(80);

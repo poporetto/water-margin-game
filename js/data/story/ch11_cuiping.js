@@ -20,7 +20,7 @@
   WM.enemy('jz_tough', 'Zhang Bao\'s Crony', 18, WM.hum(WM.enemyLooks.thug), { hp: 0.6, atk: 0.6, exp: 80, fx: 'blunt', drops: [['wine', 0.3]] });
   WM.enemy('zhangbao_foe', 'Zhang Bao', 20, WM.hum(WM.data.npcs.zhangbao.look), { hp: 1.3, atk: 0.75, exp: 220, gold: 80, boss: true, fx: 'blunt' });
   WM.enemy('zhu_waiter', 'Inn Hand', 19, WM.hum(WM.enemyLooks.thug), { hp: 0.7, atk: 0.75, exp: 80, fx: 'blunt' });
-  WM.enemy('zhu_hook', 'Zhu Village Hook-Man', 22, WM.hum(WM.enemyLooks.soldier), { range: 'M', exp: 100, drops: [['medicine', 0.1]] });
+  WM.enemy('zhu_hook', 'Zhu Village Hook-Man', 22, WM.hum(WM.enemyLooks.soldier), { hp: 0.8, atk: 0.72, range: 'M', exp: 100, drops: [['medicine', 0.1]] });
   WM.enemy('zhu_rider', 'Zhu Village Rider', 22, WM.hum(WM.enemyLooks.soldier), { hp: 0.7, atk: 0.52, range: 'M', exp: 120 });
   var T = WM.data.troops;
   T.ch11_brawl = { enemies: ['jz_tough', 'zhangbao_foe', 'jz_tough'], bg: 'town', noRun: true };

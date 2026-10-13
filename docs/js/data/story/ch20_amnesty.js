@@ -205,7 +205,7 @@
       s.despawn('cz'); s.despawn('zg');
       await s.say('wuyong', 'There will be war now, brother. Be ready.');
       await s.narrate('The court sent Tong Guan, Privy Councillor, with a hundred thousand men.');
-      s.party(['songjiang', 'gongsunsheng', 'wuyong', 'lujunyi']);
+      s.party(['songjiang', 'gongsunsheng', 'wuyong', 'lujunyi']); s.level('gongsunsheng', 33);
       await s.war('ch20_tongguan');
       await s.narrate('Tong Guan fled to the capital. Then Gao Qiu came with ten regional commanders and a fleet, and was beaten on land and on the water. He had a new edict drawn up. When it was read before the walls of Jizhou, it said: "...except Song Jiang, Lu Junyi and all others great and small are pardoned." With the comma in the wrong place, every man was pardoned but the one who mattered.');
       s.spawn('hr', 'huarong', 15, 7, 'up');

@@ -1,6 +1,6 @@
 // Plays the real game in headless Chrome with tools/autoplay.js and prints what it found.
 //   node tools/autoplay-headless.js [from] [to] [--encounters]
-// Needs the game served at http://localhost:8766 (python3 tools/serve.py 8766) and Google Chrome installed.
+// Needs the game served at http://localhost:8766 (python3 tools/serve.py 8766), or at GAME_URL, and Google Chrome installed.
 'use strict';
 const { spawn } = require('child_process');
 const fs = require('fs'), os = require('os'), path = require('path');
@@ -8,6 +8,7 @@ const fs = require('fs'), os = require('os'), path = require('path');
 const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const FROM = +(args[0] || 0), TO = +(args[1] || 24), ENC = process.argv.includes('--encounters');
 const PORT = 9333 + Math.floor(Math.random() * 500);
+const GAME = process.env.GAME_URL || 'http://localhost:8766';   // where the game is served
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'wm-autoplay-'));
 const chrome = spawn(CHROME, ['--headless=new', '--remote-debugging-port=' + PORT, '--user-data-dir=' + profile,
@@ -30,22 +31,39 @@ async function main() {
   const ws = new WebSocket(await connect());
   await new Promise((r) => ws.addEventListener('open', r));
   let id = 0; const pending = {};
-  ws.addEventListener('message', (m) => { const d = JSON.parse(m.data); if (d.id && pending[d.id]) { pending[d.id](d); delete pending[d.id]; } });
+  let onPaused = null;
+  ws.addEventListener('message', (m) => { const d = JSON.parse(m.data); if (d.id && pending[d.id]) { pending[d.id](d); delete pending[d.id]; } else if (d.method === 'Debugger.paused' && onPaused) onPaused(d.params); });
   const send = (method, params) => new Promise((r) => { const n = ++id; pending[n] = r; ws.send(JSON.stringify({ id: n, method, params })); });
   const ev = async (expr) => { const r = await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true }); if (r.result && r.result.exceptionDetails) throw new Error(JSON.stringify(r.result.exceptionDetails).slice(0, 400)); return r.result && r.result.result && r.result.result.value; };
 
   await send('Page.enable');
-  await send('Page.navigate', { url: 'http://localhost:8766/?debug' });
+  await send('Debugger.enable');   // ready to break into a page stuck in a loop
+  await send('Page.navigate', { url: GAME + '/?debug' });
   for (let i = 0; i < 100 && !(await ev('!!(window.WM && WM.gfx && WM.gfx.lctx && WM.field)').catch(() => false)); i++) await sleep(200);
   await ev(`(async () => { const src = await (await fetch('/tools/autoplay.js?' + Date.now(), { cache: 'no-store' })).text(); (0, eval)(src);
     window.__errs = []; addEventListener('error', (e) => __errs.push(e.message)); addEventListener('unhandledrejection', (e) => __errs.push(String(e.reason && e.reason.stack || e.reason).slice(0, 300)));
     window.__done = false; AutoPlay.run({ from: ${FROM}, to: ${TO}, skipOnFail: true, encounters: ${ENC} }).then(() => { __done = true; }).catch((e) => { window.__err = String(e && e.stack || e); __done = true; });
     return 'started'; })()`);
-  let shown = 0; const t0 = Date.now();
+  let shown = 0, beat = ''; const t0 = Date.now();
+  const VERBOSE = process.argv.includes('--verbose');
   for (;;) {
     await sleep(3000);
-    const st = await ev('JSON.stringify({ done: __done, err: window.__err || null, ch: WM.state.chapter, map: WM.field.map && WM.field.map.id, log: AutoPlay.log, errs: __errs.slice(0, 10) })');
+    // a page stuck in a loop never answers: say where it was last seen
+    const st = await Promise.race([ev('JSON.stringify({ done: __done, err: window.__err || null, ch: WM.state.chapter, map: WM.field.map && WM.field.map.id, at: WM.field.player && WM.field.player.tile(), run: WM.script.running, ui: WM.ui.stack.length, ev: (WM.field.playing || []).map((e) => e.id).join(","), log: AutoPlay.log, errs: __errs.slice(0, 10) })'), sleep(60000).then(() => null)]);
+    if (!st) {
+      // stuck in a loop: break into it and show where
+      console.log('page stopped responding; last seen: ' + beat);
+      const paused = new Promise((r) => { onPaused = r; });
+      send('Debugger.pause');
+      const p = await Promise.race([paused, sleep(10000).then(() => null)]);
+      if (p) p.callFrames.slice(0, 12).forEach((f) => console.log('    at ' + (f.functionName || '(anonymous)') + ' ' + f.url.replace(/^.*\/\/[^/]+\//, '') + ':' + (f.location.lineNumber + 1) + ':' + (f.location.columnNumber + 1)));
+      else console.log('    (could not pause the page)');
+      break;
+    }
     const s = JSON.parse(st);
+    const b = 'ch' + s.ch + ' ' + s.map + ' ' + JSON.stringify(s.at) + ' run=' + s.run + ' ui=' + s.ui + (s.ev ? ' in ' + s.ev : '');
+    if (VERBOSE && b !== beat) console.log('    . ' + b);
+    beat = b;
     s.log.slice(shown).forEach((x) => console.log((x.kind === 'chapter' ? '' : '  ') + x.kind + ' ch' + x.ch + ' ' + (x.map || '') + ' ' + x.msg));
     shown = s.log.length;
     if (s.done || Date.now() - t0 > 30 * 60 * 1000) {

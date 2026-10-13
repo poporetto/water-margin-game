@@ -140,7 +140,9 @@
 (function () {
   if (!/debug/.test(location.search)) return;
   async function flush() { for (var i = 0; i < 12; i++) await null; }
-  async function frames(n) { for (var i = 0; i < n; i++) { WM.step(1 / 60, 1); await flush(); } }
+  // every few frames give the browser a turn too, or image loads and timers starve (a portrait sheet never arrives)
+  var fcount = 0;
+  async function frames(n) { for (var i = 0; i < n; i++) { WM.step(1 / 60, 1); await flush(); if (++fcount % 15 === 0) await new Promise(function (r) { setTimeout(r, 0); }); } }
   window.adv = function (sec) { return frames(Math.round(sec * 60)); };
   window.press = async function (code, n) { for (var i = 0; i < (n || 1); i++) { window.dispatchEvent(new KeyboardEvent('keydown', { code: code })); await frames(2); window.dispatchEvent(new KeyboardEvent('keyup', { code: code })); await frames(2); } };
   window.hold = async function (code, sec) { window.dispatchEvent(new KeyboardEvent('keydown', { code: code })); await frames(Math.round(sec * 60)); window.dispatchEvent(new KeyboardEvent('keyup', { code: code })); await frames(1); };
