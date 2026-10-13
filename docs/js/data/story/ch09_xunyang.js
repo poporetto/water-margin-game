@@ -36,7 +36,7 @@
     win: [['foe:shock', 'Lucky!']], lose: [['hero:sad', 'Glub... glub...']]
   };
   WM.data.wars.ch9_river = {
-    name: 'The Banks of the Xunyang', goal: 'rout', turns: 10, music: 'war',
+    name: 'The Banks of the Xunyang', goal: 'rout', turns: 12, music: 'war',
     map: [
       '~~~~~.......TT',
       '~rr~~.........',

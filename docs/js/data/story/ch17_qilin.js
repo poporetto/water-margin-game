@@ -40,7 +40,7 @@
   duelVs('guansheng_shan', 'guansheng', 'shantinggui', 760, 60, 600, 50, [['foe', 'Guan Sheng! You took the government\'s pay and went over to the bandits?'], ['hero', 'Shan Tinggui. I went over to men of honour. Come.']], [[null, 'Guan Sheng\'s great blade flashed, and Shan Tinggui went down from his horse, stunned by the flat of it.']], { bg: 'field', drawAfter: 0 });
 
   WM.data.wars.ch17_daming = {
-    name: 'Before the Gates of Daming', goal: 'rout', turns: 12, music: 'war',
+    name: 'Before the Gates of Daming', goal: 'rout', turns: 15, music: 'war',
     map: [
       '.......mm....#',
       '..TT.........#',
