@@ -125,7 +125,8 @@
       var prevFade = G.fade;
       WM.audio.sfx('gong');
       var w = {
-        update: function () { if (WM.time - t0 > 1.2 && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); UI.remove(w); resolve(); } },
+        // the card gives way to black, and the chapter's first scene fades in from it (see WM.chapterDark)
+        update: function () { if (WM.time - t0 > 1.2 && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); G.fade = 1; WM.chapterDark = true; UI.remove(w); resolve(); } },
         draw: function () {
           var t = WM.time - t0, c = G.ctx;
           c.fillStyle = '#0c0a08'; c.fillRect(0, 0, WM.W, WM.H);

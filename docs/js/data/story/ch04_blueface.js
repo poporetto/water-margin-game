@@ -48,8 +48,7 @@
     s.give('sabre', 1, true);
     WM.state.gold = 20;
     WM.state.flags.lsWangLun = true;
-    await s.warp('kaifeng_in', 40, 8, 'up', { noFade: true });
-    await s.fadeIn(0.6);
+    await s.warp('kaifeng_gao', 5, 8, 'up', { noFade: true });   // the chapter opens before the Marshal (it fades in on the first line)
   };
   WM.data.chapters[4].debugStart = async function (s) {
     S.newGame(); ['pro_done', 'ch1_done', 'ch2_done', 'ch3_done'].forEach(function (f) { s.flag(f); });
@@ -57,15 +56,16 @@
     await WM.data.chapters[4].begin(s);
   };
 
-  WM.defEvents('kaifeng_in', [
+  WM.defEvents('kaifeng_gao', [
     { id: 'ch4_inn', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 4; }, run: async function (s) {
-      await s.narrate('Yang Zhi came to the Eastern Capital with the silver Wang Lun had returned to him, and spent it all on bribes to the clerks of the Bureau of Military Affairs, to have his case reopened and his post restored. At last his petition reached the Grand Marshal himself.');
-      await s.warp('kaifeng_gao', 5, 8, 'up', { noFade: true });
       s.spawn('gaoqiu', 'gaoqiu', 5, 4, 'down');
+      await s.narrate('Yang Zhi came to the Eastern Capital with the silver Wang Lun had returned to him, and spent it all on bribes to the clerks of the Bureau of Military Affairs, to have his case reopened and his post restored. At last his petition reached the Grand Marshal himself.');
       await s.say('gaoqiu:angry', 'Ten officers were sent to fetch the flower-rock for the Emperor\'s garden. Nine brought their loads to the capital. You alone lost yours — and then you ran away, and hid, and now an amnesty brings you crawling back, asking for your post? Even if there were an amnesty, you deserve no office. Get out!');
-      s.despawn('gaoqiu');
+      // back at his inn, with nothing
+      await s.fadeOut(0.6);
       await s.warp('kaifeng_in', 40, 7, 'up', { noFade: true });
       s.spawn('keep', 'kfinnkeep', 37, 4, 'down');
+      await s.fadeIn(0.6);
       await s.say('yangzhi:sad', '(Wang Lun was right. And now I have nothing. Not one coin for the inn, nor for the road home.)');
       await s.say('kfinnkeep:concerned', 'Officer Yang, you owe for three weeks. I can\'t feed you on promises.');
       await s.say('yangzhi:sad', '(All I have left is the sabre my ancestors handed down. ...So be it. I will sell it, and go home.)');

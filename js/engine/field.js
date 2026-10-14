@@ -276,6 +276,7 @@
     var st = WM.state;
     var scripting = WM.script.running;
     if (F.pendingAuto && !scripting) { F.pendingAuto = false; if (F.checkAuto()) return; }
+    if (WM.chapterDark && !scripting && !F.transitioning) { WM.chapterDark = false; if (WM.gfx.fade > 0.5) WM.fadeIn(0.6); }   // a chapter that opens on the map itself
 
     // player control
     var p = F.player;

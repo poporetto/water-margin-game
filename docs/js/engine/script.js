@@ -209,6 +209,15 @@
         a.x = cx * TS + 8; a.y = cy * TS + 15;
         return s.move(key, steps, opt);
       },
+      // walk to a tile by the shortest clear way (around stacks, houses and fences), not in straight lines
+      walkTo: function (key, tx, ty, opt) {
+        snap(key);
+        var a = actor(key), t = a.tile(), path = pathTo(t.x, t.y, tx, ty);
+        if (!path) return s.moveTo(key, tx, ty, opt);
+        var steps = []; for (var i = 1; i < path.length; i++) steps.push([path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]]);
+        a.x = t.x * TS + 8; a.y = t.y * TS + 15;
+        return s.move(key, steps, opt);
+      },
       place: function (key, tx, ty, dir) { snap(key); var a = actor(key); a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; if (dir) a.dir = dir; if (a.isPlayer) { F().lastTile = a.tile(); if (!F().camTarget) F().updateCamera(true); } },   // the view goes with the player
       face: function (key, dir) { var a = actor(key); if (a.entering) a.finalDir = dir; else a.dir = dir; },
       faceEach: function (k1, k2) {
@@ -368,8 +377,20 @@
     // these wait for anyone still walking in; a warp first sets everyone down where they were going
     ['battle', 'duel', 'war', 'tablet', 'card', 'shop', 'inn', 'smith', 'talismanShop', 'saveMenu', 'roster', 'join', 'joinMany', 'endChapter'].forEach(function (k) { s[k] = after(s[k]); });
     var warp0 = s.warp; s.warp = function () { snapAll(); return warp0.apply(s, arguments); };
+    // after a chapter card the screen is black: narration may run over it, but the first line spoken, or anyone
+    // moving, fades the scene in first
+    ['say', 'ask', 'choose', 'notice', 'move', 'moveTo', 'walkTo', 'emote', 'jump', 'battle', 'duel', 'war'].forEach(function (k) {
+      var f0 = s[k]; if (typeof f0 !== 'function') return;
+      s[k] = function () {
+        var self = this, args = arguments;
+        if (!WM.chapterDark) return f0.apply(self, args);
+        WM.chapterDark = false;
+        return (G.fade > 0.5 ? WM.fadeIn(0.6) : Promise.resolve()).then(function () { return f0.apply(self, args); });
+      };
+    });
+    var fadeIn0 = s.fadeIn; s.fadeIn = function () { WM.chapterDark = false; return fadeIn0.apply(this, arguments); };
     // the scene goes on: whoever was sent off now leaves (see sendOff)
-    ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach(function (k) {
+    ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'walkTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach(function (k) {
       var f0 = s[k]; if (typeof f0 !== 'function') return;
       s[k] = function () { flush(); return f0.apply(this, arguments); };
     });

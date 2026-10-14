@@ -162,6 +162,7 @@ function mkApi(ctx) {
       if (a.x < 0 || a.y < 0) err('move: "' + key + '" leaves the map');
       return resolved;
     },
+    walkTo(key, tx, ty) { const a = findActor(key); if (!a) err('walkTo: no actor "' + key + '"'); else if (!walkable(cur.map, tx, ty)) err('walkTo: ' + key + ' to a solid tile ' + cur.map + '(' + tx + ',' + ty + ')'); else { a.x = tx; a.y = ty; } return resolved; },
     moveTo(key, tx, ty) { const a = findActor(key); if (!a) err('moveTo: no actor "' + key + '"'); else { a.x = tx; a.y = ty; } return resolved; },
     place(key, tx, ty) {
       const a = findActor(key); if (!a) { err('place: no actor "' + key + '" on ' + cur.map); return; }
@@ -262,7 +263,7 @@ function mkApi(ctx) {
     saveMenu() { return resolved; }, roster() { return resolved; }, tablet() { return resolved; }
   };
   // as in the game: whoever was sent off leaves once the scene goes on, and each speaker's last line is remembered
-  ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach((k) => {
+  ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'walkTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach((k) => {
     const f0 = s[k]; if (typeof f0 !== 'function') return;
     s[k] = function () { flushOff(); if (k === 'say' && typeof arguments[0] === 'string' && arguments[1] && !/^\(/.test(String(arguments[1]))) lastLine[arguments[0].split(':')[0]] = true; return f0.apply(this, arguments); };
   });

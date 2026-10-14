@@ -326,8 +326,8 @@
     { id: 'ch3_depot', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch3_fodder'); }, run: async function (s) {
       s.spawn('old', 'oldsoldier', 27, 18, 'up');
       await s.say(null, '(It is the depth of winter. Dark clouds hang low and the snow falls without stopping.)');
-      await s.move('player', 'R12');
-      s.place('player', 27, 17, 'down'); s.faceEach('player', 'old');
+      await s.walkTo('player', 27, 17);   // across the yard to the keeper's hut
+      s.faceEach('player', 'old');
       await s.say('oldsoldier', 'You\'re the new keeper? Here are the keys, and the tally of the stacks. The hut\'s old — mind the roof in this snow.');
       await s.say('oldsoldier:smile', 'If you want a drink, go east of here two or three li, past the old temple of the Mountain God, and there\'s a village with wine. Take my gourd. Keep warm.');
       s.despawn('old');
