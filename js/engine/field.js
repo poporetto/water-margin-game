@@ -199,6 +199,11 @@
     var st = WM.state;
     F.map = buildMap(id);
     st.map = id;
+    if (F.map.def.world && tileSolid(tx, ty)) {   // a save from before the map was redrawn can stand in a river: step out to the nearest road
+      var seen = {}, q = [[tx, ty]], hit = null;
+      while (q.length && !hit) { var p = q.shift(); [[0, 1], [1, 0], [-1, 0], [0, -1]].forEach(function (d) { var nx = p[0] + d[0], ny = p[1] + d[1], k = nx + ',' + ny; if (hit || seen[k] || F.map.get(nx, ny) === null) return; seen[k] = 1; if (!tileSolid(nx, ny) && F.map.get(nx, ny) === ':') hit = [nx, ny]; else q.push([nx, ny]); }); }
+      if (hit) { tx = hit[0]; ty = hit[1]; }
+    }
     var leader = st.leader || st.party[0];
     F.player = new Actor({ x: tx * TS + 8, y: ty * TS + 15, dir: dir || 'down', sheetId: leader, look: WM.data.chars[leader] ? WM.data.chars[leader].look : {} });
     F.player.isPlayer = true;

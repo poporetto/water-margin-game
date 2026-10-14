@@ -179,7 +179,7 @@
       s.flag('ch2_fled');
       WM.unlock('yanmen');
       await s.narrate('The prefect sent men after him and posted a reward of a thousand strings for the arrest of the murderer Lu Da. But Lu Da had fled, hungry and desperate, through one prefecture after another, until he came to Yanmen county in Daizhou.');
-      await s.warp('world', 22, 23, 'up', { fade: 0.6 });
+      await s.warp('world', WM.worldAt('yanmen')[0], WM.worldAt('yanmen')[1], 'up', { fade: 0.6 });
     } }
   ]);
   // Weizhou is closed to the fugitive
@@ -521,7 +521,7 @@
       await s.say('cuidaocheng:smile', 'Run, you starving bald donkey! And don\'t come back!');
       await s.say('qiuxiaoyi:smile', 'Ha! The Flower Monk, they call him? The wilted monk!');
       s.flag('ch2_fled_cui');
-      await s.warp('world', 52, 45, 'down');
+      await s.warp('world', WM.worldAt('waguan')[0], WM.worldAt('waguan')[1], 'down');
       await s.say('luzhishen:sad', '(If I\'d had a meal in my belly, those two... I\'ll find something to eat and come back.)');
       await s.say(null, '(Below the monastery, on the road he came by, there was a forest of red pines.)');
     } },
@@ -560,7 +560,7 @@
       s.tint(null);
       s.removeParty('shijin');
       s.flag('ch2_waguanwin');
-      await s.warp('world', 52, 45, 'down');
+      await s.warp('world', WM.worldAt('waguan')[0], WM.worldAt('waguan')[1], 'down');
       await s.say(null, '(The Great Xiangguo Monastery is in the Eastern Capital, to the south-east.)');
     } }
   ]);

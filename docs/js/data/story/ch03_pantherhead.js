@@ -394,7 +394,7 @@
       WM.unlock('zhugui');
       s.flag('ch3_toliangshan');
       await s.narrate('So Lin Chong passed the checkpoint among Lord Chai\'s hunters, took leave of his benefactor, and set out alone on the road south to Liangshan Marsh. It was the depth of winter, and the snow was falling again.');
-      await s.warp('world', 92, 23, 'down');
+      await s.warp('world', WM.worldAt('chaimanor')[0], WM.worldAt('chaimanor')[1], 'down');
       await s.say(null, '(Liangshan Marsh lies to the south. Travellers bound for the stronghold ask at Zhu Gui\'s tavern on its shore.)');
     } }
   ]);

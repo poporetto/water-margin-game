@@ -128,6 +128,32 @@
       if (ev) setTimeout(function () { if (!WM.script.running) WM.field.runEvent(ev); }, 400);
     }
   };
+  // The whole world map at once, every place named: for judging the lie of the land (debug panel button).
+  D.worldPreview = function () {
+    var old = document.getElementById('dbg-world'); if (old) { old.remove(); return; }
+    var T = WM.tiles, def = WM.data.maps.world, saved = WM.state.flags, flags = {};
+    for (var k in saved) flags[k] = saved[k];
+    Object.keys(WM.data.locations).forEach(function (id) { flags['loc:' + id] = true; });
+    WM.state.flags = flags;
+    var rows = def.rows(), w = 0; rows.forEach(function (r) { w = Math.max(w, r.length); });
+    var m = { id: 'world', def: def, rows: rows, w: w, h: rows.length, theme: def.theme || 'spring', interior: false,
+      get: function (x, y) { if (y < 0 || y >= this.h || x < 0 || x >= this.w) return null; return this.rows[y][x] || '.'; } };
+    var base = T.bake(m), c2 = base.getContext('2d'), th = T.THEMES[m.theme] || T.THEMES.spring;
+    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { var d = T.DEF[m.get(x, y)]; if (d && d.tall) d.tall(c2, x * 16, y * 16, x, y, th, m, m.get(x, y)); }
+    WM.state.flags = saved;
+    var cv = document.createElement('canvas'); cv.id = 'dbg-world';
+    var sc = Math.min(window.innerWidth / base.width, window.innerHeight / base.height);
+    cv.width = Math.floor(base.width * sc); cv.height = Math.floor(base.height * sc);
+    cv.style.cssText = 'position:fixed;left:0;top:0;z-index:60;background:#000;cursor:pointer';
+    var c = cv.getContext('2d'); c.imageSmoothingEnabled = true; c.drawImage(base, 0, 0, cv.width, cv.height);
+    c.font = 'bold ' + Math.max(9, Math.round(11 * sc * 3)) + 'px Georgia'; c.textAlign = 'center';
+    Object.keys(WM.data.locations).forEach(function (id) {
+      var L = WM.data.locations[id], px = (L.x + 0.5) * 16 * sc, py = (L.y - 1.2) * 16 * sc;
+      c.lineWidth = 3; c.strokeStyle = 'rgba(0,0,0,0.85)'; c.strokeText(L.name.replace(/ \(.*\)/, ''), px, py); c.fillStyle = '#ffe8a8'; c.fillText(L.name.replace(/ \(.*\)/, ''), px, py);
+    });
+    cv.addEventListener('click', function () { cv.remove(); });
+    document.body.appendChild(cv);
+  };
   D.buildPicker = function () {
     if (!D.enabled || typeof document === 'undefined' || !document.body || document.getElementById('dbg-chapters')) return;
     var st = document.createElement('style');
@@ -140,6 +166,9 @@
     document.head.appendChild(st);
     var btn = document.createElement('div'); btn.id = 'dbg-chapters'; btn.textContent = 'Chapters ▾';
     var panel = document.createElement('div'); panel.id = 'dbg-panel';
+    var wb = document.createElement('button'); wb.innerHTML = '<b>Map</b>Whole world map';
+    wb.addEventListener('click', function (e) { e.stopPropagation(); panel.style.display = 'none'; D.worldPreview(); });
+    panel.appendChild(wb);
     var enc = document.createElement('button');
     var encLabel = function () { enc.innerHTML = '<b>' + (D.noEnc ? 'OFF' : 'ON') + '</b>Random battles'; };
     encLabel();

@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   var L = WM.mapLib, U = WM.util;
-  WM.data.locations.kongmanor = { id: 'kongmanor', name: 'Kong Family Manor', x: 130, y: 38, icon: 'manor', map: 'kongmanor', sx: 14, sy: 20 };
+  WM.data.locations.kongmanor = { id: 'kongmanor', name: 'Kong Family Manor', x: WM.worldPos('kongmanor')[0], y: WM.worldPos('kongmanor')[1], icon: 'manor', map: 'kongmanor', sx: 14, sy: 20 };
 
   // ---------------- Jingyang Ridge ----------------
   var j = L.grid(30, 44, 'P');

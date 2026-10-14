@@ -244,7 +244,7 @@
       await s.narrate('Wu Song went straight to the county office with the confession, the bones, the silver and Granny Wang, and gave himself up. The magistrate, who had a conscience after all, wrote the report as mercifully as he could. Granny Wang was executed. Wu Song was beaten forty strokes, tattooed on the face, and exiled to Mengzhou, two thousand li away. The people of Yanggu gave him money and wine for the journey.');
       s.flag('ch7_exiled');
       WM.unlock('crossslope', 'mengzhou');
-      await s.warp('world', 46, 55, 'up');
+      await s.warp('world', WM.worldAt('crossslope')[0], WM.worldAt('crossslope')[1], 'up');
       await s.say(null, '(Wu Song is sent to Mengzhou. The road north passes the inn at Cross Slope.)');
     } }
   ]);

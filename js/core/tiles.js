@@ -15,6 +15,8 @@
     dusk: { g0: '#5a7a3e', g1: '#4a6634', g2: '#6f9150', g3: '#3a522a', flower: ['#d8b860', '#c86a70', '#e8e0d0'], tree: ['#2a4f2a', '#386638', '#4c824a'], dirt: ['#a58b5e', '#8a734c', '#bca274'] },
     marsh: { g0: '#6a9a48', g1: '#56843a', g2: '#86b25e', g3: '#456c2e', flower: ['#e8e4a0', '#c8d8f0', '#ffffff'], tree: ['#2f6a3a', '#3f8a46', '#5aa85a'], dirt: ['#b3a06c', '#988656', '#c9b884'] },
     south: { g0: '#4a9a4a', g1: '#3a843c', g2: '#64b462', g3: '#2e6a32', flower: ['#f08a8a', '#f7e27a', '#ffffff'], tree: ['#1f5f2f', '#2c7c3c', '#45a052'], dirt: ['#b59a6a', '#977e52', '#cbb383'] },
+    // the world map, painted as on an old silk map: pale ochre ground, ink-green trees
+    world: { g0: '#cfc59c', g1: '#c2b78c', g2: '#dbd2ae', g3: '#a89d74', flower: ['#c8a040', '#b8584a', '#e8e0c8'], tree: ['#2f5440', '#41684e', '#5e8466'], dirt: ['#a0603c', '#8a4e30', '#b8744c'] },
     north: { g0: '#8a9a5a', g1: '#76844a', g2: '#a0b06a', g3: '#5e6a3a', flower: ['#e0d890', '#c0c0d0', '#ffffff'], tree: ['#3a5a3a', '#4a704a', '#6a8a5a'], dirt: ['#a89878', '#8c7e62', '#beae8e'] }
   };
   T.THEMES = THEMES;
@@ -45,6 +47,33 @@
     }
   }
   function dirt(c, x, y, tx, ty, th, m) {
+    if (m && m.def && m.def.world) {   // on the world map a road is a thin red-brown line across the silk, joining its neighbours
+      grass(c, x, y, tx, ty, th);
+      // a road on the old maps runs as a drawn line, so a tile-by-tile staircase is joined corner to corner instead
+      var links = (WM.world && WM.world.links) || {}, ln = function (ax, ay) {
+        var seen = {}; return (links[ax + ',' + ay] || []).filter(function (d) { var k = d + ''; if (seen[k]) return false; seen[k] = 1; return true; });
+      };
+      var corner = function (ax, ay) {   // a stair-step tile: exactly two links, at right angles
+        var n = ln(ax, ay);
+        return n.length === 2 && n[0][0] !== -n[1][0] && n[0][1] !== -n[1][1] ? n : null;
+      };
+      // on a staircase every tile is a step, so only every other one (by checkerboard) is cut across
+      var skip = function (ax, ay) { return m.get(ax, ay) === ':' && (ax + ay) % 2 === 1 && corner(ax, ay); };
+      var ink = '#8a4e30', line = function (ex, ey) {
+        for (var k = 0; k <= 16; k++) px(c, x + Math.round(7 + (ex - 7) * k / 16), y + Math.round(7 + (ey - 7) * k / 16), 2, 2, ink);
+      };
+      if (skip(tx, ty)) return;   // its two neighbours join across it
+      px(c, x + 6, y + 6, 4, 4, ink);
+      ln(tx, ty).forEach(function (d) {
+        var cn = skip(tx + d[0], ty + d[1]);
+        if (cn) {   // go straight on to the far side of the step
+          var o = cn[0][0] === -d[0] && cn[0][1] === -d[1] ? cn[1] : cn[0];
+          line(7 + (d[0] + o[0]) * 7, 7 + (d[1] + o[1]) * 7); return;
+        }
+        line(7 + d[0] * 7, 7 + d[1] * 7);
+      });
+      return;
+    }
     var d = th.dirt;
     px(c, x, y, S, S, d[0]);
     for (var i = 0; i < 7; i++) {
@@ -69,7 +98,25 @@
     if (U.hash2(tx, ty, 30) > 0.8) px(c, x + 5, y + 3, 2, 1, '#7d7a72');
   }
   var WATER = ['#2f67ad', '#3b78c0', '#5d97d6', '#24548e', '#d6ecf7'];
+  function worldWater(c, x, y, tx, ty, th, m, deepSea) {
+    // water as the old maps paint it: rivers with flowing lines, the sea in rows of curling fish-scale waves
+    px(c, x, y, S, S, deepSea ? '#3a6482' : '#4a7c96');
+    if (deepSea) {
+      for (var r = 0; r < 4; r++) for (var k = -1; k < 3; k++) {
+        var ox = x + k * 8 + (r % 2) * 4, oy = y + r * 4;
+        px(c, ox + 1, oy + 2, 6, 1, '#d6e4e0'); px(c, ox, oy + 3, 1, 1, '#d6e4e0'); px(c, ox + 7, oy + 3, 1, 1, '#d6e4e0'); px(c, ox + 2, oy + 1, 4, 1, '#5e8aa4');
+      }
+    } else {
+      for (var i = 0; i < 3; i++) { var wy = y + 3 + i * 5, sh = (tx * 3 + i * 5) % 6; px(c, x + sh, wy, 5, 1, '#d6e4e0'); px(c, x + sh + 5, wy - 1, 2, 1, '#d6e4e0'); px(c, x + sh + 9, wy, 4, 1, '#9cc0c8'); }
+    }
+    var isLand = function (dx, dy) { var ch = m.get(tx + dx, ty + dy); return ch && !T.isWaterChar(ch); };
+    if (isLand(0, -1)) { px(c, x, y, S, 1, '#2a3a3a'); }
+    if (isLand(0, 1)) { px(c, x, y + 15, S, 1, '#2a3a3a'); }
+    if (isLand(-1, 0)) { px(c, x, y, 1, S, '#2a3a3a'); }
+    if (isLand(1, 0)) { px(c, x + 15, y, 1, S, '#2a3a3a'); }
+  }
   function water(c, x, y, tx, ty, th, m) {
+    if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, false);
     px(c, x, y, S, S, WATER[0]);
     for (var i = 0; i < 4; i++) {
       var wx = Math.floor(U.hash2(tx * 9 + i, ty, 40) * 12), wy = Math.floor(U.hash2(tx, ty * 9 + i, 41) * 15);
@@ -83,7 +130,8 @@
     if (isLand(-1, 0)) { px(c, x, y, 2, S, landCol); px(c, x + 2, y, 1, S, '#7a6a48'); px(c, x + 3, y, 1, S, WATER[4]); }
     if (isLand(1, 0)) { px(c, x + 14, y, 2, S, landCol); px(c, x + 13, y, 1, S, '#7a6a48'); px(c, x + 12, y, 1, S, WATER[4]); }
   }
-  function deep(c, x, y, tx, ty) {
+  function deep(c, x, y, tx, ty, th, m) {
+    if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, true);
     px(c, x, y, S, S, WATER[3]);
     for (var i = 0; i < 3; i++) {
       var wx = Math.floor(U.hash2(tx * 9 + i, ty, 42) * 12), wy = Math.floor(U.hash2(tx, ty * 9 + i, 43) * 15);
@@ -167,6 +215,21 @@
     px(c, x + 9, y + 9, 3, 1, dark);
   }
   function mountain(c, x, y, tx, ty, th, m) {
+    if (m && m.def && m.def.world) {
+      // blue-and-green peaks (青綠山水) rising from the silk, each tile a peak or two outlined in ink
+      grass(c, x, y, tx, ty, th);
+      var h1 = U.hash2(tx, ty, 61), pk = function (cx, base, hgt, half) {
+        for (var r = 0; r < hgt; r++) {
+          var w = Math.max(1, Math.round(half * r / hgt));
+          px(c, cx - w, base - hgt + r, w, 1, '#7aa89a'); px(c, cx, base - hgt + r, w, 1, '#3f7064');   // lit face, shadowed face
+          px(c, cx - w - 1, base - hgt + r, 1, 1, '#24342e'); px(c, cx + w, base - hgt + r, 1, 1, '#24342e');   // ink outline
+        }
+        px(c, cx - 1, base - hgt, 2, 2, '#3a6a8a');   // the azurite peak
+      };
+      pk(x + 5 + Math.floor(h1 * 3), y + 15, 10 + Math.floor(h1 * 4), 6);
+      pk(x + 11, y + 15, 7 + Math.floor(U.hash2(tx, ty, 62) * 3), 4);
+      return;
+    }
     // fills the tile with rocky cliff; edges blend to neighbours
     var snow = th === THEMES.snow;
     var base = snow ? '#a9b3bf' : '#8d7c66', lite = snow ? '#f0f5f9' : '#b1a084', dark = snow ? '#6c7888' : '#5f5243';

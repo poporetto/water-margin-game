@@ -2,7 +2,7 @@
 'use strict';
 (function () {
   var L = WM.mapLib;
-  WM.data.locations.qingfengshan = { id: 'qingfengshan', name: 'Qingfeng Mountain', x: 120, y: 46, icon: 'mountain', map: 'qingfengshan', sx: 14, sy: 30 };
+  WM.data.locations.qingfengshan = { id: 'qingfengshan', name: 'Qingfeng Mountain', x: WM.worldPos('qingfengshan')[0], y: WM.worldPos('qingfengshan')[1], icon: 'mountain', map: 'qingfengshan', sx: 14, sy: 30 };
 
   // ---------------- Qingfeng Mountain ----------------
   var m = L.grid(30, 34, 'M');

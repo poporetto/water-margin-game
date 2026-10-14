@@ -370,7 +370,7 @@
       await s.narrate('Shi Jin left his rich clothes and most of his silver at the stockade. He tied on a plain felt cap, tucked a sword in his belt, slung his bundle over his shoulder, and set off alone on the road to the north-west, to look for Instructor Wang. After half a month on the road he came to Weizhou, where there was a garrison under Old Minister Chong\'s son. "Perhaps my master is here," he thought.');
       WM.unlock('weizhou');
       s.flag('ch1_toweizhou');
-      await s.warp('world', 8, 41, 'down', { noFade: true });
+      await s.warp('world', WM.worldAt('weizhou')[0], WM.worldAt('weizhou')[1], 'down', { noFade: true });
       await s.fadeIn(1);
     } }
   ]);
