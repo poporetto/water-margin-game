@@ -574,6 +574,8 @@
       s.spawn('zhangsan', 'zhangsan', 26, 16, 'left'); s.spawn('lisi', 'lisi', 26, 17, 'left');
       s.spawn('r1', 'drunk', 27, 15, 'left'); s.spawn('r2', 'gambler', 28, 17, 'left');
       await s.say('zhangsan:smile', 'Congratulations, congratulations, Reverend! We\'re your neighbours. We\'ve come to welcome you to the garden.');
+      await s.moveTo('player', 24, 16, { yFirst: true });   // he walks right up to them, at the edge of the pit
+      s.face('player', 'right');
       await s.say('luzhishen', '(They\'re standing round the edge of the cesspit... smiling like cats at a fishpond. Hm.)');
       await s.say('luzhishen', 'Neighbours! Then come closer and let me greet you properly.');
       await s.narrate('Zhang San and Li Si came forward as if to kneel, meaning to seize his legs and throw him into the cesspit. But before they could touch him, Zhishen shot out his right foot and his left, and sent them flying.');
@@ -598,7 +600,7 @@
     } },
     { id: 'ch2_willow', x: 28, y: 6, w: 5, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_rascalsdone'); }, idle: { zhangsan: 'Reverend, we know our betters now. Every one of us will do as you say.', lisi: 'Those crows in the willow, Reverend. Cawing from dawn to dark. It\'s bad luck, they say.' },
       run: async function (s) {
-      s.spawn('zhangsan', 'zhangsan', 26, 8, 'right'); s.spawn('lisi', 'lisi', 27, 9, 'right');
+      s.spawn('zhangsan', 'zhangsan', 27, 8, 'right'); s.spawn('lisi', 'lisi', 28, 9, 'up');   // at his elbow, under the willow
       s.sfx('wind');
       await s.say('lisi', 'Those cursed crows in the willow — cawing day and night. People say it\'s bad luck. We\'ll fetch a ladder and pull the nest down.');
       await s.say('luzhishen', 'A ladder? Why bother?');
