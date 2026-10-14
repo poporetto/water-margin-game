@@ -367,7 +367,16 @@
       s.tint(null);
       s.flag('ch3_killed');
       WM.state.chars.linchong.equip.acc = null; S.restore('linchong');
-      await s.narrate('Exhausted and half-frozen, he came to a farmhouse where the labourers were drinking round a fire. He begged for wine; they refused; he drove them out and drank it all, and then fell down drunk in the snow outside. The farmhands came back, tied him up and dragged him to their master\'s house — and their master was Lord Chai Jin.');
+      // out into the snow: he walks until he can walk no more
+      await s.fadeOut(0.8);
+      await s.warp('fodder', 9, 12, 'down', { noFade: true });
+      await s.fadeIn(0.8);
+      s.move('player', 'D5', { wait: false });
+      await s.narrate('Exhausted and half-frozen, he came to a farmhouse where the labourers were drinking round a fire. He begged for wine; they refused; he drove them out and drank it all, and then fell down drunk in the snow outside.');
+      s.lie('player'); s.sfx('step'); await s.wait(0.6);
+      await s.fadeOut(1);
+      await s.narrate('The farmhands came back, tied him up and dragged him to their master\'s house — and their master was Lord Chai Jin.');
+      s.lie('player', false);
       await s.warp('chaimanor_in', 10, 7, 'up', { noFade: true });
       s.spawn('chaijin', 'chaijin', 10, 5, 'down');
       s.tint(null);
