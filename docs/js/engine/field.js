@@ -370,18 +370,12 @@
     }
   };
 
-  var BOX_LOW = Math.ceil((196 + 18) / WM.SCALE);   // the dialogue box's height in field pixels (ui.js UI.message)
   F.updateCamera = function (snap) {
     var p = F.player;
     var tw = F.map.w * TS, th = F.map.h * TS;
     var cx = F.camTarget ? F.camTarget.x : p.x, cy = F.camTarget ? F.camTarget.y : p.y - 8;
-    // while a scene plays, the dialogue box covers the bottom of the screen: the view centres on what is left above it,
-    // and may run past the bottom of the map (into the dark) so no one stands hidden behind the box
-    var liftTo = WM.script.running && !F.map.def.world ? BOX_LOW : 0;
-    F.camLift = snap || F.camLift == null ? liftTo : F.camLift + (liftTo - F.camLift) * 0.08;
-    var lift = F.camLift;
     var tx = tw <= WM.LOW_W ? (tw - WM.LOW_W) / 2 : U.clamp(cx - WM.LOW_W / 2, 0, tw - WM.LOW_W);
-    var ty = th <= WM.LOW_H - lift ? (th - WM.LOW_H + lift) / 2 : U.clamp(cy - (WM.LOW_H - lift) / 2, 0, th - WM.LOW_H + lift);
+    var ty = th <= WM.LOW_H ? (th - WM.LOW_H) / 2 : U.clamp(cy - WM.LOW_H / 2, 0, th - WM.LOW_H);
     if (snap || !F.camTarget) { F.cam.x = tx; F.cam.y = ty; }
     else { F.cam.x += (tx - F.cam.x) * 0.12; F.cam.y += (ty - F.cam.y) * 0.12; }
   };
