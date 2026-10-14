@@ -252,7 +252,7 @@
       await s.say('chaijin', 'Uncle, our family holds the iron pledge of the first emperor. No official may touch a descendant of the Chai. I\'ll take it to the capital and have justice.');
       await s.say('chaihuangcheng:sad', 'Take it to the capital... and avenge me...');
       await s.narrate('That night Chai Huangcheng died. Three days later, Yin Tianxi came to the garden gate with twenty bullies, to take the house.');
-      s.despawn('hc'); s.despawn('cj');
+      s.lie('hc');   // he died that night
       s.flag('ch13_uncledead');
       await s.warp('gaotang', 9, 32, 'up');
     } }
@@ -264,8 +264,8 @@
       await s.say('chaijin', 'I am Chai Jin, of the house of Chai. Our family holds the iron pledge from the founding emperor!');
       await s.say('yintianxi', 'Bring me a pledge and I\'ll wipe my backside on it! Beat him!');
       await s.say('likui:angry', 'Wipe your backside on THAT!');
-      s.despawn('yt', { leave: true });
       await s.battle('ch13_yin', { bg: 'town', guests: ['chaijin'] });
+      s.lie('yt');
       await s.narrate('Li Kui dragged Yin Tianxi from his horse and beat him to death with his fists.');
       await s.say('chaijin', 'Brother, run! Back to Liangshan, now! I\'ll face the prefecture — I have the iron pledge, they cannot touch me.');
       s.despawn('cj', { leave: true });

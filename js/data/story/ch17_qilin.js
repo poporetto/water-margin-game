@@ -259,7 +259,7 @@
       await s.say('dongchao', 'Tie him to the tree. Make it quick.');
       s.sfx('arrow'); await s.flash();
       await s.narrate('An arrow from a crossbow took Xue Ba in the throat. Dong Chao turned — and the second took him in the heart. Out of the pines came Yan Qing, with his little crossbow.');
-      s.despawn('dc'); s.despawn('xb');
+      s.lie('dc'); s.lie('xb');   // shot dead under the pines
       s.spawn('yq', 'yanqing', 12, 9, 'right');
       await s.say('yanqing', 'Master! I followed you all the way.');
       await s.say('lujunyi:sad', 'Little Yi... I should have listened to you.');

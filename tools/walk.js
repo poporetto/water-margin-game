@@ -174,7 +174,7 @@ function mkApi(ctx) {
     jump(key) { if (!findActor(key)) err('jump: no actor "' + key + '"'); return resolved; },
     show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); },
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); },
-    lie(key) { if (!findActor(key)) err('lie: no actor "' + key + '"'); },
+    lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing
     boat(key) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = true; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },
     spawn(key, who, tx, ty) {
       gone(who, 'spawn');
@@ -566,7 +566,7 @@ async function main() {
           if (CPS) cps.push({ ev: ev.map + ':' + ev.id, trig: ev.trigger || 'talk', label: spoken.trim().replace(/\s+/g, ' ').slice(0, 80), snap: snap });
           if (LEFT) Object.keys(temp).forEach((k) => { if (D.chars[temp[k].who] || D.npcs[temp[k].who]) leftLog.push('ch' + WM.state.chapter + ' ' + curEvent + ' leaves ' + k + (k === temp[k].who ? '' : '=' + temp[k].who) + ' on ' + cur.map); });
           // the player can talk to anyone left standing, and to anyone waiting for this scene
-          Object.keys(temp).forEach((k) => { if ((D.chars[temp[k].who] || D.npcs[temp[k].who]) && !temp[k].idle) err('"' + k + '" is left standing after the scene with nothing to say (s.idle)'); });
+          Object.keys(temp).forEach((k) => { if ((D.chars[temp[k].who] || D.npcs[temp[k].who]) && !temp[k].idle && !temp[k].lying) err('"' + k + '" is left standing after the scene with nothing to say (s.idle)'); });
           silent.forEach((sp) => errors.push('[' + ev.map + ':' + ev.id + '] "' + sp.key + '" (' + sp.who + ') waits at ' + sp.x + ',' + sp.y + ' where the player can talk to them first, with nothing to say (idle.' + sp.key + ')'));
           break;
         }

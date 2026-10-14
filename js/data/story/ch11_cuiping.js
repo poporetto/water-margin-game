@@ -212,7 +212,7 @@
       await s.say('shixiu:angry', 'Not a sound. Tell me the truth, or you die.');
       await s.say('hudao:shock', 'M-mercy! It\'s the monk Pei Ruhai! When the incense table is set out, he goes in. When I beat the fish at dawn, he comes out. He pays me!');
       await s.fadeOut(1);
-      s.despawn('hd');
+      s.lie('hd');
       await s.narrate('In the morning, a porridge seller found two dead men in the lane: the monk Pei Ruhai, and the wandering monk Hu Dao, with a knife beside him. The prefect\'s men examined the bodies and ruled that the two monks had quarrelled and killed each other, and closed the case. All Jizhou talked of nothing else. But the clothes of both monks were missing.');
       s.night(false);
       s.flag('ch11_proof');
@@ -246,7 +246,7 @@
       await s.say('qiaoyun:sad', '...It is true. And Brother Shi Xiu never laid a finger on me. Husband, for the sake of our marriage, forgive me...');
       await s.say('shixiu', 'Brother. Now you know everything. It is for you to decide.');
       await s.fadeOut(1.5);
-      s.despawn('qy', { leave: true }); s.despawn('ye', { leave: true });
+      s.lie('qy'); s.lie('ye');
       await s.narrate('Yang Xiong killed the maid Ying\'er there among the tombs, and then he killed his wife, Pan Qiaoyun.');
       await s.fadeIn(1);
       await s.say('yangxiong:sad', 'Brother... what now? I am a murderer, and I can\'t go back to the city.');

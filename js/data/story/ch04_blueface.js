@@ -104,7 +104,7 @@
       s.music('sad');
       await s.narrate('Niu Er grabbed at him and swung his fists. Yang Zhi, in a rage, struck once, then again, and Niu Er fell dead on the bridge. And true enough, there was no blood on the blade.');
       await s.say('yangzhi:sad', 'Neighbours! I killed this bully, and I will not run and leave you to answer for it. Come with me to the prefecture, all of you, and bear witness.');
-      s.despawn('niuer', { leave: true });
+      s.lie('niuer');   // dead on the bridge
       s.take('sabre', 1);
       await s.narrate('The people of the capital, who had hated Niu Er, went with him to the prefecture and spoke for him, and many sent him food and money in prison. The prefect, knowing that the dead man had been a menace to all, reduced the charge. Yang Zhi was given twenty strokes, tattooed on the face, and exiled to the Northern Capital, Daming. His sabre was confiscated.');
       s.flag('ch4_exiled');

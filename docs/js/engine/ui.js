@@ -289,7 +289,7 @@
       G.ctx.globalAlpha = a;
       var tw = G.measure(to.text, 22) + 40;
       G.window(WM.W - tw - 20, y, tw, 44);
-      G.text(to.text, WM.W - tw, y + 11, { size: 22, color: to.col || G.COL.text });
+      G.text(to.text, WM.W - tw, y + 22 + 1, { size: 22, baseline: 'middle', color: to.col || G.COL.text });   // centred in the plate
       G.ctx.globalAlpha = 1;
       y += 50;
     }

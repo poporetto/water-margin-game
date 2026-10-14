@@ -175,7 +175,7 @@
       await s.say('luda', '(...His face is turning colour. I only meant to give him a beating, and I\'ve killed him with three punches. I\'ll go to prison for this, and there\'ll be nobody to bring me food. Better be off.)');
       await s.say('luda:angry', 'Pretending to be dead! I\'ll settle with you later!');
       await s.narrate('And swearing at the corpse as he went, Lu Da strode off down the street. None of the neighbours or Zheng\'s men dared to stop him. He went back to his lodgings, rolled up some clothes and silver, took a staff and was out of the South Gate before anyone came for him.');
-      s.despawn('zhengtu', { leave: true }); s.despawn('helper1', { leave: true }); s.despawn('helper2', { leave: true });
+      s.lie('zhengtu'); s.despawn('helper1', { leave: true }); s.despawn('helper2', { leave: true });   // the butcher lies dead in his shop
       s.flag('ch2_fled');
       WM.unlock('yanmen');
       await s.narrate('The prefect sent men after him and posted a reward of a thousand strings for the arrest of the murderer Lu Da. But Lu Da had fled, hungry and desperate, through one prefecture after another, until he came to Yanmen county in Daizhou.');
@@ -545,11 +545,14 @@
     { id: 'ch2_cui2', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_withshijin'); }, idle: { cui: 'Still on your feet, fat monk? Those old men filled your ears with lies.', qiu: '(This time Qiu Xiaoyi has his sword drawn across his knees.)' },
       run: async function (s) {
       s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
+      // Shi Jin came back with him: he stands at Zhishen's side
+      s.spawn('sj', 'shijin', WM.state.x - 1, WM.state.y, 'up');
       await s.say('cuidaocheng:angry', 'Back again, and with a friend? We beat you once already!');
       await s.say('luzhishen:angry', 'Now my belly\'s full. Let\'s see who wins this time!');
       await s.battle('ch2_waguan2', { bg: 'forest', music: 'boss' });
       await s.narrate('This time it was different. Cui Daocheng fell to Zhishen\'s staff, and Shi Jin ran Qiu Xiaoyi through from behind. When they went to the kitchen, they found the old monks had hanged themselves for fear of what the bandits would do to them after Zhishen\'s defeat.');
-      s.lie('cui'); s.lie('qiu');   // both dead where they fell, and left there
+      s.place('cui', 18, 13, 'down'); s.place('qiu', 20, 14, 'down');   // where they fell, on the open ground of the court
+      s.lie('cui'); s.lie('qiu');   // both dead, and left there
       s.tint('fire'); s.sfx('fire');
       await s.narrate('The two of them set fire to the monastery and watched it burn. Then they walked through the night until dawn, and parted at a crossroads: Shi Jin back to his friends on Mount Shaohua, Zhishen on to the Eastern Capital.');
       await s.say('shijin', 'Take care of yourself, brother. Send word to Shaohua if ever you need me.');

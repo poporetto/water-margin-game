@@ -240,7 +240,7 @@
       await s.say('wusong:angry', 'Ximen Qing. My brother sends his greetings.');
       await s.battle('ch7_lion', { bg: 'interior', music: 'boss' });
       await s.narrate('Ximen Qing kicked the knife from Wu Song\'s hand and leapt for the window. Wu Song caught him by the leg and hurled him headfirst out of the window into the street below, then leapt down after him. There, in the street beneath the Lion Bridge tavern, the matter was ended.');
-      s.despawn('ximen', { leave: true });
+      s.hide('ximen'); s.despawn('ximen');   // out of the window, into the street below
       await s.narrate('Wu Song went straight to the county office with the confession, the bones, the silver and Granny Wang, and gave himself up. The magistrate, who had a conscience after all, wrote the report as mercifully as he could. Granny Wang was executed. Wu Song was beaten forty strokes, tattooed on the face, and exiled to Mengzhou, two thousand li away. The people of Yanggu gave him money and wine for the journey.');
       s.flag('ch7_exiled');
       WM.unlock('crossslope', 'mengzhou');
@@ -341,7 +341,7 @@
       await s.say('jiangmenshen:smile', '...They\'ll have finished him by now. Drink, Commander! To the end of Wu Song!');
       await s.say('wusong:angry', 'Wu Song is here.');
       await s.battle('ch7_tower', { bg: 'palace', music: 'boss' });
-      s.despawn('zd', { leave: true }); s.despawn('zt', { leave: true }); s.despawn('jm', { leave: true });
+      s.lie('zd'); s.lie('zt'); s.lie('jm');   // all three dead in the Mandarin Duck Tower
       await s.narrate('That night in the Mandarin Duck Tower, and through the house below, Wu Song killed all who had plotted against him and many who stood in his way. Then he tore a strip from a dead man\'s robe, dipped it in blood, and wrote on the white wall: "The man who killed these is Wu Song, the slayer of the tiger."');
       await s.narrate('He gathered up the silver cups from the table, climbed over the city wall in the dark, and walked through the night, until he collapsed, exhausted, in a little temple — where four men with hooks caught him, and dragged him to a tavern to be butchered. And the tavern was Cross Slope, and the landlady was Sun Erniang.');
       s.night(false);

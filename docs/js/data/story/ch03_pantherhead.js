@@ -362,7 +362,7 @@
       await s.say('luqian:shock', 'Brother! It wasn\'t my idea! The Marshal ordered it — how could I refuse?');
       await s.say('linchong:angry', 'You and I were friends from childhood. And you came all the way here to burn me alive. "How could you refuse?" You could have refused.');
       await s.narrate('Lin Chong killed Lu Qian there in the snow. He laid the three heads on the altar of the Mountain God, put on his white felt hat, drank the last of the cold wine, and walked out into the snow towards the east, leaving the depot burning behind him.');
-      s.despawn('luqian', { leave: true });
+      s.lie('luqian');   // dead in the snow before the temple
       s.tint(null);
       s.flag('ch3_killed');
       WM.state.chars.linchong.equip.acc = null; S.restore('linchong');

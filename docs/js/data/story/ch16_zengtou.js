@@ -99,7 +99,7 @@
       await s.say('songjiang:sad', 'Brother! Brother Chao Gai!');
       await s.say('chaogai:sad', 'Brother Song Jiang... take care of yourself. Whoever captures the man who shot me... let him be the lord of Liangshan.');
       await s.narrate('Then Chao Gai closed his eyes and died. Song Jiang wept as if he had lost his own father, and the whole mountain wept with him.');
-      s.despawn('cg');
+      s.lie('cg');
       s.flag('chaogai_dead');
       S.removeFromParty('chaogai');
       await s.say('wuyong', 'Brother, the mountain cannot be without a lord. Brother Chao Gai\'s words will be honoured when his enemy is taken. Until then, sit in the seat — for the sake of all of us.');

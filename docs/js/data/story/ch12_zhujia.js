@@ -326,8 +326,8 @@
       s.spawn('bj', 'baoji', 20, 4, 'down');
       await s.narrate('Gu Dasao went in with a basket, as a relative bringing food. Yue He let her through. When the signal came from outside, she drew her sabres.');
       await s.say('baoji:angry', 'What\'s this?!');
-      s.despawn('bj');
       await s.battle('ch12_jail', { bg: 'town' });
+      s.lie('bj');   // dead in the gateway of his own prison
       s.addParty('xiezhen'); s.addParty('xiebao');
       await s.narrate('Bao Ji died in the gateway of his own prison. The Xie brothers broke their cangues. Zou Yuan and Zou Run went to the clerk Wang Zheng\'s house and came back with his head. That same night they went to Squire Mao\'s manor, where a birthday feast was going on, and killed Squire Mao, Mao Zhong and their household, took the gold and silver and the horses, and burned the manor to the ground.');
       await s.narrate('Then all eight of them took the road to Liangshan. At Shi Yong\'s tavern they heard that Song Jiang was fighting the Zhu Family Village and had been beaten twice.');

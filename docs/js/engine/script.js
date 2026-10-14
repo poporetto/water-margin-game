@@ -76,6 +76,7 @@
   }
   function instant(who) {
     var f = F();
+    if (typeof who === 'string' && WM.state.party.indexOf(who) >= 0) return true;   // a party member is already at the leader's side
     return !f || !f.map || f.map.def.world || G.fade > 0.4 || f.transitioning || (typeof who === 'string' && WM.state.flags['ghost:' + who]) || !WM.field.player;
   }
   function walk(a, path, onDone) {
@@ -208,7 +209,7 @@
         a.x = cx * TS + 8; a.y = cy * TS + 15;
         return s.move(key, steps, opt);
       },
-      place: function (key, tx, ty, dir) { snap(key); var a = actor(key); a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; if (dir) a.dir = dir; if (a.isPlayer) F().lastTile = a.tile(); },
+      place: function (key, tx, ty, dir) { snap(key); var a = actor(key); a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; if (dir) a.dir = dir; if (a.isPlayer) { F().lastTile = a.tile(); if (!F().camTarget) F().updateCamera(true); } },   // the view goes with the player
       face: function (key, dir) { var a = actor(key); if (a.entering) a.finalDir = dir; else a.dir = dir; },
       faceEach: function (k1, k2) {
         var a = actor(k1), b = actor(k2);

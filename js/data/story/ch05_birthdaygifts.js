@@ -398,7 +398,7 @@
       await s.say('linchong:angry', 'Jealous, narrow little man. You\'re not fit to lead anyone!');
       s.sfx('slash'); await s.shake(5, 0.5);
       await s.narrate('Lin Chong kicked the table over, drew a knife from his robe and seized Wang Lun. Wu Yong, Chao Gai and the others leapt up — as if to stop him — and stood between Wang Lun\'s men and the two of them. And Lin Chong killed Wang Lun there in the hall.');
-      s.despawn('wanglun');
+      s.lie('wanglun');
       await s.say('linchong', 'I killed him for the sake of the brotherhood, not for any seat. Headman Chao is a man of honour, known to everyone. He shall be our chief. Whoever disagrees, step forward.');
       await s.say('duqian', 'We were only ever Wang Lun\'s men because there was no one better. Chief Chao — we follow you.');
       await s.say('chaogai', '...Brothers, I am a plain village headman. But if you will have me, I will not fail you.');

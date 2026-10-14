@@ -83,7 +83,7 @@
       await s.narrate('Song Jiang grabbed for the pouch, and she clutched it to her breast. As they struggled, the small knife in the pouch fell out on the bed. Song Jiang snatched it up. "Murder! Black Song Jiang is murdering me!" she screamed. The word put the thought into his head. Rage overcame him.');
       s.sfx('slash'); await s.shake(4, 0.4);
       await s.fadeOut(0.6, '#600');
-      s.despawn('poxi', { leave: true });
+      s.lie('poxi');   // dead on the bed
       s.take('chaoletter', 1);
       await s.narrate('Song Jiang took the letter from the pouch and burned it in the lamp. Then he sat down, and waited for the dawn.');
       await s.fadeIn(0.6);

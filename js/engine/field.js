@@ -323,7 +323,7 @@
     F.updateActors(dt);
     F.updateCamera();
   };
-  F.updateBackground = function (dt) { F.updateActors(dt, true); };
+  F.updateBackground = function (dt) { F.updateActors(dt, true); if (F.map && F.player) F.updateCamera(); };   // the view keeps up while someone is talking
 
   F.updateActors = function (dt, frozen) {
     var all = F.actors.concat([F.player]);
@@ -711,7 +711,7 @@
     var sx = (best.x * TS + 8 - cx) * k, sy = (best.y * TS - cy) * k - 52;
     var tw = G.measure(name, 18, true) + 28;
     G.window(sx - tw / 2, sy, tw, 34, { top: '#2a1e12', bottom: '#120c06' });
-    G.text(name, sx, sy + 7, { size: 18, bold: true, align: 'center', color: G.COL.gold });
+    G.text(name, sx, sy + 17 + 1, { size: 18, bold: true, align: 'center', baseline: 'middle', color: G.COL.gold });   // centred in the plate
   }
 
   // ---------- where the story goes next ----------
@@ -754,7 +754,7 @@
     if (!best) return;
     var tw = G.measure(best.name, 22, true) + 50;
     G.window((WM.W - tw) / 2, 16, tw, 48, { top: '#2a1e12', bottom: '#120c06' });
-    G.text(best.name, WM.W / 2, 28, { size: 22, bold: true, align: 'center', color: G.COL.gold });
+    G.text(best.name, WM.W / 2, 16 + 24 + 1, { size: 22, bold: true, align: 'center', baseline: 'middle', color: G.COL.gold });   // centred in the plate
   }
 
   function drawActor(c, a, cx, cy) {

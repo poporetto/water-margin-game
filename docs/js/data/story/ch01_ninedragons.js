@@ -335,7 +335,7 @@
       await s.say('shijin:angry', 'Li Ji, you treacherous dog! I\'ll settle with you first!');
       await s.battle('ch1_boss', { bg: 'fire', music: 'boss' });
       await s.narrate('Shi Jin cut Li Ji in two with a single stroke. The two duty officers turned to flee, and Chen Da and Yang Chun ran them down. The rest of the soldiers scattered in every direction. Behind them the Shi Family manor burned to the ground.');
-      s.despawn('liji', { leave: true }); s.despawn('d1', { leave: true }); s.despawn('d2', { leave: true });
+      s.lie('liji'); s.lie('d1'); s.lie('d2');   // Li Ji cut down, the duty officers run down
       s.flag('ch1_escaped'); s.tint(null); s.night(false);
       WM.unlock('shaohua');
       s.music('world');
