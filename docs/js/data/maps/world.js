@@ -227,12 +227,6 @@
       ['jiangzhou', 'longhu'], ['liaoerwa', 'runzhou'], ['runzhou', 'hangzhou'], ['hangzhou', 'liuhe'], ['hangzhou', 'muzhou'], ['muzhou', 'qingxi'],
       ['gaotang', 'jizhou_n'], ['jizhou_n', 'cuiping'], ['jizhou_n', 'erxian'], ['jizhou_n', 'youzhou'], ['mangdang', 'jieling'], ['jizhou_n', 'yinma'], ['yinma', 'chaimanor'], ['zhuinn', 'zhujia'], ['zhuinn', 'dongchang'], ['jizhou_n', 'wugang'], ['wugang', 'gaotang'], ['lingzhou', 'daming'], ['lingzhou', 'zengtou'], ['taishan', 'dongping']
     ];
-    // which road tiles follow on from which, so the map can draw each road as one line (and two roads that
-    // happen to run side by side don't join into a ladder)
-    var LINK = WM.world.links = {}, link = function (ax, ay, bx, by) {
-      (LINK[ax + ',' + ay] = LINK[ax + ',' + ay] || []).push([bx - ax, by - ay]);
-      (LINK[bx + ',' + by] = LINK[bx + ',' + by] || []).push([ax - bx, ay - by]);
-    };
     // the ground each place's buildings will stand on: a road steps round it rather than under a wall
     var FP = {};
     for (var fid in LOC) if (LOC[fid].icon !== 'fortress') for (var fy = -1; fy <= 0; fy++) for (var fx = -1; fx <= 1; fx++) FP[(LOC[fid].x + fx) + ',' + (LOC[fid].y + fy)] = 1;
@@ -245,15 +239,14 @@
       };
       var sx = Math.sign(x1 - x0), sy = Math.sign(y1 - y0);
       var x = x0, y = y0, off = function (px, py) { return Math.abs((px - x0) * (y1 - y0) - (py - y0) * (x1 - x0)); };
-      step(x, y); link(x0, y0, a.x, a.y); link(x1, y1, b.x, b.y);
+      step(x, y);
       while (x !== x1 || y !== y1) {
         // keep to the straight line between the two places, one step across or down at a time
-        var px0 = x, py0 = y;
         var across = x !== x1 && (y === y1 || off(x + sx, y) <= off(x, y + sy));
         if (across && y !== y1 && FP[(x + sx) + ',' + y]) across = false;
         else if (!across && x !== x1 && FP[x + ',' + (y + sy)]) across = true;
         if (across) x += sx; else y += sy;
-        step(x, y); link(px0, py0, x, y);
+        step(x, y);
       }
     });
     // keep the marsh roads from crossing the whole marsh: Liangshan is reached by boat from Zhu Gui's tavern

@@ -47,31 +47,12 @@
     }
   }
   function dirt(c, x, y, tx, ty, th, m) {
-    if (m && m.def && m.def.world) {   // on the world map a road is a thin red-brown line across the silk, joining its neighbours
-      grass(c, x, y, tx, ty, th);
-      // a road on the old maps runs as a drawn line, so a tile-by-tile staircase is joined corner to corner instead
-      var links = (WM.world && WM.world.links) || {}, ln = function (ax, ay) {
-        var seen = {}; return (links[ax + ',' + ay] || []).filter(function (d) { var k = d + ''; if (seen[k]) return false; seen[k] = 1; return true; });
-      };
-      var corner = function (ax, ay) {   // a stair-step tile: exactly two links, at right angles
-        var n = ln(ax, ay);
-        return n.length === 2 && n[0][0] !== -n[1][0] && n[0][1] !== -n[1][1] ? n : null;
-      };
-      // on a staircase every tile is a step, so only every other one (by checkerboard) is cut across
-      var skip = function (ax, ay) { return m.get(ax, ay) === ':' && (ax + ay) % 2 === 1 && corner(ax, ay); };
-      var ink = '#8a4e30', line = function (ex, ey) {
-        for (var k = 0; k <= 16; k++) px(c, x + Math.round(7 + (ex - 7) * k / 16), y + Math.round(7 + (ey - 7) * k / 16), 2, 2, ink);
-      };
-      if (skip(tx, ty)) return;   // its two neighbours join across it
-      px(c, x + 6, y + 6, 4, 4, ink);
-      ln(tx, ty).forEach(function (d) {
-        var cn = skip(tx + d[0], ty + d[1]);
-        if (cn) {   // go straight on to the far side of the step
-          var o = cn[0][0] === -d[0] && cn[0][1] === -d[1] ? cn[1] : cn[0];
-          line(7 + (d[0] + o[0]) * 7, 7 + (d[1] + o[1]) * 7); return;
-        }
-        line(7 + d[0] * 7, 7 + d[1] * 7);
-      });
+    if (m && m.def && m.def.world) {   // on the world map a road is a full-width beaten track, edged in ink so it reads against the silk
+      var rd = function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === ':' || q === 'B' || q === 'D' || q === 'G' || q === null; };
+      px(c, x, y, S, S, '#b58a58');
+      for (var j = 0; j < 5; j++) px(c, x + Math.floor(U.hash2(tx * 7 + j, ty, 23) * 14), y + Math.floor(U.hash2(tx, ty * 7 + j, 24) * 15), 2, 1, j % 2 ? '#9c7244' : '#c9a170');
+      if (!rd(0, -1)) px(c, x, y, S, 1, '#6e4a2a'); if (!rd(0, 1)) px(c, x, y + 15, S, 1, '#6e4a2a');
+      if (!rd(-1, 0)) px(c, x, y, 1, S, '#6e4a2a'); if (!rd(1, 0)) px(c, x + 15, y, 1, S, '#6e4a2a');
       return;
     }
     var d = th.dirt;
