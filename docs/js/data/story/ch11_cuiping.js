@@ -175,7 +175,7 @@
       s.spawn('hd', 'hudao', 3, 30, 'right'); s.spawn('pr', 'peiruhai', 8, 30, 'left');
       await s.say('hudao', '(tok... tok... tok...) "Save us from suffering, O Bodhisattva..."');
       await s.narrate('The back door opened. A man in a scarf slipped out — and Shi Xiu, from the shadow of the wall, saw the shaven head under it. It was Pei Ruhai. The wandering monk Hu Dao went off with him.');
-      await s.move('pr', 'L5'); s.despawn('pr', { leave: true }); s.despawn('hd', { leave: true });
+      await s.move('pr', 'L4'); s.despawn('pr', { leave: true }); s.despawn('hd', { leave: true });
       await s.say('shixiu:angry', '(So that is the signal. When Brother is on duty, an incense table goes out by the back door. And at dawn Hu Dao beats his fish to wake the monk.)');
       s.night(false);
       s.flag('ch11_dawnseen');

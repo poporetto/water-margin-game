@@ -465,7 +465,7 @@
       await s.say('outlaw', 'There! A man with a load on a pole!');
       await s.move('player', 'D1', { run: true });
       await s.narrate('Lin Chong sprang out with his spear. The porter flung down his load and fled. Lin Chong was picking it up when a big man came striding up the road behind — a man with a blue birthmark on his face and a sabre in his hand.');
-      s.despawn('porter');
+      s.despawn('porter', { leave: true });   // he flung down his load and fled
       s.spawn('yangzhi', 'yangzhi', 9, 21, 'up');
       await s.move('yangzhi', 'U1');
       await s.duel('lin_yangzhi', { canLose: true });

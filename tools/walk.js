@@ -160,6 +160,8 @@ function mkApi(ctx) {
       if (hit && key !== 'player') sceneWarn('"' + (a.who || key) + '" walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
       else if (hit) sceneWarn('the player walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
       if (a.x < 0 || a.y < 0) err('move: "' + key + '" leaves the map');
+      // ends up standing in the same place as someone else (a pair drawn as one)
+      if (key !== 'player') { const on = Object.keys(temp).filter((k) => k !== key && temp[k] !== a && !temp[k].lying && temp[k].x === a.x && temp[k].y === a.y); if (on.length) sceneWarn('"' + (a.who || key) + '" walks onto "' + on.join('", "') + '" at ' + cur.map + '(' + a.x + ',' + a.y + ')'); }
       return resolved;
     },
     walkTo(key, tx, ty) { const a = findActor(key); if (!a) err('walkTo: no actor "' + key + '"'); else if (!walkable(cur.map, tx, ty)) err('walkTo: ' + key + ' to a solid tile ' + cur.map + '(' + tx + ',' + ty + ')'); else { a.x = tx; a.y = ty; } return resolved; },

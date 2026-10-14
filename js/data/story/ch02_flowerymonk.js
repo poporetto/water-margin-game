@@ -131,7 +131,7 @@
       await s.narrate('Lu Da slapped him so hard blood ran from his mouth, then a second blow knocked out two of his teeth. The inn boy crawled away into the back and did not come out again.');
       s.despawn('innboy', { leave: true });
       await s.say('luda', 'Go, old man. Go now, the two of you, and don\'t stop until you\'re far from Weizhou.');
-      await s.move('oldjin', 'R2 D3 R1'); await s.move('cuilian', 'R1 D3 R1');   // between the beds and out
+      await s.move('oldjin', 'R2 D3 R1'); await s.move('cuilian', 'R1 D3');   // between the beds and out
       s.despawn('oldjin', { leave: true }); s.despawn('cuilian', { leave: true });
       await s.narrate('Lu Da took a stool, sat himself down in the inn doorway, and stayed there for two hours, until he judged the Jins were well out of reach. Then he got up and walked to the Zhuangyuan Bridge.');
       s.flag('ch2_tobutcher');

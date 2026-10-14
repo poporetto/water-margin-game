@@ -198,7 +198,7 @@
       await s.say('wangjin', 'You have learned all I know. Practise every day. And one more thing — a man\'s art is for protecting the weak. Do not let it lead you into trouble.');
       await s.say('shitaigong', 'Take this silver for the journey, Instructor. One hundred taels — no, don\'t refuse. You have given my son more than silver can pay for.');
       await s.say('wangmother:smile', 'May Heaven repay your kindness, Taigong.');
-      await s.move('wangjinA', 'D9', { wait: false }); await s.move('mother', 'R1 D9');   // down the village road
+      await s.move('wangjinA', 'D9', { wait: false }); await s.move('mother', 'R2 D9');   // side by side down the road   // down the village road
       s.despawn('wangjinA', { leave: true }); s.despawn('mother', { leave: true });
       await s.say('shijin:sad', 'Farewell, Master...');
       await s.fadeOut(1);
@@ -296,14 +296,14 @@
       await s.say('zhuwu:sad', 'Brother, you are an honest man. We will not drag you into this. Tie us up and hand us over — you can claim the reward and keep your name clean.');
       await s.say('shijin:angry', 'Never! If I did that, I would be the lowest dog under heaven. We live together or we die together.');
       await s.say('shijin', 'Wang Si! Get in here!');
-      s.spawn('wangsi', 'wangsi', 9, 10, 'up');
+      s.spawn('wangsi', 'wangsi', 8, 10, 'up');   // he comes up beside the servant who brought the news
       await s.move('wangsi', 'U2');
       await s.say('wangsi:sad', 'Y-young master...');
       await s.say('shijin:angry', 'Where is the reply letter Zhu Wu gave you?');
       await s.say('wangsi:sad', 'I... I had a few cups on the way back and fell asleep in the woods. When I woke it was gone. I was afraid to tell you...');
       await s.say('shijin:angry', 'So that is how Li Ji knew! You have brought ruin on this house!');
       await s.narrate('In his fury Shi Jin cut Wang Si down where he stood. Then he went to the gate and called out to the officers, asking for time to bind the bandits and hand them over. While the officers waited, he and the three chiefs set fire to the manor from back to front, packed what gold and silver they could carry, and took up their weapons.');
-      s.despawn('wangsi');
+      s.lie('wangsi');   // cut down where he stood
       s.addParty('zhuwu'); s.addParty('chenda'); s.addParty('yangchun');
       s.level('zhuwu', 4); s.level('chenda', 4); s.level('yangchun', 4);
       WM.state.party = ['shijin', 'chenda', 'yangchun', 'zhuwu'];
