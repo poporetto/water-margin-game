@@ -425,13 +425,19 @@
     // steps out from the leader to stand beside them, and falls back in when the scene is over.
     var shown = [];
     var reserved = null;
+    var faceLeader = function (a) {   // a companion beside the leader looks at them, not off where they walked
+      var pl = F().player; if (!pl) return;
+      var dx = pl.x - a.x, dy = pl.y - a.y;
+      a.dir = Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+    };
     var showSpeaker = function (who) {
       var id = typeof who === 'string' ? who.split(':')[0] : null, f = F();
       // one who has since become the leader, or left the party, is no longer a stand-in at the leader's side
       shown = shown.filter(function (o) { var gone = f.actors.indexOf(o) < 0 || o.sheetWho === WM.state.leader || WM.state.party.indexOf(o.sheetWho) < 0; if (gone) f.actors = f.actors.filter(function (q) { return q !== o; }); return !gone; });
       if (!id || WM.scene !== f || !f.map || f.map.def.world || !f.player || f.player.hiddenPlayer || f.transitioning) return;
       if (id === WM.state.leader || WM.state.party.indexOf(id) < 0 || WM.state.flags['ghost:' + id]) return;
-      if ((f.actors || []).some(function (o) { return o.sheetWho === id && o.visible; })) return;
+      var here = (f.actors || []).filter(function (o) { return o.sheetWho === id && o.visible; })[0];
+      if (here) { if (here.autoShown && !here.path.length) faceLeader(here); return; }
       var p = f.player.tile(), room = f.roomAt(p.x, p.y), taken = function (x, y) { return (f.actors || []).some(function (o) { var t = o.standTo || o.tile(); return o.visible && t.x === x && t.y === y; }) || (x === p.x && y === p.y); };   // (one still stepping out counts where they are going)
       var back = { up: [0, 1], down: [0, -1], left: [1, 0], right: [-1, 0] }[f.player.dir] || [0, 1];
       var spots = [[-1, 0], [1, 0], back, [-1, back[1] || 1], [1, back[1] || 1], [-2, 0], [2, 0], [back[0] * 2, back[1] * 2]];
@@ -446,6 +452,7 @@
       if (!at) return;
       var a = f.addActor('~' + id, id, at[0], at[1], f.player.dir); a.sheetWho = id; a.autoShown = true; a.solid = false; a.standTo = { x: at[0], y: at[1] };
       a.x = f.player.x; a.y = f.player.y; a.path = [{ x: at[0] * TS + 8, y: at[1] * TS + 15 }]; a.speed = 70;   // out from the leader's side
+      a.onArrive = function () { a.onArrive = null; faceLeader(a); };   // then turn to the leader
       shown.push(a);
     };
     var hideShown = function () { var f = F(); f.actors = f.actors.filter(function (o) { return shown.indexOf(o) < 0; }); shown = []; };
