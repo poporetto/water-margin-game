@@ -42,9 +42,25 @@ async function main() {
   for (let i = 0; i < 100 && !(await ev('!!(window.WM && WM.gfx && WM.gfx.lctx && WM.field)').catch(() => false)); i++) await sleep(200);
   await ev(`(async () => { const src = await (await fetch('/tools/autoplay.js?' + Date.now(), { cache: 'no-store' })).text(); (0, eval)(src);
     window.__errs = []; addEventListener('error', (e) => __errs.push(e.message)); addEventListener('unhandledrejection', (e) => __errs.push(String(e.reason && e.reason.stack || e.reason).slice(0, 300)));
+    if (WM.debug) { WM.debug.showLog = []; WM.debug.holdOnShow = ${process.env.SHOTDIR ? 'true' : 'false'}; }
     window.__done = false; AutoPlay.run({ from: ${FROM}, to: ${TO}, skipOnFail: true, encounters: ${ENC} }).then(() => { __done = true; }).catch((e) => { window.__err = String(e && e.stack || e); __done = true; });
     return 'started'; })()`);
   let shown = 0, beat = ''; const t0 = Date.now();
+  // SHOTDIR: a screenshot each time a companion steps out beside the leader to speak (to look the scenes over)
+  if (process.env.SHOTDIR) (async () => {
+    let n = 0;
+    for (;;) {
+      await sleep(120);
+      const k = await ev('(WM.debug && WM.debug.showLog || []).length').catch(() => null); if (k == null) return;
+      if (k > n) {
+        n = k; await sleep(700);   // let them step out (the autoplayer waits: see WM.debug.hold)
+        const info = await ev('JSON.stringify(WM.debug.showLog[WM.debug.showLog.length - 1])').catch(() => '{}');
+        const shot = await send('Page.captureScreenshot', { format: 'png' }).catch(() => null);
+        if (shot && shot.result) { const j = JSON.parse(info || '{}'); fs.writeFileSync(path.join(process.env.SHOTDIR, String(n).padStart(2, '0') + '-' + j.map + '-' + j.id + '.png'), Buffer.from(shot.result.data, 'base64')); }
+        await ev('WM.debug.hold = false').catch(() => null);
+      }
+    }
+  })();
   const VERBOSE = process.argv.includes('--verbose');
   for (;;) {
     await sleep(3000);
@@ -69,6 +85,7 @@ async function main() {
     if (s.done || Date.now() - t0 > 30 * 60 * 1000) {
       if (s.err) console.log('autoplayer error: ' + s.err);
       if (s.errs.length) console.log('page errors:\n  ' + s.errs.join('\n  '));
+      if (process.env.SHOWLOG) fs.writeFileSync(process.env.SHOWLOG, await ev('JSON.stringify((WM.debug && WM.debug.showLog) || [])'));   // companions stepped out beside the leader (see script.js showSpeaker)
       console.log((s.done ? 'finished' : 'timed out') + ' at chapter ' + s.ch + ' (' + s.map + ') after ' + Math.round((Date.now() - t0) / 1000) + 's');
       break;
     }

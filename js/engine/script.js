@@ -249,6 +249,13 @@
           f.actors = f.actors.filter(function (o) { return o !== ex; });
         }
         var back = (f.actors || []).filter(function (o) { return (o.leavingKey || o.lingering || o.autoShown) && o.sheetWho === who; })[0];   // still on their way out, or still standing about
+        // a companion standing in at the leader's side on this very spot steps aside for whoever the scene puts there
+        shown.slice().forEach(function (o) {
+          if (o.sheetWho === who || !o.standTo || o.standTo.x !== tx || o.standTo.y !== ty) return;
+          shown.splice(shown.indexOf(o), 1); f.actors = f.actors.filter(function (q) { return q !== o; });
+          reserved = { x: tx, y: ty }; showSpeaker(o.sheetWho); reserved = null;
+          if (WM.debug && WM.debug.showLog) WM.debug.showLog.push({ clash: true, id: o.sheetWho, by: who, map: f.map.id, at: [tx, ty] });
+        });
         var a = f.addActor(key, who, tx, ty, dir); a.sheetWho = who;
         // the same person called back on stage walks over from where they are, if the way is clear (never through a wall)
         if (back) {
@@ -417,6 +424,7 @@
     // A companion who speaks is seen speaking: a party member (not the leader) with a line and no figure on the map
     // steps out from the leader to stand beside them, and falls back in when the scene is over.
     var shown = [];
+    var reserved = null;
     var showSpeaker = function (who) {
       var id = typeof who === 'string' ? who.split(':')[0] : null, f = F();
       // one who has since become the leader, or left the party, is no longer a stand-in at the leader's side
@@ -430,8 +438,11 @@
       var at = null;
       for (var i = 0; i < spots.length && !at; i++) {
         var x = p.x + spots[i][0], y = p.y + spots[i][1];
-        if (!f.tileSolid(x, y) && !taken(x, y) && f.roomAt(x, y) === room) at = [x, y];
+        if (!f.tileSolid(x, y) && !taken(x, y) && f.roomAt(x, y) === room && !(reserved && reserved.x === x && reserved.y === y)) at = [x, y];
       }
+      var log = WM.debug && WM.debug.showLog;
+      if (log && WM.debug.holdOnShow && at) WM.debug.hold = true;   // (tools/autoplay-headless.js SHOTDIR: wait while the scene is photographed)
+      if (log) log.push({ id: id, map: f.map.id, ch: WM.state.chapter, lead: [p.x, p.y, f.player.dir], at: at, on: at ? f.map.get(at[0], at[1]) : null, others: (f.actors || []).filter(function (o) { return o.visible; }).length });
       if (!at) return;
       var a = f.addActor('~' + id, id, at[0], at[1], f.player.dir); a.sheetWho = id; a.autoShown = true; a.solid = false; a.standTo = { x: at[0], y: at[1] };
       a.x = f.player.x; a.y = f.player.y; a.path = [{ x: at[0] * TS + 8, y: at[1] * TS + 15 }]; a.speed = 70;   // out from the leader's side

@@ -188,6 +188,7 @@
   // ---------- one step of progress ----------
   let lastProgress = '', sameCount = 0, rests = 0;
   async function advance() {
+    while (WM.debug && WM.debug.hold) await frames(5);   // held while a screenshot is taken
     if (await handleNonField()) return 'busy';
     if (pending) { if (!pending.ev.once && storySig() === pending.sig) ignored[pending.ev.map + ':' + pending.ev.id] = pending.sig; pending = null; }
     const f = F(), here = f.map.id;
