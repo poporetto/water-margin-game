@@ -40,7 +40,7 @@
   WM.defMap('liuhe', { name: 'The Liuhe Temple', theme: 'autumn', music: 'sad', rows: t.rows(), spawn: [16, 17], battleBg: 'palace',
     exits: [WM.toWorld('liuhe', 15, 17, 4, 1)] });
   var ti = L.grid(16, 10, 'x'); var tR = ti.room(1, 1, 14, 9, { floor: 'N' });
-  ti.stamp(2, 3, ['L...UUU...L.', '....AAA.....', '............', 'k..........k']);
+  ti.stamp(2, 3, ['L...111...L.', '....222.....', '...4.3.4....', 'k..........k']);   // the Buddha hall of the Liuhe Temple
   WM.defMap('liuhe_in', { name: 'The Liuhe Temple', interior: true, theme: 'autumn', music: 'sad', rows: ti.rows(), spawn: [8, 8] });
   L.link({ map: 'liuhe', x: hall.x, y: hall.y }, { map: 'liuhe_in', x: tR.x, y: tR.y });
 })();

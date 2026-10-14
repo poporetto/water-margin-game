@@ -48,7 +48,7 @@
   var gR = { yang: gi.room(1, 1, 14, 9), tavern: gi.room(16, 1, 11, 8), temple: gi.room(28, 1, 14, 10, { floor: 'N' }), lodge: gi.room(43, 1, 9, 7), prefect: gi.room(53, 1, 4, 5, { floor: 'K' }) };
   gi.stamp(2, 3, ['h.ttt.c.k.k.', '......c.....', '..t.........', 'A...........', '...........j']);   // front: the meat counter; back: the rooms
   gi.stamp(17, 3, ['h..L...h', '.t..t..t.', '.........', 'ccc......']);
-  gi.stamp(29, 3, ['L...UUU....L', '....AAA.....', '............', 'j..........j', '............']);
+  gi.stamp(29, 3, ['L...111....L', '....222.....', '...4.3.4....', 'j..........j', '............']);   // the Buddha hall of Baoen Temple
   gi.stamp(44, 3, ['k..h...', '.......', '..t....']);
   WM.defMap('jizhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: gi.rows(), spawn: [7, 8] });
   [[yang, gR.yang], [tavern, gR.tavern], [temple, gR.temple], [lodge, gR.lodge]].forEach(function (p) { L.link({ map: 'jizhou_n', x: p[0].x, y: p[0].y }, { map: 'jizhou_in', x: p[1].x, y: p[1].y }); });

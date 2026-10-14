@@ -126,7 +126,7 @@
     { id: 'pg1', x: 29, y: 11, npc: 'guard', fixedDir: true, text: ['The palace of the Son of Heaven. Move along.'] },
     { id: 'pg2', x: 30, y: 11, npc: 'guard', fixedDir: true, text: ['No one passes the palace gate without an imperial summons.'] },
     { id: 'kv1', x: 24, y: 30, npc: 'merchant', wander: true, text: ['The Bian River carries grain and stone from the south all year. The capital never sleeps!'] },
-    { id: 'kv2', x: 34, y: 20, npc: 'woman2', wander: true, text: ['They say the Fan Tower has five buildings joined by flying bridges. I have only ever seen it from the street.'] },
+    { id: 'kv2', x: 34, y: 21, npc: 'woman2', wander: true, text: ['They say the Fan Tower has five buildings joined by flying bridges. I have only ever seen it from the street.'] },
     { id: 'kv3', x: 15, y: 27, npc: 'oldman', text: ['When I was young the street-toughs played football in the alleys. Now one of them is a Marshal. Strange world.'] },
     // the vegetable garden of the Xiangguo Monastery, before and after Lu Zhishen keeps it
     { id: 'kv4', x: 44, y: 34, npc: 'monk', cond: function (S2) { return !S2.has('ch2_rascalsdone'); }, text: ['The Great Xiangguo Monastery is the largest in the realm. Its vegetable garden is plagued by idle rascals, I hear.'] },

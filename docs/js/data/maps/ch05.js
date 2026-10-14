@@ -90,7 +90,7 @@
     exits: [WM.toWorld('erlong', 13, 35, 5, 1)], encounters: { rate: 0.06, troops: [['roadbandit', 'roadbandit'], ['wolf2', 'wolf2'], ['bear']], cond: function (S2) { return !S2.has('ch5_erlongtaken'); } } });
   var ei = L.grid(18, 11, 'x');
   var eR = ei.room(1, 1, 16, 9, { floor: 'N' });
-  ei.stamp(2, 3, ['L...UUU...L...', '....AAA.......', '..............', '..t........t..']);
+  ei.stamp(2, 3, ['L...111...L...', '....222.......', '...4.3.4......', '..t........t..']);   // the Buddha hall of Baozhu Temple
   WM.defMap('erlong_in', { name: 'Baozhu Temple', interior: true, theme: 'autumn', music: 'dungeon', rows: ei.rows(), spawn: [9, 8] });
   L.link({ map: 'erlong', x: bz.x, y: bz.y }, { map: 'erlong_in', x: eR.x, y: eR.y });
 

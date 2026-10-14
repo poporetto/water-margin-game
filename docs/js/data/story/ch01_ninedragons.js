@@ -345,7 +345,7 @@
 
   // ---------------- Mount Shaohua ----------------
   WM.defEvents('shaohua', [
-    { id: 'sh_guard1', x: 12, y: 12, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, text: ['The chiefs are back! And Nine Dragons with them! Make way!'] },
+    { id: 'sh_guard1', x: 13, y: 12, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, text: ['The chiefs are back! And Nine Dragons with them! Make way!'] },
     { id: 'sh_guard2', x: 17, y: 9, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, text: ['Our chiefs owe their lives to you, Master Shi. This mountain is yours as much as theirs.'] },
     L.cache('sh_cache1', 9, 9, 'medicine', 2),
     { id: 'sh_jars', x: 9, y: 9, trigger: 'check', cond: function (S2) { return S2.has('ev:shaohua:sh_cache1'); }, text: ['Empty tents.'] }

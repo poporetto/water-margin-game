@@ -458,6 +458,60 @@
     var a = t * 0.9, ox = Math.round(Math.cos(a) * 18), oy = Math.round(Math.sin(a) * 5), fl = Math.sin(t * 9) > 0 ? 0 : 2;
     px(c, x + 8 + ox, y - 50 + oy, 2, 1, '#141414'); px(c, x + 6 + ox, y - 51 + oy + fl, 2, 1, '#141414'); px(c, x + 10 + ox, y - 51 + oy + fl, 2, 1, '#141414');
   }
+  // the floor a piece of furniture stands on: boards if the room around it is boarded, else stone flags
+  function floorUnder(c, x, y, tx, ty, m) {
+    var wood = 0, stone = 0;
+    [[0, 1], [-1, 0], [1, 0], [0, 2], [-2, 0], [2, 0]].forEach(function (d) { var q = m && m.get(tx + d[0], ty + d[1]); if (q === 'n') wood++; else if (q === 'N') stone++; });
+    if (wood > stone) floorWood(c, x, y, tx, ty); else floorStone(c, x, y, tx, ty);
+  }
+  // ---- a Buddhist hall: the great seated Buddha on his lotus throne, the offering altar, the censer, kneeling cushions ----
+  function buddhaTall(c, x, y, tx, ty, th, m) {
+    if (m.get(tx - 1, ty) === '1') return;
+    var n = runOf(m, tx, ty, '1').n, k = n / 3, W = n * S, cx = x + W / 2, t = WM.time || 0;
+    var R = function (dx, dy, w, h, col) { px(c, Math.round(cx + dx * k), Math.round(y + dy * k), Math.max(1, Math.round(w * k)), Math.max(1, Math.round(h * k)), col); };
+    // the flame-edged mandorla, and the halo behind the head
+    c.fillStyle = '#9a3a1e'; c.beginPath(); c.ellipse(cx, y - 14 * k, 23 * k, 30 * k, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#c8a040'; c.beginPath(); c.ellipse(cx, y - 14 * k, 21 * k, 28 * k, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#e8cc70'; c.beginPath(); c.ellipse(cx, y - 14 * k, 17 * k, 24 * k, 0, 0, Math.PI * 2); c.fill();
+    for (var f = -2; f <= 2; f++) R(f * 8 - 1, -44 + Math.abs(f) * 4, 2, 3, '#c8502a');                       // flame tips
+    c.fillStyle = '#f4e4a0'; c.beginPath(); c.arc(cx, y - 27 * k, 8 * k, 0, Math.PI * 2); c.fill();              // halo
+    // the lotus throne
+    R(-22, 4, 44, 12, '#8a3a2e'); for (var p2 = -21; p2 < 21; p2 += 6) { R(p2, 4, 5, 6, '#d88a7a'); R(p2 + 1, 4, 3, 2, '#f0b8a8'); }
+    R(-18, 10, 36, 2, '#c8a040'); R(-20, 12, 40, 4, '#6a2a20');
+    // the seated figure: crossed legs, robe, hands at rest in the lap, the head with its topknot of wisdom
+    R(-17, -2, 34, 8, '#c89a38'); R(-17, -2, 34, 2, '#e0b850'); R(-12, 3, 24, 2, '#a07a28');                // legs
+    R(-11, -20, 22, 19, '#d8ac44'); R(-11, -20, 3, 19, '#e8c460'); R(8, -20, 3, 19, '#a8802c');                // robe
+    R(-3, -18, 6, 10, '#c8302a'); R(-2, -17, 4, 1, '#e8c860');                                                 // inner robe
+    R(-5, -6, 10, 4, '#e8c470'); R(-2, -6, 4, 2, '#f4dc90');                                                   // hands in the lap
+    R(-5, -31, 10, 11, '#e0b450'); R(-5, -31, 10, 3, '#2a3a5a'); R(-2, -34, 4, 3, '#2a3a5a');                 // head, hair, topknot
+    R(-3, -26, 2, 1, '#8a5a20'); R(1, -26, 2, 1, '#8a5a20'); R(-1, -23, 2, 1, '#a86a2a');                      // closed eyes, mouth
+    R(-6, -27, 1, 5, '#c89a38'); R(5, -27, 1, 5, '#c89a38');                                                   // long ears
+  }
+  function offeringTall(c, x, y, tx, ty, th, m) {
+    if (m.get(tx - 1, ty) === '2') return;
+    var n = runOf(m, tx, ty, '2').n, W = n * S, X = x, cx = X + W / 2, t = WM.time || 0;
+    px(c, X, y + 1, W, 3, '#5a1a10'); px(c, X, y + 4, W, 12, '#d8a830'); px(c, X, y + 4, W, 1, '#f0c848'); px(c, X, y + 15, W, 1, '#8a6a20');   // the yellow-draped altar
+    for (var q = X + 3; q < X + W - 2; q += 5) px(c, q, y + 9, 2, 3, '#c8302a');                                  // embroidery
+    px(c, cx - 3, y - 3, 6, 4, '#6a5a3a'); px(c, cx - 4, y - 4, 8, 1, '#8a7a50'); px(c, cx - 1, y - 7, 1, 3, '#e8e0d0');   // a small censer, and incense
+    var flick = Math.sin(t * 8) > 0 ? 1 : 0;
+    [X + 3, X + W - 5].forEach(function (cx2) { px(c, cx2, y - 5, 2, 6, '#c8302a'); px(c, cx2, y - 7 - flick, 2, 2, '#ffd060'); });   // candles
+    if (n >= 3) { px(c, X + 9, y - 1, 5, 2, '#c8a040'); px(c, X + 10, y - 3, 1, 2, '#e85a3a'); px(c, X + 12, y - 3, 1, 2, '#f08a3a'); px(c, X + W - 14, y - 1, 5, 2, '#c8a040'); px(c, X + W - 13, y - 3, 2, 2, '#e8c040'); }   // fruit
+  }
+  function censerTall(c, x, y, tx, ty) {
+    // a great bronze censer (香炉) on three legs, with incense smoke rising from it
+    var t = WM.time || 0;
+    px(c, x + 2, y + 2, 12, 9, '#5a4a30'); px(c, x + 2, y + 2, 12, 2, '#7a6a48'); px(c, x + 1, y + 1, 14, 2, '#4a3a24');
+    px(c, x + 3, y + 11, 2, 4, '#4a3a24'); px(c, x + 11, y + 11, 2, 4, '#4a3a24'); px(c, x + 7, y + 11, 2, 3, '#4a3a24');
+    px(c, x, y + 3, 2, 3, '#4a3a24'); px(c, x + 14, y + 3, 2, 3, '#4a3a24');                                                    // handles
+    for (var i = 0; i < 4; i++) { var ph = (t * 0.5 + i / 4) % 1, sx = Math.round(x + 7 + Math.sin(t * 2 + i * 1.7) * 2); c.globalAlpha = 0.6 * (1 - ph); px(c, sx, Math.round(y - ph * 18), 2, 2, '#d8d8d0'); }
+    c.globalAlpha = 1;
+  }
+  function cushion(c, x, y, tx, ty, th, m) {
+    floorUnder(c, x, y, tx, ty, m);
+    c.fillStyle = '#7a5a2a'; c.beginPath(); c.ellipse(x + 8, y + 9, 6, 4, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#c8a050'; c.beginPath(); c.ellipse(x + 8, y + 8, 5, 3, 0, 0, Math.PI * 2); c.fill();
+    px(c, x + 5, y + 8, 6, 1, '#a8803a');
+  }
   // ---- a Song government hall: the official's dais and chair, his desk, and the great painted screen behind ----
   function runOf(m, tx, ty, ch) { var x0 = tx; while (m.get(x0 - 1, ty) === ch) x0--; var n = 1; while (m.get(x0 + n, ty) === ch) n++; return { x0: x0, n: n }; }
   function dais(c, x, y, tx, ty, th, m) {
@@ -505,8 +559,8 @@
     px(c, X + W / 2 + 2, y - 4, 1, 5, '#2a1a10'); px(c, X + W / 2 + 4, y - 4, 1, 5, '#2a1a10'); px(c, X + W / 2 + 1, y, 5, 2, '#5a4a3a');   // brush stand
   }
   // A great hall's column: red lacquer on a carved stone base, rising out of sight with a gilded bracket at the top.
-  function pillar(c, x, y, tx, ty) {
-    floorStone(c, x, y, tx, ty);
+  function pillar(c, x, y, tx, ty, th, m) {
+    floorUnder(c, x, y, tx, ty, m);
     c.fillStyle = 'rgba(0,0,0,0.25)'; c.fillRect(x + 3, y + 13, 11, 2);
     px(c, x + 3, y + 11, 10, 4, '#b8b4a8'); px(c, x + 3, y + 11, 10, 1, '#d8d4c8'); px(c, x + 4, y + 14, 8, 1, '#8a867c');   // lotus base
     px(c, x + 5, y, 6, 11, '#9c2f25'); px(c, x + 5, y, 2, 11, '#bc4a3a'); px(c, x + 10, y, 1, 11, '#6a1a14');
@@ -741,10 +795,14 @@
     'd': { draw: door, solid: true, shut: true },   // a house's own door, shut: nobody lives there for the player to visit
     'u': { draw: stall, tall: stallTall, solid: true },
     'i': { draw: pillar, tall: pillarTall, solid: true },
-    'E': { draw: function (c, x, y, tx, ty) { floorStone(c, x, y, tx, ty); }, tall: screenTall, solid: true },   // painted screen behind an official's seat
+    '1': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: buddhaTall, solid: true },     // the great Buddha (a run of tiles is one figure)
+    '2': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: offeringTall, solid: true },  // the offering altar before him
+    '3': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: censerTall, solid: true },    // a great bronze censer
+    '4': { draw: cushion },                                                                                          // a kneeling cushion
+    'E': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: screenTall, solid: true },   // painted screen behind an official's seat
     'q': { draw: dais },                                                                                          // the raised dais
     '0': { draw: dais, tall: chairTall },                                                                         // the official's chair (he stands on it, as if seated)
-    'a': { draw: function (c, x, y, tx, ty) { floorStone(c, x, y, tx, ty); }, tall: deskTall, solid: true },    // the judge's desk
+    'a': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: deskTall, solid: true },    // the judge's desk
     'l': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); }, tall: willowTall, solid: true },   // a weeping willow (crows' nest)   // a column of a great hall
     'n': { draw: floorWood },
     'N': { draw: floorStone },

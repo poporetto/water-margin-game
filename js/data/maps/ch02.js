@@ -100,11 +100,11 @@
   // town north gap leads up the mountain
   WM.data.maps.wutai_town.exits.push({ x: 16, y: 0, w: 2, h: 1, to: 'wutai', tx: 17, ty: 40, dir: 'up' });
   var wi = L.grid(46, 15, 'x');
-  var wR = { med: wi.room(1, 1, 16, 10, { floor: 'N' }), abbot: wi.room(18, 1, 10, 8, { floor: 'K' }), main: wi.room(29, 1, 15, 13, { floor: 'N' }) };
+  var wR = { med: wi.room(1, 1, 16, 10, { floor: 'N' }), abbot: wi.room(18, 1, 10, 8, { floor: 'K' }), main: wi.room(29, 1, 15, 13, { floor: 'n' }) };
   wi.stamp(2, 3, ['kkk..kkk..kkk.', 'kkk..kkk..kkk.', '..............', 'kkk..kkk..kkk.', 'kkk..kkk..kkk.'])   // the long meditation platforms the monks sleep on;
   wi.stamp(19, 3, ['h..A..h.', '........', '..t.....']);
   // the Hall of the Great Hero: the Manjusri triad on its altar, red columns, a carpet from the door to the altar
-  wi.stamp(30, 3, ['hh.L.UUU.L.hh', '.....AAA.....', '.i.........i.', '.....KKK.....', '.i...KKK...i.', '.....KKK.....', '.i...KKK...i.', '.....KKK.....', 'j....KKK....j', '.....KKK.....']);
+  wi.stamp(30, 3, ['hh.L.111.L.hh', '.....222.....', '.i..4...4..i.', '.....nnn.....', '.i...nnn...i.', '.....nnn.....', '.i...nnn...i.', '.....nnn.....', 'j....nnn....j', '.....nnn.....']);
   WM.defMap('wutai_in', { name: '', interior: true, theme: 'autumn', music: 'palace', rows: wi.rows(), spawn: [9, 9] });
   L.link({ map: 'wutai', x: medHall.x, y: medHall.y }, { map: 'wutai_in', x: wR.med.x, y: wR.med.y });
   L.link({ map: 'wutai', x: abbotH.x, y: abbotH.y }, { map: 'wutai_in', x: wR.abbot.x, y: wR.abbot.y });
@@ -181,8 +181,8 @@
   var d = WM.data.kaifengDoors.xiangguo;
   L.link({ map: 'kaifeng', x: d.x, y: d.y }, { map: 'xiangguo', x: 16, y: 27, w: 2, inside: { x: 16, y: 26, dir: 'up' } });
   var xi = L.grid(24, 10, 'x');
-  var xR = { zhiqing: xi.room(1, 1, 12, 8, { floor: 'K' }), hut: xi.room(14, 1, 9, 7) };
-  xi.stamp(2, 3, ['h...UU...h', '....AA....', '..........']); xi.stamp(15, 3, ['k...j..', '.......', '..t....']);
+  var xR = { zhiqing: xi.room(1, 1, 12, 8, { floor: 'n' }), hut: xi.room(14, 1, 9, 7) };
+  xi.stamp(2, 3, ['h..111...h', '...222....', '..........']);   // the Buddha hall xi.stamp(15, 3, ['k...j..', '.......', '..t....']);
   WM.defMap('xiangguo_in', { name: '', interior: true, theme: 'spring', music: 'field', rows: xi.rows(), spawn: [6, 7] });
   L.link({ map: 'xiangguo', x: zhiqing.x, y: zhiqing.y }, { map: 'xiangguo_in', x: xR.zhiqing.x, y: xR.zhiqing.y });
   L.link({ map: 'xiangguo', x: hut.x, y: hut.y }, { map: 'xiangguo_in', x: xR.hut.x, y: xR.hut.y });
