@@ -56,7 +56,15 @@
     }
     // exits must land on walkable tiles
     var rowsOf = function (m) { return typeof m.rows === 'function' ? m.rows() : m.rows; };
-    var tileAt = function (mid, x, y) { var rr = rowsOf(d.maps[mid]); return rr[y] ? rr[y][x] : null; };
+    // the world as a traveller leaving any town finds it: with every place known (a road only shows once it is)
+    var worldRows = null, worldNow = function () {
+      if (worldRows) return worldRows;
+      var keep = WM.state, fl = {}; for (var lid in (d.locations || {})) fl['loc:' + lid] = true;
+      WM.state = Object.assign({}, keep || {}, { flags: Object.assign({}, (keep && keep.flags) || {}, fl) });
+      try { worldRows = rowsOf(d.maps.world); } finally { WM.state = keep; }
+      return worldRows;
+    };
+    var tileAt = function (mid, x, y) { var rr = mid === 'world' && d.maps.world && typeof d.maps.world.rows === 'function' ? worldNow() : rowsOf(d.maps[mid]); return rr[y] ? rr[y][x] : null; };
     for (var mid2 in d.maps) {
       var m2 = d.maps[mid2];
       (m2.exits || []).forEach(function (e) {

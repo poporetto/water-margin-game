@@ -344,9 +344,18 @@
   ]);
 
   // ---------------- Mount Shaohua ----------------
+  var shiJinHere = function () { return WM.state.chapter === 1 && WM.state.party.indexOf('shijin') >= 0; };
   WM.defEvents('shaohua', [
-    { id: 'sh_guard1', x: 13, y: 12, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, text: ['The chiefs are back! And Nine Dragons with them! Make way!'] },
-    { id: 'sh_guard2', x: 17, y: 9, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, text: ['Our chiefs owe their lives to you, Master Shi. This mountain is yours as much as theirs.'] },
+    // the hill's sentries: they speak to Shi Jin as one of their own when he comes up with the chiefs, and to anyone
+    // else who comes later as what they are, the men of a robber hill
+    { id: 'sh_guard1', x: 13, y: 12, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, run: async function (s) {
+      if (shiJinHere()) await s.say('bandit', 'The chiefs are back! And Nine Dragons with them! Make way!');
+      else await s.say('bandit', 'Mount Shaohua. Zhu Wu, Chen Da and Yang Chun keep this hill. State your business, stranger, and keep your hand off your weapon while you do it.');
+    } },
+    { id: 'sh_guard2', x: 17, y: 9, npc: 'bandit', cond: function (S2) { return S2.has('ch1_escaped'); }, run: async function (s) {
+      if (shiJinHere()) await s.say('bandit', 'Our chiefs owe their lives to you, Master Shi. This mountain is yours as much as theirs.');
+      else await s.say('bandit', 'We don\'t touch the poor folk who use this road, only fat officials and their tax silver. The chiefs swore it, the day Master Shi of Shi Village spared their lives.');
+    } },
     L.cache('sh_cache1', 9, 9, 'medicine', 2),
     { id: 'sh_jars', x: 9, y: 9, trigger: 'check', cond: function (S2) { return S2.has('ev:shaohua:sh_cache1'); }, text: ['Empty tents.'] }
   ]);

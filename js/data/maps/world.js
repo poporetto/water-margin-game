@@ -270,6 +270,7 @@
       if (prev[goal] < 0 && goal !== s0) return null;
       var out = []; for (var q = goal; q >= 0; q = prev[q]) out.push([q % W, q / W | 0]); return out;
     };
+    var under = {};   // what each road tile was laid over
     var roadSteps = function (x0, y0, x1, y1) {   // walking only on road already laid
       var isR = function (x, y) { var c = g.get(x, y); return c === ':' || c === 'B'; };
       if (!isR(x0, y0) || !isR(x1, y1)) return Infinity;
@@ -288,8 +289,20 @@
         if (bySoFar <= rd.d * 1.7 + 4) return;
         var path = route(rd.a.x, rd.a.y + 1, rd.b.x, rd.b.y + 1);
         if (!path) return;
-        path.forEach(function (p) { var c = g.get(p[0], p[1]); if (c === '~' || c === 'w' || c === 'r') g.set(p[0], p[1], 'B'); else if (c !== 'B') g.set(p[0], p[1], ':'); });
+        path.forEach(function (p) { var c = g.get(p[0], p[1]), k = p[0] + ',' + p[1]; if (!(k in under)) under[k] = c; if (c === '~' || c === 'w' || c === 'r') g.set(p[0], p[1], 'B'); else if (c !== 'B') g.set(p[0], p[1], ':'); });
       });
+    // no road that stops in the middle of nowhere: cut back every loose end that isn't at a known place's door
+    var door = {}; for (var did in LOC) if (known(did)) door[LOC[did].x + ',' + (LOC[did].y + 1)] = 1;
+    var isRd = function (x, y) { var c = g.get(x, y); return c === ':' || c === 'B'; };
+    for (var cut = true; cut;) {
+      cut = false;
+      for (var uk in under) {
+        var xy = uk.split(','), ux = +xy[0], uy = +xy[1];
+        if (!isRd(ux, uy) || door[uk]) continue;
+        var nb = 0; for (var d4 = 0; d4 < 4; d4++) if (isRd(ux + [1, -1, 0, 0][d4], uy + [0, 0, 1, -1][d4])) nb++;
+        if (nb < 2) { g.set(ux, uy, under[uk]); cut = true; }
+      }
+    }
     // keep the marsh roads from crossing the whole marsh: Liangshan is reached by boat from Zhu Gui's tavern
     for (y = LS.y - 8; y <= LS.y + 8; y++) for (x = LS.x - 11; x <= LS.x + 11; x++) if (g.get(x, y) === 'B' || g.get(x, y) === ':') { var dx2 = (x - LS.x) / 8.5, dy2 = (y - LS.y) / 6; if (dx2 * dx2 + dy2 * dy2 < 0.9) g.set(x, y, 'w'); }
 
@@ -297,7 +310,7 @@
     for (var aid in LOC) {
       var A2 = LOC[aid]; if (A2.icon === 'fortress') continue;
       var at = g.get(A2.x, A2.y + 1);
-      if (at !== ':' && at !== 'B' && WM.tiles.solid(at)) g.set(A2.x, A2.y + 1, WM.tiles.isWaterChar(at) ? 'B' : known(aid) ? ':' : '.');
+      if (known(aid) && at !== ':' && at !== 'B' && WM.tiles.solid(at)) g.set(A2.x, A2.y + 1, WM.tiles.isWaterChar(at) ? 'B' : ':');   // a place not yet known keeps its ground as it is
     }
     // location icons
     for (var id in LOC) {
