@@ -335,7 +335,8 @@
       s.flag('ch3_wine');
       await s.say(null, '(Go buy wine: out of the depot and up past the old temple to the north-west.)');
     } },
-    { id: 'ch3_buywine', x: 3, y: 8, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_wine'); }, run: async function (s) {
+    // anywhere on the road past the old temple, not only at its door
+    { id: 'ch3_buywine', x: 1, y: 7, w: 11, h: 7, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_wine'); }, run: async function (s) {
       await s.narrate('Lin Chong passed the old temple — "May the Mountain God protect me," he said, and bowed — and went on to the village, filled the gourd, ate some beef, and came back with the wind roaring and the snow falling thicker than before.');
       s.flag('ch3_collapsed');
       s.sfx('earth'); await s.shake(4, 0.6);
