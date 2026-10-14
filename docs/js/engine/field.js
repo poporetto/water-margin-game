@@ -525,6 +525,10 @@
       if (ev.hidden) a.visible = false;
       keep.push(a);
     });
+    // someone left standing after a scene gives way to the map's own standing version of the same person
+    var resident = {};
+    keep.forEach(function (a) { if (a.ev && !a.ev.temp && a.visible) { if (a.ev.npc) resident[a.ev.npc] = 1; if (a.ev.char) resident[a.ev.char] = 1; } });
+    keep = keep.filter(function (a) { return !(a.lingering && a.sheetWho && resident[a.sheetWho]); });
     F.actors = keep;
     F.stage();
   };
