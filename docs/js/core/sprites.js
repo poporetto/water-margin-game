@@ -106,10 +106,11 @@
       var hc = L.hatColor || '#8a6a3a';
       g.hline(x0 - 2, x0 + 9, y0 + 1, hc); g.hline(x0 - 1, x0 + 8, y0 + 2, U.shade(hc, -0.25)); g.rect(x0 + 1, y0 - 2, 6, 3, hc); g.hline(x0 + 2, x0 + 5, y0 - 3, U.shade(hc, 0.2));
     }
-    if (hs === 'futou') { // official's black gauze cap with wings
-      g.rect(x0, y0 - 2, 8, 4, '#16161c'); g.rect(x0 + 2, y0 - 4, 4, 2, '#16161c');
-      if (dir === 'down' || dir === 'up') { g.hline(x0 - 4, x0 - 1, y0 + 1, '#16161c'); g.hline(x0 + 8, x0 + 11, y0 + 1, '#16161c'); }
-      else g.hline(x0 + 8, x0 + 11, y0 + 1, '#16161c');
+    if (hs === 'futou') { // an official's black gauze cap (幞头): a rounded crown behind, and long straight wings out to either side
+      g.rect(x0, y0 - 2, 8, 4, '#16161c'); g.rect(x0 + 1, y0 - 4, 6, 2, '#16161c'); g.hline(x0 + 2, x0 + 5, y0 - 5, '#16161c');
+      g.hline(x0 + 1, x0 + 6, y0 - 1, '#2a2a34');   // the band
+      if (dir === 'down' || dir === 'up') { g.hline(x0 - 6, x0 - 1, y0, '#16161c'); g.hline(x0 + 8, x0 + 13, y0, '#16161c'); g.set(x0 - 6, y0 - 1, '#16161c'); g.set(x0 + 13, y0 - 1, '#16161c'); }
+      else { g.hline(x0 + 8, x0 + 12, y0, '#16161c'); g.set(x0 - 1, y0, '#16161c'); }
     }
     if (hs === 'helmet') { // general's helmet with tassel
       var hm = L.helmColor || '#7a7a86';
@@ -144,7 +145,10 @@
   function drawBody(g, L, dir, frame, ox, oy) {
     var big = L.build === 'big', slim = L.build === 'slim', small = L.build === 'small';
     var bd = L.body, bdD = U.shade(bd, -0.28), bdL = U.shade(bd, 0.18), tr = L.trim, sk = L.skin;
-    var skirt = L.dress;
+    // an official (wearing the 幞头 cap) wears the round-collared robe of rank, long to the feet, with a loose belt of
+    // gold plaques and wide sleeves; a civil one (no weapon) holds his ivory court tablet before him
+    var official = L.hairStyle === 'futou' && L.robe !== false;
+    var skirt = L.dress || official;
     var top = 10 + oy, legTop = (small ? 17 : 18) + oy, bottom = 23 + oy;
     var bw = big ? 10 : slim ? 6 : 8, bx = 8 - bw / 2 + ox;
     var step = frame === 1 ? 1 : frame === 2 ? -1 : 0;
@@ -161,6 +165,14 @@
         if (L.beads) for (var i = 0; i < bw - 2; i++) g.set(bx + 1 + i, top + 2 + (i % 2), i % 2 ? '#3a2014' : '#6a3a1e');
       }
       g.hline(bx, bx + bw - 1, top + 5, L.belt || bdD); // belt
+      if (official) {
+        if (dir === 'down') {   // the round collar, in place of the crossed one
+          var cx0 = bx + bw / 2;
+          g.set(cx0 - 2, top, tr); g.set(cx0 + 1, top, tr); g.set(cx0 - 1, top + 1, tr); g.set(cx0, top + 1, tr); g.set(cx0 - 1, top, bd); g.set(cx0, top, bd);
+        }
+        g.hline(bx - 1, bx + bw, top + 6, '#2a1a10'); for (var pq = bx; pq < bx + bw; pq += 2) g.set(pq, top + 6, '#d8b36a');   // the belt of plaques, worn low
+        g.vline(bx - 2, top + 3, top + 7, bdD); g.vline(bx + bw + 1, top + 3, top + 7, bdD);                                    // wide sleeves
+      }
       // arms
       var aOff = dir === 'down' ? step : -step;
       g.vline(bx - 1, top + 1, top + 5 + aOff, bd); g.vline(bx - 2, top + 2, top + 5 + aOff, bdD); g.set(bx - 1, top + 6 + aOff, sk); g.set(bx - 2, top + 6 + aOff, sk);
@@ -177,6 +189,11 @@
         g.hline(lx, lx + 1, lY, L.shoes); g.hline(rx, rx + 1, rY, L.shoes);
         g.set(lx, legTop + 2, tr); g.set(rx + 1, legTop + 2, tr); // leg wraps
       }
+      if (official && dir === 'down' && (!L.weapon || L.weapon === 'none')) {   // the court tablet (笏), held in both hands
+        var hx2 = bx + bw / 2;
+        g.vline(hx2 - 1, top + 1, top + 5, '#ece4cc'); g.vline(hx2, top + 1, top + 5, '#d8d0b8');
+        g.set(hx2 - 2, top + 5, sk); g.set(hx2 + 1, top + 5, sk);
+      }
       if (dir === 'up' && L.mark === 'flowers') { g.set(bx + 2, top + 2, '#c84a6a'); g.set(bx + bw - 3, top + 3, '#c84a6a'); }
     } else { // left-facing profile
       var sw = big ? 8 : slim ? 5 : 6, sx = 8 - sw / 2 + ox;
@@ -184,9 +201,11 @@
       g.vline(sx + sw - 1, top, legTop - 1, bdD);
       g.set(sx, top, tr); g.set(sx + 1, top + 1, tr);
       g.hline(sx, sx + sw - 1, top + 5, L.belt || bdD);
+      if (official) { g.hline(sx - 1, sx + sw - 1, top + 6, '#2a1a10'); g.set(sx + 1, top + 6, '#d8b36a'); g.set(sx + sw - 2, top + 6, '#d8b36a'); }   // the belt of plaques
       // arm swings
       var ax = sx + Math.floor(sw / 2) - 1 - step;
       g.vline(ax, top + 1, top + 5, bdL); g.vline(ax + 1, top + 1, top + 5, bd); g.set(ax, top + 6, sk); g.set(ax + 1, top + 6, sk);
+      if (official) { g.vline(ax - 1, top + 3, top + 7, bdD); g.vline(ax + 2, top + 4, top + 7, bd); }   // a wide sleeve
       if (skirt) {
         g.rect(sx - 1, legTop, sw + 1, bottom - legTop, bd); g.hline(sx - 1, sx + sw - 1, bottom - 1, tr);
         g.set(sx - 1 - (step > 0 ? 1 : 0), bottom, L.shoes); g.set(sx + sw - 2, bottom, L.shoes);
