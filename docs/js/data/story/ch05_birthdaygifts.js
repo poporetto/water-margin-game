@@ -289,12 +289,14 @@
 
   // ---------------- Mount Erlong ----------------
   WM.defEvents('erlong', [
-    { id: 'ch5_erlongplan', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch5_toerlong'); }, run: async function (s) {
+    // halfway up the pass, where the path opens out (not at the foot of the map, where the box would hide them all)
+    { id: 'ch5_erlongplan', trigger: 'touch', once: true, x: 8, y: 26, w: 10, h: 1, cond: function (S2) { return S2.has('ch5_toerlong'); }, run: async function (s) {
       await s.say('luzhishen', 'So you\'re Yang Zhi, who fought my brother Lin Chong to a standstill! Good. That cur Deng Long shut his gate on me and won\'t come down. The pass is too steep to storm.');
       await s.say('caozheng', 'I have an idea. Brother Lu, take off your robe and let us tie you up with a slip-knot. I\'ll tell them I caught the monk who kicked their chief, drugged in my inn. They\'ll open the gate to take you — and once you\'re inside...');
       await s.say('luzhishen:smile', 'Ha! Then I\'ll undo the knot and give Deng Long a staff to the skull!');
+      s.flag('ch5_erlongplan');
     } },
-    { id: 'ch5_erlonggate', x: 13, y: 14, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_toerlong'); }, run: async function (s) {
+    { id: 'ch5_erlonggate', x: 13, y: 14, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_erlongplan'); }, run: async function (s) {
       s.spawn('gd', 'erlongguard', 15, 10, 'down');   // inside the gate, on the steps of the courtyard, looking the bound monk over
       s.beside('luzhishen'); s.beside('caozheng');   // the bound monk, and the innkeeper who 'caught' him
       await s.say('caozheng', 'Open up! We\'ve brought the monk who kicked your chief!');
