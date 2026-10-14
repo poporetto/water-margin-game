@@ -19,9 +19,10 @@
   const gridCache = {};
   function grid(id) {
     const def = D.maps[id]; if (!def) return null;
-    const rows = typeof def.rows === 'function' ? (def._rows || def.rows()) : def.rows;
     const ck = id + '|' + (def.cacheKey ? def.cacheKey() : '');
     if (gridCache[ck]) return gridCache[ck];
+    // the map as it is now: the world redraws its roads as places become known
+    const rows = typeof def.rows === 'function' ? (def._rows && def._rowsKey === (def.cacheKey ? def.cacheKey() : 'static') ? def._rows : def.rows()) : def.rows;
     let w = 0; rows.forEach((r) => { w = Math.max(w, r.length); });
     const g = { id, w, h: rows.length, get: (x, y) => (y < 0 || y >= rows.length || x < 0 || x >= w) ? null : (rows[y][x] === undefined || rows[y][x] === ' ' ? (def.fill || '.') : rows[y][x]) };
     g.walk = (x, y) => { const c = g.get(x, y); return c !== null && !T.solid(c); };

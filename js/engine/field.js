@@ -635,7 +635,7 @@
       G.text(F.nameBanner.text, WM.W / 2, 40 + 29 + 1, { size: 26, bold: true, align: 'center', baseline: 'middle', color: G.COL.gold });   // centred in the plate
       G.ctx.globalAlpha = 1;
     }
-    if (F.map.def.world) drawWorldLabel(); else drawSignLabel(cx, cy);
+    if (F.map.def.world) { drawWorldGoal(cx, cy); drawWorldLabel(); } else drawSignLabel(cx, cy);
     if (F.draw.hook) F.draw.hook();
   };
 
@@ -749,6 +749,75 @@
         }
       }
       c.globalAlpha = 1;
+    });
+  }
+
+  // ---------- where the story waits, on the world map ----------
+  // The places whose maps (or the rooms reached through them) hold this chapter's next scene. Worked out from the
+  // story's own events, so it is never out of step with them: a marker bobs over the place, and an arrow at the
+  // edge of the screen points the way when it is out of sight.
+  var regionOf = null;
+  function regions() {
+    if (regionOf) return regionOf;
+    regionOf = {};
+    var LOC = WM.data.locations, q = [];
+    for (var id in LOC) if (LOC[id].map && WM.data.maps[LOC[id].map] && !regionOf[LOC[id].map]) { regionOf[LOC[id].map] = id; q.push(LOC[id].map); }
+    while (q.length) {
+      var m = q.shift();
+      (WM.data.maps[m].exits || []).forEach(function (e) { if (e.to && e.to !== 'world' && WM.data.maps[e.to] && !regionOf[e.to]) { regionOf[e.to] = regionOf[m]; q.push(e.to); } });
+    }
+    return regionOf;
+  }
+  var goalCache = { at: -1, list: [] };
+  F.storyGoals = function () {
+    if (goalCache.at >= 0 && (WM.time || 0) - goalCache.at < 0.5) return goalCache.list;
+    goalCache.at = WM.time || 0;
+    return (goalCache.list = findGoals());
+  };
+  function findGoals() {
+    var st = WM.state, ch = st.chapter || 0, out = [], R = regions(), evs = WM.data.events || {}, sm = st.map;
+    for (var map in evs) {
+      if (map === 'world' || !R[map]) continue;
+      evs[map].forEach(function (ev) {
+        var cm = /^ch(\d+)_/.exec(ev.id);
+        if (!ev.run || !cm || +cm[1] !== ch || (ev.once ? S.has('ev:' + map + ':' + ev.id) : !(ev.cond && /!\s*\w+\.has\(/.test(ev.cond.toString())))) return;   // a repeatable scene counts only while flags of its own keep it open (it closes when the story moves on)
+        // a scene that waits for the player to reach part of its map counts if it would fire anywhere there
+        var sx0 = st.x, sy0 = st.y, ok = false, spots = ev.cond && /\.x\b|\.y\b/.test(ev.cond.toString()) ? [[sx0, sy0], [0, 0], [400, 400], [0, 400], [400, 0]] : [[sx0, sy0]];
+        st.map = map;
+        for (var i = 0; i < spots.length && !ok; i++) { st.x = spots[i][0]; st.y = spots[i][1]; try { ok = !ev.cond || !!ev.cond(S, st); } catch (e2) { ok = false; } }
+        st.map = sm; st.x = sx0; st.y = sy0;
+        if (ok && out.indexOf(R[map]) < 0) out.push(R[map]);
+      });
+    }
+    return out;
+  }
+  function drawWorldGoal(cx, cy) {
+    if (WM.script.running || WM.ui.busy()) return;
+    var LOC = WM.data.locations, k = WM.W / WM.LOW_W, t = WM.time || 0;
+    F.storyGoals().forEach(function (id) {
+      var L = LOC[id]; if (!L || !S.has('loc:' + id)) return;
+      var sx = (L.x * TS + 8 - cx) * k, sy = ((L.y - 1) * TS - cy) * k;
+      var M = 48, onScreen = sx > M && sx < WM.W - M && sy > M + 60 && sy < WM.H - M;
+      var c = G.ctx;
+      if (onScreen) {   // a gold arrow bobbing over the place, with a glow on the ground before its gate
+        var by = sy - 30 + Math.sin(t * 4) * 7, gl = 0.35 + 0.2 * Math.sin(t * 4);
+        c.globalAlpha = gl; c.fillStyle = '#ffe070'; c.beginPath(); c.ellipse(sx, sy + TS * k * 2 - 6, 26, 9, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+        c.fillStyle = '#2a1608'; c.beginPath(); c.moveTo(sx - 22, by - 26); c.lineTo(sx + 22, by - 26); c.lineTo(sx, by + 4); c.closePath(); c.fill();
+        c.fillStyle = '#ffd860'; c.beginPath(); c.moveTo(sx - 16, by - 22); c.lineTo(sx + 16, by - 22); c.lineTo(sx, by - 2); c.closePath(); c.fill();
+        c.fillStyle = '#fff4c0'; c.beginPath(); c.moveTo(sx - 10, by - 20); c.lineTo(sx - 2, by - 20); c.lineTo(sx - 4, by - 12); c.closePath(); c.fill();
+        return;
+      }
+      // out of sight: an arrow at the screen's edge, pointing the way, with the place's name
+      var mx = WM.W / 2, my = WM.H / 2, dx = sx - mx, dy = sy - my, a = Math.atan2(dy, dx);
+      var sc = Math.min((WM.W / 2 - M) / Math.abs(dx || 1e-6), (WM.H / 2 - M - 30) / Math.abs(dy || 1e-6));
+      var ex = mx + dx * sc, ey = my + dy * sc + 15, pulse = 1 + 0.12 * Math.sin(t * 5);
+      c.save(); c.translate(ex, ey); c.rotate(a); c.scale(pulse, pulse);
+      c.fillStyle = '#2a1608'; c.beginPath(); c.moveTo(26, 0); c.lineTo(-14, -20); c.lineTo(-6, 0); c.lineTo(-14, 20); c.closePath(); c.fill();
+      c.fillStyle = '#ffd860'; c.beginPath(); c.moveTo(19, 0); c.lineTo(-9, -13); c.lineTo(-2, 0); c.lineTo(-9, 13); c.closePath(); c.fill();
+      c.restore();
+      var tw = G.measure(L.name, 18, true) + 24, lx = U.clamp(ex - Math.cos(a) * 46 - tw / 2, 8, WM.W - tw - 8), ly = U.clamp(ey - Math.sin(a) * 46 - 16, 70, WM.H - 40);
+      G.window(lx, ly, tw, 32, { top: '#2a1e12', bottom: '#120c06' });
+      G.text(L.name, lx + tw / 2, ly + 17, { size: 18, bold: true, align: 'center', baseline: 'middle', color: G.COL.gold });
     });
   }
 

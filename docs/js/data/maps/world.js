@@ -230,28 +230,75 @@
     // the ground each place's buildings will stand on: a road steps round it rather than under a wall
     var FP = {};
     for (var fid in LOC) if (LOC[fid].icon !== 'fortress') for (var fy = -1; fy <= 0; fy++) for (var fx = -1; fx <= 1; fx++) FP[(LOC[fid].x + fx) + ',' + (LOC[fid].y + fy)] = 1;
-    R.forEach(function (r) {
-      var a = LOC[r[0]], b = LOC[r[1]];
-      var x0 = a.x, y0 = a.y + 1, x1 = b.x, y1 = b.y + 1;
-      var midx = x0, step = function (x, y) {
-        var c = g.get(x, y);
-        if (c === '~' || c === 'w' || c === 'r') g.set(x, y, 'B'); else if (c !== 'B') g.set(x, y, ':');
-      };
-      var sx = Math.sign(x1 - x0), sy = Math.sign(y1 - y0);
-      var x = x0, y = y0, off = function (px, py) { return Math.abs((px - x0) * (y1 - y0) - (py - y0) * (x1 - x0)); };
-      step(x, y);
-      while (x !== x1 || y !== y1) {
-        // keep to the straight line between the two places, one step across or down at a time
-        var across = x !== x1 && (y === y1 || off(x + sx, y) <= off(x, y + sy));
-        if (across && y !== y1 && FP[(x + sx) + ',' + y]) across = false;
-        else if (!across && x !== x1 && FP[x + ',' + (y + sy)]) across = true;
-        if (across) x += sx; else y += sy;
-        step(x, y);
+    // Only the roads that lead somewhere the traveller knows: a road out to a place not yet heard of is left
+    // off, unless it runs on through that place to somewhere known (pruned from the dead ends inwards).
+    var known = function (id) { return S.has('loc:' + id) && (!LOC[id].cond || LOC[id].cond(S)); };
+    var live = R.filter(function (r) { return LOC[r[0]] && LOC[r[1]]; }), pruned = true;
+    while (pruned) {
+      pruned = false;
+      var deg = {}; live.forEach(function (r) { deg[r[0]] = (deg[r[0]] || 0) + 1; deg[r[1]] = (deg[r[1]] || 0) + 1; });
+      live = live.filter(function (r) { var dead = (!known(r[0]) && deg[r[0]] < 2) || (!known(r[1]) && deg[r[1]] < 2); if (dead) pruned = true; return !dead; });
+    }
+    // Each road follows the lie of the land (round hills, across rivers by the shortest bridge) and joins a road
+    // already laid where it can, so roads meet and share a way rather than running side by side.
+    var cost = function (x, y) {
+      if (FP[x + ',' + y]) return Infinity;
+      var c = g.get(x, y);
+      if (c === ':' || c === 'B') return 1;
+      var dl = (x - LS.x) / 8.5, dm = (y - LS.y) / 6; if (dl * dl + dm * dm < 1.1) return Infinity;   // the marsh is crossed by boat
+      var k = c === 'w' ? 60 : c === '~' || c === 'r' ? 14 : c === 'M' ? 9 : c === 'T' || c === 'P' || c === 'b' ? 4 : 3;
+      for (var d = 0; d < 4; d++) { var n = g.get(x + [1, -1, 0, 0][d], y + [0, 0, 1, -1][d]); if (n === ':' || n === 'B') { k += 3; break; } }   // never a road hugging a road
+      return k;
+    };
+    var route = function (x0, y0, x1, y1) {
+      var L2 = Math.max(1, Math.hypot(x1 - x0, y1 - y0)), off = function (px, py) { return Math.abs((px - x0) * (y1 - y0) - (py - y0) * (x1 - x0)) / L2; };
+      var N = W * H, dist = new Float64Array(N).fill(Infinity), prev = new Int32Array(N).fill(-1), heap = [];
+      var push = function (i, f) { heap.push([f, i]); var j = heap.length - 1; while (j > 0) { var p = (j - 1) >> 1; if (heap[p][0] <= heap[j][0]) break; var t = heap[p]; heap[p] = heap[j]; heap[j] = t; j = p; } };
+      var pop = function () { var top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; var j = 0; for (;;) { var l = 2 * j + 1, r2 = l + 1, m2 = j; if (l < heap.length && heap[l][0] < heap[m2][0]) m2 = l; if (r2 < heap.length && heap[r2][0] < heap[m2][0]) m2 = r2; if (m2 === j) break; var t = heap[m2]; heap[m2] = heap[j]; heap[j] = t; j = m2; } } return top; };
+      var s0 = y0 * W + x0, goal = y1 * W + x1; dist[s0] = 0; push(s0, 0);
+      while (heap.length) {
+        var it = pop(), i = it[1]; if (i === goal) break;
+        if (it[0] > dist[i] + Math.abs(i % W - x1) + Math.abs((i / W | 0) - y1)) continue;
+        var cx = i % W, cy = i / W | 0;
+        for (var d = 0; d < 4; d++) {
+          var nx = cx + [1, -1, 0, 0][d], ny = cy + [0, 0, 1, -1][d]; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+          var j = ny * W + nx, k = j === goal ? 1 : cost(nx, ny); if (k === Infinity) continue;
+          k += off(nx, ny) * 0.35;   // keep near the straight way between the two places
+          if (dist[i] + k < dist[j]) { dist[j] = dist[i] + k; prev[j] = i; push(j, dist[j] + Math.abs(nx - x1) + Math.abs(ny - y1)); }
+        }
       }
-    });
+      if (prev[goal] < 0 && goal !== s0) return null;
+      var out = []; for (var q = goal; q >= 0; q = prev[q]) out.push([q % W, q / W | 0]); return out;
+    };
+    var roadSteps = function (x0, y0, x1, y1) {   // walking only on road already laid
+      var isR = function (x, y) { var c = g.get(x, y); return c === ':' || c === 'B'; };
+      if (!isR(x0, y0) || !isR(x1, y1)) return Infinity;
+      var seen = {}, q = [[x0, y0, 0]]; seen[x0 + ',' + y0] = 1;
+      for (var h = 0; h < q.length; h++) {
+        var p = q[h]; if (p[0] === x1 && p[1] === y1) return p[2];
+        for (var d = 0; d < 4; d++) { var nx = p[0] + [1, -1, 0, 0][d], ny = p[1] + [0, 0, 1, -1][d], k = nx + ',' + ny; if (!seen[k] && isR(nx, ny)) { seen[k] = 1; q.push([nx, ny, p[2] + 1]); } }
+      }
+      return Infinity;
+    };
+    live.map(function (r) { var a = LOC[r[0]], b = LOC[r[1]]; return { a: a, b: b, d: Math.abs(a.x - b.x) + Math.abs(a.y - b.y) }; })
+      .sort(function (p, q) { return p.d - q.d; })   // the short local roads first, so the long ones can join them
+      .forEach(function (rd) {
+        // two places already joined by roads that don't go far out of the way need no road of their own (no loops)
+        var bySoFar = roadSteps(rd.a.x, rd.a.y + 1, rd.b.x, rd.b.y + 1);
+        if (bySoFar <= rd.d * 1.7 + 4) return;
+        var path = route(rd.a.x, rd.a.y + 1, rd.b.x, rd.b.y + 1);
+        if (!path) return;
+        path.forEach(function (p) { var c = g.get(p[0], p[1]); if (c === '~' || c === 'w' || c === 'r') g.set(p[0], p[1], 'B'); else if (c !== 'B') g.set(p[0], p[1], ':'); });
+      });
     // keep the marsh roads from crossing the whole marsh: Liangshan is reached by boat from Zhu Gui's tavern
     for (y = LS.y - 8; y <= LS.y + 8; y++) for (x = LS.x - 11; x <= LS.x + 11; x++) if (g.get(x, y) === 'B' || g.get(x, y) === ':') { var dx2 = (x - LS.x) / 8.5, dy2 = (y - LS.y) / 6; if (dx2 * dx2 + dy2 * dy2 < 0.9) g.set(x, y, 'w'); }
 
+    // every place's doorstep is open ground, known or not, so anyone leaving it steps out onto the land
+    for (var aid in LOC) {
+      var A2 = LOC[aid]; if (A2.icon === 'fortress') continue;
+      var at = g.get(A2.x, A2.y + 1);
+      if (at !== ':' && at !== 'B' && WM.tiles.solid(at)) g.set(A2.x, A2.y + 1, WM.tiles.isWaterChar(at) ? 'B' : known(aid) ? ':' : '.');
+    }
     // location icons
     for (var id in LOC) {
       var L = LOC[id];
@@ -268,7 +315,9 @@
       else if (ic === 'inn') { g.set(lx, ly - 1, 'z'); g.set(lx + 1, ly - 1, 'z'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'O'); }
       // a ruined monastery: the hall's roof half fallen in, one wall a heap of rubble, a dead tree in the yard
       else if (ic === 'ruin') { g.set(lx - 1, ly - 1, 'v'); g.set(lx, ly - 1, 'v'); g.set(lx + 1, ly - 1, 'e'); g.set(lx - 1, ly, 'R'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'm'); }
-      else if (ic === 'forest' || ic === 'pass' || ic === 'marsh') { g.set(lx, ly, ':'); g.set(lx, ly - 1, ic === 'forest' ? 'T' : ic === 'marsh' ? 'r' : 'm'); }
+      // a ridge: two peaks with the road through the gap between them, and a wine-shop flag at the roadside
+      else if (ic === 'pass') { g.set(lx - 1, ly - 1, 'M'); g.set(lx + 1, ly - 1, 'M'); g.set(lx - 1, ly, 'M'); g.set(lx, ly - 1, ':'); g.set(lx, ly, ':'); g.set(lx + 1, ly, 'J'); }
+      else if (ic === 'forest' || ic === 'marsh') { g.set(lx, ly, ':'); g.set(lx, ly - 1, ic === 'forest' ? 'T' : ic === 'marsh' ? 'r' : 'm'); }
       else if (ic === 'fortress') { /* Liangshan: the island itself */ g.set(lx, ly + 1, 'D'); g.set(lx - 1, ly + 1, 'Y'); g.set(lx + 1, ly + 1, 'Y'); g.rect(lx - 1, ly, 3, 1, '^'); }
       // clear approach tile
       var below = g.get(lx, ly + 1);
@@ -294,7 +343,7 @@
 
   WM.defMap('world', {
     name: '', world: true, theme: 'world', music: 'world',
-    cacheKey: function () { return Object.keys(LOC).filter(function (id) { return S.has('loc:' + id); }).join(','); },
+    cacheKey: function () { return Object.keys(LOC).filter(function (id) { return S.has('loc:' + id) && (!LOC[id].cond || LOC[id].cond(S)); }).join(','); },   // the places shown, and so the roads drawn
     rows: build,
     get exits() { return exits(); },
     battleBg: 'plains',
