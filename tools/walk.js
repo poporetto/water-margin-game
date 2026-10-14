@@ -192,6 +192,10 @@ function mkApi(ctx) {
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
     despawn(key) { if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); delete temp[key]; },
+    mark(spots, until) {
+      (spots || []).forEach((sp) => { if (!D.maps[sp.map]) err('mark: unknown map ' + sp.map); else if (tile(sp.map, sp.x, sp.y) == null) err('mark: ' + sp.map + '(' + sp.x + ',' + sp.y + ') is off the map'); });
+      if (until && typeof until !== 'string') err('mark: until must be a flag name');
+    },
     idle(key, lines) { if (!temp[key]) err('idle: no actor "' + key + '"'); else if (!lines || !lines.length) err('idle: no line for "' + key + '"'); else temp[key].idle = true; },
     leader(id) { if (!D.chars[id]) err('leader: unknown char ' + id); },
     shake() { return resolved; }, flash() { return resolved; },
@@ -204,7 +208,7 @@ function mkApi(ctx) {
       cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors(); syncField();
       return resolved;
     },
-    battle(troop) { lagging(); const t = typeof troop === 'string' ? D.troops[troop] : troop; if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
+    battle(troop) { lagging(); const t = typeof troop === 'string' ? D.troops[troop] : troop; noteFoes(t); if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
     duel(id, opt) { if (!D.duels[id]) err('unknown duel ' + id); else { const d = D.duels[id]; gone((opt && opt.hero) || d.hero, 'duel ' + id); gone(d.foe, 'duel ' + id); if (!D.chars[d.hero]) err('duel hero unknown ' + d.hero); if (!D.chars[d.foe] && !D.npcs[d.foe]) err('duel foe unknown ' + d.foe); } return Promise.resolve('win'); },
     war(id) { lagging(); if (!D.wars[id]) err('unknown war ' + id); else { D.wars[id].player.forEach((u) => { gone(u.leader, 'war ' + id); (u.support || []).forEach((x) => gone(x, 'war ' + id)); if (!D.chars[u.leader]) err('war ' + id + ' unknown leader ' + u.leader); (u.support || []).forEach((x) => { if (!D.chars[x]) err('war ' + id + ' unknown support ' + x); }); }); } return Promise.resolve('win'); },
     join(id, opt) {
@@ -361,6 +365,46 @@ function eventReachable(ev, arrival) {
   return false;
 }
 
+// ---------- checkpoints (--checkpoints): the state just before every scene that moves the story on ----------
+// written to js/data/checkpoints.js for the debug picker, which can then start any scene of any chapter
+const CPS = process.argv.includes('--checkpoints'); const cps = []; const foeLv = {};
+function noteFoes(t) {
+  if (!t) return;
+  const lv = Math.max(0, ...(Array.isArray(t) ? t : t.enemies || []).map((e) => (D.enemies[e] && D.enemies[e].lv) || 0));
+  foeLv[cps.length] = Math.max(foeLv[cps.length] || 0, lv);
+}
+function cpSnap(ev, arrival) {
+  const st = WM.state, chars = {};
+  Object.keys(st.chars).forEach((id) => { const c = st.chars[id]; chars[id] = JSON.stringify({ lv: c.lv, wlv: c.wlv, equip: c.equip, tal: c.tal }); });
+  let x = cur.x, y = cur.y, dir = 'up';
+  if (ev.trigger !== 'auto' && ev.trigger !== 'touch') { const dx = ev.x - x, dy = ev.y - y; dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); }
+  if (ev.trigger === 'auto') { x = arrival.x; y = arrival.y; }
+  return { ch: st.chapter, flags: JSON.parse(JSON.stringify(st.flags)), party: st.party.slice(), leader: st.leader, recruited: st.recruited.slice(), chars, inv: Object.assign({}, st.inv), gold: st.gold, map: cur.map, x, y, dir };
+}
+function writeCheckpoints() {
+  const out = []; let prev = { flags: {}, chars: {}, inv: {}, recruited: [] };
+  cps.forEach((cp, i) => {
+    const sn = cp.snap, o = { ch: sn.ch, ev: cp.ev, t: cp.trig, l: cp.label, m: sn.map, x: sn.x, y: sn.y, d: sn.dir, p: sn.party, ld: sn.leader, g: sn.gold };
+    const set = {}, del = [];
+    Object.keys(sn.flags).forEach((k) => { if (k === 'noEncounters') return; if (JSON.stringify(sn.flags[k]) !== JSON.stringify(prev.flags[k])) set[k] = sn.flags[k]; });
+    Object.keys(prev.flags).forEach((k) => { if (!(k in sn.flags)) del.push(k); });
+    if (Object.keys(set).length) o.fs = set; if (del.length) o.fd = del;
+    const ch = {}; Object.keys(sn.chars).forEach((id) => { if (sn.chars[id] !== prev.chars[id]) ch[id] = JSON.parse(sn.chars[id]); });
+    if (Object.keys(ch).length) o.c = ch;
+    const r = sn.recruited.filter((id) => prev.recruited.indexOf(id) < 0); if (r.length) o.r = r;
+    const inv = {}; Object.keys(Object.assign({}, sn.inv, prev.inv)).forEach((k) => { if ((sn.inv[k] || 0) !== (prev.inv[k] || 0)) inv[k] = sn.inv[k] || 0; });
+    if (Object.keys(inv).length) o.iv = inv;
+    // the party should be able to win the next fight of the chapter: the level of its strongest foe
+    for (let j = i; j < cps.length && cps[j].snap.ch === sn.ch; j++) if (foeLv[j]) { o.fl = foeLv[j]; break; }
+    out.push(o); prev = sn;
+  });
+  const file = require('path').join(__dirname, '..', 'js', 'data', 'checkpoints.js');
+  require('fs').writeFileSync(file, '// Generated by `node tools/walk.js --checkpoints`: the game state just before each scene that moves the story on.\n' +
+    '// The debug chapter picker (?debug) lists them under each chapter and can start any of them. Do not edit by hand.\n' +
+    'WM.data.checkpoints = [\n' + out.map((o) => JSON.stringify(o)).join(',\n') + '\n];\n');
+  console.log('Wrote ' + out.length + ' checkpoints to js/data/checkpoints.js');
+}
+
 // ---------- people with nothing to say ----------
 // Characters a scene places before its first line stand on the map from the moment it could fire (Field.stage).
 // If the player can walk up to one without setting the scene off, they need a line of their own: ev.idle[key].
@@ -500,6 +544,7 @@ async function main() {
         if (st) { cur.x = st[0]; cur.y = st[1]; WM.state.x = cur.x; WM.state.y = cur.y; }
       }
       const silent = silentStaged(ev, arrival);
+      const snap = CPS ? cpSnap(ev, cur.map === ev.map && ev.trigger !== 'auto' ? cur : arrival) : null;
       await runEvent(ev);
       const after = storyFlags();
       reachCache = {};
@@ -508,6 +553,7 @@ async function main() {
           progressed = true; lastProgress = curEvent;
           if (FLOW) console.log('  ' + curEvent + '  — ' + (firstLine || '').slice(0, 110));
           if (HINTS) flowLog.push({ ev: curEvent, endMap: cur.map, hinted: hinted, ch: WM.state.chapter, text: spoken });
+          if (CPS) cps.push({ ev: ev.map + ':' + ev.id, trig: ev.trigger || 'talk', label: spoken.trim().replace(/\s+/g, ' ').slice(0, 80), snap: snap });
           if (LEFT) Object.keys(temp).forEach((k) => { if (D.chars[temp[k].who] || D.npcs[temp[k].who]) leftLog.push('ch' + WM.state.chapter + ' ' + curEvent + ' leaves ' + k + (k === temp[k].who ? '' : '=' + temp[k].who) + ' on ' + cur.map); });
           // the player can talk to anyone left standing, and to anyone waiting for this scene
           Object.keys(temp).forEach((k) => { if ((D.chars[temp[k].who] || D.npcs[temp[k].who]) && !temp[k].idle) err('"' + k + '" is left standing after the scene with nothing to say (s.idle)'); });
@@ -541,6 +587,7 @@ async function main() {
       if (on) console.log('  still armed: ' + mid + ':' + ev.id + ' (' + (ev.trigger || 'talk') + ')');
     }));
   }
+  if (CPS) writeCheckpoints();
   if (LEFT) { console.log('\nPeople left standing after a scene:'); leftLog.forEach((l) => console.log('  ' + l)); }
   if (HINTS) {
     console.log('\nScenes after which the story moves to another map without a hint:');

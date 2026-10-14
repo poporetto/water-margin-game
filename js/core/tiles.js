@@ -248,7 +248,19 @@
   function cityGateOver(c, x, y, tx, ty, th, m) {
     if (m.get(tx, ty - 1) === 'G') return;
     var G = function (dx) { return m.get(tx + dx, ty) === 'G'; };
-    var x0 = x - (G(-1) ? 0 : 6), x1 = x + 16 + (G(1) ? 0 : 6);
+    // shut: the two leaves are drawn across the passage (a scene sets the flag 'shut:<map>')
+    if (WM.state && WM.state.flags && WM.state.flags['shut:' + m.id]) {
+      px(c, x, y + 2, 16, 14, '#7a2a1c'); px(c, x, y + 2, 16, 1, '#9a4a32');
+      if (!G(-1)) px(c, x, y + 2, 1, 14, '#3a1a10');
+      if (!G(1)) px(c, x + 15, y + 2, 1, 14, '#3a1a10');
+      c.fillStyle = '#d8b36a';
+      for (var sr = 0; sr < 4; sr++) for (var sc = 0; sc < 3; sc++) c.fillRect(x + 3 + sc * 5, y + 4 + sr * 3, 1, 1);   // studs
+      if (G(1) && !G(2)) { px(c, x + 14, y + 8, 4, 2, '#4a2a14'); }   // the bar across the middle of the two leaves
+      if (!G(-1)) px(c, x + 15, y + 2, 1, 14, '#2a120a');           // where the leaves meet
+    }
+    // a temple's gate hall: its roof also covers the guardian kings standing in the wings on either side
+    var U = function (dx) { return m.get(tx + dx, ty) === 'U'; };
+    var x0 = x - (G(-1) ? 0 : U(-1) ? 22 : 6), x1 = x + 16 + (G(1) ? 0 : U(1) ? 22 : 6);
     px(c, x0, y - 13, x1 - x0, 2, '#2f3542');                       // ridge
     px(c, x0, y - 11, x1 - x0, 6, '#5b6476');
     for (var k = x0 + 1; k < x1; k += 4) px(c, k, y - 11, 2, 6, '#7b8598');

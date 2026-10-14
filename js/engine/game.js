@@ -89,22 +89,79 @@
     if (n === 0) { WM.newGame(); return; }
     WM.script.run(function (s) { return WM.data.chapters[n].debugStart(s); });
   };
+  // Start any scene that moves the story on (js/data/checkpoints.js, written by `node tools/walk.js --checkpoints`):
+  // the story as it stood just before it, with the party raised to the level of the chapter's next fight.
+  D.jumpTo = function (i) {
+    var C = WM.data.checkpoints || [], cp = C[i];
+    if (!cp) return;
+    WM.ui.stack.length = 0; WM.script.running = 0; WM.gfx.fade = 0; WM.gfx.flash = 0;
+    if (WM.field) { WM.field.draw.hook = null; WM.field.transitioning = false; }
+    if (WM.battle) WM.battle.cur = null; if (WM.war) WM.war.cur = null; if (WM.duel) WM.duel.cur = null;
+    WM.audio.stop();
+    S.newGame();
+    var st = WM.state, chars = {};
+    for (var k = 0; k <= i; k++) {
+      var c = C[k];
+      if (c.fs) for (var f in c.fs) st.flags[f] = c.fs[f];
+      (c.fd || []).forEach(function (f) { delete st.flags[f]; });
+      if (c.c) for (var id in c.c) chars[id] = c.c[id];
+      (c.r || []).forEach(function (id) { if (st.recruited.indexOf(id) < 0) st.recruited.push(id); });
+      if (c.iv) for (var it in c.iv) { if (c.iv[it]) st.inv[it] = c.iv[it]; else delete st.inv[it]; }
+    }
+    st.chapter = cp.ch; st.gold = Math.max(cp.g || 0, 3000);
+    Object.keys(chars).forEach(function (id) {
+      if (!S.def(id)) return;
+      var d = chars[id], lv = Math.max(d.lv || 1, cp.p.indexOf(id) >= 0 ? (cp.fl || 0) : 0);
+      var ch = S.initChar(id, lv);
+      ch.lv = lv; if (S.catchUp) S.catchUp(id);
+      ch.wlv = Math.max(d.wlv || 1, S.floorWlv(lv));
+      if (d.equip) ch.equip = d.equip; if (d.tal) ch.tal = d.tal;
+      S.restore(id);
+    });
+    st.party = cp.p.slice(); st.leader = cp.ld;
+    WM.setScene(WM.field, { map: cp.m, x: cp.x, y: cp.y, dir: cp.d, noAuto: cp.t !== 'auto' });
+    if (cp.t !== 'auto') {   // a scene you walk into or talk to: start it
+      var at = cp.ev.split(':'), ev = (WM.data.events[at[0]] || []).filter(function (e) { return e.id === at[1]; })[0];
+      if (ev) setTimeout(function () { if (!WM.script.running) WM.field.runEvent(ev); }, 400);
+    }
+  };
   D.buildPicker = function () {
     if (!D.enabled || typeof document === 'undefined' || !document.body || document.getElementById('dbg-chapters')) return;
     var st = document.createElement('style');
     st.textContent = '#dbg-chapters{position:fixed;top:8px;left:8px;z-index:50;padding:6px 12px;font:bold 13px Georgia,serif;color:#f4e6c4;background:#5a1a12;border:2px solid #d8b36a;border-radius:6px;cursor:pointer;opacity:.85}' +
       '#dbg-panel{position:fixed;top:44px;left:8px;z-index:51;max-height:calc(100vh - 60px);overflow-y:auto;background:rgba(18,12,8,.96);border:2px solid #d8b36a;border-radius:8px;padding:6px;display:none;-webkit-overflow-scrolling:touch;touch-action:pan-y}' +
       '#dbg-panel button{display:block;width:250px;text-align:left;margin:2px 0;padding:7px 10px;font:14px Georgia,serif;color:#f0e0c0;background:#2a1e14;border:1px solid #6a5030;border-radius:4px;cursor:pointer}' +
-      '#dbg-panel button:hover,#dbg-panel button:active{background:#6a2a1a}#dbg-panel b{color:#d8b36a;margin-right:6px}';
+      '#dbg-panel button:hover,#dbg-panel button:active{background:#6a2a1a}#dbg-panel b{color:#d8b36a;margin-right:6px}' +
+      '#dbg-panel .row{display:flex;gap:4px}#dbg-panel .row button.more{width:34px;text-align:center;padding:7px 0}' +
+      '#dbg-panel .scenes{display:none;margin:0 0 6px 14px}#dbg-panel .scenes button{width:330px;font-size:12px;padding:5px 8px;color:#d8ccb0}#dbg-panel .scenes i{color:#a39684;font-style:normal;margin-right:6px}';
     document.head.appendChild(st);
     var btn = document.createElement('div'); btn.id = 'dbg-chapters'; btn.textContent = 'Chapters ▾';
     var panel = document.createElement('div'); panel.id = 'dbg-panel';
+    var CPS = WM.data.checkpoints || [];
     WM.data.chapters.forEach(function (c, i) {
       if (i > 0 && !c.debugStart) return;
+      var row = document.createElement('div'); row.className = 'row';
       var b = document.createElement('button');
       b.innerHTML = '<b>' + (i === 0 ? 'Prologue' : 'Ch ' + i) + '</b>' + (c.short || '');
       b.addEventListener('click', function (e) { e.stopPropagation(); panel.style.display = 'none'; D.jump(i); });
-      panel.appendChild(b);
+      row.appendChild(b);
+      // the scenes of the chapter, in story order: start any of them
+      var list = document.createElement('div'); list.className = 'scenes';
+      CPS.forEach(function (cp, k) {
+        if (cp.ch !== i) return;
+        var sb = document.createElement('button'), n = list.children.length + 1;
+        sb.innerHTML = '<i>' + n + '.</i>';
+        sb.appendChild(document.createTextNode(cp.l || cp.ev));
+        sb.title = cp.ev;
+        sb.addEventListener('click', function (e) { e.stopPropagation(); panel.style.display = 'none'; D.jumpTo(k); });
+        list.appendChild(sb);
+      });
+      if (list.children.length) {
+        var more = document.createElement('button'); more.className = 'more'; more.textContent = '▸'; more.title = 'Scenes of this chapter';
+        more.addEventListener('click', function (e) { e.stopPropagation(); var open = list.style.display === 'block'; list.style.display = open ? 'none' : 'block'; more.textContent = open ? '▸' : '▾'; });
+        row.appendChild(more);
+      }
+      panel.appendChild(row); panel.appendChild(list);
     });
     var toggle = function (e) { e.preventDefault(); e.stopPropagation(); panel.style.display = panel.style.display === 'block' ? 'none' : 'block'; };
     btn.addEventListener('click', toggle);

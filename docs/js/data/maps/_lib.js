@@ -112,16 +112,16 @@
   // Common NPC event helpers
   L.sign = function (id, x, y, text) { return { id: id, x: x, y: y, trigger: 'check', text: text }; };
   L.inn = function (id, x, y, price, npc) {
-    return { id: id, x: x, y: y, npc: npc || 'innkeep', run: function (s) { return s.inn(price, npc || 'innkeep'); } };
+    return { id: id, x: x, y: y, kind: 'inn', npc: npc || 'innkeep', run: function (s) { return s.inn(price, npc || 'innkeep'); } };
   };
   L.shop = function (id, x, y, shopId, npc, line) {
-    return { id: id, x: x, y: y, npc: npc || 'shopkeep', run: async function (s) { if (line) await s.say(npc || 'shopkeep', line); await s.shop(shopId); } };
+    return { id: id, x: x, y: y, kind: 'shop', shop: shopId, npc: npc || 'shopkeep', run: async function (s) { if (line) await s.say(npc || 'shopkeep', line); await s.shop(shopId); } };
   };
   L.smith = function (id, x, y, maxLv, npc, line) {
-    return { id: id, x: x, y: y, npc: npc || 'smith', run: async function (s) { await s.say(npc || 'smith', line || 'Want that blade of yours sharper? I can take it as far as level ' + maxLv + '.'); await s.smith(maxLv, npc || 'smith'); } };
+    return { id: id, x: x, y: y, kind: 'smith', npc: npc || 'smith', run: async function (s) { await s.say(npc || 'smith', line || 'Want that blade of yours sharper? I can take it as far as level ' + maxLv + '.'); await s.smith(maxLv, npc || 'smith'); } };
   };
   L.talis = function (id, x, y, shopId, npc) {
-    return { id: id, x: x, y: y, npc: npc || 'talismaster', run: async function (s) { await s.say(npc || 'talismaster', 'A fighter\'s great blows spend the spirit. Burn incense, and it returns.'); await s.shop(shopId); } };
+    return { id: id, x: x, y: y, kind: 'talis', npc: npc || 'talismaster', run: async function (s) { await s.say(npc || 'talismaster', 'A fighter\'s great blows spend the spirit. Burn incense, and it returns.'); await s.shop(shopId); } };
   };
   L.save = function (id, x, y, npc) {
     return { id: id, x: x, y: y, npc: npc || 'recorder', run: async function (s) { var k = await s.ask(npc || 'recorder', 'Shall I set down the record of your journey?', ['Write a record', 'Not now']); if (k === 0) await s.saveMenu(); } };

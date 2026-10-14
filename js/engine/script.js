@@ -193,6 +193,11 @@
         return a;
       },
       despawn: function (key) { leave(key); },
+      // show the way on: twinkling motes at each spot ({ map, x, y, w }) until the story flag `until` is set
+      mark: function (spots, until) {
+        var st = WM.state; st.marks = (st.marks || []).filter(function (m) { return !(m.until && S.has(m.until)); });
+        (spots || []).forEach(function (sp) { st.marks.push({ map: sp.map, x: sp.x, y: sp.y, w: sp.w || 1, until: until }); });
+      },
       // what someone left standing after the scene says when the player talks to them (a line, or several)
       idle: function (key, lines) { var a = F().findActor(key); if (a && a.ev) a.ev.idle = lines; },
       spawnBeast: function (key, art, tx, ty, dir, params) { var a = F().addBeast(key, art, tx, ty, dir, params); enter(a, null, tx, ty, dir); return a; },

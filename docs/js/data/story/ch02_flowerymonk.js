@@ -295,6 +295,7 @@
       s.despawn('zhizhen');
       s.flag('ch2_scolded');
       await s.narrate('For three or four months after that, he did not dare leave the monastery. But one warm day in the second month he strolled out of the gate, and looking down from the hill, he saw the market town at the foot of the mountain, and heard the ring of a smith\'s hammer.');
+      s.mark([{ map: 'wutai', x: 16, y: 41, w: 3 }, { map: 'wutai_town', x: 6, y: 7 }], 'ch2_staff');   // down the mountain, to the smithy
     } }
   ]);
 
@@ -366,6 +367,7 @@
         await s.notice('Lu Zhishen ordered an iron Chan staff of sixty-two catties.', { auto: 2 });
         WM.state.chars.luzhishen.wlv = Math.max(WM.state.chars.luzhishen.wlv, 4);
         await s.say('smith', 'Come back in a few days for it. And Reverend... the taverns here won\'t sell to monks. Just so you know.');
+        s.mark([{ map: 'wutai_town', x: 30, y: 11 }], 'ch2_dogmeat');   // the little stall at the edge of town, where nobody knows him
       } else {
         await s.say('smith', 'Your staff is ready, Reverend. Sixty-two catties. I\'ve never forged anything like it.');
         await s.smith(6, 'smith');
@@ -385,20 +387,33 @@
       await s.narrate('Zhishen tore into the dog meat with both hands and drank ten bowls of wine, one after another. He paid with a piece of silver, stuffed a leftover dog leg into his robe, and said, "Keep the change. I\'ll be back tomorrow."');
       s.flag('ch2_dogmeat');
       await s.narrate('He collected his staff from the smith and climbed back up the mountain. The wine rose in him with every step.');
+      s.mark([{ map: 'wutai_town', x: 16, y: 0, w: 2 }, { map: 'wutai', x: 15, y: 22, w: 7 }], 'ch2_expelled');   // back up to the mountain gate
     } }
   ]);
   WM.defEvents('wutai', [
-    { id: 'ch2_gate2', x: 15, y: 20, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_dogmeat'); }, run: async function (s) {
+    // outside the mountain gate: the gatekeepers see him coming and bar it
+    { id: 'ch2_gate2', x: 15, y: 22, w: 7, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_dogmeat'); },
+      idle: { m1: '(The gatekeeper squints down the path at you, and his hand creeps towards the bolt.)', m2: 'Is that Brother Zhishen coming up the path? Swaying like a reed in the wind? Amitabha...' },
+      run: async function (s) {
+      s.spawn('m1', 'wutaimonk', 17, 21, 'down'); s.spawn('m2', 'wutaimonk', 18, 21, 'down');   // the gatekeepers, in the gateway
       s.music('tense');
       await s.narrate('In the pavilion half-way up, he swung his arms and stretched his legs. "I haven\'t practised in an age. My joints are rusting." He took hold of a pillar of the pavilion and gave it a shake. The pillar cracked, and half the pavilion came down with a crash.');
       s.sfx('earth'); await s.shake(4, 0.5);
-      await s.say('wutaimonk', 'It\'s Zhishen — drunk again! Bar the gate! Bar the gate!');
-      await s.narrate('The gatekeepers shut the mountain gate and bolted it. Zhishen pounded on it with his fists, and then he turned and saw the two great guardian kings standing in the gateway.');
+      await s.emote('m1', '!');
+      await s.say('wutaimonk:shock', 'It\'s Zhishen — drunk again! Bar the gate! Bar the gate!');
+      s.move('m1', 'U3', { run: true, wait: false }); await s.move('m2', 'U3', { run: true });
+      s.sfx('door'); s.flag('shut:wutai'); await s.shake(2, 0.2);
+      await s.narrate('The gatekeepers slammed the mountain gate and shot the bolt. Zhishen pounded on it with his fists until the leaves shook, and then he turned and saw the two great guardian kings glaring down at him from the wings of the gate.');
       await s.say('luzhishen:angry', 'You great lumps! Instead of opening the gate for me, you stand there waving your fists at me? Do you think I\'m afraid of you?');
       s.sfx('crit'); await s.shake(6, 0.5);
       await s.narrate('He leapt onto the pedestal, wrenched at the railing, broke off a pole and beat the guardian on the left until the clay and plaster came crashing down. Then he turned on the guardian on the right — "You open your mouth and laugh at me too?" — and kicked it so hard it toppled off its pedestal.');
       s.sfx('earth'); await s.shake(6, 0.5);
-      s.spawn('m1', 'wutaimonk', 16, 18, 'down'); s.spawn('m2', 'wutaimonk', 19, 18, 'down'); s.spawn('m3', 'wutaimonk', 17, 17, 'down');
+      // the gatekeepers, terrified, draw the bolt, and he tumbles in through the gate
+      await s.narrate('Inside, the gatekeepers heard the guardian come down and thought the whole gate would follow. They drew back the bolt and ran — and Zhishen, who was leaning on the leaves, tumbled in head first.');
+      s.unflag('shut:wutai'); s.sfx('door');
+      await s.moveTo('player', 17, 19, { run: true });
+      s.spawn('m3', 'wutaimonk', 17, 16, 'down');
+      s.move('m1', 'L1', { wait: false }); s.move('m2', 'R1', { wait: false });
       await s.say('wutaimonk:angry', 'Brothers! Take up your staves! He\'s pulled down the guardian kings!');
       await s.battle('ch2_monks2', { bg: 'temple' });
       await s.narrate('Zhishen cleared the hall with his staff. The monks who had tried to block him were laid out on every side, and he smashed his way into the meditation hall, where he flung pieces of dog meat into the faces of the meditating monks and stuffed it into one old monk\'s mouth.');

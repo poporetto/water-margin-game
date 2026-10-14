@@ -566,6 +566,8 @@
     var pt = F.player.tile(), room = roomAt(F.map, pt.x, pt.y);
     var elsewhere = function (x, y) { var r = roomAt(F.map, x, y); return room >= 0 && r >= 0 && r !== room; };
 
+    drawSigns(c, cx, cy);
+
     // y-sorted pass
     var list = [];
     var th = T.THEMES[F.map.theme] || T.THEMES.spring;
@@ -592,6 +594,7 @@
     }
     // emotes on top
     for (i = 0; i < all.length; i++) if (all[i].emote && all[i].visible) drawEmote(c, all[i], cx, cy);
+    drawMarks(c, cx, cy);
     if (room >= 0) {
       c.fillStyle = '#000';
       var x0 = Math.max(0, Math.floor(cx / TS)), y0 = Math.max(0, Math.floor(cy / TS));
@@ -620,9 +623,122 @@
       G.text(F.nameBanner.text, WM.W / 2, 40 + 29 + 1, { size: 26, bold: true, align: 'center', baseline: 'middle', color: G.COL.gold });   // centred in the plate
       G.ctx.globalAlpha = 1;
     }
-    if (F.map.def.world) drawWorldLabel();
+    if (F.map.def.world) drawWorldLabel(); else drawSignLabel(cx, cy);
     if (F.draw.hook) F.draw.hook();
   };
+
+  // ---------- what each building is ----------
+  // A door that leads into a room with an innkeeper, a smith or a shopkeeper gets that trade's signboard hung on the
+  // wall beside it, and its name shown when the player comes near. Worked out from the events inside the room.
+  var SIGN_NAME = { smith: 'Smithy', inn: 'Inn', armour: 'Armourer & Tailor', goods: 'General Store', talis: 'Incense Shop' };
+  var SIGN_ORDER = ['smith', 'inn', 'armour', 'goods', 'talis'];
+  function tradeOf(ev) {
+    if (ev.kind === 'shop') {
+      var sh = WM.data.shops[ev.shop], its = (sh && sh.items) || [];
+      var gear = its.filter(function (id) { var it = WM.data.items[id]; return it && it.type !== 'use'; }).length;
+      return gear * 2 > its.length ? 'armour' : 'goods';
+    }
+    if (ev.kind) return ev.kind;
+    var src = ev.run ? String(ev.run) : '';
+    if (/s\.smith\(/.test(src)) return 'smith';
+    if (/s\.inn\(/.test(src)) return 'inn';
+    if (/s\.shop\(/.test(src)) return 'goods';
+    return null;
+  }
+  function signsOf(map) {
+    if (map.signs) return map.signs;
+    var out = map.signs = [];
+    if (map.interior || map.def.world) return out;
+    (map.def.exits || []).forEach(function (e) {
+      var to = WM.data.maps[e.to];
+      if (!to || !to.interior || map.get(e.x, e.y) !== 'D') return;
+      var rows = typeof to.rows === 'function' ? (to._rows || []) : to.rows;
+      var at = function (x, y) { return (rows[y] || '')[x]; };
+      var seen = {}, q = [[e.tx, e.ty]]; seen[e.tx + ',' + e.ty] = 1;
+      while (q.length && q.length < 2000) {
+        var p = q.pop();
+        [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) {
+          var nx = p[0] + d[0], ny = p[1] + d[1], ch = at(nx, ny), k = nx + ',' + ny;
+          if (seen[k] || ch == null || ch === 'X' || ch === 'x' || ch === 'D') return;
+          seen[k] = 1; q.push([nx, ny]);
+        });
+      }
+      var kinds = (WM.data.events[e.to] || []).filter(function (ev) { return seen[ev.x + ',' + ev.y]; }).map(tradeOf);
+      var kind = SIGN_ORDER.filter(function (k) { return kinds.indexOf(k) >= 0; })[0];
+      if (!kind) return;
+      var side = T.isWallChar(map.get(e.x + 1, e.y)) && map.get(e.x + 1, e.y) !== 'D' ? 1 : -1;
+      out.push({ x: e.x, y: e.y, bx: e.x + side, kind: kind });
+    });
+    return out;
+  }
+  function drawSigns(c, cx, cy) {
+    signsOf(F.map).forEach(function (sg) {
+      var x = sg.bx * TS - cx, y = sg.y * TS - cy;
+      if (x < -16 || y < -16 || x > WM.LOW_W || y > WM.LOW_H + 16) return;
+      var px = function (a, b, w, h, col) { c.fillStyle = col; c.fillRect(x + a, y + b, w, h); };
+      var bg = { smith: '#3a2a20', inn: '#7a2a20', armour: '#34384a', goods: '#2a4a36', talis: '#4a2a3e' }[sg.kind];
+      px(7, -3, 2, 2, '#3a2412'); px(4, -2, 8, 1, '#3a2412');                // the iron bracket under the eave
+      px(5, -1, 1, 2, '#3a2412'); px(10, -1, 1, 2, '#3a2412');
+      px(3, 1, 10, 13, '#c8a050'); px(4, 2, 8, 11, bg);                       // the board, with a gilt edge
+      var ix = 5, iy = 3, t = WM.time || 0;
+      if (sg.kind === 'smith') {          // hammer over an anvil, and a spark now and then
+        px(ix + 3, iy, 1, 4, '#8a6a3a'); px(ix + 1, iy, 4, 2, '#c8c8d0');
+        px(ix, iy + 5, 6, 2, '#a8a8b4'); px(ix + 2, iy + 7, 2, 1, '#8a8a94'); px(ix + 1, iy + 8, 4, 1, '#8a8a94');
+        if (Math.sin(t * 5 + sg.x) > 0.6) { px(ix + 5, iy + 3, 1, 1, '#ffd060'); px(ix - 1, iy + 4, 1, 1, '#ff9030'); }
+      } else if (sg.kind === 'inn') {     // a crescent moon over a pillow: a bed for the night
+        px(ix + 2, iy, 3, 1, '#e8c860'); px(ix + 1, iy + 1, 1, 3, '#e8c860'); px(ix + 2, iy + 4, 3, 1, '#e8c860'); px(ix + 2, iy + 1, 1, 1, '#e8c860'); px(ix + 2, iy + 3, 1, 1, '#e8c860');
+        px(ix, iy + 6, 6, 2, '#e8e0cc'); px(ix, iy + 8, 6, 1, '#a8a08c');
+      } else if (sg.kind === 'armour') {  // a helmet with a red tassel, over a coat
+        px(ix + 2, iy, 2, 1, '#c8302a'); px(ix + 1, iy + 1, 4, 3, '#b8b8c4'); px(ix, iy + 4, 6, 1, '#8a8a96');
+        px(ix + 1, iy + 6, 4, 3, '#8a5a3a'); px(ix, iy + 6, 1, 2, '#8a5a3a'); px(ix + 5, iy + 6, 1, 2, '#8a5a3a');
+      } else if (sg.kind === 'goods') {   // a tied sack and a string of cash
+        px(ix + 2, iy, 2, 1, '#8a6a3a'); px(ix + 1, iy + 1, 4, 5, '#d8b888'); px(ix + 1, iy + 1, 4, 1, '#b89868');
+        px(ix, iy + 7, 6, 1, '#c8a050'); px(ix + 1, iy + 6, 1, 3, '#e8c860'); px(ix + 4, iy + 6, 1, 3, '#e8c860');
+      } else if (sg.kind === 'talis') {   // three sticks of incense, smoking
+        px(ix + 1, iy + 4, 1, 5, '#c84a2a'); px(ix + 3, iy + 3, 1, 6, '#c84a2a'); px(ix + 5, iy + 4, 1, 5, '#c84a2a'); px(ix, iy + 8, 7, 1, '#a88a40');
+        var wv = Math.round(Math.sin(t * 2 + sg.x));
+        px(ix + 3 + wv, iy + 1, 1, 2, '#c8c8c8'); px(ix + 1 - wv, iy + 2, 1, 1, '#a8a8a8');
+      }
+    });
+  }
+  function drawSignLabel(cx, cy) {
+    var p = F.player.tile(), best = null, bd = 3;
+    signsOf(F.map).forEach(function (sg) { var d = Math.abs(sg.x - p.x) + Math.abs(sg.y - p.y); if (d < bd) { bd = d; best = sg; } });
+    if (!best || WM.ui.stack.length || WM.script.running) return;
+    var k = WM.W / WM.LOW_W, name = SIGN_NAME[best.kind];
+    var sx = (best.x * TS + 8 - cx) * k, sy = (best.y * TS - cy) * k - 52;
+    var tw = G.measure(name, 18, true) + 28;
+    G.window(sx - tw / 2, sy, tw, 34, { top: '#2a1e12', bottom: '#120c06' });
+    G.text(name, sx, sy + 7, { size: 18, bold: true, align: 'center', color: G.COL.gold });
+  }
+
+  // ---------- where the story goes next ----------
+  // A scene can mark the way on (s.mark): a doorway, an exit, a person. Twinkling motes show there until the flag
+  // that ends that step of the story is set.
+  function drawMarks(c, cx, cy) {
+    var marks = (WM.state && WM.state.marks) || [];
+    var t = WM.time || 0;
+    marks.forEach(function (mk, n) {
+      if (mk.map !== F.map.id || (mk.until && S.has(mk.until))) return;
+      for (var dx = 0; dx < (mk.w || 1); dx++) {
+        var x0 = (mk.x + dx) * TS - cx, y0 = mk.y * TS - cy;
+        if (x0 < -16 || y0 < -32 || x0 > WM.LOW_W || y0 > WM.LOW_H) continue;
+        // a soft golden glow on the ground, breathing
+        var pulse = 0.5 + 0.5 * Math.sin(t * 3 + dx);
+        c.globalAlpha = 0.18 + 0.17 * pulse; c.fillStyle = '#ffe070';
+        c.beginPath(); c.ellipse(x0 + 8, y0 + 12, 7, 3, 0, 0, Math.PI * 2); c.fill();
+        for (var i = 0; i < 4; i++) {
+          var ph = (t * 0.7 + i / 4 + dx * 0.37 + n * 0.21) % 1;              // each mote rises and fades, then starts again
+          var sx = Math.round(x0 + 2 + U.hash2(mk.x + dx, i, 31) * 12), sy = Math.round(y0 + 14 - ph * 22);
+          var a = Math.sin(ph * Math.PI);
+          c.globalAlpha = a; c.fillStyle = '#ffd860';
+          c.fillRect(sx - 2, sy, 5, 1); c.fillRect(sx, sy - 2, 1, 5);          // a four-pointed star
+          c.fillStyle = '#ffffff'; c.fillRect(sx, sy, 1, 1);
+        }
+      }
+      c.globalAlpha = 1;
+    });
+  }
 
   function drawWorldLabel() {
     var p = F.player.tile(), best = null, bd = 4;   // name the place you are standing beside

@@ -81,9 +81,9 @@
   // monastery terrace
   w.rect(3, 2, 30, 20, '.');
   w.frame(3, 2, 30, 20, 'R');
-  w.rect(16, 21, 4, 1, '=');
+  // the mountain gate: a gate hall in the wall, the two guardian kings standing in its wings, facing out
+  w.rect(16, 21, 4, 1, 'G'); w.set(15, 21, 'U'); w.set(20, 21, 'U');
   w.rect(16, 15, 4, 6, '=');
-  w.set(15, 19, 'U'); w.set(20, 19, 'U');        // the two guardian kings at the mountain gate
   w.set(14, 20, 'L'); w.set(21, 20, 'L');
   var mainHall = w.house(11, 3, 14, 7, { roof: 'Z', wall: 'R', door: 7 });
   w.rect(17, 10, 2, 5, '=');
