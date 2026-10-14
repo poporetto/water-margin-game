@@ -244,7 +244,12 @@
       for (var i = 0; i < F.actors.length; i++) {
         var o = F.actors[i];
         if (o === a || !o.visible || !o.solid) continue;
-        if (Math.abs(o.x - x) < 11 && Math.abs(o.y - y) < 8) return true;
+        if (Math.abs(o.x - x) < 11 && Math.abs(o.y - y) < 8) {
+          // already pressed against someone (they wandered into us): stepping away from them is always allowed
+          var now = Math.abs(o.x - a.x) < 11 && Math.abs(o.y - a.y) < 8;
+          if (now && Math.abs(o.x - x) + Math.abs(o.y - y) > Math.abs(o.x - a.x) + Math.abs(o.y - a.y)) continue;
+          return true;
+        }
       }
     }
     if (!a.isPlayer && F.player && a.solid && !a.path.length) {

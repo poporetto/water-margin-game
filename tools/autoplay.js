@@ -163,7 +163,7 @@
         const kk = t.x < p[0] ? 'ArrowRight' : t.x > p[0] ? 'ArrowLeft' : t.y < p[1] ? 'ArrowDown' : 'ArrowUp';
         window.dispatchEvent(new KeyboardEvent('keydown', { code: kk })); await frames(3); window.dispatchEvent(new KeyboardEvent('keyup', { code: kk })); await frames(1);
         if (WM.ui.busy() || WM.script.running || WM.scene !== WM.field || f.map !== m || f.transitioning) return 'interrupted';
-        if (guard === 49) return 'stuck@' + t.x + ',' + t.y;
+        if (guard === 49) return 'stuck@' + t.x + ',' + t.y + ' next ' + p + ' tile "' + f.map.get(p[0], p[1]) + '" near: ' + f.actors.filter((a) => a !== f.player && Math.abs(a.tile().x - t.x) + Math.abs(a.tile().y - t.y) <= 2).map((a) => (a.sheetWho || a.sheetId || '?') + '@' + a.tile().x + ',' + a.tile().y + (a.solid ? ' solid' : '') + (a.lingering ? ' lingering' : '') + (a.static ? ' static=' + a.static : '')).join('; ');
       }
     }
     return 'arrived';

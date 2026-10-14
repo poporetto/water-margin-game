@@ -130,7 +130,11 @@
     var f = F(), a = f.findActor(key);
     if (!a || !a.ev || !a.ev.temp) { f.removeActor(key); return; }
     if (a.finishEntrance) a.finishEntrance();
-    if (instant(a.sheetWho) || !a.visible || a.static) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
+    // a party member is already at the leader's side: they go quietly, but not before the scene moves on (so they
+    // are still there while a fade to black darkens over them)
+    var quiet = typeof a.sheetWho === 'string' && WM.state.party.indexOf(a.sheetWho) >= 0 && a.visible && !a.static;
+    if (!quiet && (instant(a.sheetWho) || !a.visible || a.static)) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
+    if (quiet) { a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false; a.quiet = true; pending.push(a); return; }
     a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false;
     a.leaveTo = opt && opt.to;   // somewhere of their own to go (their house, their post), not just the nearest way out
     a.leaveOpt = !!(opt && (opt.leave || opt.to));   // the story has them leave; otherwise they stay where they are
@@ -170,7 +174,8 @@
     // the scene goes on: those the story sends away go now (and new party members fall in); the rest stay put
     var joined = function (a) { return a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0; };
     // beasts (the tiger, the serpent, the herd-boy's ox) never stand about: sent off, they go
-    var flush = function () { var keep = []; pending.forEach(function (a) { if (a.leaveOpt || joined(a) || a.img) go(a); else keep.push(a); }); pending = keep; };
+    var drop = function (a) { F().actors = F().actors.filter(function (o) { return o !== a; }); };
+    var flush = function () { var keep = []; pending.forEach(function (a) { if (a.quiet) drop(a); else if (a.leaveOpt || joined(a) || a.img) go(a); else keep.push(a); }); pending = keep; };
     var s = {
       S: S, ctx: ctx,
       get state() { return WM.state; },
@@ -394,10 +399,20 @@
     });
     var fadeIn0 = s.fadeIn; s.fadeIn = function () { WM.chapterDark = false; return fadeIn0.apply(this, arguments); };
     // the scene goes on: whoever was sent off now leaves (see sendOff)
-    ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'walkTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach(function (k) {
+    ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'move', 'moveTo', 'walkTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach(function (k) {
       var f0 = s[k]; if (typeof f0 !== 'function') return;
       s[k] = function () { flush(); return f0.apply(this, arguments); };
     });
+    // a fade to black: those sent off stay in the picture while it darkens, and are gone once it is dark (no one
+    // vanishes, or turns to walk away, in the second before the scene goes black)
+    var fadeOut0 = s.fadeOut;
+    s.fadeOut = function () {
+      return fadeOut0.apply(this, arguments).then(function () {
+        var f = F(), keep = [];
+        pending.forEach(function (a) { if (a.leaveOpt || joined(a) || a.img) f.actors = f.actors.filter(function (o) { return o !== a; }); else keep.push(a); });
+        pending = keep;
+      });
+    };
     var say0 = s.say;
     s.say = function (who, text) {
       var id = typeof who === 'string' ? who.split(':')[0] : null, last = Array.isArray(text) ? text[text.length - 1] : text;
@@ -405,7 +420,7 @@
       return say0.apply(this, arguments);
     };
     // the scene is over: anyone sent off at its very end stays where they are (new party members still fall in)
-    s._end = function () { var p = pending; pending = []; p.forEach(function (a) { if (a.img || (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0)) go(a); else stay(a, lines); }); };
+    s._end = function () { var p = pending; pending = []; p.forEach(function (a) { if (a.quiet) drop(a); else if (a.img || (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0)) go(a); else stay(a, lines); }); };
     return s;
   }
   SC.makeApi = makeApi;
