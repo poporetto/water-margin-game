@@ -236,12 +236,12 @@
       await s.battle('ch1_raid', { bg: 'plains' });
       await s.say('chenda:angry', 'Enough of these village boys. You and me, Nine Dragons!');
       await s.duel('shijin_chenda');
-      s.despawn('b1', { leave: true }); s.despawn('b2', { leave: true });
-      await s.narrate('The two fought back and forth on the road. At last Shi Jin feinted, let Chen Da\'s spear thrust past him, seized him by the belt and dragged him from his horse. The bandits fled back up the mountain. The villagers bound Chen Da and dragged him to the manor.');
-      s.despawn('chenda', { leave: true });
-      s.flag('ch1_captured');
+      s.lie('b1'); s.lie('b2'); s.lie('chenda');   // beaten down on the road
+      await s.narrate('The two fought back and forth on the road. At last Shi Jin feinted, let Chen Da\'s spear thrust past him, seized him by the belt and dragged him from his horse. The bandits who could still stand fled back up the mountain. The villagers bound Chen Da and dragged him to the manor.');
       s.music('field');
       await s.say('shijin', 'Tie him to a pillar in the yard. When we have the other two as well, we\'ll hand all three to the magistrate and claim the reward.');
+      s.despawn('chenda');   // carried off to the yard, where he is bound to the pillar
+      s.flag('ch1_captured');
     } },
     { id: 'ch1_bound', x: 13, y: 14, char: 'chenda', dir: 'down', cond: function (S2) { return S2.has('ch1_captured') && !S2.has('ch1_oath'); }, text: ['(Chen Da glowers at you from the pillar he is tied to.)'] },
     { id: 'ch1_plea', x: 14, y: 22, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_captured'); }, idle: { zhuwu: 'We have come on foot, without weapons. Tell Master Shi that Zhu Wu and Yang Chun of Mount Shaohua are at his gate.', yangchun: '(Yang Chun stands in the road with his empty hands at his sides, and says nothing.)', sv: 'Young master! There are two men at the gate — from the mountain!' },
