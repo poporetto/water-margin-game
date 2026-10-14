@@ -379,6 +379,9 @@
       s.lie('player', false);
       await s.warp('chaimanor_in', 10, 7, 'up', { noFade: true });
       s.spawn('chaijin', 'chaijin', 10, 5, 'down');
+      s.spawn('fh1', 'farmer', 9, 7, 'right'); s.spawn('fh2', 'farmer', 11, 7, 'left');   // the farmhands who tied him and dragged him here
+      s.idle('fh1', 'Forgive us, sir! How were we to know you were the master\'s friend? ...You did drink the whole jar, though.');
+      s.idle('fh2', '(He rubs the bruise on his jaw, and keeps well out of reach of your fists.)');
       s.tint(null);
       await s.fadeIn(1);
       await s.say('chaijin:shock', 'Instructor Lin! Untie him, you fools! ...So it\'s true. The depot burned, and you killed three men. The whole of Cangzhou is out looking for you.');
