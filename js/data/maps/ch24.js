@@ -4,7 +4,7 @@
 (function () {
   var L = WM.mapLib, U = WM.util;
   var c = L.grid(16, 11, 'x'); var cR = c.room(1, 1, 14, 9, { floor: 'K' });
-  c.stamp(2, 3, ['h...UU....h.', '....AA......', '..t......t..', '............']);
+  c.stamp(2, 3, ['h.EEEEEE..h.', '...q00q.....', '..taaaa..t..', '............']);   // the prefect's hall
   WM.defMap('chuzhou_in', { name: 'The Prefect\'s Hall, Chuzhou', interior: true, theme: 'autumn', music: 'sad', rows: c.rows(), spawn: [7, 8] });
 
   var l = L.grid(40, 30, 'w');

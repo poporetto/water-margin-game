@@ -20,7 +20,7 @@
   WM.defMap('dongping', { name: 'Dongping', theme: 'spring', music: 'tense', rows: d.rows(), spawn: [1, 17], battleBg: 'town',
     exits: [WM.toWorld('dongping', 0, 16, 1, 3)] });
   var di = L.grid(44, 11, 'x'); var dR = { hall: di.room(1, 1, 14, 9, { floor: 'K' }), jail: di.room(16, 1, 12, 9, { floor: 'N' }), rui: di.room(29, 1, 13, 9, { floor: 'K' }) };
-  di.stamp(2, 3, ['h...UU....h.', '....AA......', '..t......t..']);
+  di.stamp(2, 3, ['h.EEEEEE..h.', '...q00q.....', '..taaaa..t..']);   // the prefect's hall
   di.stamp(17, 3, ['F.FF.FF.FF', 'F..F..F..F', '..........']);
   di.stamp(30, 3, ['k..h...L..k', '...........', '..t...t....']);
   WM.defMap('dongping_in', { name: '', interior: true, theme: 'spring', music: 'tense', rows: di.rows(), spawn: [8, 8] });

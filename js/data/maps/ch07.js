@@ -51,7 +51,7 @@
     exits: [WM.toWorld('yanggu', 20, 33, 3, 1)] });
   var yi = L.grid(70, 12, 'x');
   var yR = { office: yi.room(1, 1, 12, 9, { floor: 'N' }), dalang: yi.room(14, 1, 10, 9), wang: yi.room(25, 1, 8, 8), ximen: yi.room(34, 1, 10, 8), lion: yi.room(45, 1, 14, 10), hejiu: yi.room(60, 1, 8, 8) };
-  yi.stamp(2, 3, ['h..UU..h.', '...AA....', '..t...t..']);
+  yi.stamp(2, 3, ['hEEEEEEh.', '..q00q...', '..aaaa...']);   // the county hall
   yi.stamp(15, 3, ['k...j...', '........', '..t..ttt', '........']);
   yi.stamp(26, 3, ['h..j..', '.t..t.', 'cc....']);
   yi.stamp(35, 3, ['hhhhhh..', '........', 'cccc....']);

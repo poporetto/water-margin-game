@@ -19,7 +19,7 @@
     exits: [WM.toWorld('huazhou', 21, 37, 4, 1)] });
   var hi = L.grid(42, 11, 'x');
   var hR = { hall: hi.room(1, 1, 16, 10, { floor: 'K' }), jail: hi.room(18, 1, 12, 9, { floor: 'N' }), inn: hi.room(31, 1, 10, 8) };
-  hi.stamp(2, 3, ['h...UU....UU..', '....AA....AA..', '..t........t..', '..............']);
+  hi.stamp(2, 3, ['h...EEEEEE...h', '.....q00q.....', '..t..aaaa..t..', '..............']);   // the prefect's hall
   hi.stamp(19, 3, ['F.FF.FF.FF', 'F..F..F..F', '..........']);
   hi.stamp(32, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('huazhou_in', { name: '', interior: true, theme: 'summer', music: 'tense', rows: hi.rows(), spawn: [8, 8] });

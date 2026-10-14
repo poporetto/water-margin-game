@@ -458,6 +458,52 @@
     var a = t * 0.9, ox = Math.round(Math.cos(a) * 18), oy = Math.round(Math.sin(a) * 5), fl = Math.sin(t * 9) > 0 ? 0 : 2;
     px(c, x + 8 + ox, y - 50 + oy, 2, 1, '#141414'); px(c, x + 6 + ox, y - 51 + oy + fl, 2, 1, '#141414'); px(c, x + 10 + ox, y - 51 + oy + fl, 2, 1, '#141414');
   }
+  // ---- a Song government hall: the official's dais and chair, his desk, and the great painted screen behind ----
+  function runOf(m, tx, ty, ch) { var x0 = tx; while (m.get(x0 - 1, ty) === ch) x0--; var n = 1; while (m.get(x0 + n, ty) === ch) n++; return { x0: x0, n: n }; }
+  function dais(c, x, y, tx, ty, th, m) {
+    // a raised platform of polished boards; its front edge steps down to the hall floor
+    px(c, x, y, S, S, '#7a4a2a'); for (var r = 0; r < 4; r++) px(c, x, y + r * 4 + 3, S, 1, '#6a3e22');
+    px(c, x, y, S, 1, '#9a6a3e');
+    var below = m.get(tx, ty + 1); if (below !== 'q' && below !== '0' && below !== 'a') { px(c, x, y + 13, S, 3, '#4a2a14'); px(c, x, y + 13, S, 1, '#a8784a'); }
+  }
+  function screenTall(c, x, y, tx, ty, th, m) {
+    // one long screen across the run of 'E': a lacquer frame, and in it the sea and the rising sun (海水朝日)
+    if (m.get(tx - 1, ty) === 'E') return;
+    var n = runOf(m, tx, ty, 'E').n, W = n * S, X = x, top = y - 18, H = 32, cx = X + W / 2;
+    px(c, X, top, W, H, '#4a160e'); px(c, X + 1, top + 1, W - 2, H - 2, '#c8a040'); px(c, X + 2, top + 2, W - 4, H - 4, '#e6d6aa');   // frame, gilt line, silk
+    px(c, X + 2, top + 2, W - 4, 3, '#e8c86a');                                                                                     // gold sky at the top
+    c.fillStyle = '#c8302a'; c.beginPath(); c.arc(cx, top + 11, 4, 0, Math.PI * 2); c.fill();                                     // the sun
+    px(c, X + 6, top + 8, 7, 1, '#d8c8a0'); px(c, X + W - 14, top + 7, 8, 1, '#d8c8a0');                                         // thin clouds
+    var sea = top + 15;
+    px(c, X + 2, sea, W - 4, H - 17, '#2f6a6a');
+    for (var k = X + 3; k < X + W - 4; k += 6) {                                                                                     // curling crests
+      var o = (k * 7) % 3; px(c, k, sea + o, 4, 1, '#e8f0e8'); px(c, k + 3, sea + o + 1, 1, 1, '#e8f0e8');
+      px(c, k + 1, sea + 5 + o, 3, 1, '#9ac8c0'); px(c, k + 2, sea + 9, 3, 1, '#4a8a86');
+    }
+    for (var j = 1; j < n; j++) px(c, X + j * S, top + 2, 1, H - 4, '#8a6a3a');                                                    // the folds between panels
+    px(c, X - 1, top - 2, W + 2, 2, '#4a160e'); px(c, X + 2, top + H, 2, 2, '#3a1208'); px(c, X + W - 4, top + H, 2, 2, '#3a1208');  // cap and feet
+  }
+  function chairTall(c, x, y, tx, ty, th, m) {
+    // the official's great chair: a high carved back, armrests, a seat with a red cushion
+    if (m.get(tx - 1, ty) === '0') return;
+    var n = runOf(m, tx, ty, '0').n, W = n * S, X = x;
+    px(c, X + 2, y - 14, W - 4, 16, '#5a1a10'); px(c, X + 4, y - 12, W - 8, 12, '#7a2a1c'); px(c, X + 2, y - 14, W - 4, 1, '#c8a040');   // back
+    px(c, X + W / 2 - 3, y - 11, 6, 8, '#c8a040'); px(c, X + W / 2 - 2, y - 10, 4, 6, '#9a2a1e');                                         // carved panel
+    px(c, X + 1, y - 2, 3, 10, '#5a1a10'); px(c, X + W - 4, y - 2, 3, 10, '#5a1a10');                                                     // arms
+    px(c, X + 3, y + 2, W - 6, 6, '#9a2a1e'); px(c, X + 3, y + 2, W - 6, 1, '#c84a3a');                                                   // seat cushion
+  }
+  function deskTall(c, x, y, tx, ty, th, m) {
+    // the judge's desk: a red cloth to the floor, and on it the seal box, the brush stand, the tally tube and the gavel
+    if (m.get(tx - 1, ty) === 'a') return;
+    var n = runOf(m, tx, ty, 'a').n, W = n * S, X = x;
+    px(c, X, y + 1, W, 4, '#3a1e10'); px(c, X, y + 1, W, 1, '#6a3e22');                                         // the top
+    px(c, X, y + 5, W, 11, '#9a2a1e'); px(c, X, y + 5, W, 1, '#c8a040'); px(c, X, y + 15, W, 1, '#5a140e');     // the cloth
+    for (var k = X + 4; k < X + W - 2; k += 6) px(c, k, y + 9, 2, 2, '#c8a040');                                  // embroidery
+    px(c, X + 3, y - 2, 5, 4, '#c8a040'); px(c, X + 4, y - 3, 3, 1, '#e8c860');                                   // seal box
+    px(c, X + W - 9, y - 6, 4, 8, '#9a2a1e'); for (var q = 0; q < 3; q++) px(c, X + W - 9 + q + (q > 1 ? 0 : 0), y - 9, 1, 3, '#e8d8a8');   // tally tube
+    px(c, X + W / 2 - 4, y - 1, 4, 2, '#4a2a14');                                                                   // the gavel block
+    px(c, X + W / 2 + 2, y - 4, 1, 5, '#2a1a10'); px(c, X + W / 2 + 4, y - 4, 1, 5, '#2a1a10'); px(c, X + W / 2 + 1, y, 5, 2, '#5a4a3a');   // brush stand
+  }
   // A great hall's column: red lacquer on a carved stone base, rising out of sight with a gilded bracket at the top.
   function pillar(c, x, y, tx, ty) {
     floorStone(c, x, y, tx, ty);
@@ -695,6 +741,10 @@
     'd': { draw: door, solid: true, shut: true },   // a house's own door, shut: nobody lives there for the player to visit
     'u': { draw: stall, tall: stallTall, solid: true },
     'i': { draw: pillar, tall: pillarTall, solid: true },
+    'E': { draw: function (c, x, y, tx, ty) { floorStone(c, x, y, tx, ty); }, tall: screenTall, solid: true },   // painted screen behind an official's seat
+    'q': { draw: dais },                                                                                          // the raised dais
+    '0': { draw: dais, tall: chairTall },                                                                         // the official's chair (he stands on it, as if seated)
+    'a': { draw: function (c, x, y, tx, ty) { floorStone(c, x, y, tx, ty); }, tall: deskTall, solid: true },    // the judge's desk
     'l': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); }, tall: willowTall, solid: true },   // a weeping willow (crows' nest)   // a column of a great hall
     'n': { draw: floorWood },
     'N': { draw: floorStone },

@@ -62,7 +62,7 @@
     exits: [WM.toWorld('jiangzhou', 26, 0, 4, 1)] });
   var gi = L.grid(70, 12, 'x');
   var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'K' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7) };
-  gi.stamp(2, 3, ['h...UU....h...', '....AA........', '..t.......t...', '..t.......t...']);
+  gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..t.......t...']);   // the prefect's hall
   gi.stamp(19, 3, ['F.FFF.FFF.F.', 'k.F.k.F.k.F.', '..F...F...F.', 'FF.FFF.FFF..']);
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
   gi.stamp(44, 3, ['h..L.....L..', '.t..t..t..t.', '............', '.t..t..t....', 'cccc........']);

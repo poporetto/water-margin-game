@@ -37,7 +37,7 @@
   WM.defEvents('chuzhou_in', [
     { id: 'ch24_wine', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch24_chuzhou'); }, run: async function (s) {
       s.party(['songjiang']); s.setLeader('songjiang');
-      s.spawn('env', 'official', 7, 5, 'down');
+      s.spawn('env', 'official', 7, 4, 'down');
       await s.say('official', 'Imperial wine, sent by His Majesty to Commissioner Song.');
       s.despawn('env');
       await s.narrate('Song Jiang drank a cup in thanks, and the envoy would not drink with him, and left that same day. In the night Song Jiang felt the poison in his belly, and knew.');

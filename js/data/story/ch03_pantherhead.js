@@ -97,7 +97,7 @@
       await s.say('luqian:smile', 'Brother Lin! You look gloomy. Come and drink with me. The Fan Tower has a new wine from the south. It will do you good.');
       await s.say('linchong', '...Very well. Wife, I\'ll be back before dark.');
       await s.say('linwife', 'Don\'t drink too much.');
-      s.despawn('luqian');   // he goes on ahead to the Fan Tower; Lady Zhang stays at home
+      s.despawn('luqian', { leave: true });   // he goes on ahead to the Fan Tower; Lady Zhang stays at home
       s.idle('wife', 'Go and drink with Brother Lu, then — but come home before dark. I\'ll keep the lamp lit.');
       await s.say(null, '(The Fan Tower is on the north side of the city, by the palace.)');
     } },
@@ -169,7 +169,7 @@
       await s.wait(0.6);
       await s.narrate('Lin Chong waited, sword in hand. A long time passed and no one came. He looked about him, and above the doorway of the hall he saw a blue tablet with four green characters: White Tiger Hall.');
       await s.say('linchong:shock', '(The White Tiger Hall! This is where the Marshal holds his councils of war. No one may enter here without being summoned — and certainly not with a blade! Why did they bring me here?)');
-      s.spawn('gaoqiu', 'gaoqiu', 19, 5, 'down');
+      s.spawn('gaoqiu', 'gaoqiu', 19, 4, 'down');
       s.spawn('g1', 'gaoofficer', 17, 6, 'down'); s.spawn('g2', 'gaoofficer', 21, 6, 'down');
       s.music('tense');
       await s.say('gaoqiu:angry', 'Lin Chong! I did not summon you. How dare you walk into the White Tiger Hall with a naked sword in your hand? You have come to murder me!');

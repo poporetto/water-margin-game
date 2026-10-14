@@ -160,7 +160,12 @@
     // the place has its own standing version of this person (a resident or shopkeeper): no double
     var twin = f.actors.some(function (o) { return o !== a && o.visible && o.ev && !o.ev.temp && (o.ev.npc === a.sheetWho || o.ev.char === a.sheetWho); });
     if (twin) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
-    a.ev.id = a.leavingKey; a.leavingKey = null; a.solid = true; a.lingering = true;
+    a.ev.id = a.leavingKey; a.leavingKey = null; a.lingering = true;
+    // never let someone standing about trap the player: on or beside a doorway or exit, they can be walked past
+    var t = a.tile(), nearWay = (f.map.def.exits || []).some(function (e) {
+      return t.x >= e.x - 1 && t.x <= e.x + (e.w || 1) && t.y >= e.y - 1 && t.y <= e.y + (e.h || 1);
+    });
+    a.solid = !nearWay;
     if (!a.ev.idle && lines[a.sheetWho]) a.ev.idle = lines[a.sheetWho];   // what they last said in the scene
   }
 

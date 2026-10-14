@@ -21,7 +21,7 @@
   WM.defMap('qingzhou', { name: 'Qingzhou', theme: 'autumn', music: 'tense', rows: q.rows(), spawn: [1, 19], battleBg: 'field',
     exits: [WM.toWorld('qingzhou', 0, 19, 1, 2)] });
   var qi = L.grid(30, 10, 'x'); var qR = { yamen: qi.room(1, 1, 14, 9, { floor: 'K' }), jail: qi.room(16, 1, 12, 9, { floor: 'N' }) };
-  qi.stamp(2, 3, ['h...UU....h.', '....AA......', '..t......t..']);
+  qi.stamp(2, 3, ['h.EEEEEE..h.', '...q00q.....', '..taaaa..t..']);   // the prefect's hall
   qi.stamp(17, 3, ['F.FF.FF.FF', 'F..F..F..F', '..........']);
   WM.defMap('qingzhou_in', { name: '', interior: true, theme: 'autumn', music: 'tense', rows: qi.rows(), spawn: [8, 8] });
   L.link({ map: 'qingzhou', x: yamen.x, y: yamen.y }, { map: 'qingzhou_in', x: qR.yamen.x, y: qR.yamen.y });

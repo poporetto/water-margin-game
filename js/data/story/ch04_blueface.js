@@ -114,7 +114,7 @@
     { id: 'ch4_arrive', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch4_exiled'); }, run: async function (s) {
       await s.narrate('The governor of Daming, Liang Zhongshu, was the son-in-law of the Prime Minister Cai Jing, and the most powerful man in the north. When the escorts brought Yang Zhi before him, he recognised him at once: he had known the young officer in the capital.');
       await s.warp('daming_in', 12, 10, 'up', { noFade: true });
-      s.spawn('liang', 'liangzhongshu', 12, 5, 'down');
+      s.spawn('liang', 'liangzhongshu', 12, 4, 'down');
       await s.say('liangzhongshu', 'Yang Zhi! A descendant of the Yang generals, branded and exiled for killing a ruffian. What a waste of a man. I will keep you here at my yamen.');
       await s.say('yangzhi', 'I am grateful, Excellency.');
       await s.say('liangzhongshu', 'I would like to give you a commission at once. But the officers will grumble that I favour a convict. Tomorrow I review the troops at the drill ground. Show us what you can do, and no one will be able to say a word.');
@@ -142,7 +142,7 @@
       await s.fadeOut(1);
       await s.narrate('From then on Yang Zhi was in high favour. Liang Zhongshu kept him near, and he served diligently from morning to night. Spring passed, and summer came, and the fifth day of the fifth month — the Dragon Boat Festival.');
       await s.warp('daming_in', 12, 10, 'up', { noFade: true });
-      s.spawn('liang', 'liangzhongshu', 12, 5, 'down');
+      s.spawn('liang', 'liangzhongshu', 12, 4, 'down');
       await s.fadeIn(1);
       await s.say('liangzhongshu', 'Yang Zhi. On the fifteenth of the sixth month it is my father-in-law\'s birthday. Every year I send the Prime Minister gifts — gold, pearls, jade — worth a hundred thousand strings. Last year the whole load was stolen on the road by bandits, and the thieves were never found.');
       await s.say('liangzhongshu', 'This year I want you to escort it to the Eastern Capital. I will give you ten carts and an armed escort, with banners reading "Birthday Gifts for the Prime Minister."');
