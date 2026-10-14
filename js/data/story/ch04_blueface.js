@@ -64,12 +64,10 @@
       // back at his inn, with nothing
       await s.fadeOut(0.6);
       await s.warp('kaifeng_in', 40, 7, 'up', { noFade: true });
-      s.spawn('keep', 'kfinnkeep', 37, 4, 'down');
       await s.fadeIn(0.6);
       await s.say('yangzhi:sad', '(Wang Lun was right. And now I have nothing. Not one coin for the inn, nor for the road home.)');
-      await s.say('kfinnkeep:concerned', 'Officer Yang, you owe for three weeks. I can\'t feed you on promises.');
+      await s.say('innkeep:concerned', 'Officer Yang, you owe for three weeks. I can\'t feed you on promises.');
       await s.say('yangzhi:sad', '(All I have left is the sabre my ancestors handed down. ...So be it. I will sell it, and go home.)');
-      s.despawn('keep', { leave: true });
       s.flag('ch4_sell');
       await s.narrate('He tied a straw tag to the sabre\'s hilt — the sign of a thing for sale — and went out to the Tianhan Bridge, where the crowds were thickest, to sell it.');
       await s.say(null, '(The Tianhan Bridge crosses the river on the west side of the city.)');
