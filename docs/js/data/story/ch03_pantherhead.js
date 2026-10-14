@@ -298,7 +298,7 @@
       await s.say('lixiaoer:smile', 'Master Lin! Don\'t you remember me? Li Xiaoer! In the capital I stole from my master, and you paid my debt and gave me money to leave the city. I came here and married, and now my wife and I keep a little tavern. What brings you here in a cangue?');
       await s.say('linchong:sad', 'Gao Qiu, Li Xiaoer. Gao Qiu brought me here.');
       await s.say('lixiaoer', 'Then you must come and eat at our tavern whenever you like. We\'ll wash your clothes, and mend them. It\'s the least we can do.');
-      s.despawn('lix');
+      s.despawn('lix', { to: [7, 23] });   // home to his tavern, under the wine flag
       s.flag('ch3_lixiaoer');
       await s.say(null, '(Li Xiaoer\'s tavern is on the south side of town, under the wine flag.)');
     } }

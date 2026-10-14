@@ -108,12 +108,30 @@
   // s.despawn: someone is sent off. They only go once the scene carries on (the next line, move or fade): then the
   // story has them leave, and they walk out (or, if they have just joined the party, fall in with the leader). If the
   // scene simply ends instead, it was tidying up, and they stay where they are (see settle), as people do.
-  function sendOff(key, pending) {
+  // the shortest walk from one tile to another, around anything solid (null if there is none)
+  function pathTo(fx, fy, tx, ty) {
+    var f = F(), k = function (x, y) { return x + ',' + y; }, prev = {}, q = [[fx, fy]];
+    prev[k(fx, fy)] = null;
+    while (q.length) {
+      var c = q.shift();
+      if (c[0] === tx && c[1] === ty) { var out = []; for (var n = c; n; n = prev[k(n[0], n[1])]) out.unshift(n); return out; }
+      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) {
+        var nx = c[0] + d[0], ny = c[1] + d[1];
+        if (k(nx, ny) in prev || nx < 0 || ny < 0 || nx >= f.map.w || ny >= f.map.h) return;
+        if (f.tileSolid(nx, ny) && !(nx === tx && ny === ty)) return;
+        prev[k(nx, ny)] = c; q.push([nx, ny]);
+      });
+      if (q.length > 4000) break;
+    }
+    return null;
+  }
+  function sendOff(key, pending, opt) {
     var f = F(), a = f.findActor(key);
     if (!a || !a.ev || !a.ev.temp) { f.removeActor(key); return; }
     if (a.finishEntrance) a.finishEntrance();
     if (instant(a.sheetWho) || !a.visible || a.static) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
     a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false;
+    a.leaveTo = opt && opt.to;   // somewhere of their own to go (their house, their post), not just the nearest way out
     pending.push(a);
   }
   function go(a) {
@@ -129,9 +147,9 @@
       walk(a, steps, gone);
       return;
     }
-    var path = wayIn(t.x, t.y);
+    var path = a.leaveTo ? pathTo(t.x, t.y, a.leaveTo[0], a.leaveTo[1]) : null;
+    if (!path) { path = wayIn(t.x, t.y); if (path) path.reverse(); }   // from where they stand to the way out
     if (!path || path.length < 3) { gone(); return; }
-    path.reverse();                                     // from where they stand to the way out
     walk(a, path, gone);
   }
   function stay(a, lines) {
@@ -229,7 +247,7 @@
         enter(a, who, tx, ty, dir);
         return a;
       },
-      despawn: function (key) { sendOff(key, pending); },
+      despawn: function (key, opt) { sendOff(key, pending, opt); },   // opt.to: [x, y], where they go
       // show the way on: twinkling motes at each spot ({ map, x, y, w }) until the story flag `until` is set
       mark: function (spots, until) {
         var st = WM.state; st.marks = (st.marks || []).filter(function (m) { return !(m.until && S.has(m.until)); });
