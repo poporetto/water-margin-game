@@ -200,6 +200,7 @@ function mkApi(ctx) {
       (spots || []).forEach((sp) => { if (!D.maps[sp.map]) err('mark: unknown map ' + sp.map); else if (tile(sp.map, sp.x, sp.y) == null) err('mark: ' + sp.map + '(' + sp.x + ',' + sp.y + ') is off the map'); });
       if (until && typeof until !== 'string') err('mark: until must be a flag name');
     },
+    costume(id, look) { if (!D.chars[id] && !D.npcs[id]) err('costume: unknown ' + id); },
     idle(key, lines) { if (!temp[key]) err('idle: no actor "' + key + '"'); else if (!lines || !lines.length) err('idle: no line for "' + key + '"'); else temp[key].idle = true; },
     leader(id) { if (!D.chars[id]) err('leader: unknown char ' + id); },
     shake() { return resolved; }, flash() { return resolved; },

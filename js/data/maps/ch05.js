@@ -30,7 +30,7 @@
   var di = L.grid(40, 12, 'x');
   var dR = { manor: di.room(1, 1, 18, 10, { floor: 'K' }), temple: di.room(20, 1, 8, 7, { floor: 'N' }), school: di.room(29, 1, 10, 8) };
   di.stamp(2, 3, ['h..A......A..h..', '................', '..t..KKKKKK..t..', '.....KKKKKK.....', 'k..............k']);
-  di.stamp(21, 3, ['.UUU..', '.AAA..']); di.stamp(30, 3, ['h..h..h.', '........', '.t.t.t..', '.t.t.t..']);
+  di.stamp(21, 3, ['.777..', '.888..']);   // the village shrine di.stamp(30, 3, ['h..h..h.', '........', '.t.t.t..', '.t.t.t..']);
   WM.defMap('dongxi_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: di.rows(), spawn: [10, 9] });
   L.link({ map: 'dongxi', x: manor.x, y: manor.y }, { map: 'dongxi_in', x: dR.manor.x, y: dR.manor.y });
   L.link({ map: 'dongxi', x: temple.x, y: temple.y }, { map: 'dongxi_in', x: dR.temple.x, y: dR.temple.y });

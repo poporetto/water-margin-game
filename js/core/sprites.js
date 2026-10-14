@@ -306,6 +306,13 @@
 
   SP.get = function (id, lk) {
     if (SP.overrides[id]) return SP.overrides[id];
+    // a change of clothes the story has given someone (s.costume): their look with those parts changed
+    var cos = WM.state && WM.state.costume && WM.state.costume[id];
+    if (cos) {
+      var key = id + '|' + JSON.stringify(cos);
+      if (!SP.cache[key]) SP.cache[key] = SP.build(id, Object.assign({}, lk || (WM.data.chars[id] && WM.data.chars[id].look) || {}, cos));
+      return SP.cache[key];
+    }
     if (!SP.cache[id]) SP.cache[id] = SP.build(id, lk || (WM.data.chars[id] && WM.data.chars[id].look) || {});
     return SP.cache[id];
   };

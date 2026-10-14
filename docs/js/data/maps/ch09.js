@@ -81,7 +81,7 @@
   w.scatter('T', 0.12, 362, '.', [0, 0, 30, 14]); L.clearAround(w, ':', 'T', '.');
   WM.defMap('whitedragon', { name: 'White Dragon Temple', theme: 'south', music: 'tense', rows: w.rows(), spawn: [15, 12], battleBg: 'river', exits: [WM.toWorld('whitedragon', 0, 0, 1, 14)] });
   var wi = L.grid(16, 10, 'x'); var wR = wi.room(1, 1, 14, 9, { floor: 'N' });
-  wi.stamp(2, 3, ['L...UUU...L.', '....AAA.....', '............', 'j..........j']);
+  wi.stamp(2, 3, ['L...777...L.', '....888.....', '............', 'j..........j']);
   WM.defMap('whitedragon_in', { name: 'White Dragon Temple', interior: true, theme: 'south', music: 'tense', rows: wi.rows(), spawn: [8, 8] });
   L.link({ map: 'whitedragon', x: wt.x, y: wt.y }, { map: 'whitedragon_in', x: wR.x, y: wR.y });
 

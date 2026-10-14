@@ -70,7 +70,7 @@
     exits: [WM.toWorld('erxian', 14, 35, 5, 1)] });
   var ei = L.grid(30, 10, 'x'); var eR = { home: ei.room(1, 1, 8, 7), temple: ei.room(10, 1, 16, 9, { floor: 'N' }) };
   ei.stamp(2, 3, ['k..j..', '......', '..t...']);
-  ei.stamp(11, 3, ['L...UUUU...L.', '....AAAA.....', '.............', 'j...........j']);
+  ei.stamp(11, 3, ['L....555...L.', '....8888.....', '.............', 'j...........j']);
   WM.defMap('erxian_in', { name: '', interior: true, theme: 'summer', music: 'palace', rows: ei.rows(), spawn: [5, 6] });
   L.link({ map: 'erxian', x: home.x, y: home.y }, { map: 'erxian_in', x: eR.home.x, y: eR.home.y });
   L.link({ map: 'erxian', x: temple.x, y: temple.y }, { map: 'erxian_in', x: eR.temple.x, y: eR.temple.y });

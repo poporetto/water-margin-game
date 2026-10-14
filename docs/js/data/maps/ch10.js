@@ -16,7 +16,7 @@
   WM.defMap('huandao', { name: 'Huandao Village', theme: 'dusk', music: 'tense', rows: h.rows(), spawn: [15, 24], battleBg: 'forest', tint: 'night',
     exits: [WM.toWorld('huandao', 14, 25, 3, 1), WM.toWorld('huandao', 0, 12, 1, 3)] });
   var hi = L.grid(14, 10, 'x'); var hR = hi.room(1, 1, 12, 9, { floor: 'N' });
-  hi.stamp(2, 3, ['L..UUUU..L', '...AAAA...', '..........', 'j........j']);
+  hi.stamp(2, 3, ['L..6666..L', '...8888...', '..........', 'j........j']);
   WM.defMap('huandao_in', { name: 'Temple of the Mysterious Lady', interior: true, theme: 'dusk', music: 'tense', rows: hi.rows(), spawn: [7, 8] });
   L.link({ map: 'huandao', x: temple.x, y: temple.y }, { map: 'huandao_in', x: hR.x, y: hR.y });
 

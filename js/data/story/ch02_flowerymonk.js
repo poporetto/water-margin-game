@@ -612,7 +612,7 @@
       await s.say('zhangsan:shock', '...He pulled up the willow. Roots and all.');
       await s.say('lisi:shock', 'He isn\'t a man. He\'s a living arhat!');
       s.flag('ch2_willowdone');
-      s.despawn('zhangsan'); s.despawn('lisi');
+      s.despawn('zhangsan', { leave: true }); s.despawn('lisi', { leave: true });   // home for the day; they come back every morning
       await s.narrate('After that the rascals came every day with wine and meat. One day, to repay them, Zhishen fetched his staff and showed them his art, whirling the sixty-two catties of iron as if it were a reed.');
     } },
     { id: 'ch2_linchong', x: 17, y: 4, w: 16, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_willowdone'); }, run: async function (s) {

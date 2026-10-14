@@ -46,7 +46,7 @@
   WM.defMap('xiyue', { name: 'Temple of the Western Peak', theme: 'summer', music: 'palace', rows: t.rows(), spawn: [17, 30], battleBg: 'palace',
     exits: [WM.toWorld('xiyue', 16, 31, 4, 1)] });
   var ti = L.grid(20, 11, 'x'); var tR = ti.room(1, 1, 18, 10, { floor: 'N' });
-  ti.stamp(2, 3, ['L...UUUUUU...L..', '....AAAAAA......', '................', 'j..............j']);
+  ti.stamp(2, 3, ['L...777777...L..', '....888888......', '................', 'j..............j']);
   WM.defMap('xiyue_in', { name: 'Hall of the Golden Heaven King', interior: true, theme: 'summer', music: 'palace', rows: ti.rows(), spawn: [10, 9] });
   L.link({ map: 'xiyue', x: shrine.x, y: shrine.y }, { map: 'xiyue_in', x: tR.x, y: tR.y });
 

@@ -161,11 +161,7 @@
     var twin = f.actors.some(function (o) { return o !== a && o.visible && o.ev && !o.ev.temp && (o.ev.npc === a.sheetWho || o.ev.char === a.sheetWho); });
     if (twin) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
     a.ev.id = a.leavingKey; a.leavingKey = null; a.lingering = true;
-    // never let someone standing about trap the player: on or beside a doorway or exit, they can be walked past
-    var t = a.tile(), nearWay = (f.map.def.exits || []).some(function (e) {
-      return t.x >= e.x - 1 && t.x <= e.x + (e.w || 1) && t.y >= e.y - 1 && t.y <= e.y + (e.h || 1);
-    });
-    a.solid = !nearWay;
+    a.solid = false;   // someone left standing about can never trap the player in a lane or a doorway: they can be walked past
     if (!a.ev.idle && lines[a.sheetWho]) a.ev.idle = lines[a.sheetWho];   // what they last said in the scene
   }
 
@@ -173,7 +169,8 @@
     var pending = [], lines = {};
     // the scene goes on: those the story sends away go now (and new party members fall in); the rest stay put
     var joined = function (a) { return a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0; };
-    var flush = function () { var keep = []; pending.forEach(function (a) { if (a.leaveOpt || joined(a)) go(a); else keep.push(a); }); pending = keep; };
+    // beasts (the tiger, the serpent, the herd-boy's ox) never stand about: sent off, they go
+    var flush = function () { var keep = []; pending.forEach(function (a) { if (a.leaveOpt || joined(a) || a.img) go(a); else keep.push(a); }); pending = keep; };
     var s = {
       S: S, ctx: ctx,
       get state() { return WM.state; },
@@ -271,6 +268,8 @@
         var st = WM.state; st.marks = (st.marks || []).filter(function (m) { return !(m.until && S.has(m.until)); });
         (spots || []).forEach(function (sp) { st.marks.push({ map: sp.map, x: sp.x, y: sp.y, w: sp.w || 1, until: until }); });
       },
+      // a change of clothes for a character (look parts to change, e.g. { body, robe: false }); null puts theirs back
+      costume: function (id, look) { var st = WM.state; st.costume = st.costume || {}; if (look) st.costume[id] = look; else delete st.costume[id]; },
       // what someone left standing after the scene says when the player talks to them (a line, or several)
       idle: function (key, lines) { var a = F().findActor(key); if (a && a.ev) a.ev.idle = lines; },
       spawnBeast: function (key, art, tx, ty, dir, params) { var a = F().addBeast(key, art, tx, ty, dir, params); enter(a, null, tx, ty, dir); return a; },
@@ -406,7 +405,7 @@
       return say0.apply(this, arguments);
     };
     // the scene is over: anyone sent off at its very end stays where they are (new party members still fall in)
-    s._end = function () { var p = pending; pending = []; p.forEach(function (a) { if (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0) go(a); else stay(a, lines); }); };
+    s._end = function () { var p = pending; pending = []; p.forEach(function (a) { if (a.img || (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0)) go(a); else stay(a, lines); }); };
     return s;
   }
   SC.makeApi = makeApi;

@@ -512,6 +512,66 @@
     c.fillStyle = '#c8a050'; c.beginPath(); c.ellipse(x + 8, y + 8, 5, 3, 0, 0, Math.PI * 2); c.fill();
     px(c, x + 5, y + 8, 6, 1, '#a8803a');
   }
+  // ---- a Daoist hall: the Three Pure Ones (5), a goddess (6), a deity-king (7), the altar with the eight trigrams (8) ----
+  // One seated deity, drawn to scale k about a centre (cx, y = top of the base row). kind: 'pure' (lotus crown,
+  // long beard), 'lady' (phoenix crown, no beard), 'king' (the flat crown hung with bead tassels, a court tablet).
+  function deity(c, cx, y, k, kind, robe, hold) {
+    var R = function (dx, dy, w, h, col) { px(c, Math.round(cx + dx * k), Math.round(y + dy * k), Math.max(1, Math.round(w * k)), Math.max(1, Math.round(h * k)), col); };
+    var skin = '#ecd0a0', rl = U.shade(robe, 0.2), rd = U.shade(robe, -0.25);
+    if (kind === 'pure') { c.fillStyle = 'rgba(232,200,96,0.55)'; c.beginPath(); c.arc(cx, y - 26 * k, 9 * k, 0, Math.PI * 2); c.fill(); }   // halo
+    R(-15, 2, 30, 14, '#5a1a10'); R(-15, 2, 30, 1, '#c8a040'); R(-17, -6, 3, 9, '#c8a040'); R(14, -6, 3, 9, '#c8a040');   // throne, with finials
+    R(-14, -8, 5, 10, robe); R(9, -8, 5, 10, robe);                                                                         // sleeves
+    R(-11, -18, 22, 20, robe); R(-11, -18, 3, 20, rl); R(8, -18, 3, 20, rd); R(-12, -2, 24, 6, rd);                       // robe, lap
+    R(-2, -16, 4, 13, kind === 'lady' ? '#e8e0d0' : '#c8a040');                                                             // inner robe
+    R(-4, -8, 8, 4, skin);                                                                                                  // hands
+    if (hold === 'pearl') { R(-2, -11, 4, 4, '#f4f0e8'); R(-1, -11, 1, 1, '#ffffff'); }
+    else if (hold === 'ruyi') { R(-1, -13, 2, 7, '#c8a040'); R(-3, -14, 6, 2, '#e8c860'); }
+    else if (hold === 'fan') { R(-4, -14, 8, 6, '#e8e0d0'); R(-1, -8, 2, 2, '#8a6a3a'); }
+    else if (hold === 'tablet') { R(-1, -15, 3, 9, '#ece4cc'); }
+    R(-5, -30, 10, 11, skin); R(-5, -30, 10, 3, '#1a1a1a');                                                                 // head, hair
+    R(-3, -25, 2, 1, '#3a2a1a'); R(1, -25, 2, 1, '#3a2a1a');                                                                // eyes
+    if (kind !== 'lady') R(-3, -21, 6, kind === 'pure' ? 8 : 5, kind === 'pure' ? '#e8e8e0' : '#2a2018');                   // beard
+    else { R(-1, -21, 2, 1, '#c8302a'); R(-7, -28, 2, 8, '#1a1a1a'); R(5, -28, 2, 8, '#1a1a1a'); }                           // lips, hair falling
+    if (kind === 'pure') { R(-4, -34, 8, 4, '#c8a040'); R(-3, -36, 2, 2, '#e8c860'); R(1, -36, 2, 2, '#e8c860'); }          // lotus crown
+    else if (kind === 'lady') { R(-6, -35, 12, 5, '#c8a040'); R(-1, -37, 2, 2, '#c8302a'); R(-9, -33, 3, 2, '#e8c860'); R(6, -33, 3, 2, '#e8c860'); }   // phoenix crown
+    else { R(-4, -33, 8, 3, '#1a1a1a'); R(-9, -35, 18, 2, '#1a1a1a'); for (var t = -8; t <= 8; t += 4) R(t, -33, 1, 4, '#c8a040'); }   // the tasselled crown
+  }
+  function canopy(c, X, y, W, top) {
+    // the shrine's curtain: a yellow valance with a scalloped edge, red curtains drawn back at the sides
+    px(c, X, top, W, 5, '#d8a830'); px(c, X, top, W, 1, '#f0c848');
+    for (var q = X; q < X + W; q += 4) px(c, q + 1, top + 5, 2, 2, '#d8a830');
+    px(c, X, top + 5, 3, y - top + 6, '#9a2a1e'); px(c, X + W - 3, top + 5, 3, y - top + 6, '#9a2a1e');
+    px(c, X + 1, top + 5, 1, y - top + 6, '#c84a3a'); px(c, X + W - 2, top + 5, 1, y - top + 6, '#c84a3a');
+  }
+  function pureTall(c, x, y, tx, ty, th, m) {
+    if (m.get(tx - 1, ty) === '5') return;
+    var n = runOf(m, tx, ty, '5').n, W = n * S;
+    canopy(c, x, y, W, y - 26);
+    var looks = [['#3a4a8a', 'ruyi'], ['#9a2a1e', 'pearl'], ['#c8a040', 'fan']];
+    for (var i = 0; i < n; i++) { var lk = n === 3 ? looks[i] : looks[(i + 1) % 3]; deity(c, x + i * S + 8, y, 0.5, 'pure', lk[0], lk[1]); }
+  }
+  function bigDeityTall(kind, ch, robe, hold) {
+    return function (c, x, y, tx, ty, th, m) {
+      if (m.get(tx - 1, ty) === ch) return;
+      var n = runOf(m, tx, ty, ch).n, W = n * S, k = Math.min(1.25, Math.max(0.5, W / 34));
+      canopy(c, x, y, W, Math.round(y - 42 * k));
+      deity(c, x + W / 2, y, k, kind, robe, hold);
+    };
+  }
+  function daoAltarTall(c, x, y, tx, ty, th, m) {
+    if (m.get(tx - 1, ty) === '8') return;
+    var n = runOf(m, tx, ty, '8').n, W = n * S, X = x, cx = X + W / 2, t = WM.time || 0;
+    px(c, X, y + 1, W, 3, '#3a1e10'); px(c, X, y + 4, W, 12, '#1e2c4a'); px(c, X, y + 4, W, 1, '#c8a040'); px(c, X, y + 15, W, 1, '#10182a');
+    // the taiji, and the trigrams on either side
+    c.fillStyle = '#f0ece0'; c.beginPath(); c.arc(cx, y + 10, 4, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#141414'; c.beginPath(); c.arc(cx, y + 10, 4, -Math.PI / 2, Math.PI / 2); c.fill();
+    c.fillStyle = '#f0ece0'; c.beginPath(); c.arc(cx, y + 8, 2, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#141414'; c.beginPath(); c.arc(cx, y + 12, 2, 0, Math.PI * 2); c.fill();
+    if (W >= 32) for (var g2 = 0; g2 < 3; g2++) { px(c, cx - 14, y + 7 + g2 * 3, 5, 1, '#c8a040'); px(c, cx + 9, y + 7 + g2 * 3, g2 === 1 ? 2 : 5, 1, '#c8a040'); if (g2 === 1) px(c, cx + 12, y + 10, 2, 1, '#c8a040'); }   // trigrams, where there is room
+    px(c, cx - 3, y - 3, 6, 4, '#5a4a30'); px(c, cx - 1, y - 7, 1, 4, '#e8e0d0');                                   // incense
+    var fl = Math.sin(t * 8) > 0 ? 1 : 0;
+    [X + 2, X + W - 4].forEach(function (cx2) { px(c, cx2, y - 5, 2, 6, '#c8302a'); px(c, cx2, y - 7 - fl, 2, 2, '#ffd060'); });
+  }
   // ---- a Song government hall: the official's dais and chair, his desk, and the great painted screen behind ----
   function runOf(m, tx, ty, ch) { var x0 = tx; while (m.get(x0 - 1, ty) === ch) x0--; var n = 1; while (m.get(x0 + n, ty) === ch) n++; return { x0: x0, n: n }; }
   function dais(c, x, y, tx, ty, th, m) {
@@ -799,6 +859,10 @@
     '2': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: offeringTall, solid: true },  // the offering altar before him
     '3': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: censerTall, solid: true },    // a great bronze censer
     '4': { draw: cushion },                                                                                          // a kneeling cushion
+    '5': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: pureTall, solid: true },                          // the Three Pure Ones
+    '6': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: bigDeityTall('lady', '6', '#9a2a1e', 'tablet'), solid: true },   // a goddess
+    '7': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: bigDeityTall('king', '7', '#c8a040', 'tablet'), solid: true },   // a deity-king
+    '8': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: daoAltarTall, solid: true },                       // the Daoist altar
     'E': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: screenTall, solid: true },   // painted screen behind an official's seat
     'q': { draw: dais },                                                                                          // the raised dais
     '0': { draw: dais, tall: chairTall },                                                                         // the official's chair (he stands on it, as if seated)

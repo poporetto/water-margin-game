@@ -21,7 +21,7 @@
   g.house(5, 15, 6, 4, { roof: 'z', door: false, windows: [2] });
   g.house(5, 20, 6, 4, { roof: 'z', door: false, windows: [3] });
   g.rect(20, 16, 6, 3, '~'); g.set(19, 17, 'r');
-  g.set(13, 19, 'A'); g.set(18, 19, 'A');
+  g.set(13, 19, '3'); g.set(18, 19, '3');   // bronze censers in the courtyard
   g.set(14, 14, 'L'); g.set(17, 14, 'L'); g.set(14, 23, 'L'); g.set(17, 23, 'L');
   g.stamp(6, 9, ['P', 'P']); g.stamp(24, 21, ['PP', 'P.']); g.stamp(21, 13, ['f']);
   g.rect(15, 26, 2, 4, ':'); g.rect(2, 26, 15, 1, ':'); g.vline(2, 2, 26, ':'); g.vline(3, 2, 26, ':');
@@ -32,6 +32,28 @@
     name: 'Shangqing Temple, Dragon-Tiger Mountain', theme: 'summer', music: 'palace', rows: g.rows(), spawn: [15, 27],
     exits: [WM.toWorld('longhu', 15, 29, 2, 1), { x: 2, y: 0, w: 2, h: 1, to: 'longhu_path', tx: 11, ty: 38, dir: 'up' }]
   });
+
+  // ---------------- the Hall of the Three Pure Ones (inside the main hall) ----------------
+  var hi0 = L.grid(18, 12, 'x');
+  var hallIn = hi0.room(1, 1, 16, 10, { floor: 'N' });
+  hi0.stamp(2, 3, ['h.L..555..L..h', '....88888.....', '.i..4...4..i..', '......3.......', '.i.........i..', '..............']);
+  WM.defMap('longhu_in', { name: 'Hall of the Three Pure Ones', interior: true, theme: 'summer', music: 'palace', rows: hi0.rows(), spawn: [hallIn.x, hallIn.y - 1] });
+  L.link({ map: 'longhu', x: hall.x, y: hall.y }, { map: 'longhu_in', x: hallIn.x, y: hallIn.y });
+  WM.npc('daoistElder', 'Elder Daoist', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#c8a040', beard: 'long', beardColor: '#e8e8e0', hair: '#d8d8d0', body: '#3a4a6a', trim: '#e8e0d0' });
+  var unsealed = function (S2) { return !S2.has('pro_opened'); }, opened = function (S2) { return S2.has('pro_opened'); };
+  WM.defEvents('longhu_in', [
+    // the Daoists of the hall talk of the sealed hall behind the pond, and, after the Marshal, of what came out of it
+    { id: 'lh_elder', x: 5, y: 4, npc: 'daoistElder', dir: 'right', cond: unsealed, text: [
+      'Behind the pond stands the Hall of Subdued Demons. The Ancestral Master, Zhang Daoling himself, shut the demon kings in there.',
+      'His command is cut into the tablet inside: whoever opens it brings calamity on the whole world.'] },
+    { id: 'lh_elder2', x: 5, y: 4, npc: 'daoistElder', dir: 'right', cond: opened, text: [
+      'A hundred and eight stars of Heaven and Earth. I watched them go up out of that pit like black smoke and scatter to the four quarters.',
+      'They will be born as men. And then the world will know their names.'] },
+    { id: 'lh_dao1', x: 3, y: 7, npc: 'daoistA', dir: 'right', cond: unsealed, text: ['Every Celestial Master since the founder has added a seal to that door. Nobody alive has seen inside it, and nobody wants to.'] },
+    { id: 'lh_dao1b', x: 3, y: 7, npc: 'daoistA', dir: 'right', cond: opened, text: ['We have sealed the empty hall again. Like locking the stable after the horses are gone.'] },
+    { id: 'lh_dao2', x: 12, y: 7, npc: 'daoistA', dir: 'left', cond: unsealed, text: ['The novices dare each other to put an ear to the sealed door at night. They say you can hear something breathing. I don\'t listen. I burn incense here and pray the seals hold.'] },
+    { id: 'lh_dao2b', x: 12, y: 7, npc: 'daoistA', dir: 'left', cond: opened, text: ['The Marshal laughed at us, and rode away to the capital. The abbot has not slept since.'] }
+  ]);
 
   // ---------------- the mountain path ----------------
   var p = L.grid(24, 40, 'M');
@@ -131,6 +153,7 @@
       s.despawn('dA'); s.despawn('dB'); s.despawn('esc1'); s.despawn('esc2'); s.despawn('abbotT');
       s.place('player', 15, 23, 'up');
       await s.fadeIn(0.8);
+      s.costume('hongxin', { body: '#8a7a5a', trim: '#c8b890', robe: false, shoes: '#b8a060' });   // plain hemp and straw sandals for the pilgrim's climb (he keeps his cap)
       await s.narrate('Next morning, before dawn, the Marshal bathed, dressed in plain cloth and straw sandals, and tied the decree in a yellow silk bundle across his back. A silver censer of burning incense in his hands, he set out alone. The Daoists pointed him to the path that climbs from the north-west corner of the temple grounds.');
       s.flag('pro_climb');
       WM.unlock('longhu');
@@ -157,6 +180,7 @@
       await s.say('hongxin:sad', '...I had the Celestial Master before my eyes, and I scolded him like a stable boy.');
       await s.say('abbot', 'Do not trouble yourself, Excellency. Rest tonight. Tomorrow I will show you the temple grounds.');
       await s.fadeOut(1);
+      s.costume('hongxin', null);   // in his robes of office again for the tour
       s.place('player', 16, 20, 'up'); s.place('abbotT', 17, 20, 'up');
       await s.fadeIn(1);
       // the two of them walk round the pond to the sealed hall while the tour is told
