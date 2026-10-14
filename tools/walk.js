@@ -27,7 +27,7 @@ let firstLine = '';
 // --leftover: people a scene leaves standing on the map when it ends (the player can walk up to them)
 const LEFT = process.argv.includes('--leftover'); const leftLog = [];
 const HINTS = process.argv.includes('--hints'); const flowLog = []; let hinted = false, spoken = '';
-let curEvent = '(none)';
+let curEvent = '(none)', curEv = null;
 function err(msg) { errors.push('[' + curEvent + '] ' + msg); }
 
 // ---------- map helpers ----------
@@ -72,6 +72,7 @@ function present(id) {
   if (!id || typeof id !== 'string') return true;
   id = id.split(':')[0];
   if (id === WM.state.leader || WM.state.party.indexOf(id) >= 0) return true;   // the party is with the leader
+  if (curEv && (curEv.npc === id || curEv.char === id)) return true;   // the one the player is talking to (several may share a look)
   const pr = roomOf(cur.map, cur.x, cur.y), here = (a) => pr < 0 || roomOf(cur.map, a.x, a.y) === pr || roomOf(cur.map, a.x, a.y) < 0;
   if (Object.keys(temp).some((k) => (temp[k].who === id || id.indexOf(temp[k].who + '_') === 0) && here(temp[k]))) return true;   // a beast's rider ('oxboy' -> 'oxboy_boy')
   const f = frozen[id]; return !!(f && here(f));
@@ -175,8 +176,8 @@ function mkApi(ctx) {
     faceEach(a, b) { if (!findActor(a)) err('faceEach: no actor "' + a + '"'); if (!findActor(b)) err('faceEach: no actor "' + b + '"'); },
     emote(key) { if (!findActor(key)) err('emote: no actor "' + key + '"'); return resolved; },
     jump(key) { if (!findActor(key)) err('jump: no actor "' + key + '"'); return resolved; },
-    show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); },
-    hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); },
+    show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = false; },
+    hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; },
     lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing
     boat(key) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = true; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },
     spawn(key, who, tx, ty) {
@@ -196,9 +197,9 @@ function mkApi(ctx) {
       temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key };
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
-    despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) { temp[key].pending = true; temp[key].leave = !!(opt && (opt.leave || opt.to)); } },   // the story sends them away (opt.leave / opt.to), or they stay
-    _end() { Object.keys(temp).forEach((k) => { if (temp[k].pending) { temp[k].pending = false; if (WM.state.party.indexOf(temp[k].who) >= 0) delete temp[k]; else { temp[k].lingering = true; if (lastLine[temp[k].who]) temp[k].idle = true; } } }); },
-    mark(spots, until) {
+    despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) { temp[key].pending = true; temp[key].leave = !!(opt && (opt.leave || opt.to)) || !!temp[key].hidden; } },   // the story sends them away (opt.leave / opt.to), or they stay
+    _end() { Object.keys(temp).forEach((k) => { if (temp[k].pending) { temp[k].pending = false; if (temp[k].leave || WM.state.party.indexOf(temp[k].who) >= 0) delete temp[k]; else { temp[k].lingering = true; if (lastLine[temp[k].who]) temp[k].idle = true; } } }); },
+    mark(spots, until) { hinted = true;   // sparkles on the way are a hint too
       (spots || []).forEach((sp) => { if (!D.maps[sp.map]) err('mark: unknown map ' + sp.map); else if (tile(sp.map, sp.x, sp.y) == null) err('mark: ' + sp.map + '(' + sp.x + ',' + sp.y + ') is off the map'); });
       if (until && typeof until !== 'string') err('mark: until must be a flag name');
     },
@@ -466,7 +467,7 @@ function placeNames(mid) {
 // scenes may ask which map is loaded (WM.field.map.id): answer as the real field would
 function syncField() { WM.field.map = cur.map ? { id: cur.map } : null; }
 async function runEvent(ev) {
-  curEvent = ev.map + ':' + ev.id; syncField();
+  curEvent = ev.map + ':' + ev.id; curEv = ev; syncField();
   if (VERBOSE) console.log('  run ' + curEvent + ' (ch ' + WM.state.chapter + ')');
   freezeActors();
   const fn = ev.run || (ev.text ? async (s) => { (Array.isArray(ev.text) ? ev.text : [ev.text]).forEach((t) => s.say(ev.char || ev.npc || null, t)); } : null);
@@ -568,7 +569,7 @@ async function main() {
           if (FLOW) console.log('  ' + curEvent + '  — ' + (firstLine || '').slice(0, 110));
           if (HINTS) flowLog.push({ ev: curEvent, endMap: cur.map, hinted: hinted, ch: WM.state.chapter, text: spoken });
           if (CPS) cps.push({ ev: ev.map + ':' + ev.id, trig: ev.trigger || 'talk', label: spoken.trim().replace(/\s+/g, ' ').slice(0, 80), snap: snap });
-          if (LEFT) Object.keys(temp).forEach((k) => { if (D.chars[temp[k].who] || D.npcs[temp[k].who]) leftLog.push('ch' + WM.state.chapter + ' ' + curEvent + ' leaves ' + k + (k === temp[k].who ? '' : '=' + temp[k].who) + ' on ' + cur.map); });
+          if (LEFT) Object.keys(temp).forEach((k) => { if (D.chars[temp[k].who] || D.npcs[temp[k].who]) leftLog.push('ch' + WM.state.chapter + ' ' + curEvent + ' leaves ' + k + (k === temp[k].who ? '' : '=' + temp[k].who) + ' on ' + cur.map + (temp[k].lying ? '  (lying)' : '')); });
           // the player can talk to anyone left standing, and to anyone waiting for this scene
           Object.keys(temp).forEach((k) => { if ((D.chars[temp[k].who] || D.npcs[temp[k].who]) && !temp[k].idle && !temp[k].lying) err('"' + k + '" is left standing after the scene with nothing to say (s.idle)'); });
           silent.forEach((sp) => errors.push('[' + ev.map + ':' + ev.id + '] "' + sp.key + '" (' + sp.who + ') waits at ' + sp.x + ',' + sp.y + ' where the player can talk to them first, with nothing to say (idle.' + sp.key + ')'));

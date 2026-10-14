@@ -133,10 +133,10 @@
       s.night(false);
       s.party(['songjiang', 'lujunyi', 'wuyong', 'guansheng', 'huarong', 'huyanzhuo']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       s.flag('ghost:zhangshun');
-      s.spawn('zs', 'zhangshun', 21, 14, 'right');
+      s.spawn('zs', 'zhangshun', 22, 14, 'right');   // up out of the lake onto the bank, dripping
       await s.say('zhangshun:sad', 'Brother... I am cold. The water at Yongjin Gate is so cold...');
       await s.say('songjiang:sad', 'Brother Zhang Shun!');
-      s.despawn('zs'); s.unflag('ghost:zhangshun');
+      s.hide('zs'); s.despawn('zs'); s.unflag('ghost:zhangshun');   // a dream: he is simply gone when Song Jiang wakes
       await s.narrate('Song Jiang woke weeping, and held a sacrifice for Zhang Shun\'s spirit at the Xiling bridge. Then the battle for Hangzhou began.');
       await fall(s, ['xuning', 'haosiwen'], 'At the North Gate an ambush closed on them. A poisoned arrow struck Xu Ning in the neck; he lingered half a month and died. Hao Siwen was taken by six Southern generals and put to death by Fang Tianding.');
       await fall(s, ['dongping', 'zhangqing', 'zhoutong'], 'At the Dusong Pass, Zhang Tao cut Dong Ping in two from behind. Zhang Qing\'s spear stuck fast in a pine tree, and Li Tianrun speared him through the belly. Li Tianrun cut down Zhou Tong in the same fight.');

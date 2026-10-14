@@ -295,9 +295,12 @@
       await s.say('luzhishen:smile', 'Ha! Then I\'ll undo the knot and give Deng Long a staff to the skull!');
     } },
     { id: 'ch5_erlonggate', x: 13, y: 14, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_toerlong'); }, run: async function (s) {
+      s.spawn('gd', 'erlongguard', 15, 12, 'down');   // in the gateway, looking the bound monk over
       await s.say('caozheng', 'Open up! We\'ve brought the monk who kicked your chief!');
       await s.say('erlongguard:smile', 'Ha! Bring him in, bring him in! The chief will skin him alive!');
       await s.narrate('The gate swung open. They passed three gates and came into the courtyard of the Baozhu Temple. Deng Long sat in the hall in a tiger-skin chair.');
+      s.idle('gd', 'Go on in. The chief\'s waiting in the hall, and he\'s been waiting for this one a long time.');
+      s.despawn('gd');
       s.flag('ch5_erlonginside');
     } }
   ]);
