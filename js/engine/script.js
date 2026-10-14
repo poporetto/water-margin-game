@@ -248,7 +248,7 @@
           if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; ex.ev.idle = null; ex.solid = true; if (dir) ex.dir = dir; return ex; }
           f.actors = f.actors.filter(function (o) { return o !== ex; });
         }
-        var back = (f.actors || []).filter(function (o) { return (o.leavingKey || o.lingering) && o.sheetWho === who; })[0];   // still on their way out, or still standing about
+        var back = (f.actors || []).filter(function (o) { return (o.leavingKey || o.lingering || o.autoShown) && o.sheetWho === who; })[0];   // still on their way out, or still standing about
         var a = f.addActor(key, who, tx, ty, dir); a.sheetWho = who;
         // the same person called back on stage walks over from where they are, if the way is clear (never through a wall)
         if (back) {
@@ -408,19 +408,48 @@
     var fadeOut0 = s.fadeOut;
     s.fadeOut = function () {
       return fadeOut0.apply(this, arguments).then(function () {
+        hideShown();
         var f = F(), keep = [];
         pending.forEach(function (a) { if (a.leaveOpt || joined(a) || a.img) f.actors = f.actors.filter(function (o) { return o !== a; }); else keep.push(a); });
         pending = keep;
       });
     };
+    // A companion who speaks is seen speaking: a party member (not the leader) with a line and no figure on the map
+    // steps out from the leader to stand beside them, and falls back in when the scene is over.
+    var shown = [];
+    var showSpeaker = function (who) {
+      var id = typeof who === 'string' ? who.split(':')[0] : null, f = F();
+      // one who has since become the leader, or left the party, is no longer a stand-in at the leader's side
+      shown = shown.filter(function (o) { var gone = f.actors.indexOf(o) < 0 || o.sheetWho === WM.state.leader || WM.state.party.indexOf(o.sheetWho) < 0; if (gone) f.actors = f.actors.filter(function (q) { return q !== o; }); return !gone; });
+      if (!id || WM.scene !== f || !f.map || f.map.def.world || !f.player || f.player.hiddenPlayer || f.transitioning) return;
+      if (id === WM.state.leader || WM.state.party.indexOf(id) < 0 || WM.state.flags['ghost:' + id]) return;
+      if ((f.actors || []).some(function (o) { return o.sheetWho === id && o.visible; })) return;
+      var p = f.player.tile(), room = f.roomAt(p.x, p.y), taken = function (x, y) { return (f.actors || []).some(function (o) { var t = o.standTo || o.tile(); return o.visible && t.x === x && t.y === y; }) || (x === p.x && y === p.y); };   // (one still stepping out counts where they are going)
+      var back = { up: [0, 1], down: [0, -1], left: [1, 0], right: [-1, 0] }[f.player.dir] || [0, 1];
+      var spots = [[-1, 0], [1, 0], back, [-1, back[1] || 1], [1, back[1] || 1], [-2, 0], [2, 0], [back[0] * 2, back[1] * 2]];
+      var at = null;
+      for (var i = 0; i < spots.length && !at; i++) {
+        var x = p.x + spots[i][0], y = p.y + spots[i][1];
+        if (!f.tileSolid(x, y) && !taken(x, y) && f.roomAt(x, y) === room) at = [x, y];
+      }
+      if (!at) return;
+      var a = f.addActor('~' + id, id, at[0], at[1], f.player.dir); a.sheetWho = id; a.autoShown = true; a.solid = false; a.standTo = { x: at[0], y: at[1] };
+      a.x = f.player.x; a.y = f.player.y; a.path = [{ x: at[0] * TS + 8, y: at[1] * TS + 15 }]; a.speed = 70;   // out from the leader's side
+      shown.push(a);
+    };
+    var hideShown = function () { var f = F(); f.actors = f.actors.filter(function (o) { return shown.indexOf(o) < 0; }); shown = []; };
+    s.beside = function (id) { showSpeaker(id); };   // bring a companion out beside the leader without a line (someone the scene is about)
+    var ask0 = s.ask;
+    s.ask = function (who) { showSpeaker(who); return ask0.apply(this, arguments); };
     var say0 = s.say;
     s.say = function (who, text) {
+      showSpeaker(who);
       var id = typeof who === 'string' ? who.split(':')[0] : null, last = Array.isArray(text) ? text[text.length - 1] : text;
       if (id && last && !/^\(/.test(last)) lines[id] = last;   // remembered as what they say if spoken to afterwards
       return say0.apply(this, arguments);
     };
     // the scene is over: anyone sent off at its very end stays where they are (new party members still fall in)
-    s._end = function () { var p = pending; pending = []; p.forEach(function (a) { if (a.quiet) drop(a); else if (a.img || (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0)) go(a); else stay(a, lines); }); };
+    s._end = function () { hideShown(); var p = pending; pending = []; p.forEach(function (a) { if (a.quiet) drop(a); else if (a.img || (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0)) go(a); else stay(a, lines); }); };
     return s;
   }
   SC.makeApi = makeApi;

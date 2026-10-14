@@ -177,6 +177,7 @@ function mkApi(ctx) {
     emote(key) { if (!findActor(key)) err('emote: no actor "' + key + '"'); return resolved; },
     jump(key) { if (!findActor(key)) err('jump: no actor "' + key + '"'); return resolved; },
     show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = false; },
+    beside(id) { if (WM.state.party.indexOf(id) < 0) err('beside: "' + id + '" is not in the party'); },
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; },
     lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing
     boat(key) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = true; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },

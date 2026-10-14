@@ -235,6 +235,7 @@
     return T.solid(ch);
   }
   F.tileSolid = function (tx, ty) { return tileSolid(tx, ty); };
+  F.roomAt = function (tx, ty) { return F.map ? roomAt(F.map, tx, ty) : -1; };
   var HB_W = 5, HB_H = 4; // half-width, height of feet hitbox
   function blockedAt(a, x, y) {
     var x0 = Math.floor((x - HB_W) / TS), x1 = Math.floor((x + HB_W - 1) / TS);
