@@ -165,7 +165,8 @@
 
   // Storyteller's sign-off at the end of each chapter, as the novel closes every chapter.
   C.nextTime = function () {
-    return C.text('If you would know what happened next, hear the next chapter.', { italic: true, dur: 2.5 });
+    // the chapter that ends does not show again: the screen stays black for the next chapter's card
+    return C.text('If you would know what happened next, hear the next chapter.', { italic: true, dur: 2.5, dark: true });
   };
 
   C.text = function (text, opt) {
@@ -173,7 +174,7 @@
     return new Promise(function (resolve) {
       var t0 = WM.time;
       var w = {
-        update: function () { if (WM.time - t0 > (opt.min || 0.8) && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); UI.remove(w); resolve(); } },
+        update: function () { if (WM.time - t0 > (opt.min || 0.8) && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); if (opt.dark) { G.fade = 1; WM.chapterDark = true; } UI.remove(w); resolve(); } },   // opt.dark: black behind it as it goes, not the scene
         draw: function () {
           var c = G.ctx, t = WM.time - t0;
           c.fillStyle = opt.bg || '#0a0806'; c.globalAlpha = opt.overlay ? 0.8 : 1; c.fillRect(0, 0, WM.W, WM.H); c.globalAlpha = 1;

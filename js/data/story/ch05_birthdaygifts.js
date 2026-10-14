@@ -173,8 +173,8 @@
       s.spawn('r7', 'ruanxiaoqi', 12, 12, 'left'); s.boat('r7'); s.spawn('r5', 'ruanxiaowu', 8, 12, 'left');   // Xiaoqi punting out of the reeds; Xiaowu back from the gambling den
       await s.narrate('Ruan Xiaoer took a boat, and they rowed out among the reeds, calling for the others. Ruan Xiaoqi came punting out of the reeds singing, and they found Ruan Xiaowu coming back from the gambling den, his shirt open on the leopard tattooed on his chest. The four went to a tavern built on stilts over the water.');
       s.despawn('r2', { leave: true }); s.despawn('r5', { leave: true }); s.despawn('r7', { leave: true });
-      await s.warp('shijie_in', 25, 6, 'up');
-      s.spawn('r2', 'ruanxiaoer', 24, 6, 'right'); s.spawn('r5', 'ruanxiaowu', 26, 5, 'left'); s.spawn('r7', 'ruanxiaoqi', 25, 3, 'down');
+      await s.warp('shijie_in', 28, 6, 'up');
+      s.spawn('r2', 'ruanxiaoer', 27, 6, 'right'); s.spawn('r5', 'ruanxiaowu', 29, 5, 'left'); s.spawn('r7', 'ruanxiaoqi', 28, 3, 'down');
       await s.say('ruanxiaowu', 'Big carp? They\'re all out in the deep water of Liangshan Marsh, and we can\'t go there.');
       await s.say('wuyong', 'Why not? The marsh is wide. Who could stop you?');
       await s.say('ruanxiaoqi:angry', 'The bandits. A failed scholar called Wang Lun has five or seven hundred men up there now. They don\'t let anyone fish their waters. We\'ve had to put away our nets.');

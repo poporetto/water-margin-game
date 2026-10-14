@@ -48,16 +48,16 @@
   s.rect(0, 13, 6, 2, ':'); s.vline(6, 4, 26, ':');
   var r2 = s.house(1, 3, 5, 4, { roof: 'z', door: 2 }); var r5 = s.house(8, 8, 5, 4, { roof: 'z', door: 2 }); var r7 = s.house(1, 17, 5, 4, { roof: 'z', door: 2 });
   // the waterside tavern on stilts
-  s.rect(15, 23, 6, 4, '.'); var tavern = s.house(15, 22, 6, 4, { roof: 'z', door: 3 }); s.rect(17, 26, 2, 1, 'B'); s.hline(7, 18, 27, ':'); s.set(21, 23, 'Y');
+  s.rect(15, 23, 6, 4, '.'); var tavern = s.house(15, 22, 6, 4, { roof: 'z', door: 3 }); s.set(tavern.x, tavern.y + 1, ':'); s.hline(7, 18, 27, ':'); s.set(21, 23, 'Y');
   [r2, r5, r7].forEach(function (q) { s.hline(Math.min(q.x, 6), Math.max(q.x, 6), q.y + 1, ':'); });
-  s.set(14, 6, 'o'); s.set(15, 12, 'o'); s.set(14, 18, 'o');
+  [6, 12, 18].forEach(function (by) { for (var bx = 0; bx < 40; bx++) if (s.get(bx, by) === '~') { s.set(bx, by, 'o'); return; } });   // the fishing boats, pulled up at the water's edge
   s.scatter('T', 0.08, 192, '.', [0, 0, 14, 30]);
   L.clearAround(s, ':', 'T', '.');
   WM.defMap('shijie', { name: 'Shijie Village', theme: 'marsh', music: 'field', rows: s.rows(), spawn: [1, 14], battleBg: 'marsh', exits: [WM.toWorld('shijie', 0, 13, 1, 2)] });
-  var si = L.grid(30, 10, 'x');
-  var sR = { r2: si.room(1, 1, 7, 7), r5: si.room(8, 1, 7, 7), r7: si.room(15, 1, 7, 7), tavern: si.room(22, 1, 8, 8) };
-  si.stamp(2, 3, ['k..j.', '.....', '..t..']); si.stamp(9, 3, ['k..j.', '.....', '..t..']); si.stamp(16, 3, ['k..j.', '.....', '..t..']);
-  si.stamp(23, 3, ['h..h..', '.t..t.', 'cc....']);
+  var si = L.grid(34, 10, 'x');   // each house its own room, with void between (the next house is not seen through the wall)
+  var sR = { r2: si.room(1, 1, 7, 7), r5: si.room(9, 1, 7, 7), r7: si.room(17, 1, 7, 7), tavern: si.room(25, 1, 8, 8) };
+  si.stamp(2, 3, ['k..j.', '.....', '..t..']); si.stamp(10, 3, ['k..j.', '.....', '..t..']); si.stamp(18, 3, ['k..j.', '.....', '..t..']);
+  si.stamp(26, 3, ['h..h..', '.t..t.', 'cc....']);
   WM.defMap('shijie_in', { name: '', interior: true, theme: 'marsh', music: 'field', rows: si.rows(), spawn: [4, 6] });
   [[r2, sR.r2], [r5, sR.r5], [r7, sR.r7], [tavern, sR.tavern]].forEach(function (p) { L.link({ map: 'shijie', x: p[0].x, y: p[0].y }, { map: 'shijie_in', x: p[1].x, y: p[1].y }); });
   WM.data.shijie = { rooms: sR };
@@ -116,14 +116,14 @@
   var stage = c.house(27, 28, 11, 4, { roof: 'z', wall: 'R', door: 5, windows: [2, 8] }); c.set(26, 29, 'Y'); c.set(38, 29, 'Y');   // the theatre (勾欄) the Bai family open in chapter 13
   WM.defMap('yuncheng', { name: 'Yuncheng County', theme: 'summer', music: 'town', rows: c.rows(), spawn: [21, 31], battleBg: 'town', exits: [WM.toWorld('yuncheng', 20, 33, 4, 1)] });
   var ci = L.grid(80, 12, 'x');
-  var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(60, 1, 6, 8), stage: ci.room(67, 1, 12, 10) };
+  var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(61, 1, 5, 8), stage: ci.room(67, 1, 12, 10) };
   ci.stamp(68, 3, ['..KKKKKKK.', '..KKKKKKK.', '..........', '.t.t.t.t..', '.t.t.t.t..', '..........']);
   ci.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa.t.....', '..t.....t.....']);   // the county hall
   ci.stamp(19, 3, ['h..L...h', '.t..t...', '........', 'cc......']);
   ci.stamp(30, 3, ['k...h...X.', '........X.', '..t.....n.', '........Xk', 'j.......X.']);
   ci.stamp(43, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   ci.stamp(54, 3, ['hhhh.', '.....', 'ccc..']);
-  ci.stamp(61, 3, ['hhh.', '....', 'cc..']);
+  ci.stamp(62, 3, ['hhh', '...', 'cc.']);
   WM.defMap('yuncheng_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: ci.rows(), spawn: [9, 9] });
   [[office, cR.office], [tea, cR.tea], [yan, cR.yan], [inn, cR.inn], [shop, cR.shop], [store2, cR.store2], [stage, cR.stage]].forEach(function (p) { L.link({ map: 'yuncheng', x: p[0].x, y: p[0].y }, { map: 'yuncheng_in', x: p[1].x, y: p[1].y }); });
   WM.data.yuncheng = { rooms: cR, doors: { office: office, tea: tea, yan: yan, inn: inn, shop: shop, store2: store2, wine: wine, stage: stage } };

@@ -52,7 +52,7 @@
     exits: [WM.toWorld('daming', 27, 45, 4, 1)] });
   WM.data.damingDoors = { yamen: yamen, lu: lu, inn: inn, shop: shop, smith: smith, tal: tal, tower: tower, prison: prison };
 
-  var I = L.grid(72, 24, 'x');
+  var I = L.grid(74, 24, 'x');
   var R = {};
   R.yamen = I.room(1, 1, 22, 12, { floor: 'K' });
   I.stamp(2, 3, ['h...L..EEEEEE..L...h', '........q00q........', '........aaaa........', '..t...KKKKKKKK...t..', '..t...KKKKKKKK...t..', '......KKKKKKKK......', '....................', 'j..................j']);
@@ -60,7 +60,7 @@
   I.stamp(25, 3, ['h..A......A..h', '..............', '..t...KKK...t.', '.....KKKKK....', 'k............k']);
   R.inn = I.room(41, 1, 12, 8); I.stamp(42, 3, ['.....kk.kk', '.....kk.kk', 'cccc......']);
   R.shop = I.room(54, 1, 9, 8); I.stamp(55, 3, ['hhhhh..', '.......', 'ccc....']);
-  R.smith = I.room(63, 1, 9, 8); I.stamp(64, 3, ['jj..jj.', '.......', '.cccc..']);
+  R.smith = I.room(64, 1, 9, 8); I.stamp(65, 3, ['jj..jj.', '.......', '.cccc..']);
   R.tal = I.room(41, 10, 9, 8, { floor: 'N' }); I.stamp(42, 12, ['h.A.h..', '.......', '.ccc...']);
   R.tower = I.room(51, 10, 14, 10); I.stamp(52, 12, ['h..L....L...', '.t..t..t..t.', '............', '.t..t..t..t.', 'cccc........']);
   R.prison = I.room(1, 14, 18, 9, { floor: 'N' }); I.stamp(2, 16, ['FFFF.FFFF.FFFF..', 'k..F.k..F.k..F..', '...F....F....F..', 'F.FF.F.FF.F.FF..']);
@@ -72,7 +72,7 @@
   WM.defEvents('daming_in', [
     L.inn('dminn', 44, 4, 25), L.save('dmrec', 50, 6),
     L.shop('dmshop', 56, 4, 'daming', 'shopkeep', 'The Northern Capital has everything, if you have the silver.'),
-    L.smith('dmsmith', 66, 4, 10),
+    L.smith('dmsmith', 67, 4, 10),
     L.talis('dmtal', 44, 13, 'daming_t')
   ]);
   WM.defEvents('daming', [

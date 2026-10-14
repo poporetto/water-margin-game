@@ -113,7 +113,7 @@
   // ---------------- Flying Cloud Pond ----------------
   var f = L.grid(32, 16, 'T');
   f.rect(0, 6, 32, 4, '.'); f.hline(0, 31, 7, ':'); f.hline(0, 31, 8, ':');
-  f.rect(12, 2, 9, 4, '~'); f.rect(13, 10, 7, 4, '~'); f.rect(15, 7, 3, 2, 'B');
+  f.rect(12, 2, 9, 4, '~'); f.rect(13, 10, 7, 4, '~'); f.rect(14, 6, 5, 4, '~'); f.rect(15, 7, 3, 2, 'B');   // the stream between the two ponds runs under the bridge
   f.scatter('r', 0.3, 281, '~');
   WM.defMap('feiyun', { name: 'Flying Cloud Pond', theme: 'autumn', music: 'tense', rows: f.rows(), spawn: [1, 7], battleBg: 'marsh', exits: [] });
 
