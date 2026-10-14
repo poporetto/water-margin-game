@@ -175,7 +175,9 @@
       else if (ic === 'fort') { g.rect(lx - 1, ly - 1, 3, 1, '#'); g.set(lx - 1, ly, '#'); g.set(lx + 1, ly, '#'); g.set(lx, ly, 'G'); }
       else if (ic === 'mountain') { g.set(lx - 1, ly - 1, 'M'); g.set(lx + 1, ly - 1, 'M'); g.set(lx, ly - 1, 'M'); g.set(lx, ly, ':'); g.set(lx - 1, ly, 'P'); g.set(lx + 1, ly, 'P'); }
       else if (ic === 'inn') { g.set(lx, ly - 1, 'z'); g.set(lx + 1, ly - 1, 'z'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'O'); }
-      else if (ic === 'forest' || ic === 'pass' || ic === 'ruin' || ic === 'marsh') { g.set(lx, ly, ':'); g.set(lx, ly - 1, ic === 'forest' ? 'T' : ic === 'ruin' ? 'e' : ic === 'marsh' ? 'r' : 'm'); }
+      // a ruined monastery: the hall's roof half fallen in, one wall a heap of rubble, a dead tree in the yard
+      else if (ic === 'ruin') { g.set(lx - 1, ly - 1, 'v'); g.set(lx, ly - 1, 'v'); g.set(lx + 1, ly - 1, 'e'); g.set(lx - 1, ly, 'R'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'm'); }
+      else if (ic === 'forest' || ic === 'pass' || ic === 'marsh') { g.set(lx, ly, ':'); g.set(lx, ly - 1, ic === 'forest' ? 'T' : ic === 'marsh' ? 'r' : 'm'); }
       else if (ic === 'fortress') { /* Liangshan: the island itself */ g.set(lx, ly + 1, 'D'); g.set(lx - 1, ly + 1, 'Y'); g.set(lx + 1, ly + 1, 'Y'); g.rect(lx - 1, ly, 3, 1, '^'); }
       // clear approach tile
       var below = g.get(lx, ly + 1);

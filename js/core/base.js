@@ -90,7 +90,19 @@ WM.data = WM.data || {
   shops: {}
 };
 
-WM.defMap = function (id, def) { def.id = id; if (def.interior && Array.isArray(def.rows)) def.rows = WM.growBeds(def.rows); WM.data.maps[id] = def; return def; };
+WM.defMap = function (id, def) {
+  def.id = id;
+  if (Array.isArray(def.rows)) def.rows = def.interior ? WM.growBeds(def.rows) : WM.clearDoorsteps(def.rows);
+  WM.data.maps[id] = def; return def;
+};
+// Nothing grows or lies on a doorstep: a tree, bush or rock planted in front of a door (open or shut) is cleared.
+WM.clearDoorsteps = function (rows) {
+  var g = rows.map(function (r) { return r.split(''); });
+  for (var y = 0; y < g.length - 1; y++) for (var x = 0; x < g[y].length; x++) {
+    if ((g[y][x] === 'D' || g[y][x] === 'd') && 'TPHbmej'.indexOf(g[y + 1][x]) >= 0) g[y + 1][x] = '.';
+  }
+  return g.map(function (r) { return r.join(''); });
+};
 // A bed drawn as a single tile is too small for a person: grow each lone 'k' into a bed two tiles wide and two deep
 // (rightwards or leftwards, and down) where the floor is clear and it does not stand in front of a door.
 WM.growBeds = function (rows) {
