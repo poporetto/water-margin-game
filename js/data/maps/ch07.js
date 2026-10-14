@@ -100,7 +100,7 @@
   WM.data.mengzhouTaverns = taverns;
   var mi = L.grid(56, 12, 'x');
   var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'K' }), tower: mi.room(31, 1, 12, 8, { floor: 'K' }), happy: mi.room(44, 1, 11, 8) };
-  mi.stamp(2, 3, ['h...A....h', '..........', 'k.k.k.k.k.']);
+  mi.stamp(2, 3, ['h...A....h', '..........', 'kk..kk..kk', 'kk..kk..kk']);
   mi.stamp(15, 3, ['h...L....L...h', '..............', '...t......t...', '...t......t...', 'j............j']);
   mi.stamp(32, 3, ['L..t..t...L', '...........', '.k.......k.']);
   mi.stamp(45, 3, ['h..L....h', '.t..t..t.', 'cccc.....']);
@@ -123,7 +123,7 @@
   var hut = w.house(11, 4, 9, 4, { roof: 'z', door: 4, windows: [1, 7] });
   w.scatter('P', 0.25, 291, '.'); L.clearAround(w, ':', 'P', '.');
   WM.defMap('centipede', { name: 'Centipede Ridge', theme: 'autumn', music: 'dungeon', rows: w.rows(), spawn: [15, 22], battleBg: 'mountain', tint: 'night', exits: [] });
-  var wi = L.grid(12, 8, 'x'); var wR = wi.room(1, 1, 10, 7, { floor: 'N' }); wi.stamp(2, 3, ['h..A...k', '........', '..t.....']);
+  var wi = L.grid(12, 8, 'x'); var wR = wi.room(1, 1, 10, 7, { floor: 'N' }); wi.stamp(2, 3, ['hkkA....', '.kk.....', '..t.....']);
   WM.defMap('centipede_in', { name: 'Hermitage', interior: true, theme: 'autumn', music: 'dungeon', rows: wi.rows(), spawn: [6, 6] });
   L.link({ map: 'centipede', x: hut.x, y: hut.y }, { map: 'centipede_in', x: wR.x, y: wR.y });
 

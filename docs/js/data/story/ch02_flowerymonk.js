@@ -131,7 +131,7 @@
       await s.narrate('Lu Da slapped him so hard blood ran from his mouth, then a second blow knocked out two of his teeth. The inn boy crawled away into the back and did not come out again.');
       s.despawn('innboy');
       await s.say('luda', 'Go, old man. Go now, the two of you, and don\'t stop until you\'re far from Weizhou.');
-      await s.move('oldjin', 'R3 D3'); await s.move('cuilian', 'R2 D3');
+      await s.move('oldjin', 'R2 D3 R1'); await s.move('cuilian', 'R1 D3 R1');   // between the beds and out
       s.despawn('oldjin'); s.despawn('cuilian');
       await s.narrate('Lu Da took a stool, sat himself down in the inn doorway, and stayed there for two hours, until he judged the Jins were well out of reach. Then he got up and walked to the Zhuangyuan Bridge.');
       s.flag('ch2_tobutcher');
@@ -235,10 +235,10 @@
       s.spawn('m1', 'wutaimonk', 17, 11, 'down'); s.spawn('m2', 'wutaimonk', 18, 11, 'down');
       await s.say('wutaimonk', 'Squire Zhao! Welcome. The Abbot is expecting you in the Hall.');
       s.despawn('m1'); s.despawn('m2');
-      await s.warp('wutai_in', 34, 9, 'up');
-      s.spawn('zhizhen', 'zhizhen', 34, 5, 'down');
-      s.spawn('zhao', 'zhaoyuanwai', 33, 8, 'up');
-      s.spawn('m1', 'wutaimonk', 31, 6, 'right'); s.spawn('m2', 'wutaimonk', 37, 6, 'left'); s.spawn('m3', 'wutaimonk', 31, 8, 'right'); s.spawn('m4', 'wutaimonk', 37, 8, 'left');
+      await s.warp('wutai_in', 36, 9, 'up');
+      s.spawn('zhizhen', 'zhizhen', 36, 5, 'down');
+      s.spawn('zhao', 'zhaoyuanwai', 35, 8, 'up');
+      s.spawn('m1', 'wutaimonk', 33, 6, 'right'); s.spawn('m2', 'wutaimonk', 39, 6, 'left'); s.spawn('m3', 'wutaimonk', 33, 8, 'right'); s.spawn('m4', 'wutaimonk', 39, 8, 'left');
       await s.move('player', 'U2');
       await s.say('zhaoyuanwai', 'Reverend Abbot, this is a cousin of mine, Lu Da, who has seen the emptiness of the world and wishes to leave it. I beg you to accept him as a monk.');
       await s.say('wutaimonk:concerned', '(whispering) Look at him. That face. Those eyes. He\'s no monk — he\'s a killer. Ordain him and he\'ll bring the whole monastery down on our heads.');
@@ -270,7 +270,11 @@
       await s.say('peddler', '...You\'re joking, Reverend. I sell to the monastery\'s workmen and porters, not to monks. The Abbot has forbidden us. If he hears I\'ve sold a monk wine, he\'ll take back the shop he lets me, and I\'ll have nowhere to live. I wouldn\'t sell to you if you killed me.');
       await s.say('luzhishen:angry', 'I\'m not going to kill you. I\'m going to buy your wine.');
       await s.narrate('The peddler picked up his buckets and started to run. Zhishen caught him, seized the pole, and kicked him in the groin. While the man doubled over, Zhishen carried a bucket up into the pavilion, sat down, scooped the wine out with the ladle, and drank it all.');
+      s.place('player', 9, 31, 'down'); s.place('ch2_peddler', 9, 32, 'up');   // Zhishen in the pavilion, the peddler outside it
       await s.say('luzhishen', 'Come to the monastery tomorrow for your money.');
+      await s.say('peddler:shock', '(clutching himself) T-tomorrow! Yes, Reverend! Keep the bucket!');
+      // he snatches up his pole and the other bucket and runs for it, down the path to the town
+      await s.move('ch2_peddler', 'D1 R4 D1 R2 D2 R2 D5', { run: true });
       s.flag('ch2_drunk1');
       s.weather(null);
       await s.narrate('By the time he had finished the bucket, the wine had gone to his head. He tied his robe sleeves round his waist and staggered back up the mountain, swinging his arms and showing the tattoos on his back.');
@@ -292,6 +296,59 @@
       s.flag('ch2_scolded');
       await s.narrate('For three or four months after that, he did not dare leave the monastery. But one warm day in the second month he strolled out of the gate, and looking down from the hill, he saw the market town at the foot of the mountain, and heard the ring of a smith\'s hammer.');
     } }
+  ]);
+
+  // ---------------- the monks of Wutai: newly ordained, after the first drunkenness, after he is sent away ----------------
+  var ordained = function (S2) { return S2.has('ch2_monk') && !S2.has('ch2_drunk1'); };
+  var disgraced = function (S2) { return S2.has('ch2_drunk1') && !S2.has('ch2_expelled'); };
+  var gone = function (S2) { return S2.has('ch2_expelled'); };
+  function monks(map, id, x, y, npc, lines) {
+    return [ordained, disgraced, gone].map(function (cond, i) { return { id: id + i, x: x, y: y, npc: npc, cond: cond, text: [lines[i]] }; });
+  }
+  WM.defEvents('wutai', [].concat(
+    monks('wutai', 'wtsweep', 22, 17, 'wutaimonk', [
+      'Brother Zhishen, the meditation bell has rung twice. ...You are going out of the gate again? The Abbot said — never mind. Amitabha.',
+      'Twenty strokes of the bamboo for breaking the wine precept, the rules say, and you got not one. The Abbot is too soft on you, Brother. Everyone says so.',
+      'We are rebuilding the guardian kings at the gate with Squire Zhao\'s silver. The new ones look a good deal less fierce.']),
+    monks('wutai', 'wtmed', 9, 17, 'wutaimonk', [
+      'You snore like a thunderclap, Brother, and you relieve yourself behind the Buddha hall. The elders have gone to the Abbot twice. He only says, "In time he will be enlightened."',
+      '(The monk steps quickly out of your way and bows very low.) Good — good morning, Reverend Brother.',
+      'Sometimes I almost miss the snoring. The meditation hall is very quiet now.']),
+    monks('wutai', 'wtwell', 30, 9, 'wutaimonk', [
+      'When the Abbot sits in meditation he sees a man\'s past and future. If he says you are a star of Heaven, Brother, then you are one. Even if the rest of us cannot see it.',
+      'The Abbot did not sleep last night. He sat before the Buddha until dawn. I think he was praying for you, Brother.',
+      'The Abbot keeps Zhishen\'s old begging bowl by his couch. He says that one will come back to Wutai once more, before the end.'])
+  ));
+  WM.defEvents('wutai_in', [].concat(
+    monks('wutai_in', 'wthall', 33, 10, 'wutaimonk', [
+      'This is the Hall of the Great Hero. Manjusri, the Bodhisattva of Wisdom, sits at the centre. Keep your voice down here, Brother.',
+      '(He keeps his eyes on his sutra, and edges round to the far side of the column.)',
+      'Manjusri rides a lion, because wisdom must be fierce. The Abbot said that once, about a certain monk.']),
+    monks('wutai_in', 'wthall2', 39, 10, 'wutaimonk', [
+      'Squire Zhao gave the monastery a great gift on the day you were ordained: bolts of silk and a hundred strings of cash. The elders were very quiet after that.',
+      'The brother you struck on the head is still lying in the infirmary. Please, Brother — not in the hall.',
+      'Squire Zhao has paid for the new guardian kings, the pavilion and the medicine for the injured brothers. He is a patient man.']),
+    monks('wutai_in', 'wtplat', 9, 5, 'wutaimonk', [
+      '(A monk sits cross-legged on the platform with his eyes closed.) ...When you sleep here, Brother, please do it quietly. Some of us are trying to reach enlightenment.',
+      'You were sick on the floor, just there. I cleaned it. Amitabha.',
+      'His place on the platform is still empty. Nobody will take it.'])
+  ));
+  WM.defEvents('wutai_town', [
+    // a woman of the town, which lives off the monastery and its pilgrims
+    { id: 'wtt_a', x: 10, y: 11, npc: 'woman', cond: function (S2) { return !S2.has('ch2_monk'); }, text: ['Pilgrims come up from Daizhou every spring. We sell them incense and steamed buns, and rent them beds. The monastery owns half the houses in town.'] },
+    { id: 'wtt_b', x: 10, y: 11, npc: 'woman', cond: ordained, text: ['There\'s a new monk up at the monastery, they say. Big as a guardian king, with flowers tattooed all over his back!'] },
+    { id: 'wtt_c', x: 10, y: 11, npc: 'woman', cond: function (S2) { return S2.has('ch2_drunk1') && !S2.has('ch2_expelled'); }, text: ['A monk kicked the wine-seller flat on the mountain path and drank his whole bucket! The Abbot paid the man out of his own purse.'] },
+    { id: 'wtt_d', x: 10, y: 11, npc: 'woman', cond: gone, text: ['The big monk smashed the guardian kings at the gate, and they have sent him away to the Eastern Capital. The whole town heard the crash.'] },
+    // a porter on the road up the mountain
+    { id: 'wtt_p', x: 19, y: 8, npc: 'villager', cond: function (S2) { return !S2.has('ch2_drunk1'); }, text: ['I carry rice up to the monastery. Three hundred and some steps, twice a day. The monks never carry their own.'] },
+    { id: 'wtt_p2', x: 19, y: 8, npc: 'villager', cond: function (S2) { return S2.has('ch2_drunk1'); }, text: ['No wine sold on the mountain path any more, not even to us porters. All for one thirsty monk.'] },
+    // an old man by the smithy
+    { id: 'wtt_o', x: 9, y: 8, npc: 'oldman', cond: function (S2) { return !S2.has('ch2_staff'); }, text: ['Hear that hammer? Old Zhang the smith. Pilgrims buy knives from him for the road home.'] },
+    { id: 'wtt_o2', x: 9, y: 8, npc: 'oldman', cond: function (S2) { return S2.has('ch2_staff'); }, text: ['Sixty-two catties of iron, for a monk\'s staff! Zhang says his arm still aches. What does a monk want with a thing like that?'] },
+    // a child, and a pilgrim come to burn incense
+    { id: 'wtt_k', x: 23, y: 23, npc: 'child', cond: function (S2) { return !S2.has('ch2_expelled'); }, text: ['Mama says not to stare at the monks. ...Are you a monk? You don\'t look like one.'] },
+    { id: 'wtt_k2', x: 23, y: 23, npc: 'child', cond: gone, text: ['When I grow up I\'m going to be as strong as the big monk. He knocked over a guardian king!'] },
+    { id: 'wtt_s', x: 14, y: 21, npc: 'scholar', text: ['I have walked four hundred li to burn incense before Manjusri. They say that on a clear night you can see the Bodhisattva\'s lamp shining on the northern peak.'] }
   ]);
 
   // ---------------- Wutai town: the staff and the dog meat ----------------

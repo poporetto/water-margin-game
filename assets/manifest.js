@@ -32,3 +32,5 @@ Object.keys(WM.ASSETS.portraitGroups).reduce(function (ids, group) {
     expressions: ['normal', 'angry', 'sad', 'smile', 'shock', 'concerned']
   };
 });
+// people who share a painted sheet: the innkeeper of every town is the one painted for Chapter 4's Kaifeng inn
+WM.ASSETS.portraitSheets.innkeep = Object.assign({}, WM.ASSETS.portraitSheets.kfinnkeep, { file: 'kfinnkeep' });

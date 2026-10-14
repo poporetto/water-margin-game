@@ -481,7 +481,15 @@
         }
       }
     }
+    // a shut door: someone else's house
+    for (k = 0; k < probes.length; k++) {
+      var dtx = Math.floor(probes[k].x / TS), dty = Math.floor(probes[k].y / TS), dd = WM.tiles.DEF[F.map.get(dtx, dty)];
+      if (dd && dd.shut) { var line = SHUT[Math.floor(WM.util.hash2(dtx, dty, 7) * SHUT.length)]; F.runEvent({ id: 'door', map: F.map.id, run: async function (s) { await s.say(null, line); } }); return; }
+    }
   };
+  var SHUT = ['(The door is barred from the inside.)', '(You knock. Nobody comes.)', '(A dog barks behind the door, but no one opens it.)',
+    '(The door is shut. Through the crack comes the smell of millet porridge.)', '(You knock. A voice inside calls, "We have nothing to sell!")',
+    '(The door is shut, and a pair of paper door-gods glare out from its leaves.)'];
 
   F.runEvent = function (ev, actor) {
     var fn = ev.run;
@@ -566,7 +574,7 @@
       var sx = tt.x * TS - cx, sy = tt.y * TS - cy;
       if (sx < -32 || sy < -48 || sx > WM.LOW_W + 32 || sy > WM.LOW_H + 32) continue;
       if (elsewhere(tt.x, tt.y)) continue;
-      list.push({ y: tt.y * TS + 14, kind: 't', t: tt, sx: sx, sy: sy });
+      list.push({ y: tt.y * TS + (tt.d.sortDy != null ? tt.d.sortDy : 14), kind: 't', t: tt, sx: sx, sy: sy });
     }
     var all = F.actors.concat([F.player]);
     for (i = 0; i < all.length; i++) {
@@ -579,7 +587,7 @@
     list.sort(function (p, q) { return p.y - q.y; });
     for (i = 0; i < list.length; i++) {
       var it = list[i];
-      if (it.kind === 't') it.t.d.tall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map);
+      if (it.kind === 't') it.t.d.tall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map, F.map.get(it.t.x, it.t.y));
       else drawActor(c, it.a, cx, cy);
     }
     // emotes on top

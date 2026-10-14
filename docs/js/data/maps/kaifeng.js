@@ -76,13 +76,13 @@
   var R = {};
   R.wang = I.room(1, 1, 10, 8); I.stamp(2, 3, ['k...h', '.....', '..t..']); I.set(8, 3, 'j');
   R.lin = I.room(12, 1, 10, 8); I.stamp(13, 3, ['k.h.k', '.....', '..t..']); I.set(20, 3, 'j');
-  R.luqian = I.room(23, 1, 10, 8); I.stamp(24, 3, ['h..hk', '.....', '.tt..']);
-  R.inn = I.room(34, 1, 12, 9); I.stamp(35, 3, ['k.k.k.k.k.', '..........', 'cccc......', '......t..t']);
+  R.luqian = I.room(23, 1, 10, 8); I.stamp(24, 3, ['h..kk', '...kk', '.tt..']);
+  R.inn = I.room(34, 1, 12, 9); I.stamp(35, 3, ['.....kk.kk', '.....kk.kk', 'cccc......', '......t..t']);
   R.shop = I.room(47, 1, 8, 7); I.stamp(48, 3, ['hhhhhh', '......', 'cccc..']);
   R.smith = I.room(56, 1, 8, 7); I.stamp(57, 3, ['jj..jj', '......', '.cccc.']);
   R.tal = I.room(1, 11, 9, 7, { floor: 'N' }); I.stamp(2, 13, ['h.A.h', '.....', '.ccc.']);
   R.fan = I.room(11, 11, 15, 10); I.stamp(12, 13, ['h..L.....L..h', '.............', '.t..t..t..t..', '.............', '.t..t..t..t..', 'cccc.........']);
-  R.li = I.room(27, 11, 10, 8, { floor: 'K' }); I.stamp(28, 13, ['h.k..h', '......', '..t...']);
+  R.li = I.room(27, 11, 10, 8, { floor: 'K' }); I.stamp(28, 13, ['hkk..h', '.kk...', '..t...']);
   R.yue = I.room(38, 11, 12, 9, { floor: 'N' }); I.stamp(39, 13, ['L..UU..L.', '...AA....', '.........', 'j.......j']);
   R.xu = I.room(51, 11, 12, 9); I.stamp(52, 13, ['k..h..j...', '..........', '...t......', 'h.........']);
   WM.defMap('kaifeng_in', { name: '', interior: true, theme: 'spring', music: 'town', rows: I.rows(), battleBg: 'interior', spawn: [6, 6] });

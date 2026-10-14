@@ -155,7 +155,7 @@
   ]);
   WM.defEvents('yishui_in', [
     { id: 'ch10_home', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch10_liguidone') && WM.state.map === 'yishui_in' && WM.state.x < 10; }, run: async function (s) {
-      s.spawn('mother', 'likuimother', 3, 4, 'down');
+      s.spawn('mother', 'likuimother', 4, 4, 'down');   // by her bed
       await s.say('likuimother', 'Who\'s there? ...Tie\'niu? Is that you, my son?');
       await s.say('likui:sad', 'Mother! It\'s me, Iron Ox! I\'ve come home!');
       await s.say('likuimother:sad', 'I\'ve cried my eyes blind for you, my son. Where have you been all these years?');

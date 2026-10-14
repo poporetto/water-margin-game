@@ -49,6 +49,8 @@
     ['Y', 'War banner (elsewhere)', ['.....', '..Y..', '.....']],
     ['Y', 'Liangshan banner (on Liangshan)', ['.....', '..Y..', '.....'], false, 'liangshan'],
     ['J', 'Wine flag (taverns)', ['.zzzz', '.WWDW', 'J....']],
+    ['d', 'Shut door (a house with no way in)', ['.^^^^^.', '.WWdWW.', '.......']],
+    ['u', 'Market stall', ['=====', '=u.u=', '=====']],
     ['F', 'Fence', ['.......', '.FFFFF.', '.F...F.', '.FFFFF.']],
     ['p', 'Well', ['=====', '==p==', '=====']],
     ['T', 'Broadleaf tree', ['.....', '.T.T.', '.....']],
@@ -76,7 +78,8 @@
     ['t', 'Table', ['XXXXX', 'nntnn', 'nnnnn'], true],
     ['c', 'Counter', ['XXXXX', 'ncccn', 'nnnnn'], true],
     ['h', 'Shelf', ['XXXXX', 'hnnhn', 'nnnnn'], true],
-    ['k', 'Bed', ['XXXXX', 'nknnn', 'nnnnn'], true],
+    ['k', 'Bed (two by two)', ['XXXXXX', 'nkknnn', 'nkknnn', 'nnnnnn'], true],
+    ['k', 'Sleeping platform (three wide)', ['XXXXXX', 'nkkkn', 'nkkkn', 'nnnnn'], true],
     ['j', 'Jar', ['XXXXX', 'njjnn', 'nnnnn'], true],
     ['A', 'Altar', ['XXXXX', 'NNANN', 'NNNNN'], true],
     ['U', 'Statue', ['XXXXX', 'NNUNN', 'NNNNN'], true],
@@ -97,7 +100,7 @@
     c.fillStyle = '#000'; c.fillRect(0, 0, cv.width, cv.height);
     c.drawImage(base, 0, 16);
     var th = T.THEMES.spring;
-    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { var d = T.DEF[m.get(x, y)]; if (d && d.tall) d.tall(c, x * S, y * S + 16, x, y, th, m); }
+    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { var d = T.DEF[m.get(x, y)]; if (d && d.tall) d.tall(c, x * S, y * S + 16, x, y, th, m, m.get(x, y)); }
     var f = document.createElement('figure');
     f.appendChild(cv);
     var cap = document.createElement('figcaption');

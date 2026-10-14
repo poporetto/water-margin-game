@@ -260,7 +260,7 @@
       img.onerror = function () { PT.sheetSettled[id] = true; resolve(false); };
       // never hold up a line of dialogue on art: if the sheet is slow, go on with the plain portrait
       setTimeout(function () { if (!PT.sheetSettled[id]) { PT.sheetSettled[id] = true; resolve(false); } }, 2500);
-      img.src = 'assets/portraits/' + id + '-expressions.png';
+      img.src = 'assets/portraits/' + (spec.file || id) + '-expressions.png';   // a sheet may be shared (spec.file)
     });
     return PT.sheetLoads[id];
   };

@@ -41,7 +41,7 @@
   var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'K' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };
   zi.stamp(2, 3, ['h...UU....UU...h', '....AA....AA....', '..t..........t..', '..t..........t..', '................']);
   zi.stamp(21, 3, ['F.FF.FF.FF', 'F..F..F..F', 'FF.FF.FF.F']);
-  zi.stamp(34, 3, ['k..', '.t.']);
+  zi.stamp(34, 3, ['kk..', 'kk..', '...t']);
   WM.defMap('zhujia_in', { name: '', interior: true, theme: 'autumn', music: 'tense', rows: zi.rows(), spawn: [10, 9] });
   L.link({ map: 'zhujia', x: hall.x, y: hall.y }, { map: 'zhujia_in', x: zR.hall.x, y: zR.hall.y });
   L.link({ map: 'zhujia', x: zhongli.x, y: zhongli.y }, { map: 'zhujia_in', x: zR.cottage.x, y: zR.cottage.y });

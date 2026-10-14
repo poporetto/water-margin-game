@@ -32,7 +32,7 @@ async function run() {
   W.portraits.tryOverride('linchong'); requests.pop().onload();
   assert.strictEqual(W.portraits.overrides.linchong, sheetNormal, 'Late static load cannot replace sheet normal');
   for (const id of Object.keys(W.ASSETS.portraitSheets)) {
-    assert(fs.existsSync('assets/portraits/' + id + '-expressions.png'));
+    assert(fs.existsSync('assets/portraits/' + (W.ASSETS.portraitSheets[id].file || id) + '-expressions.png'));
     assert.strictEqual(W.ui.resolveSpeaker(id).portrait, id);
   }
   const source = ['ch00_prologue.js', 'ch01_ninedragons.js', 'ch02_flowerymonk.js', 'ch03_pantherhead.js', 'ch04_blueface.js', 'ch05_birthdaygifts.js', 'ch06_timelyrain.js'].map(name => fs.readFileSync('js/data/story/' + name, 'utf8')).join('\n');

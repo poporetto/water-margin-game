@@ -90,7 +90,28 @@ WM.data = WM.data || {
   shops: {}
 };
 
-WM.defMap = function (id, def) { def.id = id; WM.data.maps[id] = def; return def; };
+WM.defMap = function (id, def) { def.id = id; if (def.interior && Array.isArray(def.rows)) def.rows = WM.growBeds(def.rows); WM.data.maps[id] = def; return def; };
+// A bed drawn as a single tile is too small for a person: grow each lone 'k' into a bed two tiles wide and two deep
+// (rightwards or leftwards, and down) where the floor is clear and it does not stand in front of a door.
+WM.growBeds = function (rows) {
+  var g = rows.map(function (r) { return r.split(''); });
+  var at = function (x, y) { return (g[y] || [])[x]; };
+  var floor = function (x, y) { var c = at(x, y); return c === 'n' || c === 'N' || c === 'K'; };
+  for (var y = 0; y < g.length; y++) for (var x = 0; x < g[y].length; x++) {
+    if (at(x, y) !== 'k' || at(x - 1, y) === 'k' || at(x + 1, y) === 'k' || at(x, y - 1) === 'k' || at(x, y + 1) === 'k') continue;
+    for (var o = 0; o > -2; o--) {
+      var ox = x + o, ok = true;
+      for (var dx = 0; dx < 2 && ok; dx++) for (var dy = 0; dy < 2 && ok; dy++) {
+        var cx = ox + dx, cy = y + dy;
+        if (!(cx === x && cy === y) && !floor(cx, cy)) ok = false;
+        if (at(cx, y + 2) === 'D' || at(cx, y + 2) === 'k' || at(cx, y - 1) === 'k') ok = false;
+      }
+      [y, y + 1].forEach(function (yy) { if (at(ox - 1, yy) === 'k' || at(ox + 2, yy) === 'k') ok = false; });   // never fused with the next bed
+      if (ok) { g[y][ox] = g[y][ox + 1] = g[y + 1][ox] = g[y + 1][ox + 1] = 'k'; break; }
+    }
+  }
+  return g.map(function (r) { return r.join(''); });
+};
 WM.defEvents = function (mapId, list) {
   var arr = WM.data.events[mapId] = WM.data.events[mapId] || [];
   for (var i = 0; i < list.length; i++) { list[i].map = mapId; arr.push(list[i]); }

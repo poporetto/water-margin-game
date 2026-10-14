@@ -126,7 +126,7 @@
   ROOMS.store = I.room(32, 1, 9, 7); I.stamp(33, 3, ['hhhhh..', '.......', 'ccc....']);
   ROOMS.smithy = I.room(42, 1, 9, 7); I.stamp(43, 3, ['jj..jj.', '.......', '.cccc..']);
   ROOMS.tailor = I.room(52, 1, 9, 7); I.stamp(53, 3, ['hhhhhh.', '.......', '.cccc..']);
-  ROOMS.barracks = I.room(61, 1, 9, 9); I.stamp(62, 3, ['k.k.k..', '.......', 'k.k.k..', '.......', '..t....']);
+  ROOMS.barracks = I.room(61, 1, 9, 9); I.stamp(62, 3, ['kk.kk..', 'kk.kk..', '.....kk', '.....kk', '..t....']);
   ROOMS.clinic = I.room(32, 10, 9, 7); I.stamp(33, 12, ['k.h.k..', '.......', '..t....']);
   ROOMS.engrave = I.room(42, 10, 9, 7, { floor: 'N' }); I.stamp(43, 12, ['h.A.h..', '.......', '.ccc...']);
   ROOMS.records = I.room(52, 10, 9, 7); I.stamp(53, 12, ['hhhhhh.', '.......', '..t....']);

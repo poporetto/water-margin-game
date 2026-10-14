@@ -22,7 +22,7 @@
   [tea, garrison, pan].forEach(function (d) { g.vline(d.x, d.y + 1, 9, ':'); });
   // market square
   g.rect(23, 12, 7, 2, '=');
-  g.stamp(24, 12, ['t.t.t']);
+  g.stamp(24, 12, ['u.u.u']);   // market stalls
   // south side
   var inn = g.house(2, 18, 9, 5, { roof: 'z', door: 4, windows: [1, 7] });
   var butcher = g.house(26, 18, 9, 5, { roof: 'z', door: 6, windows: [2] });
@@ -44,7 +44,7 @@
   R.tea = I.room(1, 1, 12, 8); I.stamp(2, 3, ['h..L....h.', '..........', '.t..t..t..', 'cc........']);
   R.garrison = I.room(14, 1, 10, 8, { floor: 'N' }); I.stamp(15, 3, ['h..A...h', '........', '..t..t..']);
   R.pan = I.room(25, 1, 18, 10); I.stamp(26, 3, ['h...L.....L...h.', '................', '.t..t..t....t...', '................', '.t..t..t..cccc..']);
-  R.inn = I.room(44, 1, 12, 8); I.stamp(45, 3, ['k.k..k.k..', '..........', 'cccc......']);
+  R.inn = I.room(44, 1, 12, 8); I.stamp(45, 3, ['.....kk.kk', '.....kk.kk', 'cccc......']);
   R.butcher = I.room(1, 12, 12, 8); I.stamp(2, 14, ['jj..hh..jj', '..........', '.cccccccc.']);
   WM.defMap('weizhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: I.rows(), spawn: [6, 7] });
   var link = function (door, room) { L.link({ map: 'weizhou', x: door.x, y: door.y }, { map: 'weizhou_in', x: room.x, y: room.y }); };

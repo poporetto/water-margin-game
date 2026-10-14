@@ -121,7 +121,7 @@
   ci.stamp(2, 3, ['h...UU....h...', '....AA........', '..t.....t.....', '..t.....t.....']);
   ci.stamp(19, 3, ['h..L...h', '.t..t...', '........', 'cc......']);
   ci.stamp(30, 3, ['k...h...X.', '........X.', '..t.....n.', '........Xk', 'j.......X.']);
-  ci.stamp(43, 3, ['k.k.k...', '........', 'ccc.....']);
+  ci.stamp(43, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   ci.stamp(54, 3, ['hhhh.', '.....', 'ccc..']);
   ci.stamp(61, 3, ['hhh.', '....', 'cc..']);
   WM.defMap('yuncheng_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: ci.rows(), spawn: [9, 9] });

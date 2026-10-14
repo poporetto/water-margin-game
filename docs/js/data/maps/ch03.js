@@ -69,7 +69,7 @@
   gi.stamp(15, 3, ['L.UUU.L.', '..AAA...', '........']);
   gi.stamp(26, 3, ['h..L...h', '........', '.t..t..t', 'cc......']);
   gi.stamp(37, 3, ['hhhh..', '......', 'ccc...']);
-  gi.stamp(46, 3, ['k.k.k...', '........', 'ccc.....']);
+  gi.stamp(46, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('cangzhou_in', { name: '', interior: true, get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town' : 'snow'; }, rows: gi.rows(), spawn: [6, 7] });
   [[camp, gR.camp], [tw, gR.tw], [lix, gR.lix], [shop, gR.shop], [inn, gR.inn]].forEach(function (p) { L.link({ map: 'cangzhou', x: p[0].x, y: p[0].y }, { map: 'cangzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.cangzhou = { rooms: gR };

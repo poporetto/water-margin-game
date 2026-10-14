@@ -746,12 +746,17 @@
       var w = {
         update: function () { if (WM.time - t0 > 0.6 && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); UI.remove(w); resolve(); } },
         draw: function () {
-          G.window(200, 70, 560, 70 + (drops.length ? 40 : 0));
-          G.text('Victory', 480, 84, { size: 30, bold: true, align: 'center', color: G.COL.gold });
-          G.text('Got ' + gold + ' taels', 480, 118, { size: 22, align: 'center' });
-          if (drops.length) G.text('Found: ' + drops.map(function (d) { return WM.data.items[d].name; }).join(', '), 480, 148, { size: 20, align: 'center', color: '#bfe0ff' });
+          // the banner is as tall as its lines (no "0 taels"); the EXP tags never sit on it
+          var lines = [];
+          if (gold > 0) lines.push({ t: 'Got ' + gold + ' taels', size: 22, col: G.COL.text });
+          if (drops.length) lines.push({ t: 'Found: ' + drops.map(function (d) { return WM.data.items[d].name; }).join(', '), size: 20, col: '#bfe0ff' });
+          var bottom = 70 + 52 + lines.length * 32;
+          G.window(200, 70, 560, bottom - 70);
+          G.text('Victory', 480, 82, { size: 30, bold: true, align: 'center', color: G.COL.gold });
+          lines.forEach(function (l, i) { G.text(l.t, 480, 120 + i * 32, { size: l.size, align: 'center', color: l.col }); });
           gains.forEach(function (g) {
             var x = g.u.pos[0], y = g.u.pos[1] - 140;
+            if (y - 6 < bottom + 8) y = g.u.pos[1] + 12;   // no room above the head: show it at the feet
             if (g.u.hp <= 0) return;
             var tx = g.up ? 'LV UP! ' + g.lv : '+' + g.exp + ' EXP';
             var tw = G.measure(tx, 20, true) + 24;

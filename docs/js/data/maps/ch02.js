@@ -23,7 +23,7 @@
   WM.defMap('yanmen', { name: 'Yanmen County', theme: 'autumn', music: 'town', rows: y.rows(), spawn: [15, 22], battleBg: 'town', exits: [WM.toWorld('yanmen', 14, 23, 3, 1)] });
   var yi = L.grid(40, 12, 'x');
   var yR = { shop: yi.room(1, 1, 8, 7), inn: yi.room(10, 1, 10, 7), zhao: yi.room(21, 1, 16, 10, { floor: 'K' }) };
-  yi.stamp(2, 3, ['hhhh..', '......', 'ccc...']); yi.stamp(11, 3, ['k.k.k...', '........', 'cccc....']);
+  yi.stamp(2, 3, ['hhhh..', '......', 'ccc...']); yi.stamp(11, 3, ['...kk.kk', '...kk.kk', 'cccc....']);
   yi.stamp(22, 3, ['h..A....A..h..', '..............', '...t......t...', '..............', 'j....kkk.....j']);
   WM.defMap('yanmen_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: yi.rows(), spawn: [5, 6] });
   L.link({ map: 'yanmen', x: yShop.x, y: yShop.y }, { map: 'yanmen_in', x: yR.shop.x, y: yR.shop.y });
@@ -49,14 +49,14 @@
   [smith, tavern].forEach(function (d) { t.vline(d.x, d.y + 1, 11, ':'); });
   t.hline(2, 31, 22, ':'); t.vline(12, 14, 22, ':'); t.vline(20, 14, 22, ':');
   [store, tinn].forEach(function (d) { t.vline(d.x, d.y + 1, 22, ':'); });
-  t.stamp(29, 9, ['jtJ']);                         // a little tavern stall at the edge of town
+  t.stamp(29, 9, ['juJ']);                         // a little tavern stall at the edge of town
   t.scatter('P', 0.1, 61, '.', [1, 1, 32, 24]); t.scatter('m', 0.03, 62, '.', [1, 1, 32, 24]);
   L.clearAround(t, ':', 'Pm', '.');
   WM.defMap('wutai_town', { name: 'Town below Mount Wutai', theme: 'autumn', music: 'field', rows: t.rows(), spawn: [16, 24], battleBg: 'mountain', exits: [WM.toWorld('wutai', 16, 25, 2, 1)] });
   var ti = L.grid(44, 10, 'x');
   var tR = { smith: ti.room(1, 1, 10, 8), tavern: ti.room(12, 1, 12, 8), store: ti.room(25, 1, 8, 8), inn: ti.room(34, 1, 10, 8) };
   ti.stamp(2, 3, ['jj..hh..', '........', '.cccc...']); ti.stamp(13, 3, ['h...L....h', '..........', '.t..t..t..', 'cc........']);
-  ti.stamp(26, 3, ['hhhh..', '......', 'ccc...']); ti.stamp(35, 3, ['k.k.k...', '........', 'ccc.....']);
+  ti.stamp(26, 3, ['hhhh..', '......', 'ccc...']); ti.stamp(35, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('wutai_town_in', { name: '', interior: true, theme: 'autumn', music: 'field', rows: ti.rows(), spawn: [5, 6] });
   L.link({ map: 'wutai_town', x: smith.x, y: smith.y }, { map: 'wutai_town_in', x: tR.smith.x, y: tR.smith.y });
   L.link({ map: 'wutai_town', x: tavern.x, y: tavern.y }, { map: 'wutai_town_in', x: tR.tavern.x, y: tR.tavern.y });
@@ -99,11 +99,12 @@
   });
   // town north gap leads up the mountain
   WM.data.maps.wutai_town.exits.push({ x: 16, y: 0, w: 2, h: 1, to: 'wutai', tx: 17, ty: 40, dir: 'up' });
-  var wi = L.grid(40, 12, 'x');
-  var wR = { med: wi.room(1, 1, 16, 10, { floor: 'N' }), abbot: wi.room(18, 1, 10, 8, { floor: 'K' }), main: wi.room(29, 1, 11, 10, { floor: 'N' }) };
-  wi.stamp(2, 3, ['k.k.k.k.k.k.k.', '..............', '..............', 'k.k.k.k.k.k.k.', '..............']);
+  var wi = L.grid(46, 15, 'x');
+  var wR = { med: wi.room(1, 1, 16, 10, { floor: 'N' }), abbot: wi.room(18, 1, 10, 8, { floor: 'K' }), main: wi.room(29, 1, 15, 13, { floor: 'N' }) };
+  wi.stamp(2, 3, ['kkk..kkk..kkk.', 'kkk..kkk..kkk.', '..............', 'kkk..kkk..kkk.', 'kkk..kkk..kkk.'])   // the long meditation platforms the monks sleep on;
   wi.stamp(19, 3, ['h..A..h.', '........', '..t.....']);
-  wi.stamp(30, 3, ['L..UUU..L', '...AAA...', '.........', 'j.......j']);
+  // the Hall of the Great Hero: the Manjusri triad on its altar, red columns, a carpet from the door to the altar
+  wi.stamp(30, 3, ['hh.L.UUU.L.hh', '.....AAA.....', '.i.........i.', '.....KKK.....', '.i...KKK...i.', '.....KKK.....', '.i...KKK...i.', '.....KKK.....', 'j....KKK....j', '.....KKK.....']);
   WM.defMap('wutai_in', { name: '', interior: true, theme: 'autumn', music: 'palace', rows: wi.rows(), spawn: [9, 9] });
   L.link({ map: 'wutai', x: medHall.x, y: medHall.y }, { map: 'wutai_in', x: wR.med.x, y: wR.med.y });
   L.link({ map: 'wutai', x: abbotH.x, y: abbotH.y }, { map: 'wutai_in', x: wR.abbot.x, y: wR.abbot.y });

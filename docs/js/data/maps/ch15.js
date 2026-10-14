@@ -21,7 +21,7 @@
   var hR = { hall: hi.room(1, 1, 16, 10, { floor: 'K' }), jail: hi.room(18, 1, 12, 9, { floor: 'N' }), inn: hi.room(31, 1, 10, 8) };
   hi.stamp(2, 3, ['h...UU....UU..', '....AA....AA..', '..t........t..', '..............']);
   hi.stamp(19, 3, ['F.FF.FF.FF', 'F..F..F..F', '..........']);
-  hi.stamp(32, 3, ['k.k.k...', '........', 'ccc.....']);
+  hi.stamp(32, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('huazhou_in', { name: '', interior: true, theme: 'summer', music: 'tense', rows: hi.rows(), spawn: [8, 8] });
   [[hall, hR.hall], [jail, hR.jail], [inn, hR.inn]].forEach(function (p) { L.link({ map: 'huazhou', x: p[0].x, y: p[0].y }, { map: 'huazhou_in', x: p[1].x, y: p[1].y }); });
   WM.defEvents('huazhou_in', [L.inn('hzinn', 34, 4, 26), L.save('hzrec', 38, 6)]);

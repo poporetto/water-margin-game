@@ -109,13 +109,16 @@
     px(c, x + 7, y + 8, 3, 6, '#6b4a2b'); px(c, x + 7, y + 8, 1, 6, '#4f3520');
   }
   function treeTall(c, x, y, tx, ty, th) {
-    // crown spans from y-12 to y+9 (drawn in sorted pass)
-    var t = th.tree;
-    var cy = y - 3;
-    blob(c, x + 8, cy, 8, 9, t[0]);
-    blob(c, x + 7, cy - 2, 7, 7, t[1]);
-    blob(c, x + 6, cy - 4, 4, 4, t[2]);
-    px(c, x + 3, cy + 3, 2, 1, t[2]); px(c, x + 11, cy - 1, 2, 1, t[2]); px(c, x + 9, cy + 5, 2, 1, t[0]);
+    // a broadleaf tree: the trunk rises unbroken from its foot on the ground tile (y+8) and forks into the crown,
+    // which is three clumps of leaves, darker underneath, lit from the upper left
+    var t = th.tree, bark = '#6b4a2b', dark = '#4f3520', under = U.shade(t[0], -0.22);
+    px(c, x + 7, y - 2, 3, 11, bark); px(c, x + 7, y - 2, 1, 11, dark);
+    px(c, x + 5, y - 3, 2, 1, bark); px(c, x + 4, y - 4, 2, 1, bark); px(c, x + 10, y - 4, 2, 1, bark); px(c, x + 11, y - 5, 2, 1, bark);
+    blob(c, x + 4, y - 4, 5, 5, under); blob(c, x + 12, y - 4, 5, 5, under); blob(c, x + 8, y - 9, 7, 5, under);
+    blob(c, x + 4, y - 5, 5, 4, t[0]); blob(c, x + 12, y - 5, 5, 4, t[0]); blob(c, x + 8, y - 10, 7, 4, t[0]);
+    blob(c, x + 3, y - 6, 3, 2, t[1]); blob(c, x + 11, y - 6, 3, 2, t[1]); blob(c, x + 7, y - 11, 5, 2, t[1]);
+    px(c, x + 5, y - 12, 3, 1, t[2]); px(c, x + 2, y - 7, 2, 1, t[2]); px(c, x + 10, y - 7, 2, 1, t[2]);
+    px(c, x + 6, y - 2, 1, 1, under); px(c, x + 9, y - 1, 2, 1, under);   // leaves hanging over the fork
   }
   function pineTall(c, x, y, tx, ty, th) {
     // a pine as Song painters drew it: a crooked trunk carrying flat, layered pads of needles
@@ -367,14 +370,89 @@
     floorWood(c, x, y, tx, ty);
     px(c, x, y + 2, S, 12, '#6a3a1c'); px(c, x, y + 2, S, 3, '#8a5a2c'); px(c, x, y + 13, S, 1, '#3a200e');
   }
-  function bed(c, x, y, tx, ty) {
-    // a canopied bed: a dark wooden frame, the bed-curtains drawn back, a quilt and a hard pillow
+  // A bed is a block of 'k' tiles, two deep: drawn whole and cut to each tile. A run four or more wide is beds side
+  // by side, two tiles each; an odd run of three is one long platform bed with a pillow for each sleeper.
+  function bedBlock(m, tx, ty) {
+    var K = function (x, y) { return m.get(x, y) === 'k'; };
+    var x0 = tx, x1 = tx, y0 = ty, y1 = ty;
+    while (K(x0 - 1, ty)) x0--; while (K(x1 + 1, ty)) x1++;
+    while (K(tx, y0 - 1)) y0--; while (K(tx, y1 + 1)) y1++;
+    var w = x1 - x0 + 1, h = y1 - y0 + 1;
+    if (w >= 4 && w % 2 === 0) { x0 += Math.floor((tx - x0) / 2) * 2; w = 2; }
+    if (h > 2) { y0 += Math.floor((ty - y0) / 2) * 2; h = Math.min(2, y1 - y0 + 1); }
+    return { x: x0, y: y0, w: w, h: h };
+  }
+  function bigBed(c, X, Y, w, h) {
+    // a Song canopy bed seen from above the foot: dark lacquered posts and frame, the canopy along the head,
+    // red curtains tied back at the head posts, a quilt turned down, and a porcelain pillow for each sleeper
+    var W = w * S, H = h * S;
+    c.fillStyle = 'rgba(0,0,0,0.25)'; c.fillRect(X + 2, Y + H - 2, W - 3, 2);
+    px(c, X + 1, Y + 1, W - 2, H - 3, '#3a1e10');                                       // frame
+    px(c, X + 3, Y + 5, W - 6, H - 9, '#e6dcc4');                                       // the mat
+    for (var i = 0; i < w; i++) {                                                         // pillows
+      var pxx = X + Math.round((i + 0.5) * (W - 6) / w) + 3 - 4;
+      px(c, pxx, Y + 6, 8, 3, '#dcd8c0'); px(c, pxx, Y + 8, 8, 1, '#a8a48c'); px(c, pxx + 1, Y + 6, 2, 1, '#f4f0e0');
+    }
+    var qy = Y + Math.max(11, Math.round(H * 0.42));
+    px(c, X + 3, qy, W - 6, Y + H - 4 - qy, '#34466e');                                // quilt
+    px(c, X + 3, qy, W - 6, 2, '#e6dcc4'); px(c, X + 3, qy + 2, W - 6, 1, '#24345a');   // the sheet turned over it
+    for (var q = X + 6; q < X + W - 5; q += 6) px(c, q, qy + 5, 2, 2, '#5a6a94');      // woven flowers
+    px(c, X + 1, Y + 1, W - 2, 4, '#7a2a20'); px(c, X + 1, Y + 1, W - 2, 1, '#9a3a2a'); px(c, X + 1, Y + 4, W - 2, 1, '#4a160e');   // canopy
+    px(c, X + 1, Y + 1, 2, H - 3, '#5a2e18'); px(c, X + W - 3, Y + 1, 2, H - 3, '#5a2e18');   // posts
+    px(c, X + 3, Y + 5, 2, 7, '#a8483a'); px(c, X + W - 5, Y + 5, 2, 7, '#a8483a');           // curtains, tied back
+    px(c, X + 3, Y + 9, 2, 1, '#d8b36a'); px(c, X + W - 5, Y + 9, 2, 1, '#d8b36a');
+    px(c, X + 1, Y + H - 3, W - 2, 1, '#2a140a');                                       // the foot rail
+  }
+  function bed(c, x, y, tx, ty, th, m) {
+    var b = m ? bedBlock(m, tx, ty) : { w: 1, h: 1 };
+    if (b.h >= 2) {
+      if (m.get(tx, ty + 1) === 'N' || m.get(tx, ty - 1) === 'N') floorStone(c, x, y, tx, ty); else floorWood(c, x, y, tx, ty);
+      c.save(); c.beginPath(); c.rect(x, y, S, S); c.clip();
+      bigBed(c, x - (tx - b.x) * S, y - (ty - b.y) * S, b.w, b.h);
+      c.restore();
+      return;
+    }
+    // a single tile with no room to grow: a narrow canopied bed
     floorWood(c, x, y, tx, ty);
     px(c, x + 1, y + 1, 14, 14, '#4a2614');
     px(c, x + 1, y + 1, 14, 3, '#7a2a20'); px(c, x + 1, y + 1, 14, 1, '#9a3a2a');   // canopy
     px(c, x + 1, y + 4, 3, 11, '#a8483a'); px(c, x + 12, y + 4, 3, 11, '#a8483a');   // curtains
     px(c, x + 4, y + 5, 8, 9, '#d8b06a'); px(c, x + 4, y + 9, 8, 5, '#a86a3a'); px(c, x + 5, y + 10, 6, 1, '#c8885a');
     px(c, x + 5, y + 5, 6, 2, '#e8e0d0');
+  }
+
+  // A great hall's column: red lacquer on a carved stone base, rising out of sight with a gilded bracket at the top.
+  function pillar(c, x, y, tx, ty) {
+    floorStone(c, x, y, tx, ty);
+    c.fillStyle = 'rgba(0,0,0,0.25)'; c.fillRect(x + 3, y + 13, 11, 2);
+    px(c, x + 3, y + 11, 10, 4, '#b8b4a8'); px(c, x + 3, y + 11, 10, 1, '#d8d4c8'); px(c, x + 4, y + 14, 8, 1, '#8a867c');   // lotus base
+    px(c, x + 5, y, 6, 11, '#9c2f25'); px(c, x + 5, y, 2, 11, '#bc4a3a'); px(c, x + 10, y, 1, 11, '#6a1a14');
+  }
+  function pillarTall(c, x, y, tx, ty, th, m) {
+    // a row of columns down a hall reads as one column per pair of tiles: join up to the one above, bracket only at the top
+    var joined = m && m.get(tx, ty - 2) === 'i', h = joined ? 32 : 18;
+    px(c, x + 5, y - h, 6, h, '#9c2f25'); px(c, x + 5, y - h, 2, h, '#bc4a3a'); px(c, x + 10, y - h, 1, h, '#6a1a14');
+    if (!joined) { px(c, x + 3, y - 22, 10, 4, '#c8a040'); px(c, x + 3, y - 22, 10, 1, '#e8c860'); px(c, x + 2, y - 23, 12, 1, '#5a3a18'); }   // gilded bracket
+  }
+  // A market stall as on the Qingming scroll: a trestle counter of goods under a cloth awning on two poles.
+  function stall(c, x, y, tx, ty, th, m) {
+    var near = function (ch) { return m.get(tx - 1, ty) === ch || m.get(tx + 1, ty) === ch || m.get(tx, ty - 1) === ch || m.get(tx, ty + 1) === ch; };
+    if (near('=')) pave(c, x, y, tx, ty); else if (near(':')) dirt(c, x, y, tx, ty, th, m); else grass(c, x, y, tx, ty, th);
+    c.fillStyle = 'rgba(0,0,0,0.22)'; c.fillRect(x + 1, y + 13, 14, 2);
+    px(c, x + 1, y + 6, 14, 6, '#6a4224'); px(c, x + 1, y + 6, 14, 1, '#8a5a32');           // the board
+    px(c, x + 2, y + 12, 1, 3, '#4a2a14'); px(c, x + 13, y + 12, 1, 3, '#4a2a14');           // trestle legs
+    var kind = Math.floor(U.hash2(tx, ty, 41) * 4);
+    if (kind === 0) { for (var i = 0; i < 3; i++) { px(c, x + 2 + i * 4, y + 4, 4, 3, '#e8e0cc'); px(c, x + 3 + i * 4, y + 4, 2, 1, '#fff8e8'); } }   // steamed buns in a basket row
+    else if (kind === 1) { px(c, x + 2, y + 3, 5, 4, '#8a6a3a'); px(c, x + 3, y + 3, 3, 1, '#c84a2a'); px(c, x + 9, y + 3, 5, 4, '#8a6a3a'); px(c, x + 10, y + 3, 3, 1, '#e8a03a'); }   // baskets of dates and persimmons
+    else if (kind === 2) { px(c, x + 2, y + 4, 4, 3, '#3a5a8a'); px(c, x + 6, y + 4, 4, 3, '#a83a2a'); px(c, x + 10, y + 4, 4, 3, '#d8c890'); }   // bolts of cloth
+    else { px(c, x + 3, y + 2, 4, 5, '#7a5a3a'); px(c, x + 4, y + 1, 2, 1, '#7a5a3a'); px(c, x + 9, y + 3, 3, 4, '#5a4a3a'); px(c, x + 12, y + 4, 2, 3, '#e8e0d0'); }   // wine jars and cups
+  }
+  function stallTall(c, x, y, tx, ty, th, m) {
+    var cloth = ['#d8c8a0', '#c8a878', '#a8b8b0'][Math.floor(U.hash2(tx, ty, 42) * 3)];
+    px(c, x + 1, y - 8, 1, 15, '#4a2a14'); px(c, x + 14, y - 8, 1, 15, '#4a2a14');            // poles
+    px(c, x - 1, y - 10, 18, 5, cloth); px(c, x - 1, y - 10, 18, 1, U.shade(cloth, 0.2));    // the awning
+    px(c, x - 1, y - 5, 18, 1, U.shade(cloth, -0.3));
+    for (var k = x; k < x + 17; k += 3) px(c, k, y - 4, 2, 1, U.shade(cloth, -0.15));         // the scalloped edge
   }
 
   function shelf(c, x, y, tx, ty) {
@@ -566,16 +644,20 @@
     'H': { draw: poplarBase, tall: poplarTall, solid: true },
     'm': { draw: rock, solid: true },
     'M': { draw: mountain, solid: true },
-    '^': { draw: roof, over: roofOver, solid: true },
-    'Z': { draw: roof, over: roofOver, solid: true },
-    'z': { draw: roof, over: roofOver, solid: true },
-    'v': { draw: roof, over: roofOver, solid: true },
+    '^': { draw: roof, tall: roofOver, solid: true },
+    'Z': { draw: roof, tall: roofOver, solid: true },
+    'z': { draw: roof, tall: roofOver, solid: true },
+    'v': { draw: roof, tall: roofOver, solid: true },
     'W': { draw: wallPlaster, solid: true, wall: true },
     'O': { draw: wallPlaster, solid: true, wall: true },
-    'R': { draw: wallRed, over: wallRedOver, solid: true, wall: true },
+    'R': { draw: wallRed, tall: wallRedOver, solid: true, wall: true },
     '#': { draw: wallStone, solid: true, wall: true },
-    'G': { draw: cityGate, over: cityGateOver },
+    // the tower over the passage hides anyone in the passage or on the road behind it (sorted after its own row)
+    'G': { draw: cityGate, tall: cityGateOver, sortDy: 17 },
     'D': { draw: door },
+    'd': { draw: door, solid: true, shut: true },   // a house's own door, shut: nobody lives there for the player to visit
+    'u': { draw: stall, tall: stallTall, solid: true },
+    'i': { draw: pillar, tall: pillarTall, solid: true },   // a column of a great hall
     'n': { draw: floorWood },
     'N': { draw: floorStone },
     'K': { draw: carpet },
@@ -583,7 +665,7 @@
     'x': { draw: voidT, solid: true },
     't': { draw: table, solid: true },
     'c': { draw: counter, solid: true },
-    'k': { draw: bed, solid: true },
+    'k': { draw: bed, solid: true },   // a run of 'k' two rows deep is one bed (two wide), or a long sleeping platform
     'h': { draw: shelf, solid: true },
     'j': { draw: jar, solid: true },
     'F': { draw: fence, solid: true },

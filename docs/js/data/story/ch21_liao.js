@@ -144,12 +144,12 @@
       await s.say('luzhishen', 'Brother, Mount Wutai is near. Let me go and see my old master.');
       await s.say('songjiang', 'Then I will come with you.');
       s.flag('ch21_wutai');
-      await s.warp('wutai_in', 34, 8, 'up');
+      await s.warp('wutai_in', 36, 8, 'up');
     } }
   ]);
   WM.defEvents('wutai_in', [
     { id: 'ch21_zhizhen', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch21_wutai'); }, run: async function (s) {
-      s.spawn('zz', 'zhizhen', 34, 5, 'down'); s.spawn('lz', 'luzhishen', 33, 7, 'up');
+      s.spawn('zz', 'zhizhen', 36, 5, 'down'); s.spawn('lz', 'luzhishen', 35, 7, 'up');
       await s.say('zhizhen', 'My disciple. You have been gone many years. Killing and burning... it was hard to avoid, wasn\'t it.');
       await s.say('luzhishen:sad', 'Master...');
       await s.say('zhizhen', 'Your time of fulfilment is near. Here are four more lines; keep them all your life. "Meet Xia, and capture. Meet La, and seize. Hear the tide, and be complete. See the signal, and be still."');

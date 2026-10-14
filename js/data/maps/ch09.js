@@ -31,7 +31,7 @@
   L.clearAround(y, ':', 'Tb', '.'); L.clearAround(y, '=', 'Tb', '.');
   WM.defMap('jieyang', { name: 'Jieyang Town', theme: 'south', music: 'town', rows: y.rows(), spawn: [1, 8], battleBg: 'river', exits: [WM.toWorld('jieyang', 0, 8, 1, 2)] });
   var yi = L.grid(30, 10, 'x'); var yR = { mu: yi.room(1, 1, 14, 9, { floor: 'K' }), inn: yi.room(16, 1, 12, 8) };
-  yi.stamp(2, 3, ['h..A.....A.h', '............', '..t..KKK..t.', 'k..........k']); yi.stamp(17, 3, ['k.k.k.....', '..........', 'ccc.......']);
+  yi.stamp(2, 3, ['h..A.....A.h', '............', '..t..KKK..t.', 'k..........k']); yi.stamp(17, 3, ['.....kk.kk', '.....kk.kk', 'ccc.......']);
   WM.defMap('jieyang_in', { name: '', interior: true, theme: 'south', music: 'town', rows: yi.rows(), spawn: [8, 8] });
   L.link({ map: 'jieyang', x: mu.x, y: mu.y }, { map: 'jieyang_in', x: yR.mu.x, y: yR.mu.y });
   L.link({ map: 'jieyang', x: yinn.x, y: yinn.y }, { map: 'jieyang_in', x: yR.inn.x, y: yR.inn.y });

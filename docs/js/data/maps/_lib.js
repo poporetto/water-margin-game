@@ -58,9 +58,14 @@
     var wallRows = o.wallRows || 2;
     this.rect(x, y, w, h - wallRows, roof);
     this.rect(x, y + h - wallRows, w, wallRows, wall);
-    var dx = x + (o.door != null ? o.door : Math.floor(w / 2));
+    var dx = x + (o.door != null && o.door !== false ? o.door : Math.floor(w / 2));
     var dy = y + h - 1;
-    if (o.door !== false) this.set(dx, dy, 'D');
+    if (o.door === false) {
+      // every house has a door: one the player cannot go through is drawn shut ('d'), clear of the windows
+      var win = o.windows || [], off = [0, 1, -1, 2, -2].filter(function (k) { var q = dx - x + k; return q > 0 && q < w - 1 && win.indexOf(q) < 0; })[0];
+      if (off != null) dx += off;
+      this.set(dx, dy, 'd');
+    } else this.set(dx, dy, 'D');
     (o.windows || []).forEach(function (wx) { this.set(x + wx, y + h - 1, 'O'); }, this);
     if (o.windowsUpper) o.windowsUpper.forEach(function (wx) { this.set(x + wx, y + h - 2, 'O'); }, this);
     return { x: dx, y: dy };
