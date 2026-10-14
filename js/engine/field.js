@@ -604,8 +604,10 @@
     }
 
     // weather & lighting
-    if (F.map.def.weather === 'snow' || WM.state.flags.weather === 'snow') drawSnow(c);
-    if (F.map.def.weather === 'rain' || WM.state.flags.weather === 'rain') drawRain(c);
+    if (!F.map.interior) {   // no weather under a roof
+      if (F.map.def.weather === 'snow' || WM.state.flags.weather === 'snow') drawSnow(c);
+      if (F.map.def.weather === 'rain' || WM.state.flags.weather === 'rain') drawRain(c);
+    }
     var tint = (!F.map.interior && WM.state.flags.tintOverride) || F.map.def.tint || (WM.state.flags.night && !F.map.interior ? 'night' : null);
     if (tint === 'night') { c.fillStyle = 'rgba(10,20,60,0.42)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); drawLanternGlow(c, cx, cy); }
     else if (tint === 'dusk') { c.fillStyle = 'rgba(120,50,20,0.18)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }

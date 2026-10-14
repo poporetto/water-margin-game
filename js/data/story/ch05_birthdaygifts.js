@@ -143,8 +143,8 @@
       await s.say('chaogai:shock', '...Wang Xiaosan? Is it you, nephew? Why are you here, you good-for-nothing? You left home ten years ago, and now you turn up as a thief in a temple?');
       await s.say('leiheng:shock', 'This is your nephew, Headman? ...Then I am sorry. I didn\'t know. Untie him!');
       await s.narrate('Chao Gai gave Lei Heng ten taels of silver "for the trouble," and Lei Heng and his men went off to the county. But Liu Tang, the moment he was free, snatched up a halberd and ran after them.');
-      s.despawn('lei');
-      s.despawn('liutang');
+      s.despawn('lei', { leave: true });
+      s.despawn('liutang', { leave: true });
       await s.duel('liutang_leiheng', { hero: 'liutang', canLose: true });
       await s.narrate('The two fought fifty bouts on the road, and neither could win, until a man in a scholar\'s gown came out of a schoolhouse by the bridge and held them apart with a pair of copper chains. This was the village schoolmaster, Wu Yong, the Resourceful Star — a friend of Chao Gai from childhood. Then Chao Gai came running, scolded his "nephew," and Lei Heng went off cursing.');
       s.flag('ch5_wuyong');
@@ -154,7 +154,7 @@
       await s.say('chaogai', 'Last night I dreamed that the seven stars of the Dipper fell on my roof, and a little white star flew off by itself. I wonder...');
       await s.say('wuyong', 'This can\'t be done with three men, nor with three thousand. It needs seven or eight good men — no more. I know three: the Ruan brothers of Shijie village, fishermen, fearless, as loyal as they come. Let me go and win them over.');
       await s.say('chaogai', 'Go, then, Professor.');
-      s.despawn('liutang'); s.despawn('wuyong');
+      s.despawn('liutang', { leave: true }); s.despawn('wuyong', { leave: true });
       s.party(['wuyong']); s.level('wuyong', 13); s.setLeader('wuyong');
       WM.state.chars.wuyong.equip.body = 'robe';
       WM.unlock('shijie');
@@ -172,7 +172,7 @@
       await s.say('ruanxiaoer', 'Carp that size? Not these days. Let\'s find my brothers, and drink, and I\'ll tell you why.');
       s.spawn('r7', 'ruanxiaoqi', 12, 12, 'left'); s.boat('r7'); s.spawn('r5', 'ruanxiaowu', 8, 12, 'left');   // Xiaoqi punting out of the reeds; Xiaowu back from the gambling den
       await s.narrate('Ruan Xiaoer took a boat, and they rowed out among the reeds, calling for the others. Ruan Xiaoqi came punting out of the reeds singing, and they found Ruan Xiaowu coming back from the gambling den, his shirt open on the leopard tattooed on his chest. The four went to a tavern built on stilts over the water.');
-      s.despawn('r2'); s.despawn('r5'); s.despawn('r7');
+      s.despawn('r2', { leave: true }); s.despawn('r5', { leave: true }); s.despawn('r7', { leave: true });
       await s.warp('shijie_in', 25, 6, 'up');
       s.spawn('r2', 'ruanxiaoer', 24, 6, 'right'); s.spawn('r5', 'ruanxiaowu', 26, 5, 'left'); s.spawn('r7', 'ruanxiaoqi', 25, 3, 'down');
       await s.say('ruanxiaowu', 'Big carp? They\'re all out in the deep water of Liangshan Marsh, and we can\'t go there.');
@@ -271,7 +271,7 @@
       await s.fadeOut(1.5);
       await s.narrate('The soldiers fell one after another. Yang Zhi could see, but he could not move a finger. The seven merchants tipped the dates out of their carts, loaded the eleven packs of gold and pearls in their place, covered them with the dates, and pushed the carts away down the ridge.');
       await s.narrate('How was it done? The first bucket was clean. While the soldiers watched, Wu Yong took a ladle from the second bucket — and the drug was in the ladle. When Bai Sheng snatched it back and poured it in, the drug went with it. This is what the storytellers call "Seizing the Birthday Gifts by Guile."');
-      s.despawn('m1'); s.despawn('m2'); s.despawn('m3'); s.despawn('bai'); s.despawn('steward'); s.despawn('s1'); s.despawn('s2'); s.despawn('s3');
+      s.despawn('m1', { leave: true }); s.despawn('m2', { leave: true }); s.despawn('m3', { leave: true }); s.despawn('bai', { leave: true }); s.despawn('steward', { leave: true }); s.despawn('s1', { leave: true }); s.despawn('s2', { leave: true }); s.despawn('s3', { leave: true });
       s.lie('player', false);
       s.flag('ch5_gifts');
       await s.fadeIn(1);
@@ -309,7 +309,7 @@
       await s.narrate('Lu Zhishen shook off the ropes, snatched his staff from Cao Zheng\'s hands, and leapt at Deng Long.');
       await s.battle('ch5_erlong', { bg: 'temple', music: 'boss' });
       await s.narrate('Deng Long fell to Lu Zhishen\'s staff. The bandit-monks of the temple knelt and surrendered. Lu Zhishen and Yang Zhi became the chiefs of Mount Erlong, and Cao Zheng went home to his inn.');
-      s.despawn('deng');
+      s.despawn('deng', { leave: true });
       s.removeParty('luzhishen'); s.removeParty('caozheng');
       s.flag('ch5_erlongtaken');
       // He Tao's investigation and Song Jiang's warning
@@ -347,7 +347,7 @@
       await s.say('songjiang:concerned', 'Brother, there\'s no time. The birthday gifts — Bai Sheng has confessed. He Tao is sitting in the teahouse in town with a warrant for you, waiting for the magistrate. I\'ve delayed him as long as I can. Go! Go now, all of you!');
       await s.say('chaogai:shock', '...Brother, I will never forget this.');
       await s.say('songjiang', 'Don\'t waste time with thanks. Run!');
-      s.despawn('chaogai');
+      s.despawn('chaogai', { leave: true });
       await s.narrate('Song Jiang rode back to town and took He Tao to the magistrate as if nothing had happened. The magistrate sent the constables Zhu Tong and Lei Heng with soldiers to East Creek that night.');
       await s.narrate('Both constables were Chao Gai\'s friends. Zhu Tong took the back gate, where he knew Chao Gai would come out, and let him through, shouting and waving his sword at empty air, and even pretended to stumble so the soldiers would fall over him. Chao Gai and his men escaped into the night to Shijie village, and the manor was left empty.');
       s.flag('ch5_fled');
@@ -403,6 +403,8 @@
       await s.say('duqian', 'We were only ever Wang Lun\'s men because there was no one better. Chief Chao — we follow you.');
       await s.say('chaogai', '...Brothers, I am a plain village headman. But if you will have me, I will not fail you.');
       await s.narrate('Chao Gai took the first seat. Wu Yong was second, as strategist; Gongsun Sheng third; Lin Chong fourth. Then Liu Tang, the three Ruan brothers, Du Qian, Song Wan, and Zhu Gui. And Liangshan became the stronghold of the heroes.');
+      s.idle('songwan', 'Wang Lun was afraid of every man better than himself. Now Chao Gai sits in his chair, and I think this mountain will be the better for it.');
+      s.idle('zhugui', 'I\'ll be back at my tavern on the shore tomorrow. Whoever wants to join Liangshan still comes past my door first.');
       s.despawn('lin'); s.despawn('duqian'); s.despawn('songwan'); s.despawn('zhugui'); s.despawn('wuyong'); s.despawn('gss'); s.despawn('liutang'); s.despawn('r2');
       s.unflag('lsWangLun');
       s.flag('castle');

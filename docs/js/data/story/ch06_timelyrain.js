@@ -38,7 +38,7 @@
       await s.narrate('In a private room of a small tavern Song Jiang read Chao Gai\'s letter. The gold he would not take: "My brothers need it more than I do. They are starting a new life." Only when Liu Tang begged did he take a single bar, and he put it, with the letter, into the document pouch at his belt.');
       await s.give('chaoletter', 1);
       await s.say('songjiang', 'Tell the brothers I am grateful. And go now — before the gates close. Don\'t stop for anything.');
-      s.despawn('liutang');
+      s.despawn('liutang', { leave: true });
       await s.narrate('It was a bright moonlit night. As Song Jiang walked home, a voice called out to him from behind: "Clerk Song! I\'ve been looking for you everywhere!"');
       s.spawn('yanpo', 'yanpo', 22, 22, 'up');
       await s.move('yanpo', 'U3');
@@ -83,7 +83,7 @@
       await s.narrate('Song Jiang grabbed for the pouch, and she clutched it to her breast. As they struggled, the small knife in the pouch fell out on the bed. Song Jiang snatched it up. "Murder! Black Song Jiang is murdering me!" she screamed. The word put the thought into his head. Rage overcame him.');
       s.sfx('slash'); await s.shake(4, 0.4);
       await s.fadeOut(0.6, '#600');
-      s.despawn('poxi');
+      s.despawn('poxi', { leave: true });
       s.take('chaoletter', 1);
       await s.narrate('Song Jiang took the letter from the pouch and burned it in the lamp. Then he sat down, and waited for the dawn.');
       await s.fadeIn(0.6);
@@ -101,7 +101,7 @@
       await s.say('tangniuer:angry', 'Let him go, you old hag!');
       s.sfx('hit');
       await s.narrate('Tang Niu\'er knocked the old woman\'s hands loose, and Song Jiang slipped away into the crowd. For his trouble Tang Niu\'er was dragged before the magistrate in Song Jiang\'s place.');
-      s.despawn('yanpo'); s.despawn('tang');
+      s.despawn('yanpo'); s.despawn('tang', { leave: true });
       s.flag('ch6_fled');
       WM.unlock('songfarm');
       await s.say(null, '(Song Jiang\'s family farm lies south-west of the town.)');
@@ -165,7 +165,7 @@
       await s.narrate('The big man dropped to his knees at once and kowtowed. "I have eyes, and did not see Mount Tai in front of me! Forgive me, brother!"');
       await s.say('wusong', 'I am Wu Song, the second son of my family, from Qinghe county. A year ago I struck a man in a drunken quarrel and thought I\'d killed him, so I fled here to Lord Chai. Then I heard he lived after all. I meant to go home, and I caught this fever. I\'ve been waiting for it to pass.');
       await s.say('songjiang:smile', 'Then come, sit with us and drink. A hero\'s fever goes the moment he meets a friend.');
-      s.despawn('lamp'); s.despawn('wusong');
+      s.despawn('lamp', { leave: true }); s.despawn('wusong');
       s.night(false);
       await s.fadeOut(1);
       await s.narrate('Song Jiang and Wu Song became sworn brothers, with Song Jiang as the elder, and Wu Song stayed at Chai Jin\'s side, recovered from his fever, for many days. At last he took his leave to go home to his elder brother in Qinghe county. Song Jiang and Song Qing walked with him five li, then ten, unwilling to part, and at an inn by the road they drank once more.');
@@ -175,7 +175,7 @@
       await s.say('wusong', 'Brother, go back now. A thousand li of seeing off still ends in parting.');
       await s.say('songjiang', 'Take this silver for the road. And Wu Song — when you are home, take care of yourself. You have a temper.');
       await s.say('wusong:smile', 'Brother Song. If ever you need me, I will come.');
-      s.despawn('wusong');
+      s.despawn('wusong', { leave: true });
       s.flag('ch6_done');
       await s.endChapter();
       if (WM.data.chapters[7].begin) await WM.data.chapters[7].begin(s);

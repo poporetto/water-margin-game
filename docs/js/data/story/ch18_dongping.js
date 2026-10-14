@@ -130,7 +130,7 @@
       await s.narrate('Xie Zhen forked Zeng Suo; Zhu Tong cut down Zeng Mi; Zeng Kui was trampled under the horses; Yang Zhi and Shi Jin shot Su Ding at the north gate. The old master, Zeng Nong, hanged himself. And Shi Wengong broke out on the Jade Lion and fled west into the woods — where Lu Junyi and Yan Qing were waiting.');
       s.spawn('sw', 'shiwengong', 8, 22, 'right');
       await s.duel('lu_shiwengong', { hero: 'lujunyi', canLose: true });
-      s.despawn('sw');
+      s.despawn('sw', { leave: true });
       s.night(false);
       s.flag('ch18_shi');
       await s.warp('liangshan_in', 16, 12, 'up');
@@ -168,7 +168,7 @@
       s.spawn('dp', 'dongping', 10, 17, 'left');
       await s.say('songjiang', 'Untie him! Give the General back his armour and his horse. General, we are men driven to the marsh by evil officials. We wait for the emperor\'s pardon. Will you join us?');
       await s.say('dongping', '...I have been a fool, fighting for a prefect who would not even give me his daughter. I will open Dongping for you tonight.');
-      s.despawn('dp');
+      s.despawn('dp', { leave: true });
       await s.narrate('Dong Ping called up to the gate, and it opened. He went straight to Prefect Cheng\'s hall, killed him and his household, and took the prefect\'s daughter for himself. Shi Jin was freed, and Li Ruilan\'s house was paid back for its treachery. Song Jiang emptied the granary for Liangshan and posted notices to calm the people.');
       s.unflag('away:shijin');
       await s.join('dongping');
@@ -184,7 +184,7 @@
     { id: 'ch18_stones', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch18_dongping'); }, run: async function (s) {
       s.spawn('zq', 'zhangqing', 14, 12, 'left');
       await s.narrate('Zhang Qing rode out from Dongchang with a bag of round stones at his saddle. Xu Ning went out against him and was struck between the eyes. Then Han Tao. Then Peng Qi. Then Xuan Zan, Liu Tang, Lei Heng — one after another they went down from their saddles. Guan Sheng\'s blade was struck aside; Dong Ping\'s helmet was knocked askew.');
-      s.despawn('zq');
+      s.despawn('zq', { leave: true });
       await s.battle('ch18_stones', { bg: 'field', canLose: true, rounds: 5 });
       await s.say('songjiang', 'I swear it: if I do not take this man, I will not take the army home!');
       await s.narrate('Yan Qing shot Ding Desun\'s horse from under him, and Lü Fang and Guo Sheng took him. Lin Chong and Hua Rong took Gong Wang. But Zhang Qing captured Liu Tang and went back into the city.');
@@ -193,7 +193,7 @@
       s.spawn('zq', 'zhangqing', 14, 12, 'left');
       await s.say('songjiang', 'Brothers, in battle every man serves his master. Whoever bears a grudge for what was done today, Heaven will strike him. General Zhang, will you stay with us?');
       await s.say('zhangqing', '...I will. And let me bring you one more: there is a horse-doctor in Dongchang, Huangfu Duan, the Purple-Bearded Earl. There is no sickness of a horse he cannot cure.');
-      s.despawn('zq');
+      s.despawn('zq', { leave: true });
       await s.joinMany(['zhangqing', 'gongwang', 'dingdesun', 'huangfuduan']);
       await s.narrate('So Dongchang fell, and Liu Tang was brought out of its prison unharmed. Its prefect, who was an honest man, was spared, and the grain was shared out among the people. When the army had returned to the mountain, Song Jiang counted the chiefs in the Hall of Loyalty. There were one hundred and eight.');
       s.flag('ch18_done');

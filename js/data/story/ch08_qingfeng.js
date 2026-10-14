@@ -101,7 +101,7 @@
       await s.say('songjiang', '(The wife of Hua Rong\'s colleague!) Brother Wang, this lady is the wife of an official, and of a colleague of my sworn brother Hua Rong. Let her go — for my sake. I promise you, one day I will find you a good wife myself.');
       await s.say('wangying:sad', '...For you, brother. All right.');
       await s.say('liuwife', 'Thank you, sir... thank you.');
-      s.despawn('lady'); s.despawn('yanshun'); s.despawn('wangying'); s.despawn('zheng');
+      s.despawn('lady', { leave: true }); s.despawn('yanshun'); s.despawn('wangying'); s.despawn('zheng');
       await s.narrate('Lady Liu went home. And Song Jiang, after a few more days, set out for Qingfeng Fort to see Hua Rong, at last.');
       s.flag('ch8_tohua');
     } }
@@ -114,7 +114,7 @@
       await s.say('songjiang', 'Hua Rong. You\'ve grown into a fine officer.');
       await s.narrate('Song Jiang stayed at Hua Rong\'s house, and spoke of Lady Liu, whom he had saved on the mountain. Hua Rong frowned. "Liu Gao is a corrupt, petty man, and his wife is worse. You should not have saved her." Song Jiang only said, "A kindness is never wasted."');
       await s.narrate('The fifteenth of the first month came: the Lantern Festival. The whole fort was hung with lanterns, and Song Jiang went out with Hua Rong\'s servants to see them.');
-      s.despawn('huarong');
+      s.despawn('huarong', { leave: true });
       s.night(true);
       s.place('player', 20, 14, 'right');
       s.spawn('lady', 'liuwife', 28, 14, 'left'); s.spawn('liugao', 'liugao', 29, 13, 'left');
@@ -123,7 +123,7 @@
       await s.say('liugao:angry', 'Seize him!');
       await s.battle('ch8_liugao', { bg: 'snow', canLose: true, rounds: 2 });
       await s.narrate('Song Jiang was overpowered and dragged before Liu Gao. "I am Zhang San, a merchant from Yuncheng!" he protested. "Liar! You\'re the bandit chief!" Liu Gao had him beaten until his skin split, and locked him in a cage.');
-      s.despawn('lady'); s.despawn('liugao');
+      s.despawn('lady', { leave: true }); s.despawn('liugao', { leave: true });
       s.party(['huarong']); s.level('huarong', 18); s.setLeader('huarong');
       WM.state.chars.huarong.equip.body = 'leather';
       s.flag('protagonist', 'huarong');

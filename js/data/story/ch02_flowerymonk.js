@@ -116,7 +116,7 @@
       s.despawn('oldjin'); s.despawn('cuilian'); s.despawn('waiterP');
       await s.say('shijin', 'Brother Lu, I must go on and look for Master Wang. When will we meet again?');
       await s.say('luda:smile', 'Who knows? The rivers and lakes are wide, but they all flow together somewhere. Take care of yourself, Nine Dragons.');
-      s.despawn('shijin'); s.despawn('lizhong');
+      s.despawn('shijin', { leave: true }); s.despawn('lizhong', { leave: true });
       await s.fadeOut(0.8);
       await s.narrate('Shi Jin went his own way, and Li Zhong went his. Lu Da went back to his quarters, too angry to eat, and lay awake all night. At the first light of dawn he strode to the Jins\' inn.');
       s.flag('ch2_dawn');
@@ -129,10 +129,10 @@
       await s.say('innwaiter:angry', 'Master Zheng\'s money is my business!');
       s.sfx('hit'); await s.shake(3, 0.3);
       await s.narrate('Lu Da slapped him so hard blood ran from his mouth, then a second blow knocked out two of his teeth. The inn boy crawled away into the back and did not come out again.');
-      s.despawn('innboy');
+      s.despawn('innboy', { leave: true });
       await s.say('luda', 'Go, old man. Go now, the two of you, and don\'t stop until you\'re far from Weizhou.');
       await s.move('oldjin', 'R2 D3 R1'); await s.move('cuilian', 'R1 D3 R1');   // between the beds and out
-      s.despawn('oldjin'); s.despawn('cuilian');
+      s.despawn('oldjin', { leave: true }); s.despawn('cuilian', { leave: true });
       await s.narrate('Lu Da took a stool, sat himself down in the inn doorway, and stayed there for two hours, until he judged the Jins were well out of reach. Then he got up and walked to the Zhuangyuan Bridge.');
       s.flag('ch2_tobutcher');
       s.give('beef', 2, true);
@@ -175,7 +175,7 @@
       await s.say('luda', '(...His face is turning colour. I only meant to give him a beating, and I\'ve killed him with three punches. I\'ll go to prison for this, and there\'ll be nobody to bring me food. Better be off.)');
       await s.say('luda:angry', 'Pretending to be dead! I\'ll settle with you later!');
       await s.narrate('And swearing at the corpse as he went, Lu Da strode off down the street. None of the neighbours or Zheng\'s men dared to stop him. He went back to his lodgings, rolled up some clothes and silver, took a staff and was out of the South Gate before anyone came for him.');
-      s.despawn('zhengtu'); s.despawn('helper1'); s.despawn('helper2');
+      s.despawn('zhengtu', { leave: true }); s.despawn('helper1', { leave: true }); s.despawn('helper2', { leave: true });
       s.flag('ch2_fled');
       WM.unlock('yanmen');
       await s.narrate('The prefect sent men after him and posted a reward of a thousand strings for the arrest of the murderer Lu Da. But Lu Da had fled, hungry and desperate, through one prefecture after another, until he came to Yanmen county in Daizhou.');
@@ -219,7 +219,7 @@
       await s.say('zhaoyuanwai', 'Major, I have an idea, though I hardly dare suggest it. Thirty li from here is Mount Wutai, and on it the Monastery of Manjusri. I am a patron there. Long ago I vowed to have a monk ordained in my name, and I have the certificate already bought. If you were to shave your head and become a monk, no constable could touch you there.');
       await s.say('luda', '...A monk? Me?');
       await s.say('luda', '...Well. Better a monk than a head on the city wall. I\'ll do it.');
-      s.despawn('zhao');
+      s.despawn('zhao', { leave: true });
       WM.unlock('wutai');
       s.flag('ch2_towutai');
       await s.narrate('Next morning Squire Zhao and Lu Da set out for Mount Wutai with porters carrying gifts for the monastery. It lies north-east of Yanmen, up a valley of pines.');
@@ -255,7 +255,7 @@
       transform('luda', 'luzhishen');
       s.flag('protagonist', 'luzhishen');
       WM.state.chars.luzhishen.equip.body = 'monkrobe';
-      s.despawn('zhao'); s.despawn('m1'); s.despawn('m2'); s.despawn('m3'); s.despawn('m4'); s.despawn('zhizhen');
+      s.despawn('zhao', { leave: true }); s.despawn('m1'); s.despawn('m2'); s.despawn('m3'); s.despawn('m4'); s.despawn('zhizhen');
       await s.notice('Lu Da took the tonsure as Lu Zhishen.', { auto: 2 });
       await s.narrate('Squire Zhao left a great gift for the monastery and went home. And the new monk Zhishen went to the meditation hall, threw himself down on the bench and went to sleep. When the monks shook him and said he must sit in meditation, he said, "I\'ll sleep. What\'s it to you?" He snored like thunder. At night he got up and relieved himself behind the Buddha hall. The monks complained to the Abbot every day; the Abbot only said, "He will be enlightened one day. Bear with him."');
       await s.narrate('Four or five months went by. In the first month of winter, Zhishen, who had not touched wine or meat in all that time, could bear it no longer. One fine day he put on his black robe, tied his belt, and walked out of the mountain gate.');
@@ -285,14 +285,14 @@
       await s.say('luzhishen:angry', 'Strokes? You\'ll strike me? Come and try!');
       await s.battle('ch2_monks1', { bg: 'temple' });
       await s.narrate('The monks scattered, howling. Zhishen rampaged through the monastery, scattering the brethren in every direction, until the Abbot himself came out with several elders.');
-      s.despawn('m1'); s.despawn('m2');
+      s.despawn('m1', { leave: true }); s.despawn('m2', { leave: true });
       s.spawn('zhizhen', 'zhizhen', 17, 15, 'down');
       await s.move('zhizhen', 'D2');
       await s.say('zhizhen:angry', 'Zhishen! Stop this at once.');
       await s.say('luzhishen', '...Abbot. I had a little wine, but I didn\'t pick the quarrel. They hit me first.');
       await s.say('zhizhen', 'Go and sleep. We will speak tomorrow.');
       await s.narrate('Next day the Abbot called him in and spoke to him gravely. "Squire Zhao brought you here to be a monk. Wine brings confusion; it is the first of the precepts. If it happens again, you cannot stay." Zhishen knelt and said he would never dare again.');
-      s.despawn('zhizhen');
+      s.despawn('zhizhen', { leave: true });
       s.flag('ch2_scolded');
       await s.narrate('For three or four months after that, he did not dare leave the monastery. But one warm day in the second month he strolled out of the gate, and looking down from the hill, he saw the market town at the foot of the mountain, and heard the ring of a smith\'s hammer.');
       s.mark([{ map: 'wutai', x: 16, y: 41, w: 3 }, { map: 'wutai_town', x: 6, y: 7 }], 'ch2_staff');   // down the mountain, to the smithy
@@ -415,7 +415,7 @@
       await s.say('wutaimonk:angry', 'Brothers! Take up your staves! He\'s pulled down the guardian kings!');
       await s.battle('ch2_monks2', { bg: 'temple' });
       await s.narrate('Zhishen cleared the hall with his staff. The monks who had tried to block him were laid out on every side, and he smashed his way into the meditation hall, where he flung pieces of dog meat into the faces of the meditating monks and stuffed it into one old monk\'s mouth.');
-      s.despawn('m1'); s.despawn('m2'); s.despawn('m3');
+      s.despawn('m1', { leave: true }); s.despawn('m2', { leave: true }); s.despawn('m3', { leave: true });
       s.spawn('zhizhen', 'zhizhen', 17, 15, 'down');
       await s.move('zhizhen', 'D2');
       await s.say('zhizhen', 'Zhishen.');
@@ -425,7 +425,7 @@
       await s.say('zhizhen', '"Meet forest, and rise. Meet mountain, and prosper. Meet water, and flourish. Meet river, and stop."');
       await s.say('luzhishen', '...I will remember them, Abbot.');
       await s.say('luzhishen:sad', '(I made a fool of the old man in front of everyone, and he still sends me off with a letter and a blessing.)');
-      s.despawn('zhizhen');
+      s.despawn('zhizhen', { leave: true });
       s.flag('ch2_expelled');
       WM.unlock('peach', 'waguan', 'kaifeng');
       s.give('medicine', 3, true); s.gold(50, true);
@@ -468,7 +468,7 @@
       await s.say('zhoutong:shock', 'Help! Help! Save your chief!');
       await s.battle('ch2_zhoutong', { bg: 'interior' });
       await s.narrate('Zhou Tong broke free, ran out of the manor, leapt on his horse and fled up the mountain, his men scattering after him.');
-      s.despawn('zhoutong');
+      s.despawn('zhoutong', { leave: true });
       await s.fadeOut(0.6);
       await s.narrate('Before dawn the whole mountain came down: the chief of Peach Blossom Mountain himself, with torches and men, to avenge his brother. But when he saw the naked monk standing in the gate with his staff, he cried out in surprise.');
       s.night(false);
@@ -482,7 +482,7 @@
       await s.say('lizhong', 'If it\'s your wish, brother, it will be done. Zhou Tong will break the arrow and swear it.');
       await s.narrate('Zhou Tong, sore and humbled, swore he would never trouble the Liu family again. Li Zhong and Zhou Tong took Zhishen up the mountain and feasted him for several days. But Zhishen saw that they were stingy fellows, who meant to rob travellers for the parting gifts rather than give anything of their own.');
       await s.narrate('So while the two were down the mountain on a robbery, he gathered up the gold and silver wine cups from the table, stamped them flat, stuffed them in his bundle, and, finding the path guarded, wrapped himself up and rolled down the steep back of the mountain to the road below.');
-      s.despawn('lizhong'); s.despawn('liu');
+      s.despawn('lizhong', { leave: true }); s.despawn('liu', { leave: true });
       s.tint(null);
       s.gold(120, true);
       s.flag('ch2_peachdone');
@@ -530,13 +530,13 @@
       s.spawn('shijinH', 'shijin', 21, 23, 'left');
       await s.move('shijinH', 'L3', { run: true });
       await s.duel('lu_shijin', { canLose: true });
-      s.despawn('shijinH');
+      s.despawn('shijinH', { leave: true });
       s.spawn('shijinH', 'shijin', 17, 25, 'left');
       await s.say('shijin', 'Brother! After we parted at Weizhou, I went to Yan\'an to look for Master Wang and never found him. My money ran out, so I\'ve been... borrowing from travellers on the road.');
       await s.say('luzhishen', 'Ha! And I have been a monk. Here — do you have anything to eat? I\'ve had nothing all day.');
       await s.narrate('Shi Jin brought out dried meat and flatbread, and Zhishen ate it all. Then he told Shi Jin about the Waguan Monastery and the two villains.');
       await s.say('shijin:angry', 'Then let\'s go back together and finish them.');
-      s.despawn('shijinH');
+      s.despawn('shijinH', { leave: true });
       s.addParty('shijin'); s.level('shijin', Math.max(8, WM.state.chars.luzhishen.lv - 1));
       S.restoreParty();
       s.flag('ch2_withshijin');
@@ -630,7 +630,7 @@
       await s.say('jiner:shock', 'Master! Master, come quickly! At the Temple of the Eastern Peak — a man has stopped the Mistress and won\'t let her go!');
       await s.say('linchong:angry', 'What?!');
       await s.say('linchong', 'Brother, forgive me — I must go!');
-      s.despawn('jiner'); s.despawn('linchong'); s.despawn('zs');
+      s.despawn('jiner'); s.despawn('linchong', { leave: true }); s.despawn('zs');
       s.flag('ch2_done');
       await s.endChapter();
       if (WM.data.chapters[3].begin) await WM.data.chapters[3].begin(s);

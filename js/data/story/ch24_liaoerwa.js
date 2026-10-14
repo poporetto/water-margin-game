@@ -51,7 +51,7 @@
       await s.say('songjiang:sad', 'Our army is gone, brother. Our brothers are gone.');
       await s.say('likui:sad', '...All right. All right. All right! Alive, I served you, brother. Dead, I\'ll be a little ghost under you, all the same.');
       await s.say('songjiang:sad', 'South of Chuzhou there is a place called Liaoerwa. The water and the hills there are just like Liangshan. Bury me there.');
-      s.despawn('lk');
+      s.despawn('lk', { leave: true });
       s.music('sad');
       await fall(s, ['likui'], 'Li Kui went back to Runzhou, and the poison took him on the road. As he had asked, he was carried to Liaoerwa.');
       await fall(s, ['songjiang'], 'Song Jiang, the Timely Rain, died at Chuzhou. His people wept for him, and buried him at Liaoerwa, among the reeds and the low hills that looked like Liangshan. Li Kui was buried beside him.');
@@ -67,7 +67,7 @@
       await s.say('huarong:sad', 'Professor. You dreamed it too.');
       await s.say('wuyong:sad', 'All my life I spent my wits for him. Now he is gone, and we live on in a world without our brothers. ...I would rather follow him here, and sleep beside him.');
       await s.say('huarong:sad', 'Then I will go with you. Let us be buried here together, so that people will say: the brothers of Liangshan kept faith to the end.');
-      s.despawn('hr');
+      s.despawn('hr', { leave: true });
       await fall(s, ['wuyong', 'huarong'], 'At Song Jiang\'s grave, Wu Yong and Hua Rong embraced, and wept, and hanged themselves from the same tree. The people of Chuzhou buried them beside Song Jiang and Li Kui. There were four graves at Liaoerwa.');
       s.flag('ch24_dream');
       s.party(['daizong']); s.setLeader('daizong'); s.flag('protagonist', 'daizong');

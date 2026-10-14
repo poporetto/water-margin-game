@@ -166,7 +166,7 @@
       s.spawn('lk', 'likui', 15, 8, 'up'); s.spawn('sj', 'songjiang', 15, 5, 'down');
       await s.say('likui:sad', 'Brother... I\'ve come with thorns on my back. Beat me as much as you like. Or take my head — I lost the bet.');
       await s.say('songjiang', 'I want neither. Bring back the girl, and the men who used my name, and we will say no more.');
-      s.despawn('lk'); s.despawn('sj');
+      s.despawn('lk', { leave: true }); s.despawn('sj', { leave: true });
       s.party(['likui', 'yanqing']); s.setLeader('likui'); s.flag('protagonist', 'likui');
       await s.narrate('They found the impostors on Niutou Mountain: Wang Jiang and Dong Hai.');
       await s.battle('ch20_niutou', { bg: 'forest' });
@@ -213,7 +213,7 @@
       await s.say('huarong:angry', 'Except Song Jiang? Look at Hua Rong\'s arrow!');
       s.sfx('arrow'); await s.flash();
       await s.narrate('Hua Rong shot the reader of the edict through the face. Gao Qiu built great paddle-wheel ships, the Sea-Eels, and came a third time.');
-      s.despawn('hr');
+      s.despawn('hr', { leave: true });
       await s.war('ch20_gaoqiu');
       s.flag('ch20_gao');
       s.spawn('gq', 'gaoqiu', 15, 6, 'down');
@@ -222,7 +222,7 @@
       await s.say('gaoqiu:smile', 'Hm, hm... Yes. Of course. I shall speak to His Majesty myself. ...You know, when I was young, there was no wrestler in the capital who could throw me.');
       await s.duel('yanqing_gaoqiu', { hero: 'yanqing', canLose: true });
       await s.say('gaoqiu:sad', '...I swear it before Heaven: I will see you pardoned. If I go back on my word, let Heaven not cover me nor Earth bear me.');
-      s.despawn('gq');
+      s.despawn('gq', { leave: true });
       await s.narrate('Song Jiang let him go, with Xiao Rang and Yue He to carry the petition. Gao Qiu left one of his staff, Wen Huanzhang, on the mountain as a pledge. And as soon as Gao Qiu was home, he locked Xiao Rang and Yue He in his own house and said nothing to the emperor at all.');
       s.flag('away:xiaorang'); s.flag('away:yuehe');
       await s.say('wuyong', 'As I thought. Brother — send Yan Qing to Li Shishi. And Dai Zong with him.');

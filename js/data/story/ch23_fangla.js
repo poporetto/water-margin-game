@@ -173,7 +173,7 @@
       await s.narrate('Lu Zhishen had chased Xiahou Cheng deep into the hills and killed him, and had been lost there ever since, living on what an old monk in a grass hut gave him. That morning the old monk had said: "Wait by the pine trees. Catch the big man who comes out of the woods." A man in a yellow robe came stumbling out of the trees.');
       s.spawn('fl', 'fangla', 22, 6, 'down');
       await s.duel('lu_fangla', { hero: 'luzhishen', canLose: true });
-      s.despawn('fl');
+      s.despawn('fl', { leave: true });
       await s.say('luzhishen', '"Meet Xia, and capture. Meet La, and seize." ...Xiahou Cheng, and Fang La. So that is what the old man meant.');
       s.flag('ch23_caught');
       await s.narrate('So Fang La, who had called himself emperor of the south, was taken by a monk with a staff. He was sent to the capital in a cage. The army turned back north, and came to Hangzhou, and camped at the Liuhe Temple above the Qiantang River.');
@@ -203,7 +203,7 @@
       await s.say('yanqing', 'Master, I am leaving. Come with me. Let us hide somewhere far away and live out our lives.');
       await s.say('lujunyi', 'Little Yi, we have won. We are going to the capital to be honoured. Why would I hide?');
       await s.say('yanqing:sad', 'Master, you are wrong. Where I am going, there is a good ending. I only fear that where you are going, there is none.');
-      s.despawn('yq'); s.despawn('lu');
+      s.despawn('yq', { leave: true }); s.despawn('lu');
       s.flag('away:yanqing');
       await s.narrate('That night Yan Qing left with a bundle on his back, and no one ever knew where he went. At Suzhou, Li Jun pretended to be stricken with palsy and stayed behind with Tong Wei and Tong Meng. When the army had gone, the three of them sailed out to sea from Taicang. Years later, it was said, Li Jun became the king of a country across the ocean.');
       ['lijun', 'tongwei', 'tongmeng'].forEach(function (id) { s.flag('away:' + id); });

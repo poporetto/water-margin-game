@@ -136,7 +136,7 @@
     await s.narrate('The Liangshan army fled across the water with heavy losses. Huyan Zhuo sent to the capital for Ling Zhen, the greatest artillerist of the empire, and soon his trebuchets were dropping "wind-and-fire" bombs on the Liangshan forts.');
     s.spawn('wy', 'wuyong', 15, 6, 'down');
     await s.say('wuyong', 'Ling Zhen\'s trebuchets are on the shore. Li Jun, Zhang Heng — draw him to the water. The Ruan brothers will be waiting under it.');
-    s.despawn('wy');
+    s.despawn('wy', { leave: true });
     s.party(['ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'lijun', 'zhangheng']); s.setLeader('ruanxiaoer');
     ['ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'lijun', 'zhangheng'].forEach(function (id) { s.level(id, 25); });
     await s.battle('ch14_lingzhen', { bg: 'river' });
@@ -147,7 +147,7 @@
     await s.join('lingzhen');
     await s.say('tanglong', 'Brother — there is a way to beat the chained horses. The hooked lance. And only one man in the empire knows how to use it: my cousin Xu Ning, instructor of the Imperial Guard. And he would never leave the capital — unless he lost his family\'s treasure, the goose-feather armour he keeps in a leather box on the beam over his bed.');
     await s.say('wuyong:smile', 'Then we send someone to take it. Shi Qian!');
-    s.despawn('sj'); s.despawn('lz'); s.despawn('wy'); s.despawn('tl');
+    s.despawn('sj', { leave: true }); s.despawn('lz', { leave: true }); s.despawn('wy', { leave: true }); s.despawn('tl', { leave: true });
     s.party(['shiqian']); s.setLeader('shiqian'); s.level('shiqian', 25); s.flag('protagonist', 'shiqian');
     s.flag('ch14_heist');
     WM.unlock('kaifeng');
@@ -241,13 +241,13 @@
       await s.say('luzhishen', 'Brother Wu Song, Brother Yang Zhi — leave him to me first!');
       await s.duel('lu_huyan', { hero: 'luzhishen', canLose: true });
       await s.duel('yangzhi_huyan', { hero: 'yangzhi', canLose: true });
-      s.despawn('hy');
+      s.despawn('hy', { leave: true });
       await s.narrate('Huyan Zhuo went back into Qingzhou. A few days later he caught Kong Ming of White Tiger Mountain, who had come to rescue his uncle Kong Bin from the prison, and threw him into the cells too. Kong Ming\'s brother Kong Liang fled — straight into Wu Song on the road.');
       s.spawn('kl', 'kongliang', 12, 21, 'left');
       await s.say('kongliang:sad', 'Master Wu Song! My brother is taken!');
       await s.say('wusong', 'Kong Liang! ...Huyan Zhuo is too strong for any one of our mountains. But Song Jiang of Liangshan is my brother, and yours too — he stayed at your father\'s house. Go to Liangshan and ask him. And let the three mountains fight together.');
       await s.say('yangzhi', 'Agreed. Erlong, Peach Blossom and White Tiger — one army, under Song Jiang.');
-      s.despawn('kl');
+      s.despawn('kl', { leave: true });
       s.flag('ch14_three');
       await s.fadeOut(1);
       s.party(['songjiang', 'wuyong', 'qinming', 'huarong', 'linchong', 'luzhishen']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
@@ -269,7 +269,7 @@
       await s.say('huyanzhuo:angry', 'There! On the hill — Song Jiang himself! Follow me!');
       await s.move('hy', 'L5 D1 L5 U1');   // round the trees to the pit
       s.sfx('earth'); await s.shake(6, 0.4);
-      s.despawn('hy');
+      s.despawn('hy', { leave: true });
       await s.narrate('The earth gave way under Snow-Treading Black\'s hooves, and Huyan Zhuo, horse and all, went down into the pit. Hooks came out of the grass on both sides, and he was hauled up and bound.');
       s.spawn('hy', 'huyanzhuo', 9, 12, 'up');
       await s.say('songjiang', 'Untie him! ...General Huyan, forgive us. We are not rebels. We were driven to this marsh by corrupt officials, and we wait only for the emperor\'s pardon to serve the state again. We would gladly follow a man like you.');

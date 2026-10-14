@@ -76,7 +76,7 @@
       await s.say('gaoyanei', 'Lin Chong? What business is it of yours?');
       await s.say('servant:concerned', '(whispering) Instructor, don\'t you know who this is? It\'s the Yanei! He didn\'t know she was your wife. Let it go!');
       await s.narrate('Gao Yanei and his lackeys sauntered out of the temple, laughing. Lin Chong stood shaking with rage, then took his wife by the arm and turned to go.');
-      s.despawn('gaoyanei'); s.despawn('lackey1'); s.despawn('lackey2');
+      s.despawn('gaoyanei', { leave: true }); s.despawn('lackey1'); s.despawn('lackey2');
       s.spawn('luzhishen', 'luzhishen', 44, 18, 'up');
       s.spawn('zhangsan', 'zhangsan', 43, 18, 'up');
       await s.move('luzhishen', 'U1', { run: true });
@@ -109,7 +109,7 @@
       await s.say('linchong:sad', 'What use is a man\'s talent, Lu Qian, if he must serve a man like Gao Qiu? I swallow insult after insult.');
       await s.say('luqian', 'Don\'t think like that. The Marshal values you. He just doesn\'t know his son\'s ways. Drink.');
       await s.say('linchong', '...I must step out a moment.');
-      s.despawn('luqian');
+      s.despawn('luqian', { leave: true });
       s.spawn('jiner', 'jiner', 18, 18, 'left');           // she runs in at the door and stops beside him
       s.face('player', 'right');
       await s.say('jiner:shock', 'Master! Master, I\'ve been looking everywhere! A man came to the house saying you had fainted at Lu Qian\'s, and the Mistress went with him — and it was the Yanei waiting there! He\'s got her upstairs in Lu Qian\'s house!');
@@ -192,7 +192,7 @@
       await s.say('zhangjiaotou:sad', 'Son-in-law, don\'t say such things. You have had bad luck, nothing more. I will keep my daughter at home, and send you money every month. Come back to us.');
       await s.say('linchong:sad', 'Thank you, father. But if you won\'t take the letter, I swear I won\'t live to see Cangzhou. Let her be free.');
       await s.narrate('Lin Chong\'s wife wept until she fainted. Instructor Zhang carried her home. And the two escorts, Dong Chao and Xue Ba, led Lin Chong out of the city.');
-      s.despawn('zhang'); s.despawn('wife');
+      s.despawn('zhang', { leave: true }); s.despawn('wife', { leave: true });
       await s.narrate('That night, at a tavern, a man in a cloth cap paid the two escorts ten taels of gold. "This is from Lu Qian, by order of the Marshal. Lin Chong is not to reach Cangzhou. Somewhere quiet on the road — finish him, and bring back the brand cut from his face as proof."');
       WM.state.chars.linchong.equip.acc = 'cangue';
       WM.state.chars.linchong.equip.body = null;
@@ -271,16 +271,16 @@
       await s.say('hongjiaotou:angry', 'He dares not, because he can\'t!');
       await s.say('chaijin', 'Escorts — here are ten taels. Unlock the Instructor\'s cangue for a little while; I\'ll answer for it. And here is a silver ingot of twenty-five taels: whichever of you wins, it is his.');
       WM.state.chars.linchong.equip.acc = null; S.restore('linchong');
-      s.despawn('hong'); s.despawn('chaijin');
+      s.despawn('hong', { leave: true }); s.despawn('chaijin');
       await s.warp('chaimanor', 17, 15, 'up');
       s.spawn('chaijin', 'chaijin', 13, 13, 'right'); s.spawn('hong', 'hongjiaotou', 17, 13, 'down');
       await s.duel('lin_hong');
       await s.narrate('Hong swung his staff down at Lin Chong\'s head. Lin Chong stepped back, and as the staff came down, swept his own across and caught Hong on the shin. Hong\'s staff flew from his hands and he went down flat on his back, to the laughter of the whole household. He crawled away in shame and left the manor.');
-      s.despawn('hong');
+      s.despawn('hong', { leave: true });
       await s.say('chaijin:smile', 'Splendid! Splendid! The silver is yours, Instructor.');
       await s.gold(25);
       await s.say('chaijin', 'I will write letters to the warden and the guards at the Cangzhou camp, so they will treat you well. If ever you need anything — anything — come to me.');
-      s.despawn('chaijin');
+      s.despawn('chaijin', { leave: true });
       WM.state.chars.linchong.equip.acc = 'cangue'; S.restore('linchong');
       WM.unlock('cangzhou');
       s.flag('ch3_tocangzhou');
@@ -362,7 +362,7 @@
       await s.say('luqian:shock', 'Brother! It wasn\'t my idea! The Marshal ordered it — how could I refuse?');
       await s.say('linchong:angry', 'You and I were friends from childhood. And you came all the way here to burn me alive. "How could you refuse?" You could have refused.');
       await s.narrate('Lin Chong killed Lu Qian there in the snow. He laid the three heads on the altar of the Mountain God, put on his white felt hat, drank the last of the cold wine, and walked out into the snow towards the east, leaving the depot burning behind him.');
-      s.despawn('luqian');
+      s.despawn('luqian', { leave: true });
       s.tint(null);
       s.flag('ch3_killed');
       WM.state.chars.linchong.equip.acc = null; S.restore('linchong');
@@ -376,7 +376,7 @@
       await s.say('chaijin', 'Not yet. In Shandong there is a marsh called Liangshan, eight hundred li of water, and on it a stronghold of bold fellows. The chief is Wang Lun, the Scholar in White, with Du Qian and Song Wan. They are friends of mine. I will give you a letter. Go to them.');
       await s.give('chailetter', 1);
       await s.say('chaijin', 'The checkpoints are watched. I\'ll go hunting tomorrow with my men, and you\'ll ride out among us in a hunter\'s coat. No guard will stop Chai Jin\'s hunting party.');
-      s.despawn('chaijin');
+      s.despawn('chaijin', { leave: true });
       s.weather(null);
       WM.unlock('zhugui');
       s.flag('ch3_toliangshan');
@@ -402,7 +402,7 @@
       await s.say('linchong:shock', '...Who are you?');
       await s.say('zhugui:smile', 'Zhu Gui, the Dry-Land Crocodile. I keep this tavern as a lookout for Liangshan. Travellers who are rich are robbed here, and travellers who are heroes are taken across the water. Lord Chai has written of you more than once.');
       await s.narrate('Zhu Gui went to the window that faced the lake, drew a bow, and shot a whistling arrow into the reeds. Soon a boat with several men came gliding out from the reeds to the landing.');
-      s.despawn('zhugui');
+      s.despawn('zhugui', { leave: true });
       s.flag('ch3_boat');
       s.flag('lsWangLun');
       await s.warp('liangshan', 24, 40, 'up');
@@ -435,7 +435,7 @@
       await s.say('linchong', 'I can write, sir. Tell me what to write.');
       await s.say('wanglun', 'Not writing. Those who join a band like ours bring a head. Go down the mountain and kill a traveller, and bring his head to me within three days. Then we\'ll know you are one of us — and can\'t go back.');
       await s.say('linchong:sad', '...I will go.');
-      s.despawn('wanglun'); s.despawn('duqian'); s.despawn('songwan'); s.despawn('zhugui');
+      s.despawn('wanglun'); s.despawn('duqian', { leave: true }); s.despawn('songwan', { leave: true }); s.despawn('zhugui', { leave: true });
       s.flag('ch3_head');
       await s.narrate('On the first day Lin Chong waited by the road with a guide from morning till dusk, and no traveller came by. On the second day a party of more than three hundred came down the road together; he dared not attack so many. On the third day, he went down in despair.');
       await s.warp('zhugui', 9, 18, 'down');
@@ -462,7 +462,7 @@
       await s.say('wanglun:smile', 'Yang Zhi! Then stay with us on Liangshan. Why go back to serve the men who ruined you?');
       await s.say('yangzhi', 'I thank you. But I have a family name to honour. I will not shame my ancestors by becoming an outlaw. Please return my load.');
       await s.narrate('Wang Lun saw that Yang Zhi would not stay, and thought it better to keep a check on Lin Chong than to have two such men on the mountain. He gave back the silver, feasted Yang Zhi for a day, and let him go on to the capital.');
-      s.despawn('yangzhi'); s.despawn('wanglun'); s.despawn('duqian'); s.despawn('guide');
+      s.despawn('yangzhi', { leave: true }); s.despawn('wanglun', { leave: true }); s.despawn('duqian', { leave: true }); s.despawn('guide', { leave: true });
       await s.narrate('And Lin Chong was made the fourth chief of Liangshan, after Wang Lun, Du Qian and Song Wan — above Zhu Gui. But Wang Lun never trusted him, and Lin Chong never forgot it.');
       s.flag('ch3_done');
       await s.endChapter();

@@ -121,13 +121,13 @@
       await s.say('chaogai', 'Go, then, and come back to us.');
       s.flag('away:gongsunsheng');
       s.removeParty('gongsunsheng');
-      s.despawn('gss');
+      s.despawn('gss', { leave: true });
       s.music('sad');
       await s.say('likui:sad', '...Everybody\'s fetching their father, and their mother. My mother\'s in Yishui, carrying water and weaving straw sandals for my brother. I want to bring her here to live well too!');
       await s.say('songjiang', 'Brother, you are hot-headed, and the roads are watched. If you go, there are three things you must promise. Do not drink. Go alone, and quietly. And do not take your axes.');
       await s.say('likui', 'No wine — I promise. Alone — fine. My axes... all right. All right! I\'ll take a waist sabre and a pudao.');
       await s.say('songjiang', 'Then go, and come back quickly.');
-      s.despawn('likui'); s.despawn('chaogai');
+      s.despawn('likui', { leave: true }); s.despawn('chaogai', { leave: true });
       s.party(['likui']); s.setLeader('likui'); s.level('likui', 23);
       WM.state.chars.likui.weapon = { name: 'Pudao', range: 'S', pow: 1.05 };
       s.flag('protagonist', 'likui');
@@ -148,7 +148,7 @@
       await s.battle('ch10_ligui', { bg: 'forest' });
       await s.say('ligui:sad', 'Mercy! Mercy! My real name is Li Gui. I use the Black Whirlwind\'s name because everyone is afraid of it. I have a mother of ninety at home and no one to feed her — that\'s why I rob! If you kill me, she\'ll starve!');
       await s.say('likui', '...A mother at home, eh? I\'ve come all this way to fetch my own mother. All right. Here — ten taels. Go home and become an honest man.');
-      s.despawn('ligui');
+      s.despawn('ligui', { leave: true });
       await s.narrate('A little further on, Li Kui stopped at a cottage to buy a meal. From the next room he heard a man telling his wife how he had tricked the real Black Whirlwind with a story about a mother of ninety — there was no mother. Li Kui burst in. The false Li Kui did not trick anyone again. His wife ran away into the hills.');
       s.flag('ch10_liguidone');
     } }
@@ -164,7 +164,7 @@
       await s.say('lida:angry', 'Iron Ox! You killed a man and ran, and the county has hounded me ever since! Now there\'s a reward of three thousand strings for you. You\'re no official — you\'re a bandit! I\'m going to the squire!');
       s.despawn('lida');
       await s.say('likui', '(No time. Brother will bring the whole village.) Up you come, Mother. We\'re going over the Yi Ridge tonight.');
-      s.despawn('mother');
+      s.despawn('mother', { leave: true });
       s.flag('ch10_carry');
       s.night(true);
       await s.narrate('Li Kui left a bar of silver on the bed for his brother, took his mother on his back, and went out into the night, up the path to the Yi Ridge.');
@@ -235,7 +235,7 @@
       await s.duel('likui_liyun', { hero: 'likui', canLose: true });
       await s.say('zhufu', 'Master, you have lost your prisoner. You can never go back to the county now — they will punish you for it. Come with us to Liangshan. Song Jiang welcomes every hero.');
       await s.say('liyun:sad', '...You have left me no road back, Zhu Fu. So be it.');
-      s.despawn('liyun'); s.despawn('zhufu'); s.despawn('zhugui');
+      s.despawn('liyun', { leave: true }); s.despawn('zhufu', { leave: true }); s.despawn('zhugui', { leave: true });
       s.flag('ch10_return');
       await s.warp('liangshan_in', 16, 12, 'up');
     } }

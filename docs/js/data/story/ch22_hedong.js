@@ -143,7 +143,7 @@
       await s.say('wangqing', 'Fisherman! A boat! I still have three cities on the far side — take me over and you\'ll be rich!');
       await s.say('lijun:smile', 'Splendid — more wine money! Get in, get in.');
       await s.narrate('On the bank of the Qing River, the "fisherman" was Li Jun, and the man at the oar was Tong Wei. Halfway across, the nets came up — over Wang Qing.');
-      s.despawn('wq'); s.despawn('lj');
+      s.despawn('wq', { leave: true }); s.despawn('lj');
       await s.say('songjiang', 'Brother Li Jun, that is no small merit.');
       s.music('sad');
       await s.narrate('The army turned north for the capital. It was autumn. At the Qiulin ferry, a long skein of wild geese went over, crying, and Yan Qing — who had never missed — drew his bow and brought down one after another.');
@@ -161,7 +161,7 @@
       s.spawn('gs', 'gongsunsheng', 29, 38, 'down');
       await s.say('gongsunsheng', 'Brother. My master told me long ago: "Meet You, and stop. Meet Bian, and return." We fought at Youzhou and stopped the Liao there; and now we have come back to Bianliang. He told me to see you home to the capital, and then go back to the mountain. My mother is old.');
       await s.say('songjiang:sad', 'I promised him I would let you go. ...We came together like a gathering of flowers, and now we fall apart like petals. Go, brother.');
-      s.despawn('gs');
+      s.despawn('gs', { leave: true });
       s.flag('away:gongsunsheng'); S.removeFromParty('gongsunsheng');
       await s.narrate('Gongsun Sheng went back to Erxian Mountain, to his master and his mother. Tian Hu and Wang Qing were put to death in the market-place. Song Jiang was made an Imperial City Commissioner — no more — and Lu Junyi a minor officer. Wu Yong said nothing, but his face said everything.');
       await s.narrate('And the court began to keep the useful ones for itself. Cai Jing took Xiao Rang to write his letters. Prince Wang took Yue He for his singing. The emperor kept Jin Dajian to carve jade seals and Huangfu Duan to tend the imperial horses. They were not asked.');

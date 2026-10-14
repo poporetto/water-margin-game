@@ -69,7 +69,7 @@
       await s.say('yangzhi:sad', '(Wang Lun was right. And now I have nothing. Not one coin for the inn, nor for the road home.)');
       await s.say('kfinnkeep:concerned', 'Officer Yang, you owe for three weeks. I can\'t feed you on promises.');
       await s.say('yangzhi:sad', '(All I have left is the sabre my ancestors handed down. ...So be it. I will sell it, and go home.)');
-      s.despawn('keep');
+      s.despawn('keep', { leave: true });
       s.flag('ch4_sell');
       await s.narrate('He tied a straw tag to the sabre\'s hilt — the sign of a thing for sale — and went out to the Tianhan Bridge, where the crowds were thickest, to sell it.');
       await s.say(null, '(The Tianhan Bridge crosses the river on the west side of the city.)');
@@ -104,7 +104,7 @@
       s.music('sad');
       await s.narrate('Niu Er grabbed at him and swung his fists. Yang Zhi, in a rage, struck once, then again, and Niu Er fell dead on the bridge. And true enough, there was no blood on the blade.');
       await s.say('yangzhi:sad', 'Neighbours! I killed this bully, and I will not run and leave you to answer for it. Come with me to the prefecture, all of you, and bear witness.');
-      s.despawn('niuer');
+      s.despawn('niuer', { leave: true });
       s.take('sabre', 1);
       await s.narrate('The people of the capital, who had hated Niu Er, went with him to the prefecture and spoke for him, and many sent him food and money in prison. The prefect, knowing that the dead man had been a menace to all, reduced the charge. Yang Zhi was given twenty strokes, tattooed on the face, and exiled to the Northern Capital, Daming. His sabre was confiscated.');
       s.flag('ch4_exiled');
@@ -140,7 +140,7 @@
       await s.say('liangzhongshu:smile', 'Both are heroes! Both shall be made captains of my guard!');
       await s.say('suochao:smile', 'Yang Zhi. You\'re the first man who\'s ever stood up to my axe. Let\'s drink.');
       await s.say('yangzhi:smile', 'Gladly, brother Suo.');
-      s.despawn('liang'); s.despawn('zhoujin'); s.despawn('suochao'); s.despawn('s1'); s.despawn('s2');
+      s.despawn('liang', { leave: true }); s.despawn('zhoujin', { leave: true }); s.despawn('suochao', { leave: true }); s.despawn('s1', { leave: true }); s.despawn('s2', { leave: true });
       await s.fadeOut(1);
       await s.narrate('From then on Yang Zhi was in high favour. Liang Zhongshu kept him near, and he served diligently from morning to night. Spring passed, and summer came, and the fifth day of the fifth month — the Dragon Boat Festival.');
       await s.warp('daming_in', 12, 10, 'up', { noFade: true });
@@ -152,7 +152,7 @@
       await s.say('yangzhi', 'Let me pack it in loads, and have eleven strong soldiers carry them on poles, disguised as porters. I and they will go as merchants, quietly. That way we may get through.');
       await s.say('liangzhongshu:smile', 'Excellent. It shall be as you say. And my wife\'s steward, and two officers from the household, will go with you.');
       await s.say('yangzhi:concerned', '(The steward and the household officers... they will not take orders from me. This will be trouble.)');
-      s.despawn('liang');
+      s.despawn('liang', { leave: true });
       s.flag('ch4_done');
       await s.endChapter();
       if (WM.data.chapters[5].begin) await WM.data.chapters[5].begin(s);

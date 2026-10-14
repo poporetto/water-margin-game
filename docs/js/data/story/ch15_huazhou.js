@@ -144,7 +144,7 @@
       s.spawn('sj', 'shijin', 21, 4, 'down'); s.spawn('lz', 'luzhishen', 26, 4, 'down');
       await s.say('shijin', 'Brother Song Jiang! And Master Lu — you came for me, and got yourself caught too!');
       await s.say('luzhishen:smile', 'Ha! I was keeping you company!');
-      s.despawn('sj'); s.despawn('lz');
+      s.despawn('sj', { leave: true }); s.despawn('lz', { leave: true });
       await s.narrate('They set fire to the prefect\'s hall and emptied the treasury. Then they returned every piece of Su Yuanjing\'s regalia, with gold and silver for his trouble, and let him go on his way. Su Yuanjing went back to the capital and reported that he had been robbed by bandits on the road — and said no more.');
       await s.joinMany(['shijin', 'zhuwu', 'chenda', 'yangchun']);
       s.flag('ch15_freed');
@@ -152,7 +152,7 @@
       await s.warp('liangshan_in', 16, 12, 'up');
       s.spawn('sj', 'shijin', 16, 10, 'down');
       await s.say('shijin', 'Let me go. I\'ve only just come up the mountain, and I\'ve done nothing yet.');
-      s.despawn('sj');
+      s.despawn('sj', { leave: true });
       s.party(['shijin', 'zhuwu', 'chenda', 'yangchun']); s.setLeader('shijin'); s.flag('protagonist', 'shijin');
       ['shijin', 'zhuwu', 'chenda', 'yangchun'].forEach(function (id) { s.level(id, 27); });
       WM.unlock('mangdang');
@@ -174,7 +174,7 @@
       await s.say('songjiang', 'Untie them. Bring them new clothes and their horses. ...Brothers, we have long heard of you. If you will not stay, go back to your mountain. If you will, persuade Brother Fan Rui to come too.');
       await s.say('xiangchong', '...We came to destroy you, and you give us our horses back. Brother Li Gun, what do you say?');
       await s.say('ligun', 'I say we go and fetch Fan Rui.');
-      s.despawn('xc'); s.despawn('lg');
+      s.despawn('xc', { leave: true }); s.despawn('lg', { leave: true });
       await s.narrate('Fan Rui came down the mountain with them the next day and knelt to Song Jiang. When he saw Gongsun Sheng, he begged to become his disciple and learn the true Way of the Five Thunders. Then they burned their stockade and brought their men and stores to Liangshan.');
       await s.joinMany(['fanrui', 'xiangchong', 'ligun']);
       s.flag('ch15_done');

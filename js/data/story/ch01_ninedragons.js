@@ -86,7 +86,7 @@
       await s.move('player', 'D2');
       await s.face('player', 'up');
       await s.say('wangjin:sad', '(I knew that face. Gao Er, the street tough — the one my father knocked flat with a single stroke of his staff, so badly hurt he lay in bed three months. So that is the new Marshal. Today he spared me before the officers. Tomorrow he will have his revenge.)');
-      s.despawn('gaoqiu'); s.despawn('o1'); s.despawn('o2'); s.despawn('o3'); s.despawn('o4');
+      s.despawn('gaoqiu'); s.despawn('o1', { leave: true }); s.despawn('o2', { leave: true }); s.despawn('o3', { leave: true }); s.despawn('o4', { leave: true });
       await s.warp('kaifeng_in', 6, 6, 'up');
       s.spawn('mother', 'wangmother', 4, 4, 'down');
       await s.say('wangjin:sad', 'Mother, the new Grand Marshal is Gao Er — the street-tough Father once beat half to death. He has power over me now, and he means to use it.');
@@ -150,7 +150,7 @@
       await s.fadeOut(0.8);
       await s.narrate('But in the night Wang Jin\'s mother was taken with pains in her chest, and by morning she could not rise. The kindly Taigong would not hear of them leaving. He sent to the county town for medicine and told Wang Jin to stay until she was well.');
       await s.narrate('Five or six days later, her illness easing, Wang Jin went out behind the hall to see to the horse. There, in the threshing yard, a young man stood stripped to the waist, tattooed from shoulders to chest with blue dragons, practising with a staff.');
-      s.despawn('taigong'); s.despawn('mother');
+      s.despawn('taigong', { leave: true }); s.despawn('mother', { leave: true });
       s.tint(null);
       s.flag('ch1_yard');
       await s.warp('shivillage', 16, 15, 'up', { noFade: true });
@@ -179,7 +179,7 @@
       await s.say('shitaigong:smile', 'An instructor of the Imperial Guard, under my roof! Heaven has sent you. Stay as long as you like and teach my son. We will see that you want for nothing.');
       await s.say('shitaigong', 'This boy is Shi Jin, my only son. He would never look at a plough. All he wants is spear and staff, and he spent his mother\'s heart\'s blood on teachers. He had a craftsman tattoo nine dragons on his body, so the whole county calls him "Nine Dragons Shi Jin."');
       await s.say('shijin', 'Master, I swear I will learn everything you teach me.');
-      s.despawn('taigong');
+      s.despawn('taigong', { leave: true });
       await s.fadeOut(1);
       await s.narrate('So Wang Jin and his mother stayed at the Shi Family Village. Day after day Wang Jin taught Shi Jin from the beginning: the eighteen weapons of war, the spear and the staff, the sword and the halberd, the bow and the crossbow, the axe and the hammer, until he had mastered every one.');
       await s.narrate('Half a year went by. Wang Jin saw that his pupil had learned all he had to teach, and that the longer he stayed, the more likely Gao Qiu\'s men would find him. One day he told the Taigong that he must go on to Yan\'an.');
@@ -199,10 +199,10 @@
       await s.say('shitaigong', 'Take this silver for the journey, Instructor. One hundred taels — no, don\'t refuse. You have given my son more than silver can pay for.');
       await s.say('wangmother:smile', 'May Heaven repay your kindness, Taigong.');
       await s.move('wangjinA', 'D9', { wait: false }); await s.move('mother', 'R1 D9');   // down the village road
-      s.despawn('wangjinA'); s.despawn('mother');
+      s.despawn('wangjinA', { leave: true }); s.despawn('mother', { leave: true });
       await s.say('shijin:sad', 'Farewell, Master...');
       await s.fadeOut(1);
-      s.despawn('taigong');
+      s.despawn('taigong', { leave: true });
       await s.narrate('Wang Jin and his mother went on their way to Yan\'an, and Shi Jin returned to his practice. But not half a year later Shi Taigong fell ill, and no physician could save him. Shi Jin buried his father with all due rites on the hill behind the village. Now the master of the manor, he cared even less for farming than before. Every day he practised spear and staff, and the village went on as best it could.');
       s.flag('ch1_shijin');
       s.place('player', 16, 14, 'down');
@@ -236,9 +236,9 @@
       await s.battle('ch1_raid', { bg: 'plains' });
       await s.say('chenda:angry', 'Enough of these village boys. You and me, Nine Dragons!');
       await s.duel('shijin_chenda');
-      s.despawn('b1'); s.despawn('b2');
+      s.despawn('b1', { leave: true }); s.despawn('b2', { leave: true });
       await s.narrate('The two fought back and forth on the road. At last Shi Jin feinted, let Chen Da\'s spear thrust past him, seized him by the belt and dragged him from his horse. The bandits fled back up the mountain. The villagers bound Chen Da and dragged him to the manor.');
-      s.despawn('chenda');
+      s.despawn('chenda', { leave: true });
       s.flag('ch1_captured');
       s.music('field');
       await s.say('shijin', 'Tie him to a pillar in the yard. When we have the other two as well, we\'ll hand all three to the magistrate and claim the reward.');
@@ -326,7 +326,7 @@
       s.spawn('d1', 'dutyA', 14, 17, 'up'); s.spawn('d2', 'dutyA', 16, 17, 'up');
       await s.say('dutyA:angry', 'There they are! Don\'t let them escape!');
       await s.battle('ch1_yard', { bg: 'fire' });
-      s.despawn('d1'); s.despawn('d2');
+      s.despawn('d1', { leave: true }); s.despawn('d2', { leave: true });
     } },
     { id: 'ch1_bossfight', x: 12, y: 24, w: 5, h: 2, trigger: 'touch', once: true, cond: fireActive, idle: { liji: 'Not one step further, Shi Jin. The constables hold every gate, and the reward is as good as mine.', d1: 'Stand back! By order of the magistrate of Huayin county!', d2: '(The duty officer\'s spear shakes in the firelight.)' },
       run: async function (s) {
@@ -335,7 +335,7 @@
       await s.say('shijin:angry', 'Li Ji, you treacherous dog! I\'ll settle with you first!');
       await s.battle('ch1_boss', { bg: 'fire', music: 'boss' });
       await s.narrate('Shi Jin cut Li Ji in two with a single stroke. The two duty officers turned to flee, and Chen Da and Yang Chun ran them down. The rest of the soldiers scattered in every direction. Behind them the Shi Family manor burned to the ground.');
-      s.despawn('liji'); s.despawn('d1'); s.despawn('d2');
+      s.despawn('liji', { leave: true }); s.despawn('d1', { leave: true }); s.despawn('d2', { leave: true });
       s.flag('ch1_escaped'); s.tint(null); s.night(false);
       WM.unlock('shaohua');
       s.music('world');

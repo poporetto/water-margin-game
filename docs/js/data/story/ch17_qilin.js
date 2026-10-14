@@ -157,10 +157,10 @@
       await s.say('lujunyi', 'Wait, wait! Master, forgive me. Is there a way to escape it?');
       await s.say('wuyong', 'Only one. Go more than a thousand li to the south-east. There the disaster will pass you by. And let me leave four lines on your wall, as a charm. In time you will understand them.');
       await s.narrate('Lu Junyi wrote on the wall as Wu Yong recited: four lines of verse about a boat among the reeds, a hero, and righteousness. No one noticed that the first characters of the four lines, read downwards, said: "Lu Junyi rebels."');
-      s.despawn('lg');
+      s.despawn('lg', { leave: true });
       await s.say('yanqing', 'Master, that fortune-teller is a Liangshan spy. The south-east road goes right past Liangshan. Let me go after him and deal with him.');
       await s.say('lujunyi', 'Nonsense, Little Yi. I am going to burn incense at Mount Tai and escape my fate. And if the bandits come, I\'ll take them all.');
-      s.despawn('lu'); s.despawn('yq');
+      s.despawn('lu', { leave: true }); s.despawn('yq', { leave: true });
       s.flag('ch17_fortune');
       await s.narrate('Wu Yong and Li Kui left the city. Li Kui took the coin out of his mouth at last and swore for a whole li without stopping.');
       await s.fadeOut(1);
@@ -198,7 +198,7 @@
       await s.say('lujunyi:angry', 'Bandits! Come down and fight me!');
       s.spawn('hr', 'huarong', 35, 5, 'down');
       s.sfx('arrow'); await s.flash();
-      ['sj', 'wy', 'gs', 'hr'].forEach(function (k) { s.despawn(k); });   // the chiefs melt back into the hill as the others close in
+      ['sj', 'wy', 'gs', 'hr'].forEach(function (k) { s.despawn(k, { leave: true }); });   // the chiefs melt back into the hill as the others close in
       await s.narrate('An arrow sang down from the hill and cut the red tassel from Lu Junyi\'s hat. Then from both sides came Qin Ming, Lin Chong, Huyan Zhuo and Xu Ning. Lu Junyi had been fighting since dawn and had not eaten. He turned and fled east, towards the water.');
       s.night(true);
       s.flag('ch17_flee');
@@ -208,7 +208,7 @@
       await s.say('lujunyi', 'Boatman! Take me across and I\'ll pay you whatever you ask!');
       await s.say('lijun', 'Get in. ...Do you know who I am? Li Jun, the Dragon of the Turbulent River. Squire Lu, you\'ll come up the mountain.');
       await s.narrate('Lu Junyi lunged with his spear. Li Jun turned a somersault backwards into the water. Then the boat lurched: a pale figure had come up from under it — Zhang Shun, the White Streak in the Waves — and tipped it over, and Lu Junyi went into the lake.');
-      s.despawn('lj');
+      s.despawn('lj', { leave: true });
       s.night(false);
       s.flag('ch17_taken');
       await s.warp('liangshan_in', 16, 12, 'up');
@@ -232,7 +232,7 @@
       await s.say('yanqing:sad', 'Master! Master, it\'s me, Little Yi. Don\'t go into the city! Li Gu came back and went to the prefecture and denounced you as a rebel — the poem on the wall. He and the mistress... they have been together a long time. He threw me out of the house, and I\'ve been begging in the streets.');
       await s.say('lujunyi:angry', 'Lies! My wife has been with me five years, and Li Gu owes me everything. You beggar — you\'re the one who\'s been up to something!');
       await s.narrate('Lu Junyi kicked Yan Qing aside and went in at the gate.');
-      s.despawn('yq');
+      s.despawn('yq', { leave: true });
       s.flag('ch17_home');
       await s.say(null, '(Go home.)');
     } }
@@ -265,7 +265,7 @@
       await s.say('lujunyi:sad', 'Little Yi... I should have listened to you.');
       WM.state.chars.lujunyi.equip.acc = null;
       await s.narrate('But Lu Junyi\'s legs were broken by beating and he was sick with fever. Yan Qing carried him on his back to a village inn — and there the constables, who had found the bodies, caught Lu Junyi again. Yan Qing, out buying food, saw it from a distance and ran for Liangshan. On the road he met Yang Xiong and Shi Xiu.');
-      s.despawn('yq');
+      s.despawn('yq', { leave: true });
       s.party(['shixiu']); s.setLeader('shixiu'); s.level('shixiu', 30); s.flag('protagonist', 'shixiu');
       await s.narrate('Yang Xiong took Yan Qing to the mountain. Shi Xiu went straight to Daming alone — and arrived on the day Lu Junyi was to be beheaded at the crossroads.');
       s.flag('ch17_leap');
@@ -296,7 +296,7 @@
       s.spawn('gs', 'guansheng', 15, 7, 'up');
       await s.say('songjiang', 'General, forgive us. Huyan Zhuo only did what I asked. We are waiting for the emperor\'s pardon; until then, we are men driven here by injustice. Will you stay with us?');
       await s.say('guansheng', 'I am a beaten general. If you will have me, I will serve you as a common soldier.');
-      s.despawn('gs');
+      s.despawn('gs', { leave: true });
       await s.joinMany(['guansheng', 'xuanzan', 'haosiwen']);
       await s.narrate('It was winter when they marched on Daming again. Suo Chao came out to meet them in the snow — and Wu Yong had had pits dug along the river road and covered with the snow. Li Jun drew Suo Chao after him, and down he went. Yang Zhi, who had once been his comrade in Daming, talked to him for a long time.');
       await s.join('suochao');
@@ -306,10 +306,10 @@
       s.spawn('cg', 'chaogai', 15, 6, 'down');
       await s.say('chaogai:sad', 'Brother... you have a hundred days of calamity upon you, and only a man of the south, the Earth Spirit Star, can save you. Withdraw while you can.');
       await s.say('songjiang:shock', 'Brother Chao Gai! Brother —');
-      s.despawn('cg'); s.unflag('ghost:chaogai');
+      s.despawn('cg', { leave: true }); s.unflag('ghost:chaogai');
       s.spawn('zs', 'zhangshun', 17, 7, 'left');
       await s.say('zhangshun', 'The Earth Spirit Star... there is a physician in Jiankang, An Daoquan, the Miraculous Doctor. He cured my mother once. Let me go and fetch him.');
-      s.despawn('zs');
+      s.despawn('zs', { leave: true });
       s.party(['zhangshun']); s.setLeader('zhangshun'); s.level('zhangshun', 30); s.flag('protagonist', 'zhangshun');
       s.flag('ch17_doctor');
       await s.narrate('Zhang Shun went south through the snow and reached the Yangtze at dusk.');
@@ -353,7 +353,7 @@
       s.spawn('lq', 'liqiaonu', 20, 4, 'down'); s.spawn('an', 'andaoquan', 18, 5, 'right');
       await s.say('liqiaonu:angry', 'Go to Shandong? To the bandits? If you go, I\'ll curse you every day you\'re gone!');
       await s.narrate('An Daoquan drank himself into a stupor and was put to bed. Late in the night, Zhang Shun heard a man come in by the back way — and knew the voice. It was Zhang Wang, with his share of Zhang Shun\'s gold, come to spend it on Li Qiaonu.');
-      s.despawn('lq'); s.despawn('an');
+      s.despawn('lq'); s.despawn('an', { leave: true });
       await s.fadeOut(1);
       await s.narrate('Zhang Shun took a kitchen knife. Zhang Wang got away out of the window. Li Qiaonu and the servants who saw Zhang Shun did not. Then Zhang Shun dipped his finger in the blood and wrote on the wall: "The killer is An Daoquan."');
       await s.fadeIn(1);
@@ -438,7 +438,7 @@
       await s.say('likui', '...I am the Black Whirlwind.');
       await s.say('jiaoting:shock', 'You! Forgive me, brother! I didn\'t know!');
       await s.say('jiaoting', 'There\'s a man on Withered Tree Mountain up ahead — Bao Xu, the God of Death. He kills like you do. Let\'s go and get him to join too.');
-      s.despawn('jt'); s.addParty('jiaoting'); s.level('jiaoting', 29);
+      s.despawn('jt', { leave: true }); s.addParty('jiaoting'); s.level('jiaoting', 29);
       s.flag('ch17_kushu');
     } },
     { id: 'ch17_baoxu', x: 18, y: 2, w: 8, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_kushu'); }, run: async function (s) {
@@ -460,7 +460,7 @@
       await s.duel('guansheng_shan', { hero: 'guansheng', canLose: true });
       await s.narrate('Guan Sheng lifted Shan Tinggui from the ground, and spoke to him as one soldier to another. Shan Tinggui knelt to him. With the fire behind them in Lingzhou, Wei Dingguo\'s fire-troops broke, and he fled to Zhongling.');
       await s.say('shantinggui', 'Let me go to him. He will listen to me.');
-      s.despawn('st');
+      s.despawn('st', { leave: true });
       await s.narrate('Wei Dingguo listened to Shan Tinggui, but he said: "If Guan Sheng wants me, let him come himself." Guan Sheng went alone, unarmed, into Zhongling. Wei Dingguo came out and knelt.');
       await s.joinMany(['shantinggui', 'weidingguo', 'jiaoting', 'baoxu']);
       s.flag('ch17_ling');

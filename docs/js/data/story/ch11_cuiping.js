@@ -77,7 +77,7 @@
       await s.say('yanglin', '...Brother Deng Fei? It\'s me — Yang Lin!');
       await s.say('dengfei:smile', 'Yang Lin! Ha! I almost chained you to a tree! Brothers, put down your blades. This is an old friend.');
       await s.say('dengfei', 'I\'m Deng Fei of Xiangyang, the Fiery-Eyed Lion. My eyes go red when I\'m angry. Come up to the stockade and meet my brothers.');
-      s.despawn('b1'); s.despawn('b2'); s.despawn('df');
+      s.despawn('b1', { leave: true }); s.despawn('b2', { leave: true }); s.despawn('df', { leave: true });   // back up to their stockade
       s.flag('ch11_metdeng');
       await s.say(null, '(The stockade is in the hills north-east of the river.)');
     } }
@@ -120,9 +120,9 @@
       var keep = WM.state.party.slice();
       s.addParty('shixiu'); s.level('shixiu', 23); s.party(['shixiu']);
       await s.battle('ch11_brawl', { bg: 'town', guests: ['yangxiong'] });
-      s.despawn('zb'); s.despawn('t1'); s.despawn('t2');
+      s.despawn('zb', { leave: true }); s.despawn('t1', { leave: true }); s.despawn('t2', { leave: true });
       await s.narrate('Zhang Bao and his cronies scattered. Yang Xiong, free at last, ran after them, and the stranger went after him to help. Dai Zong and Yang Lin, who had watched it all, followed the stranger, and caught him at the corner.');
-      s.despawn('yx');
+      s.despawn('yx', { leave: true });
       s.party(keep); s.setLeader('daizong');
       s.flag('ch11_brawled');
       await s.warp('jizhou_in', 21, 6, 'up');
@@ -150,7 +150,7 @@
       await s.say('yangxiong', 'I have no brother. Will you be mine? I am twenty-nine.');
       await s.say('shixiu', 'And I am twenty-eight. Then you are my elder brother.');
       await s.narrate('So Yang Xiong and Shi Xiu swore brotherhood in the tavern. Yang Xiong took Shi Xiu home, to his wife Pan Qiaoyun and her father, Old Pan, who had been a butcher. Old Pan opened a butcher\'s shop in the front of the house, and Shi Xiu, who knew the trade, kept it.');
-      s.despawn('yx');
+      s.despawn('yx', { leave: true });
       s.addParty('yangxiong'); s.level('yangxiong', 23); s.removeParty('yangxiong');
       s.flag('ch11_brothers');
       await s.warp('jizhou_in', 8, 7, 'up');
@@ -175,7 +175,7 @@
       s.spawn('hd', 'hudao', 3, 30, 'right'); s.spawn('pr', 'peiruhai', 8, 30, 'left');
       await s.say('hudao', '(tok... tok... tok...) "Save us from suffering, O Bodhisattva..."');
       await s.narrate('The back door opened. A man in a scarf slipped out — and Shi Xiu, from the shadow of the wall, saw the shaven head under it. It was Pei Ruhai. The wandering monk Hu Dao went off with him.');
-      await s.move('pr', 'L5'); s.despawn('pr'); s.despawn('hd');
+      await s.move('pr', 'L5'); s.despawn('pr', { leave: true }); s.despawn('hd', { leave: true });
       await s.say('shixiu:angry', '(So that is the signal. When Brother is on duty, an incense table goes out by the back door. And at dawn Hu Dao beats his fish to wake the monk.)');
       s.night(false);
       s.flag('ch11_dawnseen');
@@ -187,7 +187,7 @@
       s.spawn('yx', 'yangxiong', 22, 4, 'down');
       await s.say('shixiu', 'Brother. Every time you are on duty at night, Pei Ruhai of Baoen Temple comes into your house. I saw him go out of the back door this morning with my own eyes. Don\'t be hasty. Tomorrow say you are on duty, and come back at the third watch, and we\'ll take him together.');
       await s.say('yangxiong:angry', '...So that\'s it. Tomorrow, then.');
-      s.despawn('yx');
+      s.despawn('yx', { leave: true });
       s.music('sad');
       await s.narrate('But that evening Yang Xiong was called before the prefect, and came home drunk, and in his drink he cursed his wife and let slip that he knew. In the night she wept and told him another story: that his sworn brother, Shi Xiu, had made advances to her, and that she had said nothing for fear of what it would do to him.');
       await s.narrate('In the morning Yang Xiong told Old Pan to pull down the counters of the butcher\'s shop. When Shi Xiu came back from buying pigs, the shop was gone.');
@@ -246,7 +246,7 @@
       await s.say('qiaoyun:sad', '...It is true. And Brother Shi Xiu never laid a finger on me. Husband, for the sake of our marriage, forgive me...');
       await s.say('shixiu', 'Brother. Now you know everything. It is for you to decide.');
       await s.fadeOut(1.5);
-      s.despawn('qy'); s.despawn('ye');
+      s.despawn('qy', { leave: true }); s.despawn('ye', { leave: true });
       await s.narrate('Yang Xiong killed the maid Ying\'er there among the tombs, and then he killed his wife, Pan Qiaoyun.');
       await s.fadeIn(1);
       await s.say('yangxiong:sad', 'Brother... what now? I am a murderer, and I can\'t go back to the city.');
@@ -256,7 +256,7 @@
       await s.say('yangxiong:shock', 'Who\'s that?! — Shi Qian?');
       await s.say('shiqian', 'Shi Qian of Gaotang — the Flea on a Drum, at your service. I go over walls and through roofs, and I don\'t much mind whose. I was digging in these old graves for anything worth having, and I heard it all. Warden Yang, you saved me from the court once. Let me follow you two to Liangshan.');
       await s.say('shixiu', 'A man of your skills would be useful. Come on, then.');
-      s.despawn('sq'); s.addParty('shiqian'); s.level('shiqian', 22);
+      s.despawn('sq', { leave: true }); s.addParty('shiqian'); s.level('shiqian', 22);
       WM.unlock('zhuinn');
       s.flag('ch11_cuiping');
       await s.narrate('The three of them went down the back of the mountain and took the road south-east to Yunzhou, towards Liangshan.');
@@ -344,7 +344,7 @@
       await s.say('yangxiong:angry', 'Brother Shi Xiu — at them!');
       await s.battle('ch11_riders', { bg: 'field', rounds: 3 });
       await s.narrate('Yang Xiong and Shi Xiu charged with their swords. Yang Xiong slashed Zhu Biao\'s horse across the rump, and Zhu Biao fled back to his village. Du Xing carried his master home.');
-      s.despawn('ly'); s.despawn('zb');
+      s.despawn('ly', { leave: true }); s.despawn('zb', { leave: true });
       s.heal();
       await s.say('yangxiong', 'Master Li Ying is wounded because of us. We have no road but one. To Liangshan — and ask them to save Shi Qian.');
       s.flag('ch11_toliangshan');

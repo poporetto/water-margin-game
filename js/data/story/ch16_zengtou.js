@@ -61,13 +61,13 @@
       s.spawn('zk', 'zengkui', 26, 24, 'down');
       await s.say('zengkui', 'So the bandit king himself has come to die!');
       await s.duel('linchong_zengkui', { hero: 'linchong', canLose: true });
-      s.despawn('zk');
+      s.despawn('zk', { leave: true });
       await s.narrate('For days the Zeng family would not come out. Then two monks came to Chao Gai\'s camp.');
       s.spawn('m1', 'fahuamonk', 25, 33, 'up'); s.spawn('m2', 'fahuamonk', 27, 33, 'up');
       await s.say('fahuamonk', 'Great King, we are monks of the Fahua Temple, to the west. The Zeng family have plundered our temple and abused us beyond bearing. We know a back way to their camp. If you come tonight, we will lead you to it.');
       await s.say('linchong', 'Brother, I don\'t trust them. Let me go, and you stay with the camp.');
       await s.say('chaogai', 'If I don\'t go myself, who will fight with heart? You stay and guard the camp, Brother Lin Chong.');
-      s.despawn('m1'); s.despawn('m2');
+      s.despawn('m1', { leave: true }); s.despawn('m2', { leave: true });
       s.party(['chaogai', 'liutang', 'ruanxiaoer', 'huyanzhuo', 'baisheng']); s.setLeader('chaogai');
       s.night(true);
       s.flag('ch16_night');
@@ -107,7 +107,7 @@
       await s.say('songjiang:sad', '...Until Shi Wengong is taken, I will sit in it — for a time. When he is taken, whoever took him shall be our lord, as our brother wished.');
       await s.narrate('Song Jiang changed the name of the Hall of Gathered Righteousness to the Hall of Loyalty and Righteousness, and before it raised a great apricot-yellow banner: "Act on Heaven\'s Behalf." He divided the mountain into camps and set a captain over each.');
       s.flag('loyaltyhall');
-      s.despawn('wy'); s.despawn('lc');
+      s.despawn('wy', { leave: true }); s.despawn('lc');
       await s.join('duanjingzhu');
       await s.narrate('Song Jiang wanted to march on Zengtou at once. Wu Yong held him back: they were in mourning, and an army in mourning goes out under a bad star. And one day, at the memorial service for Chao Gai, a monk from Daming spoke of the richest man in the north, a master of the spear and staff without equal in the land: Lu Junyi, the Jade Qilin.');
       await s.say('songjiang', 'If only we had such a man on Liangshan, what would we fear from any army?');

@@ -172,7 +172,7 @@
       await s.say('songjiang', 'They say the roads into the Zhu Village twist and turn, and a stranger can never find his way. Before we attack, we must know the roads.');
       await s.say('shixiu', 'Let me go. I\'ll carry a load of firewood in and sell it.');
       await s.say('yanglin', 'And I\'ll go as a Daoist exorcist with a bell. Two of us will see twice as much.');
-      s.despawn('sx'); s.despawn('yl');
+      s.despawn('sx', { leave: true }); s.despawn('yl');
       s.party(['shixiu']); s.setLeader('shixiu'); s.flag('protagonist', 'shixiu');
       s.flag('ch12_scout');
       await s.narrate('Shi Xiu shouldered a load of firewood and went into the village. The roads wound back and forth among the bamboo and the trees, and every one looked like every other.');
@@ -258,7 +258,7 @@
       await s.narrate('That night Song Jiang could not sleep. Wang Ying, Qin Ming, Deng Fei, Huang Xin and Yang Lin were prisoners in the Zhu manor; Ou Peng was wounded. In the morning a messenger came: Wu Yong had come down from Liangshan with the three Ruan brothers, Lü Fang and Guo Sheng, and five hundred men.');
       s.spawn('wy', 'wuyong', 31, 44, 'left');
       await s.say('wuyong:smile', 'Don\'t despair, brother. The Zhu Village will be ours in a few days. Help has come to us from where we least expected it: a band of heroes from Dengzhou, at Shi Yong\'s tavern. Let me tell you how they came.');
-      s.despawn('wy');
+      s.despawn('wy', { leave: true });
       s.flag('ch12_second');
       await WM.data.chapters[12].dengzhou(s);
     } }
@@ -296,7 +296,7 @@
       await s.say('maozhong', 'Father, I\'ve already taken a tiger to the prefecture this morning — the one that was killed on our land. These two smashed our things. Constables!');
       await s.say('xiezhen:angry', 'You\'ve stolen our tiger, and now you call us robbers?!');
       await s.narrate('Mao Zhong had the constables waiting. The brothers were taken to the prefecture as robbers. Mao\'s son-in-law, the clerk Wang Zheng, saw to it that they were beaten until they confessed, and the chief jailer, Bao Ji, took Mao\'s silver to make sure they never came out of the prison alive.');
-      s.despawn('mt'); s.despawn('mz');
+      s.despawn('mt', { leave: true }); s.despawn('mz', { leave: true });
       s.flag('ch12_arrest');
       await s.fadeOut(1);
       s.party(['gudasao']); s.level('gudasao', 23); s.setLeader('gudasao'); s.flag('protagonist', 'gudasao');
@@ -341,7 +341,7 @@
       await s.say('songjiang:smile', 'Heroes of Dengzhou! You come at the moment we most need you. Welcome — welcome, all of you!');
       s.idle('gd', 'Sun Xin and I kept a tavern at Dengzhou. Now we keep an army fed — and I still have my sabres, if the Zhu men want them.');
       s.idle('xz', 'Mao Taigong stole our tiger and put us in the cangue for it. Now the Zhu family will learn what Dengzhou hunters can do.');
-      s.despawn('sl'); s.despawn('gd'); s.despawn('xz');
+      s.despawn('sl', { leave: true }); s.despawn('gd', { leave: true }); s.despawn('xz', { leave: true });
       await s.joinMany(['sunli', 'sunxin', 'gudasao', 'xiezhen', 'xiebao', 'zouyuan', 'zourun', 'yuehe']);
       s.flag('ch12_dengzhou');
     } }
@@ -381,7 +381,7 @@
       s.level('sunli', 25);
       await s.duel('sunli_shixiu', { hero: 'sunli', canLose: true });
       await s.say('squirezhu:smile', 'Magnificent! Into the cage with him! Commander, you are our saviour!');
-      s.despawn('sz');
+      s.despawn('sz', { leave: true });
       s.flag('ch12_staged');
       await s.narrate('So Sun Li won the Zhu family\'s trust. Inside the manor, Zou Yuan and Zou Run learned where the prison was, and Yue He where the keys were kept. On the fifth day, at the signal, Song Jiang attacked from four sides at once.');
       s.music('battle');
@@ -437,7 +437,7 @@
       await s.say('songjiang', 'And your family and all your goods are already on the mountain. Your manor is burnt. There is nothing to go back to — except brothers here.');
       await s.say('liying:sad', '...You have left me no road but this one. Very well. Du Xing and I will stay.');
       await s.joinMany(['liying', 'duxing']);
-      s.despawn('xr');
+      s.despawn('xr', { leave: true });
       s.spawn('hs', 'husanniang', 17, 7, 'left'); s.spawn('wy', 'wangying', 19, 7, 'left');
       await s.say('songjiang', 'And one more thing. Long ago I promised Brother Wang Ying a bride. My father, Song Taigong, has taken Hu Sanniang as his adopted daughter. Sister, today is an auspicious day. Will you marry Wang Ying?');
       await s.say('husanniang', '...My family is gone. Brother Song has treated me with honour. I will do as he says.');

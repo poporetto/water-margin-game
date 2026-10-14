@@ -132,6 +132,7 @@
     if (instant(a.sheetWho) || !a.visible || a.static) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
     a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false;
     a.leaveTo = opt && opt.to;   // somewhere of their own to go (their house, their post), not just the nearest way out
+    a.leaveOpt = !!(opt && (opt.leave || opt.to));   // the story has them leave; otherwise they stay where they are
     pending.push(a);
   }
   function go(a) {
@@ -164,7 +165,9 @@
 
   function makeApi(ctx) {
     var pending = [], lines = {};
-    var flush = function () { var p = pending; pending = []; p.forEach(go); };
+    // the scene goes on: those the story sends away go now (and new party members fall in); the rest stay put
+    var joined = function (a) { return a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0; };
+    var flush = function () { var keep = []; pending.forEach(function (a) { if (a.leaveOpt || joined(a)) go(a); else keep.push(a); }); pending = keep; };
     var s = {
       S: S, ctx: ctx,
       get state() { return WM.state; },

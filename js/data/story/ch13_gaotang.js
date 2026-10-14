@@ -157,7 +157,7 @@
       await s.say('leiheng:angry', 'MOTHER!');
       s.sfx('hit'); await s.shake(6, 0.4);
       await s.narrate('Lei Heng, a devoted son, could not bear it. He swung the heavy cangue on his neck and struck Bai Xiuying on the head. She fell dead in the street.');
-      s.despawn('bx'); s.despawn('lm');
+      s.despawn('bx', { leave: true }); s.despawn('lm', { leave: true });
       s.flag('ch13_killed');
       await s.fadeOut(1);
       // Zhu Tong
@@ -169,7 +169,7 @@
       await s.say('zhutong', 'Brother, I\'ll take the cangue off. Go home, fetch your mother, and run. I\'ll go back and say you escaped.');
       await s.say('leiheng:shock', 'Brother, you\'ll be punished for it!');
       await s.say('zhutong', 'You killed that woman: for you it\'s death. For me, letting a prisoner go is a lighter crime, and I have no family to suffer for it. Go — and don\'t waste the chance.');
-      s.despawn('lh');
+      s.despawn('lh', { leave: true });
       WM.state.chars.leiheng.equip.acc = null;
       await s.narrate('Lei Heng took his mother and went to Liangshan. Zhu Tong went back to Yuncheng and reported that the prisoner had escaped. The magistrate, who liked Zhu Tong, did what he could, but Bai Yuqiao pressed the case, and Zhu Tong was given twenty strokes and exiled to Cangzhou.');
       await s.join('leiheng');
@@ -191,7 +191,7 @@
       await s.say('wuyong', 'Song Jiang and Chao Gai have long admired you. You saved Brother Lei Heng, and lost everything for it. Come up the mountain with us.');
       await s.say('zhutong:angry', 'Don\'t say it. I am a convict under the law, and the prefect has been good to me. I will serve out my sentence and go home a free man. If you go on, I\'ll take it as an insult.');
       await s.say('leiheng', '...Then let us at least talk a while, there by the bank.');
-      s.despawn('lh'); s.despawn('wy');
+      s.despawn('lh', { leave: true }); s.despawn('wy', { leave: true });
       await s.narrate('When Zhu Tong came back, the little master was gone.');
       s.despawn('boy');
       s.spawn('lh', 'leiheng', 33, 10, 'left');
@@ -232,10 +232,10 @@
       await s.say('zhutong:angry', 'Kill the Black Whirlwind. Then I will come.');
       await s.say('chaijin', 'That — we cannot do. But let Li Kui stay here with me, and keep out of your sight, and you three go up the mountain.');
       await s.say('zhutong', '...So be it. As long as I don\'t have to look at him.');
-      s.despawn('wy'); s.despawn('lh');
+      s.despawn('wy', { leave: true }); s.despawn('lh', { leave: true });
       await s.join('zhutong');
       await s.narrate('Zhu Tong went to Liangshan with Wu Yong and Lei Heng. Li Kui stayed at Chai Jin\'s manor, out of the way. A month later a letter came: Chai Jin\'s uncle, Chai Huangcheng, in Gaotang, was dying.');
-      s.despawn('cj');
+      s.despawn('cj', { leave: true });
       s.addParty('chaijin'); s.level('chaijin', 24);
       s.party(['likui']); s.setLeader('likui'); s.flag('protagonist', 'likui');
       WM.unlock('gaotang');
@@ -264,11 +264,11 @@
       await s.say('chaijin', 'I am Chai Jin, of the house of Chai. Our family holds the iron pledge from the founding emperor!');
       await s.say('yintianxi', 'Bring me a pledge and I\'ll wipe my backside on it! Beat him!');
       await s.say('likui:angry', 'Wipe your backside on THAT!');
-      s.despawn('yt');
+      s.despawn('yt', { leave: true });
       await s.battle('ch13_yin', { bg: 'town', guests: ['chaijin'] });
       await s.narrate('Li Kui dragged Yin Tianxi from his horse and beat him to death with his fists.');
       await s.say('chaijin', 'Brother, run! Back to Liangshan, now! I\'ll face the prefecture — I have the iron pledge, they cannot touch me.');
-      s.despawn('cj');
+      s.despawn('cj', { leave: true });
       await s.narrate('Gao Lian\'s men came and took Chai Jin. Gao Lian cared nothing for the iron pledge. He had Chai Jin beaten until his flesh split, and threw him in the death cell. Li Kui ran to Liangshan.');
       s.flag('ch13_jailed');
       await s.warp('liangshan_in', 16, 12, 'up');
@@ -281,7 +281,7 @@
       await s.say('songjiang', 'Brother Zhu Tong! He killed the child on our orders, not his own. The fault is ours. Li Kui — bow to him.');
       await s.say('likui', '...Fine. I\'m sorry, Beard. Er, brother.');
       await s.say('songjiang', 'Chai Jin saved my life once, and Lin Chong\'s, and many more of ours. We go to Gaotang.');
-      s.despawn('zt'); s.despawn('sj');
+      s.despawn('zt'); s.despawn('sj', { leave: true });
       s.party(['songjiang', 'likui', 'linchong', 'huarong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       await s.war('ch13_gaotang1', { canLose: true });
       await s.narrate('That night Gao Lian came out to raid the Liangshan camp, but Yang Lin and Bai Sheng were waiting in the grass. An arrow took Gao Lian in the left shoulder, and he fled back inside the walls.');
@@ -339,7 +339,7 @@
       s.spawn('gs', 'gongsunsheng', 16, 5, 'right');
       await s.say('luozhenren', 'Go and save Song Jiang\'s brothers. I give you the method of the Five Thunders of the Heart of Heaven. And remember eight words: "Meet You, and stop. Meet Bian, and return." Do not forget them.');
       await s.say('gongsunsheng', 'I will not forget, Master.');
-      s.despawn('luo'); s.despawn('gs');
+      s.despawn('luo'); s.despawn('gs', { leave: true });
       s.unflag('away:gongsunsheng');
       s.unflag('present:gongsunsheng');
       s.level('gongsunsheng', 26);   // back from Luo Zhenren with the Five Thunders of the Heart of Heaven
@@ -376,7 +376,7 @@
       s.spawn('lr', 'linren', 44, 13, 'left');
       await s.say('linren', 'Gao Lian ordered me to kill Lord Chai. I couldn\'t do it. I let him down into the old dry well in the yard and told the prefect he was dead. I don\'t know if he\'s still alive.');
       await s.say('likui', 'I\'ll go down. Put me in a basket and let the rope out.');
-      s.despawn('lr');
+      s.despawn('lr', { leave: true });
       s.party(['likui']); s.setLeader('likui'); s.heal();
       s.flag('ch13_well');
       await s.warp('gaowell', 3, 2, 'down');
@@ -395,7 +395,7 @@
       s.spawn('sj', 'songjiang', 43, 13, 'right'); s.face('player', 'left');
       await s.say('likui:angry', 'You FORGOT me! You left me down there with the bones!');
       await s.say('songjiang', 'Brother, we were seeing to Lord Chai. Forgive us.');
-      s.despawn('sj');
+      s.despawn('sj', { leave: true });
       await s.narrate('Chai Jin\'s head was split and his legs torn by the beatings, and he could hardly speak. They carried him on a cart. Song Jiang rewarded Lin Ren, and the whole army, with the Chai family and their goods, went back to Liangshan.');
       s.heal();
       await s.join('chaijin');

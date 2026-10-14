@@ -132,7 +132,7 @@
       await s.say('muchun:angry', 'Then let\'s see if your fists are your own too!');
       await s.battle('ch9_jieyang', { bg: 'town', canLose: true, rounds: 3 });
       await s.narrate('Xue Yong knocked Mu Chun into the dust, and Mu Chun ran off swearing vengeance. Song Jiang and the escorts hurried out of town before dark — but no inn would take them: the Mu brothers had sent word. At last, in the dark, they found a big manor and begged a night\'s lodging from a kind old man.');
-      s.despawn('xueyong'); s.despawn('c1'); s.despawn('c2'); s.despawn('muchun');
+      s.despawn('xueyong', { leave: true }); s.despawn('c1', { leave: true }); s.despawn('c2', { leave: true }); s.despawn('muchun', { leave: true });
       s.night(true);
       await s.narrate('In the night they heard the old man\'s sons come home: "Mu Chun was beaten in the market by a convict with silver! We\'ve shut every door in town against him!" They were lodging in the house of the Mu brothers. They crept out the back gate in the dark and ran for the river.');
       s.flag('ch9_river');
@@ -179,7 +179,7 @@
       await s.say('songjiang:smile', 'The very same.');
       await s.narrate('Li Kui threw himself down and kowtowed so hard the floor shook. Song Jiang gave him ten taels. Li Kui lost it all at the gambling den in an hour, robbed the den to get it back, and Song Jiang had to pay the gamblers. Li Kui was his devoted slave from that day on.');
       await s.narrate('Then Song Jiang wanted fresh fish soup, and Li Kui ran down to the river to get some — by grabbing it from the fishermen\'s boats. The fishermen ran for their master, the fish-broker of the river.');
-      s.despawn('likui');
+      s.despawn('likui', { leave: true });
       await s.warp('jiangzhou', 27, 35, 'down');
       s.spawn('likui', 'likui', 26, 35, 'right'); s.spawn('zhangshun', 'zhangshun', 29, 35, 'left');
       await s.duel('likui_zhangshun_land', { hero: 'likui', canLose: true });
@@ -189,7 +189,7 @@
       await s.say('daizong', 'Zhang Shun! Stop! That\'s Li Kui — and this is Song Jiang!');
       await s.say('zhangshun:shock', '...Song Jiang? My brother Zhang Heng wrote to me about you!');
       await s.narrate('So Zhang Shun the White Streak in the Waves, and Li Kui the Black Whirlwind, became friends, though Li Kui would never again go near water if he could help it.');
-      s.despawn('likui'); s.despawn('zhangshun');
+      s.despawn('likui', { leave: true }); s.despawn('zhangshun', { leave: true });
       s.flag('ch9_poem');
       s.removeParty('daizong');
       await s.narrate('Some days later, Song Jiang went alone to the famous Xunyang Tower overlooking the river.');
@@ -242,7 +242,7 @@
       await s.say('wuyong:shock', '...Wait. Which seal did you put on the letter?');
       await s.say('jindajian', 'The one with his name and title: "Cai Jing, Hanlin Academician."');
       await s.say('wuyong:shock', 'Aiya! That is the seal for his public writings! No father writes to his own son under his name and title. The prefect will see it at once — Dai Zong is running to his death! Gather everyone! We go to Jiangzhou ourselves!');
-      s.despawn('wuyong');
+      s.despawn('wuyong', { leave: true });
       s.flag('ch9_rescue');
       s.party(['chaogai', 'huarong', 'liutang', 'yanshun', 'ruanxiaoqi', 'lufang']);
       s.level('chaogai', 22); ['huarong', 'liutang', 'yanshun', 'ruanxiaoqi', 'lufang'].forEach(function (id) { s.level(id, 21); });
@@ -268,7 +268,7 @@
       s.addParty('likui'); s.level('likui', 22);
       await s.battle('ch9_exec1', { bg: 'town', music: 'battle' });
       await s.battle('ch9_exec2', { bg: 'town', music: 'boss' });
-      s.despawn('g1'); s.despawn('g2'); s.despawn('sj'); s.despawn('dz');
+      s.despawn('g1', { leave: true }); s.despawn('g2', { leave: true }); s.despawn('sj', { leave: true }); s.despawn('dz', { leave: true });
       await s.narrate('Liangshan\'s men carried Song Jiang and Dai Zong on their backs, and followed the Black Whirlwind, who cut a road through the crowd towards the river. But when they reached the bank there were no boats, only the White Dragon Temple, and the great river, and the soldiers of Jiangzhou coming behind.');
       s.flag('ch9_temple');
       WM.unlock('whitedragon');
@@ -282,7 +282,7 @@
       s.spawn('sj', 'songjiang', 15, 9, 'down'); s.spawn('lk', 'likui', 16, 10, 'up');
       await s.say('songjiang', 'Brothers... I owe you my life. All of you.');
       await s.say('likui', 'Brother! Let\'s go back and kill the prefect, and Huang Wenbing too!');
-      s.despawn('sj'); s.despawn('lk');
+      s.despawn('sj', { leave: true }); s.despawn('lk');
       ['zhangshun', 'zhangheng', 'lijun', 'tongwei', 'tongmeng', 'muhong', 'muchun', 'xueyong', 'lili'].forEach(function (id) { S.initChar(id, 20); });
       await s.war('ch9_river');
       await s.narrate('The Jiangzhou army broke and fled. That night, guided by Hou Jian — a tailor from Hongdu who worked in Huang Wenbing\'s house and was Xue Yong\'s pupil — they crossed the river to Wuweijun.');

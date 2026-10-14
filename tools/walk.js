@@ -81,7 +81,7 @@ function present(id) {
 let cur = { map: null, x: 0, y: 0 };
 let temp = {};
 const lastLine = {};   // who -> they have spoken a line in this scene (what a lingerer says if spoken to)
-function flushOff() { Object.keys(temp).forEach((k) => { if (temp[k].pending) delete temp[k]; }); }          // temp actors on the current map: key -> {x,y}
+function flushOff() { Object.keys(temp).forEach((k) => { if (temp[k].pending && (temp[k].leave || WM.state.party.indexOf(temp[k].who) >= 0)) delete temp[k]; }); }          // temp actors on the current map: key -> {x,y}
 const joins = {};
 
 function eventActive(ev) {
@@ -193,7 +193,7 @@ function mkApi(ctx) {
       temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key };
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
-    despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) temp[key].pending = true; },   // goes when the scene goes on (see flushOff)
+    despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) { temp[key].pending = true; temp[key].leave = !!(opt && (opt.leave || opt.to)); } },   // the story sends them away (opt.leave / opt.to), or they stay
     _end() { Object.keys(temp).forEach((k) => { if (temp[k].pending) { temp[k].pending = false; if (WM.state.party.indexOf(temp[k].who) >= 0) delete temp[k]; else { temp[k].lingering = true; if (lastLine[temp[k].who]) temp[k].idle = true; } } }); },
     mark(spots, until) {
       (spots || []).forEach((sp) => { if (!D.maps[sp.map]) err('mark: unknown map ' + sp.map); else if (tile(sp.map, sp.x, sp.y) == null) err('mark: ' + sp.map + '(' + sp.x + ',' + sp.y + ') is off the map'); });

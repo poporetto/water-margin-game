@@ -124,14 +124,14 @@
       setWeapon('wusong', { name: 'Fists', range: 'S', pow: 1.15, fx: 'blunt' });
       s.music('boss');
       await s.battle('ch7_tiger', { bg: 'forest', music: 'boss', noRun: true, intro: 'Wu Song\'s cudgel has broken. Only his fists remain.' });
-      s.despawn('tiger');
+      s.despawn('tiger', { leave: true });
       await s.narrate('Wu Song seized the tiger by the scruff of the neck and forced its head to the ground. The tiger clawed two pits in the earth beneath it. Holding it down with his left hand, Wu Song beat it with his right fist, fifty, seventy blows, until blood ran from its eyes, nose, mouth and ears, and it lay still.');
       await s.say('wusong', '(...It\'s dead. I killed a tiger with my bare hands. And I can barely stand.)');
       s.spawn('h1', 'tigerhunter', 12, 15, 'up'); s.spawn('h2', 'tigerhunter', 16, 15, 'up');
       await s.say('wusong:shock', '(Two more tigers?! I\'m finished...)');
       await s.say('tigerhunter', 'Don\'t be afraid! We\'re men — hunters, in tiger skins. Who are you? Where did you come from at this hour? ...Is that the tiger? Dead?! You killed it?!');
       await s.narrate('The hunters ran down to the villages. Torches came up the ridge, and the villagers carried the dead tiger down in triumph, with Wu Song before it. Next morning the whole town of Yanggu turned out to see the man who had killed the tiger of Jingyang Ridge with his fists.');
-      s.despawn('h1'); s.despawn('h2');
+      s.despawn('h1', { leave: true }); s.despawn('h2', { leave: true });
       setWeapon('wusong', { name: 'Fists', range: 'S', pow: 1.15, fx: 'blunt' });
       s.flag('ch7_tigerslain');
       WM.unlock('yanggu');
@@ -192,13 +192,13 @@
       await s.narrate('Next door, Granny Wang, who kept the teashop and was a matchmaker, midwife and procuress, saw everything. For ten taels of silver she laid a plan for Ximen Qing, step by step, and within a month Ximen Qing and Pan Jinlian were meeting in her back room every afternoon. The whole street knew it — except Wu Dalang.');
       // she steps back inside; he strolls off down the street, with a look back
       s.move('jinlian', 'U1', { wait: false }); await s.move('ximen', 'R12');   // off the edge of the screen
-      s.hide('jinlian'); s.despawn('jinlian'); s.hide('ximen'); s.despawn('ximen');
+      s.hide('jinlian'); s.despawn('jinlian', { leave: true }); s.hide('ximen'); s.despawn('ximen', { leave: true });
       s.spawn('dalang', 'wudalang', 9, 24, 'right');
       await s.move('dalang', 'R4');
       await s.narrate('Yun Ge, a boy who sold pears and whom Granny Wang had boxed on the ears, told Wu Dalang the truth. Wu Dalang went to the teashop to catch them. Ximen Qing burst out of the door and kicked him in the chest. He fell, and was carried home, and lay sick for days, and no one came to him.');
       s.sfx('hit'); await s.shake(4, 0.3); s.lie('dalang');
       await s.fadeOut(1);
-      s.despawn('dalang'); s.despawn('wangpo'); s.show('player');
+      s.despawn('dalang', { leave: true }); s.despawn('wangpo'); s.show('player');
       await s.narrate('"When my brother comes home," Wu Dalang said, "he will know what to do." The lovers heard. Ximen Qing brought arsenic from his shop. Pan Jinlian put it in Wu Dalang\'s medicine, and held the quilt over him until he was still.');
       await s.narrate('The coroner, He Jiu, was called to examine the body. Ximen Qing slipped him ten taels of silver. He Jiu saw at once that the dead man\'s face was purple and his lips black — and he took the silver, said nothing, and quietly kept two of the burned bones.');
       s.flag('ch7_return');
@@ -240,7 +240,7 @@
       await s.say('wusong:angry', 'Ximen Qing. My brother sends his greetings.');
       await s.battle('ch7_lion', { bg: 'interior', music: 'boss' });
       await s.narrate('Ximen Qing kicked the knife from Wu Song\'s hand and leapt for the window. Wu Song caught him by the leg and hurled him headfirst out of the window into the street below, then leapt down after him. There, in the street beneath the Lion Bridge tavern, the matter was ended.');
-      s.despawn('ximen');
+      s.despawn('ximen', { leave: true });
       await s.narrate('Wu Song went straight to the county office with the confession, the bones, the silver and Granny Wang, and gave himself up. The magistrate, who had a conscience after all, wrote the report as mercifully as he could. Granny Wang was executed. Wu Song was beaten forty strokes, tattooed on the face, and exiled to Mengzhou, two thousand li away. The people of Yanggu gave him money and wine for the journey.');
       s.flag('ch7_exiled');
       WM.unlock('crossslope', 'mengzhou');
@@ -267,7 +267,7 @@
       await s.say('zhangqing2', 'I am Zhang Qing, called the Gardener. We keep this inn, but we have three rules: never harm wandering monks, singing girls, or convicts on their way to exile — and we broke the third today. Forgive us! Aren\'t you Wu Song, who killed the tiger of Jingyang Ridge?');
       await s.say('wusong', 'I am. ...You honour a code, at least. Get up.');
       await s.narrate('So they became sworn brothers. Zhang Qing told Wu Song of the two monks who held Mount Erlong — Lu Zhishen and Yang Zhi — and Wu Song stayed three days before going on to Mengzhou.');
-      s.despawn('erniang'); s.despawn('zhangqing2');
+      s.despawn('erniang', { leave: true }); s.despawn('zhangqing2', { leave: true });
       s.flag('ch7_slope');
     } }
   ]);
@@ -301,7 +301,7 @@
       await s.battle('ch7_happy', { bg: 'plains', music: 'boss' });
       await s.narrate('Wu Song feinted with his fists and turned as if to run. As Jiang rushed after him, he spun and kicked him in the belly, then whirled and kicked him in the head with the other foot: the "Jade Ring Step" and the "Duck-and-Drake Kick." Jiang went down and did not get up.');
       await s.say('jiangmenshen:sad', 'Hero! Mercy! I\'ll give it back — I\'ll give it all back, and leave Mengzhou!');
-      s.despawn('jiang');
+      s.despawn('jiang', { leave: true });
       s.flag('ch7_happy');
       await s.narrate('Jiang Menshen returned the tavern, and Shi En\'s business flourished again. But Jiang had friends, and the friends had a plan.');
       await s.narrate('Commander Zhang of the Mengzhou garrison sent for Wu Song, made him a member of his household, and treated him like a son. On the night of the Mid-Autumn Festival he feasted him, and promised him his own maid, Yulan, as a wife. Late that night, a cry went up: "Thief!" Wu Song ran to help — and was seized, and in his trunk the guards "found" silver and gold plate from the commander\'s house.');
@@ -325,7 +325,7 @@
       WM.state.chars.wusong.equip.acc = null; S.restore('wusong');
       await s.battle('ch7_feiyun', { bg: 'marsh', music: 'battle' });
       await s.narrate('When it was over, Wu Song held the last of them by the collar. "Who sent you?" "Jiang Menshen... and Commander Zhang, and Captain Zhang. They\'re waiting for us tonight at the Commander\'s residence, in the Mandarin Duck Tower, to hear that you\'re dead."');
-      s.despawn('e1'); s.despawn('e2'); s.despawn('k1'); s.despawn('k2');
+      s.despawn('e1', { leave: true }); s.despawn('e2', { leave: true }); s.despawn('k1', { leave: true }); s.despawn('k2', { leave: true });
       await s.say('wusong:angry', '"Waiting to hear that I\'m dead." ...Then I will bring them the news myself.');
       setWeapon('wusong', { name: 'Knife', range: 'S', pow: 1.15 });
       s.flag('ch7_totower');
@@ -341,7 +341,7 @@
       await s.say('jiangmenshen:smile', '...They\'ll have finished him by now. Drink, Commander! To the end of Wu Song!');
       await s.say('wusong:angry', 'Wu Song is here.');
       await s.battle('ch7_tower', { bg: 'palace', music: 'boss' });
-      s.despawn('zd'); s.despawn('zt'); s.despawn('jm');
+      s.despawn('zd', { leave: true }); s.despawn('zt', { leave: true }); s.despawn('jm', { leave: true });
       await s.narrate('That night in the Mandarin Duck Tower, and through the house below, Wu Song killed all who had plotted against him and many who stood in his way. Then he tore a strip from a dead man\'s robe, dipped it in blood, and wrote on the white wall: "The man who killed these is Wu Song, the slayer of the tiger."');
       await s.narrate('He gathered up the silver cups from the table, climbed over the city wall in the dark, and walked through the night, until he collapsed, exhausted, in a little temple — where four men with hooks caught him, and dragged him to a tavern to be butchered. And the tavern was Cross Slope, and the landlady was Sun Erniang.');
       s.night(false);
@@ -361,7 +361,7 @@
       WM.state.chars.wusong.equip.body = 'monkrobe';
       await s.notice('Wu Song became the Pilgrim. (Twin Snowflake Blades)', { auto: 2 });
       await s.say('zhangqing2', 'Go to Mount Erlong. Lu Zhishen and Yang Zhi hold it. They\'ll take you in.');
-      s.despawn('erniang'); s.despawn('zhangqing2');
+      s.despawn('erniang', { leave: true }); s.despawn('zhangqing2');
       s.flag('ch7_isPilgrim');
       await s.narrate('So Wu Song the Pilgrim set out for Mount Erlong. It was the tenth month, and the nights were cold. As he crossed Centipede Ridge in the moonlight, he saw a light in a hermitage among the pines, and heard a woman laughing — and a man.');
       await s.warp('centipede', 15, 21, 'up');
@@ -372,11 +372,11 @@
       s.spawn('daoist', 'daoistwang', 5, 4, 'down');
       await s.say('daoistwang:angry', 'Who comes knocking at this hour? A monk? Get out, or my swords will see you out!');
       await s.battle('ch7_daoist', { bg: 'interior', music: 'boss' });
-      s.despawn('daoist');
+      s.despawn('daoist', { leave: true });
       s.spawn('woman', 'woman', 8, 4, 'down');
       await s.say('woman:sad', 'Thank you, master monk... He killed my father and mother and my brother and kept me here. He calls himself a Daoist, but he is a wolf.');
       await s.narrate('Wu Song gave her the Daoist\'s silver and sent her home, and burned the hermitage behind him. Then he went on towards Qingzhou. At a village inn near White Tiger Mountain, cold and thirsty, he drank, and saw a chicken and a jar of good wine being prepared for someone else — and took them.');
-      s.despawn('woman');
+      s.despawn('woman', { leave: true });
       s.flag('ch7_tokong');
       WM.unlock('kongmanor');
       await s.warp('kongmanor', 9, 15, 'up');
@@ -387,7 +387,7 @@
       s.spawn('kongliang', 'kongliang', 12, 15, 'left');
       await s.duel('wusong_kongliang', { canLose: true });
       await s.narrate('Wu Song threw Kong Liang into the stream. Then, staggering after a yellow dog that barked at him, he fell into the icy water himself, and was too drunk to get out. Kong Liang\'s men fished him out, tied him to a tree, and beat him with willow switches — until the elder Kong brother came out with a guest to see what the noise was about. The guest was Song Jiang.');
-      s.despawn('kongliang');
+      s.despawn('kongliang', { leave: true });
       s.spawn('songjiang', 'songjiang', 15, 12, 'down'); s.spawn('kongming', 'kongming', 16, 12, 'down');
       await s.move('songjiang', 'D2', { run: true });
       await s.say('songjiang:shock', 'Stop! This is my brother Wu Song!');
@@ -397,7 +397,7 @@
       await s.say('wusong', 'Brother, I have killed too many men. The posters are everywhere. If I go with you, I\'ll bring trouble on you, and on Hua Rong. Lu Zhishen and Yang Zhi are at Mount Erlong. I\'ll go to them. If the court ever pardons us, I\'ll come to you.');
       await s.say('songjiang:sad', '...Then we part again. Brother, take care of yourself. And drink less.');
       await s.say('wusong:smile', 'Never.');
-      s.despawn('songjiang'); s.despawn('kongming');
+      s.despawn('songjiang', { leave: true }); s.despawn('kongming', { leave: true });
       s.flag('ch7_done');
       await s.endChapter();
       if (WM.data.chapters[8].begin) await WM.data.chapters[8].begin(s);
