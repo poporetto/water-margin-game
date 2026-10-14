@@ -367,7 +367,6 @@
         await s.notice('Lu Zhishen ordered an iron Chan staff of sixty-two catties.', { auto: 2 });
         WM.state.chars.luzhishen.wlv = Math.max(WM.state.chars.luzhishen.wlv, 4);
         await s.say('smith', 'Come back in a few days for it. And Reverend... the taverns here won\'t sell to monks. Just so you know.');
-        s.mark([{ map: 'wutai_town', x: 30, y: 11 }], 'ch2_dogmeat');   // the little stall at the edge of town, where nobody knows him
       } else {
         await s.say('smith', 'Your staff is ready, Reverend. Sixty-two catties. I\'ve never forged anything like it.');
         await s.smith(6, 'smith');
@@ -387,7 +386,6 @@
       await s.narrate('Zhishen tore into the dog meat with both hands and drank ten bowls of wine, one after another. He paid with a piece of silver, stuffed a leftover dog leg into his robe, and said, "Keep the change. I\'ll be back tomorrow."');
       s.flag('ch2_dogmeat');
       await s.narrate('He collected his staff from the smith and climbed back up the mountain. The wine rose in him with every step.');
-      s.mark([{ map: 'wutai_town', x: 16, y: 0, w: 2 }, { map: 'wutai', x: 15, y: 22, w: 7 }], 'ch2_expelled');   // back up to the mountain gate
     } }
   ]);
   WM.defEvents('wutai', [
