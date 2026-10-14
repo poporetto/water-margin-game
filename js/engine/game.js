@@ -78,6 +78,9 @@
 
   // ---------- debug (F2) ----------
   var D = WM.debug = { enabled: /debug/.test(location.search) };
+  // no random battles while testing (remembered across reloads; kept apart from the story's own calm stretches)
+  try { D.noEnc = D.enabled && localStorage.getItem('wm-debug-noenc') === '1'; } catch (e) { D.noEnc = false; }
+  D.setNoEnc = function (on) { D.noEnc = !!on; try { localStorage.setItem('wm-debug-noenc', on ? '1' : '0'); } catch (e) {} };
 
   // ---------- debug chapter picker (a button in the corner; only with ?debug) ----------
   // Jumps straight into any chapter with that chapter's debug party, from the title screen or mid-game.
@@ -137,6 +140,11 @@
     document.head.appendChild(st);
     var btn = document.createElement('div'); btn.id = 'dbg-chapters'; btn.textContent = 'Chapters ▾';
     var panel = document.createElement('div'); panel.id = 'dbg-panel';
+    var enc = document.createElement('button');
+    var encLabel = function () { enc.innerHTML = '<b>' + (D.noEnc ? 'OFF' : 'ON') + '</b>Random battles'; };
+    encLabel();
+    enc.addEventListener('click', function (e) { e.stopPropagation(); D.setNoEnc(!D.noEnc); encLabel(); });
+    panel.appendChild(enc);
     var CPS = WM.data.checkpoints || [];
     WM.data.chapters.forEach(function (c, i) {
       if (i > 0 && !c.debugStart) return;
@@ -186,7 +194,7 @@
       } else if (k === 2) { WM.state.party.forEach(function (id) { var c = WM.state.chars[id]; c.lv = Math.min(99, c.lv + 10); S.restore(id); }); }
       else if (k === 3) WM.state.gold += 5000;
       else if (k === 4) { WM.data.charOrder.forEach(function (id) { S.recruit(id); }); WM.state.flags.castle = true; }
-      else if (k === 5) { WM.state.flags.noEncounters = !WM.state.flags.noEncounters; UI.toast('Encounters ' + (WM.state.flags.noEncounters ? 'off' : 'on')); }
+      else if (k === 5) { D.setNoEnc(!D.noEnc); UI.toast('Random battles ' + (D.noEnc ? 'off' : 'on')); }
       else if (k === 6) { await s.say(null, Object.keys(WM.state.flags).filter(function (f) { return f.indexOf('ev:') !== 0; }).join(', ') || '(none)'); }
     });
   };

@@ -97,7 +97,8 @@
       await s.say('luqian:smile', 'Brother Lin! You look gloomy. Come and drink with me. The Fan Tower has a new wine from the south. It will do you good.');
       await s.say('linchong', '...Very well. Wife, I\'ll be back before dark.');
       await s.say('linwife', 'Don\'t drink too much.');
-      s.despawn('luqian'); s.despawn('wife');
+      s.despawn('luqian');   // he goes on ahead to the Fan Tower; Lady Zhang stays at home
+      s.idle('wife', 'Go and drink with Brother Lu, then — but come home before dark. I\'ll keep the lamp lit.');
       await s.say(null, '(The Fan Tower is on the north side of the city, by the palace.)');
     } },
     { id: 'ch3_fan', x: 17, y: 17, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_luqian'); }, run: async function (s) {
@@ -122,11 +123,13 @@
       await s.say('linwife:angry', 'In the age of peace and order, how can you hold a respectable woman prisoner?!');
       await s.say('linchong:angry', 'Wife! Open the door!');
       s.sfx('hit'); await s.shake(4, 0.3);
+      // he goes out of the back window, not the door Lin Chong is breaking down
+      await s.emote('gaoyanei', '!');
+      s.face('gaoyanei', 'up'); await s.jump('gaoyanei', 10);
+      s.hide('gaoyanei'); s.despawn('gaoyanei');
       await s.narrate('Gao Yanei heard Lin Chong\'s voice and lost his nerve. He pushed open the back window and jumped out over the wall. When Lin Chong burst in, there was only his wife, white-faced but unharmed.');
-      s.despawn('gaoyanei');
       await s.say('linwife:sad', 'He... he didn\'t touch me. Jin\'er came in time.');
       await s.narrate('Lin Chong smashed everything in Lu Qian\'s house to pieces. Then he took his wife home, put a sharp knife in his belt, and went looking for Lu Qian. For three days he waited outside Lu Qian\'s door. But Lu Qian had hidden himself in the Marshal\'s residence and did not come out.');
-      s.despawn('wife');
       s.flag('ch3_sword');
       await s.narrate('On the fourth day Lin Chong was walking with Lu Zhishen, who had come to cheer him, when they passed a big man in a soldier\'s cap standing at the corner with a straw sign stuck in a sword-hilt — the sign of a thing for sale.');
       await s.warp('kaifeng', 20, 33, 'right');

@@ -433,6 +433,31 @@
     px(c, x + 5, y + 5, 6, 2, '#e8e0d0');
   }
 
+  // A weeping willow with a crows' nest; a scene can fell it ('felled:<map>'), and then it lies on its side, roots in the air.
+  function willowTall(c, x, y, tx, ty, th, m) {
+    var t = WM.time || 0, felled = WM.state && WM.state.flags && WM.state.flags['felled:' + m.id];
+    var bark = '#5a4a32', dark = '#3e3222', leaf = '#7a9a4a', leafD = '#5a7a3a', leafL = '#a0b860';
+    if (felled) {
+      c.fillStyle = 'rgba(30,20,10,0.55)'; c.beginPath(); c.ellipse(x + 8, y + 12, 6, 3, 0, 0, Math.PI * 2); c.fill();   // the hole it came out of
+      px(c, x - 10, y + 8, 30, 4, bark); px(c, x - 10, y + 8, 30, 1, '#7a6448'); px(c, x - 10, y + 11, 30, 1, dark);   // the trunk on the ground
+      for (var r = 0; r < 5; r++) { px(c, x - 14 + r, y + 3 + r * 2, 5, 1, dark); px(c, x - 15, y + 5 + r * 2, 2, 1, '#6a5038'); }   // roots, earth still on them
+      for (var k = x + 14; k < x + 28; k += 2) px(c, k, y + 4 + ((k * 7) % 5), 1, 9, (k % 4) ? leaf : leafD);                   // the crown, crushed
+      return;
+    }
+    px(c, x + 5, y - 14, 6, 28, bark); px(c, x + 5, y - 14, 2, 28, dark); px(c, x + 9, y - 8, 1, 20, '#7a6448');   // a thick old trunk
+    px(c, x + 1, y - 17, 5, 2, bark); px(c, x + 10, y - 19, 6, 2, bark);
+    blob(c, x + 8, y - 24, 18, 11, leafD); blob(c, x + 7, y - 27, 14, 7, leaf); blob(c, x + 4, y - 30, 7, 3, leafL);
+    for (var k2 = x - 9; k2 <= x + 25; k2 += 2) {                                                              // the long hanging strands
+      var len = 14 + Math.floor(U.hash2(k2, ty, 77) * 12), sway = Math.round(Math.sin(t * 1.3 + k2 * 0.4) * 1.5);
+      px(c, k2, y - 20, 1, 5, (k2 % 4) ? leaf : leafD); px(c, k2 + sway, y - 15, 1, len - 5, (k2 % 4) ? leaf : leafD);
+    }
+    px(c, x + 12, y - 37, 9, 4, '#3a2a18'); px(c, x + 11, y - 36, 11, 1, '#5a4228'); px(c, x + 13, y - 38, 3, 1, '#3a2a18');   // the nest
+    // crows: two perched (now and then lifting their wings), and one wheeling overhead
+    var crow = function (cx, cy, up) { px(c, cx, cy, 4, 3, '#141414'); px(c, cx + 4, cy + 1, 1, 1, '#c8a040'); px(c, cx - 1, cy + 2, 1, 1, '#141414'); if (up) { px(c, cx - 2, cy - 2, 3, 2, '#141414'); px(c, cx + 3, cy - 2, 3, 2, '#141414'); } };
+    crow(x + 15, y - 41, Math.sin(t * 3) > 0.85); crow(x - 2, y - 34, Math.sin(t * 2.3 + 1) > 0.9);
+    var a = t * 0.9, ox = Math.round(Math.cos(a) * 18), oy = Math.round(Math.sin(a) * 5), fl = Math.sin(t * 9) > 0 ? 0 : 2;
+    px(c, x + 8 + ox, y - 50 + oy, 2, 1, '#141414'); px(c, x + 6 + ox, y - 51 + oy + fl, 2, 1, '#141414'); px(c, x + 10 + ox, y - 51 + oy + fl, 2, 1, '#141414');
+  }
   // A great hall's column: red lacquer on a carved stone base, rising out of sight with a gilded bracket at the top.
   function pillar(c, x, y, tx, ty) {
     floorStone(c, x, y, tx, ty);
@@ -669,7 +694,8 @@
     'D': { draw: door },
     'd': { draw: door, solid: true, shut: true },   // a house's own door, shut: nobody lives there for the player to visit
     'u': { draw: stall, tall: stallTall, solid: true },
-    'i': { draw: pillar, tall: pillarTall, solid: true },   // a column of a great hall
+    'i': { draw: pillar, tall: pillarTall, solid: true },
+    'l': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); }, tall: willowTall, solid: true },   // a weeping willow (crows' nest)   // a column of a great hall
     'n': { draw: floorWood },
     'N': { draw: floorStone },
     'K': { draw: carpet },

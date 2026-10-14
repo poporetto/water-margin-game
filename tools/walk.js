@@ -79,7 +79,9 @@ function present(id) {
 
 // ---------- world simulation ----------
 let cur = { map: null, x: 0, y: 0 };
-let temp = {};          // temp actors on the current map: key -> {x,y}
+let temp = {};
+const lastLine = {};   // who -> they have spoken a line in this scene (what a lingerer says if spoken to)
+function flushOff() { Object.keys(temp).forEach((k) => { if (temp[k].pending) delete temp[k]; }); }          // temp actors on the current map: key -> {x,y}
 const joins = {};
 
 function eventActive(ev) {
@@ -191,7 +193,8 @@ function mkApi(ctx) {
       temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key };
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
-    despawn(key) { if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); delete temp[key]; },
+    despawn(key) { if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) temp[key].pending = true; },   // goes when the scene goes on (see flushOff)
+    _end() { Object.keys(temp).forEach((k) => { if (temp[k].pending) { temp[k].pending = false; if (WM.state.party.indexOf(temp[k].who) >= 0) delete temp[k]; else { temp[k].lingering = true; if (lastLine[temp[k].who]) temp[k].idle = true; } } }); },
     mark(spots, until) {
       (spots || []).forEach((sp) => { if (!D.maps[sp.map]) err('mark: unknown map ' + sp.map); else if (tile(sp.map, sp.x, sp.y) == null) err('mark: ' + sp.map + '(' + sp.x + ',' + sp.y + ') is off the map'); });
       if (until && typeof until !== 'string') err('mark: until must be a flag name');
@@ -258,6 +261,11 @@ function mkApi(ctx) {
     talismanShop(id) { if (!D.shops[id]) err('unknown talisman shop ' + id); else D.shops[id].items.forEach((i) => { if (!D.talismans[i]) err('talisman shop ' + id + ' unknown talisman ' + i); }); return resolved; },
     saveMenu() { return resolved; }, roster() { return resolved; }, tablet() { return resolved; }
   };
+  // as in the game: whoever was sent off leaves once the scene goes on, and each speaker's last line is remembered
+  ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach((k) => {
+    const f0 = s[k]; if (typeof f0 !== 'function') return;
+    s[k] = function () { flushOff(); if (k === 'say' && typeof arguments[0] === 'string' && arguments[1] && !/^\(/.test(String(arguments[1]))) lastLine[arguments[0].split(':')[0]] = true; return f0.apply(this, arguments); };
+  });
   // keep the mock in lock-step with the real API
   Object.keys(realApi).forEach((k) => { if (!(k in s)) err('walker mock missing API method "' + k + '"'); });
   return s;
@@ -460,7 +468,9 @@ async function runEvent(ev) {
   const fn = ev.run || (ev.text ? async (s) => { (Array.isArray(ev.text) ? ev.text : [ev.text]).forEach((t) => s.say(ev.char || ev.npc || null, t)); } : null);
   if (!fn) return;
   pendingWet = []; firstLine = ''; hinted = false; spoken = '';
-  try { await fn(mkApi({ ev })); } catch (e) { err('script threw: ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e)); }
+  Object.keys(lastLine).forEach((k) => delete lastLine[k]);
+  const api = mkApi({ ev });
+  try { await fn(api); api._end(); } catch (e) { err('script threw: ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e)); }
   pendingWet.forEach((m) => sceneWarn(m.split('|')[0] + ' (on water, not in a boat)'));
   if (ev.once) S.flag('ev:' + ev.map + ':' + ev.id, true);
 }

@@ -339,6 +339,8 @@
       s.spawn('sl', 'sunli', 30, 44, 'down'); s.spawn('gd', 'gudasao', 28, 44, 'down'); s.spawn('xz', 'xiezhen', 32, 44, 'down');
       await s.fadeIn(1);
       await s.say('songjiang:smile', 'Heroes of Dengzhou! You come at the moment we most need you. Welcome — welcome, all of you!');
+      s.idle('gd', 'Sun Xin and I kept a tavern at Dengzhou. Now we keep an army fed — and I still have my sabres, if the Zhu men want them.');
+      s.idle('xz', 'Mao Taigong stole our tiger and put us in the cangue for it. Now the Zhu family will learn what Dengzhou hunters can do.');
       s.despawn('sl'); s.despawn('gd'); s.despawn('xz');
       await s.joinMany(['sunli', 'sunxin', 'gudasao', 'xiezhen', 'xiebao', 'zouyuan', 'zourun', 'yuehe']);
       s.flag('ch12_dengzhou');

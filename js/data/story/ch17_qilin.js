@@ -198,8 +198,8 @@
       await s.say('lujunyi:angry', 'Bandits! Come down and fight me!');
       s.spawn('hr', 'huarong', 35, 5, 'down');
       s.sfx('arrow'); await s.flash();
+      ['sj', 'wy', 'gs', 'hr'].forEach(function (k) { s.despawn(k); });   // the chiefs melt back into the hill as the others close in
       await s.narrate('An arrow sang down from the hill and cut the red tassel from Lu Junyi\'s hat. Then from both sides came Qin Ming, Lin Chong, Huyan Zhuo and Xu Ning. Lu Junyi had been fighting since dawn and had not eaten. He turned and fled east, towards the water.');
-      ['sj', 'wy', 'gs', 'hr'].forEach(function (k) { s.despawn(k); });
       s.night(true);
       s.flag('ch17_flee');
     } },

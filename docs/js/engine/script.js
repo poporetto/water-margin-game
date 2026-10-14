@@ -12,6 +12,7 @@
     try { p = Promise.resolve(fn(s)); } catch (e) { p = Promise.reject(e); }
     return p.catch(function (e) { console.error('Script error', e); WM.lastError = e; })
       .then(function () {
+        try { s._end(); } catch (e) { console.error(e); }
         SC.running = Math.max(0, SC.running - 1); WM.input.clear();
         var F = WM.field;
         if (WM.scene === F && F.map && !SC.running) { F.refreshActors(); F.pendingAuto = true; }
@@ -104,19 +105,48 @@
   // run fn once everyone entering has arrived
   function after(fn) { return function () { var args = arguments, self = this; return settle().then(function () { return fn.apply(self, args); }); }; }
   var leaving = 0;
-  function leave(key) {
+  // s.despawn: someone is sent off. They only go once the scene carries on (the next line, move or fade): then the
+  // story has them leave, and they walk out (or, if they have just joined the party, fall in with the leader). If the
+  // scene simply ends instead, it was tidying up, and they stay where they are (see settle), as people do.
+  function sendOff(key, pending) {
     var f = F(), a = f.findActor(key);
     if (!a || !a.ev || !a.ev.temp) { f.removeActor(key); return; }
     if (a.finishEntrance) a.finishEntrance();
+    if (instant(a.sheetWho) || !a.visible || a.static) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
+    a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false;
+    pending.push(a);
+  }
+  function go(a) {
+    var f = F();
+    if (f.actors.indexOf(a) < 0 || a.path.length || !a.leavingKey) return;   // called back on stage meanwhile (spawn)
     var t = { x: Math.floor(a.x / TS), y: Math.floor((a.y - 1) / TS) };
-    var path = (!instant(a.sheetWho) && a.visible && !a.static) ? wayIn(t.x, t.y) : null;
-    if (!path || path.length < 3) { f.removeActor(key); return; }
+    var gone = function () { f.actors = f.actors.filter(function (o) { return o !== a; }); };
+    // someone who has just joined the party does not walk away: they fall in with the leader and are gone into the party
+    if (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0 && f.player) {
+      var p = f.player.tile(), steps = [[t.x, t.y]], cx = t.x, cy = t.y;
+      while (cx !== p.x) { cx += cx < p.x ? 1 : -1; steps.push([cx, cy]); }
+      while (cy !== p.y) { cy += cy < p.y ? 1 : -1; steps.push([cx, cy]); }
+      walk(a, steps, gone);
+      return;
+    }
+    var path = wayIn(t.x, t.y);
+    if (!path || path.length < 3) { gone(); return; }
     path.reverse();                                     // from where they stand to the way out
-    a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false;   // never stands in the player's way on the way out
-    walk(a, path, function () { f.actors = f.actors.filter(function (o) { return o !== a; }); });
+    walk(a, path, gone);
+  }
+  function stay(a, lines) {
+    var f = F();
+    if (f.actors.indexOf(a) < 0 || !a.leavingKey) return;
+    // the place has its own standing version of this person (a resident or shopkeeper): no double
+    var twin = f.actors.some(function (o) { return o !== a && o.visible && o.ev && !o.ev.temp && (o.ev.npc === a.sheetWho || o.ev.char === a.sheetWho); });
+    if (twin) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
+    a.ev.id = a.leavingKey; a.leavingKey = null; a.solid = true; a.lingering = true;
+    if (!a.ev.idle && lines[a.sheetWho]) a.ev.idle = lines[a.sheetWho];   // what they last said in the scene
   }
 
   function makeApi(ctx) {
+    var pending = [], lines = {};
+    var flush = function () { var p = pending; pending = []; p.forEach(go); };
     var s = {
       S: S, ctx: ctx,
       get state() { return WM.state; },
@@ -180,8 +210,15 @@
           if (et.x === tx && et.y === ty && ex.sheetWho === who) { ex.ev.staged = false; ex.ev.idle = null; ex.solid = true; if (dir) ex.dir = dir; return ex; }
           f.actors = f.actors.filter(function (o) { return o !== ex; });
         }
-        var back = (f.actors || []).filter(function (o) { return o.leavingKey && o.sheetWho === who; })[0];
+        var back = (f.actors || []).filter(function (o) { return (o.leavingKey || o.lingering) && o.sheetWho === who; })[0];   // still on their way out, or still standing about
         var a = f.addActor(key, who, tx, ty, dir); a.sheetWho = who;
+        // the same person called back on stage walks over from where they are, if the way is clear (never through a wall)
+        if (back) {
+          var bx = Math.floor(back.x / TS), by = Math.floor((back.y - 1) / TS), clear = true;
+          for (var cx2 = Math.min(bx, tx); cx2 <= Math.max(bx, tx) && clear; cx2++) if (f.tileSolid(cx2, by)) clear = false;
+          for (var cy2 = Math.min(by, ty); cy2 <= Math.max(by, ty) && clear; cy2++) if (f.tileSolid(tx, cy2)) clear = false;
+          if (!clear || Math.abs(bx - tx) + Math.abs(by - ty) > 12) { f.actors = f.actors.filter(function (o) { return o !== back; }); back = null; }
+        }
         if (back) {
           var from = { x: Math.floor(back.x / TS), y: Math.floor((back.y - 1) / TS) };
           f.actors = f.actors.filter(function (o) { return o !== back; });
@@ -192,7 +229,7 @@
         enter(a, who, tx, ty, dir);
         return a;
       },
-      despawn: function (key) { leave(key); },
+      despawn: function (key) { sendOff(key, pending); },
       // show the way on: twinkling motes at each spot ({ map, x, y, w }) until the story flag `until` is set
       mark: function (spots, until) {
         var st = WM.state; st.marks = (st.marks || []).filter(function (m) { return !(m.until && S.has(m.until)); });
@@ -309,6 +346,19 @@
     // these wait for anyone still walking in; a warp first sets everyone down where they were going
     ['battle', 'duel', 'war', 'tablet', 'card', 'shop', 'inn', 'smith', 'talismanShop', 'saveMenu', 'roster', 'join', 'joinMany', 'endChapter'].forEach(function (k) { s[k] = after(s[k]); });
     var warp0 = s.warp; s.warp = function () { snapAll(); return warp0.apply(s, arguments); };
+    // the scene goes on: whoever was sent off now leaves (see sendOff)
+    ['say', 'narrate', 'ask', 'choose', 'notice', 'wait', 'fadeOut', 'move', 'moveTo', 'emote', 'jump', 'shake', 'flash', 'battle', 'duel', 'war', 'camera'].forEach(function (k) {
+      var f0 = s[k]; if (typeof f0 !== 'function') return;
+      s[k] = function () { flush(); return f0.apply(this, arguments); };
+    });
+    var say0 = s.say;
+    s.say = function (who, text) {
+      var id = typeof who === 'string' ? who.split(':')[0] : null, last = Array.isArray(text) ? text[text.length - 1] : text;
+      if (id && last && !/^\(/.test(last)) lines[id] = last;   // remembered as what they say if spoken to afterwards
+      return say0.apply(this, arguments);
+    };
+    // the scene is over: anyone sent off at its very end stays where they are (new party members still fall in)
+    s._end = function () { var p = pending; pending = []; p.forEach(function (a) { if (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0) go(a); else stay(a, lines); }); };
     return s;
   }
   SC.makeApi = makeApi;

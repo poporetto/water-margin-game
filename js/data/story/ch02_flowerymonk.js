@@ -512,11 +512,18 @@
       await s.say('luzhishen:angry', 'Liar!');
       await s.narrate('Zhishen rushed at them with his staff. But he had walked all day and eaten nothing, and Cui Daocheng\'s halberd and Qiu Xiaoyi\'s sword came at him from both sides.');
       await s.battle('ch2_waguan1', { bg: 'forest', rounds: 3, noRun: true, canLose: true, intro: 'Lu Zhishen is weak with hunger...' });
-      await s.narrate('Fifteen bouts, and Zhishen\'s strength was gone. Hungry and exhausted, he could only drag his staff away, while the two laughed after him and did not bother to give chase.');
-      s.despawn('cui'); s.despawn('qiu');
+      await s.narrate('Fifteen bouts, and Zhishen\'s strength was gone. Hungry and exhausted, he dragged his staff away and ran, and the two came after him, laughing.');
+      // he runs for the gate down the old road, and they chase him as far as the wall
+      s.music('tense');
+      await s.moveTo('player', 16, 15, { run: true });
+      s.move('player', 'D17', { run: true, wait: false });
+      s.move('cui', 'D4 L3 D2', { run: true, wait: false }); await s.move('qiu', 'D4 L3 D1', { run: true });
+      await s.say('cuidaocheng:smile', 'Run, you starving bald donkey! And don\'t come back!');
+      await s.say('qiuxiaoyi:smile', 'Ha! The Flower Monk, they call him? The wilted monk!');
       s.flag('ch2_fled_cui');
+      await s.warp('world', 52, 45, 'down');
       await s.say('luzhishen:sad', '(If I\'d had a meal in my belly, those two... I\'ll find something to eat and come back.)');
-      await s.say(null, '(The red pine forest lies to the south of the monastery.)');
+      await s.say(null, '(Below the monastery, on the road he came by, there was a forest of red pines.)');
     } },
     { id: 'ch2_shijin', x: 14, y: 23, w: 7, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled_cui'); }, idle: { shijinH: '(A man in a broad hat is waiting among the pines with a halberd.) You there, monk! Anyone who passes through these trees pays the toll.' },
       run: async function (s) {
@@ -542,7 +549,7 @@
       await s.say('luzhishen:angry', 'Now my belly\'s full. Let\'s see who wins this time!');
       await s.battle('ch2_waguan2', { bg: 'forest', music: 'boss' });
       await s.narrate('This time it was different. Cui Daocheng fell to Zhishen\'s staff, and Shi Jin ran Qiu Xiaoyi through from behind. When they went to the kitchen, they found the old monks had hanged themselves for fear of what the bandits would do to them after Zhishen\'s defeat.');
-      s.despawn('cui'); s.despawn('qiu');
+      s.lie('cui'); s.lie('qiu');   // both dead where they fell, and left there
       s.tint('fire'); s.sfx('fire');
       await s.narrate('The two of them set fire to the monastery and watched it burn. Then they walked through the night until dawn, and parted at a crossroads: Shi Jin back to his friends on Mount Shaohua, Zhishen on to the Eastern Capital.');
       await s.say('shijin', 'Take care of yourself, brother. Send word to Shaohua if ever you need me.');
@@ -574,8 +581,19 @@
       await s.say('lisi:shock', 'Help! Get us out!');
       await s.say('gambler', 'He threw the bosses into the pit! Get him!');
       await s.battle('ch2_rascals', { bg: 'plains' });
-      await s.narrate('The rest of the gang were sent sprawling one after another. Zhishen hauled Zhang San and Li Si out of the muck, stinking, and sent them off to wash. Next day they came back with wine and meat and knelt to him as his followers.');
-      s.despawn('zhangsan'); s.despawn('lisi'); s.despawn('r1'); s.despawn('r2');
+      await s.narrate('The rest of the gang were sent sprawling one after another. Zhishen hauled Zhang San and Li Si out of the muck, stinking, and sent them off to wash.');
+      // the next day: they come back with wine and meat, and kneel
+      await s.fadeOut(0.8);
+      s.place('player', 21, 16, 'down');
+      s.place('zhangsan', 20, 17, 'up'); s.place('lisi', 22, 17, 'up'); s.place('r1', 19, 18, 'up'); s.place('r2', 23, 18, 'up');
+      await s.fadeIn(0.8);
+      await s.narrate('Next day they came back, washed, with a jar of wine and a pig\'s head, and knelt to him.');
+      await s.say('zhangsan', 'Reverend, we were blind. From today you are our master, and we are your followers.');
+      await s.say('lisi', 'Whatever the garden needs, we\'ll see to it. And the wine — we\'ll see to that too.');
+      s.idle('zhangsan', 'Master, we have sworn it: whatever you need, we will see to it.');
+      s.idle('lisi', 'Those crows in the old willow, Master. Cawing from dawn to dark. It\'s bad luck, they say.');
+      s.idle('r1', '(hic) ...Never seen a man throw Zhang San in the muck before. Here — have some wine, Master. Our wine. Your wine.');
+      s.idle('r2', 'Twenty cash I lost on you going in head first. Worth every coin, Master.');
       s.flag('ch2_rascalsdone');
     } },
     { id: 'ch2_willow', x: 28, y: 6, w: 5, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_rascalsdone'); }, idle: { zhangsan: 'Reverend, we know our betters now. Every one of us will do as you say.', lisi: 'Those crows in the willow, Reverend. Cawing from dawn to dark. It\'s bad luck, they say.' },
@@ -584,7 +602,7 @@
       s.sfx('wind');
       await s.say('lisi', 'Those cursed crows in the willow — cawing day and night. People say it\'s bad luck. We\'ll fetch a ladder and pull the nest down.');
       await s.say('luzhishen', 'A ladder? Why bother?');
-      s.sfx('earth'); await s.shake(6, 0.8);
+      s.sfx('earth'); s.flag('felled:xiangguo'); await s.shake(6, 0.8);   // down it comes, nest, crows and all
       await s.narrate('Zhishen walked up to the willow, looked it over, wrapped his arms around the trunk, bent his back, and with one heave pulled the whole tree out of the ground, roots and all.');
       await s.say('zhangsan:shock', '...He pulled up the willow. Roots and all.');
       await s.say('lisi:shock', 'He isn\'t a man. He\'s a living arhat!');
@@ -625,6 +643,16 @@
       await s.say('luzhishen', '...Hmph. Then I\'ll keep your garden.');
       s.flag('ch2_gardener');
       await s.say(null, '(The vegetable garden is beyond the wall, on the east side of the court.)');
-    } }
+    } },
+    // the Abbot stays in his hall: what he says follows Zhishen's time at the Xiangguo Monastery
+    { id: 'zq_garden', x: 7, y: 5, npc: 'zhiqing', cond: function (S2) { return S2.has('ch2_gardener') && !S2.has('ch2_rascalsdone'); }, text: [
+      'The garden is beyond the wall, on the east side of the court. The rascals who haunt it are led by two men called Zhang San and Li Si.',
+      'Do not let them provoke you, Zhishen. And — I beg you — do not provoke them.'] },
+    { id: 'zq_settled', x: 7, y: 5, npc: 'zhiqing', cond: function (S2) { return S2.has('ch2_rascalsdone') && !S2.has('ch3_saved'); }, text: [
+      'I hear the rascals of the garden now bring you wine and call you Master. And there is a willow lying in the garden with its roots in the air.',
+      '(He sighs.) My brother Zhizhen did write that you would be no ordinary gardener.'] },
+    { id: 'zq_gone', x: 7, y: 5, npc: 'zhiqing', cond: function (S2) { return S2.has('ch3_saved'); }, text: [
+      'Zhishen left the garden in the same month that Instructor Lin was sent into exile. Marshal Gao\'s men came here asking for him.',
+      'I told them the truth: I do not know where he has gone. ...Amitabha. I hope that wherever he is, he is eating well.'] }
   ]);
 })();

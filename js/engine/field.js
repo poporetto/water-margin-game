@@ -531,7 +531,7 @@
   // ---------- encounters ----------
   F.rollEncounter = function () {
     var enc = F.map.def.encounters;
-    if (!enc || WM.state.flags.noEncounters) return false;
+    if (!enc || WM.state.flags.noEncounters || (WM.debug && WM.debug.noEnc)) return false;   // story calm, or switched off in the debug panel
     if (enc.cond && !enc.cond(S)) return false;
     if (Math.random() > (enc.rate || 0.06)) return false;
     var troops = typeof enc.troops === 'function' ? enc.troops(S) : enc.troops;

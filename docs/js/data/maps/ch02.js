@@ -172,7 +172,7 @@
   // vegetable garden (east)
   x.rect(18, 6, 6, 4, 'y'); x.rect(25, 6, 6, 4, 'y'); x.rect(18, 12, 6, 4, 'y');
   x.rect(26, 13, 3, 2, 'C');                                  // the cesspit
-  x.set(31, 5, 'T'); x.set(30, 5, 'T');                        // the old willow (with the crows' nest)
+  x.set(30, 5, 'l');                                         // the old willow, with the crows' nest
   var hut = x.house(24, 18, 7, 4, { roof: 'z', door: 3, windows: [1, 5] });
   x.rect(17, 22, 16, 1, ':'); x.vline(27, 22, 22, ':');
   x.vline(17, 10, 22, ':');
