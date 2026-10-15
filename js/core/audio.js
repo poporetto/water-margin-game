@@ -118,6 +118,37 @@
         o.start(t); o.stop(t + 3.2);
       }
     },
+    suona: function (f, t, dur, vol, out) { // 嗩吶: the shrill double-reed war horn: nasal, brassy, scooped up into the note, wide vibrato
+      var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), bp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), lfo = ctx.createOscillator(), lg = ctx.createGain();
+      o.type = 'sawtooth'; o2.type = 'square';
+      [o, o2].forEach(function (x) { x.frequency.setValueAtTime(f * 0.94, t); x.frequency.exponentialRampToValueAtTime(f, t + 0.06); });
+      lfo.frequency.value = 5.6; lg.gain.setValueAtTime(0, t); lg.gain.linearRampToValueAtTime(f * 0.018, t + Math.min(0.35, dur));
+      lfo.connect(lg); lg.connect(o.frequency); lg.connect(o2.frequency);
+      var g2 = ctx.createGain(); g2.gain.value = 0.35;
+      bp.type = 'peaking'; bp.frequency.value = 1500; bp.Q.value = 1.2; bp.gain.value = 9;   // the reed's nasal formant
+      lp.type = 'lowpass'; lp.frequency.value = Math.min(9000, f * 7);
+      o.connect(bp); o2.connect(g2); g2.connect(bp); bp.connect(lp); lp.connect(g); g.connect(out);
+      env(g, t, 0.025, vol, 0.08, 0.85, 0.08, dur);
+      var end = t + dur + 0.2; o.start(t); o2.start(t); lfo.start(t); o.stop(end); o2.stop(end); lfo.stop(end);
+    },
+    bigdrum: function (f, t, dur, vol, out) { // 大鼓: the great war drum: a deep boom and the slap of the hide
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(f * 1.8, t); o.frequency.exponentialRampToValueAtTime(f * 0.55, t + 0.35);
+      o.connect(g); g.connect(out);
+      env(g, t, 0.004, vol, 0.5, 0.01, 0.15, 0.01);
+      o.start(t); o.stop(t + 0.8);
+      var n = ctx.createBufferSource(), nf = ctx.createBiquadFilter(), ng = ctx.createGain();
+      n.buffer = noiseBuf; nf.type = 'lowpass'; nf.frequency.value = 500; n.connect(nf); nf.connect(ng); ng.connect(out);
+      env(ng, t, 0.002, vol * 0.5, 0.12, 0.01, 0.05, 0.01); n.start(t); n.stop(t + 0.3);
+    },
+    horn: function (f, t, dur, vol, out) { // 號角: a long low horn under the army, swelling in
+      var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), flt = ctx.createBiquadFilter();
+      o.type = 'sawtooth'; o2.type = 'sawtooth'; o.frequency.value = f; o2.frequency.value = f * 1.004;
+      flt.type = 'lowpass'; flt.frequency.setValueAtTime(f * 2, t); flt.frequency.linearRampToValueAtTime(f * 4, t + Math.min(0.6, dur)); flt.Q.value = 1;
+      o.connect(flt); o2.connect(flt); flt.connect(g); g.connect(out);
+      env(g, t, Math.min(0.35, dur * 0.4), vol, 0.2, 0.8, 0.3, dur);
+      var end = t + dur + 0.5; o.start(t); o2.start(t); o.stop(end); o2.stop(end);
+    },
     cymbal: function (f, t, dur, vol, out) {
       var n = ctx.createBufferSource(), nf = ctx.createBiquadFilter(), ng = ctx.createGain();
       n.buffer = noiseBuf; nf.type = 'highpass'; nf.frequency.value = 5000; n.connect(nf); nf.connect(ng); ng.connect(out);
@@ -197,6 +228,30 @@
       if (tr.once && !alive) clearInterval(s.timer);
     }, 60);
     sched = s;
+  };
+  // Render a track offline for so many seconds (debug: to listen to it as a file, or measure its loudness).
+  A.renderOffline = function (id, secs) {
+    var tr = A.tracks[id]; if (!tr) return Promise.reject('no track ' + id);
+    var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext, sr = 44100;
+    var off = new OAC(2, Math.ceil(sr * secs), sr), keep = { ctx: ctx, noiseBuf: noiseBuf };
+    ctx = off;
+    noiseBuf = off.createBuffer(1, sr, sr); var nd = noiseBuf.getChannelData(0); for (var i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    var bus = off.createGain(); bus.gain.value = A.musicVol * 0.8; bus.connect(off.destination);
+    var conv = off.createConvolver(), len = sr * 1.6, ir = off.createBuffer(2, len, sr);
+    for (var c2 = 0; c2 < 2; c2++) { var d = ir.getChannelData(c2); for (i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    conv.buffer = ir; var wet = off.createGain(); wet.gain.value = 0.22; bus.connect(conv); conv.connect(wet); wet.connect(off.destination);
+    var step = 60 / tr.bpm / 2;
+    tr.ch.forEach(function (c) {
+      var seq = c.perc ? parsePerc(c.notes) : parse(c.notes, tr.key, c.oct == null ? 4 : c.oct), pos = 0, k = 0;
+      while (pos * step < secs) {
+        var t = 0.05 + pos * step;
+        if (c.perc) { var v = seq[k % seq.length]; if (v) INST[c.inst](c.f || 80, t, step, c.vol * v, bus); pos++; }
+        else { var n = seq[k % seq.length]; if (!n.rest) INST[c.inst](n.f * (c.mul || 1), t, n.len * step * (c.legato || 0.95), c.vol, bus); pos += n.len; }
+        k++;
+      }
+    });
+    ctx = keep.ctx; noiseBuf = keep.noiseBuf;   // the offline notes are all scheduled: the live context comes back
+    return off.startRendering();
   };
   A.stop = function (quick) {
     if (!sched) { A.current = null; return; }
