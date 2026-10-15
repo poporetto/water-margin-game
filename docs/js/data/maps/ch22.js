@@ -13,4 +13,38 @@
   c.rect(16, 11, 2, 11, ':'); c.rect(18, 13, 11, 2, ':');
   c.scatter('T', 0.06, 572, '.', [0, 0, 32, 3]); c.scatter('T', 0.06, 573, '.', [0, 23, 32, 5]);
   WM.defMap('armycamp', { name: 'Song Jiang\'s Camp', theme: 'autumn', music: 'tense', rows: c.rows(), spawn: [16, 20], battleBg: 'field' });
+
+  // A council of war before a great battle, in the commander's pavilion: the leader before his tent with his strategist
+  // at his side, the commanders gathered before him; a scout may come running up from the gate with news of the enemy.
+  // Then the plan, the war drums, and the commanders go out to their troops.
+  //   o.beside: the strategist; o.generals: up to six commanders; o.scout: { who, lines }; o.lines: [[speaker|null, text]]
+  //   (null narrates); o.night; o.here: hold the council where the leader already is (no march to the camp)
+  WM.data.warCouncil = async function (s, o) {
+    o = o || {};
+    if (!o.here) { await s.fadeOut(0.6); await s.warp('armycamp', 17, 9, 'down', { noFade: true }); }
+    var slots = [[14, 11, 'up'], [20, 11, 'up'], [15, 12, 'up'], [19, 12, 'up'], [13, 12, 'up'], [21, 12, 'up']];
+    if (o.beside) s.spawn('cb', o.beside, 16, 9, 'right');
+    (o.generals || []).forEach(function (id, i) { if (slots[i]) s.spawn('cg' + i, id, slots[i][0], slots[i][1], slots[i][2]); });
+    s.night(!!o.night);
+    s.music(o.music || 'tense');
+    s.camera(17, 11, 0.01);   // the whole gathering above the words, the pavilion at the top
+    if (!o.here) await s.fadeIn(0.8);
+    if (o.scout) {
+      var sw = o.scout.who || 'soldier';
+      s.spawn('scout', sw, 16, 21, 'up');
+      await s.moveTo('scout', 17, 13, { run: true, yFirst: true });
+      s.face('scout', 'up');
+      for (var k = 0; k < o.scout.lines.length; k++) await s.say(sw, o.scout.lines[k]);
+      s.despawn('scout', { to: [16, 22] });
+    }
+    for (var i = 0; i < (o.lines || []).length; i++) {
+      var ln = o.lines[i];
+      if (typeof ln === 'function') await ln(s); else if (ln[0] === null) await s.narrate(ln[1]); else await s.say(ln[0], ln[1]);
+    }
+    s.music('war'); s.sfx('drum'); await s.wait(0.25); s.sfx('drum'); await s.wait(0.25); s.sfx('gong');
+    (o.generals || []).forEach(function (id, i) { if (slots[i]) s.despawn('cg' + i, { to: [16, 22] }); });   // out to their troops
+    if (o.beside) s.despawn('cb');
+    await s.wait(0.6);
+    s.cameraReset();
+  };
 })();

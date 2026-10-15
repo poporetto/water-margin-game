@@ -91,6 +91,11 @@
     await s.say('songjiang:sad', '...On the mountain, no one could have touched you. Under the court, I cannot even save my own man. Drink this wine, brother. Then go.');
     s.despawn('sd');
     await s.narrate('The soldier drank, and hanged himself, and his head was hung at Chenqiao as a warning. Song Jiang wept for him. Then the army marched north.');
+    await WM.data.warCouncil(s, {
+      beside: 'wuyong', generals: ['lujunyi', 'guansheng', 'zhangqing', 'huarong', 'linchong', 'dongping'],
+      scout: { lines: ['Brother, the Liao hold Tanzhou. Their general Ali Qi has come out on the Mizhou road to meet us — a young man in silver mail on a white horse, and he says the southern bandits will run at the sight of him.'] },
+      lines: [['songjiang', 'Our first battle under the emperor\'s banner. Let the court see what the men of Liangshan are worth.'], ['zhangqing', 'Let him come close enough to see my stones, brother.']]
+    });
     await s.battle('ch21_tanzhou', { bg: 'field' });
     await s.narrate('Zhang Qing\'s stone struck the Liao general Ali Qi in the eye, and Hua Rong, Lin Chong, Qin Ming and Suo Chao took him. Dong Ping unhorsed Yelü Guozhen; the navy, disguised as grain-boats, seized the water gate of Tanzhou. Then the Liao king sent his envoy Ouyang with a gift: Song Jiang would be Grand Marshal of Liao, if he would change sides.');
     await s.say('songjiang', 'Even if the Song betray me, my loyal heart will not betray the Song.');
@@ -118,6 +123,13 @@
       s.flag('ch21_formation');
       s.party(['songjiang', 'lujunyi', 'wuyong', 'gongsunsheng', 'guansheng', 'zhangqing']);
       await s.narrate('North of Yanjing, the Liao Grand Marshal Wuyan Guang drew up two hundred thousand men in the Formation of the Great Unity, which mirrors the heavens.');
+      await WM.data.warCouncil(s, {
+        beside: 'wuyong', generals: ['zhuwu', 'lujunyi', 'guansheng', 'huyanzhuo', 'linchong', 'dongping'],
+        lines: [['zhuwu', 'Brother, I climbed the hill and watched it all day. It is the Taiyi Hunyi formation. In the centre, the king in his yellow tent; around him the sun and the moon, the five planets and the twenty-eight lunar mansions, every gate guarded by its own colour. And it turns, as the sky turns.'],
+          ['songjiang', 'Can it be broken?'],
+          ['zhuwu:sad', '...I do not know how. Whatever part of it we strike, the rest closes round it.'],
+          ['songjiang', 'Then we must strike it, and learn.']]
+      });
       await s.war('ch21_taiyi1', { canLose: true });
       s.music('sad');
       await s.narrate('Again and again the formation turned and closed. Li Kui was captured and had to be exchanged for Wuyan Guang\'s son. A court instructor, Wang Wenbin, who had come with the winter clothing, rode out to show the bandits how it was done and was cut down. Song Jiang sat up night after night over the problem. At last he fell asleep at his table.');
@@ -133,10 +145,19 @@
       await s.say('xuannu', 'Go now. You will not meet me again for a long time.');
       ['lady', 'm1', 'm2'].forEach(function (k) { s.despawn(k); });
       await s.fadeOut(1, '#ffffff');
-      await s.warp('roadinn', 12, 8, 'up', { noFade: true });
-      s.music('war');
+      await s.warp('armycamp', 17, 9, 'down', { noFade: true });
+      s.night(true);
       await s.fadeIn(1);
+      await s.narrate('Song Jiang woke at his table in the pavilion. The lamp had burned down, and it was the third watch. He called for Wu Yong at once.');
+      await WM.data.warCouncil(s, {
+        here: true, night: true, beside: 'wuyong', generals: ['gongsunsheng', 'guansheng', 'huyanzhuo', 'linchong', 'dongping', 'huarong'],
+        lines: [['songjiang', 'I have seen the Mysterious Lady of the Ninth Heaven. She told me how the formation is broken.'],
+          ['wuyong', 'Then tell us, brother, and we will do it tonight.'],
+          ['songjiang', 'Yellow against its black gate: earth dams water. White against its blue: metal cuts wood. Red against its white, black against its red, blue against the yellow centre. Carts of fire in front of us — and Gongsun Sheng\'s thunder against the king himself.'],
+          ['gongsunsheng', 'Then tonight I will call down the thunder.']]
+      });
       await s.war('ch21_taiyi2');
+      s.night(false);
       await s.narrate('Hua Rong\'s arrow glanced off Wuyan Guang\'s breastplate. Zhang Qing\'s stones knocked him onto his horse\'s neck. Guan Sheng\'s blade cut him through the waist, and Zhang Qing finished him with his spear. Hu Sanniang took a Liao princess; Lu Junyi took a Liao prince.');
       await s.narrate('The Liao king, beaten, did not surrender to Song Jiang. His chancellor went to the capital with gold for Cai Jing, Tong Guan, Gao Qiu and Yang Jian, and the four of them persuaded the emperor that Liao should be left as a buffer in the north. Su Yuanjing brought the order: the war was over. Every conquered city was handed back.');
       await s.say('songjiang:sad', 'I do not blame the court. Only... all that we did is undone.');

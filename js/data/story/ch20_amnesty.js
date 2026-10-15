@@ -207,13 +207,22 @@
       await s.say('wuyong', 'There will be war now, brother. Be ready.');
       await s.narrate('The court sent Tong Guan, Privy Councillor, with a hundred thousand men.');
       s.party(['songjiang', 'gongsunsheng', 'wuyong', 'lujunyi']); s.level('gongsunsheng', 33);
+      await WM.data.warCouncil(s, {
+        beside: 'wuyong', generals: ['lujunyi', 'gongsunsheng', 'guansheng', 'linchong', 'huyanzhuo', 'dongping'],
+        scout: { lines: ['Tong Guan is at Jizhou, brother! Eight regional commanders under him, a hundred thousand men, and he swears to sweep the marsh clean in ten days.'] },
+        lines: [['wuyong', 'He comes in one long column, proud and in a hurry. Let us meet him on the plain with the formation of the Nine Palaces and the Eight Trigrams — and hide our men on every side of it. When he turns, there will be an army wherever he looks.'], ['songjiang', 'We fight only to be pardoned, not to overthrow anyone. Take the officers alive where you can.']]
+      });
       await s.war('ch20_tongguan');
+      await s.warp('liangshan_in', 16, 12, 'up');   // back up the mountain after the battle
       await s.narrate('Tong Guan fled to the capital. Then Gao Qiu came with ten regional commanders and a fleet, and was beaten on land and on the water. He had a new edict drawn up. When it was read before the walls of Jizhou, it said: "...except Song Jiang, Lu Junyi and all others great and small are pardoned." With the comma in the wrong place, every man was pardoned but the one who mattered.');
       s.spawn('hr', 'huarong', 15, 7, 'up');
       await s.say('huarong:angry', 'Except Song Jiang? Look at Hua Rong\'s arrow!');
       s.sfx('arrow'); await s.flash();
       await s.narrate('Hua Rong shot the reader of the edict through the face. Gao Qiu built great paddle-wheel ships, the Sea-Eels, and came a third time.');
       s.despawn('hr', { leave: true });
+      s.spawn('zs0', 'zhangshun', 16, 8, 'up');
+      await s.say('zhangshun:smile', 'Let him come in his eel-ships, brother. The water is ours. While his paddle-wheels turn, my men will be underneath them with augers.');
+      s.despawn('zs0');
       await s.war('ch20_gaoqiu');
       s.flag('ch20_gao');
       s.spawn('gq', 'gaoqiu', 15, 6, 'down');

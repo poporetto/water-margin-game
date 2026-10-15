@@ -289,8 +289,18 @@
   WM.defEvents('liangshan_in', [
     { id: 'ch17_march', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_caught') && WM.state.x < 31 && WM.state.y < 17; }, run: async function (s) {
       s.party(['songjiang', 'wuyong', 'linchong', 'qinming', 'huarong', 'likui']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
+      s.spawn('wy0', 'wuyong', 15, 7, 'up');
+      await s.say('wuyong', 'Brother Lu Junyi and Shi Xiu are in the death cell of Daming, and Governor Liang only waits for word from his father-in-law to cut off their heads. There is nothing left to try but the army.');
+      await s.say('songjiang', 'Then sound the drums. We march on Daming.');
+      s.despawn('wy0');
+      await WM.data.warCouncil(s, {
+        beside: 'wuyong', generals: ['linchong', 'qinming', 'huarong', 'likui', 'huyanzhuo', 'xuning'],
+        scout: { lines: ['Brother, Governor Liang has sent his generals out to meet us: Wen Da the Great Blade and Li Cheng, Li the King of Heaven, with Suo Chao — the Vanguard Hothead — riding before them. They are drawn up at Feihu Valley, thirty li from the city.'] },
+        lines: [['wuyong', 'Let Suo Chao come on: he charges at everything. Qin Ming will meet him in front; Hua Rong and Lin Chong wait on the wings. When his vanguard breaks, the rest will run for the walls.'], ['likui:angry', 'And me?'], ['songjiang', 'You, Iron Ox, stay at my side until I let you go.']]
+      });
       await s.war('ch17_daming');
       await s.narrate('Song Jiang surrounded Daming. Governor Liang wrote to his father-in-law, Cai Jing, and Cai Jing\'s clerk Xuan Zan, the Ugly Prince Consort, recommended a descendant of Guan Yu — Guan Sheng of Pudong, who carried a green-dragon blade like his ancestor\'s, with his sworn brother Hao Siwen. Guan Sheng did not march to Daming. He marched on Liangshan itself — "besiege Wei to save Zhao" — and Song Jiang had to raise the siege and hurry home.');
+      await s.warp('liangshan_in', 16, 12, 'up');   // home to the mountain, with Guan Sheng behind them
       await s.duel('linchong_guansheng', { hero: 'linchong', canLose: true });
       await s.narrate('Zhang Heng tried to raid Guan Sheng\'s camp at night and was taken; Ruan Xiaoqi went to rescue him without orders and was taken too. Then Huyan Zhuo rode into Guan Sheng\'s camp, saying he had come over, and offered to lead him by night to take Song Jiang. Guan Sheng followed the red lantern — into the hooks. Qin Ming and Sun Li took Xuan Zan; Hu Sanniang lassoed Hao Siwen.');
       s.spawn('gs', 'guansheng', 15, 7, 'up');
@@ -456,7 +466,11 @@
   WM.defEvents('lingzhou', [
     { id: 'ch17_shan', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_fired'); }, run: async function (s) {
       s.party(['guansheng', 'likui']); s.setLeader('guansheng'); s.level('guansheng', 31); s.flag('protagonist', 'guansheng');
-      s.spawn('st', 'shantinggui', 16, 14, 'left');
+      s.spawn('st', 'shantinggui', 20, 14, 'left');
+      await s.move('st', 'L4');
+      await s.say('shantinggui', 'Guan Sheng! You were a general of the court, the heir of Lord Guan himself — and now you ride for bandits? Are you not ashamed before your ancestor?');
+      await s.say('guansheng', 'General Shan, a dog of a minister sent me against men who only wait for the emperor\'s pardon. I have found brothers there. Come down and talk with me.');
+      await s.say('shantinggui:angry', 'I talk with this!');
       await s.duel('guansheng_shan', { hero: 'guansheng', canLose: true });
       await s.narrate('Guan Sheng lifted Shan Tinggui from the ground, and spoke to him as one soldier to another. Shan Tinggui knelt to him. With the fire behind them in Lingzhou, Wei Dingguo\'s fire-troops broke, and he fled to Zhongling.');
       await s.say('shantinggui', 'Let me go to him. He will listen to me.');

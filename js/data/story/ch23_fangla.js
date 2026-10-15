@@ -96,8 +96,13 @@
     s.party(['songjiang', 'lujunyi', 'wuyong', 'guansheng', 'huarong', 'wusong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
     WM.data.charOrder.forEach(function (id) { if (WM.state.chars[id] && WM.state.chars[id].lv < 40) s.level(id, 40); });
     await s.narrate('The army of Liangshan crossed the Huai and came to the Yangtze, and looked across the water at Runzhou, held by Fang La\'s general Lü Shinang.');
-    await s.warp('armycamp', 16, 18, 'up', { noFade: true });
-    await s.fadeIn(1);
+    await WM.data.warCouncil(s, {
+      beside: 'wuyong', generals: ['lujunyi', 'guansheng', 'huarong', 'zhangshun', 'shixiu', 'muhong'],
+      scout: { lines: ['Brother, the Yangtze is a mile wide here, and Runzhou is on the far shore. Lü Shinang has ships across the river mouth, and on Jinshan and Jiaoshan — the two islands — his men keep watch day and night.'] },
+      lines: [['zhangshun', 'Then I\'ll swim over to Jinshan tonight and see how well they watch.'],
+        ['wuyong', 'And we will cross in merchant ships, with our soldiers lying under the grain sacks. Grain for Runzhou, as far as anyone can see.'],
+        ['songjiang', 'The first river of the south. Go carefully, brothers. Every one of you.']]
+    });
     await s.war('ch23_runzhou');
     await fall(s, ['songwan', 'jiaoting', 'taozongwang'], 'Runzhou was taken. But in the confusion of the battle, three chiefs fell under arrows and hooves: Song Wan, who had helped Wang Lun found Liangshan; Jiao Ting the Faceless; and Tao Zongwang, the Nine-Tailed Tortoise. Song Jiang buried them outside the east gate of Runzhou, and wept.');
     await s.say('songjiang:sad', 'Three brothers, at the first river. ...How many will cross back?');
@@ -105,6 +110,8 @@
     await fall(s, ['hantao', 'pengqi'], 'Before Changzhou, an arrow from the Southern general Gao Keli struck Han Tao in the face. Peng Qi rode to avenge him, and Zhang Jinren speared him from the side. They had come to Liangshan together, as prisoners of war, and they died together.');
     await fall(s, ['zhengtianshou', 'caozheng', 'wangdingliu'], 'At Xuanzhou, a millstone thrown from the wall killed Zheng Tianshou, the Fair-Faced Gentleman. Cao Zheng and Wang Dingliu were struck by poisoned arrows and died as they reached the camp. When Song Jiang heard, he fainted away.');
     s.party(['wusong', 'luzhishen', 'likui', 'zhutong']); s.setLeader('wusong');
+    await s.say('wusong', 'Fang Mao, Fang La\'s own brother, holds Suzhou. The gates are shut and the canals are full of his boats. Brothers, we go in on foot, by the Pan Gate, while they watch the water.');
+    await s.say('luzhishen:smile', 'Ha! Lead on, brother. My staff has been idle since the river.');
     await s.battle('ch23_suzhou', { bg: 'town' });
     await fall(s, ['xuanzan', 'shien', 'kongliang'], 'At Suzhou, Wu Song killed Fang La\'s brother Fang Mao. But under the Yinma Bridge, Xuan Zan the Ugly Prince Consort and the Southern general Guo Shiguang wounded each other and died together. At Changshu and Kunshan, Shi En and Kong Liang, who could not swim, fell from the boats and drowned.');
     await s.narrate('An envoy came from the capital: the Retired Emperor was unwell, and An Daoquan was to return at once. Song Jiang could not refuse.');
@@ -141,12 +148,20 @@
       await fall(s, ['xuning', 'haosiwen'], 'At the North Gate an ambush closed on them. A poisoned arrow struck Xu Ning in the neck; he lingered half a month and died. Hao Siwen was taken by six Southern generals and put to death by Fang Tianding.');
       await fall(s, ['dongping', 'zhangqing', 'zhoutong'], 'At the Dusong Pass, Zhang Tao cut Dong Ping in two from behind. Zhang Qing\'s spear stuck fast in a pine tree, and Li Tianrun speared him through the belly. Li Tianrun cut down Zhou Tong in the same fight.');
       await fall(s, ['leiheng', 'gongwang'], 'At Deqing, Si Xingfang cut Lei Heng from his horse. Gong Wang\'s horse fell into a stream, and the Southern soldiers speared him in the water.');
+      await WM.data.warCouncil(s, {
+        beside: 'wuyong', generals: ['guansheng', 'huarong', 'huyanzhuo', 'linchong', 'zhangheng', 'likui'],
+        lines: [['wuyong', 'Fang Tianding holds Hangzhou with seven gates and seventy thousand men. We have already lost Xu Ning, Dong Ping, Zhang Qing...'],
+          ['zhangheng:sad', 'And my brother. Give me the Yongjin Gate, brother Song Jiang. I will go in where he died.'],
+          ['songjiang', 'All seven gates at once, then. For every brother who has fallen on this road.']]
+      });
       await s.war('ch23_hangzhou');
       await fall(s, ['liutang', 'baoxu', 'dengfei', 'suochao'], 'At the Houchao Gate, Liu Tang rode in as the portcullis rope was cut, and horse and man died together under the gate. At the North Gate, Shi Bao cut Bao Xu in two, and then Deng Fei; and Suo Chao, the Vanguard Hothead, fell to Shi Bao\'s hammer.');
       await s.narrate('Hangzhou fell. Zhang Heng, possessed by his dead brother\'s spirit, cut off Fang Tianding\'s head and brought it to Song Jiang. Then a plague broke out in the city, and six chiefs fell sick: Zhang Heng, Mu Hong, Kong Ming, Zhu Gui, Yang Lin and Bai Sheng. Mu Chun and Zhu Fu stayed behind to nurse them.');
       await fall(s, ['houjian', 'duanjingzhu'], 'Ruan Xiaoqi came back from the coast. His boat had been wrecked on the way to Haiyan, and Hou Jian the tailor and Duan Jingzhu the horse-thief, who could not swim, had drowned in the sea.');
       await fall(s, ['ruanxiaoer', 'mengkang', 'xiezhen', 'xiebao'], 'At the river below Wulong Ridge, fire-rafts came down on the navy. Ruan Xiao\'er, surrounded, cut his own throat rather than be taken. A fire-bomb from the bank struck Meng Kang\'s helmet. Xie Zhen, climbing the cliff by night, was hooked from above, cut his rope, and fell a hundred feet; Xie Bao died under stones and arrows in the bamboo at the foot of the ridge. Hunters all their lives, they died together on the mountain.');
       s.flag('ch23_muzhou');
+      await s.say('songjiang', 'Muzhou, and then Qingxi — Fang La\'s nest.');
+      await s.say('wuyong', 'Bao Daoyi the Daoist and Zheng Biao, the Demon Lord, hold Muzhou. Their sorcery is all Fang La has left. We must strike before they can work it.');
       await s.war('ch23_muzhou');
       await fall(s, ['wangying', 'husanniang', 'xiangchong', 'ligun'], 'Before Muzhou, the Demon Lord Zheng Biao speared Wang Ying from his horse. Hu Sanniang, his wife, rode after Zheng Biao to avenge him, and a gilded brick from his sorcery struck her down. Xiang Chong and Li Gun, chasing the enemy across a stream, fell in: Xiang Chong was hacked to pieces, Li Gun shot full of arrows.');
       await s.narrate('Bao Daoyi\'s flying sword struck Wu Song\'s left arm and all but cut it off. Wu Song cut through what was left with his own monk\'s knife, and lived. And Lu Zhishen, chasing the Southern general Xiahou Cheng into the mountains, did not come back.');
@@ -156,10 +171,15 @@
       s.party(['lujunyi', 'shiqian', 'yanqing']); s.setLeader('lujunyi'); s.flag('protagonist', 'lujunyi');
       await s.narrate('On the other road, Lu Junyi came to the Yuling Pass. Shi Jin led the vanguard.');
       await fall(s, ['shijin', 'shixiu', 'chenda', 'yangchun', 'lizhong', 'xueyong'], 'At the pass, an arrow from Pang Wanchun — the "Little Yang Youji," who never missed — struck Shi Jin from his horse. Shi Xiu, Chen Da, Yang Chun, Li Zhong and Xue Yong, caught in the pass, were shot down from both slopes and died in a heap below the pass. Shi Jin, Chen Da and Yang Chun had come from Shaohua together, long ago.');
+      await s.say('shiqian', 'Master, nobody will take that pass from the front. But there\'s a goat-track round behind it, through the cliffs. Let me go up tonight.');
+      await s.say('lujunyi:sad', 'Go, then — and may Heaven keep you, Drum-Flea.');
       await s.narrate('Shi Qian climbed round behind the pass by night and set fire to it.');
       await s.battle('ch23_yuling', { bg: 'forest' });
       await fall(s, ['oupeng', 'zhangqing2', 'dingdesun', 'shantinggui', 'weidingguo', 'liyun', 'shiyong'], 'At Shezhou, Pang Wanchun shot Ou Peng in the back. Zhang Qing the Gardener fell in the confusion. Ding Desun was bitten by a snake on the mountain path, and the poison went to his heart. Shan Tinggui and Wei Dingguo charged into the city and fell into a pit, and were speared in it. Wang Yin trampled Li Yun and speared Shi Yong.');
       s.party(['songjiang', 'lujunyi', 'wuyong', 'guansheng', 'huarong', 'likui']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
+      await s.say('lujunyi:sad', 'Brother... Shi Jin, Shi Xiu, the Shaohua men — all of them, at the pass. This is all I could bring you.');
+      await s.say('songjiang:sad', 'We are nearly at the end of it, brother. Fang La is behind the walls of Qingxi. Let us finish it, and take home the ones who are left.');
+      s.sfx('drum'); await s.wait(0.3); s.sfx('drum');
       await s.war('ch23_qingxi');
       await fall(s, ['qinming', 'yubaosi', 'sunerniang', 'zouyuan', 'duqian', 'lili', 'tanglong', 'caifu', 'ruanxiaowu'], 'At Qingxi, Fang Jie\'s halberd brought down Qin Ming while Du Wei\'s flying knife distracted him. Du Wei\'s knives killed Yu Baosi and Sun Erniang. Zou Yuan and Du Qian were trampled in the cavalry. Li Li, Tang Long and Cai Fu died of wounds that would not heal. Ruan Xiaowu was killed by the chancellor Lou Minzhong.');
       await s.narrate('Fang La fled from the palace into the Pangyuan cave, and from the cave into the hills, alone.');

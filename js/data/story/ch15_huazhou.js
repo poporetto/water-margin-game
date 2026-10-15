@@ -152,7 +152,12 @@
   WM.defEvents('huazhou_in', [
     { id: 'ch15_rescue', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch15_he') && WM.state.x >= 18 && WM.state.x < 30; }, run: async function (s) {
       await s.narrate('Then into Huazhou itself, while the city still thought the envoy was at the temple.');
+      s.spawn('j1', 'guard', 22, 6, 'down'); s.spawn('j2', 'guard', 26, 6, 'down');   // the jailers before the cells
+      await s.say('guard', 'Halt! No one comes into the prison by night without the Prefect\'s own tally.');
+      await s.say('wusong:angry', 'Your Prefect is lying on the temple steps with his head beside him. Here is my tally.');
+      await s.say('guard:shock', 'Bandits! Turn out the guard — the Liangshan bandits are in the prison!');
       await s.battle('ch15_jail', { bg: 'town' });
+      s.lie('j1'); s.lie('j2');
       s.spawn('sj', 'shijin', 21, 4, 'down'); s.spawn('lz', 'luzhishen', 26, 4, 'down');
       await s.say('shijin', 'Brother Song Jiang! And Master Lu — you came for me, and got yourself caught too!');
       await s.say('luzhishen:smile', 'Ha! I was keeping you company!');
@@ -175,8 +180,15 @@
   // ---------------- Mount Mangdang ----------------
   WM.defEvents('mangdang', [
     { id: 'ch15_mangdang', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch15_freed'); }, run: async function (s) {
-      s.music('boss');
+      s.music('tense');
+      await s.say('shijin', 'Mount Mangdang. Brothers, this is the first thing we do for Liangshan. Let them see what Shaohua men are made of.');
+      s.spawn('xc', 'xiangchong', 13, 26, 'down'); s.spawn('lg', 'ligun', 15, 26, 'down');
+      s.move('xc', 'D3', { wait: false }); await s.move('lg', 'D3');
       await s.narrate('Down the mountain came Xiang Chong and Li Gun, each behind a great round shield of oxhide studded with brass, with twenty-four throwing knives on Xiang Chong\'s and twenty-four javelins on Li Gun\'s.');
+      await s.say('xiangchong', 'So Liangshan sends us its newest dogs! Go back and tell Song Jiang to bring his own head down the mountain.');
+      await s.say('ligun', 'Brother Xiang — the shields!');
+      s.music('boss');
+      s.despawn('xc'); s.despawn('lg');
       await s.battle('ch15_shields', { bg: 'forest', canLose: true, rounds: 4 });
       await s.narrate('The knives and javelins came out from behind the shields faster than Shi Jin\'s men could see them. Half the Shaohua men fell; Yang Chun\'s horse was wounded under him. Then Hua Rong and Xu Ning came up with fresh troops, and Song Jiang behind them with Gongsun Sheng.');
       s.party(['songjiang', 'gongsunsheng', 'shijin', 'huarong', 'xuning']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');

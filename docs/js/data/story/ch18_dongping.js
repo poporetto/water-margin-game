@@ -118,6 +118,14 @@
 
   WM.defEvents('zengtou', [
     { id: 'ch18_attack', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 18; }, run: async function (s) {
+      s.music('tense');
+      s.spawn('sq', 'shiqian', 26, 29, 'down');
+      await s.moveTo('sq', 26, 33, { run: true });
+      await s.say('shiqian', 'Brother! The Zengs have five camps round the town, and before the north and the south camp they\'ve dug pits — dozens of them, under a skin of earth and straw. I put a little flag beside every one.');
+      await s.say('wuyong:smile', 'Then the pits are theirs, not ours. Brother, send the horse out to the north camp by the flags, and let them run when the Zengs come after them. The Zeng cavalry will find their own pits.');
+      await s.say('songjiang', 'For Brother Chao Gai. Sound the drums!');
+      s.despawn('sq');
+      s.music('war'); s.sfx('drum'); await s.wait(0.3); s.sfx('drum');
       await s.war('ch18_zengtou');
       await s.narrate('Hua Rong\'s arrow took Zeng Tu in the arm, and Lü Fang and Guo Sheng finished him with their halberds. Zeng Nong, the old master, sent to ask for terms: he would give back the horses, and pay for the war.');
       await s.say('wuyong', 'Let us talk. Send hostages both ways. And their Yu Baosi, the Dangerous Road God, who took our horses — I want to speak with him.');

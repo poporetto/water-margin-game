@@ -111,10 +111,16 @@
     s.party(['songjiang', 'lujunyi', 'wuyong', 'gongsunsheng', 'linchong', 'zhangqing']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
     ['songjiang', 'lujunyi', 'wuyong', 'gongsunsheng', 'linchong', 'zhangqing', 'fanrui', 'luzhishen', 'likui'].forEach(function (id) { s.level(id, 38); });
     await s.narrate('No titles came from the court. Cai Jing and Tong Guan let the matter sleep. Then word came from Hedong: Tian Hu, a hunter of Weisheng, had made himself king of five prefectures and fifty-six counties. Su Yuanjing spoke again, and Song Jiang was sent west.');
-    await s.warp('armycamp', 16, 18, 'up', { noFade: true });
-    await s.fadeIn(1);
+    await WM.data.warCouncil(s, {
+      beside: 'wuyong', generals: ['lujunyi', 'linchong', 'zhangqing', 'luzhishen', 'likui', 'fanrui'],
+      scout: { lines: ['Tian Hu\'s men hold the passes of Gaiping, brother. And at Zhaode a Daoist rides with them — Qiao Daoqing, the Phantom Magician. They say he can fill a valley with water out of a clear sky.'] },
+      lines: [['wuyong', 'Then we fight his soldiers by daylight, and leave his magic to Brother Gongsun Sheng.'],
+        ['likui:angry', 'Magic! Give me the vanguard and I\'ll chop his magic in half!'],
+        ['songjiang', 'No one goes ahead against orders, Iron Ox. Not one man.']]
+    });
     await s.war('ch22_hedong', { canLose: true });
     await s.narrate('Li Kui charged ahead against orders and was caught with five hundred men; then Lu Zhishen, Wu Song and Liu Tang were lost in the sea of illusion. A figure robed in yellow — the spirit of the Earth, Wu Yong said, for earth conquers water — drained the sea away. And then Gongsun Sheng rode out with his pine-patterned sword.');
+    await s.say('gongsunsheng', 'His is the magic of the left-hand way, brother — borrowed, and false. Let me meet it.');
     await s.battle('ch22_qiao', { bg: 'field' });
     await s.narrate('Qiao Daoqing\'s divine soldiers fell down as paper. His clay dragons were smashed by a great roc that rose from Gongsun Sheng\'s whisk. He fled to Baigu Ridge, and there, surrounded, he gave himself up. Li Kui, Lu Zhishen, Wu Song and Liu Tang came back alive.');
     await s.narrate('At the next city, a girl of sixteen led the enemy: Qiongying, whose stones struck down Wang Ying, Sun Xin, Lin Chong and Li Kui one after another. She was no daughter of the rebel lord Wu Li. Tian Hu\'s men had killed her father, Qiu Shen, and taken her mother, who threw herself from a cliff rather than submit. Her steward Ye Qing came over to Song Jiang secretly — and told how a green-robed young general throwing stones had appeared to Qiongying in a dream, and she had sworn to marry only a man who could throw stones as she did.');
@@ -123,8 +129,16 @@
     s.level('zhangqing', 40);
     await s.duel('zhangqing_qiongying', { hero: 'zhangqing', canLose: true });
     await s.narrate('They were married. Together they did away with Wu Li and opened the city. At Weisheng Qiongying took her revenge on Tian Hu\'s brother Tian Ding with her own blade, and went to find her mother\'s bones on the mountain.');
+    await s.say('songjiang', 'Weisheng is the last of Tian Hu\'s cities, and Tian Hu is in it with everything he has left. Brothers — finish it.');
+    s.sfx('drum'); await s.wait(0.3); s.sfx('drum');
     await s.war('ch22_tianhu');
     await s.narrate('Tian Hu, his brothers Tian Bao and Tian Biao, were caged to be sent to the capital. Hedong was won. And before the army could rest, the court sent it south-west against Wang Qing — a soldier from the capital who had fled a murder charge and made himself king of eight prefectures in Huaixi.');
+    await WM.data.warCouncil(s, {
+      beside: 'wuyong', generals: ['lujunyi', 'linchong', 'gongsunsheng', 'zhangqing', 'huarong', 'likui'],
+      scout: { lines: ['Wang Qing\'s army is drawn up before Nanfeng, brother. His general Li Zhi is a sorcerer — they say his golden sword flies out of its sheath by itself and cuts down whoever he points at. And a woman rides with them, Duan Sanniang, who fights like ten men.'] },
+      lines: [['gongsunsheng', 'A flying sword is a small magic. When it comes, I will speak to it.'],
+        ['songjiang', 'This is the last of the rebels within. When Wang Qing falls, the Lady\'s words are fulfilled.']]
+    });
     await s.war('ch22_wangqing');
     s.flag('ch22_ferry');
     await s.warp('armycamp', 30, 13, 'right');

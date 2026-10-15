@@ -58,8 +58,11 @@
 
   WM.defEvents('zengtou', [
     { id: 'ch16_first', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch16_march'); }, run: async function (s) {
+      await s.narrate('Chao Gai\'s army came to Zengtou and made camp before its walls: five thousand men, and twenty chiefs. At dawn the gate opened, and a young man in silver armour rode out at the head of a troop of horse — Zeng Kui, the fourth of the Zeng sons.');
       s.spawn('zk', 'zengkui', 26, 24, 'down');
-      await s.say('zengkui', 'So the bandit king himself has come to die!');
+      await s.move('zk', 'D3');
+      await s.say('zengkui', 'So the bandit king himself has come to die! Which of you thieves will face me?');
+      await s.say('linchong', 'Brother Chao Gai, this one is mine.');
       await s.duel('linchong_zengkui', { hero: 'linchong', canLose: true });
       s.despawn('zk', { leave: true });
       await s.narrate('For days the Zeng family would not come out. Then two monks came to Chao Gai\'s camp.');
