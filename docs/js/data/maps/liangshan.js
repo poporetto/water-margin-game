@@ -11,7 +11,7 @@
     else if (y === 7) z.set(x, y, U.hash2(x, y, 3) > 0.4 ? 'r' : '~');
   }
   z.scatter('r', 0.4, 151, '~', [0, 3, 30, 5]);
-  z.rect(13, 3, 2, 5, 'B'); z.set(12, 5, 'o'); z.set(15, 4, 'o');   // the landing where the boat comes
+  z.rect(13, 3, 2, 5, 'B'); z.set(15, 4, '<'); z.set(16, 4, '['); z.set(17, 4, '>'); z.set(18, 4, '>'); z.set(11, 6, 'o');   // the landing: Liangshan's sampan tied up at the end of the pier, a fisherman's skiff by the reeds
   var tav = z.house(4, 10, 10, 5, { roof: 'z', door: 5, windows: [1, 3, 7] }); z.set(15, 10, 'J');
   z.rect(13, 8, 2, 2, ':'); z.vline(9, 15, 21, ':'); z.hline(9, 14, 15, ':'); z.vline(14, 8, 15, ':');
   z.scatter('T', 0.1, 152, '.', [0, 9, 30, 13]); z.scatter(',', 0.2, 153, '.', [0, 9, 30, 13]);
@@ -24,6 +24,15 @@
   WM.defMap('zhugui_in', { name: 'Zhu Gui\'s Tavern', interior: true, theme: 'marsh', music: 'field', rows: zi.rows(), spawn: [7, 6] });
   L.link({ map: 'zhugui', x: tav.x, y: tav.y }, { map: 'zhugui_in', x: zR.x, y: zR.y });
   WM.data.zhuguiTav = { door: tav, room: zR };
+  // the ferry over the marsh: once Liangshan is the brothers' own, its boatman waits at Zhu Gui's pier
+  WM.defEvents('zhugui', [
+    { id: 'zg_ferry', x: 15, y: 4, trigger: 'check', cond: function (S2) { return S2.has('castle'); }, run: async function (s) {
+      var k = await s.ask(null, 'A Liangshan boatman sits in the stern of the sampan, his hand on the oar. Cross the marsh to the fortress?', ['Cross over', 'Not now']);
+      if (k !== 0) return;
+      s.sfx('splash'); await s.warp('liangshan', 24, 44, 'up');
+    } },
+    { id: 'zg_ferry0', x: 15, y: 4, trigger: 'check', cond: function (S2) { return !S2.has('castle'); }, text: ['(A sampan is tied at the end of the pier, its mat awning dark. No boatman comes unless the whistling arrow calls him.)'] }
+  ]);
 
   // ---------------- the fortress ----------------
   var W = 50, H = 48;
@@ -58,7 +67,8 @@
     for (xx = 0; xx < W; xx++) for (yy = 0; yy < 8; yy++) if (g.get(xx, yy) === '.' && (yy < 4 || U.hash2(xx, yy, 9) > 0.55)) g.set(xx, yy, yy < 3 ? 'M' : 'P');
     // shore & jetty
     g.rect(18, 40, 14, 2, 's');
-    g.rect(23, 42, 4, 5, 'B'); g.set(21, 44, 'o'); g.set(28, 44, 'o'); g.set(20, 42, 'o');
+    g.rect(23, 42, 4, 5, 'B'); g.set(21, 44, 'o'); g.set(20, 42, 'o');
+    g.set(27, 45, '<'); g.set(28, 45, '['); g.set(29, 45, '>'); g.set(30, 45, '>');   // the ferry sampan that plies to Zhu Gui's pier, tied up at the jetty
     // main path
     g.rect(24, 9, 2, 32, ':');
     // Duanjin Pavilion near the landing

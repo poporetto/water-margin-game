@@ -830,6 +830,40 @@
     px(c, x + 5, y + 5, 7, 1, '#5a4a30'); px(c, x + 5, y + 7, 7, 1, '#5a4a30'); px(c, x + 6, y + 3, 4, 1, '#a89a70');
   }
 
+  // A two-man sampan (舢板) moored broadside, four tiles long: bow '<', midships '[', then two stern tiles '>'. The tiles are water; the
+  // whole boat is drawn in the depth pass from the middle tile, so its upswept ends and the woven-mat awning (篷) can rise
+  // above the row, with the boatman in his straw hat at the stern oar (櫓).
+  function sampanTile(c, x, y, tx, ty, th, m) { water(c, x, y, tx, ty, th, m); }
+  function sampanTall(c, x, y) {
+    var bx = x - S, wl = y + 15, N = 64;   // four tiles long
+    var top = function (u) { return u < 12 ? 5 - Math.round((12 - u) * 0.6) : u > 50 ? 5 - Math.round((u - 50) * 0.65) : 5; };
+    var bot = function (u) { return u < 7 ? 15 - Math.round((7 - u) * 1.3) : u > 56 ? 15 - Math.round((u - 56) * 1.3) : 15; };
+    c.fillStyle = 'rgba(10,20,40,0.35)'; c.fillRect(bx + 5, wl, 54, 2);   // its shadow on the water
+    for (var u = 0; u < N; u++) {
+      var t = top(u), b = bot(u); if (t >= b) continue;
+      px(c, bx + u, y + t, 1, b - t, '#6a3e1c');
+      px(c, bx + u, y + t, 1, 1, '#c99a5c');                          // the gunwale
+      if (b - t > 4) px(c, bx + u, y + t + 2, 1, 1, '#8a5a2c');         // the rubbing strake
+      if (b - t > 6) px(c, bx + u, y + t + 5, 1, 1, '#5a3418');         // a plank seam
+      if (b - t > 6) px(c, bx + u, y + b - 3, 1, 3, '#3a2210');         // the wet planks at the waterline
+    }
+    px(c, bx, y - 3, 2, 5, '#c99a5c'); px(c, bx + 2, y - 1, 1, 2, '#c99a5c');   // the bow post
+    // the awning: woven bamboo matting on hoops, open at both ends
+    for (var r = 0; r < 14; r++) {
+      var inset = [6, 4, 2, 1, 1, 0][r] || 0;
+      px(c, bx + 20 + inset, y - 9 + r, 24 - inset * 2, 1, r < 2 ? '#bca676' : r < 5 ? '#a08a5a' : '#8f7a4c');
+    }
+    for (var k = 0; k < 8; k++) px(c, bx + 22 + k * 3, y - 6, 1, 11, '#6a5634');   // the hoops
+    px(c, bx + 20, y - 5, 2, 10, '#241810'); px(c, bx + 42, y - 5, 2, 10, '#2e2014');   // the dark mouths
+    // the boatman at the stern, standing to his oar under a conical straw hat (斗笠)
+    px(c, bx + 50, y - 4, 6, 9, '#3a4a5a'); px(c, bx + 51, y - 4, 2, 9, '#4a5c6e');   // his blue coat
+    px(c, bx + 51, y - 7, 4, 3, '#d8a878');                                            // his face
+    px(c, bx + 52, y - 12, 2, 1, '#c8b078'); px(c, bx + 51, y - 11, 4, 1, '#c8b078'); px(c, bx + 49, y - 10, 8, 1, '#c8b078'); px(c, bx + 47, y - 9, 12, 1, '#8a7448');   // the hat
+    px(c, bx + 55, y - 3, 2, 2, '#d8a878');                                            // his hands
+    for (var j = 0; j < 17; j++) px(c, bx + 56 + j, y - 3 + j, 1, 1, '#9a7a4a');      // the oar, raked back over the stern
+    px(c, bx + 71, y + 12, 3, 2, '#9a7a4a');                                            // its blade in the water
+  }
+
   function signTall(c, x, y) {
     // a notice board: a tall board on a post, sheltered by a little tiled roof
     px(c, x + 7, y + 4, 2, 10, '#4a2a16');
@@ -935,6 +969,9 @@
     'g': { draw: grave, solid: true },
     'e': { draw: deadTree, solid: true },
     'o': { draw: boat, solid: true, water: true },
+    '<': { draw: sampanTile, solid: true, water: true },
+    '[': { draw: sampanTile, tall: sampanTall, solid: true, water: true },
+    '>': { draw: sampanTile, solid: true, water: true },
     'I': { draw: function (c, x, y, tx, ty, th, m) { grass(c, x, y, tx, ty, th); }, tall: signTall, solid: true },
     'V': { draw: tent, solid: true },
     'y': { draw: cropField },
