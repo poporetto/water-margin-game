@@ -171,6 +171,11 @@
       s.despawn('sj2');
       await s.narrate('Li Ruilan welcomed Shi Jin with smiles. Her mother went straight to the prefecture. That night the constables took Shi Jin from her bed. Gu Dasao, dressed as a beggar woman, got into the prison with a bowl of food and whispered: "The last night of the month."');
       s.flag('away:shijin');
+      await s.narrate('Song Jiang brought the army up to the walls of Dongping. The gate opened, and out rode the city\'s commander with a spear in each hand and a little banner on his back: "A Hero of Hedong; the Double Spear General."');
+      s.spawn('dp0', 'dongping', 10, 17, 'left');
+      await s.say('dongping', 'Song Jiang! You marsh-rats have the gall to come to my city? Which of you will meet my two spears?');
+      await s.say('xuning', 'Brother, let me. I want to see these two spears for myself.');
+      s.despawn('dp0', { leave: true });   // back to his lines, to meet Xu Ning in the field
       await s.duel('xuning_dongping', { hero: 'xuning', canLose: true });
       await s.narrate('Dong Ping, the Double Spear, followed Xu Ning\'s retreat at full gallop into a village west of the city — and in the narrow lane, ropes jerked up out of the dust in front of and behind his horse. Wang Ying, Hu Sanniang, Zhang Qing the Gardener and Sun Erniang were on him before he could rise.');
       s.spawn('dp', 'dongping', 10, 17, 'left');

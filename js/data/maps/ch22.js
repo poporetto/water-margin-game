@@ -42,9 +42,13 @@
       if (typeof ln === 'function') await ln(s); else if (ln[0] === null) await s.narrate(ln[1]); else await s.say(ln[0], ln[1]);
     }
     s.music('war'); s.sfx('drum'); await s.wait(0.25); s.sfx('drum'); await s.wait(0.25); s.sfx('gong');
-    (o.generals || []).forEach(function (id, i) { if (slots[i]) s.despawn('cg' + i, { to: [16, 22] }); });   // out to their troops
-    if (o.beside) s.despawn('cb');
-    await s.wait(0.6);
+    // the commanders turn and go out to their troops, every one of them (companions too), and the scene darkens over them;
+    // the camp is cleared in the dark, and the battle comes up out of it
+    var keys = (o.generals || []).map(function (id, i) { return 'cg' + i; }).filter(function (k, i) { return !!slots[i]; });
+    keys.forEach(function (k) { s.moveTo(k, 16, 21, { run: true, wait: false }); });
+    await s.wait(0.7);
+    await s.fadeOut(0.5);
+    keys.concat(o.beside ? ['cb'] : []).forEach(function (k) { s.hide(k); s.despawn(k); });
     s.cameraReset();
   };
 })();

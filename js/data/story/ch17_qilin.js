@@ -172,21 +172,44 @@
   ]);
 
   // ---------------- the gauntlet ----------------
+  // one Liangshan hero after another steps out of the trees onto the road, a little way ahead of Lu Junyi
+  function stepOut(s, key, who) {
+    var st = WM.state, m = WM.data.maps[st.map], rows = typeof m.rows === 'function' ? m.rows(WM.S) : m.rows;
+    var free = function (x, y) { var c = (rows[y] || '')[x]; return c != null && !WM.tiles.solid(c); };
+    var spot = [[2, 0, 'left'], [0, -2, 'down'], [-2, 0, 'right'], [0, 2, 'up'], [1, -1, 'down'], [1, 1, 'up']].filter(function (d) { return free(st.x + d[0], st.y + d[1]); })[0] || [1, 0, 'left'];
+    s.spawn(key, who, st.x + spot[0], st.y + spot[1], spot[2]);
+  }
   WM.defEvents('lsroad', [
     { id: 'ch17_g1', x: 9, y: 10, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_fortune'); }, run: async function (s) {
       await s.narrate('In the forest, a gong sounded, and the carts were surrounded. A black giant with two axes jumped into the road.');
+      stepOut(s, 'lk', 'likui');
+      await s.say('likui:smile', 'Squire Lu! Do you know me? I\'m the Black Whirlwind of Liangshan, and the fortune-teller sent me to fetch you!');
+      await s.say('lujunyi:angry', 'I came all this way to catch you bandits. Kneel, and I\'ll take you to the magistrate myself!');
       await s.duel('lu_likui', { hero: 'lujunyi', canLose: true });
+      await s.narrate('Li Kui fought a few bouts, then turned and ran into the trees, laughing. Lu Junyi went after him.');
+      s.despawn('lk', { leave: true });
       s.flag('ch17_g1');
     } },
     { id: 'ch17_g2', x: 19, y: 7, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g1'); }, run: async function (s) {
+      stepOut(s, 'lz', 'luzhishen');
+      await s.say('luzhishen', 'Amitabha! Squire, I am Lu Zhishen, the Flowery Monk. By Brother Song Jiang\'s orders I have come to welcome you up the mountain.');
+      await s.say('lujunyi:angry', 'A bald thief in a monk\'s robe! Stand and fight!');
       await s.duel('lu_luzhishen', { hero: 'lujunyi', canLose: true });
+      await s.narrate('The staff and the spear met a dozen times; then the monk swung his staff over his shoulder and walked off into the woods.');
+      s.despawn('lz', { leave: true });
       s.flag('ch17_g2');
     } },
     { id: 'ch17_g3', x: 28, y: 12, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g2'); }, run: async function (s) {
+      stepOut(s, 'ws', 'wusong');
+      await s.say('wusong', 'Squire Lu. I am Wu Song, the Pilgrim, who killed the tiger on Jingyang Ridge. You have come far enough on this road. The mountain is waiting for you.');
+      await s.say('lujunyi:angry', 'The tiger-killer? Then let us see if you can kill a man!');
       await s.duel('lu_wusong', { hero: 'lujunyi', canLose: true });
+      await s.narrate('Wu Song\'s two blades held the spear off, bout after bout, until he leapt back out of reach and was gone among the trees.');
+      s.despawn('ws', { leave: true });
       s.flag('ch17_g3');
     } },
     { id: 'ch17_g4', x: 33, y: 12, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g3'); }, run: async function (s) {
+      await s.say('lujunyi', '...Where are my carts? Where are my men? You bandits, come out and fight me one at a time!');
       await s.narrate('Three horsemen came at him together, in a triangle: Liu Tang, Mu Hong and Li Ying.');
       await s.battle('ch17_trio', { bg: 'forest', canLose: true, rounds: 4 });
       await s.narrate('A gong sounded on the hill, and the three wheeled away. Above the trees Lu Junyi saw a great yellow banner: "Act on Heaven\'s Behalf."');
@@ -301,6 +324,8 @@
       await s.war('ch17_daming');
       await s.narrate('Song Jiang surrounded Daming. Governor Liang wrote to his father-in-law, Cai Jing, and Cai Jing\'s clerk Xuan Zan, the Ugly Prince Consort, recommended a descendant of Guan Yu — Guan Sheng of Pudong, who carried a green-dragon blade like his ancestor\'s, with his sworn brother Hao Siwen. Guan Sheng did not march to Daming. He marched on Liangshan itself — "besiege Wei to save Zhao" — and Song Jiang had to raise the siege and hurry home.');
       await s.warp('liangshan_in', 16, 12, 'up');   // home to the mountain, with Guan Sheng behind them
+      await s.say('linchong', 'Brother, Guan Sheng is on the shore with his green-dragon blade, calling for you by name. Let me go down to him.');
+      await s.say('songjiang', 'Go — but take him alive, Brother Lin Chong. A man like that should be one of us.');
       await s.duel('linchong_guansheng', { hero: 'linchong', canLose: true });
       await s.narrate('Zhang Heng tried to raid Guan Sheng\'s camp at night and was taken; Ruan Xiaoqi went to rescue him without orders and was taken too. Then Huyan Zhuo rode into Guan Sheng\'s camp, saying he had come over, and offered to lead him by night to take Song Jiang. Guan Sheng followed the red lantern — into the hooks. Qin Ming and Sun Li took Xuan Zan; Hu Sanniang lassoed Hao Siwen.');
       s.spawn('gs', 'guansheng', 15, 7, 'up');
