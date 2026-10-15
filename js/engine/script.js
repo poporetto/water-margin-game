@@ -132,7 +132,8 @@
     if (a.finishEntrance) a.finishEntrance();
     // a party member is already at the leader's side: they go quietly, but not before the scene moves on (so they
     // are still there while a fade to black darkens over them)
-    var quiet = typeof a.sheetWho === 'string' && WM.state.party.indexOf(a.sheetWho) >= 0 && a.visible && !a.static;
+    // so are the fallen, carried off: they lie there until the scene moves on (or the screen is dark)
+    var quiet = a.visible && (a.static || typeof a.sheetWho === 'string' && WM.state.party.indexOf(a.sheetWho) >= 0);
     if (!quiet && (instant(a.sheetWho) || !a.visible || a.static)) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
     if (quiet) { a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false; a.quiet = true; pending.push(a); return; }
     a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false;

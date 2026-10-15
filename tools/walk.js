@@ -198,7 +198,7 @@ function mkApi(ctx) {
       temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key };
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; },
-    despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) { temp[key].pending = true; temp[key].leave = !!(opt && (opt.leave || opt.to)) || !!temp[key].hidden; } },   // the story sends them away (opt.leave / opt.to), or they stay
+    despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) { temp[key].pending = true; temp[key].leave = !!(opt && (opt.leave || opt.to)) || !!temp[key].hidden || !!temp[key].lying; } },   // the story sends them away (opt.leave / opt.to), or they stay   // (the fallen are carried off)
     _end() { Object.keys(temp).forEach((k) => { if (temp[k].pending) { temp[k].pending = false; if (temp[k].leave || WM.state.party.indexOf(temp[k].who) >= 0) delete temp[k]; else { temp[k].lingering = true; if (lastLine[temp[k].who]) temp[k].idle = true; } } }); },
     mark(spots, until) { hinted = true;   // sparkles on the way are a hint too
       (spots || []).forEach((sp) => { if (!D.maps[sp.map]) err('mark: unknown map ' + sp.map); else if (tile(sp.map, sp.x, sp.y) == null) err('mark: ' + sp.map + '(' + sp.x + ',' + sp.y + ') is off the map'); });
