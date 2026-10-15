@@ -6,7 +6,7 @@
   WM.data.start = { party: ['hongxin'], map: 'longhu', x: 15, y: 27, dir: 'up', items: [], gold: 0 };
   WM.npc('abbot', 'Abbot of Shangqing', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#c8a040', beard: 'long', beardColor: '#d8d8d0', hair: '#c8c8c0', body: '#6a5a9a', trim: '#e8d8a0' }, { face: true });
   WM.npc('daoistA', 'Daoist', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#6a6a6a', body: '#4a5a7a', trim: '#e8e0d0' }, { face: true });
-  WM.npc('workman', 'Workman', WM.data.npcs.villager.look, { face: true });
+  WM.npc('workman', 'Workman', WM.data.npcs.villager.look);
   WM.npc('hongguard', 'Escort', { skin: '#c8905e', hairStyle: 'helmet', helmColor: '#8a7a3a', tassel: '#c8302a', body: '#7a1a1a', trim: '#d8b36a', weapon: 'spear' });
 
   // ---------------- Shangqing Temple at the foot of the mountain ----------------
