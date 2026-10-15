@@ -385,6 +385,9 @@
   WM.defEvents('kongmanor', [
     { id: 'ch7_kong', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_tokong'); }, run: async function (s) {
       s.spawn('kongliang', 'kongliang', 12, 15, 'left');
+      await s.narrate('Wu Song, in his pilgrim\'s robe, came stumbling through the snow and found men sitting round a fire with a jar of wine and a boiled chicken. He took the jar without asking, and drank.');
+      await s.say('kongliang:angry', 'You thieving drunk of a monk! That wine is mine, and this is my father\'s land!');
+      await s.say('wusong', 'Yours? Then I paid for it already — with my fists.');
       await s.duel('wusong_kongliang', { canLose: true });
       await s.narrate('Wu Song threw Kong Liang into the stream. Then, staggering after a yellow dog that barked at him, he fell into the icy water himself, and was too drunk to get out. Kong Liang\'s men fished him out, tied him to a tree, and beat him with willow switches — until the elder Kong brother came out with a guest to see what the noise was about. The guest was Song Jiang.');
       s.despawn('kongliang', { leave: true });

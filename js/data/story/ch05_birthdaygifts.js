@@ -371,8 +371,20 @@
   // ---------------- Shijie: the battle in the reeds ----------------
   WM.defEvents('shijie', [
     { id: 'ch5_hetaowar', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch5_fled'); }, run: async function (s) {
+      // He Tao on the shore with his soldiers, the Ruans out on the water in their little boats
+      var D = WM.data;
+      s.spawn('ht', 'hetao', 11, 14, 'right');
+      var men = D.troop(s, 'hs', 'soldier', D.block(7, 10, [12, 15]), 'right');
+      s.spawn('r5w', 'ruanxiaowu', 17, 14, 'left'); s.boat('r5w'); s.spawn('r7w', 'ruanxiaoqi', 18, 11, 'left'); s.boat('r7w');
+      s.boat('player'); s.place('player', 16, 15, 'left');   // Chao Gai and the others are already out on the water, among the reeds
+      await s.say('hetao', 'Take every boat on the shore! Search every reed-bed! I want those Ruan brothers in chains by nightfall!');
+      await s.say('ruanxiaowu', '(singing, out among the reeds) "All my life I\'ve fished the marsh; I never ploughed a field nor paid a tax. I\'ll kill the crooked officials, every one, and pay my debt to the Emperor that way!"');
+      await s.say('hetao:shock', '...Who is that singing? After him — after him!');
+      s.despawn('r5w'); s.despawn('r7w');
       await s.narrate('He Tao followed them to Shijie village with five hundred soldiers and constables, and commandeered every boat on the shore. The Ruans had gone out into the marsh. He Tao\'s men rowed deep into the reeds after them, singing and shouting.');
       await s.war('ch5_shijie');
+      D.clear(s, men.concat(['ht']));
+      s.boat('player', false); s.place('player', 3, 14, 'right');   // ashore again
       await s.narrate('Every boat was burned or sunk. The soldiers who were not killed drowned in the mud. He Tao was dragged out of the water by Ruan Xiaoqi. They did not kill him: they cut off his ears and sent him back to the prefect as a message.');
       s.flag('ch5_hetaobeaten');
       await s.say('wuyong', 'Now there is no going back. Wang Lun\'s stronghold on Liangshan is the only place for us. Zhu Gui\'s tavern on the shore is the way in.');

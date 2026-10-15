@@ -216,6 +216,10 @@
     } },
     { id: 'ch13_chase', x: 30, y: 6, w: 10, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch13_found'); }, run: async function (s) {
       s.music('duel');
+      s.spawn('lk2', 'likui', 34, 8, 'left');
+      await s.say('likui:smile', 'Come on, Beard! Catch me if you can!');
+      await s.say('zhutong:angry', 'I will tear you apart with my own hands!');
+      s.despawn('lk2', { leave: true });
       await s.duel('zhutong_likui', { hero: 'zhutong', canLose: true });
       s.night(false);
       await s.narrate('Li Kui led him on, running and stopping and running, all night long, until at dawn they came to the gate of a great manor. Li Kui ran inside.');
@@ -283,12 +287,20 @@
       await s.say('songjiang', 'Chai Jin saved my life once, and Lin Chong\'s, and many more of ours. We go to Gaotang.');
       s.despawn('zt'); s.despawn('sj', { leave: true });
       s.party(['songjiang', 'likui', 'linchong', 'huarong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
+      await WM.data.warCouncil(s, {
+        beside: 'wuyong', generals: ['linchong', 'huarong', 'likui', 'qinming', 'yangxiong', 'shixiu'],
+        scout: { lines: ['Brother, Gao Lian, the prefect of Gaotang, is coming out to meet us himself — with his three hundred "divine soldiers" in yellow, and a sword of bronze. They say when he strikes it on his shield, a black wind comes up out of nowhere, full of sand and wild beasts.'] },
+        lines: [['wuyong', 'Then we will see this magic of his with our own eyes before we decide what to do about it. Lin Chong in front; Hua Rong on the flank.'], ['likui:angry', 'Beasts and sand! I\'ll chop them all!'], ['songjiang', 'Chai Jin is in that city\'s prison because of us. We do not go home without him.']]
+      });
       await s.war('ch13_gaotang1', { canLose: true });
+      s.spawn('wy2', 'wuyong', 16, 9, 'right');
       await s.narrate('That night Gao Lian came out to raid the Liangshan camp, but Yang Lin and Bai Sheng were waiting in the grass. An arrow took Gao Lian in the left shoulder, and he fled back inside the walls.');
       await s.say('wuyong', 'Gao Lian\'s magic is real. Only one man can break it — Gongsun Sheng. Dai Zong, take Li Kui, and go to Jizhou. This time you must find him.');
+      s.despawn('wy2');
       s.party(['daizong', 'likui']); s.setLeader('daizong'); s.flag('protagonist', 'daizong');
       s.flag('ch13_fetch');
       await s.narrate('On the road Dai Zong told Li Kui: anyone who travels by his magic charms must eat no meat. That night Li Kui ate a whole plate of beef in secret. The next day, once the charms were on his legs, he could not stop running. "Brother! Help! I can\'t stop!" — "Did you eat meat?" — "...A little beef!" Dai Zong let him run until he wept, and then took the charms off.');
+      await s.warp('world', WM.worldAt('gaotang')[0], WM.worldAt('gaotang')[1], 'down');   // out of the camp before Gaotang, onto the road north
       await s.say(null, '(Search for Gongsun Sheng in Jizhou. Try asking in an eating-house.)');
     } }
   ]);
@@ -370,6 +382,8 @@
   WM.defEvents('gaotang', [
     { id: 'ch13_fall', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_tanglong'); }, run: async function (s) {
       s.party(['songjiang', 'gongsunsheng', 'likui', 'linchong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
+      await s.narrate('Gongsun Sheng came down from Erxian Mountain with Dai Zong and Li Kui, and the army went back before Gaotang. Gao Lian, his shoulder bound up, came out again with his divine soldiers, beating his bronze sword on his shield.');
+      await s.say('gongsunsheng', 'Let him call his wind, brother. Today it will blow back in his own face.');
       await s.war('ch13_gaotang2');
       await s.narrate('Gao Lian mounted a black cloud and rose above the city wall. Gongsun Sheng pointed his sword and spoke a word, and Gao Lian fell out of the sky — and Lei Heng, waiting below, cut him in two.');
       await s.narrate('Song Jiang entered Gaotang and forbade his men to harm the people. But Chai Jin was not in the prison. The jailer Lin Ren came forward.');
@@ -384,6 +398,8 @@
   ]);
   WM.defEvents('gaowell', [
     { id: 'ch13_bats', x: 8, y: 6, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch13_well') && WM.state.chapter === 13; }, run: async function (s) {
+      await s.narrate('Down in the dark, the well opened into a cave. Li Kui felt his way along the wall — and the dark came alive with wings.');
+      await s.say('likui:shock', 'Aiya! Get off — get off me!');
       await s.battle('ch13_well', { bg: 'cave' });
     } },
     { id: 'ch13_found_chai', x: 10, y: 11, w: 9, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch13_well'); }, run: async function (s) {

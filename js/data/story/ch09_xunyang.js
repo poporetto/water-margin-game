@@ -182,6 +182,8 @@
       s.despawn('likui', { leave: true });
       await s.warp('jiangzhou', 27, 35, 'down');
       s.spawn('likui', 'likui', 26, 35, 'right'); s.spawn('zhangshun', 'zhangshun', 29, 35, 'left');
+      await s.say('zhangshun:angry', 'So you\'re the black ox who\'s been robbing my fishermen! Put that fish down.');
+      await s.say('likui:angry', 'I want fish for my brother\'s soup, and I\'ll have it — fish-broker or no fish-broker!');
       await s.duel('likui_zhangshun_land', { hero: 'likui', canLose: true });
       await s.narrate('On land Li Kui pinned the fish-broker under his fists. But the white-skinned man broke away, jumped onto a boat, and taunted him until Li Kui, furious, leapt in after him. In the middle of the river the man tipped the boat over.');
       await s.duel('likui_zhangshun_water', { hero: 'likui', canLose: true });

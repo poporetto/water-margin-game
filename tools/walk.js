@@ -171,7 +171,7 @@ function mkApi(ctx) {
     place(key, tx, ty) {
       const a = findActor(key); if (!a) { err('place: no actor "' + key + '" on ' + cur.map); return; }
       a.x = tx; a.y = ty;
-      if (key === 'player' || key === WM.state.leader) { if (!walkable(cur.map, tx, ty)) err('place player on solid tile ' + cur.map + '(' + tx + ',' + ty + ') "' + tile(cur.map, tx, ty) + '"'); }
+      if (key === 'player' || key === WM.state.leader) { if (!a.boat && !walkable(cur.map, tx, ty)) err('place player on solid tile ' + cur.map + '(' + tx + ',' + ty + ') "' + tile(cur.map, tx, ty) + '"'); }
     },
     face(key) { if (!findActor(key)) err('face: no actor "' + key + '"'); },
     faceEach(a, b) { if (!findActor(a)) err('faceEach: no actor "' + a + '"'); if (!findActor(b)) err('faceEach: no actor "' + b + '"'); },
@@ -182,7 +182,7 @@ function mkApi(ctx) {
     splash(key) { if (!findActor(key)) err('splash: no actor "' + key + '"'); },
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; },
     lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing
-    boat(key) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = true; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },
+    boat(key, on) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = on !== false; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },
     spawn(key, who, tx, ty) {
       gone(who, 'spawn');
       if (typeof who === 'string' && !D.chars[who] && !D.npcs[who]) err('spawn: unknown "' + who + '"');
