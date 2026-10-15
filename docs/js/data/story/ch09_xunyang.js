@@ -260,17 +260,35 @@
       s.spawn('sj', 'songjiang', 17, 28, 'down'); s.spawn('dz', 'daizong', 19, 28, 'down');
       s.spawn('ex1', 'executioner', 17, 27, 'down'); s.spawn('ex2', 'executioner', 19, 27, 'down');
       s.spawn('g1', 'soldier', 15, 29, 'right'); s.spawn('g2', 'soldier', 21, 29, 'left');
+      // the guard round the execution ground, and the crowd packed about it — snake-charmers, beggars, porters, merchants:
+      // every one of them a Liangshan man
+      var D = WM.data;
+      var guard = D.troop(s, 'eg', 'soldier', [[14, 27], [22, 27], [15, 31], [21, 31], [14, 30], [22, 30]], 'down');
+      var crowd = [].concat(
+        D.troop(s, 'cm', 'merchant', [[12, 32], [21, 33], [24, 32]], 'up'),
+        D.troop(s, 'cw', 'workman', [[13, 33], [16, 33], [23, 33], [12, 30]], 'up'),
+        D.troop(s, 'co', 'oldman', [[15, 32], [24, 33]], 'up'),
+        D.troop(s, 'cd', 'daoist', [[13, 31], [23, 31]], 'up'),
+        D.troop(s, 'cf', 'farmer', [[19, 33], [12, 33], [23, 29], [13, 29]], 'up'));
       s.music('tense');
       await s.say({ name: 'Officer' }, 'The third quarter of the noon hour! Execute the prisoners!');
       s.spawn('likui', 'likui', 24, 24, 'down');
       s.sfx('crit'); await s.shake(6, 0.5);
       await s.narrate('Before the executioners could raise their swords, a huge black man, stripped to the waist, leapt down from the roof of a teahouse with a battle-axe in each hand, roaring like thunder. He cut down the two executioners and charged into the guards.');
-      s.despawn('ex1'); s.despawn('ex2');
+      s.moveTo('likui', 18, 26, { run: true, wait: false });   // down off the teahouse roof and into the square
+      s.lie('ex1'); s.lie('ex2');   // the two executioners, cut down where they stood
+      await s.wait(0.5);
       await s.say('chaogai', 'Now! Liangshan, now!');
+      // the crowd throws off its disguise: knives from the carts, swords from the poles
+      crowd.forEach(function (k) { s.jump(k, 6); s.emote(k, '!', 0.8); });
+      s.spawn('hr9', 'huarong', 16, 32, 'up'); s.spawn('lt9', 'liutang', 20, 32, 'up'); s.spawn('ys9', 'yanshun', 14, 32, 'up'); s.spawn('rq9', 'ruanxiaoqi', 22, 32, 'up'); s.spawn('lf9', 'lufang', 17, 33, 'up');
+      guard.forEach(function (k) { s.face(k, 'down'); s.emote(k, '!', 0.8); });
+      s.sfx('slash'); await s.wait(0.6);
       s.addParty('likui'); s.level('likui', 22);
       await s.battle('ch9_exec1', { bg: 'town', music: 'battle' });
       await s.battle('ch9_exec2', { bg: 'town', music: 'boss' });
-      s.despawn('g1', { leave: true }); s.despawn('g2', { leave: true }); s.despawn('sj', { leave: true }); s.despawn('dz', { leave: true });
+      guard.concat(['g1', 'g2']).forEach(function (k) { s.lie(k); });   // the guard of the execution ground, cut down where they stood
+      s.despawn('sj', { leave: true }); s.despawn('dz', { leave: true });
       await s.narrate('Liangshan\'s men carried Song Jiang and Dai Zong on their backs, and followed the Black Whirlwind, who cut a road through the crowd towards the river. But when they reached the bank there were no boats, only the White Dragon Temple, and the great river, and the soldiers of Jiangzhou coming behind.');
       s.flag('ch9_temple');
       WM.unlock('whitedragon');
