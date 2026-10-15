@@ -437,8 +437,28 @@
       await s.say('wuyong', 'Brother Chao, our scouts say the Jizhou prefect has sent Commander Huang An with a thousand men and a fleet of boats to take Liangshan. They will be at the jetty soon.');
       var k = await s.ask('wuyong', 'Are the brothers ready?', ['To battle!', 'Wait — let me prepare first']);
       if (k !== 0) { await s.say('wuyong', 'Don\'t take too long. When you are ready, speak to me.'); return; }
+      // down to the shore: the brothers on the beach and in the reeds, Huang An's boats coming in over the marsh
+      var D = WM.data;
+      await s.fadeOut(0.6);
+      await s.warp('liangshan', 24, 41, 'down', { noFade: true });
+      s.spawn('wy5', 'wuyong', 23, 40, 'down'); s.spawn('lc5', 'linchong', 27, 41, 'down'); s.spawn('lt5', 'liutang', 21, 40, 'down');
+      [['r25', 'ruanxiaoer', 20, 43], ['r55', 'ruanxiaowu', 27, 43], ['r75', 'ruanxiaoqi', 36, 40]].forEach(function (b) { s.spawn(b[0], b[1], b[2], b[3], 'down'); s.boat(b[0]); });
+      // the boats start out on the open water and row in close to the shore, either side of the jetty
+      var fleet = [[12, 44], [14, 45], [16, 44], [33, 44], [35, 45], [37, 44]].map(function (c, i) { s.spawn('hb' + i, 'soldier', c[0], c[1], 'up'); s.boat('hb' + i); return 'hb' + i; });
+      s.spawn('ha', 'huangan', 31, 45, 'up'); s.boat('ha');
+      await s.fadeIn(0.8);
+      s.music('tense');
+      fleet.concat(['ha']).forEach(function (k) { s.move(k, 'U2', { speed: 22, wait: false }); });
+      await s.narrate('Huang An came across the marsh with a thousand men in a hundred boats, banners flying and drums beating on every deck.');
+      await s.say('huangan', 'Bandits of Liangshan! Come out of your reeds and be taken, and the prefect may spare your families!');
+      await s.say('wuyong:smile', 'Let them come in among the reeds, brothers. Once they are in the reeds, the reeds are ours.');
+      s.despawn('r25'); s.despawn('r55'); s.despawn('r75');   // away into the reeds
       await s.war('ch5_huangan');
+      await s.fadeOut(0.5); D.clear(s, fleet.concat(['ha', 'wy5', 'lc5'])); await s.fadeIn(0.5);
+      s.spawn('ha2', 'huangan', 24, 44, 'up'); s.spawn('lt6', 'liutang', 24, 45, 'up');
+      s.move('ha2', 'U2', { wait: false }); await s.move('lt6', 'U2');   // brought up the jetty, bound
       await s.narrate('Huang An was taken in the reeds, and more than half his men drowned. From then on no official in Jizhou dared to attack Liangshan.');
+      D.clear(s, ['ha2', 'lt6', 'lt5']);
       await s.narrate('Chao Gai sent men with silver to the Jizhou prison, to bribe the jailers. A few nights later Bai Sheng, the Daylight Rat, walked out of his cell and came to Liangshan.');
       s.flag('ch5_huanganbeaten');
       await s.join('baisheng');

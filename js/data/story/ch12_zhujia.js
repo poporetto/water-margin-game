@@ -204,18 +204,30 @@
   WM.defEvents('zhujia', [
     { id: 'ch12_trapauto', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_poplar') && !S2.has('ch12_trap'); }, run: async function (s) {
       s.music('tense');
+      // Song Jiang's men strung out along the narrow road behind him, between the bamboo
+      var D = WM.data;
+      var ours1 = D.troop(s, 'l1', 'outlaw', [[30, 16], [30, 17], [31, 17], [31, 18], [29, 18], [27, 18], [26, 19], [28, 19], [24, 18], [25, 19]], 'up');
       await s.say('likui', 'The bridge is up and the gate\'s shut! Not a man on the walls! They\'re scared of us!');
       await s.say('songjiang:shock', '...No. Not a soldier, not a light — this is a trap. Turn back! Turn back at once!');
       s.sfx('cannon'); await s.shake(6, 0.5);
+      // the Zhu men come up out of the bamboo behind them, following their red lantern
+      var zhu1 = D.troop(s, 'z1', 'guard', [[21, 18], [22, 18], [21, 19], [22, 19], [23, 19]], 'right');
+      s.spawn('lan', 'guard', 23, 18, 'right'); s.emote('lan', '!', 1.5);
+      ours1.forEach(function (k) { s.face(k, 'left'); });
+      s.sfx('arrow'); await s.flash('#ffffff', 0.15);
       await s.narrate('A signal bomb burst over the manor. Arrows poured down from the wall, and behind them the roads they had come by were full of torches and shouting.');
       s.spawn('sx', 'shixiu', 30, 18, 'up');
       await s.say('shixiu', 'Brother! I found you! Don\'t take the wide roads — wherever you see a white poplar, turn there! That\'s the living road!');
       await s.say('huarong', 'And look — wherever that red lantern on the pole goes, their men follow it.');
       s.sfx('arrow'); await s.flash('#ffffff', 0.2);
+      s.lie('lan');   // the man with the lantern pole
+      zhu1.forEach(function (k) { s.move(k, 'L4', { run: true, wait: false }); });
       await s.narrate('Hua Rong drew his bow and shot. The red lantern dropped into the darkness, and the Zhu men in the bamboo, without their signal, ran about in confusion.');
+      D.clear(s, zhu1);
       s.despawn('sx');
       s.addParty('shixiu');
       s.flag('ch12_trap');
+      await s.fadeOut(0.5); D.clear(s, ours1.concat(['lan'])); await s.fadeIn(0.5);   // the army falls in behind its leader
       await s.say(null, '(Lead the army back to the camp. Turn only where the white poplars stand.)');
     } },
     { id: 'ch12_camp1', x: 0, y: 42, w: 60, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch12_trap'); }, run: async function (s) {
@@ -408,10 +420,16 @@
       await s.say('squirezhu:smile', 'Magnificent! Into the cage with him! Commander, you are our saviour!');
       s.despawn('sz', { leave: true });
       s.flag('ch12_staged');
+      var D3 = WM.data;
+      var hall = D3.troop(s, 'zg', 'guard', [[6, 7], [8, 7], [12, 7], [14, 7], [6, 5], [14, 4]], 'down');   // the Zhu household guard in the hall
       await s.narrate('So Sun Li won the Zhu family\'s trust. Inside the manor, Zou Yuan and Zou Run learned where the prison was, and Yue He where the keys were kept. On the fifth day, at the signal, Song Jiang attacked from four sides at once.');
       s.music('battle');
+      s.spawn('gd3', 'gudasao', 9, 9, 'up'); s.spawn('sx3', 'sunxin', 11, 9, 'up'); s.spawn('yh3', 'yuehe', 8, 8, 'up'); s.spawn('zy3', 'zouyuan', 5, 9, 'up'); s.spawn('zr3', 'zourun', 15, 9, 'up');
+      ['gd3', 'sx3', 'yh3', 'zy3', 'zr3'].forEach(function (k) { s.jump(k, 5); });
+      hall.forEach(function (k) { s.emote(k, '!', 0.8); });
       await s.say('gudasao:angry', 'Now!');
       await s.battle('ch12_inside', { bg: 'town' });
+      hall.forEach(function (k) { s.lie(k); });   // the guard of the hall, where they fell
       await s.narrate('Gu Dasao ran into the inner rooms with her two sabres, and none of the women of the Zhu household came out. Squire Zhu tried to throw himself into a well, and Shi Xiu, out of his cage, cut him down at the well\'s edge.');
       s.unflag('away:yanglin'); s.unflag('away:huangxin'); s.unflag('away:wangying'); s.unflag('away:qinming'); s.unflag('away:dengfei');
       await s.join('shiqian');
