@@ -194,9 +194,20 @@
       s.move('jinlian', 'U1', { wait: false }); await s.move('ximen', 'R12');   // off the edge of the screen
       s.hide('jinlian'); s.despawn('jinlian', { leave: true }); s.hide('ximen'); s.despawn('ximen', { leave: true });
       s.spawn('dalang', 'wudalang', 9, 24, 'right');
+      // Yun Ge the pear-seller, whom Granny Wang had boxed on the ears, comes running
+      s.spawn('yg', 'yunge', 4, 24, 'right');
+      await s.move('yg', 'R4', { run: true });
+      await s.say('yunge', 'Uncle Wu! Your wife is in Granny Wang\'s back room with Ximen Qing — right now! Go in and catch them. I\'ll keep the old woman out of your way!');
+      await s.say('wudalang', '...Ximen Qing? In there? With — ?');
+      s.move('yg', 'R4', { run: true, wait: false });
       await s.move('dalang', 'R4');
-      await s.narrate('Yun Ge, a boy who sold pears and whom Granny Wang had boxed on the ears, told Wu Dalang the truth. Wu Dalang went to the teashop to catch them. Ximen Qing burst out of the door and kicked him in the chest. He fell, and was carried home, and lay sick for days, and no one came to him.');
+      await s.move('wangpo', 'R1');   // the boy butts her aside
+      s.face('dalang', 'up');
+      await s.say('wudalang', 'Open the door! Open it!');
+      s.spawn('xm2', 'ximenqing', 14, 23, 'down');
       s.sfx('hit'); await s.shake(4, 0.3); s.lie('dalang');
+      await s.narrate('Ximen Qing burst out of the door and kicked Wu Dalang full in the chest. He fell, and was carried home, and lay sick for days, and no one came to him.');
+      s.despawn('xm2', { leave: true }); s.despawn('yg', { leave: true });
       await s.fadeOut(1);
       s.despawn('dalang', { leave: true }); s.despawn('wangpo'); s.show('player');
       await s.narrate('"When my brother comes home," Wu Dalang said, "he will know what to do." The lovers heard. Ximen Qing brought arsenic from his shop. Pan Jinlian put it in Wu Dalang\'s medicine, and held the quilt over him until he was still.');

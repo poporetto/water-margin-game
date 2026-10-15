@@ -123,8 +123,18 @@
     await s.say('gongsunsheng', 'His is the magic of the left-hand way, brother — borrowed, and false. Let me meet it.');
     await s.battle('ch22_qiao', { bg: 'field' });
     await s.narrate('Qiao Daoqing\'s divine soldiers fell down as paper. His clay dragons were smashed by a great roc that rose from Gongsun Sheng\'s whisk. He fled to Baigu Ridge, and there, surrounded, he gave himself up. Li Kui, Lu Zhishen, Wu Song and Liu Tang came back alive.');
-    await s.narrate('At the next city, a girl of sixteen led the enemy: Qiongying, whose stones struck down Wang Ying, Sun Xin, Lin Chong and Li Kui one after another. She was no daughter of the rebel lord Wu Li. Tian Hu\'s men had killed her father, Qiu Shen, and taken her mother, who threw herself from a cliff rather than submit. Her steward Ye Qing came over to Song Jiang secretly — and told how a green-robed young general throwing stones had appeared to Qiongying in a dream, and she had sworn to marry only a man who could throw stones as she did.');
+    await s.narrate('At the next city, a girl of sixteen led the enemy: Qiongying, whose stones struck down Wang Ying, Sun Xin, Lin Chong and Li Kui one after another.');
+    // that night a man comes secretly to the camp: her steward
+    s.night(true);
+    s.spawn('yeq', 'servant', 16, 21, 'up');
+    await s.moveTo('yeq', 17, 12, { yFirst: true });
+    s.face('yeq', 'up');
+    await s.say({ name: 'Ye Qing' }, 'General, I am Ye Qing, steward of the house of Qiu. The girl who throws the stones is no daughter of the rebel Wu Li. Tian Hu\'s men killed her father, Qiu Shen, and took her mother — who threw herself from a cliff rather than submit. She has waited years to be avenged.');
+    await s.say({ name: 'Ye Qing' }, 'And she has sworn an oath. A young general in green came to her in a dream, throwing stones as she does — and she will marry no man but one who can throw as she throws.');
     await s.say('zhangqing:shock', '...I have dreamed of her.');
+    await s.say('wuyong:smile', 'Then Heaven has drawn up our plan for us. Steward, take An Daoquan into the city as a doctor for your lady\'s household — and Brother Zhang Qing with him, as his "brother."');
+    s.despawn('yeq', { to: [16, 22] });
+    s.night(false);
     await s.narrate('An Daoquan went into the city disguised as a doctor, with Zhang Qing as his "brother." Before the gates, Qiongying rode out.');
     s.level('zhangqing', 40);
     await s.duel('zhangqing_qiongying', { hero: 'zhangqing', canLose: true });

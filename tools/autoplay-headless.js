@@ -42,7 +42,12 @@ async function main() {
   for (let i = 0; i < 100 && !(await ev('!!(window.WM && WM.gfx && WM.gfx.lctx && WM.field)').catch(() => false)); i++) await sleep(200);
   await ev(`(async () => { const src = await (await fetch('/tools/autoplay.js?' + Date.now(), { cache: 'no-store' })).text(); (0, eval)(src);
     window.__errs = []; addEventListener('error', (e) => __errs.push(e.message)); addEventListener('unhandledrejection', (e) => __errs.push(String(e.reason && e.reason.stack || e.reason).slice(0, 300)));
-    if (WM.debug) { WM.debug.showLog = []; WM.debug.holdOnShow = ${process.env.SHOTDIR ? 'true' : 'false'}; }
+    if (WM.debug) { WM.debug.showLog = []; WM.debug.holdOnShow = ${process.env.SHOTDIR && !process.env.SHOTSAY ? 'true' : 'false'}; }
+    // SHOTSAY=regex (with SHOTDIR): hold and photograph the scene whenever a line of dialogue or narration matches
+    if (${JSON.stringify(process.env.SHOTSAY || '')}) {
+      var RX = new RegExp(${JSON.stringify(process.env.SHOTSAY || 'x^')}), wrap = function (k) { var f0 = WM.ui[k]; WM.ui[k] = function (sp, txt) { var p = f0.apply(this, arguments), t = String(k === 'narrate' ? sp : txt); if (RX.test(t)) { (WM.debug.showLog = WM.debug.showLog || []).push({ id: 'line', map: WM.field.map && WM.field.map.id, at: [0, 0], text: t.slice(0, 24).replace(/[^A-Za-z]+/g, '_') }); WM.debug.hold = true; } return p; }; };
+      wrap('message'); wrap('narrate');
+    }
     window.__done = false; AutoPlay.run({ from: ${FROM}, to: ${TO}, skipOnFail: true, encounters: ${ENC} }).then(() => { __done = true; }).catch((e) => { window.__err = String(e && e.stack || e); __done = true; });
     return 'started'; })()`);
   let shown = 0, beat = ''; const t0 = Date.now();
@@ -55,8 +60,9 @@ async function main() {
       if (k > n) {
         n = k; await sleep(700);   // let them step out (the autoplayer waits: see WM.debug.hold)
         const info = await ev('JSON.stringify(WM.debug.showLog[WM.debug.showLog.length - 1])').catch(() => '{}');
+        if (process.env.SHOTSAY && JSON.parse(info || '{}').id !== 'line') continue;   // only the chosen lines
         const shot = await send('Page.captureScreenshot', { format: 'png' }).catch(() => null);
-        if (shot && shot.result) { const j = JSON.parse(info || '{}'); fs.writeFileSync(path.join(process.env.SHOTDIR, String(n).padStart(2, '0') + '-' + j.map + '-' + j.id + '.png'), Buffer.from(shot.result.data, 'base64')); }
+        if (shot && shot.result) { const j = JSON.parse(info || '{}'); fs.writeFileSync(path.join(process.env.SHOTDIR, String(n).padStart(2, '0') + '-' + j.map + '-' + (j.text || j.id) + '.png'), Buffer.from(shot.result.data, 'base64')); }
         await ev('WM.debug.hold = false').catch(() => null);
       }
     }

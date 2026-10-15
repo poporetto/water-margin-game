@@ -164,7 +164,7 @@
     { id: 'ch3_whitetiger', x: 11, y: 8, w: 3, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_summoned'); }, run: async function (s) {
       s.spawn('o1', 'gaoofficer2', 15, 8, 'left');
       await s.say('gaoofficer2', 'Wait here a moment, Instructor. I\'ll tell the Marshal you\'ve come.');
-      s.despawn('o1');
+      s.despawn('o1', { leave: true });   // and he does not come back
       await s.move('player', 'R4');
       await s.wait(0.6);
       await s.narrate('Lin Chong waited, sword in hand. A long time passed and no one came. He looked about him, and above the doorway of the hall he saw a blue tablet with four green characters: White Tiger Hall.');
@@ -175,10 +175,17 @@
       await s.say('gaoqiu:angry', 'Lin Chong! I did not summon you. How dare you walk into the White Tiger Hall with a naked sword in your hand? You have come to murder me!');
       await s.say('linchong:shock', 'Your Excellency, your own officers brought me here to compare swords!');
       await s.say('gaoqiu:angry', 'Officers? What officers? Guards! Seize him!');
+      // guards from both sides of the hall
+      var pt = WM.state, gx = pt.x, gy = pt.y;
+      var D = WM.data, seize = D.troop(s, 'wt', 'guard', [[15, 7], [15, 9], [24, 7], [24, 9]], 'down');
+      seize.forEach(function (k, i) { s.moveTo(k, gx + (i < 2 ? -1 : 1), gy + (i % 2), { run: true, wait: false }); });
+      await s.wait(0.5);
       s.sfx('hit'); await s.shake(3, 0.4);
+      s.lie('player');
       await s.narrate('From both sides of the hall more than twenty guards rushed in and threw Lin Chong to the floor. The sword was taken from him. And the two "officers" who had brought him were nowhere to be found.');
       s.take('precioussword', 1);
       s.despawn('gaoqiu'); s.despawn('g1'); s.despawn('g2');
+      await s.fadeOut(0.6); D.clear(s, seize); s.lie('player', false);
       await s.fadeOut(1);
       await s.narrate('Gao Qiu sent him to the Kaifeng prefecture to be tried for the attempted murder of a minister — a crime punishable by death. But a clerk named Sun Ding, an upright man, persuaded the prefect that the charge did not hold: who goes to murder a Marshal by first buying a sword in the street?');
       await s.narrate('Even the prefect could not ignore it. Lin Chong was sentenced to twenty strokes, his face was tattooed with the mark of a criminal, and he was exiled to the prison camp at Cangzhou. A seven-and-a-half-catty cangue was locked around his neck.');
@@ -193,13 +200,39 @@
       await s.say('linchong:sad', 'Thank you, father. But if you won\'t take the letter, I swear I won\'t live to see Cangzhou. Let her be free.');
       await s.narrate('Lin Chong\'s wife wept until she fainted. Instructor Zhang carried her home. And the two escorts, Dong Chao and Xue Ba, led Lin Chong out of the city.');
       s.despawn('zhang', { leave: true }); s.despawn('wife', { leave: true });
-      await s.narrate('That night, at a tavern, a man in a cloth cap paid the two escorts ten taels of gold. "This is from Lu Qian, by order of the Marshal. Lin Chong is not to reach Cangzhou. Somewhere quiet on the road — finish him, and bring back the brand cut from his face as proof."');
       WM.state.chars.linchong.equip.acc = 'cangue';
       WM.state.chars.linchong.equip.body = null;
       S.restore('linchong');
-      await s.narrate('On the road the escorts drove him without pity. At an inn one night, Xue Ba poured boiling water into a basin, "to bathe your feet, brother," and pushed Lin Chong\'s feet into it. They blistered and swelled. In the morning they gave him new straw sandals, and by noon his feet were running with blood.');
-      await s.narrate('On the fourth day they came to the Wild Boar Forest, the most dangerous stretch of the road between the capital and Cangzhou: a tangle of trees full of mist, where countless men had been murdered.');
+      // that night, in a tavern on the road out of the city: Lu Qian himself, in a plain cloth cap
+      await s.fadeOut(0.8);
       s.despawn('dong'); s.despawn('xue');
+      await s.warp('roadinn_in', 6, 6, 'up', { noFade: true });
+      s.night(true); s.hide('player'); s.place('player', 9, 6, 'up');
+      s.spawn('dc', 'dongchao', 5, 4, 'right'); s.spawn('xb', 'xueba', 7, 4, 'left'); s.spawn('lq', 'luqian', 6, 7, 'up');
+      await s.fadeIn(0.8);
+      await s.move('lq', 'U2');
+      await s.say('luqian', 'Escort Dong, Escort Xue — a cup with you. ...You don\'t know me. I am Lu Qian, of the Marshal\'s household.');
+      await s.say('luqian', 'Ten taels of gold: five for each of you. The Marshal does not wish Lin Chong to reach Cangzhou. Somewhere quiet on the road, finish him — and bring me back the brand cut from his face, as proof.');
+      await s.say('dongchao', '...That is a heavy thing, sir. The prefecture\'s papers say to deliver him alive.');
+      await s.say('xueba', 'Brother Dong, the Marshal himself wants it. Who are we to say no? We\'ll take the gold, sir.');
+      s.despawn('lq', { to: [6, 7] });
+      await s.wait(0.6);
+      // three days on the road, and another inn: the escorts drive him without pity
+      await s.fadeOut(0.8);
+      s.hide('dc'); s.despawn('dc'); s.hide('xb'); s.despawn('xb');
+      s.show('player'); s.place('player', 4, 5, 'right');
+      s.spawn('dc2', 'dongchao', 7, 3, 'down'); s.spawn('xb2', 'xueba', 8, 5, 'left');
+      await s.fadeIn(0.8);
+      await s.moveTo('xb2', 5, 5);
+      await s.say('xueba', 'Sit, brother, sit. You\'ve walked all day in that cangue. I\'ve brought hot water — let me bathe your feet for you.');
+      await s.say('linchong', 'You are too kind. A prisoner should not let his escort —');
+      s.sfx('water'); await s.shake(3, 0.3);
+      await s.say('linchong:shock', 'Aaagh! It\'s boiling!');
+      await s.say('xueba:angry', 'A prisoner ought to be grateful when his escort washes his feet! And he complains about the water!');
+      await s.narrate('Lin Chong\'s feet blistered and swelled. In the morning they gave him new straw sandals, and by noon his feet were running with blood.');
+      await s.narrate('On the fourth day they came to the Wild Boar Forest, the most dangerous stretch of the road between the capital and Cangzhou: a tangle of trees full of mist, where countless men had been murdered.');
+      s.despawn('dc2'); s.despawn('xb2');
+      s.night(false);
       WM.unlock('boarforest');
       await s.warp('boarforest', 2, 13, 'right');
     } }

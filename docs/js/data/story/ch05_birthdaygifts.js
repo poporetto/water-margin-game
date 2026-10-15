@@ -279,7 +279,25 @@
       await s.say('yangzhi:sad', '...No. My father and mother gave me this body. I am not finished yet. I\'ll wander the rivers and lakes, and see what fate has left for me.');
       await s.narrate('The soldiers, when they woke, agreed to tell the governor that Yang Zhi had plotted with the robbers. Yang Zhi had already gone, south, with nothing but his sabre.');
       WM.unlock('erlong');
-      await s.narrate('He came to a village inn and ate without paying, fought the innkeeper — and found that the innkeeper was Cao Zheng, a butcher who had learned his art from none other than Lin Chong. Cao Zheng told him of a temple stronghold on Mount Erlong, nearby in Qingzhou, held by a renegade monk called Deng Long. And on the road there, Yang Zhi met a monk with a staff of iron, who had been turned away from Mount Erlong and had kicked Deng Long in the belly for it. It was Lu Zhishen.');
+      // a village inn on the road south: no money, and a long way from anywhere
+      await s.fadeOut(0.8);
+      await s.warp('roadinn_in', 4, 5, 'up', { noFade: true });
+      s.spawn('cz', 'caozheng', 3, 6, 'right');
+      await s.fadeIn(0.8);
+      await s.narrate('He came to a village inn, hungry, with nothing left but his sabre, and ate and drank his fill — and then got up to go.');
+      await s.move('player', 'R2');
+      await s.say('caozheng', 'Sir! You haven\'t paid for your wine and meat.');
+      await s.say('yangzhi', 'Let me owe it. I\'ll pay you when I come back this way.');
+      await s.say('caozheng:angry', 'Owe it? Do I look like a man who gives credit to strangers with sabres?');
+      await s.moveTo('cz', 5, 5, { run: true });
+      for (var r = 0; r < 3; r++) { s.sfx('block'); s.jump('cz', 4); s.jump('player', 4); await s.shake(2, 0.25); }
+      await s.narrate('They fought thirty bouts across the inn, kicking over the tables, and neither could get the better of the other.');
+      await s.say('caozheng:shock', 'Stop! Stop — who are you? Nobody out of the countryside fights like that.');
+      await s.say('yangzhi', 'Yang Zhi of the Eastern Capital. They call me the Blue-Faced Beast.');
+      await s.say('caozheng:shock', 'Yang Zhi? Then I\'ve been fighting the finest soldier in the empire over a bowl of wine! Forgive me. I\'m Cao Zheng — a butcher, and I learned what I know from Lin Chong, Instructor of the Imperial Guard.');
+      await s.say('caozheng', 'If you need a place, there\'s a temple on Mount Erlong, near here in Qingzhou, that a renegade monk called Deng Long has turned into a robbers\' den. Take it from him, and you\'ll have a mountain of your own.');
+      await s.narrate('And on the road there, Yang Zhi met a monk with a staff of iron, who had been turned away from Mount Erlong and had kicked Deng Long in the belly for it. It was Lu Zhishen.');
+      s.despawn('cz');
       s.addParty('luzhishen'); s.addParty('caozheng');
       s.level('luzhishen', Math.max(15, WM.state.chars.luzhishen.lv)); s.level('caozheng', 13);
       s.flag('ch5_toerlong');

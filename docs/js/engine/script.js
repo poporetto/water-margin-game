@@ -133,7 +133,7 @@
     // a party member is already at the leader's side: they go quietly, but not before the scene moves on (so they
     // are still there while a fade to black darkens over them)
     // so are the fallen, carried off: they lie there until the scene moves on (or the screen is dark)
-    var quiet = a.visible && (a.static || typeof a.sheetWho === 'string' && WM.state.party.indexOf(a.sheetWho) >= 0);
+    var quiet = a.visible && !(opt && opt.to) && (a.static || typeof a.sheetWho === 'string' && WM.state.party.indexOf(a.sheetWho) >= 0);   // (sent somewhere in particular, they walk there)
     if (!quiet && (instant(a.sheetWho) || !a.visible || a.static)) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
     if (quiet) { a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false; a.quiet = true; pending.push(a); return; }
     a.ev.id = '__leaving' + (++leaving); a.leavingKey = key; a.solid = false; a.lingering = false;
@@ -147,7 +147,7 @@
     var t = { x: Math.floor(a.x / TS), y: Math.floor((a.y - 1) / TS) };
     var gone = function () { f.actors = f.actors.filter(function (o) { return o !== a; }); };
     // someone who has just joined the party does not walk away: they fall in with the leader and are gone into the party
-    if (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0 && f.player) {
+    if (a.sheetWho && WM.state.party.indexOf(a.sheetWho) >= 0 && f.player && !a.leaveTo) {
       var p = f.player.tile(), steps = [[t.x, t.y]], cx = t.x, cy = t.y;
       while (cx !== p.x) { cx += cx < p.x ? 1 : -1; steps.push([cx, cy]); }
       while (cy !== p.y) { cy += cy < p.y ? 1 : -1; steps.push([cx, cy]); }

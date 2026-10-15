@@ -267,10 +267,27 @@
       s.despawn('zhuwu'); s.despawn('yangchun'); s.despawn('chendaF');
       await s.narrate('After that day the three chiefs of Mount Shaohua and Shi Jin became fast friends. Zhu Wu sent thirty taels of gold, and later a string of great pearls, by night to the manor in thanks. Shi Jin had three suits of red silk brocade made, and roasted fat sheep, and sent them up the mountain by his servant Wang Si.');
       await s.narrate('So time passed, and the Mid-Autumn Festival came round. Shi Jin wanted to invite his three friends to enjoy the full moon at his manor, and sent Wang Si up the mountain with a letter of invitation.');
-      await s.narrate('At the stockade the chiefs gave Wang Si four or five bowls of wine and silver for his trouble, and Zhu Wu wrote a reply. On the way down, Wang Si — never a man to refuse a cup — fell asleep in the woods. Li Ji the hunter, setting his traps nearby, found him lying there, and the silver and the letter beside him.');
-      await s.narrate('Li Ji could read a little. He read the letter, and saw at once that a reward of three thousand strings of cash was offered for the bandits of Shaohua. He went straight to the county town.');
-      s.flag('ch1_midautumn');
+      await s.narrate('At the stockade the chiefs gave Wang Si four or five bowls of wine and silver for his trouble, and Zhu Wu wrote a reply.');
+      // the road down from the mountain, by moonlight: Wang Si, the letter, and the hunter
       s.night(true);
+      s.hide('player'); s.camera(32, 3, 0.01);
+      s.spawn('ws', 'wangsi', 31, 0, 'down');
+      await s.fadeIn(0.8);
+      await s.move('ws', 'D2', { speed: 28 });
+      await s.say('wangsi', '(hic) Four bowls... five bowls... and silver for Wang Si, and a fine reply for the young master... (hic) Just a little rest. Just under this tree. Just for a...');
+      await s.move('ws', 'R2', { speed: 28 });
+      s.lie('ws'); s.emote('ws', 'zzz', 2);
+      await s.wait(0.8);
+      s.spawn('lj', 'liji', 37, 1, 'left');
+      await s.move('lj', 'L2');
+      await s.say('liji', 'Who\'s snoring in my trap-ground? ...Wang Si, from the Shi manor, drunk as a lord. And what\'s this beside him — silver? And a letter?');
+      s.emote('lj', '!', 1);
+      await s.say('liji:shock', '"...From Zhu Wu, Chen Da and Yang Chun, of Mount Shaohua, to our brother Shi Jin..." The Shaohua bandits! There are three thousand strings on their heads — and the young master of Shi Village drinks with them!');
+      s.despawn('lj', { leave: true });
+      await s.narrate('Li Ji pocketed the silver and the letter and went straight to the county town.');
+      await s.fadeOut(0.8);
+      s.hide('ws'); s.despawn('ws'); s.cameraReset(); s.show('player');
+      s.flag('ch1_midautumn');
       await s.warp('shivillage_in', 9, 7, 'up', { noFade: true });
       await s.fadeIn(1);
     } }

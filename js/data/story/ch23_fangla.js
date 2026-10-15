@@ -164,7 +164,15 @@
       await s.say('wuyong', 'Bao Daoyi the Daoist and Zheng Biao, the Demon Lord, hold Muzhou. Their sorcery is all Fang La has left. We must strike before they can work it.');
       await s.war('ch23_muzhou');
       await fall(s, ['wangying', 'husanniang', 'xiangchong', 'ligun'], 'Before Muzhou, the Demon Lord Zheng Biao speared Wang Ying from his horse. Hu Sanniang, his wife, rode after Zheng Biao to avenge him, and a gilded brick from his sorcery struck her down. Xiang Chong and Li Gun, chasing the enemy across a stream, fell in: Xiang Chong was hacked to pieces, Li Gun shot full of arrows.');
-      await s.narrate('Bao Daoyi\'s flying sword struck Wu Song\'s left arm and all but cut it off. Wu Song cut through what was left with his own monk\'s knife, and lived. And Lu Zhishen, chasing the Southern general Xiahou Cheng into the mountains, did not come back.');
+      // Wu Song is brought into the camp, his sleeve empty
+      s.spawn('ws23', 'wusong', 16, 21, 'up'); s.spawn('ws1', 'outlaw', 15, 21, 'up'); s.spawn('ws2', 'outlaw', 17, 21, 'up');
+      s.moveTo('ws1', 15, 12, { yFirst: true, wait: false }); s.moveTo('ws2', 17, 12, { yFirst: true, wait: false }); await s.moveTo('ws23', 16, 11, { yFirst: true });
+      await s.narrate('Bao Daoyi\'s flying sword had struck Wu Song\'s left arm and all but cut it off. Wu Song cut through what was left with his own monk\'s knife, and lived.');
+      await s.say('songjiang:sad', 'Brother Wu Song... your arm.');
+      await s.say('wusong', 'It is only an arm, brother. Better I took it than his sorcery. ...But Brother Lu Zhishen went after the Southern general Xiahou Cheng into the hills, and he has not come back.');
+      await s.say('wuyong:sad', 'We have sent men into every valley. No one has seen him.');
+      s.despawn('ws23', { to: [16, 22] }); s.despawn('ws1', { to: [16, 22] }); s.despawn('ws2', { to: [16, 22] });
+      await s.wait(0.6);
       await fall(s, ['yanshun', 'malin'], 'On Wulong Ridge, Shi Bao\'s meteor hammer killed Yan Shun, and Shi Bao cut Ma Lin in two after Bai Qin\'s spear had brought him down.');
       await fall(s, ['lufang', 'guosheng'], 'Lü Fang grappled with Bai Qin on the edge of the ridge, and the two of them fell together down the cliff. A boulder from the heights killed Guo Sheng, horse and man. The two young halberdiers who had once fought each other on a mountain road had never been apart since.');
       s.flag('ch23_yuling');

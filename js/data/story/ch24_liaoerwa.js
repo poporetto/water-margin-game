@@ -17,7 +17,25 @@
     await s.warp('kaifeng', 29, 40, 'up', { noFade: true });
     await s.fadeIn(1);
     await s.narrate('The emperor received the twenty-seven in the palace and gave them titles and gold. Then they were sent away to posts across the empire, one here, one there, so that they would never stand together again.');
-    await s.narrate('Dai Zong gave back his seal and went to the temple of Mount Tai as a Daoist; one night, after his prayers, he laughed aloud and died. Ruan Xiaoqi was stripped of his rank because he had once put on Fang La\'s yellow robe for a joke, and went home to fish at Shijie Village with his old mother. Chai Jin, afraid of the same, pleaded a palsy and went home. Li Ying went home with Du Xing and grew rich. Guan Sheng fell from his horse, drunk, and died of it. Huyan Zhuo would die years later fighting the Jin in the north. Zhu Tong rose to command a province.');
+    // at the south gate of the capital, the brothers take their leave of Song Jiang one by one
+    var bye = [['dz', 'daizong', 26, 41, 'right'], ['rq', 'ruanxiaoqi', 32, 41, 'left'], ['cj', 'chaijin', 33, 41, 'left'], ['ly', 'liying', 27, 42, 'up'], ['dx', 'duxing', 26, 42, 'up'], ['zt', 'zhutong', 32, 42, 'up'], ['lj', 'lujunyi', 27, 41, 'right']];
+    bye.forEach(function (b) { s.spawn(b[0], b[1], b[2], b[3], b[4]); });
+    s.face('player', 'down'); s.music('sad');
+    await s.say('daizong', 'Brother, I have given back my seal. I will go to the temple on Mount Tai and burn incense for the rest of my days. These legs have run far enough.');
+    s.despawn('dz', { to: [29, 44] });
+    await s.say('ruanxiaoqi:smile', 'They\'ve taken my rank away for putting on Fang La\'s yellow robe as a joke! Good riddance. I\'m going home to Shijie to fish, and look after my old mother.');
+    s.despawn('rq', { to: [29, 44] });
+    await s.say('chaijin', 'And I shall plead a palsy, and go home before they find something of mine to quarrel with.');
+    s.despawn('cj', { to: [29, 44] });
+    await s.say('liying', 'Du Xing and I are going back to the Li manor. Come and drink with us when you can, brother.');
+    s.despawn('ly', { to: [29, 44] }); s.despawn('dx', { to: [29, 44] });
+    await s.say('zhutong', 'They have given me a province to command. I\'ll try to govern it the way you would have.');
+    s.despawn('zt', { to: [29, 44] });
+    await s.say('lujunyi', 'Luzhou, brother — not far from your Chuzhou. We will write to each other.');
+    await s.say('songjiang:sad', 'Go well, brothers, all of you. We came together like flowers gathering on one branch... and now the wind takes us one by one.');
+    s.despawn('lj', { to: [29, 44] });
+    await s.wait(1.2);
+    await s.narrate('One night at Mount Tai, after his prayers, Dai Zong laughed aloud and died. Guan Sheng fell from his horse, drunk, and died of it. Huyan Zhuo would die years later fighting the Jin in the north.');
     await s.narrate('Song Jiang was made Commissioner of Chuzhou, and Lu Junyi of Luzhou. And in the capital, Gao Qiu, Yang Jian, Cai Jing and Tong Guan, who had never forgiven Liangshan, put their heads together.');
     await fall(s, ['lujunyi'], 'Lu Junyi was summoned to the capital on a false charge of treason, and cleared, and given an imperial banquet before he went home — and in the food was mercury. On the boat back to Luzhou his body grew heavy and his mind clouded. He stood in the bow, drunk, and fell into the Huai River, and drowned.');
     s.flag('ch24_chuzhou');
