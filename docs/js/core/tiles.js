@@ -768,7 +768,8 @@
   function bannerTall(c, x, y, tx, ty, th, m) {
     // on Liangshan's own ground, its apricot-yellow banner bordered in red: "Act on Heaven's Behalf" (替天行道);
     // anywhere else, a plain red war banner of whoever holds the place
-    var ls = !!(m && m.id && (/^liangshan/.test(m.id) || m.id === 'world'));
+    var LSW = WM.world && WM.world.LOC && WM.world.LOC.liangshan;   // on the world map only Liangshan's own island flies it
+    var ls = !!(m && m.id && (/^liangshan/.test(m.id) || (m.id === 'world' && (!LSW || Math.abs(tx - LSW.x) + Math.abs(ty - LSW.y) < 4))));
     px(c, x + 7, y - 24, 2, 38, '#4a2a16'); px(c, x + 6, y - 25, 4, 2, '#c8a050');
     var wave = Math.sin((WM.time || 0) * 3 + tx) * 1.5;
     px(c, x + 9, y - 22, 9, 22, ls ? '#b02a1e' : '#3a2010');

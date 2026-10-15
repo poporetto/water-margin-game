@@ -414,6 +414,7 @@
     var p = F.player;
     var back = { up: [0, 6], down: [0, -6], left: [6, 0], right: [-6, 0] }[p.dir] || [0, 0];
     p.x += back[0]; p.y += back[1];
+    var bt = p.tile(); p.x = bt.x * TS + 8; p.y = bt.y * TS + 15; p.path = [];   // standing square in front of the closed way, not half in it
     F.lastTile = p.tile();
     var msg = typeof e.blocked === 'function' ? e.blocked(S) : e.blocked;
     if (msg) WM.script.run(function (s) { return s.say(msg.who || null, msg.text || msg); });

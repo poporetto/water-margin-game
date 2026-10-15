@@ -366,8 +366,8 @@
       else if (ic === 'inn') { g.set(lx, ly - 1, 'z'); g.set(lx + 1, ly - 1, 'z'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'O'); }
       // a ruined monastery: the hall's roof half fallen in, one wall a heap of rubble, a dead tree in the yard
       else if (ic === 'ruin') { g.set(lx - 1, ly - 1, 'v'); g.set(lx, ly - 1, 'v'); g.set(lx + 1, ly - 1, 'e'); g.set(lx - 1, ly, 'R'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'm'); }
-      // a ridge: peaks with the road climbing in among them, and a wine-shop flag at the roadside
-      else if (ic === 'pass') { g.set(lx - 1, ly - 1, 'M'); g.set(lx, ly - 1, 'M'); g.set(lx + 1, ly - 1, 'M'); g.set(lx - 1, ly, 'M'); g.set(lx, ly, ':'); g.set(lx + 1, ly, 'J'); }   // the road climbs into the ridge (it does not run on through it)
+      // a ridge: peaks with the road climbing in among them, and the red banner of a guard post at the roadside
+      else if (ic === 'pass') { g.set(lx - 1, ly - 1, 'M'); g.set(lx, ly - 1, 'M'); g.set(lx + 1, ly - 1, 'M'); g.set(lx - 1, ly, 'M'); g.set(lx, ly, ':'); g.set(lx + 1, ly, 'Y'); }   // the road climbs into the ridge (it does not run on through it), past a military post's red banner
       else if (ic === 'forest' || ic === 'marsh') { g.set(lx, ly, ':'); g.set(lx, ly - 1, ic === 'forest' ? 'T' : ic === 'marsh' ? 'r' : 'm'); }
       else if (ic === 'fortress') { /* Liangshan: the island itself */ g.set(lx, ly + 1, 'D'); g.set(lx - 1, ly + 1, 'Y'); g.set(lx + 1, ly + 1, 'Y'); g.rect(lx - 1, ly, 3, 1, '^'); }
       // clear approach tile
@@ -383,7 +383,7 @@
       if (!WM.data.maps[LOC[id].map]) continue;   // campaign sites fought as wars only (Youzhou, Hedong, Huaixi, Runzhou, Muzhou)
       (function (L) {
         var md = WM.data.maps[L.map], sp = (md && (md.entry || md.spawn)) || [L.sx, L.sy];
-        var ex = { x: L.x, y: L.y + (L.icon === 'fortress' ? 1 : 0), to: L.map, tx: sp[0], ty: sp[1], dir: 'up', passable: true,
+        var ex = { x: L.x, y: L.y + (L.icon === 'fortress' ? 1 : 0), to: L.map, tx: sp[0], ty: sp[1], dir: 'up',   // a place not yet open turns the traveller back at its gate
           cond: function (S2) { return S2.has('loc:' + L.id) && WM.data.maps[L.map]; },
           blocked: function (S2) { return { text: S2.has('loc:' + L.id) ? L.name + '. (Not yet passable.)' : L.name + '. There is no reason to go there now.' }; } };
         out.push(ex);
