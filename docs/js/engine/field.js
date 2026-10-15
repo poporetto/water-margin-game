@@ -832,7 +832,7 @@
     var LOC = WM.data.locations;
     for (var id in LOC) {
       var L = LOC[id];
-      if (!S.has('loc:' + id)) continue;
+      if (L.cond && !L.cond(S)) continue;   // every place is named on the map, open or not
       var d = Math.abs(L.x - p.x) + Math.abs(L.y - p.y);
       if (d < bd) { bd = d; best = L; }
     }

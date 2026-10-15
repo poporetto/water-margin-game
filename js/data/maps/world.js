@@ -232,7 +232,8 @@
     for (var fid in LOC) if (LOC[fid].icon !== 'fortress') for (var fy = -1; fy <= 0; fy++) for (var fx = -1; fx <= 1; fx++) FP[(LOC[fid].x + fx) + ',' + (LOC[fid].y + fy)] = 1;
     // Only the roads that lead somewhere the traveller knows: a road out to a place not yet heard of is left
     // off, unless it runs on through that place to somewhere known (pruned from the dead ends inwards).
-    var known = function (id) { return S.has('loc:' + id) && (!LOC[id].cond || LOC[id].cond(S)); };
+    // every place is on the map from the start (the traveller is only barred from entering one the story has not opened)
+    var known = function (id) { return !LOC[id].cond || LOC[id].cond(S); };
     var live = R.filter(function (r) { return LOC[r[0]] && LOC[r[1]]; }), pruned = true;
     while (pruned) {
       pruned = false;
@@ -294,14 +295,51 @@
     // no road that stops in the middle of nowhere: cut back every loose end that isn't at a known place's door
     var door = {}; for (var did in LOC) if (known(did)) door[LOC[did].x + ',' + (LOC[did].y + 1)] = 1;
     var isRd = function (x, y) { var c = g.get(x, y); return c === ':' || c === 'B'; };
-    for (var cut = true; cut;) {
-      cut = false;
-      for (var uk in under) {
-        var xy = uk.split(','), ux = +xy[0], uy = +xy[1];
-        if (!isRd(ux, uy) || door[uk]) continue;
-        var nb = 0; for (var d4 = 0; d4 < 4; d4++) if (isRd(ux + [1, -1, 0, 0][d4], uy + [0, 0, 1, -1][d4])) nb++;
-        if (nb < 2) { g.set(ux, uy, under[uk]); cut = true; }
+    var trim = function () {
+      for (var cut = true; cut;) {
+        cut = false;
+        for (var uk in under) {
+          var xy = uk.split(','), ux = +xy[0], uy = +xy[1];
+          if (!isRd(ux, uy) || door[uk]) continue;
+          var nb = 0; for (var d4 = 0; d4 < 4; d4++) if (isRd(ux + [1, -1, 0, 0][d4], uy + [0, 0, 1, -1][d4])) nb++;
+          if (nb < 2) { g.set(ux, uy, under[uk]); cut = true; }
+        }
       }
+    };
+    trim();
+    // and no little loops: where two roads part and meet again round a patch of ground, one side of the ring goes,
+    // as long as every place stays joined to every place it was joined to
+    var D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]], doors = Object.keys(door);
+    var groups = function () {   // which doors the roads join together, as a signature
+      var seen = {}, sig = [];
+      doors.forEach(function (dk) {
+        if (seen[dk] != null) return;
+        var id = sig.length, st = [dk.split(',').map(Number)]; seen[dk] = id; var members = [dk];
+        while (st.length) { var p = st.pop(); D4.forEach(function (d) { var q = (p[0] + d[0]) + ',' + (p[1] + d[1]); if (seen[q] == null && isRd(p[0] + d[0], p[1] + d[1])) { seen[q] = id; st.push([p[0] + d[0], p[1] + d[1]]); if (door[q]) members.push(q); } }); }
+        sig.push(members.sort().join(';'));
+      });
+      return sig.sort().join('|');
+    };
+    var base = groups(), kept = {};   // kept: rings that cannot be opened
+    for (var round = 0; round < 60; round++) {
+      var lab = Object.assign({}, kept), pocket = null;
+      for (var py = 0; py < H && !pocket; py++) for (var px = 0; px < W && !pocket; px++) {
+        if (isRd(px, py) || lab[px + ',' + py]) continue;
+        var st2 = [[px, py]], cells = [], edge = false; lab[px + ',' + py] = 1;
+        while (st2.length) { var c2 = st2.pop(); cells.push(c2); if (c2[0] === 0 || c2[1] === 0 || c2[0] === W - 1 || c2[1] === H - 1) edge = true; D4.forEach(function (d) { var nx = c2[0] + d[0], ny = c2[1] + d[1], k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= W || ny >= H || lab[k] || isRd(nx, ny)) return; lab[k] = 1; st2.push([nx, ny]); }); }
+        if (!edge && cells.length < 90) pocket = cells;
+      }
+      if (!pocket) break;
+      var rim = [], inRim = {};
+      pocket.forEach(function (c3) { D4.forEach(function (d) { var k = (c3[0] + d[0]) + ',' + (c3[1] + d[1]); if (isRd(c3[0] + d[0], c3[1] + d[1]) && !inRim[k] && !door[k] && (k in under)) { inRim[k] = 1; rim.push(k); } }); });
+      var opened = false;
+      for (var ri = 0; ri < rim.length && !opened; ri++) {
+        var rk = rim[ri].split(',').map(Number), was = g.get(rk[0], rk[1]);
+        g.set(rk[0], rk[1], under[rim[ri]]);
+        if (groups() === base) opened = true; else g.set(rk[0], rk[1], was);
+      }
+      if (!opened) { pocket.forEach(function (c4) { kept[c4[0] + ',' + c4[1]] = 1; }); continue; }   // a ring every road needs (opening it would cut a place off)
+      trim();
     }
     // keep the marsh roads from crossing the whole marsh: Liangshan is reached by boat from Zhu Gui's tavern
     for (y = LS.y - 8; y <= LS.y + 8; y++) for (x = LS.x - 11; x <= LS.x + 11; x++) if (g.get(x, y) === 'B' || g.get(x, y) === ':') { var dx2 = (x - LS.x) / 8.5, dy2 = (y - LS.y) / 6; if (dx2 * dx2 + dy2 * dy2 < 0.9) g.set(x, y, 'w'); }
@@ -316,7 +354,7 @@
     for (var id in LOC) {
       var L = LOC[id];
       if (L.cond && !L.cond(S)) continue;
-      var shown = S.has('loc:' + id);
+      var shown = known(id);
       if (!shown) continue;
       var ic = L.icon, lx = L.x, ly = L.y;
       if (ic === 'city') { g.rect(lx - 1, ly - 1, 3, 1, '^'); g.set(lx - 1, ly, '#'); g.set(lx + 1, ly, '#'); g.set(lx, ly, 'G'); }
@@ -328,8 +366,8 @@
       else if (ic === 'inn') { g.set(lx, ly - 1, 'z'); g.set(lx + 1, ly - 1, 'z'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'O'); }
       // a ruined monastery: the hall's roof half fallen in, one wall a heap of rubble, a dead tree in the yard
       else if (ic === 'ruin') { g.set(lx - 1, ly - 1, 'v'); g.set(lx, ly - 1, 'v'); g.set(lx + 1, ly - 1, 'e'); g.set(lx - 1, ly, 'R'); g.set(lx, ly, 'D'); g.set(lx + 1, ly, 'm'); }
-      // a ridge: two peaks with the road through the gap between them, and a wine-shop flag at the roadside
-      else if (ic === 'pass') { g.set(lx - 1, ly - 1, 'M'); g.set(lx + 1, ly - 1, 'M'); g.set(lx - 1, ly, 'M'); g.set(lx, ly - 1, ':'); g.set(lx, ly, ':'); g.set(lx + 1, ly, 'J'); }
+      // a ridge: peaks with the road climbing in among them, and a wine-shop flag at the roadside
+      else if (ic === 'pass') { g.set(lx - 1, ly - 1, 'M'); g.set(lx, ly - 1, 'M'); g.set(lx + 1, ly - 1, 'M'); g.set(lx - 1, ly, 'M'); g.set(lx, ly, ':'); g.set(lx + 1, ly, 'J'); }   // the road climbs into the ridge (it does not run on through it)
       else if (ic === 'forest' || ic === 'marsh') { g.set(lx, ly, ':'); g.set(lx, ly - 1, ic === 'forest' ? 'T' : ic === 'marsh' ? 'r' : 'm'); }
       else if (ic === 'fortress') { /* Liangshan: the island itself */ g.set(lx, ly + 1, 'D'); g.set(lx - 1, ly + 1, 'Y'); g.set(lx + 1, ly + 1, 'Y'); g.rect(lx - 1, ly, 3, 1, '^'); }
       // clear approach tile
@@ -356,7 +394,7 @@
 
   WM.defMap('world', {
     name: '', world: true, theme: 'world', music: 'world',
-    cacheKey: function () { return Object.keys(LOC).filter(function (id) { return S.has('loc:' + id) && (!LOC[id].cond || LOC[id].cond(S)); }).join(','); },   // the places shown, and so the roads drawn
+    cacheKey: function () { return Object.keys(LOC).filter(function (id) { return !LOC[id].cond || LOC[id].cond(S); }).join(','); },   // the places shown, and so the roads drawn
     rows: build,
     get exits() { return exits(); },
     battleBg: 'plains',
