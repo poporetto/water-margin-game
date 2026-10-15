@@ -56,6 +56,20 @@
       var ln = d.intro[i];
       await UI.message(who(du, ln[0]), ln[1]);
     }
+    // a teaching duel opens with lessons: the opponent shows his move, the hero says how to answer it, and that answer
+    // is marked in the menu (the player may still choose otherwise). Real exchanges, so the damage stands.
+    var lessons = du.opt.noLessons ? [] : (d.lessons || []);
+    for (i = 0; i < lessons.length; i++) {
+      var L = lessons[i];
+      du.round++; du.next = L.move;
+      await UI.message(who(du, 'foe'), L.foe);
+      var pick = await chooseMove(du, L.tip, { name: du.hero.name, advice: L.answer });
+      await exchange(du, pick, L.move);
+      if (L.after) await outro(du, pick === L.answer ? L.after : L.missed || []);
+      if (du.foe.hp <= 0) { await outro(du, d.win); return 'win'; }
+      if (du.hero.hp <= 0) { await outro(du, d.lose); return 'lose'; }
+    }
+    if (lessons.length) await outro(du, d.afterLessons);
     var pattern = d.pattern ? d.pattern.slice() : null;
     while (true) {
       du.round++;
@@ -82,21 +96,24 @@
     return 'attack';
   }
 
-  function chooseMove(du, line) {
+  // tip (in a lesson): { name: who is speaking, advice: the move he advises, marked in the menu with the cursor on it }
+  function chooseMove(du, line, tip) {
     return new Promise(function (resolve) {
-      var sp = UI.resolveSpeaker(du.foeId);
-      var list = new UI.List(MOVES.map(function (m) { return { label: MOVE_NAME[m], v: m }; }), { x: 690, y: 330, w: 250, cancel: false });
+      var adv = tip && tip.advice;
+      var list = new UI.List(MOVES.map(function (m) { return { label: MOVE_NAME[m], v: m, color: m === adv ? G.COL.gold : null, right: m === adv ? '◀' : null, rightColor: G.COL.gold }; }),
+        { x: 690, y: 330, w: 250, cancel: false, index: adv ? MOVES.indexOf(adv) : 0 });
       var w = {
         isDuelChoice: true,
         update: function () { var r = list.handle(); if (r && r.ok) { UI.remove(w); resolve(r.ok.v); } },
         draw: function () {
           var boxX = 24, boxY = 534, boxW = 912, boxH = 168;
           G.window(boxX, boxY, boxW, boxH);
-          G.text(du.foe.name, boxX + 24, boxY + 18, { size: 22, bold: true, color: G.COL.gold });
+          G.text(tip ? tip.name : du.foe.name, boxX + 24, boxY + 18, { size: 22, bold: true, color: G.COL.gold });
           var ls = G.wrap('“' + line + '”', boxW - 60, 25);
           for (var i = 0; i < ls.length; i++) G.text(ls[i], boxX + 24, boxY + 56 + i * 32, { size: 25 });
           // read his words for his next move: the rule, for anyone new to duels
-          G.text('Attack beats Defend  ·  Brute beats Attack  ·  Defend beats Brute', boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.dim });
+          if (adv) G.text(du.foe.name + ' will ' + { attack: 'attack', wild: 'make a Brute Attack', defend: 'defend' }[du.next] + '  →  answer with ' + MOVE_NAME[adv], boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.gold });
+          else G.text('Attack beats Defend  ·  Brute beats Attack  ·  Defend beats Brute', boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.dim });
           list.draw();
         }
       };
