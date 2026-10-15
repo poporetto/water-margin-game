@@ -18,9 +18,10 @@
     await s.fadeIn(1);
     await s.narrate('The emperor received the twenty-seven in the palace and gave them titles and gold. Then they were sent away to posts across the empire, one here, one there, so that they would never stand together again.');
     // at the south gate of the capital, the brothers take their leave of Song Jiang one by one
-    var bye = [['dz', 'daizong', 26, 41, 'right'], ['rq', 'ruanxiaoqi', 32, 41, 'left'], ['cj', 'chaijin', 33, 41, 'left'], ['ly', 'liying', 27, 42, 'up'], ['dx', 'duxing', 26, 42, 'up'], ['zt', 'zhutong', 32, 42, 'up'], ['lj', 'lujunyi', 27, 41, 'right']];
+    // gathered on the avenue above him; each walks past him and out at the south gate
+    var bye = [['dz', 'daizong', 28, 39, 'down'], ['rq', 'ruanxiaoqi', 31, 39, 'down'], ['cj', 'chaijin', 31, 38, 'down'], ['ly', 'liying', 28, 38, 'down'], ['dx', 'duxing', 28, 37, 'down'], ['zt', 'zhutong', 31, 37, 'down'], ['lj', 'lujunyi', 30, 39, 'down']];
     bye.forEach(function (b) { s.spawn(b[0], b[1], b[2], b[3], b[4]); });
-    s.face('player', 'down'); s.music('sad');
+    s.face('player', 'up'); s.music('sad');
     await s.say('daizong', 'Brother, I have given back my seal. I will go to the temple on Mount Tai and burn incense for the rest of my days. These legs have run far enough.');
     s.despawn('dz', { to: [29, 44] });
     await s.say('ruanxiaoqi:smile', 'They\'ve taken my rank away for putting on Fang La\'s yellow robe as a joke! Good riddance. I\'m going home to Shijie to fish, and look after my old mother.');

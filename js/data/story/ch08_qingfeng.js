@@ -135,8 +135,17 @@
   WM.defEvents('qingfeng_in', [
     { id: 'ch8_rescue', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch8_caged') && WM.state.x >= 17; }, run: async function (s) {
       s.spawn('sj', 'songjiang', 20, 8, 'up'); s.lie('sj');
+      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[21, 5], [24, 5], [27, 5], [29, 6]], 'down');
       await s.say('huarong:angry', 'Liu Gao! You beat my kinsman half to death on a lie! Where is he?');
-      await s.narrate('Liu Gao\'s guards fell back before Hua Rong\'s bow. Hua Rong broke open the cage and carried Song Jiang out himself. On the way out he fired an arrow into the lintel of Liu Gao\'s gate: "The next one will be for your heart."');
+      await s.say('guard', 'The Commandant\'s orders — no one goes near the prisoner! Stand back, Major Hua!');
+      s.sfx('arrow'); await s.flash('#ffffff', 0.15); s.emote('lgg0', '!', 0.8);
+      await s.say('huarong:angry', 'That arrow went where I meant it to. The next one goes where I mean it to as well. Who is first?');
+      lg.forEach(function (k) { s.move(k, 'U2', { run: true, wait: false }); });
+      await s.wait(0.5);
+      await s.moveTo('player', 21, 8);
+      s.sfx('hit');
+      await s.narrate('Liu Gao\'s guards fell back before Hua Rong\'s bow. He broke open the cage and lifted Song Jiang out himself, and on the way out he put an arrow into the lintel of Liu Gao\'s gate: "The next one will be for your heart."');
+      D.clear(s, lg);
       s.despawn('sj');
       await s.narrate('But Song Jiang could not stay at Hua Rong\'s. "Liu Gao will report to Qingzhou that you harbour bandits. I must go back to Qingfeng Mountain." That night he slipped out — and Liu Gao\'s men, waiting in ambush on the road, caught him again.');
       await s.narrate('Liu Gao reported to the prefect of Qingzhou, who sent his military supervisor Huang Xin, the "Suppressor of Three Mountains." Huang Xin invited Hua Rong to a feast "to make peace with Liu Gao" — and seized him at the table. Song Jiang and Hua Rong were put in prison carts to be taken to Qingzhou.');
@@ -182,11 +191,38 @@
       await s.say('qinming', 'My lieutenant Huang Xin holds Qingfeng Fort. He was my pupil. I will bring him to you.');
       s.despawn('qinming'); s.despawn('huarong'); s.despawn('yanshun');
       await s.narrate('Huang Xin came over with the fort. Qin Ming married Hua Rong\'s sister. And when they heard that Qingzhou was raising a great army against them, Song Jiang said: "There is only one place for us now. Liangshan Marsh."');
-      await s.narrate('On the road south, at a mountain called Duiying, they came upon two young men in a valley fighting on horseback with painted halberds — one all in red, one all in white. The two halberds\' tassels had become entangled, and neither could pull free. Hua Rong drew his bow, aimed, and with a single arrow cut the tassels apart. The whole valley cheered.');
-      await s.narrate('The two were Lü Fang, the Little Marquis, who held that mountain, and Guo Sheng, who had come to take it from him. Both knelt to Song Jiang and asked to join.');
-      await s.narrate('At an inn on the road a rough man named Shi Yong, the Stone General, sat in Song Jiang\'s seat and would not move until he heard who Song Jiang was. "I\'ve been searching for you! I have a letter from your brother Song Qing."');
+      // on the road south, in a valley below Duiying Mountain: two young men on horseback, one in red, one in white
+      await s.fadeOut(0.8);
+      await s.warp('roadinn', 4, 8, 'right', { noFade: true });
+      s.spawn('hr8', 'huarong', 3, 7, 'right');
+      s.spawn('lf8', 'lufang', 14, 8, 'right'); s.spawn('gs8', 'guosheng', 16, 8, 'left');
+      await s.fadeIn(0.8);
+      for (var r8 = 0; r8 < 3; r8++) { s.sfx('block'); s.jump('lf8', 4); s.jump('gs8', 4); await s.wait(0.35); }
+      await s.say('lufang:angry', 'This is my mountain, Guo Sheng! Go back to Sichuan!');
+      await s.say('guosheng:angry', 'Then let the halberd decide whose mountain it is! ...Let go of my tassel!');
+      await s.narrate('The two halberds\' gold-and-silk tassels had wound together in the fighting, and neither man could pull free.');
+      await s.say('huarong', 'Hold still, the pair of you.');
+      s.sfx('arrow'); await s.flash('#ffffff', 0.15);
+      s.emote('lf8', '!', 1); s.emote('gs8', '!', 1);
+      await s.narrate('Hua Rong drew his bow and, with a single arrow, cut the tangled tassels apart.');
+      s.face('lf8', 'left'); s.face('gs8', 'left');
+      await s.moveTo('lf8', 7, 8); await s.moveTo('gs8', 8, 8);
+      await s.say('lufang', 'What archery! ...Song Jiang? Song Jiang of Yuncheng, Timely Rain? I am Lü Fang, the Little Marquis, and this mountain is mine — or it was until this morning.');
+      await s.say('guosheng', 'And I am Guo Sheng, who came to take it from him. ...We will both follow you, brother, if you will have us.');
+      s.hide('lf8'); s.despawn('lf8'); s.hide('gs8'); s.despawn('gs8');
+      // and an inn further on, where a stranger will not give up the best seat
+      await s.fadeOut(0.8);
+      await s.warp('roadinn_in', 6, 6, 'up', { noFade: true });
+      s.spawn('sy', 'shiyong', 4, 4, 'down');
+      await s.fadeIn(0.8);
+      await s.say('songjiang', 'Friend, my companions are many. Would you move to another table?');
+      await s.say('shiyong:angry', 'Move? For you? There are only two men in the world I would move for: Chai Jin of Cangzhou, and Song Jiang of Yuncheng!');
+      await s.say('songjiang', '...I am Song Jiang of Yuncheng.');
+      await s.say('shiyong:shock', 'You — ! I\'ve been searching the roads for you! I\'m Shi Yong, the Stone General. I have a letter for you from your brother, Song Qing.');
       await s.say('songjiang:shock', '(reading) "...Father died in the first month of this year... we await your return to bury him..." Father! Father!');
+      s.lie('player');
       await s.narrate('Song Jiang fell down weeping and beating his breast. He would not go on to Liangshan. He wrote a letter to Chao Gai for the others to carry, and set out for home alone, by night.');
+      s.lie('player', false); s.hide('sy'); s.despawn('sy');
       s.flag('ch8_letter');
       await s.notice('The heroes of Qingfeng go on to Liangshan.', { auto: 2 });
       await s.joinMany(['huarong', 'qinming', 'huangxin', 'yanshun', 'wangying', 'zhengtianshou', 'lufang', 'guosheng', 'shiyong']);

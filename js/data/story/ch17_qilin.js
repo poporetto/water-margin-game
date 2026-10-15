@@ -267,9 +267,35 @@
       await s.say('lujunyi', 'Where is Yan Qing?');
       await s.say('ligu', 'Don\'t ask about him now, master. Eat first.');
       s.spawn('c1', 'constable', 28, 8, 'up'); s.spawn('c2', 'constable', 34, 8, 'up');
-      await s.narrate('Before he had finished his rice, the constables of the prefecture burst in and bound him.');
-      ['lg', 'js', 'c1', 'c2'].forEach(function (k) { s.despawn(k); });
-      await s.narrate('Governor Liang had him beaten until he confessed to dealing with Liangshan. Li Gu bribed the jailer, Cai Fu — the Iron Arm — and his brother Cai Qing, the Single Flower, with five hundred taels to finish Lu Junyi in prison. But that night a gentleman in fine clothes called on Cai Fu with a thousand taels of gold: Chai Jin. "If Lu Junyi dies, Liangshan will come to Daming, and nobody will be spared." Cai Fu kept Lu alive. He was sentenced to exile on Shamen Island instead — and his escorts were Dong Chao and Xue Ba.');
+      s.moveTo('c1', 31, 6, { run: true, wait: false }); await s.moveTo('c2', 33, 6, { run: true });
+      await s.say('constable', 'Lu Junyi! By order of Governor Liang, you are under arrest for dealings with the bandits of Liangshan!');
+      await s.say('lujunyi:shock', '...Li Gu? What is this? Li Gu!');
+      s.emote('lg', '...', 1.2); s.face('lg', 'left');
+      await s.narrate('Before he had finished his rice, the constables of the prefecture had bound him hand and foot. His wife and his steward did not look at him.');
+      await s.fadeOut(0.8);
+      ['lg', 'js', 'c1', 'c2'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      await s.narrate('Governor Liang had him beaten until he confessed to dealing with Liangshan, and threw him into the death cell.');
+      // the prison of Daming: Lu Junyi in a cell, the brothers Cai keeping the keys
+      s.place('player', 4, 17, 'down'); s.lie('player');
+      s.spawn('cf', 'caifu', 6, 17, 'left'); s.spawn('cq', 'caiqing', 11, 18, 'left');   // on the walk between the cells
+      s.spawn('lg2', 'ligu', 10, 22, 'up');
+      await s.fadeIn(0.8);
+      await s.walkTo('lg2', 6, 18); s.face('lg2', 'up');
+      await s.say('ligu', 'Jailer Cai. Five hundred taels — for you and your brother. Lu Junyi has no need to see another morning. You understand me.');
+      await s.say('caifu', '...Five hundred taels for a man\'s life. Leave it on the table, Steward Li, and go home.');
+      s.despawn('lg2', { to: [10, 22] });
+      await s.wait(0.8);
+      s.night(true);
+      s.spawn('cj', 'chaijin', 10, 22, 'up');
+      await s.walkTo('cj', 6, 18); s.face('cj', 'up');
+      await s.say('chaijin', 'Jailer Cai Fu. I am Chai Jin of Cangzhou — you will have heard the name. Here are a thousand taels of gold.');
+      await s.say('chaijin', 'If Lu Junyi dies in this prison, Liangshan will come to Daming, and nobody in the city will be spared: not the governor, not you, not your brother. If he lives, you have a friend on the mountain.');
+      await s.say('caifu:shock', '...Lord Chai. I hear you. He will live.');
+      s.despawn('cj', { to: [10, 22] });
+      await s.narrate('Cai Fu kept Lu Junyi alive, and the court of the prefecture, softened by the same gold, sentenced him to exile on Shamen Island instead. His escorts were Dong Chao and Xue Ba.');
+      await s.fadeOut(0.8);
+      s.hide('cf'); s.despawn('cf'); s.hide('cq'); s.despawn('cq');
+      s.lie('player', false); s.night(false);
       s.flag('ch17_exile');
       WM.state.chars.lujunyi.equip.acc = 'cangue';
       await s.warp('shamenroad', 14, 9, 'up');

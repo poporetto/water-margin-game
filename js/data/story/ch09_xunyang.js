@@ -201,16 +201,49 @@
   WM.defEvents('jiangzhou_in', [
     { id: 'ch9_tower', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_poem') && WM.state.x >= 43 && WM.state.x <= 56; }, run: async function (s) {
       s.night(false);
-      await s.narrate('Song Jiang sat by the window drinking alone, looking out over the great river. He thought of his age — past thirty, with no name and no achievement, a branded convict far from home, his father old and alone. He grew drunk, and sad, and angry. He called for a brush, and on the white wall wrote:');
-      await s.narrate('"In youth I studied the classics and histories; grown, I learned strategy too. Like a tiger lying in a wild hill, I hide my claws and bear it. Ill fate has branded both my cheeks, and sent me to Jiangzhou. If one day I can avenge my wrongs, I will stain the mouth of the Xunyang with blood."');
-      await s.narrate('And beneath it: "My heart is in Shandong, my body in Wu; I drift on the rivers and lakes, and sigh in vain. If one day I achieve my soaring ambition, I will laugh at Huang Chao for being less than a man." He signed it: "Written by Song Jiang of Yuncheng." Then he paid, staggered home, and forgot all about it.');
+      // the tower over the river: Song Jiang alone with his wine, and the white wall
+      s.place('player', 49, 5, 'up');
+      await s.narrate('Song Jiang sat by the window drinking alone, looking out over the great river. He thought of his age — past thirty, with no name and no achievement, a branded convict far from home, his father old and alone. He grew drunk, and sad, and angry.');
+      await s.say('songjiang', 'Waiter! A brush. And ink. Plenty of ink.');
+      s.spawn('wt9', 'waiter', 48, 8, 'up');
+      await s.moveTo('wt9', 49, 6);
+      s.face('wt9', 'up'); s.emote('wt9', '...', 1);
+      s.despawn('wt9', { to: [48, 8] });
+      await s.move('player', 'U2', { speed: 34 });   // unsteady, up to the white wall
+      s.face('player', 'up');
+      await s.say('songjiang:angry', '(writing on the wall) "In youth I studied the classics and histories; grown, I learned strategy too. Like a tiger lying in a wild hill, I hide my claws and bear it. Ill fate has branded both my cheeks, and sent me to Jiangzhou. If one day I can avenge my wrongs, I will stain the mouth of the Xunyang with blood."');
+      await s.say('songjiang:angry', '(and beneath it) "My heart is in Shandong, my body in Wu; I drift on the rivers and lakes, and sigh in vain. If one day I achieve my soaring ambition, I will laugh at Huang Chao for being less than a man." ...Written by Song Jiang of Yuncheng. Ha!');
+      await s.narrate('Then he paid, staggered home, and forgot all about it.');
+      await s.fadeOut(0.8);
+      s.hide('player');
       s.flag('ch9_written');
-      s.spawn('huang', 'huangwenbing', 49, 5, 'up');
+      s.spawn('huang', 'huangwenbing', 50, 5, 'up');
+      await s.fadeIn(0.8);
       await s.narrate('The next day, a retired official named Huang Wenbing, of Wuweijun across the river, a jealous, scheming man always looking for a way back into office, climbed the tower to pass the time, and read the walls.');
       await s.say('huangwenbing:smile', '"...I will laugh at Huang Chao for being less than a man"? Huang Chao, the rebel who sacked the capital! This is a rebel\'s poem! "Song Jiang of Yuncheng"... And the children in the streets have been singing a rhyme: "The one who ruins the state is house-and-wood; the one who leads the troops is water-and-work; across thirty-six, rebellion in Shandong." House over wood is Song. Water beside work is Jiang. Song Jiang!');
       s.despawn('huang');
-      await s.narrate('Huang Wenbing copied the poem and took it at once to the prefect, Cai Jiu — the ninth son of the Prime Minister Cai Jing. The prefect sent his guards for Song Jiang that very hour. Dai Zong ran ahead to warn him: "Brother, pretend to be mad!" So when the guards came, they found Song Jiang rolling in his own filth, shouting that he was the son-in-law of the Jade Emperor.');
-      await s.narrate('It did not work. Huang Wenbing asked whether he had been mad when he arrived, and the camp clerks said no. Song Jiang was beaten until he confessed, and locked in a cangue in the condemned cell.');
+      // the prefect's hall: Cai Jiu on the dais, Huang Wenbing at his side, and Song Jiang dragged in
+      await s.fadeOut(0.8);
+      await s.warp('jiangzhou_in', 14, 9, 'up', { noFade: true });
+      s.hide('player');
+      s.spawn('cj9', 'caijiu', 7, 4, 'down'); s.spawn('hw9', 'huangwenbing', 10, 5, 'left');
+      var g9 = WM.data.troop(s, 'jg', 'soldier', [[3, 6], [12, 6], [3, 8], [12, 8]], 'down');
+      s.spawn('sj9', 'songjiang', 7, 9, 'up'); s.spawn('dg', 'soldier', 6, 9, 'up'); s.spawn('dg2', 'soldier', 8, 9, 'up');
+      await s.fadeIn(0.8);
+      await s.narrate('Huang Wenbing copied the poem and took it at once to the prefect, Cai Jiu — the ninth son of the Prime Minister Cai Jing. The prefect sent his guards for Song Jiang that very hour. Dai Zong had run ahead to warn him: "Brother, pretend to be mad!"');
+      s.move('dg', 'U1', { wait: false }); s.move('dg2', 'U1', { wait: false }); await s.move('sj9', 'U1');
+      s.lie('sj9');   // he throws himself down and rolls about the floor
+      await s.say('songjiang:angry', 'Ha! Who dares lay hands on me? I am the son-in-law of the Jade Emperor! My father-in-law has lent me a hundred thousand heavenly soldiers to kill every one of you in Jiangzhou! The King of Hell himself is my vanguard!');
+      await s.say('caijiu', '...He is mad. Huang Wenbing, you have brought me a madman.');
+      await s.say('huangwenbing:smile', 'Your Honour, ask the clerks of the prison camp whether he was mad when he came. A madman does not write in that hand.');
+      await s.say('caijiu:angry', '...He was not. Then he is a rebel feigning madness. Beat him until he tells the truth!');
+      s.lie('sj9', false);
+      for (var b9 = 0; b9 < 3; b9++) { s.sfx('hit'); await s.shake(3, 0.25); await s.wait(0.2); }
+      await s.narrate('Song Jiang was beaten until his skin split and his blood ran, and he confessed: he had written it drunk, and meant nothing by it. They locked him in a cangue in the condemned cell.');
+      await s.fadeOut(0.8);
+      WM.data.clear(s, g9.concat(['cj9', 'hw9', 'sj9', 'dg', 'dg2']));
+      s.show('player');
+      await s.fadeIn(0.8);
       s.flag('ch9_condemned');
       s.party(['daizong']); s.level('daizong', 21); s.setLeader('daizong');
       s.flag('protagonist', 'daizong');
