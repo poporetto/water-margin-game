@@ -990,17 +990,96 @@
     var cv = U.makeCanvas(w * S, h * S);
     var c = cv.getContext('2d');
     var th = THEMES[map.theme] || THEMES.spring;
+    artInit();
+    c.imageSmoothingEnabled = false;
     for (var ty = 0; ty < h; ty++) for (var tx = 0; tx < w; tx++) {
       var ch = map.get(tx, ty);
       var d = T.DEF[ch] || T.DEF['.'];
-      d.draw(c, tx * S, ty * S, tx, ty, th, map, ch);
+      if (!drawGroundArt(c, tx * S, ty * S, tx, ty, map, ch, 0)) d.draw(c, tx * S, ty * S, tx, ty, th, map, ch);
     }
     // second pass: what overhangs its own tile (eave corners, ridge ornaments, wall copings), so later tiles cannot cover it
+    // (a tile drawn from art brings its own overhang, if it has one)
     for (ty = 0; ty < h; ty++) for (tx = 0; tx < w; tx++) {
       ch = map.get(tx, ty); d = T.DEF[ch];
-      if (d && d.over) d.over(c, tx * S, ty * S, tx, ty, th, map, ch);
+      if (d && d.over && !groundArt(ch, map)) d.over(c, tx * S, ty * S, tx, ty, th, map, ch);
     }
     return cv;
+  };
+
+  // ---------- tile art ----------
+  // Drawn art for the tiles lives in assets/tiles/ and is described in assets/tiles.js (WM.TILE_ART). A tile that has
+  // art is drawn from its sheet; anything without art is still drawn by the code above, so art can arrive a batch at a
+  // time. See assets/tiles.js for the format.
+  T.artVersion = 0;
+  var ART = null, SHEETS = {}, artWaiting = 0;
+  function artInit() {
+    if (ART !== null) return;
+    var cfg = WM.TILE_ART || {};
+    ART = cfg.tiles || {};
+    var sh = cfg.sheets || {}, names = Object.keys(sh);
+    if (!names.length || typeof Image === 'undefined') return;
+    artWaiting = names.length;
+    names.forEach(function (n) {
+      var img = new Image();
+      img.onload = function () { SHEETS[n] = img; if (--artWaiting === 0) artReady(); };
+      img.onerror = function () { if (window.console) console.warn('Tile sheet not found: ' + sh[n]); if (--artWaiting === 0) artReady(); };
+      img.src = sh[n];
+    });
+  }
+  function artReady() { T.artVersion++; if (T.onArtReady) T.onArtReady(); }
+  // start again from assets/tiles.js (for testing art without reloading the page)
+  T.reloadArt = function () { ART = null; SHEETS = {}; artInit(); if (!artWaiting) artReady(); };
+  T.artStatus = function () { return { tiles: ART ? Object.keys(ART).length : 0, sheets: Object.keys(SHEETS), waiting: artWaiting }; };
+
+  // the art entry for a tile on this map: a season's own version ('T@autumn') before the plain one ('T')
+  function artEntry(ch, map) { return ART && (ART[ch + '@' + map.theme] || ART[ch]) || null; }
+  function sheetOf(e) { return SHEETS[e.sheet || 'tiles']; }
+  function cellList(v) { return !v ? [] : typeof v[0] === 'number' ? [v] : v; }
+  function groundArt(ch, map) { var e = artEntry(ch, map); return !!(e && (e.ground || e.auto || e.frames) && sheetOf(e)); }
+  function blit(c, img, cell, w, h, dx, dy) { if (img && cell) c.drawImage(img, cell[0] * S, cell[1] * S, w, h, dx, dy, w, h); }
+
+  // the ground of a tile from its art (returns false if it has none): a variant chosen by place, a piece joining
+  // its neighbours (auto), or a frame of its animation
+  function drawGroundArt(c, x, y, tx, ty, map, ch, frame) {
+    var e = artEntry(ch, map); if (!e) return false;
+    var img = sheetOf(e); if (!img) return false;
+    var cell = null;
+    if (e.auto) {
+      var same = e.auto.same || ch, m = 0;
+      [[0, -1, 1], [1, 0, 2], [0, 1, 4], [-1, 0, 8]].forEach(function (d) { var n = map.get(tx + d[0], ty + d[1]); if (n == null || same.indexOf(n) >= 0) m |= d[2]; });
+      cell = e.auto.cells && e.auto.cells[m];
+    }
+    if (!cell && e.frames) cell = cellList(e.frames)[frame % cellList(e.frames).length];
+    if (!cell && e.ground) { var vs = cellList(e.ground); cell = vs[Math.floor(U.hash2(tx, ty, 404) * vs.length) % vs.length]; }
+    if (!cell) return false;
+    blit(c, img, cell, S, S, x, y);
+    return true;
+  }
+  // animated tiles in view are drawn over the baked ground each frame
+  T.animateArt = function (c, map, camX, camY, time) {
+    if (!ART) return;
+    var x0 = Math.floor(camX / S), y0 = Math.floor(camY / S);
+    for (var ty = y0; ty < y0 + 16; ty++) for (var tx = x0; tx < x0 + 21; tx++) {
+      var ch = map.get(tx, ty), e = ch && artEntry(ch, map);
+      if (!e || !e.frames || e.auto) continue;
+      var n = cellList(e.frames).length, f = Math.floor(time * (e.fps || 3) + U.hash2(tx, ty, 405) * n) % n;
+      drawGroundArt(c, tx * S - camX, ty * S - camY, tx, ty, map, ch, f);
+    }
+  };
+  // a tall object from its art, bottom-aligned on its tile and centred across it; in a run of the same tile
+  // (the great Buddha, a long counter) each tile takes its own slice, left to right
+  function tallArt(ch, map) { var e = artEntry(ch, map); return e && e.tall && sheetOf(e) ? e : null; }
+  T.hasTall = function (ch, map) { var d = T.DEF[ch]; return !!((d && d.tall) || (ART && map && tallArt(ch, map))); };
+  T.drawTall = function (c, x, y, tx, ty, th, map, ch) {
+    var e = tallArt(ch, map), d = T.DEF[ch];
+    if (!e) { if (d && d.tall) d.tall(c, x, y, tx, ty, th, map, ch); return; }
+    var t = e.tall, w = t.w || S, h = t.h || S, cell;
+    if (t.run) {
+      var i = 0; while (map.get(tx - i - 1, ty) === ch) i++;
+      var run = cellList(t.run); cell = run[Math.min(i, run.length - 1)];
+      w = S;
+    } else { var vs = cellList(t.at); cell = vs[Math.floor(U.hash2(tx, ty, 406) * vs.length) % vs.length]; }
+    blit(c, sheetOf(e), cell, w, h, x + Math.round((S - w) / 2) + (t.dx || 0), y + S - h + (t.dy || 0));
   };
 
   // Draw animated water glints on visible water tiles.
@@ -1009,6 +1088,7 @@
     for (var ty = y0; ty < y0 + 16; ty++) for (var tx = x0; tx < x0 + 21; tx++) {
       var ch = map.get(tx, ty);
       if (ch !== '~' && ch !== 'w' && ch !== 'r') continue;
+      if (ART && groundArt(ch, map)) continue;   // drawn water brings its own movement
       var ph = U.hash2(tx, ty, 99) * 6.28;
       var k = Math.sin(time * 2 + ph);
       if (k > 0.55) {

@@ -27,17 +27,26 @@
         return ch === undefined || ch === ' ' ? (this.def.fill || '.') : ch;
       }
     };
-    var key = (def.cacheKey ? def.cacheKey() : 'static') + '|' + m.theme;
+    var key = (def.cacheKey ? def.cacheKey() : 'static') + '|' + m.theme + '|' + T.artVersion;   // (rebaked when new tile art arrives)
     if (!def._baked || def._bakedKey !== key) { def._baked = T.bake(m); def._bakedKey = key; }
     m.baked = def._baked;
-    m.talls = [];
     if (m.interior) m.rooms = rooms(m);
-    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) {
-      var d = T.DEF[m.get(x, y)];
-      if (d && d.tall) m.talls.push({ x: x, y: y, d: d });
-    }
+    scanTalls(m);
     return m;
   }
+  function scanTalls(m) {
+    m.talls = [];
+    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) {
+      var ch = m.get(x, y);
+      if (T.hasTall(ch, m)) m.talls.push({ x: x, y: y, d: T.DEF[ch] || {} });
+    }
+  }
+  // tile art finished loading while a map is open: bake it again with the art, and pick up any new tall objects
+  T.onArtReady = function () {
+    var m = F.map; if (!m) return;
+    m.def._baked = m.baked = T.bake(m); m.def._bakedKey = null;
+    scanTalls(m);
+  };
   F.buildMap = buildMap;
   // An interior map holds several rooms side by side, each walled off by void ('x'). Number them, so that only the
   // room the player stands in is drawn: the house next door is not visible through the wall.
@@ -579,6 +588,7 @@
     c.fillStyle = '#000'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H);
     c.drawImage(F.map.baked, -cx, -cy);
     T.animateWater(c, F.map, cx, cy, WM.time);
+    T.animateArt(c, F.map, cx, cy, WM.time);
 
     // in an interior, only the player's own room is drawn
     var pt = F.player.tile(), room = roomAt(F.map, pt.x, pt.y);
@@ -607,7 +617,7 @@
     list.sort(function (p, q) { return p.y - q.y; });
     for (i = 0; i < list.length; i++) {
       var it = list[i];
-      if (it.kind === 't') it.t.d.tall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map, F.map.get(it.t.x, it.t.y));
+      if (it.kind === 't') T.drawTall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map, F.map.get(it.t.x, it.t.y));
       else drawActor(c, it.a, cx, cy);
     }
     // emotes on top

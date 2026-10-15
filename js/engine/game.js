@@ -149,7 +149,7 @@
     var m = { id: 'world', def: def, rows: rows, w: w, h: rows.length, theme: def.theme || 'spring', interior: false,
       get: function (x, y) { if (y < 0 || y >= this.h || x < 0 || x >= this.w) return null; return this.rows[y][x] || '.'; } };
     var base = T.bake(m), c2 = base.getContext('2d'), th = T.THEMES[m.theme] || T.THEMES.spring;
-    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { var d = T.DEF[m.get(x, y)]; if (d && d.tall) d.tall(c2, x * 16, y * 16, x, y, th, m, m.get(x, y)); }
+    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { if (T.hasTall(m.get(x, y), m)) T.drawTall(c2, x * 16, y * 16, x, y, th, m, m.get(x, y)); }
     WM.state.flags = saved;
     var cv = document.createElement('canvas'); cv.id = 'dbg-world';
     var sc = Math.min(window.innerWidth / base.width, window.innerHeight / base.height);
