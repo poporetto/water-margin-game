@@ -14,6 +14,18 @@
   c.scatter('T', 0.06, 572, '.', [0, 0, 32, 3]); c.scatter('T', 0.06, 573, '.', [0, 23, 32, 5]);
   WM.defMap('armycamp', { name: 'Song Jiang\'s Camp', theme: 'autumn', music: 'tense', rows: c.rows(), spawn: [16, 20], battleBg: 'field' });
 
+  // Troops on a battlefield, so a fight told in words has its armies on the ground: rank on rank of one kind of
+  // soldier at the given tiles (any that are blocked are skipped), all facing one way. Returns their keys.
+  WM.data.troop = function (s, prefix, who, cells, dir) {
+    var st = WM.state, m = WM.data.maps[st.map], rows = typeof m.rows === 'function' ? m.rows(WM.S) : m.rows, keys = [];
+    cells.forEach(function (c, i) { var ch = (rows[c[1]] || '')[c[0]]; if (ch == null || WM.tiles.solid(ch)) return; s.spawn(prefix + i, who, c[0], c[1], dir); keys.push(prefix + i); });
+    return keys;
+  };
+  // a block of tiles, x0..x1 by the given rows
+  WM.data.block = function (x0, x1, rowsList) { var out = []; rowsList.forEach(function (y) { for (var x = x0; x <= x1; x++) out.push([x, y]); }); return out; };
+  // the field cleared (in the dark, or as the scene moves on)
+  WM.data.clear = function (s, keys) { keys.forEach(function (k) { s.hide(k); s.despawn(k); }); };
+
   // A council of war before a great battle, in the commander's pavilion: the leader before his tent with his strategist
   // at his side, the commanders gathered before him; a scout may come running up from the gate with news of the enemy.
   // Then the plan, the war drums, and the commanders go out to their troops.

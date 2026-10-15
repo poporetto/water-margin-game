@@ -242,18 +242,43 @@
   ]);
   WM.defEvents('zhujia', [
     { id: 'ch12_second', x: 0, y: 42, w: 60, h: 8, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch12_duxing'); }, run: async function (s) {
+      // the field before the Zhu manor: Song Jiang's army on the east of the road, and out of the west, Hu Sanniang's riders
+      var D = WM.data;
+      s.place('player', 31, 45, 'left');
+      s.spawn('wy1', 'wangying', 29, 46, 'left'); s.spawn('lc', 'linchong', 32, 47, 'left'); s.spawn('lk1', 'likui', 32, 44, 'left'); s.spawn('hr1', 'huarong', 30, 47, 'left');
+      var ours = D.troop(s, 'ls', 'outlaw', D.block(34, 38, [44, 47]).concat(D.block(35, 38, [48])), 'left');
+      s.spawn('hu', 'husanniang', 9, 45, 'right');
+      var hus = D.troop(s, 'hm', 'guard', D.block(8, 11, [44, 47]).concat(D.block(8, 10, [46])), 'right');
+      s.music('boss');
+      hus.forEach(function (k) { s.move(k, 'R13', { run: true, wait: false }); });
+      s.move('hu', 'R16', { run: true, wait: false });
       await s.narrate('Song Jiang divided his army and attacked again. Out of the west came a troop of horsemen, and at their head, on a red-maned horse, a young woman with a sabre in each hand: Hu Sanniang.');
+      await s.say('wangying', 'Ha! A girl? Leave her to me, brother!');
+      await s.move('wy1', 'L2');
       s.level('wangying', 22);
       await s.duel('wangying_hu', { hero: 'wangying', canLose: true });
       await s.narrate('Wang Ying the Stumpy Tiger had thought he would take her easily. Within ten bouts his hands were shaking. She hooked him out of the saddle with her lasso, and her men carried him off to the Zhu manor.');
+      await s.move('wy1', 'L3', { speed: 40 }); s.hide('wy1'); s.despawn('wy1');   // dragged off among her riders
       s.flag('away:wangying');
       await s.war('ch12_second');
       s.flag('away:qinming'); s.flag('away:dengfei');
       s.level('linchong', 25);
+      s.move('hu', 'R3', { run: true, wait: false });
       await s.narrate('Hu Sanniang chased Song Jiang himself across the field — until Li Kui drew her off with his axes, and a rider in black came between them: Lin Chong, the Panther Head.');
+      s.move('lk1', 'L2', { run: true, wait: false });
+      await s.moveTo('lc', 29, 45, { run: true });
+      s.face('lc', 'left');
+      await s.say('linchong', 'Lady, the commander of Liangshan is not for you. Turn your sabres on me.');
       await s.duel('linchong_hu', { hero: 'linchong', canLose: true });
       await s.narrate('Lin Chong let her sabres slide off his serpent spear, reached across, and lifted her bodily from the saddle.');
+      s.jump('lc', 6); await s.wait(0.3); s.hide('hu'); s.despawn('hu');   // taken across his saddle
+      hus.forEach(function (k) { s.move(k, 'L8', { run: true, wait: false }); });   // her riders break and flee
+      await s.wait(0.8);
+      D.clear(s, hus);
       await s.say('songjiang', 'Do her no harm. Take her up the mountain to my father, Song Taigong, and keep her safe there.');
+      await s.fadeOut(0.8);
+      D.clear(s, ours.concat(['lc', 'lk1', 'hr1']));
+      await s.fadeIn(0.8);
       s.music('sad');
       await s.narrate('That night Song Jiang could not sleep. Wang Ying, Qin Ming, Deng Fei, Huang Xin and Yang Lin were prisoners in the Zhu manor; Ou Peng was wounded. In the morning a messenger came: Wu Yong had come down from Liangshan with the three Ruan brothers, Lü Fang and Guo Sheng, and five hundred men.');
       s.spawn('wy', 'wuyong', 31, 44, 'left');
