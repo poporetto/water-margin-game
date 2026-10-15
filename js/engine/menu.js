@@ -25,7 +25,7 @@
       cx.restore();
       G.text(d.name, x + 100, yy + 2, { size: 22, bold: true, color: c.hp <= 0 ? '#c06050' : G.COL.text });
       G.text('LV ' + c.lv, x + 330, yy + 4, { size: 20 });
-      G.text((i < 3 ? 'Front' : 'Back') + ' · ' + st.range, x + 530, yy + 4, { size: 18, align: 'right', color: G.COL.dim });
+      G.text(i < 3 ? 'Front' : 'Back', x + 530, yy + 4, { size: 18, align: 'right', color: G.COL.dim });
       G.text('HP ' + c.hp + '/' + st.mhp, x + 100, yy + 34, { size: 19, color: G.hpColor(c.hp / st.mhp) });
       G.bar(x + 100, y + 16 + i * 92 + 60, 220, 8, c.hp / st.mhp, G.hpColor(c.hp / st.mhp));
       G.text('EXP ' + c.exp, x + 330, yy + 34, { size: 18, color: G.COL.dim });
@@ -243,7 +243,7 @@
     y += 70;
     var wpn = S.weapon(id);
     G.text('Weapon', x, y, { size: 20, color: G.COL.dim });
-    G.text(wpn.name + '  Lv ' + c.wlv + '  (' + wpn.range + ')', x + 120, y, { size: 20 });
+    G.text(wpn.name + '  Lv ' + c.wlv, x + 120, y, { size: 20 });
     y += 34;
     G.text('Skills', x, y, { size: 20, color: G.COL.dim });
     var mm = S.maxMp(id);
@@ -311,7 +311,7 @@
         var ids = pool();
         return new UI.List(ids.map(function (id) {
           var d = S.def(id), inP = st.party.indexOf(id) >= 0;
-          return { label: (inP ? '★ ' : '   ') + d.name, right: 'LV ' + st.chars[id].lv + ' ' + S.weapon(id).range, id: id, help: d.nick ? '“' + d.nick + '”  ' + S.weapon(id).name : '' };
+          return { label: (inP ? '★ ' : '   ') + d.name, right: 'LV ' + st.chars[id].lv, id: id, help: d.nick ? '“' + d.nick + '”  ' + S.weapon(id).name : '' };
         }), { x: 600, y: 20, w: 344, rows: 13, rowH: 36, help: true, size: 20 });
       };
       var list = mkList();

@@ -1,5 +1,5 @@
 // Turn-based battle modelled on Suikoden II:
-// six-member party in front/back rows, weapon ranges S/M/L, each hero's own skills with uses per skill level,
+// six-member party in front and back rows (everyone can strike from either), each hero's own skills with uses per skill level,
 // Unite attacks, and the Fight / Bribe / Run / Auto / Let Go round menu.
 'use strict';
 (function () {
@@ -166,15 +166,9 @@
   function allies(u) { var bt = B.cur; return u.side === 'party' ? bt.party.concat(bt.guests) : bt.enemies; }
   function foes(u) { var bt = B.cur; return u.side === 'party' ? bt.enemies : bt.party.concat(bt.guests); }
   function frontRowEmpty(list) { return !list.some(function (u) { return u.hp > 0 && u.row === 0; }); }
-  // Can unit `u` hit target `t` given weapon range and rows?
-  function canReach(u, t) {
-    if (t.hp <= 0) return false;
-    var tf = t.row === 0 || frontRowEmpty(foes(u));
-    var uf = u.row === 0 || frontRowEmpty(allies(u)) || u.guest;
-    if (u.range === 'L') return true;
-    if (u.range === 'M') return tf;
-    return uf && tf;
-  }
+  // Can unit `u` hit target `t`? Anyone can strike anyone still standing, from either row (a weapon's reach only
+  // decides how the blow is drawn: a bow or sling shoots from where it stands, the rest close in)
+  function canReach(u, t) { return t.hp > 0; }
   function canAttack(u) { return foes(u).some(function (t) { return canReach(u, t); }); }
   B.canReach = canReach;
 
@@ -337,7 +331,7 @@
       var unites = availableUnites(bt, u, usedByUnite);
       var arts = skillsOf(u), silenced = !!u.status.silence;
       var items = [
-        { label: 'Attack', v: 'attack', disabled: !canAttack(u), help: canAttack(u) ? (u.range + '-range weapon') : 'Out of reach from the back row.' },
+        { label: 'Attack', v: 'attack', disabled: !canAttack(u), help: 'Strike with your weapon.' },
         { label: 'Skill', v: 'tal', disabled: !arts.length, help: arts.length ? arts.map(function (a) { return a.name; }).join(', ') : 'No skills.' },
         { label: 'Item', v: 'item', disabled: !S.invList(function (it) { return it.battle; }).length },
         { label: 'Defend', v: 'defend' },
@@ -930,7 +924,6 @@
       c.restore();
       c.strokeStyle = G.COL.goldD; c.lineWidth = 2; c.strokeRect(x, y, 64, 72);
       G.text(u.name, x + 74, y + 2, { size: 20, bold: true, color: u.hp <= 0 ? '#c06050' : G.COL.text });
-      G.text(u.range, x + 286, y + 2, { size: 16, align: 'right', color: G.COL.dim });
       var fr = u.hp / u.mhp;
       G.text(u.hp + '/' + u.mhp, x + 286, y + 26, { size: 18, align: 'right', color: G.hpColor(fr) });
       G.bar(x + 74, y + 50, 212, 9, fr, G.hpColor(fr));

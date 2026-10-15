@@ -1,4 +1,4 @@
-// One-on-one duels, Suikoden II rules: Attack beats Defend, Wild Attack beats Attack, Defend beats Wild Attack.
+// One-on-one duels, Suikoden II rules: Attack beats Defend, Brute Attack beats Attack, Defend beats Brute Attack.
 // The opponent's line before each exchange hints at their next move.
 'use strict';
 (function () {
@@ -7,7 +7,7 @@
   var SCN = { countsTime: true };
   WM.scenes.duel = SCN;
   var MOVES = ['attack', 'wild', 'defend'];
-  var MOVE_NAME = { attack: 'Attack', wild: 'Wild Attack', defend: 'Defend' };
+  var MOVE_NAME = { attack: 'Attack', wild: 'Brute Attack', defend: 'Defend' };
 
   D.start = function (id, opt) {
     var d = WM.data.duels[id];
@@ -96,7 +96,7 @@
           var ls = G.wrap('“' + line + '”', boxW - 60, 25);
           for (var i = 0; i < ls.length; i++) G.text(ls[i], boxX + 24, boxY + 56 + i * 32, { size: 25 });
           // read his words for his next move: the rule, for anyone new to duels
-          G.text('Attack beats Defend  ·  Wild beats Attack  ·  Defend beats Wild', boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.dim });
+          G.text('Attack beats Defend  ·  Brute beats Attack  ·  Defend beats Brute', boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.dim });
           list.draw();
         }
       };
