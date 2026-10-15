@@ -211,15 +211,27 @@
     return cv;
   }
 
+  PT.resolveId = function (id) {
+    if (id !== 'linchong') return id;
+    var state = WM.state;
+    return state && ((state.flags && state.flags.ch3_exiled) || state.chapter > 3)
+      ? 'linchong_exile' : 'linchong_official';
+  };
+  PT.sheetSpec = function (id) {
+    var assets = WM.ASSETS || {};
+    return (assets.portraitVariants || {})[id] || (assets.portraitSheets || {})[id];
+  };
   PT.get = function (id, expr) {
+    var characterId = id.indexOf('linchong_') === 0 ? 'linchong' : id;
+    id = PT.resolveId(id);
     expr = expr || 'normal';
     if (PT.overrides[id + ':' + expr]) return PT.overrides[id + ':' + expr];
-    var sheets = WM.ASSETS && WM.ASSETS.portraitSheets;
-    if (sheets && sheets[id]) PT.tryExpressionSheet(id, sheets[id]);
+    var spec = PT.sheetSpec(id);
+    if (spec) PT.tryExpressionSheet(id, spec);
     if (PT.overrides[id]) return PT.overrides[id];
     var key = id + ':' + expr;
     if (!PT.cache[key]) {
-      var ch = WM.data.chars[id] || (WM.data.npcs && WM.data.npcs[id]);
+      var ch = WM.data.chars[characterId] || (WM.data.npcs && WM.data.npcs[characterId]);
       var lk = ch ? ((typeof ch.face === 'object' && ch.face) || ch.look || {}) : {};
       if (ch && ch.look && ch.face && typeof ch.face === 'object') { var m = {}; for (var k in ch.look) m[k] = ch.look[k]; for (k in ch.face) m[k] = ch.face[k]; lk = m; }
       PT.cache[key] = build(lk, expr);

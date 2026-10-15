@@ -1,0 +1,20 @@
+{
+  "mode": "built-in imagegen",
+  "records": [
+    {
+      "id": "xiezhen",
+      "prompt": "Redraw image1 expression sheet in image2 Song Jiang ART TECHNIQUE ONLY. Stronger slight mature anime: clear graphic ink contours, simplified 2-3 tone cel shading, expressive drawn eyes, smooth painted skin without realistic pores, no photographic lighting. Preserve image1 individual face geometry, ethnicity, natural dark tan complexion, hairstyle, clothing, hunting fork, pose and six expressions. DO NOT adopt Song Jiang face/moustache. Older lean rugged hunter with long angular face and short rough beard, fur collar, hunting fork upright. Match image2 muted yellow textured paper background exactly, no yellow cast on skin. Six cells 3 columns x2 rows normal angry sad / smile shock concerned, no text or gutters. Same identity and costume across all expressions.",
+      "path": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-24b5cba5-f57d-4574-a2d6-9fc7b2d34b14.png"
+    },
+    {
+      "id": "xiebao",
+      "prompt": "Redraw image1 expression sheet in image2 Song Jiang ART TECHNIQUE ONLY. Stronger slight mature anime: clear graphic ink contours, simplified 2-3 tone cel shading, expressive drawn eyes, smooth painted skin without realistic pores, no photographic lighting. Preserve image1 individual face geometry, ethnicity, natural dark tan complexion, hairstyle, clothing, hunting fork, pose and six expressions. DO NOT adopt Song Jiang face/moustache. Younger clean-shaven hunter, wider youthful eyes and rounded jaw, brown headband, hunting fork over shoulder. Match image2 muted yellow textured paper background exactly, no yellow cast on skin. Six cells 3 columns x2 rows normal angry sad / smile shock concerned, no text or gutters. Same identity and costume across all expressions.",
+      "path": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-cec9c95d-f354-46f9-adbd-94ff3ba7392f.png"
+    },
+    {
+      "id": "luzhishen",
+      "prompt": "Precisely edit this six-expression sheet. Keep normal top-left and sad top-right unchanged. In angry top-middle, smile bottom-left, shock bottom-middle, concerned bottom-right REMOVE the stray orange cloth wedge on the VIEWER LEFT alongside the left strand of wooden beads. Match normal and sad: entire viewer-left shoulder and chest next to beads is bare tattooed skin, robe covers viewer RIGHT shoulder only, ivory inner collar diagonal low across chest. Preserve every face, expression, beard, bead, tattoo style, framing and yellow paper. No other changes.",
+      "path": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-6aed89a3-b593-4ee2-bc46-4c8898bb4b65.png"
+    }
+  ]
+}

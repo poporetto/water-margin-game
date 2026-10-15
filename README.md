@@ -133,3 +133,50 @@ portrait, and reuses four returning sets: 12 characters and 72 expressions in
 follow the chapter's emotional beats. Built-in image generation prompts and facial-design
 refinements are saved in `output/imagegen/chapter6-expression-prompts.json` and
 `output/imagegen/chapter6-refinements.json`.
+
+Chapter 7 adds 21 illustrated characters with six expressions each, alongside returning
+Wu Song and Song Jiang: 23 characters and 138 expressions in `tools/chapter7-portraits.html`.
+The five new Stars use yellow paper; other characters use blue. Story dialogue,
+NPC conversations and the Sun Erniang / Kong Liang duels share the expression sheets.
+
+Chapter 8 adds 13 six-expression sheets (including Hua Rong’s existing design),
+with returning Song Jiang, Song Taigong and Song Qing: 16 characters and 96 expressions
+in `tools/chapter8-portraits.html`. The Qingfeng battle and Hua Rong–Qin Ming duel
+use these same sheets. New Stars keep yellow paper; non-Stars keep blue paper.
+
+Chapter 9 adds 23 six-expression sheets for the Xunyang cast, including all new
+recruits, craftsmen and officials. Together with returning characters, 35 characters
+and 210 expressions are available in `tools/chapter9-portraits.html`. Story dialogue,
+the Li Kui–Zhang Shun duels and the river battle use the same portrait system.
+Stars retain yellow paper and other characters blue paper. Prompts are recorded
+in `output/imagegen/chapter9-portrait-prompts.json`.
+
+Chapter 10 adds nine six-expression sets (including a generic constable), covering
+18 characters / 108 expressions with the returning cast. The generic Shopkeeper
+and Old Woman also have illustrated expression sets, used by their existing NPC
+IDs everywhere, including Chapter 2. Preview them in `tools/generic-portraits.html`.
+New portraits aim for roughly 15% less yellow cast on people while preserving the
+muted yellow Star backgrounds and blue non-Star backgrounds. Keep neutral daylight,
+natural skin tones and neutral whites in future portrait prompts; avoid global sepia.
+The Chapter 8–10 galleries load each sheet independently and report missing files
+without hiding the rest. Prompts are saved under `output/imagegen/`.
+
+Chapter 11 adds sixteen six-expression portrait sets, covering 21 characters (126 expressions) including returning cast and the shared innkeeper. Preview at `tools/chapter11-portraits.html`. Stars retain muted yellow paper, other characters blue paper, with neutral skin tones.
+
+Lin Chong has separate official and exile six-expression sheets (`linchong-official-expressions.png`, `linchong-exile-expressions.png`). Portrait selection changes with `ch3_exiled`, and defaults to exile for chapter 4 onward, including chapter-selected saves. Both outfits can be previewed in `tools/linchong-outfits.html`.
+
+Chapter 12 adds eighteen six-expression sets for the Zhu Village and Dengzhou cast. Its gallery covers 39 characters (234 expressions), including battle leaders and returning characters, at `tools/chapter12-portraits.html`.
+
+Chapters 13 and 14 add twenty six-expression sets (120 new expressions), including a reusable old man. Galleries: `tools/chapter13-portraits.html` (27 characters) and `tools/chapter14-portraits.html` (29 characters). New Stars use muted yellow paper, other characters blue; prompts and generation records are in `output/imagegen/chapter13-portrait-prompts.json` and `chapter14-portrait-prompts.json`.
+
+Chapter 15 adds five six-expression sets for Fan Rui, Xiang Chong, Li Gun, Prefect He and Marshal Su Yuanjing. Its gallery covers 17 characters (102 expressions), including returning cast and battle leaders, at `tools/chapter15-portraits.html`.
+
+Portrait colour direction: light Stars with neutral daylight independently of their pale muted yellow paper (rough target #e8ddbd). Never grade the entire image sepia. Keep natural tan depth with neutral/rosy undertones, neutral steel and off-white collars; non-Stars retain muted blue paper. Backgrounds must contain paper grain only, with no landscapes or silhouettes. Chapter 15 Fan Rui, Xiang Chong and Li Gun received a dedicated subject-only yellow-cast correction.
+
+Chapter 16 adds five six-expression sets (Duan Jingzhu, Zeng Kui, Zeng Tu, Shi Wengong and the Fahua monk). Its gallery covers 13 characters and 78 expressions at `tools/chapter16-portraits.html`. Apparel direction is Northern Song: plain cross-collar cloth robes, practical cord-laced iron lamellar armour and simple helmets; no fantasy plate shoulders or later Qing attire.
+
+Chapter 16 style revision: use `songjiang-expressions.png` as the master art reference for every new portrait: mature slight anime, defined ink contours, simplified skin shading and fine paper texture. Do not drift into photographic skin or realistic material rendering. Preserve distinct faces and story descriptions. Stars match Song Jiang's textured yellow paper; non-Stars match the blue/off-white paper in `oldmonk-expressions.png`. Keep background colour independent of neutral skin lighting. Revision prompts are in `output/imagegen/chapter16-style-revisions.json`.
+
+Chapters 17 and 18 add 28 six-expression portrait sets (168 new expressions), including the generic Daming gate guard. Galleries: `tools/chapter17-portraits.html` (52 characters, 312 expressions) and `tools/chapter18-portraits.html` (39 characters, 234 expressions). Song Jiang remains the technique and yellow-paper reference, not the face template. Face revisions differentiate the generals, executioners, officials and civilians; Guan Sheng retains his red complexion, Yan Qing his tattoos, and Huangfu Duan his blue eyes and purple beard. Generation and revision prompts are recorded in `output/imagegen/chapter17-portrait-prompts.json` and `chapter18-portrait-prompts.json`.
+
+Court and townsfolk batch: 17 new six-expression sheets (102 expressions) in `assets/portraits`, reviewed at `tools/court-townsfolk-portraits.html`. All use the non-Star blue paper palette. Existing NPC face flags are preserved: eight previously disabled townsfolk remain without dialogue portraits. Built-in imagegen prompts and face revisions are saved in `output/imagegen/court-townsfolk-portrait-prompts.json`.

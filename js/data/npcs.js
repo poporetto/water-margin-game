@@ -12,7 +12,7 @@
   WM.npc('villager', 'Villager', { skin: SK.tan, hairStyle: 'topknot', body: '#7a6a4a', trim: '#5a4a3a', pants: '#4a3a2a' }, { face: true });
   WM.npc('villager2', 'Villager', { skin: SK.mid, hairStyle: 'headband', band: '#e8e0d0', body: '#5a6a7a', trim: '#e8e0d0' });
   WM.npc('farmer', 'Farmer', { skin: SK.tan, hairStyle: 'hat', hatColor: '#c8b070', body: '#8a7a5a', trim: '#5a4a3a', beard: 'stubble' });
-  WM.npc('woman', 'Village Woman', { skin: SK.light, hairStyle: 'woman', body: '#8a5a6a', trim: '#e8d8c0', dress: true });
+  WM.npc('woman', 'Village Woman', { skin: SK.light, hairStyle: 'woman', body: '#8a5a6a', trim: '#e8d8c0', dress: true }, { face: true });
   WM.npc('woman2', 'Townswoman', { skin: SK.fair, hairStyle: 'woman', body: '#5a7a9a', trim: '#f0e0c0', dress: true, flower: '#e8a0b0' });
   WM.npc('oldman', 'Old Man', { skin: SK.mid, hair: '#d8d8d0', hairStyle: 'topknot', beard: 'long', beardColor: '#e8e8e0', body: '#6a5a4a', trim: '#c8b890' }, { face: true });
   WM.npc('oldwoman', 'Old Woman', { skin: SK.mid, hair: '#c8c8c0', hairStyle: 'woman', body: '#5a4a5a', trim: '#c8b890', dress: true }, { face: true });
@@ -27,7 +27,7 @@
   WM.npc('daoist', 'Daoist', { skin: SK.light, hairStyle: 'daoist', crown: '#8a7a4a', body: '#4a5a7a', trim: '#e8e0d0', beard: 'short' }, { face: true });
   WM.npc('scholar', 'Scholar', { skin: SK.fair, hairStyle: 'scarf', band: '#1a1a2a', body: '#3a4a6a', trim: '#e8e0d0', beard: 'mustache', build: 'slim' }, { face: true });
   WM.npc('soldier', 'Soldier', { skin: SK.tan, hairStyle: 'helmet', helmColor: '#6a6a72', tassel: '#c8302a', body: '#8a2a2a', trim: '#c8b890', weapon: 'spear' }, { face: true });
-  WM.npc('guard', 'Guard', { skin: SK.mid, hairStyle: 'helmet', helmColor: '#5a5a62', tassel: '#2a2a2a', body: '#3a3a5a', trim: '#c8b890', weapon: 'spear' });
+  WM.npc('guard', 'Guard', { skin: SK.mid, hairStyle: 'helmet', helmColor: '#5a5a62', tassel: '#2a2a2a', body: '#3a3a5a', trim: '#c8b890', weapon: 'spear' }, { face: true });
   WM.npc('officer', 'Officer', { skin: SK.light, hairStyle: 'futou', body: '#2a3a6a', trim: '#d8b36a', beard: 'short' }, { face: true });
   WM.npc('official', 'Official', { skin: SK.fair, hairStyle: 'futou', body: '#7a1a1a', trim: '#d8b36a', beard: 'long' }, { face: true });
   WM.npc('constable', 'Constable', { skin: SK.tan, hairStyle: 'scarf', band: '#1a1a1a', body: '#2a2a2a', trim: '#c8302a', weapon: 'dao' }, { face: true });

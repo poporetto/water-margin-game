@@ -1,0 +1,23 @@
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const vm = require('vm');
+function element() { return { children: [], append(...nodes) { this.children.push(...nodes); }, setAttribute() {}, getContext() { return { drawImage() {} }; } }; }
+const frame = { contentDocument: { readyState: 'loading' }, contentWindow: {}, addEventListener(_, fn) { this.onload = fn; }, scrollIntoView() {} };
+const status = element(), gallery = element(), images = [];
+let poll;
+const sandbox = { document: { body: { dataset: { portraitGroup: 'test' } }, getElementById: id => ({ game: frame, status, gallery })[id], createElement: element }, Image: function () { images.push(this); }, setInterval: fn => { poll = fn; return 1; }, clearInterval() {}, setTimeout() {} };
+vm.runInNewContext(fs.readFileSync('tools/portrait-gallery.js', 'utf8'), sandbox);
+poll(); assert.equal(images.length, 0, 'Wait for iframe game data');
+const expressions = ['normal', 'angry', 'sad', 'smile', 'shock', 'concerned'];
+let spoken;
+frame.contentWindow.WM = { ASSETS: { portraitGroups: { test: ['ready', 'missing'] }, portraitSheets: { ready: { columns: 3, rows: 2, expressions }, missing: { columns: 3, rows: 2, expressions } } }, data: { chars: { ready: { name: 'Ready' }, missing: { name: 'Missing' } }, npcs: {} }, portraits: { overrides: {} }, ui: { message: (...args) => { spoken = args; } } };
+poll(); assert.equal(images.length, 0, 'Wait until later chapter scripts finish loading');
+frame.contentDocument.readyState = 'complete';
+poll(); frame.onload(); assert.equal(images.length, 2, 'Start only once, including already-loaded iframe');
+images[0].width = 1448; images[0].height = 1086; images[0].onload();
+assert.equal(gallery.children[0].children[1].children.length, 6, 'Show ready expressions without waiting for other files');
+images[1].onerror(); assert(status.textContent.includes('Could not load: Missing'));
+gallery.children[0].children[1].children[1].onclick(); assert.equal(spoken[0], 'ready:angry');
+assert(frame.contentWindow.WM.portraits.overrides['ready:angry'].isOverride);
+console.log('PASS: delayed iframe readiness, progressive portrait loading, missing asset reporting and dialogue selection');

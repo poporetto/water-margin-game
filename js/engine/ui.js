@@ -34,8 +34,8 @@
   UI.message = function (speaker, text, opt) {
     opt = opt || {};
     var pendingSpeaker = resolveSpeaker(speaker);
-    var portraitId = pendingSpeaker && pendingSpeaker.portrait;
-    var sheet = WM.ASSETS && WM.ASSETS.portraitSheets && WM.ASSETS.portraitSheets[portraitId];
+    var portraitId = WM.portraits.resolveId(pendingSpeaker && pendingSpeaker.portrait);
+    var sheet = WM.portraits.sheetSpec(portraitId);
     if (sheet && !WM.portraits.sheetSettled[portraitId]) {
       return WM.portraits.tryExpressionSheet(portraitId, sheet).then(function () {
         return UI.message(speaker, text, opt);

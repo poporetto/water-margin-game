@@ -1,0 +1,20 @@
+{
+  "mode": "built-in image_gen",
+  "edits": [
+    {
+      "id": "fanrui",
+      "prompt": "Use case: identity-preserve colour correction. Edit this exact six-expression character sheet. Remove the obvious yellow/ochre/sepia colour filter FROM THE CHARACTER ONLY. Neutral daylight white balance. Skin should be natural neutral peach-brown with subtle rosy undertones and cool neutral shadows, retain original tan depth and ethnicity, do not whiten. Ivory collars neutral off-white, iron weapons neutral grey, blacks neutral charcoal, clothing true local colours. Visibly reduce yellow cast on people by 25-30%. Preserve facial anatomy identity all six expressions, beard hair costume pose weapons drawing detail and exact 3x2 layout. Background stays a consistent PALE MUTED YELLOW paper texture (#e8ddbd average), low saturation ivory-straw, NOT orange or bright yellow. Plain paper ONLY no landscapes silhouettes trees symbols borders text. The paper's yellow must NOT spill into subject lighting. Refined ink and painted anime style unchanged.",
+      "path": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-e378bbda-b538-46f9-b478-1f02289b6151.png"
+    },
+    {
+      "id": "xiangchong",
+      "prompt": "Use case: identity-preserve colour correction. Edit this exact six-expression character sheet. Remove the obvious yellow/ochre/sepia colour filter FROM THE CHARACTER ONLY. Neutral daylight white balance. Skin should be natural neutral peach-brown with subtle rosy undertones and cool neutral shadows, retain original tan depth and ethnicity, do not whiten. Ivory collars neutral off-white, iron weapons neutral grey, blacks neutral charcoal, clothing true local colours. Visibly reduce yellow cast on people by 25-30%. Preserve facial anatomy identity all six expressions, beard hair costume pose weapons drawing detail and exact 3x2 layout. Background stays a consistent PALE MUTED YELLOW paper texture (#e8ddbd average), low saturation ivory-straw, NOT orange or bright yellow. Plain paper ONLY no landscapes silhouettes trees symbols borders text. The paper's yellow must NOT spill into subject lighting. Refined ink and painted anime style unchanged.",
+      "path": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-e46574e4-7eb1-40f5-975e-e3a5c2ac91fa.png"
+    },
+    {
+      "id": "ligun",
+      "prompt": "Use case: identity-preserve colour correction. Edit this exact six-expression character sheet. Remove the obvious yellow/ochre/sepia colour filter FROM THE CHARACTER ONLY. Neutral daylight white balance. Skin should be natural neutral peach-brown with subtle rosy undertones and cool neutral shadows, retain original tan depth and ethnicity, do not whiten. Ivory collars neutral off-white, iron weapons neutral grey, blacks neutral charcoal, clothing true local colours. Visibly reduce yellow cast on people by 25-30%. Preserve facial anatomy identity all six expressions, beard hair costume pose weapons drawing detail and exact 3x2 layout. Background stays a consistent PALE MUTED YELLOW paper texture (#e8ddbd average), low saturation ivory-straw, NOT orange or bright yellow. Plain paper ONLY no landscapes silhouettes trees symbols borders text. The paper's yellow must NOT spill into subject lighting. Refined ink and painted anime style unchanged.",
+      "path": "/Users/andriastaniwan/.codex/generated_images/01a11d74-fc26-79a2-b49a-551d9931d0df/exec-462728de-9927-4182-84bc-5270a0c8f4b5.png"
+    }
+  ]
+}
