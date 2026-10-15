@@ -35,6 +35,27 @@
   };
   W.ABIL = ABIL;
 
+  // The famous few have a deed of their own from the novel: an order they can give once in a battle (active),
+  // or a way they always fight (passive). A hero brings it to any unit he leads or supports.
+  var SIG = {
+    timelyrain: { hero: 'songjiang', name: 'Timely Rain', active: true, desc: 'Timely Rain: once per battle, his name rallies the scattered men — every allied unit within 2 recovers one loss.' },
+    willow: { hero: 'huarong', name: 'Through the Willow', active: true, desc: 'Through the Willow at a Hundred Paces: once per battle, a sure arrow into any enemy unit within 5.' },
+    panther: { hero: 'linchong', name: 'Unhorse the General', active: true, desc: 'Unhorse the General: once per battle, the snake spear lifts the enemy leader from his saddle — a sure loss, and that unit fights at -25% for the rest of the battle.' },
+    uproot: { hero: 'luzhishen', name: 'Uproot the Willow', active: true, desc: 'Uproot the Willow: once per battle, the iron staff sweeps every adjacent enemy unit.' },
+    tiger: { hero: 'wusong', name: 'Tiger-Slayer\'s Fists', active: true, desc: 'Tiger-Slayer\'s Fists: once per battle, strike an adjacent enemy unit twice.' },
+    stones: { hero: 'zhangqing', name: 'Featherless Stones', active: true, desc: 'Featherless Stones: once per battle, a stone knocks the enemy general from his horse — a unit within 2 cannot move or attack in the next enemy phase.' },
+    lasso: { hero: 'husanniang', name: 'Red Lasso', active: true, desc: 'Red Lasso: once per battle, drag an enemy officer from the saddle — an adjacent unit takes a loss, and cannot strike back.' },
+    bore: { hero: 'zhangshun', name: 'White Streak in the Waves', active: true, desc: 'White Streak in the Waves: once per battle, swim under an adjacent enemy on the water and hole its boats — a sure loss.' },
+    flea: { hero: 'shiqian', name: 'Drum-Flea\'s Fire', active: true, desc: 'Drum-Flea\'s Fire: once per battle, slip behind the lines and set a fire — any enemy unit loses 30% defence for the rest of the battle.' },
+    whirlwind: { hero: 'likui', name: 'Black Whirlwind', desc: 'Black Whirlwind: charges ahead whatever the orders — +40% attack, -25% defence.' },
+    dragon: { hero: 'guansheng', name: 'Green-Dragon Blade', desc: 'Green-Dragon Blade: the heir of Lord Guan — when he attacks, the enemy cannot strike back.' },
+    chained: { hero: 'huyanzhuo', name: 'Chained Cavalry', desc: 'Chained Cavalry: horses chained in line — +35% defence beside allied cavalry.' },
+    hooks: { hero: 'xuning', name: 'Hooked Lances', desc: 'Hooked Lances: the lance that broke the chained horses — +60% attack against cavalry.' }
+  };
+  W.SIG = SIG;
+  var HERO_SIG = {}; Object.keys(SIG).forEach(function (k) { HERO_SIG[SIG[k].hero] = k; });
+  function hasSig(u, id) { return !!(u.sig && u.sig.indexOf(id) >= 0); }
+
   var TERR = {
     '.': { name: 'Plain', def: 0, col: '#6aa848', col2: '#5b9a3e' },
     'T': { name: 'Forest', def: 0.2, col: '#3c7a34', col2: '#2c6a2c', move: 2 },
@@ -64,6 +85,7 @@
       u.atk = lw.atk; u.def = lw.def; u.abil = [];
       if (lw.ability) u.abil.push(lw.ability);
       u.supports.forEach(function (sid) { var sw = charWar(sid); u.atk += Math.round(sw.atk * 0.45); u.def += Math.round(sw.def * 0.45); if (sw.ability) u.abil.push(sw.ability); });
+      u.sig = [o.leader].concat(u.supports).map(function (id) { return HERO_SIG[id]; }).filter(Boolean); u.usedSig = {};
       if (!u.name) u.name = WM.data.chars[o.leader].name;
       if (o.leader && WM.data.chars[o.leader] && WM.data.chars[o.leader].war && WM.data.chars[o.leader].war.type && !o.type) u.type = WM.data.chars[o.leader].war.type;
     } else {
@@ -279,9 +301,15 @@
     if (u.abil.indexOf('heal') >= 0 && !u.usedAbil.heal && active('player').some(function (a) { return a.losses > 0 && dist(a, u) <= 1; })) items.push({ label: 'Treat Wounded', v: 'heal' });
     if (u.abil.indexOf('infiltrate') >= 0 && melee.length) items.push({ label: 'Infiltrate', v: 'infiltrate' });
     if (u.abil.indexOf('stratagem') >= 0 && !wr.stratUsed) items.push({ label: 'Stratagem', v: 'stratagem' });
+    // the hero's own deed, while it is still to be done this battle
+    (u.sig || []).forEach(function (id) {
+      if (!SIG[id].active || u.usedSig[id]) return;
+      var pool = sigTargets(u, id);
+      if (pool && pool.length) items.push({ label: '\u2605 ' + SIG[id].name, v: 'sig:' + id, help: SIG[id].desc });
+    });
     items.push({ label: 'Wait', v: 'wait' });
     UI.remove(w);
-    UI.choose(items, { x: 700, y: 120, title: u.name }).then(function (k) {
+    UI.choose(items, { x: 700, y: 120, title: u.name, help: items.some(function (it) { return it.help; }) }).then(function (k) {
       UI.push(w);
       if (k < 0) { u.x = wr.orig.x; u.y = wr.orig.y; wr.mode = 'move'; wr.reach = reach(u); wr.cursor = { x: u.x, y: u.y }; return; }
       var v = items[k].v;
@@ -291,6 +319,11 @@
         banner(wr, 'Stratagem! All units may act again.').then(function () { active('player').forEach(function (a) { a.done = false; }); u.done = true; wr.busy = false; wr.mode = 'cursor'; wr.sel = null; });
         return;
       }
+      if (v.indexOf('sig:') === 0) {
+        var sid = v.slice(4);
+        if (sid === 'uproot' || sid === 'timelyrain') { wr.busy = true; wr.mode = 'busy'; sigOrder(wr, u, sid).then(function () { wr.busy = false; finishUnit(wr, w); }); return; }
+        wr.targets = sigTargets(u, sid); wr.tIdx = 0; wr.pendingAct = v; wr.mode = 'target'; return;
+      }
       if (v === 'heal') {
         var pts = active('player').filter(function (a) { return a.losses > 0 && dist(a, u) <= 1; });
         wr.targets = pts; wr.tIdx = 0; wr.pendingAct = 'heal'; wr.mode = 'target'; return;
@@ -298,6 +331,18 @@
       var pool = v === 'cannon' ? enemiesInRange(u, 4) : v === 'infiltrate' ? melee : ranged;
       wr.targets = pool; wr.tIdx = 0; wr.pendingAct = v; wr.mode = 'target';
     });
+  }
+
+  // who a hero's deed can reach (for the orders with no target, a non-empty list means it can be given)
+  function sigTargets(u, id) {
+    var foes = active(u.side === 'player' ? 'enemy' : 'player');
+    if (id === 'willow') return foes.filter(function (e) { return dist(u, e) <= 5; });
+    if (id === 'stones') return foes.filter(function (e) { return dist(u, e) <= 2; });
+    if (id === 'flea') return foes;
+    if (id === 'bore') return foes.filter(function (e) { var t = terr(e.x, e.y); return dist(u, e) <= 1 && (e.naval || (t && t.water)); });
+    if (id === 'panther' || id === 'tiger' || id === 'lasso' || id === 'uproot') return foes.filter(function (e) { return dist(u, e) <= 1; });
+    if (id === 'timelyrain') return active(u.side).filter(function (o) { return o.losses > 0 && dist(o, u) <= 2; });
+    return [];
   }
 
   function finishUnit(wr, w) {
@@ -333,12 +378,17 @@
     if (attacking && u.moved && u.abil.indexOf('charge') >= 0) a *= 1.25;
     if (TYPE[u.type].beats === other.type) a *= 1.3;
     if (active(u.side).some(function (o) { return o !== u && dist(o, u) <= 1 && o.abil.indexOf('morale') >= 0; })) a *= 1.1;
+    if (hasSig(u, 'whirlwind')) a *= 1.4;
+    if (hasSig(u, 'hooks') && other.type === 'cav') a *= 1.6;
+    a *= 1 - (u.atkDebuff || 0);
     return a;
   }
   function defence(u) {
     var t = terr(u.x, u.y);
     var d = u.def * (1 + (t ? t.def : 0));
     if (u.abil.indexOf('guard') >= 0) d *= 1.25;
+    if (hasSig(u, 'whirlwind')) d *= 0.75;
+    if (hasSig(u, 'chained') && active(u.side).some(function (o) { return o !== u && o.type === 'cav' && dist(o, u) <= 1; })) d *= 1.35;
     d *= 1 - (u.debuff || 0);
     return d;
   }
@@ -352,9 +402,43 @@
       t.debuff = 0.25; WM.audio.sfx('miss'); fxAt(wr, t, 'smoke'); await banner(wr, t.name + '\'s ranks are thrown into confusion!');
       return;
     }
+    if (typeof act === 'string' && act.indexOf('sig:') === 0) return sigDeed(wr, a, t, act.slice(4));
     var ranged = act === 'cannon' || dist(a, t) > 1;
     if (act === 'cannon') a.cannonUsed = true;
     await clash(wr, a, t, ranged, act);
+  }
+  // a sure loss on a unit, with its own sound and words
+  async function sureLoss(wr, t, kind, sfx, text) {
+    WM.audio.sfx(sfx); fxAt(wr, t, kind); await WM.wait(0.4);
+    t.losses++; G.shake = 3;
+    await banner(wr, text + (t.losses >= 2 ? '  ' + t.name + '\'s unit is routed!' : ''), 1.3);
+  }
+  async function sigDeed(wr, a, t, id) {
+    a.usedSig[id] = true;
+    var who = WM.data.chars[SIG[id].hero].name;
+    if (id === 'willow') return sureLoss(wr, t, 'arrows', 'arrow', who + '\'s arrow finds ' + t.name + ' at a hundred paces!');
+    if (id === 'panther') { t.atkDebuff = 0.25; return sureLoss(wr, t, 'clash', 'crit', who + '\'s snake spear lifts ' + t.name + ' from the saddle!'); }
+    if (id === 'bore') return sureLoss(wr, t, 'smoke', 'splash', who + ' comes up under the boats — ' + t.name + '\'s hulls are holed!');
+    if (id === 'lasso') return sureLoss(wr, t, 'clash', 'hit', who + '\'s red lasso drags an officer of ' + t.name + '\'s from the saddle!');
+    if (id === 'stones') { t.stunned = wr.turn; WM.audio.sfx('hit'); fxAt(wr, t, 'clash'); await banner(wr, who + '\'s stone knocks ' + t.name + ' from his horse — the unit stands leaderless!', 1.4); return; }
+    if (id === 'flea') { t.debuff = Math.max(t.debuff || 0, 0.3); WM.audio.sfx('fire'); fxAt(wr, t, 'boom'); await banner(wr, 'Fire behind the lines! ' + t.name + '\'s ranks are thrown into confusion.', 1.4); return; }
+    if (id === 'tiger') { await banner(wr, who + ' throws down his weapons and goes in with his fists!', 1); await clash(wr, a, t, false, 'attack'); if (t.losses < 2 && a.losses < 2) await clash(wr, a, t, false, 'attack'); return; }
+  }
+  async function sigOrder(wr, a, id) {   // the deeds that need no single target
+    a.usedSig[id] = true;
+    var who = WM.data.chars[SIG[id].hero].name;
+    if (id === 'uproot') {
+      await banner(wr, who + ' plants his feet and swings the iron staff!', 1);
+      var near = enemiesInRange(a, 1);
+      for (var i = 0; i < near.length; i++) if (near[i].losses < 2) await clash(wr, a, near[i], false, { noCounter: true });
+      return;
+    }
+    if (id === 'timelyrain') {
+      var hurt = active(a.side).filter(function (o) { return o.losses > 0 && dist(o, a) <= 2; });
+      hurt.forEach(function (o) { o.losses--; fxAt(wr, o, 'heal'); });
+      WM.audio.sfx('heal');
+      await banner(wr, 'Timely Rain! The scattered men come back to ' + who + '\'s banner.', 1.4);
+    }
   }
   async function clash(wr, a, t, ranged, act) {
     var magic = a.abil.indexOf('thunder') >= 0 || a.abil.indexOf('sorcery') >= 0 || a.abil.indexOf('fire') >= 0 || a.abil.indexOf('water') >= 0;
@@ -367,7 +451,7 @@
     var outcome;
     // enemy takes a loss; attacker may take a loss in melee counter
     var tLoss = r < 0.25 + ratio * 0.6;
-    var aLoss = !ranged && Math.random() < 0.15 + (1 - ratio) * 0.45;
+    var aLoss = !ranged && !hasSig(a, 'dragon') && !(act && act.noCounter) && Math.random() < 0.15 + (1 - ratio) * 0.45;
     await WM.wait(0.45);
     if (tLoss) { t.losses++; outcome = t.losses >= 2 ? t.name + '\'s unit is routed!' : t.name + '\'s unit takes losses.'; }
     else outcome = t.name + '\'s unit holds firm.';
@@ -386,6 +470,7 @@
       if (e.losses >= 2) continue;
       if (!active('player').length) return;
       if (e.hold && !enemiesInRange(e, rangeOf(e) + 1).length) continue; // garrison units stay put
+      if (e.stunned === wr.turn) { wr.cursor = { x: e.x, y: e.y }; await banner(wr, e.name + '\'s unit is without its general, and does not move.', 0.9); continue; }
       // choose nearest target
       var targets = active('player').slice().sort(function (p, q) { return dist(e, p) - dist(e, q); });
       var tgt = targets[0];
@@ -473,7 +558,9 @@
       G.text(hu.name + (hu.commander ? '  (Commander)' : ''), x0, 548, { size: 24, bold: true, color: hu.side === 'player' ? G.COL.gold : '#f0a090' });
       G.text(TYPE[hu.type].name + '   ATK ' + hu.atk + '   DEF ' + hu.def + '   Losses ' + hu.losses + '/2', x0, 582, { size: 20 });
       if (hu.supports && hu.supports.length) G.text('Support: ' + hu.supports.map(function (s) { return WM.data.chars[s].name; }).join(', '), x0, 610, { size: 20, color: '#c0d0e0' });
-      if (hu.abil.length) G.text(hu.abil.map(function (a) { return (ABIL[a] || a).split(':')[0]; }).join(' · '), x0, 638, { size: 18, color: '#a0e0a0' });
+      var tags = hu.abil.map(function (a) { return (ABIL[a] || a).split(':')[0]; });
+      if (tags.length) G.text(tags.join(' · '), x0, 638, { size: 18, color: '#a0e0a0' });
+      if (hu.sig && hu.sig.length) G.text(hu.sig.map(function (id) { return '\u2605 ' + SIG[id].name + (SIG[id].active && hu.usedSig[id] ? ' (used)' : ''); }).join('   '), x0, 664, { size: 18, color: '#ffd070' });
       var tt = terr(cp.x, cp.y); if (tt) G.text(tt.name + (tt.def ? ' (+' + Math.round(tt.def * 100) + '% def)' : ''), 920, 548, { size: 18, align: 'right', color: G.COL.dim });
     } else {
       var tt2 = terr(cp.x, cp.y);
