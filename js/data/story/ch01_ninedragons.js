@@ -29,9 +29,27 @@
   WM.data.troops.ch1_boss = { enemies: ['duty_boss', 'liji_boss'], bg: 'fire', boss: true };
 
   WM.data.duels.wangjin_shijin = {
-    hero: 'wangjin', foe: 'shijin', bg: 'plains', heroHp: 420, heroAtk: 60, foeHp: 190, foeAtk: 32,
-    pattern: ['attack', 'wild', 'defend', 'attack'],
-    intro: [['foe', 'You think you can teach me? Pick up a staff and we\'ll see who laughs!'], ['hero', 'If your father permits it. Come then, young master.']],
+    hero: 'wangjin', foe: 'shijin', bg: 'plains', heroHp: 420, heroAtk: 60, foeHp: 420, foeAtk: 32,   // (the lessons take about 280 of his)
+    pattern: ['wild', 'attack', 'defend'],
+    intro: [['foe', 'You think you can teach me? Pick up a staff and we\'ll see who laughs!'], ['hero', 'If your father permits it. Come then, young master.'],
+      ['hero', '(He is young and proud, and every move he means to make shows in his face first. Let me teach him to read it.)']],
+    // the first duel in the game: Wang Jin teaches Shi Jin, and the player, how a duel is read
+    lessons: [
+      { move: 'attack', foe: 'Hah! Straight at you. Here comes my staff!',
+        tip: 'You lean in before every thrust, young master. I can see the attack coming. Let me teach you the brute attack: one heavy blow goes straight through it.', answer: 'wild',
+        after: [['foe:shock', 'Ugh! You ran right through my staff!'], ['hero', 'Because you came at me plainly. An attack breaks before a heavier blow.']],
+        missed: [['hero', '(Not like that. When he attacks, a brute attack is the answer.)']] },
+      { move: 'defend', foe: 'Fine. Then I\'ll keep my guard up and wait for you this time.',
+        tip: 'You hide behind your staff and wait for me. In that case it is my turn to attack. A steady attack breaks a guard that only waits.', answer: 'attack',
+        after: [['foe', 'My guard... you just knocked it aside!'], ['hero', 'A guard that only waits is a door left on the latch.']],
+        missed: [['hero', '(He was waiting behind his guard. That was the moment to attack.)']] },
+      { move: 'wild', foe: 'Enough of this! Everything I\'ve got, Nine Dragons!',
+        tip: 'Now you lose your temper and swing with all your strength. Time for me to calm down and defend. Let the wild blow spend itself.', answer: 'defend',
+        after: [['foe:shock', 'I hit nothing but air... and then you were behind my staff!'], ['hero', 'Rage is strength thrown away. Guard against it, and it falls on its face.']],
+        missed: [['hero', '(Against fury, keep calm and defend. Let him exhaust himself.)']] }
+    ],
+    afterLessons: [['hero', 'Attack breaks a guard, a brute blow breaks an attack, a calm guard breaks a brute blow. That is all a duel is. Read the man, not the staff.'],
+      ['foe:angry', 'Enough lessons! This time I won\'t give anything away!'], ['hero', '(He will, though. Watch what he says.)']],
     lines: {
       attack: ['Hah! Take this!', 'Here comes my staff!', 'Straight at you — block this!'],
       wild: ['Everything I\'ve got — Nine Dragons!', 'I\'ll knock you flat in one blow!', 'No holding back now!'],
@@ -169,7 +187,7 @@
       var r = await s.duel('wangjin_shijin', { canLose: true });
       if (r === 'lose') {
         await s.say('wangjin', '(I held back too much. Again, properly this time.)');
-        await s.duel('wangjin_shijin', { canLose: true });
+        await s.duel('wangjin_shijin', { canLose: true, noLessons: true });
       }
       s.flag('ch1_duelled');
       await s.narrate('Wang Jin did not strike him down. He stepped back and swept the staff across, and Shi Jin\'s own staff flew from his hands as he went over backwards. Wang Jin threw his staff aside and helped him up.');
