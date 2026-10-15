@@ -253,7 +253,8 @@
         }
       }
     }
-    if (!a.isPlayer && F.player && a.solid && !a.path.length) {
+    // a passer-by never walks into the player (only a scene may move someone up close)
+    if (!a.isPlayer && F.player && a.solid && (!a.path.length || !WM.script.running)) {
       if (Math.abs(F.player.x - x) < 11 && Math.abs(F.player.y - y) < 8) return true;
     }
     return false;

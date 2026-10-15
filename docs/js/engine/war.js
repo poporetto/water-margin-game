@@ -464,8 +464,11 @@
     var hu = unitAt(cp.x, cp.y) || wr.sel;
     G.window(16, 530, 928, 176);
     if (hu) {
-      if (hu.side === 'player') WM.portraits.drawFramed(hu.leader, 'normal', 36, 536 + 6);
-      else if (hu.portrait) WM.portraits.drawFramed(hu.portrait, 'angry', 36, 536 + 6);
+      // the portrait at a little under full size, so its frame sits inside the panel
+      var pc = G.ctx; pc.save(); pc.translate(32, 542); pc.scale(0.84, 0.84);
+      if (hu.side === 'player') WM.portraits.drawFramed(hu.leader, 'normal', 6, 6);
+      else if (hu.portrait) WM.portraits.drawFramed(hu.portrait, 'angry', 6, 6);
+      pc.restore();
       var x0 = hu.portrait || hu.side === 'player' ? 210 : 40;
       G.text(hu.name + (hu.commander ? '  (Commander)' : ''), x0, 548, { size: 24, bold: true, color: hu.side === 'player' ? G.COL.gold : '#f0a090' });
       G.text(TYPE[hu.type].name + '   ATK ' + hu.atk + '   DEF ' + hu.def + '   Losses ' + hu.losses + '/2', x0, 582, { size: 20 });
