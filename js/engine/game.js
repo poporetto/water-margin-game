@@ -70,6 +70,8 @@
       (m2.exits || []).forEach(function (e) {
         if (!d.maps[e.to]) return;
         var ch = tileAt(e.to, e.tx, e.ty);
+        // onto the world map, only at a place's own doorstep (not at coordinates left over from an older map)
+        if (e.to === 'world' && WM.world && !Object.keys(WM.world.LOC).some(function (lid) { var p = WM.worldAt(lid); return p[0] === e.tx && p[1] === e.ty; })) errs.push('Exit ' + mid2 + '(' + e.x + ',' + e.y + ') -> world lands at (' + e.tx + ',' + e.ty + '), which is no place\'s doorstep');
         if (ch == null || WM.tiles.solid(ch)) errs.push('Exit ' + mid2 + '(' + e.x + ',' + e.y + ') -> ' + e.to + ' lands on solid/void tile (' + e.tx + ',' + e.ty + ') "' + ch + '"');
       });
       if (m2.spawn) { var sc = tileAt(mid2, m2.spawn[0], m2.spawn[1]); if (sc == null || WM.tiles.solid(sc)) errs.push('Spawn of ' + mid2 + ' is solid "' + sc + '"'); }

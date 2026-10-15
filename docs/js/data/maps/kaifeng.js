@@ -67,7 +67,7 @@
 
   WM.defMap('kaifeng', {
     name: 'The Eastern Capital', theme: 'spring', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [29, 40],
-    exits: [{ x: 28, y: 44, w: 4, h: 2, to: 'world', tx: 62, ty: 59, dir: 'down' }]
+    exits: [WM.toWorld('kaifeng', 28, 44, 4, 2)]   // out of the south gate, onto the road below the Eastern Capital on the world map
   });
   WM.data.kaifengDoors = { gao: gaoDoor, fan: fanDoor, li: liDoor, shop: shopDoor, smith: smithDoor, inn: innDoor, tal: talDoor, luqian: luDoor, yue: yueDoor, xiangguo: xgDoor, wang: wangDoor, lin: linDoor, xu: xuDoor };
 
