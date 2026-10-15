@@ -150,7 +150,7 @@ function mkApi(ctx) {
     choose(options) { return Promise.resolve(0); },
     notice() { hinted = true; return resolved; }, wait() { return resolved; }, fadeOut() { return resolved; }, fadeIn() { return resolved; },
     actor(key) { const a = findActor(key); if (!a) err('no actor "' + key + '" on ' + cur.map); return a || {}; },
-    move(key, steps) {
+    move(key, steps, opt) {
       const a = findActor(key); if (!a) { err('move: no actor "' + key + '" on ' + cur.map); return resolved; }
       const parse = Array.isArray(steps) ? steps : steps.trim().split(/\s+/).map((tk) => { const d = tk[0].toUpperCase(), n = parseInt(tk.slice(1) || '1', 10); return d === 'R' ? [n, 0] : d === 'L' ? [-n, 0] : d === 'U' ? [0, -n] : [0, n]; });
       let hit = null;
@@ -158,6 +158,7 @@ function mkApi(ctx) {
         const n = Math.abs(st[0]) + Math.abs(st[1]), sx = Math.sign(st[0]), sy = Math.sign(st[1]);
         for (let i = 0; i < n; i++) { a.x += sx; a.y += sy; if (!hit && !a.boat && !walkable(cur.map, a.x, a.y)) hit = [a.x, a.y]; }
       });
+      if (hit && opt && opt.fall) hit = null;   // knocked into the water, or over an edge, on purpose
       if (hit && key !== 'player') sceneWarn('"' + (a.who || key) + '" walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
       else if (hit) sceneWarn('the player walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
       if (a.x < 0 || a.y < 0) err('move: "' + key + '" leaves the map');
@@ -178,6 +179,7 @@ function mkApi(ctx) {
     jump(key) { if (!findActor(key)) err('jump: no actor "' + key + '"'); return resolved; },
     show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = false; },
     beside(id) { if (WM.state.party.indexOf(id) < 0) err('beside: "' + id + '" is not in the party'); },
+    splash(key) { if (!findActor(key)) err('splash: no actor "' + key + '"'); },
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; },
     lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing
     boat(key) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = true; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },

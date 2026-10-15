@@ -106,17 +106,29 @@
   ]);
   WM.defEvents('weiriver', [
     { id: 'ch15_envoy', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch15_taken'); }, run: async function (s) {
-      s.spawn('su', 'suyuanjing', 15, 12, 'up'); s.boat('su');   // the envoy's barge
+      s.spawn('su', 'suyuanjing', 15, 11, 'up'); s.boat('su');   // the envoy's barge, at the foot of the landing
+      s.spawn('g1', 'guard', 14, 10, 'down'); s.spawn('g2', 'guard', 17, 10, 'down');   // two of his guards gone ahead onto the landing
+      await s.camera(15, 10, 0.6);   // the view down to the river, so the landing is not behind the words
       await s.narrate('Li Jun, Zhang Shun and Yang Chun had seized the ferry boats. When the envoy\'s barge came down the river, Song Jiang stood on the bank and bowed.');
       await s.say('songjiang', 'Song Jiang of Liangshan begs an audience with the Marshal.');
       await s.say('suyuanjing', 'I am on the emperor\'s business. What business have I with bandits?');
-      await s.narrate('Li Jun and Zhang Shun leapt aboard and tipped two of the Marshal\'s guards into the river.');
+      // Li Jun and Zhang Shun come down the landing at a run, and the two guards go into the river
+      s.spawn('lj', 'lijun', 15, 6, 'down'); s.spawn('zs', 'zhangshun', 16, 6, 'down');
+      s.moveTo('lj', 15, 10, { run: true }); await s.moveTo('zs', 16, 10, { run: true });
+      s.face('g1', 'right'); s.face('g2', 'left'); s.emote('g1', '!'); await s.emote('g2', '!');
+      s.face('lj', 'left'); s.face('zs', 'right');
+      s.sfx('hit'); s.jump('lj', 3); s.jump('zs', 3);
+      s.emote('g1', '?', 0.6); s.emote('g2', '?', 0.6);   // staggering back over the edge, arms going
+      s.jump('g1', 10); s.jump('g2', 10); s.move('g1', 'L1', { speed: 34, wait: false, fall: true }); await s.move('g2', 'R1', { speed: 34, fall: true });
+      s.splash('g1'); s.splash('g2'); s.hide('g1'); s.hide('g2'); s.despawn('g1'); s.despawn('g2'); await s.shake(2, 0.3);
+      await s.wait(0.6);   // the rings spread where they went in
+      await s.narrate('Li Jun and Zhang Shun sprang onto the landing and tipped two of the Marshal\'s guards into the river.');
       await s.say('songjiang', 'Forgive my men, Your Excellency — they are rough, and I cannot always hold them. I mean you no harm. I only ask you to step ashore for a moment.');
-      s.despawn('su'); s.spawn('su', 'suyuanjing', 15, 7, 'up');
+      s.despawn('su'); s.spawn('su', 'suyuanjing', 15, 7, 'up');   // stepped ashore
       await s.say('songjiang', 'Your Excellency, two of my brothers are in the prison of Huazhou, because a wicked prefect stole a painter\'s daughter. We need your golden bells and your regalia for a single day. We will return every piece, and no harm will come to you. I swear it.');
       await s.say('suyuanjing', '...If I refuse, I see I shall not leave this bank. Take them. But you will answer for it to Heaven, Song Jiang.');
       await s.say('songjiang', 'We wait only for the emperor\'s pardon, Your Excellency, to serve the state. Remember us.');
-      s.despawn('su');
+      s.despawn('su'); s.cameraReset();
       s.flag('ch15_bells');
       await s.narrate('A Liangshan man who looked a little like the Marshal put on his robes and lay behind the curtains of a sedan chair, "ill from the journey." Wu Yong dressed as the master of ceremonies. Wu Song and Shi Xiu stood at the temple gate as guards.');
       await s.warp('xiyue', 17, 26, 'up');

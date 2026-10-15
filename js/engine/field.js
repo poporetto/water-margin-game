@@ -613,6 +613,7 @@
     // emotes on top
     for (i = 0; i < all.length; i++) if (all[i].emote && all[i].visible) drawEmote(c, all[i], cx, cy);
     drawMarks(c, cx, cy);
+    drawSplashes(c, cx, cy);
     if (room >= 0) {
       c.fillStyle = '#000';
       var x0 = Math.max(0, Math.floor(cx / TS)), y0 = Math.max(0, Math.floor(cy / TS));
@@ -890,6 +891,27 @@
     'heart': function (c, x, y) { c.fillStyle = '#e04a7a'; c.fillRect(x - 3, y - 5, 2, 2); c.fillRect(x + 1, y - 5, 2, 2); c.fillRect(x - 3, y - 4, 6, 2); c.fillRect(x - 2, y - 2, 4, 1); c.fillRect(x - 1, y - 1, 2, 1); },
     'zzz': function (c, x, y) { c.fillStyle = '#5a5a8a'; c.fillRect(x - 3, y - 5, 4, 1); c.fillRect(x - 1, y - 4, 1, 1); c.fillRect(x - 2, y - 3, 1, 1); c.fillRect(x - 3, y - 2, 4, 1); }
   };
+  // someone going into the water: a ring spreading on the surface, and spray thrown up and falling back
+  F.splashes = [];
+  F.splash = function (x, y) { F.splashes.push({ x: x, y: y, t: 0 }); };
+  function drawSplashes(c, cx, cy) {
+    for (var i = F.splashes.length - 1; i >= 0; i--) {
+      var sp = F.splashes[i]; sp.t += 1 / 60;
+      if (sp.t > 1.3) { F.splashes.splice(i, 1); continue; }
+      var x = sp.x - cx, y = sp.y - cy, t = sp.t;
+      c.globalAlpha = Math.max(0, 1 - t / 1.3); c.strokeStyle = '#f0f8ff'; c.lineWidth = 1;
+      if (t < 0.35) { c.fillStyle = '#ffffff'; c.fillRect(Math.round(x - 4), Math.round(y - 10 * (1 - t / 0.35)) - 2, 8, Math.round(10 * (1 - t / 0.35)) + 2); }   // the first white burst
+      c.beginPath(); c.ellipse(x, y, 4 + t * 18, (4 + t * 18) * 0.35, 0, 0, Math.PI * 2); c.stroke();
+      if (t > 0.25) { c.beginPath(); c.ellipse(x, y, 3 + (t - 0.25) * 14, (3 + (t - 0.25) * 14) * 0.35, 0, 0, Math.PI * 2); c.stroke(); }
+      c.fillStyle = '#ffffff';
+      for (var k = 0; k < 9; k++) {
+        var a = Math.PI * (0.1 + k * 0.8 / 8), v = 34 + (k % 3) * 8, dx = Math.cos(a) * v * t, dy = -(Math.sin(a) * v * t) + 70 * t * t;
+        if (dy < 2) { c.fillRect(Math.round(x + dx), Math.round(y + dy), 2, 2); c.fillRect(Math.round(x - dx), Math.round(y + dy), 2, 2); }   // falling back on both sides
+      }
+      c.globalAlpha = 1;
+    }
+  }
+
   function drawEmote(c, a, cx, cy) {
     var x = Math.round(a.x - cx), y = Math.round(a.y - cy - 32 + a.offY);
     var b = Math.sin(WM.time * 10) > 0 ? 0 : -1;

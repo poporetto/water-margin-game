@@ -239,6 +239,7 @@
       show: function (key) { actor(key).visible = true; },
       hide: function (key) { actor(key).visible = false; },
       lie: function (key, on) { snap(key); actor(key).static = on === false ? null : 'down'; },
+      splash: function (key) { var a = actor(key); F().splash(a.x, a.y - 3); WM.audio.sfx('splash'); },   // someone goes into the water
       boat: function (key, on) { actor(key).boat = on !== false; },   // seat a character in a small boat (on water)
       spawn: function (key, who, tx, ty, dir) {
         // the same character still walking off from an earlier despawn turns round and walks to the new spot
