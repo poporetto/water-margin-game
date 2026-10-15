@@ -176,7 +176,7 @@
       await s.say('linchong:shock', 'Your Excellency, your own officers brought me here to compare swords!');
       await s.say('gaoqiu:angry', 'Officers? What officers? Guards! Seize him!');
       // guards from both sides of the hall
-      var pt = WM.state, gx = pt.x, gy = pt.y;
+      var pt = (WM.field && WM.field.player && WM.field.player.tile && WM.field.player.tile()) || WM.state, gx = pt.x, gy = pt.y;   // where Lin Chong stands now, after his walk in
       var D = WM.data, seize = D.troop(s, 'wt', 'guard', [[15, 7], [15, 9], [24, 7], [24, 9]], 'down');
       seize.forEach(function (k, i) { s.moveTo(k, gx + (i < 2 ? -1 : 1), gy + (i % 2), { run: true, wait: false }); });
       await s.wait(0.5);
