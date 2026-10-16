@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tile Previews</title>
+<!-- Every tile preview in one page. Each preview keeps its own page (they each load the game's scripts, so they cannot
+     share one document); here they are shown one after another, each frame sized to its content. -->
+<style>
+  :root { --bg: #14100c; --panel: #1e1813; --line: #3a2f24; --text: #ece3d3; --dim: #a39684; --gold: #d8b36a; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 Georgia, 'Times New Roman', serif; }
+  header { position: sticky; top: 0; z-index: 2; background: rgba(20, 16, 12, 0.96); border-bottom: 1px solid var(--line); padding: 12px 16px; }
+  h1 { font-weight: normal; color: var(--gold); margin: 0 0 8px; font-size: 22px; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; }
+  nav a { color: var(--text); text-decoration: none; border: 1px solid var(--line); border-radius: 4px; padding: 3px 9px; font-size: 14px; background: var(--panel); }
+  nav a:hover { border-color: var(--gold); color: var(--gold); }
+  main { padding: 8px 16px 60px; }
+  section { margin: 24px 0 0; scroll-margin-top: 110px; }
+  h2 { font-weight: normal; color: var(--gold); font-size: 19px; margin: 0 0 2px; }
+  h2 a { color: var(--dim); font-size: 13px; margin-left: 10px; }
+  p.d { color: var(--dim); margin: 0 0 8px; font-size: 14px; }
+  iframe { width: 100%; height: 600px; border: 1px solid var(--line); border-radius: 6px; background: #000; display: block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tile Previews</h1>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+<script>
+  var PAGES = [
+    ['tile-atlas.html', 'Tile atlas', 'Every map tile, drawn as the game draws it, in a patch of its usual surroundings.'],
+    ['starter-tiles.html', 'Starter tiles', 'Grass, roads, water and shorelines, trees.'],
+    ['surface-tiles.html', 'Surfaces', 'Sand, crops, scorched ground, floors, carpet, steps, bridge planks.'],
+    ['building-tiles.html', 'Buildings', 'Roofs, walls, windows, doors, gates, fences and paving.'],
+    ['seasonal-tiles.html', 'Seasons', 'Autumn and snow ground, trees and cliffs.'],
+    ['world-footprints.html', 'World map', 'The silk-map ground, destinations and terrain symbols.'],
+    ['remaining-tiles.html', 'Objects', 'Furniture, temple pieces, town and nature props.'],
+    ['part2-tiles.html', 'Part 2 set', 'Regional ground and water, gates, interiors and prisons.'],
+    ['tile-refinements.html', 'Refinements', 'Reworked props and paving.'],
+    ['prop-footprints.html', 'Prop footprints', 'How large each prop is beside a character, and what it blocks.']
+  ];
+  var nav = document.getElementById('nav'), main = document.getElementById('main');
+  PAGES.forEach(function (p, i) {
+    var id = 'p' + i;
+    var a = document.createElement('a'); a.href = '#' + id; a.textContent = p[1]; nav.appendChild(a);
+    var sec = document.createElement('section'); sec.id = id;
+    sec.innerHTML = '<h2>' + p[1] + '<a href="' + p[0] + '" target="_blank" rel="noopener">open on its own ↗</a></h2><p class="d">' + p[2] + '</p>';
+    var fr = document.createElement('iframe'); fr.src = p[0]; fr.loading = 'lazy'; fr.title = p[1];
+    sec.appendChild(fr); main.appendChild(sec);
+    // size each frame to its page (same origin), and again as it finishes drawing
+    function fit() { try { var d = fr.contentDocument; if (d && d.body) fr.style.height = Math.max(200, d.documentElement.scrollHeight) + 'px'; } catch (e) {} }
+    fr.addEventListener('load', function () { fit(); var n = 0, t = setInterval(function () { fit(); if (++n > 20) clearInterval(t); }, 500); });
+  });
+</script>
+</body>
+</html>
