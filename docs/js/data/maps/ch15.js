@@ -81,7 +81,7 @@
     exits: [WM.toWorld('zengtou', 0, 34, 1, 2)] });
   var zi = L.grid(30, 10, 'x'); var zR = { hall: zi.room(1, 1, 16, 9, { floor: 'N' }), fahua: zi.room(18, 1, 10, 8, { floor: 'N' }) };
   zi.stamp(2, 3, ['h...UU....UU..', '....AA....AA..', '..t...........']);
-  zi.stamp(19, 3, ['L.UUU.L.', '..AAA...', '........']);
+  zi.stamp(19, 3, ['L.999.L.', '..AAA...', '........']);   // Fahua Temple's Buddhas
   WM.defMap('zengtou_in', { name: '', interior: true, theme: 'spring', music: 'tense', rows: zi.rows(), spawn: [8, 8] });
   L.link({ map: 'zengtou', x: zhall.x, y: zhall.y }, { map: 'zengtou_in', x: zR.hall.x, y: zR.hall.y });
   L.link({ map: 'zengtou', x: fahua.x, y: fahua.y }, { map: 'zengtou_in', x: zR.fahua.x, y: zR.fahua.y });

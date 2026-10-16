@@ -69,7 +69,7 @@
       s.despawn('wang');
       await s.move('player', 'U1', { run: true });
       await s.warp('yuncheng_in', 34, 7, 'up', { fade: 0.25 });
-      s.spawn('poxi', 'yanpoxi', 37, 5, 'left');
+      s.spawn('poxi', 'yanpoxi', 38, 5, 'left');   // in her room, by the bed
       await s.say('yanpoxi:smile', 'Looking for something, Third Brother?');
       await s.say('songjiang', 'Give me my pouch. It\'s mine.');
       await s.say('yanpoxi:smile', 'Your pouch... and this letter in it? From Chao Gai, the bandit chief of Liangshan Marsh? And a bar of gold? "To our benefactor Song Jiang"... My, my. You\'re a friend of robbers, Third Brother.');

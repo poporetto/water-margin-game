@@ -456,7 +456,7 @@
     var below = m.get(tx, ty + 1);
     if(SHEETS.part2){
       var floorAt=function(yy){var q=m.get(tx,yy);return !!q&&q!=='X'&&q!=='x';},lower=floorAt(ty+1),upper=below==='X'&&floorAt(ty+2);   // a face only above the floor; the walls beside and below a room stay plain brown
-      if(lower||upper){var idx=m.get(tx-1,ty)!=='X'?0:m.get(tx+1,ty)!=='X'?4:tx%9===4?3:1+(tx%2);part2(c,idx,x,y,16,16,0,lower?16:0,16,16);return;}
+      if(lower||upper){var wl=m.get(tx-1,ty)==='X',wr=m.get(tx+1,ty)==='X',idx=!wl&&!wr?1+(ty%2):!wl?0:!wr?4:tx%9===4?3:1+(tx%2);/* a free-standing partition is plain wall, no end posts */part2(c,idx,x,y,16,16,0,lower?16:0,16,16);return;}
     }
     if (below && below !== 'X' && below !== 'x') {
       // visible wall face
@@ -584,13 +584,22 @@
   // ---- a Buddhist hall: the great seated Buddha on his lotus throne, the offering altar, the censer, kneeling cushions ----
   function buddhaTall(c, x, y, tx, ty, th, m) {
     if (m.get(tx - 1, ty) === '1') return;
-    var n = runOf(m, tx, ty, '1').n, k = n / 3, W = n * S, cx = x + W / 2, t = WM.time || 0;
+    var n = runOf(m, tx, ty, '1').n;
+    buddhaFigure(c, x + n * S / 2, y, n / 3);
+  }
+  // a small seated Buddha on its lotus, one to a tile: the figures along a side hall's altar
+  function smallBuddhaTall(c, x, y) { buddhaFigure(c, x + S / 2, y + 1, 0.5, true); }
+  // the seated Buddha drawn about (cx, y) at scale k (1 is the great Buddha, three tiles wide); a small one (plain) has
+  // only the halo behind its head, no flame-edged mandorla
+  function buddhaFigure(c, cx, y, k, plain) {
     var R = function (dx, dy, w, h, col) { px(c, Math.round(cx + dx * k), Math.round(y + dy * k), Math.max(1, Math.round(w * k)), Math.max(1, Math.round(h * k)), col); };
     // the flame-edged mandorla, and the halo behind the head
+    if (!plain) {
     c.fillStyle = '#9a3a1e'; c.beginPath(); c.ellipse(cx, y - 14 * k, 23 * k, 30 * k, 0, 0, Math.PI * 2); c.fill();
     c.fillStyle = '#c8a040'; c.beginPath(); c.ellipse(cx, y - 14 * k, 21 * k, 28 * k, 0, 0, Math.PI * 2); c.fill();
     c.fillStyle = '#e8cc70'; c.beginPath(); c.ellipse(cx, y - 14 * k, 17 * k, 24 * k, 0, 0, Math.PI * 2); c.fill();
     for (var f = -2; f <= 2; f++) R(f * 8 - 1, -44 + Math.abs(f) * 4, 2, 3, '#c8502a');                       // flame tips
+    }
     c.fillStyle = '#f4e4a0'; c.beginPath(); c.arc(cx, y - 27 * k, 8 * k, 0, Math.PI * 2); c.fill();              // halo
     // the lotus throne
     R(-22, 4, 44, 12, '#8a3a2e'); for (var p2 = -21; p2 < 21; p2 += 6) { R(p2, 4, 5, 6, '#d88a7a'); R(p2 + 1, 4, 3, 2, '#f0b8a8'); }
@@ -1063,6 +1072,7 @@
     'u': { draw: stall, tall: stallTall, solid: true },
     'i': { draw: pillar, tall: pillarTall, solid: true },
     '1': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: buddhaTall, solid: true },     // the great Buddha (a run of tiles is one figure)
+    '9': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: smallBuddhaTall, solid: true },   // a small seated Buddha
     '2': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: offeringTall, solid: true },  // the offering altar before him
     '3': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: censerTall, solid: true },    // a great bronze censer
     '4': { draw: cushion },                                                                                          // a kneeling cushion

@@ -122,7 +122,7 @@
   // rows down either side, files shelved in the back corners
   ci.stamp(2, 3, ['hh..EEEEEE..hh', '......00......', '.....aaaa.....', '..............', '.t.........t..', '..............', '.t.........t..']);
   ci.stamp(19, 3, ['h..L...h', '.t..t...', '........', 'cc......']);
-  ci.stamp(30, 3, ['k...h...X.', '........X.', '..t.....n.', '........Xk', 'j.......X.']);
+  ci.stamp(30, 3, ['k...h..Xkk', '.......Xkk', '..t....n..', '.......X..', 'j......X..']);   // her own room behind the partition, its bed in the corner
   ci.stamp(43, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   ci.stamp(54, 3, ['hhhh.', '.....', 'ccc..']);
   ci.stamp(62, 3, ['hhh', '...', 'cc.']);
@@ -152,7 +152,7 @@
   var fi = L.grid(30, 10, 'x');
   var fR = { hall: fi.room(1, 1, 14, 8, { floor: 'N' }), shrine: fi.room(16, 1, 9, 8, { floor: 'N' }) };
   fi.stamp(2, 3, ['h..A.....Akk', '..........kk', '..t.........', '............']);
-  fi.stamp(17, 3, ['.UUU...', '.AAA...', '.......', '....S..']);
+  fi.stamp(17, 3, ['.999...', '.AAA...', '.......', '....S..']);   // the Buddha hall: three small Buddhas over the altars, the cellar steps
   WM.defMap('songfarm_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: fi.rows(), spawn: [8, 7] });
   L.link({ map: 'songfarm', x: hall.x, y: hall.y }, { map: 'songfarm_in', x: fR.hall.x, y: fR.hall.y });
   L.link({ map: 'songfarm', x: shrine.x, y: shrine.y }, { map: 'songfarm_in', x: fR.shrine.x, y: fR.shrine.y });
