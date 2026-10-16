@@ -57,8 +57,8 @@
     prev[key(tx, ty)] = null; depth[key(tx, ty)] = 0;
     while (q.length) {
       var c = q.shift(), d = depth[key(c[0], c[1])];
+      if (d >= 1 && !door && isWay(c[0], c[1])) door = c;   // (a door right in front of them is still the way out)
       if (d >= 2) {
-        if (!door && isWay(c[0], c[1])) door = c;
         if (!off && !onScreen(c[0], c[1])) off = c;
         if (d <= 6 && (!far || d > depth[key(far[0], far[1])])) far = c;
       }
@@ -156,9 +156,10 @@
     }
     var path = a.leaveTo ? pathTo(t.x, t.y, a.leaveTo[0], a.leaveTo[1]) : null;
     if (!path) { path = wayIn(t.x, t.y); if (path) path.reverse(); }   // from where they stand to the way out
-    if (!path || path.length < 3) { gone(); return; }
+    if (!path || path.length < (door1(path) ? 2 : 3)) { gone(); return; }
     walk(a, path, gone);
   }
+  function door1(path) { return path.length === 2 && isWay(path[1][0], path[1][1]); }   // one step, out through a door
   function stay(a, lines) {
     var f = F();
     if (f.actors.indexOf(a) < 0 || !a.leavingKey) return;

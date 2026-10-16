@@ -120,7 +120,7 @@
       await s.fadeOut(0.8);
       await s.narrate('Shi Jin went his own way, and Li Zhong went his. Lu Da went back to his quarters, too angry to eat, and lay awake all night. At the first light of dawn he strode to the Jins\' inn.');
       s.flag('ch2_dawn');
-      await s.warp('weizhou_in', 50, 7, 'up', { noFade: true });
+      await s.warp('weizhou_in', 51, 7, 'up', { noFade: true });   // beside the door, leaving the Jins the way out
       s.spawn('oldjin', 'oldjin', 47, 4, 'down'); s.spawn('cuilian', 'cuilian', 48, 4, 'down');
       s.spawn('innboy', 'innwaiter', 50, 5, 'down');
       await s.fadeIn(0.8);
