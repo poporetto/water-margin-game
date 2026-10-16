@@ -130,7 +130,7 @@
   ]);
   WM.defEvents('jizhou_in', [
     { id: 'ch11_tavern', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_brawled') && !S2.has('ch11_brothers'); }, run: async function (s) {
-      s.spawn('sx', 'shixiu', 22, 4, 'down');
+      s.spawn('sx', 'shixiu', 23, 4, 'down');
       await s.say('daizong', 'You fight like a tiger, friend. Who are you?');
       await s.say('shixiu', 'Shi Xiu, from Jiankang. I learned the spear and staff as a boy, and I can\'t walk past an injustice without stepping in, so people call me the Daredevil Third Brother. I came north with my uncle to sell livestock. He died on the road, the money\'s gone, and I sell firewood to eat.');
       await s.say('daizong', 'Then don\'t sell firewood. Come to Liangshan, where a man like you can hold up his head. Here — ten taels, for now.');
@@ -143,7 +143,7 @@
       s.party(['shixiu']); s.setLeader('shixiu'); s.level('shixiu', 23); s.flag('protagonist', 'shixiu');
       await s.fadeOut(0.6);
       await s.warp('jizhou_in', 21, 6, 'up', { noFade: true });
-      s.spawn('yx', 'yangxiong', 22, 4, 'down');
+      s.spawn('yx', 'yangxiong', 22, 5, 'down');
       await s.fadeIn(0.6);
       await s.say('yangxiong:smile', 'There you are! You saved my face today, friend. Who were the two men drinking with you?');
       await s.say('shixiu', 'Two travellers. They left.');
@@ -171,7 +171,9 @@
     } }
   ]);
   WM.defEvents('jizhou_n', [
-    { id: 'ch11_dawn', x: 1, y: 30, w: 8, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_service') && !S2.has('ch11_dawnseen'); }, run: async function (s) {
+    { id: 'ch11_dawn', x: 1, y: 30, w: 8, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_service') && !S2.has('ch11_dawnseen'); },
+      idle: { hd: '(The wandering monk beats his wooden fish and does not look up.) Save us from suffering, O Bodhisattva...', pr: '(A man in a scarf turns his face to the wall and says nothing.)' },
+      run: async function (s) {
       s.spawn('hd', 'hudao', 3, 30, 'right'); s.spawn('pr', 'peiruhai', 8, 30, 'left');
       await s.say('hudao', '(tok... tok... tok...) "Save us from suffering, O Bodhisattva..."');
       await s.narrate('The back door opened. A man in a scarf slipped out — and Shi Xiu, from the shadow of the wall, saw the shaven head under it. It was Pei Ruhai. The wandering monk Hu Dao went off with him.');
@@ -184,7 +186,7 @@
   ]);
   WM.defEvents('jizhou_in', [
     { id: 'ch11_tell', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_dawnseen') && WM.state.x >= 16 && WM.state.x < 27; }, run: async function (s) {
-      s.spawn('yx', 'yangxiong', 22, 4, 'down');
+      s.spawn('yx', 'yangxiong', 22, 3, 'down');
       await s.say('shixiu', 'Brother. Every time you are on duty at night, Pei Ruhai of Baoen Temple comes into your house. I saw him go out of the back door this morning with my own eyes. Don\'t be hasty. Tomorrow say you are on duty, and come back at the third watch, and we\'ll take him together.');
       await s.say('yangxiong:angry', '...So that\'s it. Tomorrow, then.');
       s.despawn('yx', { leave: true });
@@ -251,7 +253,7 @@
       await s.fadeIn(1);
       await s.say('yangxiong:sad', 'Brother... what now? I am a murderer, and I can\'t go back to the city.');
       await s.say('shixiu', 'I have a road for us. Dai Zong of Liangshan gave me ten taels and told me to come up the mountain. We\'ll go to Liangshan.');
-      s.spawn('sq', 'shiqian', 20, 3, 'left');
+      s.spawn('sq', 'shiqian', 21, 3, 'left');
       await s.say('shiqian:smile', 'Liangshan! Then take me too!');
       await s.say('yangxiong:shock', 'Who\'s that?! — Shi Qian?');
       await s.say('shiqian', 'Shi Qian of Gaotang — the Flea on a Drum, at your service. I go over walls and through roofs, and I don\'t much mind whose. I was digging in these old graves for anything worth having, and I heard it all. Warden Yang, you saved me from the court once. Let me follow you two to Liangshan.');

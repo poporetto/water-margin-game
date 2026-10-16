@@ -8,6 +8,8 @@ const { load } = require('./headless.js');
 const VERBOSE = process.argv.includes('--verbose');
 const sb = load();
 const WM = sb.WM, S = WM.S, D = WM.data;
+// lay out the drawn props as the game does (a table or bed can cover more than its own tile): see T.headlessArt
+WM.tiles.headlessArt = true; WM.tiles.reloadArt();
 // time never passes headless: make engine timing helpers resolve at once
 WM.tween = function (d, fn) { if (fn) fn(1); return Promise.resolve(); };
 WM.wait = function () { return Promise.resolve(); };
@@ -42,7 +44,30 @@ function rowsOf(mid) {
   return rowsCache[mid] || (rowsCache[mid] = m.rows);
 }
 function tile(mid, x, y) { const r = rowsOf(mid); if (!r || y < 0 || x < 0 || !r[y] || x >= r[y].length) return null; const c = r[y][x]; return c === ' ' ? (D.maps[mid].fill || '.') : c; }
-function walkable(mid, x, y) { const c = tile(mid, x, y); return c != null && !WM.tiles.solid(c); }
+// The map as the game builds it (js/engine/field.js buildMap), for asking the tile code what is solid there: besides the
+// tile itself, a prop's wider footprint, a world-map icon, or a roof row the compact roof art leaves walkable.
+// Props keep clear of the spot the player came in at, so the layout depends on it (entry).
+const mapObjs = {};
+function mapObj(mid, entry) {
+  const def = D.maps[mid], rows = rowsOf(mid); if (!rows) return null;
+  const theme = def.theme || 'spring';
+  const key = mid + '|' + theme + '|' + (def.cacheKey ? def.cacheKey() : '') + '|' + (entry ? entry.x + ',' + entry.y : '');
+  if (mapObjs[key]) return mapObjs[key];
+  if (Object.keys(mapObjs).length > 40) for (const k in mapObjs) delete mapObjs[k];   // (each holds its own layout: keep few)
+  let w = 0; rows.forEach((r) => { w = Math.max(w, r.length); });
+  const m = { id: mid, def: def, rows: rows, w: w, h: rows.length, theme: theme, interior: !!def.interior,
+    get(x, y) { if (y < 0 || y >= this.h || x < 0 || x >= this.w) return def.edge || null; const c = rows[y][x]; return c === undefined || c === ' ' ? (def.fill || '.') : c; } };
+  if (entry) m.propEntry = { x: entry.x, y: entry.y };
+  return (mapObjs[key] = m);
+}
+// entry: where the player came into the map (defaults to how they came into the current one; none for another map)
+function walkable(mid, x, y, entry) {
+  const c = tile(mid, x, y); if (c == null) return false;
+  if (entry === undefined) entry = mid === cur.map ? cur.entry : null;
+  return !WM.tiles.solidAt(mapObj(mid, entry), x, y);
+}
+// what is in the way, for messages: the tile, or the prop whose footprint covers it
+function blocker(mid, x, y) { const c = tile(mid, x, y); return WM.tiles.solid(c) ? c : c + '" (under a prop\'s footprint)'; }
 // interiors hold several rooms walled off by void ('x'): which room a tile is in (-1 outside any, or not an interior)
 const roomCache = {};
 function roomOf(mid, x, y) {
@@ -79,7 +104,7 @@ function present(id) {
 }
 
 // ---------- world simulation ----------
-let cur = { map: null, x: 0, y: 0 };
+let cur = { map: null, x: 0, y: 0, entry: null };
 let temp = {};
 const lastLine = {};   // who -> they have spoken a line in this scene (what a lingerer says if spoken to)
 function flushOff() { Object.keys(temp).forEach((k) => { if (temp[k].pending && (temp[k].leave || WM.state.party.indexOf(temp[k].who) >= 0)) delete temp[k]; }); }          // temp actors on the current map: key -> {x,y}
@@ -159,8 +184,8 @@ function mkApi(ctx) {
         for (let i = 0; i < n; i++) { a.x += sx; a.y += sy; if (!hit && !a.boat && !walkable(cur.map, a.x, a.y)) hit = [a.x, a.y]; }
       });
       if (hit && opt && opt.fall) hit = null;   // knocked into the water, or over an edge, on purpose
-      if (hit && key !== 'player') sceneWarn('"' + (a.who || key) + '" walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
-      else if (hit) sceneWarn('the player walks through a solid tile "' + tile(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
+      if (hit && key !== 'player') sceneWarn('"' + (a.who || key) + '" walks through a solid tile "' + blocker(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
+      else if (hit) sceneWarn('the player walks through a solid tile "' + blocker(cur.map, hit[0], hit[1]) + '" at ' + cur.map + '(' + hit[0] + ',' + hit[1] + ')');
       if (a.x < 0 || a.y < 0) err('move: "' + key + '" leaves the map');
       // ends up standing in the same place as someone else (a pair drawn as one)
       if (key !== 'player') { const on = Object.keys(temp).filter((k) => k !== key && temp[k] !== a && !temp[k].lying && temp[k].x === a.x && temp[k].y === a.y); if (on.length) sceneWarn('"' + (a.who || key) + '" walks onto "' + on.join('", "') + '" at ' + cur.map + '(' + a.x + ',' + a.y + ')'); }
@@ -171,7 +196,7 @@ function mkApi(ctx) {
     place(key, tx, ty) {
       const a = findActor(key); if (!a) { err('place: no actor "' + key + '" on ' + cur.map); return; }
       a.x = tx; a.y = ty;
-      if (key === 'player' || key === WM.state.leader) { if (!a.boat && !walkable(cur.map, tx, ty)) err('place player on solid tile ' + cur.map + '(' + tx + ',' + ty + ') "' + tile(cur.map, tx, ty) + '"'); }
+      if (key === 'player' || key === WM.state.leader) { if (!a.boat && !walkable(cur.map, tx, ty)) err('place player on solid tile ' + cur.map + '(' + tx + ',' + ty + ') "' + blocker(cur.map, tx, ty) + '"'); }
     },
     face(key) { if (!findActor(key)) err('face: no actor "' + key + '"'); },
     faceEach(a, b) { if (!findActor(a)) err('faceEach: no actor "' + a + '"'); if (!findActor(b)) err('faceEach: no actor "' + b + '"'); },
@@ -190,7 +215,7 @@ function mkApi(ctx) {
       else {
         const wid = typeof who === 'string' ? who : key;
         const tc = tile(cur.map, tx, ty), wet = WM.tiles.DEF[tc] && WM.tiles.DEF[tc].water;
-        if (!walkable(cur.map, tx, ty)) (wet ? pendingWet : scene).push((wet ? '' : '[' + curEvent + '] ') + '"' + wid + '" placed on a solid tile "' + tc + '" at ' + cur.map + '(' + tx + ',' + ty + ')' + (wet ? '|' + key : ''));
+        if (!walkable(cur.map, tx, ty)) (wet ? pendingWet : scene).push((wet ? '' : '[' + curEvent + '] ') + '"' + wid + '" placed on a solid tile "' + blocker(cur.map, tx, ty) + '" at ' + cur.map + '(' + tx + ',' + ty + ')' + (wet ? '|' + key : ''));
         if (cur.x === tx && cur.y === ty) sceneWarn('"' + wid + '" placed on the player\'s tile ' + cur.map + '(' + tx + ',' + ty + ')');
         const on = Object.keys(temp).filter((k) => k !== key && temp[k].x === tx && temp[k].y === ty);
         if (on.length) sceneWarn('"' + wid + '" placed on top of "' + on.join('", "') + '" at ' + cur.map + '(' + tx + ',' + ty + ')');
@@ -215,8 +240,8 @@ function mkApi(ctx) {
     camera() { return resolved; }, cameraReset() {},
     warp(map, tx, ty) {
       if (!D.maps[map]) { err('warp to unknown map ' + map); return resolved; }
-      if (!walkable(map, tx, ty)) err('warp lands on solid tile ' + map + '(' + tx + ',' + ty + ') "' + tile(map, tx, ty) + '"');
-      cur = { map: map, x: tx, y: ty }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors(); syncField();
+      if (!walkable(map, tx, ty, { x: tx, y: ty })) err('warp lands on solid tile ' + map + '(' + tx + ',' + ty + ') "' + blocker(map, tx, ty) + '"');
+      cur = { map: map, x: tx, y: ty, entry: { x: tx, y: ty } }; temp = {}; WM.state.map = map; WM.state.x = tx; WM.state.y = ty; freezeActors(); syncField();
       return resolved;
     },
     battle(troop) { lagging(); const t = typeof troop === 'string' ? D.troops[troop] : troop; noteFoes(t); if (!t) err('unknown troop ' + troop); else (Array.isArray(t) ? t : t.enemies).forEach((e) => { if (!D.enemies[e]) err('troop ' + troop + ' has unknown enemy ' + e); }); return Promise.resolve('win'); },
@@ -487,7 +512,7 @@ async function main() {
   S.newGame();
   const st = D.start;
   S.setParty(st.party); WM.state.leader = st.party[0];
-  cur = { map: st.map, x: st.x, y: st.y }; WM.state.map = st.map;
+  cur = { map: st.map, x: st.x, y: st.y, entry: { x: st.x, y: st.y } }; WM.state.map = st.map;
   // Stars dead, and Stars departed (away:), at each chapter end (docs/STORY.md)
   const EXPECT_DEAD = { 19: 0, 22: 0, 23: 70, 24: 75 }, EXPECT_AWAY = { 19: 0, 22: 5, 23: 11 };
   const EXPECT_STARS = { 5: 11, 8: 20, 9: 39, 10: 42, 11: 48, 12: 60, 13: 64, 14: 80, 15: 87, 16: 88, 17: 102, 18: 108 }, checkedTotals = {};
@@ -550,7 +575,7 @@ async function main() {
       const route = { map: ev.map, t: arrival };
       const snapshot = JSON.stringify(WM.state), snapCur = JSON.stringify(cur), snapTemp = JSON.stringify(temp), errCount = errors.length, joinSnap = JSON.stringify(joins);
       const prevMap = cur.map;
-      cur = { map: route.map, x: route.t.x, y: route.t.y }; WM.state.map = cur.map; WM.state.x = cur.x; WM.state.y = cur.y; if (prevMap !== cur.map) temp = {};
+      cur = { map: route.map, x: route.t.x, y: route.t.y, entry: prevMap !== route.map ? { x: route.t.x, y: route.t.y } : cur.entry }; WM.state.map = cur.map; WM.state.x = cur.x; WM.state.y = cur.y; if (prevMap !== cur.map) temp = {};
       // where the player actually stands when it fires: inside a touch area, or beside the one they talk to
       if (ev.trigger !== 'auto') {
         const rch = tileReach(ev.map, arrival), spots = [];

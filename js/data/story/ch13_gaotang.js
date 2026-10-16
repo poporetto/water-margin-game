@@ -129,7 +129,7 @@
   WM.defEvents('yuncheng_in', [
     { id: 'ch13_theatre', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 13 && WM.state.x >= 67; }, run: async function (s) {
       s.spawn('bx', 'baixiuying', 72, 3, 'down'); s.spawn('by', 'baiyuqiao', 70, 4, 'right');
-      s.spawn('a1', 'villager', 68, 6, 'up'); s.spawn('a2', 'merchant', 74, 6, 'up'); s.spawn('a3', 'villager2', 71, 8, 'up');
+      s.spawn('a1', 'villager', 68, 6, 'up'); s.spawn('a2', 'merchant', 74, 5, 'up'); s.spawn('a3', 'villager2', 71, 8, 'up');
       s.music('inn');
       await s.narrate('Lei Heng took the best seat, in the front row. Bai Xiuying sang "Shuang Jian Chases Su Qing at Yuzhang," and the hall roared. Then she came down with a plate to collect from the audience — and began with the front row.');
       await s.say('baixiuying:smile', 'Sir, the first in the front row should be the first to give.');

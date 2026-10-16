@@ -257,12 +257,12 @@
       // the field before the Zhu manor: Song Jiang's army on the east of the road, and out of the west, Hu Sanniang's riders
       var D = WM.data;
       s.place('player', 31, 45, 'left');
-      s.spawn('wy1', 'wangying', 29, 46, 'left'); s.spawn('lc', 'linchong', 32, 47, 'left'); s.spawn('lk1', 'likui', 32, 44, 'left'); s.spawn('hr1', 'huarong', 30, 47, 'left');
-      var ours = D.troop(s, 'ls', 'outlaw', D.block(34, 38, [44, 47]).concat(D.block(35, 38, [48])), 'left');
+      s.spawn('wy1', 'wangying', 29, 46, 'left'); s.spawn('lc', 'linchong', 33, 46, 'left'); s.spawn('lk1', 'likui', 32, 44, 'left'); s.spawn('hr1', 'huarong', 30, 46, 'left');
+      var ours = D.troop(s, 'ls', 'outlaw', D.block(34, 38, [44, 45]).concat(D.block(35, 38, [46])), 'left');   // on the road, clear of the tents
       s.spawn('hu', 'husanniang', 9, 45, 'right');
-      var hus = D.troop(s, 'hm', 'guard', D.block(8, 11, [44, 47]).concat(D.block(8, 10, [46])), 'right');
+      var hus = D.troop(s, 'hm', 'guard', D.block(8, 11, [44, 46]).concat(D.block(5, 7, [45])), 'right');   // behind her, clear of the tents
       s.music('boss');
-      hus.forEach(function (k) { s.move(k, 'R13', { run: true, wait: false }); });
+      hus.forEach(function (k) { s.move(k, 'R10', { run: true, wait: false }); });
       s.move('hu', 'R16', { run: true, wait: false });
       await s.narrate('Song Jiang divided his army and attacked again. Out of the west came a troop of horsemen, and at their head, on a red-maned horse, a young woman with a sabre in each hand: Hu Sanniang.');
       await s.say('wangying', 'Ha! A girl? Leave her to me, brother!');
@@ -339,7 +339,7 @@
       s.party(['gudasao']); s.level('gudasao', 23); s.setLeader('gudasao'); s.flag('protagonist', 'gudasao');
       await s.warp('dengzhou_in', 31, 6, 'up', { noFade: true });
       await s.fadeIn(1);
-      s.spawn('yh', 'yuehe', 31, 4, 'down');
+      s.spawn('yh', 'yuehe', 31, 5, 'down');
       await s.say('yuehe', 'Sister-in-law Gu! I\'m Yue He, the jailer — Sun Li\'s wife is my sister. Your cousins the Xie brothers are in the death cell. Squire Mao has bought Bao Ji, and they won\'t live many days.');
       await s.say('gudasao:angry', 'My cousins? Husband! Sun Xin! Get in here!');
       s.spawn('sx', 'sunxin', 33, 5, 'left');

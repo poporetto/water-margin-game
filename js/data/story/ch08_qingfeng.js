@@ -135,7 +135,7 @@
   WM.defEvents('qingfeng_in', [
     { id: 'ch8_rescue', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch8_caged') && WM.state.x >= 17; }, run: async function (s) {
       s.spawn('sj', 'songjiang', 20, 8, 'up'); s.lie('sj');
-      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[21, 5], [24, 5], [27, 5], [29, 6]], 'down');
+      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[18, 6], [24, 5], [27, 5], [29, 6]], 'down');
       await s.say('huarong:angry', 'Liu Gao! You beat my kinsman half to death on a lie! Where is he?');
       await s.say('guard', 'The Commandant\'s orders — no one goes near the prisoner! Stand back, Major Hua!');
       s.sfx('arrow'); await s.flash('#ffffff', 0.15); s.emote('lgg0', '!', 0.8);

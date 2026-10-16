@@ -1175,6 +1175,9 @@
     var cfg = WM.TILE_ART || {};
     ART = cfg.tiles || {};
     var sh = cfg.sheets || {}, names = Object.keys(sh);
+    // headless tools (tools/walk.js) set T.headlessArt: no pictures load, but every sheet counts as present, so prop
+    // footprints and what they block are laid out exactly as in the game
+    if (T.headlessArt) { names.forEach(function (n) { SHEETS[n] = { width: 0, height: 0, headless: true }; }); return; }
     if (!names.length || typeof Image === 'undefined') return;
     artWaiting = names.length;
     names.forEach(function (n) {

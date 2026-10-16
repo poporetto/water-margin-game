@@ -148,7 +148,7 @@
   WM.defEvents('daming_in', [
     { id: 'ch17_fortune', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_gate') && WM.state.x >= 24 && WM.state.x < 40 && WM.state.y <= 10; }, run: async function (s) {
       s.addParty('lujunyi'); s.removeParty('lujunyi');
-      s.spawn('lu', 'lujunyi', 31, 4, 'down'); s.spawn('yq', 'yanqing', 34, 5, 'left'); s.spawn('lg', 'ligu', 28, 5, 'right');
+      s.spawn('lu', 'lujunyi', 31, 4, 'down'); s.spawn('yq', 'yanqing', 34, 5, 'left'); s.spawn('lg', 'ligu', 29, 5, 'right');
       await s.say('lujunyi', 'Master Zhang. They say you can read a man\'s fate. Read mine. I was born in the year of —');
       await s.narrate('Wu Yong counted on his fingers, and then slammed the table.');
       await s.say('wuyong', 'Strange! Within a hundred days, blood will fall on you. Your family will be scattered and your fortune lost, and you will die under the blade.');
@@ -392,7 +392,7 @@
   ]);
   WM.defEvents('yangtze_in', [
     { id: 'ch17_wang', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_swim'); }, run: async function (s) {
-      s.spawn('wf', 'wangfather', 5, 4, 'down'); s.spawn('wd', 'wangdingliu', 7, 4, 'down');
+      s.spawn('wf', 'wangfather', 5, 5, 'down'); s.spawn('wd', 'wangdingliu', 7, 4, 'down');
       await s.say('wangfather', 'A drowned man! Quick, son, dry clothes and hot wine!');
       await s.say('wangdingliu', 'I\'m Wang Dingliu — they call me the Lightning Flash, I run so fast. Zhang Wang? That devil has robbed half the travellers on this river. I\'d give anything to join Liangshan. Brother, take me with you.');
       await s.say('zhangshun', 'When I come back this way, I\'ll take you. And I\'ll settle with Zhang Wang.');
@@ -411,14 +411,14 @@
       await s.warp('jiankang_in', 21, 8, 'up');
     } },
     { id: 'ch17_blood', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_qiaonu') && WM.state.x >= 14; }, run: async function (s) {
-      s.spawn('lq', 'liqiaonu', 20, 4, 'down'); s.spawn('an', 'andaoquan', 18, 5, 'right');
+      s.spawn('lq', 'liqiaonu', 20, 4, 'down'); s.spawn('an', 'andaoquan', 19, 5, 'right');
       await s.say('liqiaonu:angry', 'Go to Shandong? To the bandits? If you go, I\'ll curse you every day you\'re gone!');
       await s.narrate('An Daoquan drank himself into a stupor and was put to bed. Late in the night, Zhang Shun heard a man come in by the back way — and knew the voice. It was Zhang Wang, with his share of Zhang Shun\'s gold, come to spend it on Li Qiaonu.');
       s.despawn('lq'); s.despawn('an', { leave: true });
       await s.fadeOut(1);
       await s.narrate('Zhang Shun took a kitchen knife. Zhang Wang got away out of the window. Li Qiaonu and the servants who saw Zhang Shun did not. Then Zhang Shun dipped his finger in the blood and wrote on the wall: "The killer is An Daoquan."');
       await s.fadeIn(1);
-      s.spawn('an', 'andaoquan', 18, 5, 'right');
+      s.spawn('an', 'andaoquan', 19, 5, 'right');
       await s.say('andaoquan:shock', 'What have you done?! You\'ve ruined me!');
       await s.say('zhangshun', 'Now you can\'t stay in Jiankang, Doctor. Come with me, or wait here for the constables.');
       await s.say('andaoquan:sad', '...Then let us go.');

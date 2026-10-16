@@ -194,7 +194,7 @@
       await s.fadeOut(1);
       s.addParty('xuning'); s.level('xuning', 26); s.party(['xuning']); s.setLeader('xuning'); s.flag('protagonist', 'xuning');
       await s.warp('kaifeng_in', 56, 15, 'up', { noFade: true });
-      s.spawn('wf', 'xuwife', 56, 13, 'down');
+      s.spawn('wf', 'xuwife', 57, 13, 'down');
       await s.fadeIn(1);
       await s.say('xuwife:sad', 'Husband — the red leather box. It\'s gone. Your grandfather\'s armour.');
       await s.say('xuning:shock', 'The goose-feather armour? Gone? I would give thirty thousand strings for it! It has been in my family four generations!');
@@ -254,7 +254,7 @@
       s.level('wuyong', 25);
       await s.narrate('Kong Liang ran all the way to Liangshan and threw himself at Song Jiang\'s feet. Song Jiang came at once with Wu Yong, Qin Ming, Hua Rong, Lin Chong and three thousand men, and the three mountains came out to meet him.');
       await s.warp('qingzhou', 10, 22, 'up', { noFade: true });
-      s.spawn('ys', 'yangzhi', 8, 22, 'right'); s.spawn('ws', 'wusong', 12, 22, 'left'); s.spawn('lz', 'lizhong', 7, 23, 'right'); s.spawn('zt', 'zhoutong', 13, 23, 'left');
+      s.spawn('ys', 'yangzhi', 8, 21, 'right'); s.spawn('ws', 'wusong', 12, 22, 'left'); s.spawn('lz', 'lizhong', 7, 24, 'right'); s.spawn('zt', 'zhoutong', 13, 23, 'left');
       await s.fadeIn(1);
       await s.say('wusong', 'Brother! You came!');
       await s.say('songjiang:smile', 'Brother Wu Song. Brother Lu Zhishen. Yang Zhi. I have long wanted to see you on our mountain.');

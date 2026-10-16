@@ -348,7 +348,7 @@
     { id: 'ch7_tower', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_totower') && WM.state.x >= 14 && WM.state.x <= 29; }, run: async function (s) {
       await s.narrate('Wu Song climbed over the wall of the residence in the dark. Up on the Mandarin Duck Tower, the lamps were lit, and three men were drinking and laughing: Commander Zhang, Captain Zhang, and Jiang Menshen.');
       await s.warp('mengzhou_in', 37, 7, 'up', { noFade: true });
-      s.spawn('zd', 'zhangdujian', 37, 4, 'down'); s.spawn('zt', 'zhangtuanlian', 34, 4, 'down'); s.spawn('jm', 'jiangmenshen', 40, 4, 'down');
+      s.spawn('zd', 'zhangdujian', 37, 4, 'down'); s.spawn('zt', 'zhangtuanlian', 34, 4, 'down'); s.spawn('jm', 'jiangmenshen', 39, 4, 'down');
       await s.say('jiangmenshen:smile', '...They\'ll have finished him by now. Drink, Commander! To the end of Wu Song!');
       await s.say('wusong:angry', 'Wu Song is here.');
       await s.battle('ch7_tower', { bg: 'palace', music: 'boss' });
@@ -362,7 +362,7 @@
   ]);
   WM.defEvents('crossslope_in', [
     { id: 'ch7_pilgrim', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_fugitive'); }, run: async function (s) {
-      s.spawn('erniang', 'sunerniang', 7, 4, 'down'); s.spawn('zhangqing2', 'zhangqing2', 9, 5, 'down');
+      s.spawn('erniang', 'sunerniang', 8, 4, 'down'); s.spawn('zhangqing2', 'zhangqing2', 9, 5, 'down');
       await s.say('sunerniang:shock', 'Brother Wu Song?! Lads, let him go!');
       await s.say('zhangqing2', 'Every road in Mengzhou is watched. Posters with your face, and a reward of three thousand strings. You can\'t go anywhere as you are.');
       await s.say('sunerniang', 'Two years ago a pilgrim monk came through here, and... well, he left behind his things. A black robe, a headband, a string of a hundred and eight beads of human skull-bone, a certificate of ordination, and two snowflake steel swords that sing in the night. Let your hair down over your brand and wear them, and you\'ll be the pilgrim.');

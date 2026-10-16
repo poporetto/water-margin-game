@@ -119,7 +119,7 @@
       await s.say(null, '(Lu Qian\'s house is on the north bank, east of the market.)');
     } },
     { id: 'ch3_luqianhouse', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch3_rush') && WM.state.map === 'kaifeng_in' && WM.state.x >= 23 && WM.state.x <= 32 && WM.state.y < 10; }, run: async function (s) {
-      s.spawn('gaoyanei', 'gaoyanei', 25, 3, 'down'); s.spawn('wife', 'linwife', 29, 4, 'down');
+      s.spawn('gaoyanei', 'gaoyanei', 26, 3, 'down'); s.spawn('wife', 'linwife', 29, 4, 'down');
       await s.say('linwife:angry', 'In the age of peace and order, how can you hold a respectable woman prisoner?!');
       await s.say('linchong:angry', 'Wife! Open the door!');
       s.sfx('hit'); await s.shake(4, 0.3);
@@ -192,7 +192,7 @@
       s.flag('ch3_exiled');
       await s.warp('kaifeng_in', 21, 15, 'up', { noFade: true });
       s.spawn('zhang', 'zhangjiaotou', 20, 14, 'right'); s.spawn('wife', 'linwife', 22, 14, 'left');
-      s.spawn('dong', 'dongchao', 18, 17, 'up'); s.spawn('xue', 'xueba', 23, 17, 'up');
+      s.spawn('dong', 'dongchao', 18, 17, 'up'); s.spawn('xue', 'xueba', 24, 17, 'up');
       await s.fadeIn(1);
       await s.say('linchong:sad', 'Father-in-law. I have been unjustly condemned. Who knows if I will ever come back alive? Your daughter is young. I will not have her wait for me and waste her youth, and I will not have Gao Yanei pester her because of me. I have written a letter of divorce. Let her marry again.');
       await s.say('linwife:sad', 'Husband! I have done nothing wrong — why would you cast me off?');
@@ -208,7 +208,7 @@
       s.despawn('dong'); s.despawn('xue');
       await s.warp('roadinn_in', 6, 6, 'up', { noFade: true });
       s.night(true); s.hide('player'); s.place('player', 9, 6, 'up');
-      s.spawn('dc', 'dongchao', 5, 4, 'right'); s.spawn('xb', 'xueba', 7, 4, 'left'); s.spawn('lq', 'luqian', 6, 7, 'up');
+      s.spawn('dc', 'dongchao', 5, 4, 'right'); s.spawn('xb', 'xueba', 8, 4, 'left'); s.spawn('lq', 'luqian', 6, 7, 'up');
       await s.fadeIn(0.8);
       await s.move('lq', 'U2');
       await s.say('luqian', 'Escort Dong, Escort Xue — a cup with you. ...You don\'t know me. I am Lu Qian, of the Marshal\'s household.');

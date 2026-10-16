@@ -44,13 +44,12 @@
   });
   WM.data.shiDoors = { hall: hall, houseA: houseA, shop: shopH, houseB: houseB };
 
-  // interiors: the manor hall with guest room, and village rooms
+  // interiors: the manor hall (the guests' beds along its back wall), and village rooms
   var I = L.grid(48, 22, 'x');
   var R = {};
   R.hall = I.room(1, 1, 20, 11, { floor: 'n' });
   I.stamp(2, 3, ['h..A.....A..h.....', '..................', '......KKKK........', '......KKKK....t...', '..................', '..................', 'j................j']);
-  I.vline(14, 3, 6, 'X'); I.set(14, 5, 'n');
-  I.stamp(15, 3, ['k...', '....', '...k']);
+  I.stamp(15, 3, ['k..k', '....', '....']);
   R.houseA = I.room(22, 1, 8, 7); I.stamp(23, 3, ['k..j..', '......', '..t...']);
   R.shop = I.room(31, 1, 8, 7); I.stamp(32, 3, ['hhhhh.', '......', 'ccc...']);
   R.houseB = I.room(40, 1, 8, 7); I.stamp(41, 3, ['k...h.', '......', '...t..']);

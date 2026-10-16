@@ -72,7 +72,7 @@
   WM.defMap('crossslope', { name: 'Cross Slope', theme: 'autumn', music: 'tense', rows: c.rows(), spawn: [13, 18], battleBg: 'plains', exits: [WM.toWorld('crossslope', 12, 19, 3, 1)] });
   var ci = L.grid(16, 9, 'x');
   var cR = ci.room(1, 1, 14, 8);
-  ci.stamp(2, 3, ['h..j....j..h', '.t..t..t....', '..........cc', 'kk.......jjj']);
+  ci.stamp(2, 3, ['h..j....j.kk', '.t..t..t..kk', '..........cc', '.........jjj']);
   WM.defMap('crossslope_in', { name: 'Cross Slope Inn', interior: true, theme: 'autumn', music: 'tense', rows: ci.rows(), spawn: [8, 7] });
   L.link({ map: 'crossslope', x: cs.x, y: cs.y }, { map: 'crossslope_in', x: cR.x, y: cR.y });
 
@@ -102,7 +102,7 @@
   var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'N' }), tower: mi.room(31, 1, 12, 8, { floor: 'n' }), happy: mi.room(44, 1, 11, 8) };
   mi.stamp(2, 3, ['h...A....h', '..........', 'kk..kk..kk', 'kk..kk..kk']);
   mi.stamp(15, 3, ['h...L....L...h', '..............', '...t..........', '..............', 'j............j']);
-  mi.stamp(32, 3, ['L..t......L', '...........', '.k.......k.']);
+  mi.stamp(32, 3, ['L..t....kkL', '........kk.', '...........']);
   mi.stamp(45, 3, ['h..L....h', '.t..t..t.', 'cccc.....']);
   WM.defMap('mengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: mi.rows(), spawn: [6, 7] });
   L.link({ map: 'mengzhou', x: camp.x, y: camp.y }, { map: 'mengzhou_in', x: mR.camp.x, y: mR.camp.y });

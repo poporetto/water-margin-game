@@ -45,7 +45,7 @@
     exits: [WM.toWorld('gaotang', 23, 39, 4, 1)] });
   var gi = L.grid(52, 11, 'x');
   var gR = { chai: gi.room(1, 1, 14, 9), yamen: gi.room(16, 1, 18, 10, { floor: 'N' }), jail: gi.room(35, 1, 14, 9, { floor: 'N' }) };
-  gi.stamp(2, 3, ['h..A......h.', '..........k.', '..t.........', '............']);
+  gi.stamp(2, 3, ['h..A......kk', '..........kk', '..t.........', '............']);
   gi.stamp(17, 3, ['h....EEEEEE....h', '......q00q......', '..t...aaaa...t..', '......KKKK......', '......KKKK']);   // the prefect's hall
   gi.stamp(36, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF', 'h..........h']);
   WM.defMap('gaotang_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: gi.rows(), spawn: [8, 8] });

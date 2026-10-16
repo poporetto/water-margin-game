@@ -100,7 +100,7 @@
   // ---------------- Jieling Ridge ----------------
   WM.defEvents('jieling_in', [
     { id: 'ch9_lili', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_road'); }, run: async function (s) {
-      s.spawn('lili', 'lili', 5, 4, 'down'); s.spawn('esc', 'escortzhang', 4, 5, 'right');
+      s.spawn('lili', 'lili', 5, 5, 'down'); s.spawn('esc', 'escortzhang', 4, 5, 'right');
       await s.say('lili', 'Wine? Meat? Sit, sit, travellers. You look tired.');
       await s.narrate('The wine tasted strange. Before Song Jiang could set down the bowl, the room spun. He and both escorts slid to the floor.');
       s.lie('player'); s.lie('esc');
@@ -202,11 +202,11 @@
     { id: 'ch9_tower', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_poem') && WM.state.x >= 43 && WM.state.x <= 56; }, run: async function (s) {
       s.night(false);
       // the tower over the river: Song Jiang alone with his wine, and the white wall
-      s.place('player', 49, 5, 'up');
+      s.place('player', 50, 5, 'up');
       await s.narrate('Song Jiang sat by the window drinking alone, looking out over the great river. He thought of his age — past thirty, with no name and no achievement, a branded convict far from home, his father old and alone. He grew drunk, and sad, and angry.');
       await s.say('songjiang', 'Waiter! A brush. And ink. Plenty of ink.');
       s.spawn('wt9', 'waiter', 48, 8, 'up');
-      await s.moveTo('wt9', 49, 6);
+      await s.moveTo('wt9', 50, 6);
       s.face('wt9', 'up'); s.emote('wt9', '...', 1);
       s.despawn('wt9', { to: [48, 8] });
       await s.move('player', 'U2', { speed: 34 });   // unsteady, up to the white wall
@@ -227,7 +227,7 @@
       await s.warp('jiangzhou_in', 14, 9, 'up', { noFade: true });
       s.hide('player');
       s.spawn('cj9', 'caijiu', 7, 4, 'down'); s.spawn('hw9', 'huangwenbing', 10, 5, 'left');
-      var g9 = WM.data.troop(s, 'jg', 'soldier', [[3, 6], [12, 6], [3, 8], [12, 8]], 'down');
+      var g9 = WM.data.troop(s, 'jg', 'soldier', [[2, 6], [12, 6], [3, 8], [12, 8]], 'down');
       s.spawn('sj9', 'songjiang', 7, 9, 'up'); s.spawn('dg', 'soldier', 6, 9, 'up'); s.spawn('dg2', 'soldier', 8, 9, 'up');
       await s.fadeIn(0.8);
       await s.narrate('Huang Wenbing copied the poem and took it at once to the prefect, Cai Jiu — the ninth son of the Prime Minister Cai Jing. The prefect sent his guards for Song Jiang that very hour. Dai Zong had run ahead to warn him: "Brother, pretend to be mad!"');

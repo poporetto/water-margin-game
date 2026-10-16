@@ -92,7 +92,7 @@
   WM.defEvents('weizhou_in', [
     { id: 'ch2_pan', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 2; }, run: async function (s) {
       s.spawn('shijin', 'shijin', 31, 6, 'left'); s.spawn('lizhong', 'lizhong', 29, 6, 'right');
-      s.spawn('waiterP', 'waiter', 34, 8, 'up');
+      s.spawn('waiterP', 'waiter', 35, 8, 'up');
       s.spawn('oldjin', 'oldjin', 38, 4, 'down'); s.spawn('cuilian', 'cuilian', 39, 4, 'down');
       s.face('player', 'down');
       await s.move('waiterP', 'U1');
@@ -441,7 +441,7 @@
       await s.move('servant', 'D2');
       await s.say('servant', 'Monk, you can\'t stay here tonight! There\'s business at the manor tonight.');
       await s.say('luzhishen', 'What business is it of yours if I stay one night? Is it a wedding or a funeral, that I can\'t sleep in a barn?');
-      s.spawn('liu', 'liutaigong', 14, 9, 'down');
+      s.spawn('liu', 'liutaigong', 12, 9, 'down');   // out of his door
       await s.move('liu', 'D2');
       await s.say('liutaigong:sad', 'Forgive my servant, Reverend. Come in, eat and rest. But it is a sorry kind of wedding tonight.');
       s.despawn('servant'); s.despawn('liu');
