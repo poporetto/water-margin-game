@@ -101,10 +101,6 @@ These are the same 47 shoreline shapes × 3 frames as `water.png` (shallow) and 
 | 29 | Prisoner's straw pallet | **64 × 36**, one piece seen from above, sized for a man lying full length on it: a straw mat with a rolled straw pillow at the left (head) end and a rough grey blanket over the right (foot) end. It lies across two rows of tiles, centred on the line between them |
 | 30 | Cell door | 32 × 32: the same timber grille as item 28 with a hinged door in it, two posts and an iron lock on a chain; it sits in the front run of bars and joins the bars on both sides |
 
-## Known issue to fix (not new art)
-
-- **Props sitting on a carpet show a patch of floor.** On carpeted rooms (Chai Jin's hall, the manor halls), every lantern, table, shelf and jar sits on a square of wooden floor with a carpet border around it, because the map cuts a hole in the carpet for each prop. **Fix:** let the carpet run under props, so the prop stands on the carpet itself. If any prop sheet has its own floor painted in, re-export it with a transparent background so the ground beneath shows through.
-
 ---
 
 ## Priority
