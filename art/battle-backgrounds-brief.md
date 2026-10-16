@@ -7,11 +7,12 @@ Water Margin, a Suikoden II–style RPG set in Northern Song China, c. 1120. Bat
 - **Size: 1920 × 1040 px.** The game shows the backdrop over a 960 × 520 area and draws at the screen's own pixel density, so this is sharp on high-density displays. One file per background, with no UI and no characters.
 - **File type: PNG.** JPG is fine only for a soft, painterly style; it smears hard edges, which then show as blotches.
 - **Style:** a painterly, slightly soft backdrop in the game's palette sits best behind the small pixel-art characters, in an "HD-2D" look. Avoid photographic sharpness. If you prefer strict pixel art instead, draw at 480 × 260 and enlarge it 4× with nearest-neighbour to 1920 × 1040.
-- **Composition** (in 1920 × 1040 pixels):
-  - The horizon sits about **a third of the way down** (around y = 320).
-  - Everything below the horizon is ground the fighters stand on: keep the lower two thirds fairly open and even, with detail at the edges, not the middle.
-  - Fighters stand in two groups, enemies on the left half and the party on the right, feet at roughly y = 600–800.
-  - A dialogue box covers the bottom of the screen, so nothing important belongs in the bottom 80 px.
+- **Composition: the fighters must stand on ground.** Use [battle-background-guide.png](battle-background-guide.png) (1920 × 1040) as the layout; it can be given to the image generator as a reference:
+  - **Blue, y 0–320: scenery.** Sky, mountains, trees, walls, buildings, water.
+  - **Sand band, y 320–420: the horizon.** The far edge of the ground and the foot of hills, walls and treelines. Nothing taller than this band may come down past y = 420.
+  - **Green, y 420–1040: ground only, across the full width.** Earth, grass, paving, snow, a riverbank or a floor, seen flat. No cliffs, ponds, rivers, buildings, trees or large rocks here; small tufts, stones and texture are fine, kept clear of the marked feet.
+  - The outlines show where fighters stand (about 120 × 300 px each, feet on the black ellipses): red is enemies, blue the party, purple a guest, yellow the two duellists. The highest feet are at y = 460, so the ground must start above that.
+  - Heads of the back row reach up into the scenery zone; that is fine, only the feet need ground.
 - **View:** looking across level ground towards the horizon (a side-on stage), not top-down.
 - **Palette:** earthy and muted, as in the field art. Night and fire scenes may be darker and warmer.
 
