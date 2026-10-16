@@ -864,13 +864,13 @@
       px(c,x,y,S,S,'#9a6a3c');
       for(var i=0;i<S;i+=3)px(c,vert?x:x+i,vert?y+i:y,vert?S:1,vert?1:S,'#7a4e28');
     }
-    // Railings belong only on the outside of the full bridge footprint.
+    // Railings belong only on the outside of the full bridge footprint: a plain dark rail, no posts.
     if(vert){
-      if(m.get(tx-1,ty)!=='B'){px(c,x,y,2,S,'#5a3418');px(c,x,y+2,2,3,'#c8965a');px(c,x,y+10,2,3,'#c8965a');}
-      if(m.get(tx+1,ty)!=='B'){px(c,x+14,y,2,S,'#5a3418');px(c,x+14,y+2,2,3,'#c8965a');px(c,x+14,y+10,2,3,'#c8965a');}
+      if(m.get(tx-1,ty)!=='B'){px(c,x,y,2,S,'#5a3418');}
+      if(m.get(tx+1,ty)!=='B'){px(c,x+14,y,2,S,'#5a3418');}
     }else{
-      if(m.get(tx,ty-1)!=='B'){px(c,x,y,S,2,'#5a3418');px(c,x+2,y-1,3,3,'#c8965a');px(c,x+10,y-1,3,3,'#c8965a');}
-      if(m.get(tx,ty+1)!=='B'){px(c,x,y+14,S,2,'#5a3418');px(c,x+2,y+13,3,3,'#c8965a');px(c,x+10,y+13,3,3,'#c8965a');}
+      if(m.get(tx,ty-1)!=='B'){px(c,x,y,S,2,'#5a3418');}
+      if(m.get(tx,ty+1)!=='B'){px(c,x,y+14,S,2,'#5a3418');}
     }
   }
 
