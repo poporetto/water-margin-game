@@ -749,9 +749,10 @@
     px(c, x + 5, y + 2, 6, 3, '#4a3018'); px(c, x + 6, y + 1, 4, 1, '#c84a3a');
   }
   function fence(c, x, y, tx, ty, th, m) {
+    var F = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'F'; };
+    if (m && m.interior) { cellBars(c, x, y, tx, ty, m, F); return; }   // indoors a fence is the timber grille of a prison cell
     // a village fence of woven wattle between sharpened stakes
     grass(c, x, y, tx, ty, th);
-    var F = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'F'; };
     var horiz = F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1));
     if (horiz) {
       for (var i = 0; i < 16; i += 2) { px(c, x + i, y + 6 + (i % 4 ? 1 : 0), 2, 5, i % 4 ? '#a8885a' : '#8a6a40'); }
@@ -761,6 +762,24 @@
       for (var j = 0; j < 16; j += 2) { px(c, x + 5 + (j % 4 ? 1 : 0), y + j, 5, 2, j % 4 ? '#a8885a' : '#8a6a40'); }
       px(c, x + 5, y, 1, S, '#c8a870'); px(c, x + 10, y, 1, S, '#6a4a2a');
       for (var q = 1; q < 16; q += 6) px(c, x + 6, y + q, 3, 2, '#6a4a2a');
+    }
+  }
+
+  // A prison cell's wall of heavy timber bars, standing on the stone floor: across the room, a top beam and a sill with
+  // squared bars between; running away from the viewer, one long beam with the bar tops along it.
+  function cellBars(c, x, y, tx, ty, m, F) {
+    floorStone(c, x, y, tx, ty);
+    if (F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1))) {
+      px(c, x, y + 14, S, 2, 'rgba(0,0,0,0.25)');                                    // shadow on the floor
+      for (var i = 1; i < 16; i += 4) { px(c, x + i, y + 1, 2, 13, '#4a2e18'); px(c, x + i, y + 1, 1, 13, '#7a5232'); }
+      px(c, x, y, S, 2, '#3a2412'); px(c, x, y, S, 1, '#6a4428');                      // top beam
+      px(c, x, y + 12, S, 2, '#3a2412'); px(c, x, y + 12, S, 1, '#6a4428');            // sill
+      if (!F(-1, 0)) px(c, x, y, 2, 14, '#2e1c0e');                                     // end posts
+      if (!F(1, 0)) px(c, x + 14, y, 2, 14, '#2e1c0e');
+    } else {
+      px(c, x + 10, y, 2, S, 'rgba(0,0,0,0.25)');
+      px(c, x + 6, y, 4, S, '#3a2412'); px(c, x + 6, y, 1, S, '#6a4428');
+      for (var j = 1; j < 16; j += 4) px(c, x + 7, y + j, 2, 2, '#7a5232');
     }
   }
 

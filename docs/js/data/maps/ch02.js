@@ -24,7 +24,7 @@
   var yi = L.grid(40, 12, 'x');
   var yR = { shop: yi.room(1, 1, 8, 7), inn: yi.room(10, 1, 10, 7), zhao: yi.room(21, 1, 16, 10, { floor: 'K' }) };
   yi.stamp(2, 3, ['hhhh..', '......', 'ccc...']); yi.stamp(11, 3, ['...kk.kk', '...kk.kk', 'cccc....']);
-  yi.stamp(22, 3, ['h..A....A..h..', '..............', '...t......t...', '..............', 'j....kkk.....j']);
+  yi.stamp(22, 3, ['h..A....A..h..', '..............', '...t..........', '..............', 'j....kkk.....j']);
   WM.defMap('yanmen_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: yi.rows(), spawn: [5, 6] });
   L.link({ map: 'yanmen', x: yShop.x, y: yShop.y }, { map: 'yanmen_in', x: yR.shop.x, y: yR.shop.y });
   L.link({ map: 'yanmen', x: yInn.x, y: yInn.y }, { map: 'yanmen_in', x: yR.inn.x, y: yR.inn.y });
@@ -153,7 +153,7 @@
     encounters: { rate: 0.05, troops: [['wolf', 'wolf'], ['boar'], ['bandit', 'bandit', 'banditArcher']], cond: function (S2) { return !S2.has('ch2_waguanwin'); } } });
   var gi = L.grid(20, 9, 'x');
   var gR = { kitchen: gi.room(1, 1, 8, 7), cui: gi.room(10, 1, 9, 7) };
-  gi.stamp(2, 3, ['jj..j.', '......', '.t....']); gi.stamp(11, 3, ['k..h..j', '.......', '..t.t..']);
+  gi.stamp(2, 3, ['jj..j.', '......', '.t....']); gi.stamp(11, 3, ['k..h..j', '.......', '..t....']);
   WM.defMap('waguan_in', { name: '', interior: true, theme: 'autumn', music: 'dungeon', rows: gi.rows(), spawn: [5, 6] });
   L.link({ map: 'waguan', x: kitchen.x, y: kitchen.y }, { map: 'waguan_in', x: gR.kitchen.x, y: gR.kitchen.y });
   L.link({ map: 'waguan', x: cuiRoom.x, y: cuiRoom.y }, { map: 'waguan_in', x: gR.cui.x, y: gR.cui.y });

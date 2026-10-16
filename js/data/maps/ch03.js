@@ -34,7 +34,7 @@
   WM.defMap('chaimanor', { name: 'Chai Jin\'s Manor', theme: 'snow', music: 'palace', rows: m.rows(), spawn: [17, 26], battleBg: 'snow', exits: [WM.toWorld('chaimanor', 16, 27, 3, 1)] });
   var mi = L.grid(20, 12, 'x');
   var mR = mi.room(1, 1, 18, 10, { floor: 'K' });
-  mi.stamp(2, 3, ['h..L......L..h..', '................', '..t..t....t..t..', '................', 'j..............j']);
+  mi.stamp(2, 3, ['h..L......L..h..', '................', '..t.............', '................', 'j..............j']);
   WM.defMap('chaimanor_in', { name: 'Chai Jin\'s Hall', interior: true, theme: 'snow', music: 'palace', rows: mi.rows(), spawn: [10, 9] });
   L.link({ map: 'chaimanor', x: hall.x, y: hall.y }, { map: 'chaimanor_in', x: mR.x, y: mR.y });
 

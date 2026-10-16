@@ -45,7 +45,7 @@
     exits: [WM.toWorld('gaotang', 23, 39, 4, 1)] });
   var gi = L.grid(52, 11, 'x');
   var gR = { chai: gi.room(1, 1, 14, 9), yamen: gi.room(16, 1, 18, 10, { floor: 'K' }), jail: gi.room(35, 1, 14, 9, { floor: 'N' }) };
-  gi.stamp(2, 3, ['h..A......h.', '..........k.', '..t.....t...', '............']);
+  gi.stamp(2, 3, ['h..A......h.', '..........k.', '..t.........', '............']);
   gi.stamp(17, 3, ['h....EEEEEE....h', '......q00q......', '..t...aaaa...t..', '................']);   // the prefect's hall
   gi.stamp(36, 3, ['F.FF.FF.FF.F', 'F..F..F..F..', '............', 'h..........h']);
   WM.defMap('gaotang_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: gi.rows(), spawn: [8, 8] });
@@ -85,7 +85,7 @@
   WM.defMap('wugang', { name: 'Wugang Market', theme: 'summer', music: 'town', rows: m.rows(), spawn: [0, 10], battleBg: 'town',
     exits: [WM.toWorld('wugang', 0, 10, 1, 2)] });
   var mi = L.grid(12, 8, 'x'); var mR = mi.room(1, 1, 10, 7);
-  mi.stamp(2, 3, ['hjj..h..', '..t.....', 'p.......']);
+  mi.stamp(2, 3, ['hjj..h..', '..t.....', '........']);
   WM.defMap('wugang_in', { name: 'Smithy', interior: true, theme: 'summer', music: 'town', rows: mi.rows(), spawn: [6, 6] });
   L.link({ map: 'wugang', x: smithy.x, y: smithy.y }, { map: 'wugang_in', x: mR.x, y: mR.y });
 })();

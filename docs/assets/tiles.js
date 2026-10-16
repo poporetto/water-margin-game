@@ -155,8 +155,9 @@ WM.TILE_ART = {
   't c k h j A 4 i 1 2 3 5 6 7 8 E 0 a U'.split(' ').forEach(function(ch){ if(!A[ch+'@snow'])A[ch+'@snow']=A[ch+'@spring']; });
   // The lantern too, but only indoors: outdoors in snow it waits for a snowy version.
   A['L@snow']=Object.assign({},A['L@spring'],{indoors:true});
-  // Fences and wells that stand inside an interior map (a prison yard, a courtyard well). (Red walls indoors keep the
-  // plain lacquer the code draws: the outdoor wall art shows the ground through its edges.)
-  ['F','p'].forEach(function(ch){ themes.forEach(function(th){ if(A[ch+'@'+th])A[ch+'@'+th]=Object.assign({},A[ch+'@'+th],{inside:true}); }); });
+  // A well that stands inside an interior map. (Indoors a fence is a prison cell's bars, drawn by the code until there
+  // is art for them; red walls indoors keep the plain lacquer the code draws, as the outdoor wall art shows the ground
+  // through its edges.)
+  ['p'].forEach(function(ch){ themes.forEach(function(th){ if(A[ch+'@'+th])A[ch+'@'+th]=Object.assign({},A[ch+'@'+th],{inside:true}); }); });
   // (the world map's roads take the silk road texture in js/core/tiles.js, so they keep their ink edges)
 })();

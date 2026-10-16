@@ -93,6 +93,17 @@ These are the same 47 shoreline shapes × 3 frames as `water.png` (shallow) and 
 |---|---|---|
 | 27 | Vegetable plot | dug earth beds with rows of greens and a wooden edge, connecting on all sides (edges and corners); 2 variants |
 
+## 7. Prisons
+
+| # | Tile | Notes |
+|---|---|---|
+| 28 | Prison cell bars | heavy dark timber grille standing on a stone floor: a top beam, a sill and squared bars. Pieces for a run across the room (left end, middle, right end) and a run going away from the viewer (top, middle, bottom), plus a gap for the cell door. No grass: this stands indoors |
+| 29 | Prisoner's straw pallet | 32 × 32 (2 wide if possible): a straw mat or plank bunk with a rough blanket, for the cells (they currently use the curtained bed) |
+
+## Known issue to fix (not new art)
+
+- **Props sitting on a carpet show a patch of floor.** On carpeted rooms (Chai Jin's hall, the manor halls), every lantern, table, shelf and jar sits on a square of wooden floor with a carpet border around it, because the map cuts a hole in the carpet for each prop. **Fix:** let the carpet run under props, so the prop stands on the carpet itself. If any prop sheet has its own floor painted in, re-export it with a transparent background so the ground beneath shows through.
+
 ---
 
 ## Priority
@@ -100,6 +111,7 @@ These are the same 47 shoreline shapes × 3 frames as `water.png` (shallow) and 
 1. **Section 1a (marsh) and section 2 (water) for marsh.** Liangshan uses these, and most of the second half of the game happens there.
 2. **Section 4 (interior wall and doorway).** You see these in every building.
 3. **Snow (1e, the snow water in section 2, and the snow gate).**
-4. **South and autumn.**
-5. **World-map sea and river.**
-6. **Dusk and the vegetable plot.**
+4. **Prison bars and pallet (section 7).**
+5. **South and autumn.**
+6. **World-map sea and river.**
+7. **Dusk and the vegetable plot.**

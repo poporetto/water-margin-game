@@ -52,7 +52,7 @@
   var yi = L.grid(70, 12, 'x');
   var yR = { office: yi.room(1, 1, 12, 9, { floor: 'N' }), dalang: yi.room(14, 1, 10, 9), wang: yi.room(25, 1, 8, 8), ximen: yi.room(34, 1, 10, 8), lion: yi.room(45, 1, 14, 10), hejiu: yi.room(60, 1, 8, 8) };
   yi.stamp(2, 3, ['hEEEEEEh.', '..q00q...', '..aaaa...']);   // the county hall
-  yi.stamp(15, 3, ['k...j...', '........', '..t..ttt', '........']);
+  yi.stamp(15, 3, ['k...j...', '........', '..t.....', '........']);
   yi.stamp(26, 3, ['h..j..', '.t..t.', 'cc....']);
   yi.stamp(35, 3, ['hhhhhh..', '........', 'cccc....']);
   yi.stamp(46, 3, ['h..L....L..h', '.t..t..t..t.', '............', '.t..t..t..t.']);
@@ -101,8 +101,8 @@
   var mi = L.grid(56, 12, 'x');
   var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'K' }), tower: mi.room(31, 1, 12, 8, { floor: 'K' }), happy: mi.room(44, 1, 11, 8) };
   mi.stamp(2, 3, ['h...A....h', '..........', 'kk..kk..kk', 'kk..kk..kk']);
-  mi.stamp(15, 3, ['h...L....L...h', '..............', '...t......t...', '...t......t...', 'j............j']);
-  mi.stamp(32, 3, ['L..t..t...L', '...........', '.k.......k.']);
+  mi.stamp(15, 3, ['h...L....L...h', '..............', '...t..........', '..............', 'j............j']);
+  mi.stamp(32, 3, ['L..t......L', '...........', '.k.......k.']);
   mi.stamp(45, 3, ['h..L....h', '.t..t..t.', 'cccc.....']);
   WM.defMap('mengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: mi.rows(), spawn: [6, 7] });
   L.link({ map: 'mengzhou', x: camp.x, y: camp.y }, { map: 'mengzhou_in', x: mR.camp.x, y: mR.camp.y });
@@ -136,7 +136,7 @@
   k.house(3, 13, 6, 4, { roof: 'z', door: false, windows: [2] }); k.set(9, 14, 'J');       // the village inn where Wu Song drank
   k.scatter('T', 0.08, 301, '.', [1, 1, 30, 22]); L.clearAround(k, ':', 'T', '.');
   WM.defMap('kongmanor', { name: 'Kong Family Manor', theme: 'snow', music: 'field', rows: k.rows(), spawn: [15, 22], battleBg: 'snow', exits: [WM.toWorld('kongmanor', 14, 23, 3, 1)] });
-  var ki = L.grid(18, 11, 'x'); var kR = ki.room(1, 1, 16, 9, { floor: 'K' }); ki.stamp(2, 3, ['h..A......A.h.', '..............', '..t...KKK..t..', '..............', 'j............j']);
+  var ki = L.grid(18, 11, 'x'); var kR = ki.room(1, 1, 16, 9, { floor: 'K' }); ki.stamp(2, 3, ['h..A......A.h.', '..............', '..t...KKK.....', '..............', 'j............j']);
   WM.defMap('kongmanor_in', { name: 'Kong Family Hall', interior: true, theme: 'snow', music: 'field', rows: ki.rows(), spawn: [8, 8] });
   L.link({ map: 'kongmanor', x: km.x, y: km.y }, { map: 'kongmanor_in', x: kR.x, y: kR.y });
 })();

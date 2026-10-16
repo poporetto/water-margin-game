@@ -50,7 +50,7 @@
     exits: [Object.assign(WM.toWorld('yishui', 0, 26, 1, 2), { cond: function (S2) { return !S2.has('ch10_carry') || S2.has('ch10_tigers'); }, blocked: '(Li Kui will not turn back now.)' })] });
   WM.defEvents('yishui', [L.save('yisave', 19, 28)]);
   var yi = L.grid(22, 9, 'x'); var yR = { home: yi.room(1, 1, 8, 7), cao: yi.room(10, 1, 11, 8, { floor: 'K' }) };
-  yi.stamp(2, 3, ['k..j..', '......', '..t...']); yi.stamp(11, 3, ['h..A..h..', '.........', '..t...t..']);
+  yi.stamp(2, 3, ['k..j..', '......', '..t...']); yi.stamp(11, 3, ['h..A..h..', '.........', '..t......']);
   WM.defMap('yishui_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: yi.rows(), spawn: [5, 6] });
   L.link({ map: 'yishui', x: home.x, y: home.y }, { map: 'yishui_in', x: yR.home.x, y: yR.home.y });
   L.link({ map: 'yishui', x: cao.x, y: cao.y }, { map: 'yishui_in', x: yR.cao.x, y: yR.cao.y });

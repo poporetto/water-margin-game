@@ -91,7 +91,7 @@
   });
   var H = L.grid(18, 12, 'x');
   var hallR = H.room(0, 0, 18, 12, { floor: 'n' });
-  H.stamp(1, 2, ['h...LA..AL...h..', '................', '..t..KKKKKK..t..', '..t..KKKKKK..t..', '.....KKKKKK.....', '................', 'j..............j']);
+  H.stamp(1, 2, ['h...LA..AL...h..', '................', '..t..KKKKKK.....', '.....KKKKKK.....', '.....KKKKKK.....', '................', 'j..............j']);
   H.set(2, 3, 'k');
   WM.defMap('shaohua_in', { name: 'Shaohua Stronghold', interior: true, theme: 'spring', music: 'dungeon', rows: H.rows(), spawn: [9, 10] });
   L.link({ map: 'shaohua', x: fortHall.x, y: fortHall.y }, { map: 'shaohua_in', x: hallR.x, y: hallR.y });

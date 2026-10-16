@@ -49,7 +49,7 @@
   WM.defMap('jiankang', { name: 'Jiankang', theme: 'snow', music: 'town', rows: j.rows(), spawn: [19, 1], battleBg: 'town', weather: 'snow' });
   var ji = L.grid(30, 10, 'x'); var jR = { an: ji.room(1, 1, 12, 8), li: ji.room(14, 1, 14, 9, { floor: 'K' }) };
   ji.stamp(2, 3, ['hhhh..k...', '..........', '..t.......']);
-  ji.stamp(15, 3, ['k..h....L...', '............', '..t...t.....', '............']);
+  ji.stamp(15, 3, ['k..h....L...', '............', '..t.........', '............']);
   WM.defMap('jiankang_in', { name: '', interior: true, theme: 'snow', music: 'town', rows: ji.rows(), spawn: [6, 6] });
   L.link({ map: 'jiankang', x: an.x, y: an.y }, { map: 'jiankang_in', x: jR.an.x, y: jR.an.y });
   L.link({ map: 'jiankang', x: li.x, y: li.y }, { map: 'jiankang_in', x: jR.li.x, y: jR.li.y });
