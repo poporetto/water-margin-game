@@ -348,9 +348,22 @@
   };
 
   // Shadow ellipse under actors.
+  // A soft shadow on the ground under a figure: darkest beneath the feet and fading out at the edge, as if blurred, and
+  // thrown a little to the right by light from the upper left. Drawn once into a small image and scaled to each figure.
+  var shadowImg = null;
+  function softShadow() {
+    if (shadowImg) return shadowImg;
+    var cv = document.createElement('canvas'); cv.width = 64; cv.height = 64;
+    var g = cv.getContext('2d'), rg = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    rg.addColorStop(0, 'rgba(0,0,0,0.5)'); rg.addColorStop(0.4, 'rgba(0,0,0,0.36)'); rg.addColorStop(0.75, 'rgba(0,0,0,0.12)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = rg; g.fillRect(0, 0, 64, 64);
+    return (shadowImg = cv);
+  }
   SP.shadow = function (c, x, y, w) {
-    c.fillStyle = 'rgba(0,0,0,0.28)';
-    c.beginPath(); c.ellipse(Math.round(x), Math.round(y - 1), w || 5, 2, 0, 0, Math.PI * 2); c.fill();
+    var rx = (w || 5) * 2.1, ry = 4, sm = c.imageSmoothingEnabled;
+    c.imageSmoothingEnabled = true;   // (the fade is meant to be smooth on the pixel-art canvas)
+    c.drawImage(softShadow(), x - rx + 1, y + 1 - ry, rx * 2, ry * 2);
+    c.imageSmoothingEnabled = sm;
   };
 
   // Load optional PNG override for a sprite sheet.
