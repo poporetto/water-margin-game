@@ -188,15 +188,18 @@
     });
   };
 
-  // The closing roll: all hundred and eight, by rank, with their stars and how their stories ended.
+  // The closing roll: all hundred and eight, by rank, each with a portrait, the star, the name, and how their story
+  // ended (WM.data.fates), in the manner of the old Suikoden endings. Hold a button to hurry it.
   C.credits = function () {
     var st = WM.state, order = WM.data.charOrder.slice().sort(function (a, b) { return S.def(a).rank - S.def(b).rank; });
-    var ROW = 64, total = order.length * ROW + WM.H + 400;
+    var FATES = WM.data.fates || {}, ROW = 196, HEAD = 200, total = HEAD + order.length * ROW + WM.H + 360;
+    var BOX = { top: '#1f3a33', bottom: '#0e1d19' }, lines = {};
+    order.forEach(function (id) { lines[id] = G.wrap(FATES[id] || '', 530, 21); });
     return new Promise(function (resolve) {
-      var t0 = WM.time, y = 0;
+      var y = 0;
       var w = {
         update: function (dt) {
-          y += (I.down('ok') || I.down('cancel') ? 260 : 46) * (dt || 1 / 60);
+          y += (I.down('ok') || I.down('cancel') ? 420 : 62) * (dt || 1 / 60);
           if (y > total) { UI.remove(w); resolve(); }
         },
         draw: function () {
@@ -205,15 +208,16 @@
           G.text('The Hundred and Eight Stars', 480, top + 40, { size: 34, bold: true, align: 'center', color: G.COL.gold });
           G.text('天罡三十六 · 地煞七十二', 480, top + 86, { size: 22, align: 'center', color: '#c8b890' });
           order.forEach(function (id, i) {
-            var py = top + 160 + i * ROW; if (py < -ROW || py > WM.H + ROW) return;
-            var d = S.def(id), fate = st.dead[id] ? 'fell' : st.flags['away:' + id] ? 'departed' : 'lived';
-            var col = fate === 'fell' ? '#a89a88' : fate === 'departed' ? '#a8c0d8' : '#f0e0c0';
-            try { var im = WM.portraits.get(id, 'normal'); if (im.isOverride) WM.portraits.drawOverride(im, 150, py - 28, 48, 56); else WM.gfx.blit(im, 150, py - 28, 1); } catch (e) {}
-            G.text(d.starEn, 230, py - 14, { size: 18, color: '#c8b890' });
-            G.text(d.name + '  ' + d.zh, 230, py + 10, { size: 24, bold: true, color: col });
-            G.text(fate === 'fell' ? 'fell' : fate === 'departed' ? 'departed' : 'lived', 820, py, { size: 18, align: 'right', color: col, italic: true });
+            var py = top + HEAD + i * ROW; if (py < -ROW || py > WM.H + 20) return;
+            var d = S.def(id), fell = !!st.dead[id], col = fell ? '#b8ab98' : '#f0e4c8';
+            try { WM.portraits.drawFramed(id, fell ? 'sad' : 'normal', 96, py + 6); } catch (e) {}
+            G.window(276, py, 262, 46, BOX); G.window(548, py, 316, 46, BOX);
+            G.text(d.starEn, 290, py + 11, { size: 19, color: '#d8c898' });
+            G.text(d.name + '  ' + d.zh, 562, py + 9, { size: 23, bold: true, color: col });
+            G.window(276, py + 54, 588, 122, BOX);
+            (lines[id] || []).slice(0, 4).forEach(function (l, k) { G.text(l, 292, py + 68 + k * 26, { size: 21, color: col }); });
           });
-          var ey = top + 160 + order.length * ROW + 160;
+          var ey = top + HEAD + order.length * ROW + 160;
           G.text('The End', 480, ey, { size: 44, bold: true, align: 'center', color: G.COL.gold });
           G.text('水滸傳', 480, ey + 70, { size: 30, align: 'center', color: '#c8b890' });
         }
