@@ -63,7 +63,7 @@
   R.smith = I.room(64, 1, 9, 8); I.stamp(65, 3, ['jj..jj.', '.......', '.cccc..']);
   R.tal = I.room(41, 10, 9, 8, { floor: 'N' }); I.stamp(42, 12, ['h.A.h..', '.......', '.ccc...']);
   R.tower = I.room(51, 10, 14, 10); I.stamp(52, 12, ['h..L....L...', '.t..t..t..t.', '............', '.t..t..t..t.', 'cccc........']);
-  R.prison = I.room(1, 14, 18, 9, { floor: 'N' }); I.stamp(2, 16, ['-...F-...F-...F.', '....F....F....F.', 'F+FFFF+FFFF+FFF.']);
+  R.prison = I.room(1, 14, 18, 9, { floor: 'N' }); I.stamp(2, 16, ['--..F--..F--..F.', '--..F--..F--..F.', 'F+FFFF+FFFF+FFF.']);
   WM.defMap('daming_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: I.rows(), spawn: [12, 11] });
   var D = WM.data.damingDoors;
   Object.keys(R).forEach(function (k) { L.link({ map: 'daming', x: D[k].x, y: D[k].y }, { map: 'daming_in', x: R[k].x, y: R[k].y }); });

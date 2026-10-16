@@ -63,7 +63,7 @@
   var gi = L.grid(70, 12, 'x');
   var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'N' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7) };
   gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..tKKKK...t...', '...KKKK']);   // the prefect's hall
-  gi.stamp(19, 3, ['-..F-..F-..F', '...F...F...F', 'F+FFF+FFF+FF']);
+  gi.stamp(19, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF']);
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
   gi.stamp(44, 3, ['h..L.....L..', '.t..t..t..t.', '............', '.t..t..t....', 'cccc........']);
   gi.stamp(59, 3, ['hhhh..', '......', 'ccc...']);

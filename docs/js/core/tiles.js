@@ -793,13 +793,19 @@
     px(c, x + 2, y + 7, 12, 1, '#3a2412'); px(c, x + 2, y + 12, 12, 1, '#3a2412');     // the door's own rails
     px(c, x + 12, y + 6, 3, 4, '#5a5a60'); px(c, x + 12, y + 6, 3, 1, '#8a8a92');      // lock
   }
-  // A prisoner's pallet: a straw mat on the stone floor with a rough grey blanket thrown over one end.
-  function pallet(c, x, y, tx, ty) {
+  // A prisoner's pallet: a straw mat two tiles long and a tile deep, laid across the line between two rows of '-' (a
+  // man lying on the upper row lies along it), with a rolled straw pillow at the head and a rough grey blanket at the foot.
+  function pallet(c, x, y, tx, ty, th, m) {
     floorStone(c, x, y, tx, ty);
-    px(c, x + 1, y + 3, 14, 11, '#a8894a'); px(c, x + 1, y + 13, 14, 1, '#6e5628');
-    for (var i = 0; i < 6; i++) px(c, x + 2 + Math.floor(U.hash2(tx * 3 + i, ty, 77) * 11), y + 4 + i * 2 - (i > 3 ? 2 : 0), 3, 1, i % 2 ? '#c8aa62' : '#8a6e36');
-    px(c, x + 1, y + 3, 14, 1, '#c8aa62');
-    px(c, x + 7, y + 3, 8, 10, '#6c6a64'); px(c, x + 7, y + 3, 8, 1, '#8a8880'); px(c, x + 7, y + 12, 8, 1, '#4a4844');
+    var head = m.get(tx - 1, ty) !== '-', foot = m.get(tx + 1, ty) !== '-', top = m.get(tx, ty - 1) !== '-';
+    var x0 = x + (head ? 1 : 0), x1 = x + (foot ? 15 : 16);
+    c.save(); c.beginPath(); c.rect(x, y, S, S); c.clip();
+    var my = top ? y + 7 : y - 9;   // the mat's top edge, in this tile's frame
+    px(c, x0, my, x1 - x0, 18, '#a8894a'); px(c, x0, my, x1 - x0, 1, '#c8aa62'); px(c, x0, my + 17, x1 - x0, 1, '#6e5628');
+    for (var i = 0; i < 8; i++) px(c, x0 + Math.floor(U.hash2(tx * 3 + i, 0, 77) * (x1 - x0 - 3)), my + 2 + Math.floor(U.hash2(tx, i, 78) * 14), 3, 1, i % 2 ? '#c8aa62' : '#8a6e36');
+    if (head) { px(c, x + 2, my + 3, 5, 12, '#c8aa62'); px(c, x + 2, my + 14, 5, 1, '#8a6e36'); px(c, x + 4, my + 3, 1, 12, '#b09050'); }   // the straw pillow
+    if (foot) { px(c, x + 1, my + 2, 13, 14, '#6c6a64'); px(c, x + 1, my + 2, 13, 1, '#8a8880'); px(c, x + 1, my + 15, 13, 1, '#4a4844'); px(c, x + 1, my + 2, 1, 14, '#8a8880'); }   // the blanket
+    c.restore();
   }
 
   function bridge(c, x, y, tx, ty, th, m) {

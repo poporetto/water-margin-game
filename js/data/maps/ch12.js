@@ -40,7 +40,7 @@
   var zi = L.grid(40, 12, 'x');
   var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'N' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };
   zi.stamp(2, 3, ['h...UU....UU...h', '....AA....AA....', '..t.............', '................', '................']);
-  zi.stamp(21, 3, ['-.F-.F-.F.', '..F..F..F.', 'F+FF+FF+F.']);
+  zi.stamp(21, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.']);
   zi.stamp(34, 3, ['kk..', 'kk..', '...t']);
   WM.defMap('zhujia_in', { name: '', interior: true, theme: 'autumn', music: 'tense', rows: zi.rows(), spawn: [10, 9] });
   L.link({ map: 'zhujia', x: hall.x, y: hall.y }, { map: 'zhujia_in', x: zR.hall.x, y: zR.hall.y });
@@ -69,7 +69,7 @@
   var di = L.grid(40, 11, 'x');
   var dR = { mao: di.room(1, 1, 12, 8, { floor: 'n' }), jail: di.room(14, 1, 12, 9, { floor: 'N' }), tavern: di.room(27, 1, 10, 8) };
   di.stamp(2, 3, ['h..A...h..', '.t........', '..........']);
-  di.stamp(15, 3, ['-.F-.F-.F.', '..F..F..F.', 'F+FF+FF+F.', 'h........h']);
+  di.stamp(15, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.', 'h........h']);
   di.stamp(28, 3, ['h..j..k.', '.t..t...', '........', 'ccc.....']);
   WM.defMap('dengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: di.rows(), spawn: [31, 7] });
   [[mao, dR.mao], [jail, dR.jail], [gdt, dR.tavern]].forEach(function (p) { L.link({ map: 'dengzhou', x: p[0].x, y: p[0].y }, { map: 'dengzhou_in', x: p[1].x, y: p[1].y }); });

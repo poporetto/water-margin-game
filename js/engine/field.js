@@ -872,6 +872,8 @@
       return;
     }
     if (a.static === 'down') { // lying (wounded / dead)
+      var at = a.tile && a.tile();   // on a prisoner's pallet, along the middle of the two-tile mat
+      if (at && F.map.get(at.x, at.y) === '-' && F.map.get(at.x + 1, at.y) === '-' && F.map.get(at.x - 1, at.y) !== '-') x += 8;
       SP.shadow(c, x, y - a.offY, 8);
       c.save(); c.translate(x, y - 4); c.rotate(-Math.PI / 2);
       SP.draw(c, a.sheet(), 'down', 0, 0, 12);

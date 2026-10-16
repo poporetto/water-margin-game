@@ -98,7 +98,7 @@ These are the same 47 shoreline shapes × 3 frames as `water.png` (shallow) and 
 | # | Tile | Notes |
 |---|---|---|
 | 28 | Prison cell bars | each prison has three cells side by side along the back wall, closed in by bars. Heavy dark timber grille standing on a stone floor: a top beam, a sill and squared bars. Pieces for a run across the room (left end, middle, right end) and a run going away from the viewer (top, middle, bottom), plus T-joints where a cell divider meets the front bars. No grass: this stands indoors |
-| 29 | Prisoner's straw pallet | 32 × 32: a straw mat on the stone floor with a rough grey blanket over one end, seen from above (one in each cell) |
+| 29 | Prisoner's straw pallet | **64 × 36**, one piece seen from above, sized for a man lying full length on it: a straw mat with a rolled straw pillow at the left (head) end and a rough grey blanket over the right (foot) end. It lies across two rows of tiles, centred on the line between them |
 | 30 | Cell door | 32 × 32: the same timber grille as item 28 with a hinged door in it, two posts and an iron lock on a chain; it sits in the front run of bars and joins the bars on both sides |
 
 ## Known issue to fix (not new art)
