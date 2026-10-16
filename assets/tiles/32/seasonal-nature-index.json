@@ -1,0 +1,242 @@
+[
+  {
+    "name": "spring-broadleaf",
+    "file": "seasonal-nature/spring-broadleaf.png",
+    "cell": [
+      0,
+      0
+    ],
+    "width": 48,
+    "height": 64
+  },
+  {
+    "name": "spring-pine",
+    "file": "seasonal-nature/spring-pine.png",
+    "cell": [
+      3,
+      0
+    ],
+    "width": 48,
+    "height": 88
+  },
+  {
+    "name": "spring-poplar",
+    "file": "seasonal-nature/spring-poplar.png",
+    "cell": [
+      6,
+      0
+    ],
+    "width": 48,
+    "height": 88
+  },
+  {
+    "name": "spring-willow",
+    "file": "seasonal-nature/spring-willow.png",
+    "cell": [
+      9,
+      0
+    ],
+    "width": 96,
+    "height": 120
+  },
+  {
+    "name": "spring-bamboo",
+    "file": "seasonal-nature/spring-bamboo.png",
+    "cell": [
+      12,
+      0
+    ],
+    "width": 64,
+    "height": 128
+  },
+  {
+    "name": "spring-dead-tree",
+    "file": "seasonal-nature/spring-dead-tree.png",
+    "cell": [
+      15,
+      0
+    ],
+    "width": 48,
+    "height": 56
+  },
+  {
+    "name": "spring-boulder",
+    "file": "seasonal-nature/spring-boulder.png",
+    "cell": [
+      18,
+      0
+    ],
+    "width": 32,
+    "height": 32
+  },
+  {
+    "name": "spring-cliff",
+    "file": "seasonal-nature/spring-cliff.png",
+    "cell": [
+      21,
+      0
+    ],
+    "width": 32,
+    "height": 32
+  },
+  {
+    "name": "autumn-broadleaf",
+    "file": "seasonal-nature/autumn-broadleaf.png",
+    "cell": [
+      0,
+      4
+    ],
+    "width": 48,
+    "height": 64
+  },
+  {
+    "name": "autumn-pine",
+    "file": "seasonal-nature/autumn-pine.png",
+    "cell": [
+      3,
+      4
+    ],
+    "width": 48,
+    "height": 88
+  },
+  {
+    "name": "autumn-poplar",
+    "file": "seasonal-nature/autumn-poplar.png",
+    "cell": [
+      6,
+      4
+    ],
+    "width": 48,
+    "height": 88
+  },
+  {
+    "name": "autumn-willow",
+    "file": "seasonal-nature/autumn-willow.png",
+    "cell": [
+      9,
+      4
+    ],
+    "width": 96,
+    "height": 120
+  },
+  {
+    "name": "autumn-bamboo",
+    "file": "seasonal-nature/autumn-bamboo.png",
+    "cell": [
+      12,
+      4
+    ],
+    "width": 64,
+    "height": 128
+  },
+  {
+    "name": "autumn-dead-tree",
+    "file": "seasonal-nature/autumn-dead-tree.png",
+    "cell": [
+      15,
+      4
+    ],
+    "width": 48,
+    "height": 56
+  },
+  {
+    "name": "autumn-boulder",
+    "file": "seasonal-nature/autumn-boulder.png",
+    "cell": [
+      18,
+      4
+    ],
+    "width": 32,
+    "height": 32
+  },
+  {
+    "name": "autumn-cliff",
+    "file": "seasonal-nature/autumn-cliff.png",
+    "cell": [
+      21,
+      4
+    ],
+    "width": 32,
+    "height": 32
+  },
+  {
+    "name": "snow-broadleaf",
+    "file": "seasonal-nature/snow-broadleaf.png",
+    "cell": [
+      0,
+      8
+    ],
+    "width": 48,
+    "height": 64
+  },
+  {
+    "name": "snow-pine",
+    "file": "seasonal-nature/snow-pine.png",
+    "cell": [
+      3,
+      8
+    ],
+    "width": 48,
+    "height": 88
+  },
+  {
+    "name": "snow-poplar",
+    "file": "seasonal-nature/snow-poplar.png",
+    "cell": [
+      6,
+      8
+    ],
+    "width": 48,
+    "height": 88
+  },
+  {
+    "name": "snow-willow",
+    "file": "seasonal-nature/snow-willow.png",
+    "cell": [
+      9,
+      8
+    ],
+    "width": 96,
+    "height": 120
+  },
+  {
+    "name": "snow-bamboo",
+    "file": "seasonal-nature/snow-bamboo.png",
+    "cell": [
+      12,
+      8
+    ],
+    "width": 64,
+    "height": 128
+  },
+  {
+    "name": "snow-dead-tree",
+    "file": "seasonal-nature/snow-dead-tree.png",
+    "cell": [
+      15,
+      8
+    ],
+    "width": 48,
+    "height": 56
+  },
+  {
+    "name": "snow-boulder",
+    "file": "seasonal-nature/snow-boulder.png",
+    "cell": [
+      18,
+      8
+    ],
+    "width": 32,
+    "height": 32
+  },
+  {
+    "name": "snow-cliff",
+    "file": "seasonal-nature/snow-cliff.png",
+    "cell": [
+      21,
+      8
+    ],
+    "width": 32,
+    "height": 32
+  }
+]

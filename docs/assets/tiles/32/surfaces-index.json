@@ -1,0 +1,171 @@
+{
+  "tileSize": 32,
+  "groups": [
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ],
+    [
+      8,
+      9,
+      10
+    ],
+    [
+      11
+    ],
+    [
+      12,
+      13
+    ],
+    [
+      14
+    ],
+    [
+      15
+    ]
+  ],
+  "tiles": [
+    {
+      "name": "sand-1",
+      "cell": [
+        0,
+        0
+      ],
+      "file": "surfaces/sand-1.png"
+    },
+    {
+      "name": "sand-2",
+      "cell": [
+        1,
+        0
+      ],
+      "file": "surfaces/sand-2.png"
+    },
+    {
+      "name": "millet-1",
+      "cell": [
+        2,
+        0
+      ],
+      "file": "surfaces/millet-1.png"
+    },
+    {
+      "name": "millet-2",
+      "cell": [
+        3,
+        0
+      ],
+      "file": "surfaces/millet-2.png"
+    },
+    {
+      "name": "scorched-1",
+      "cell": [
+        0,
+        1
+      ],
+      "file": "surfaces/scorched-1.png"
+    },
+    {
+      "name": "scorched-2",
+      "cell": [
+        1,
+        1
+      ],
+      "file": "surfaces/scorched-2.png"
+    },
+    {
+      "name": "stone-steps",
+      "cell": [
+        2,
+        1
+      ],
+      "file": "surfaces/stone-steps.png"
+    },
+    {
+      "name": "bridge-horizontal-planks",
+      "cell": [
+        3,
+        1
+      ],
+      "file": "surfaces/bridge-horizontal-planks.png"
+    },
+    {
+      "name": "wood-floor-1",
+      "cell": [
+        0,
+        2
+      ],
+      "file": "surfaces/wood-floor-1.png"
+    },
+    {
+      "name": "wood-floor-2",
+      "cell": [
+        1,
+        2
+      ],
+      "file": "surfaces/wood-floor-2.png"
+    },
+    {
+      "name": "wood-floor-3",
+      "cell": [
+        2,
+        2
+      ],
+      "file": "surfaces/wood-floor-3.png"
+    },
+    {
+      "name": "red-carpet",
+      "cell": [
+        3,
+        2
+      ],
+      "file": "surfaces/red-carpet.png"
+    },
+    {
+      "name": "stone-floor-1",
+      "cell": [
+        0,
+        3
+      ],
+      "file": "surfaces/stone-floor-1.png"
+    },
+    {
+      "name": "stone-floor-2",
+      "cell": [
+        1,
+        3
+      ],
+      "file": "surfaces/stone-floor-2.png"
+    },
+    {
+      "name": "bridge-vertical-planks",
+      "cell": [
+        2,
+        3
+      ],
+      "file": "surfaces/bridge-vertical-planks.png"
+    },
+    {
+      "name": "interior-wall",
+      "cell": [
+        3,
+        3
+      ],
+      "file": "surfaces/interior-wall.png"
+    }
+  ]
+}

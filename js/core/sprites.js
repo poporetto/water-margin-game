@@ -1,6 +1,7 @@
-// Procedural character sprites (16x24 field sprites, 4 directions x 3 frames)
+// Procedural character sprites (32x48 artwork, 4 directions x 3 frames)
 // built from a "look" descriptor, with a dark outline pass for a clean pixel-art read.
-// Drop-in override: assets/sprites/<id>.png (48x96: 3 frames across; rows = down, left, right, up).
+// Generated padded frames: 48x64; sheet 144x256. Logical coordinates remain 24x32.
+// Overrides: three columns, four rows (down, left, right, up); set spriteScales[id]=2 for native 32px art.
 'use strict';
 (function () {
   var U = WM.util;
@@ -30,9 +31,26 @@
     var c = cv.getContext('2d');
     for (var y = 0; y < this.h; y++) for (var x = 0; x < this.w; x++) {
       var col = this.p[y * this.w + x];
-      if (!col) continue;
-      c.fillStyle = col;
-      c.fillRect(ox + (flip ? this.w - 1 - x : x), oy + y, 1, 1);
+      if ((cv.artScale || 1) === 2) {
+        // Refine contours on the physical 32px grid; retain palette colours and hard alpha.
+        // Subpixel highlights follow material boundaries, rather than adding noisy texture to every pixel.
+        var b = this.get(x, y - 1), d = this.get(x - 1, y), f = this.get(x + 1, y), h = this.get(x, y + 1);
+        var parts = [col, col, col, col];
+        if (b !== h && d !== f) parts = [d === b ? d : col, b === f ? f : col, d === h ? d : col, h === f ? f : col];
+        for (var q = 0; q < 4; q++) {
+          var value = parts[q]; if (!value) continue;
+          if (value === col && col !== OUTLINE && d === col && f === col) {
+            if (q < 2 && b && b !== col && b !== OUTLINE) value = U.shade(col, 0.07);
+            else if (q >= 2 && h && h !== col && h !== OUTLINE) value = U.shade(col, -0.07);
+          }
+          var sx = x * 2 + (q % 2), sy = y * 2 + Math.floor(q / 2);
+          c.fillStyle = value;
+          c.fillRect(ox + (flip ? this.w * 2 - 1 - sx : sx) / 2, oy + sy / 2, 0.5, 0.5);
+        }
+      } else if (col) {
+        c.fillStyle = col;
+        c.fillRect(ox + (flip ? this.w - 1 - x : x), oy + y, 1, 1);
+      }
     }
   };
   SP.Grid = Grid;
@@ -294,7 +312,7 @@
   SP.CW = 24; SP.CH = 32; SP.OX = 4; SP.OY = 6; SP.FOOT = 30;
   SP.build = function (id, lk) {
     var L = look(lk || {});
-    var cv = U.makeCanvas(SP.CW * 3, SP.CH * 4);
+    var cv = U.makeWorldCanvas(SP.CW * 3, SP.CH * 4);
     var dirs = ['down', 'left', 'right', 'up'];
     for (var r = 0; r < 4; r++) for (var f = 0; f < 3; f++) {
       var d = dirs[r] === 'right' ? 'left' : dirs[r];
@@ -326,7 +344,7 @@
     var cw = SP.CW, ch = SP.CH;
     if (sheet.isOverride) { cw = sheet.cw; ch = sheet.ch; }
     var dx = Math.round(x - cw / 2), dy = Math.round(sheet.isOverride ? y - ch : y - SP.FOOT + 1);
-    c.drawImage(sheet, col * cw, row * ch, cw, ch, dx, dy, cw, ch);
+    U.drawArt(c, sheet, col * cw, row * ch, cw, ch, dx, dy, cw, ch);
   };
 
   // Shadow ellipse under actors.
@@ -341,7 +359,9 @@
     img.onload = function () {
       var cv = U.makeCanvas(img.width, img.height);
       cv.getContext('2d').drawImage(img, 0, 0);
-      cv.isOverride = true; cv.cw = img.width / 3; cv.ch = img.height / 4;
+      var density = (WM.ASSETS.spriteScales && WM.ASSETS.spriteScales[id]) || 1;
+      cv.artScale = density;
+      cv.isOverride = true; cv.cw = img.width / (3 * density); cv.ch = img.height / (4 * density);
       SP.overrides[id] = cv;
     };
     img.onerror = function () {};

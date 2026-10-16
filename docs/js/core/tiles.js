@@ -21,10 +21,22 @@
   };
   T.THEMES = THEMES;
 
-  function px(c, x, y, w, h, col) { c.fillStyle = col; c.fillRect(x, y, w, h); }
+  var edgeColours = {};
+  function px(c, x, y, w, h, col) {
+    c.fillStyle = col; c.fillRect(x, y, w, h);
+    // Half-unit bevels are one physical pixel at 32px density, including procedural seasonal props.
+    if (WM.ART_SCALE === 2 && w >= 3 && h >= 3 && /^#[0-9a-f]{6}$/i.test(col)) {
+      var edge = edgeColours[col] || (edgeColours[col] = [U.shade(col, 0.07), U.shade(col, -0.08)]);
+      c.fillStyle = edge[0]; c.fillRect(x + 0.5, y, w - 1, 0.5);
+      c.fillStyle = edge[1]; c.fillRect(x + 0.5, y + h - 0.5, w - 1, 0.5);
+    }
+  }
 
   // ---------- individual tile painters ----------
   function grass(c, x, y, tx, ty, th, rich) {
+    // Use the same ground under procedural props as on adjacent painted tiles.
+    var theme = Object.keys(THEMES).filter(function (k) { return THEMES[k] === th; })[0];
+    if (drawGroundArt(c, x, y, tx, ty, { theme: theme }, rich ? ',' : '.', 0)) return;
     px(c, x, y, S, S, th.g0);
     for (var i = 0; i < 9; i++) {
       var h = U.hash2(tx * 7 + i, ty * 13 + i, 3);
@@ -98,6 +110,7 @@
   }
   function water(c, x, y, tx, ty, th, m) {
     if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, false);
+    if (drawGroundArt(c, x, y, tx, ty, m, '~', 0)) return;
     px(c, x, y, S, S, WATER[0]);
     for (var i = 0; i < 4; i++) {
       var wx = Math.floor(U.hash2(tx * 9 + i, ty, 40) * 12), wy = Math.floor(U.hash2(tx, ty * 9 + i, 41) * 15);
@@ -197,6 +210,7 @@
   }
   function mountain(c, x, y, tx, ty, th, m) {
     if (m && m.def && m.def.world) {
+      if(SHEETS.worldIcons){grass(c,x,y,tx,ty,th);U.drawArt(c,SHEETS.worldIcons,48*(1+(U.hash2(tx,ty,61)>.5?1:0)),96,48,32,x,y+5,16,11);return;}
       // blue-and-green peaks (青綠山水) rising from the silk, each tile a peak or two outlined in ink
       grass(c, x, y, tx, ty, th);
       var h1 = U.hash2(tx, ty, 61), pk = function (cx, base, hgt, half) {
@@ -219,10 +233,16 @@
       var rx = Math.floor(U.hash2(tx * 3 + i, ty, 80) * 12), ry = Math.floor(U.hash2(tx, ty * 3 + i, 81) * 12);
       px(c, x + rx, y + ry, 4, 1, lite); px(c, x + rx + 1, y + ry + 1, 3, 2, dark);
     }
-    var up = m.get(tx, ty - 1);
-    if (up !== 'M') { px(c, x, y, S, 3, snow ? '#ffffff' : th.g3); px(c, x, y + 3, S, 1, dark); }
-    var dn = m.get(tx, ty + 1);
-    if (dn !== 'M') { px(c, x, y + 12, S, 4, dark); for (var k = 0; k < 16; k += 3) px(c, x + k, y + 11, 2, 1, dark); }
+    // Eight distinct cells sample a continuous face instead of enlarging a rock fragment.
+    if(SHEETS.cliffFaces)U.drawArt(c,SHEETS.cliffFaces,((tx%4+4)%4)*16,(snow?2:th===THEMES.autumn?1:0)*32+((ty%2+2)%2)*16,16,16,x,y,16,16);
+    var topEdge=m.get(tx,ty-1)!=='M',bottomEdge=m.get(tx,ty+1)!=='M';
+    for(var k=0;k<32;k++){
+      var edgeNoise=U.hash2(tx*32+k,ty,873),depth=.5+Math.floor(edgeNoise*4)*.5;
+      if(topEdge){c.fillStyle=snow?'#e9f0f5':th.g3;c.fillRect(x+k*.5,y,.5,depth);if(edgeNoise>.75){c.fillStyle=snow?'#b8c9d6':th.g1;c.fillRect(x+k*.5,y+depth,.5,.5);}}
+      if(bottomEdge){c.fillStyle=dark;c.fillRect(x+k*.5,y+16-depth,.5,depth);}
+      if(k<32 && m.get(tx-1,ty)!=='M'){c.fillStyle=dark;c.fillRect(x,y+k*.5,edgeNoise>.6?1:.5,.5);}
+      if(k<32 && m.get(tx+1,ty)!=='M'){c.fillStyle=dark;c.fillRect(x+15.5,y+k*.5,.5,.5);}
+    }
   }
   function wallPlaster(c, x, y, tx, ty, th, m, ch) {
     // a Song house front: whitewashed infill between timber columns, a vermilion beam resting on small brackets
@@ -381,7 +401,14 @@
       px(c, x, y, S, S, '#3a2a1e'); px(c, x + 2, y + 4, 12, 12, '#7a5a3a'); px(c, x + 3, y + 5, 10, 10, '#8f6c46');
     }
   }
+  function surface(c, x, y, choices, tx, ty) {
+    if (!SHEETS || !SHEETS.surfaces) return false;
+    var index = choices[Math.floor(U.hash2(tx || 0, ty || 0, 919) * choices.length) % choices.length];
+    blit(c, SHEETS.surfaces, [index % 4, Math.floor(index / 4)], S, S, x, y);
+    return true;
+  }
   function floorWood(c, x, y, tx, ty) {
+    if (surface(c, x, y, [8,9,10], tx, ty)) return;
     px(c, x, y, S, S, '#a3744a');
     c.fillStyle = '#8a5f38';
     for (var r = 0; r < 4; r++) { c.fillRect(x, y + r * 4 + 3, S, 1); c.fillRect(x + ((r * 5 + tx * 3) % 16), y + r * 4, 1, 3); }
@@ -389,23 +416,26 @@
     for (r = 0; r < 4; r++) c.fillRect(x + 2, y + r * 4, 5, 1);
   }
   function floorStone(c, x, y, tx, ty) {
+    if (surface(c, x, y, [12,13], tx, ty)) return;
     px(c, x, y, S, S, '#8e8c86');
     c.fillStyle = '#76746e'; c.fillRect(x, y + 15, S, 1); c.fillRect(x + 15, y, 1, S);
     c.fillStyle = '#a4a29b'; c.fillRect(x, y, S, 1); c.fillRect(x, y, 1, S);
   }
   function carpet(c, x, y, tx, ty, th, m) {
-    px(c, x, y, S, S, '#8a2420');
+    var textured = surface(c, x, y, [11], tx, ty);
+    if (!textured) px(c, x, y, S, S, '#8a2420');
     var K = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'K'; };
     if (!K(-1, 0)) px(c, x, y, 2, S, '#d8b36a');
     if (!K(1, 0)) px(c, x + 14, y, 2, S, '#d8b36a');
     if (!K(0, -1)) px(c, x, y, S, 2, '#d8b36a');
     if (!K(0, 1)) px(c, x, y + 14, S, 2, '#d8b36a');
-    if ((tx + ty) % 2 === 0) { px(c, x + 6, y + 6, 4, 4, '#a8382c'); px(c, x + 7, y + 7, 2, 2, '#d8b36a'); }
+    if (!textured && (tx + ty) % 2 === 0) { px(c, x + 6, y + 6, 4, 4, '#a8382c'); px(c, x + 7, y + 7, 2, 2, '#d8b36a'); }
   }
   function interiorWall(c, x, y, tx, ty, th, m) {
     var below = m.get(tx, ty + 1);
     if (below && below !== 'X' && below !== 'x') {
       // visible wall face
+      if (surface(c, x, y, [15], tx, ty)) return;
       px(c, x, y, S, S, '#d8ccb0');
       px(c, x, y, S, 3, '#6a3e22');
       px(c, x, y + 13, S, 3, '#6a4a30');
@@ -732,23 +762,29 @@
   }
 
   function bridge(c, x, y, tx, ty, th, m) {
-    // a timber bridge with a railing of posts and rails along both sides
-    var vert = T.isWaterChar(m.get(tx - 1, ty)) && T.isWaterChar(m.get(tx + 1, ty));
+    // Determine orientation for the whole deck, including bridges wider than one tile.
+    var horizontal = runOf(m, tx, ty, 'B').n, top=ty, bottom=ty;
+    while(top>0 && m.get(tx,top-1)==='B')top--;
+    while(bottom<m.h-1 && m.get(tx,bottom+1)==='B')bottom++;
+    var vertical=bottom-top+1;
+    var vert = vertical>horizontal || (vertical===horizontal && T.isWaterChar(m.get(tx-1,ty)) && T.isWaterChar(m.get(tx+1,ty)));
     water(c, x, y, tx, ty, th, m);
-    if (vert) {
-      px(c, x + 1, y, 14, S, '#9a6a3c');
-      for (var i = 0; i < 16; i += 3) px(c, x + 1, y + i, 14, 1, '#7a4e28');
-      px(c, x, y, 2, S, '#5a3418'); px(c, x + 14, y, 2, S, '#5a3418');
-      px(c, x, y + 2, 2, 3, '#c8965a'); px(c, x + 14, y + 2, 2, 3, '#c8965a'); px(c, x, y + 10, 2, 3, '#c8965a'); px(c, x + 14, y + 10, 2, 3, '#c8965a');
-    } else {
-      px(c, x, y + 1, S, 14, '#9a6a3c');
-      for (var j = 0; j < 16; j += 3) px(c, x + j, y + 1, 1, 14, '#7a4e28');
-      px(c, x, y, S, 2, '#5a3418'); px(c, x, y + 14, S, 2, '#5a3418');
-      px(c, x + 2, y - 1, 3, 3, '#c8965a'); px(c, x + 10, y - 1, 3, 3, '#c8965a'); px(c, x + 2, y + 13, 3, 3, '#c8965a'); px(c, x + 10, y + 13, 3, 3, '#c8965a');
+    if (!surface(c,x,y,[vert?7:14],tx,ty)) {
+      px(c,x,y,S,S,'#9a6a3c');
+      for(var i=0;i<S;i+=3)px(c,vert?x:x+i,vert?y+i:y,vert?S:1,vert?1:S,'#7a4e28');
+    }
+    // Railings belong only on the outside of the full bridge footprint.
+    if(vert){
+      if(m.get(tx-1,ty)!=='B'){px(c,x,y,2,S,'#5a3418');px(c,x,y+2,2,3,'#c8965a');px(c,x,y+10,2,3,'#c8965a');}
+      if(m.get(tx+1,ty)!=='B'){px(c,x+14,y,2,S,'#5a3418');px(c,x+14,y+2,2,3,'#c8965a');px(c,x+14,y+10,2,3,'#c8965a');}
+    }else{
+      if(m.get(tx,ty-1)!=='B'){px(c,x,y,S,2,'#5a3418');px(c,x+2,y-1,3,3,'#c8965a');px(c,x+10,y-1,3,3,'#c8965a');}
+      if(m.get(tx,ty+1)!=='B'){px(c,x,y+14,S,2,'#5a3418');px(c,x+2,y+13,3,3,'#c8965a');px(c,x+10,y+13,3,3,'#c8965a');}
     }
   }
 
   function stairs(c, x, y) {
+    if (surface(c, x, y, [6], 0, 0)) return;
     px(c, x, y, S, S, '#6a655b');
     for (var i = 0; i < 4; i++) { px(c, x, y + i * 4, S, 3, '#a7a49a'); px(c, x, y + i * 4, S, 1, '#c4c1b8'); }
   }
@@ -914,6 +950,7 @@
     'w': { draw: deep, solid: true, water: true },
     'r': { draw: reeds, solid: true, water: true },
     's': { draw: sand },
+    '!': { draw: function(c,x,y,tx,ty){if(!surface(c,x,y,[4,5],tx,ty))px(c,x,y,S,S,'#302c28');} },
     'T': { draw: treeBase, tall: treeTall, solid: true },
     'P': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); px(c, x + 7, y + 10, 2, 5, '#5a3a20'); }, tall: pineTall, solid: true },
     'b': { draw: bamboo, solid: true },
@@ -985,22 +1022,388 @@
   T.solid = function (ch) { var d = T.DEF[ch]; return !d || !!d.solid; };
 
   // Bake a map's ground layer into a canvas.
+  // The map symbols replace only the cells already reserved by world.js.
+  // Discovery conditions and the original doorway/collision cells remain authoritative.
+  function worldSymbols(map) {
+    if (!(map.def && map.def.world) || !SHEETS.worldIcons) return [];
+    var names=['city','town','village','manor','temple','fort','inn','ruin','pass','forest','marsh','fortress','mountain'];
+    return Object.keys(WM.data.locations || {}).map(function(id){return WM.data.locations[id];}).filter(function(l){return !l.cond || l.cond(WM.S);}).map(function(l){
+      var narrow=l.icon==='forest'||l.icon==='marsh', two=l.icon==='village'||l.icon==='manor'||l.icon==='inn';
+      return {i:names.indexOf(l.icon),x:l.x+(narrow||l.icon==='inn'?0:-1),y:l.y+(l.icon==='fortress'?0:-1),w:narrow?1:two?2:3,h:2};
+    }).filter(function(l){return l.i>=0;});
+  }
+  function worldSymbolAt(map,tx,ty) {return (map._worldSymbols || []).some(function(l){return tx>=l.x&&tx<l.x+l.w&&ty>=l.y&&ty<l.y+l.h;});}
+  // Rendering and collision share one placement for every world terrain feature.
+  // Dense terrain is grouped first; isolated features expand only onto safe open ground.
+  var worldLayouts = new WeakMap();
+  T.worldTerrainLayout = function(map) {
+    artInit();
+    var empty={items:[],occupied:{}};
+    if(!(map.def && map.def.world) || !SHEETS.worldIcons)return empty;
+    var cached=worldLayouts.get(map);
+    if(cached && cached.version===T.artVersion && cached.entry===map.propEntry)return cached;
+    var out={items:[],occupied:{},version:T.artVersion,entry:map.propEntry}, reserved={},symbols=worldSymbols(map);
+    function key(x,y){return x+','+y;}
+    function protect(x,y,w,h){for(var yy=y-1;yy<y+(h||1)+1;yy++)for(var xx=x-1;xx<x+(w||1)+1;xx++)reserved[key(xx,yy)]=true;}
+    symbols.forEach(function(l){protect(l.x,l.y,l.w,l.h);});
+    var exits=map.def.exits||[];if(typeof exits==='function')exits=exits();
+    exits.forEach(function(e){protect(e.x,e.y,e.w,e.h);});
+    var events=WM.data.events && WM.data.events[map.id] || [];events.forEach(function(e){protect(e.x,e.y,e.w,e.h);});
+    if(map.propEntry)protect(map.propEntry.x,map.propEntry.y);
+    function kind(ch){return ch==='M'?'mountain':'TPHlb'.indexOf(ch)>=0 && ch?'forest':null;}
+    function blocked(x,y){return !!out.occupied[key(x,y)] || T.solid(map.get(x,y)) || T.isWaterChar(map.get(x,y));}
+    // Every surviving perimeter cell that was connected before must remain connected.
+    function routesSafe(x,y,w,h){
+      var perimeter=[];for(var yy=y-1;yy<=y+h;yy++)for(var xx=x-1;xx<=x+w;xx++)if((xx<x||xx>=x+w||yy<y||yy>=y+h)&&!blocked(xx,yy))perimeter.push([xx,yy]);
+      function labels(after){var ids={},n=0;for(var sy=y-2;sy<y+h+2;sy++)for(var sx=x-2;sx<x+w+2;sx++){
+        if(ids[key(sx,sy)]||blocked(sx,sy)||(after&&sx>=x&&sx<x+w&&sy>=y&&sy<y+h))continue;
+        var queue=[[sx,sy]];ids[key(sx,sy)]=++n;
+        for(var q=0;q<queue.length;q++)[[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){var nx=queue[q][0]+d[0],ny=queue[q][1]+d[1];if(nx<x-2||nx>=x+w+2||ny<y-2||ny>=y+h+2||ids[key(nx,ny)]||blocked(nx,ny)||(after&&nx>=x&&nx<x+w&&ny>=y&&ny<y+h))return;ids[key(nx,ny)]=n;queue.push([nx,ny]);});
+      }return ids;}
+      var before=labels(false),after=labels(true);
+      for(var a=0;a<perimeter.length;a++)for(var b=a+1;b<perimeter.length;b++){var ka=key.apply(null,perimeter[a]),kb=key.apply(null,perimeter[b]);if(before[ka]===before[kb]&&after[ka]!==after[kb])return false;}return true;
+    }
+    for(var y=0;y<map.h;y++)for(var x=0;x<map.w;x++){
+      var k=kind(map.get(x,y));if(!k||out.occupied[key(x,y)]||reserved[key(x,y)])continue;
+      var chosen=null, sizes=k==='forest'?[[4,3],[3,2],[2,2],[2,1],[1,1]]:[[3,2],[2,2],[2,1],[1,1]];
+      // Prefer merging existing solid cells before adding any new boundary.
+      for(var grow=0;grow<2&&!chosen;grow++)for(var f=0;f<sizes.length&&!chosen;f++){
+        var size=sizes[f],w=size[0],h=size[1],okay=true,added=false;
+        for(var yy=y;yy<y+h;yy++)for(var xx=x;xx<x+w;xx++){
+          var ch=map.get(xx,yy),same=kind(ch)===k;
+          if(xx>=map.w||yy>=map.h||reserved[key(xx,yy)]||out.occupied[key(xx,yy)]||(!same&&(!grow||'.,f'.indexOf(ch)<0||!ch)))okay=false;
+          if(!same)added=true;
+        }
+        // Leave single cells for the growth pass so isolated terrain can become larger.
+        if(!grow&&w===1)continue;
+        if(okay&&(!added||routesSafe(x,y,w,h)))chosen={x:x,y:y,w:w,h:h,kind:k};
+      }
+      if(!chosen)chosen={x:x,y:y,w:1,h:1,kind:k};
+      out.items.push(chosen);for(var yy=y;yy<y+chosen.h;yy++)for(var xx=x;xx<x+chosen.w;xx++)out.occupied[key(xx,yy)]=chosen;
+    }
+    worldLayouts.set(map,out);return out;
+  };
   T.bake = function (map) {
     var w = map.w, h = map.h;
-    var cv = U.makeCanvas(w * S, h * S);
+    var cv = U.makeWorldCanvas(w * S, h * S);
     var c = cv.getContext('2d');
     var th = THEMES[map.theme] || THEMES.spring;
+    artInit();
+    c.imageSmoothingEnabled = false;
+    map._worldSymbols = worldSymbols(map);
+    var terrain=T.worldTerrainLayout(map);
     for (var ty = 0; ty < h; ty++) for (var tx = 0; tx < w; tx++) {
-      var ch = map.get(tx, ty);
+      var ch = (worldSymbolAt(map,tx,ty) || terrain.occupied[tx+','+ty]) ? '.' : map.get(tx, ty);
       var d = T.DEF[ch] || T.DEF['.'];
-      d.draw(c, tx * S, ty * S, tx, ty, th, map, ch);
+      if(map.def && map.def.world && ch==='b' && SHEETS.worldIcons){grass(c,tx*S,ty*S,tx,ty,th);U.drawArt(c,SHEETS.worldIcons,48,64,48,32,tx*S,ty*S+5,16,11);continue;}
+      if (!drawGroundArt(c, tx * S, ty * S, tx, ty, map, ch, 0)) d.draw(c, tx * S, ty * S, tx, ty, th, map, ch);
     }
     // second pass: what overhangs its own tile (eave corners, ridge ornaments, wall copings), so later tiles cannot cover it
+    // (a tile drawn from art brings its own overhang, if it has one)
     for (ty = 0; ty < h; ty++) for (tx = 0; tx < w; tx++) {
       ch = map.get(tx, ty); d = T.DEF[ch];
-      if (d && d.over) d.over(c, tx * S, ty * S, tx, ty, th, map, ch);
+      if (!worldSymbolAt(map,tx,ty) && d && d.over && !groundArt(ch, map)) d.over(c, tx * S, ty * S, tx, ty, th, map, ch);
     }
+    terrain.items.forEach(function(l){
+      var i=l.kind==='forest'?9:13+(U.hash2(l.x,l.y,61)>.5?1:0),scale=Math.min(l.w/3,l.h/2),dw=48*scale,dh=32*scale;
+      U.drawArt(c,SHEETS.worldIcons,(i%4)*48,Math.floor(i/4)*32,48,32,l.x*16+(l.w*16-dw)/2,(l.y+l.h)*16-dh,dw,dh);
+    });
+    map._worldSymbols.forEach(function(l){
+      var scale=Math.min(l.w/3,1),dw=48*scale,dh=32*scale;
+      U.drawArt(c,SHEETS.worldIcons,(l.i%4)*48,Math.floor(l.i/4)*32,48,32,l.x*16+(l.w*16-dw)/2,(l.y+2)*16-dh,dw,dh);
+    });
     return cv;
+  };
+
+  // ---------- tile art ----------
+  // Drawn art for the tiles lives in assets/tiles/ and is described in assets/tiles.js (WM.TILE_ART). A tile that has
+  // art is drawn from its sheet; anything without art is still drawn by the code above, so art can arrive a batch at a
+  // time. See assets/tiles.js for the format.
+  T.artVersion = 0;
+  var ART = null, SHEETS = {}, artWaiting = 0;
+  function artInit() {
+    if (ART !== null) return;
+    var cfg = WM.TILE_ART || {};
+    ART = cfg.tiles || {};
+    var sh = cfg.sheets || {}, names = Object.keys(sh);
+    if (!names.length || typeof Image === 'undefined') return;
+    artWaiting = names.length;
+    names.forEach(function (n) {
+      var img = new Image();
+      img.artScale = (cfg.size || S) / S;
+      img.onload = function () { SHEETS[n] = img; if (--artWaiting === 0) artReady(); };
+      img.onerror = function () { if (window.console) console.warn('Tile sheet not found: ' + sh[n]); if (--artWaiting === 0) artReady(); };
+      img.src = sh[n];
+    });
+  }
+  function artReady() { T.artVersion++; if (T.onArtReady) T.onArtReady(); }
+  // start again from assets/tiles.js (for testing art without reloading the page)
+  T.reloadArt = function () { ART = null; SHEETS = {}; artInit(); if (!artWaiting) artReady(); };
+  T.artStatus = function () { return { tiles: ART ? Object.keys(ART).length : 0, sheets: Object.keys(SHEETS), waiting: artWaiting }; };
+
+  // the art entry for a tile on this map: a season's own version ('T@autumn') before the plain one ('T')
+  function artEntry(ch, map) { var e = ART && (ART[ch + '@' + map.theme] || ART[ch]) || null; return e && ((e.building && (map.interior || (map.def && map.def.world))) || (e.object && (map.theme === 'world' || (map.def && map.def.world)))) ? null : e; }
+  function sheetOf(e) { return SHEETS[e.sheet || 'tiles']; }
+  function cellList(v) { return !v ? [] : typeof v[0] === 'number' ? [v] : v; }
+  function groundArt(ch, map) { var e = artEntry(ch, map); return !!(e && (e.ground || e.auto || e.frames || e.building || e.object) && sheetOf(e)); }
+  function blit(c, img, cell, w, h, dx, dy) { if (img && cell) U.drawArt(c, img, cell[0] * S, cell[1] * S, w, h, dx, dy, w, h); }
+
+  function buildingCell(c, index, x, y) { blit(c, SHEETS.buildingWalls, [index % 8, Math.floor(index / 8)], S, S, x, y); }
+  function buildingSide(map, tx, ty, same) { return same.indexOf(map.get(tx - 1, ty)) < 0 ? 0 : same.indexOf(map.get(tx + 1, ty)) < 0 ? 2 : 1; }
+  function roofCell(e, map, tx, ty, ch) {
+    var up = map.get(tx, ty - 1) === ch, down = map.get(tx, ty + 1) === ch;
+    return [(e.style || 0) * 3 + buildingSide(map, tx, ty, ch), !up && !down ? 4 : down ? 0 : 2];
+  }
+  // Rendering and collision share the same rule for roof rows replaced by grass.
+  T.isRemovedRoof = function (map, tx, ty) {
+    artInit();
+    var ch = map.get(tx, ty), e = ch && artEntry(ch, map);
+    return !!(e && e.building === 'roof' && sheetOf(e) &&
+      map.get(tx, ty + 1) === ch && map.get(tx, ty + 2) === ch);
+  };
+  T.solidAt = function (map, tx, ty) {
+    if(T.worldTerrainLayout(map).occupied[tx+','+ty])return true;
+    var layout = T.propLayout(map);
+    return !!layout.occupied[tx + ',' + ty] || (!T.isRemovedRoof(map, tx, ty) && T.solid(map.get(tx, ty)));
+  };
+  function gateEligible(map, tx, ty) {
+    // Guardian wings in temple gates use the original bespoke roof coverage.
+    var run = runOf(map, tx, ty, 'G'), l = map.get(run.x0 - 1, ty), r = map.get(run.x0 + run.n, ty);
+    return (l === '#' || l === 'R') && (r === '#' || r === 'R');
+  }
+  function shrineFacade(map,tx,ty){
+    // Architectural style follows the roof, so adjoining windows and doors agree.
+    for(var yy=ty;yy>=0;yy--){var ch=map.get(tx,yy);if(ch==='Z')return true;if(!ch||'WODdR'.indexOf(ch)<0)return false;}
+    return false;
+  }
+  function facadeGround(c,x,y,tx,ty,map,ch,th){
+    var same='WODdR',left=same.indexOf(map.get(tx-1,ty))<0?4:0,right=same.indexOf(map.get(tx+1,ty))<0?4:0;
+    var bottom=same.indexOf(map.get(tx,ty+1))<0;
+    var shrine=shrineFacade(map,tx,ty);
+    var red=!shrine&&(ch==='R'||[map.get(tx-1,ty),map.get(tx+1,ty),map.get(tx,ty-1)].indexOf('R')>=0);
+    grass(c,x,y,tx,ty,th);
+    c.save();c.beginPath();c.rect(x+left,y,S-left-right,S);c.clip();
+    // Use continuous upper-wall material; the footing is shared across all lower bays.
+    buildingCell(c,red?7:26,x,y);
+    if(shrine){
+      c.fillStyle='#30251d';c.fillRect(x,y,2,S);c.fillRect(x,y+1,S,1);
+      if(right)c.fillRect(x+S-right-2,y,2,S);
+    }
+    if(left||right){c.fillStyle='#503629';if(left)c.fillRect(x+left,y,2,S);if(right)c.fillRect(x+S-right-2,y,2,S);}
+    if(bottom&&shrine){c.fillStyle='#b0ad9b';c.fillRect(x+left,y+13,S-left-right,1);}
+    if(bottom){c.fillStyle='#898b7e';c.fillRect(x+left,y+14,S-left-right,1);c.fillStyle='#4b5151';c.fillRect(x+left,y+15,S-left-right,1);}
+    c.restore();
+  }
+  function buildingGround(c, x, y, tx, ty, map, ch, e) {
+    if (!SHEETS.buildingWalls) return false;
+    var th = THEMES[map.theme] || THEMES.spring, side = buildingSide(map, tx, ty, 'WODdR');
+    if (e.building === 'roof') {
+      grass(c, x, y, tx, ty, th);
+      // Keep only the ridge and eave rows, anchored directly above the facade.
+      // Extra map rows no longer insert a repeated, rectangular slope band.
+      if (!T.isRemovedRoof(map, tx, ty))
+        blit(c, sheetOf(e), roofCell(e, map, tx, ty, ch), S, S, x, y);
+    } else if (e.building === 'plaster' || e.building === 'window' || e.building === 'red') {
+      facadeGround(c,x,y,tx,ty,map,ch,th);
+      if(e.building==='window'){
+        // Raise the opening above the sill; it is not a floor-height doorway.
+        var red=!shrineFacade(map,tx,ty)&&[map.get(tx-1,ty),map.get(tx+1,ty),map.get(tx,ty-1)].indexOf('R')>=0;
+        var rise='WOR'.indexOf(map.get(tx,ty-1))>=0?6:0;
+        U.drawArt(c,SHEETS.buildingWalls,(red?5:3)*S+4,red?3*S+3:3,8,11,x+4,y+3-rise,8,11);
+      }
+    }
+    else if (e.building === 'stone') buildingCell(c, 9 + buildingSide(map, tx, ty, '#G'), x, y);
+    else if (e.building === 'door') {
+      // Closed Chinese house doors: 24 logical / 48 physical pixels high.
+      // Keep the passable D event and blocked d collision semantics unchanged.
+      facadeGround(c,x,y,tx,ty,map,ch,th);
+      if (SHEETS.objects) {
+        var doorCell = ch === 'd' ? [28, 25] : [0, 0];
+        blit(c, SHEETS.objects, doorCell, S, 24, x, y - 8);
+      } else U.drawArt(c, SHEETS.buildingWalls, 5 * S, 0, S, S, x, y - 8, S, 24);
+    }
+    else if (e.building === 'paving') buildingCell(c, U.hash2(tx, ty, 408) > 0.5 ? 15 : 16, x, y);
+    else if (e.building === 'well') { buildingCell(c, 15, x, y); buildingCell(c, 24, x, y); }
+    else if (e.building === 'fence') {
+      grass(c, x, y, tx, ty, th);
+      var n = map.get(tx, ty - 1) === 'F', s = map.get(tx, ty + 1) === 'F', w = map.get(tx - 1, ty) === 'F', east = map.get(tx + 1, ty) === 'F';
+      var index = !n && !s && !w && !east ? 23 : (n || s) && !(w || east) ? 18 : !(n || s) ? 17 : s && east ? 19 : s && w ? 20 : n && east ? 21 : 22;
+      buildingCell(c, index, x, y);
+    } else if (e.building === 'gate') {
+      if (!gateEligible(map, tx, ty)) return false;
+      px(c, x, y, S, S, '#181b1c');
+      if (map.get(tx, ty + 1) !== 'G') U.drawArt(c, SHEETS.buildingWalls, 7 * S, S + 12, S, 4, x, y + 12, S, 4);
+    } else return false;
+    return true;
+  }
+  function buildingTall(c, x, y, tx, ty, map, ch, e) {
+    if (e.building === 'roof') {
+      if (map.get(tx, ty + 1) !== ch) { var rc = roofCell(e, map, tx, ty, ch); U.drawArt(c, sheetOf(e), rc[0] * S, rc[1] * S + 16, S, 6, x, y + 16, S, 6); }
+      return true;
+    }
+    if (e.building === 'red') { if (!SHEETS.buildingRoofs) return false; if (map.get(tx, ty - 1) !== 'R') U.drawArt(c, SHEETS.buildingRoofs, 7 * S, 42, S, 4, x, y - 2, S, 4); return true; }
+    if (e.building === 'stone') { if (map.get(tx, ty - 1) !== '#' && map.get(tx, ty - 1) !== 'G') U.drawArt(c, sheetOf(e), (12 + buildingSide(map, tx, ty, '#G')) % 8 * S, S, S, 4, x, y - 4, S, 4); return true; }
+    if (e.building === 'gate' && gateEligible(map, tx, ty)) {
+      if (map.get(tx - 1, ty) === 'G' || map.get(tx, ty + 1) === 'G') return true;
+      var run = runOf(map, tx, ty, 'G'), sy = WM.state && WM.state.flags && WM.state.flags['shut:' + map.id] ? 48 : 0;
+      // Piers sit on neighbouring solid wall tiles; every G tile remains a visible passage.
+      U.drawArt(c, sheetOf(e), 0, sy, 16, 45, x - 16, y - 29, 16, 45);
+      for (var i = 0; i < run.n; i++) U.drawArt(c, sheetOf(e), 16 + (i % 2) * 16, sy, 16, 45, x + i * 16, y - 29, 16, 45);
+      U.drawArt(c, sheetOf(e), 48, sy, 16, 45, x + run.n * 16, y - 29, 16, 45);
+      return true;
+    }
+    return false;
+  }
+
+  function objectGround(c, x, y, tx, ty, map, ch, e) {
+    var th = THEMES[map.theme] || THEMES.spring;
+    if (e.base === 'water') water(c, x, y, tx, ty, th, map);
+    else if (e.base === 'floor' || map.interior) floorUnder(c, x, y, tx, ty, map);
+    else grass(c, x, y, tx, ty, th);
+    return true;
+  }
+  var propLayouts = new WeakMap();
+  T.propLayout = function (map) {
+    artInit();
+    var cached = propLayouts.get(map);
+    if (cached && cached.version === T.artVersion && cached.theme === map.theme) return cached;
+    var out = {version:T.artVersion, theme:map.theme, occupied:{}, anchors:{}, skipped:{}, constrained:[]}, protectedCells = {};
+    var events = map.def && map.def.events;
+    if (typeof events === 'function') events = events(WM.S);
+    var accessPoints = (Array.isArray(events) ? events : []).slice();
+    if (map.propEntry) accessPoints.push(map.propEntry);
+    accessPoints.forEach(function(ev){
+      if (typeof ev.x !== 'number' || typeof ev.y !== 'number') return;
+      [[0,0],[0,1],[0,-1],[1,0],[-1,0]].forEach(function(d){protectedCells[(ev.x+d[0])+','+(ev.y+d[1])]=true;});
+    });
+    function free(x,y,ch) {
+      if(x<0||y<0||x>=map.w||y>=map.h)return false;
+      var key=x+','+y, q=map.get(x,y);
+      if(out.occupied[key] || protectedCells[key])return false;
+      // Do not expand over roads, entrances, stairs, other props or room boundaries.
+      return q===ch || (ch==='o' ? '~w'.indexOf(q)>=0 : '.,fnN'.indexOf(q)>=0);
+    }
+    function keepsRoutes(left,top,w,h) {
+      var added={}, around={}, start=null;
+      function walk(x,y,extra){return x>=0&&y>=0&&x<map.w&&y<map.h&&!T.solid(map.get(x,y))&&!out.occupied[x+','+y]&&!(extra&&extra[x+','+y]);}
+      for(var y=top;y<top+h;y++)for(var x=left;x<left+w;x++)added[x+','+y]=true;
+      for(var y=top-1;y<=top+h;y++)for(var x=left-1;x<=left+w;x++)if(!added[x+','+y]&&walk(x,y)){around[x+','+y]=true;if(!start)start=[x,y];}
+      if(!start)return true;
+      function reach(extra){var seen={},q=[start];seen[start.join(',')]=true;
+        for(var i=0;i<q.length;i++){var p=q[i];[[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){var x=p[0]+d[0],y=p[1]+d[1],k=x+','+y;if(!seen[k]&&walk(x,y,extra)){seen[k]=true;q.push([x,y]);}});}return seen;}
+      var before=reach(null),after=reach(added);
+      return Object.keys(around).every(function(k){return !before[k]||after[k];});
+    }
+    // Scan bottom-up so a two-row bed is anchored at its foot.
+    for(var y=map.h-1;y>=0;y--)for(var x=0;x<map.w;x++){
+      var ch=map.get(x,y),e=artEntry(ch,map),key=x+','+y;
+      if(!e||!e.object||!e.object.footprint||!sheetOf(e)||out.skipped[key])continue;
+      var fp=e.object.footprint, chosen=null;
+      for(var offset=0;offset<fp[0]&&!chosen;offset++){
+        var left=x-offset, top=y-fp[1]+1, okay=true;
+        for(var yy=top;yy<=y;yy++)for(var xx=left;xx<left+fp[0];xx++){
+          // An event on the authored prop itself is allowed; surrounding access is protected.
+          if(xx===x&&yy===y)continue;
+          if(!free(xx,yy,ch))okay=false;
+        }
+        if(okay && keepsRoutes(left,top,fp[0],fp[1]))chosen={x:left,y:top,w:fp[0],h:fp[1],bottom:y+1};
+      }
+      if(!chosen){chosen={x:x,y:y,w:1,h:1,bottom:y+1};out.constrained.push({x:x,y:y,ch:ch});}
+      out.anchors[key]=chosen;
+      for(var yy=chosen.y;yy<chosen.y+chosen.h;yy++)for(var xx=chosen.x;xx<chosen.x+chosen.w;xx++){
+        out.occupied[xx+','+yy]=chosen;
+        if((xx!==x||yy!==y)&&map.get(xx,yy)===ch)out.skipped[xx+','+yy]=true;
+      }
+    }
+    propLayouts.set(map,out);return out;
+  };
+  function objectTall(c, x, y, tx, ty, map, ch, e) {
+    if (ch === 'l' && WM.state && WM.state.flags && WM.state.flags['felled:' + map.id]) {
+      willowTall(c, x, y, tx, ty, THEMES[map.theme] || THEMES.spring, map); return;
+    }
+    var o = e.object, cell = o.at;
+    if (o.variants) cell = o.variants[Math.floor(U.hash2(tx, ty, 905) * o.variants.length) % o.variants.length];
+    var w = o.w || S, h = o.h || S, dx = x + (S - w) / 2;
+    var placement = o.footprint && T.propLayout(map);
+    if (placement && placement.skipped[tx+','+ty]) return;
+    if (ch === 'u' && !placement) {
+      var stallRun = runOf(map, tx, ty, ch), offset = tx - stallRun.x0;
+      if (offset % 2) return;
+      w = Math.min(2, stallRun.n - offset) * S; dx = x;
+    }
+    if (o.run) {
+      if (map.get(tx - 1, ty) === ch) return;
+      w = runOf(map, tx, ty, ch).n * S; dx = x;
+    }
+    if (o.bed && !placement) {
+      if (map.get(tx - 1, ty) === ch || map.get(tx, ty + 1) === ch) return;
+      w = runOf(map, tx, ty, ch).n * S; dx = x;
+    }
+    if (ch === '[') dx = x - S;
+    if (placement) {
+      var bounds=placement.anchors[tx+','+ty];
+      if(bounds){dx=x+(bounds.x-tx)*S;w=bounds.w*S;}
+    }
+    // Never stretch an object's width independently of its height to fill a map run.
+    var sourceW = o.w || S, fit = ch === 'b' ? 1 : Math.min(1, w / sourceW), drawW = sourceW * fit, drawH = h * fit;
+    U.drawArt(c, sheetOf(e), cell[0] * S, cell[1] * S, sourceW, h, dx + (w - drawW) / 2, y + S - drawH, drawW, drawH);
+  }
+
+  // the ground of a tile from its art (returns false if it has none): a variant chosen by place, a piece joining
+  // its neighbours (auto), or a frame of its animation
+  function drawGroundArt(c, x, y, tx, ty, map, ch, frame) {
+    var e = artEntry(ch, map); if (!e) return false;
+    var img = sheetOf(e); if (!img) return false;
+    if (e.object) return objectGround(c, x, y, tx, ty, map, ch, e);
+    if (e.building) return buildingGround(c, x, y, tx, ty, map, ch, e);
+    var cell = null;
+    if (e.auto) {
+      var same = e.auto.same || ch, m = 0;
+      [[0, -1, 1], [1, 0, 2], [0, 1, 4], [-1, 0, 8]].forEach(function (d) { var n = map.get(tx + d[0], ty + d[1]); if (n == null || same.indexOf(n) >= 0) m |= d[2]; });
+      if (e.auto.diagonal) [[1, -1, 16], [1, 1, 32], [-1, 1, 64], [-1, -1, 128]].forEach(function (d) { var n = map.get(tx + d[0], ty + d[1]); if (n == null || same.indexOf(n) >= 0) m |= d[2]; });
+      cell = e.auto.cells && e.auto.cells[m];
+      if (cell) { var choices = cellList(cell); cell = choices[Math.floor(U.hash2(tx, ty, 404) * choices.length) % choices.length]; }
+      if (cell && e.auto.frames) { var offset = e.auto.frames[frame % e.auto.frames.length]; cell = [cell[0] + offset[0], cell[1] + offset[1]]; }
+    }
+    if (!cell && e.frames) cell = cellList(e.frames)[frame % cellList(e.frames).length];
+    if (!cell && e.ground) { var vs = cellList(e.ground); cell = vs[Math.floor(U.hash2(tx, ty, 404) * vs.length) % vs.length]; }
+    if (!cell) return false;
+    blit(c, img, cell, S, S, x, y);
+    return true;
+  }
+  // animated tiles in view are drawn over the baked ground each frame
+  T.animateArt = function (c, map, camX, camY, time) {
+    if (!ART) return;
+    var x0 = Math.floor(camX / S), y0 = Math.floor(camY / S);
+    for (var ty = y0; ty < y0 + 16; ty++) for (var tx = x0; tx < x0 + 21; tx++) {
+      var ch = map.get(tx, ty), e = ch && artEntry(ch, map);
+      var frames = e && (e.auto ? e.auto.frames : e.frames);
+      if (!frames) continue;
+      var n = cellList(frames).length, f = Math.floor(time * (e.fps || 3) + (e.sync ? 0 : U.hash2(tx, ty, 405) * n)) % n;
+      drawGroundArt(c, tx * S - camX, ty * S - camY, tx, ty, map, ch, f);
+    }
+  };
+  // a tall object from its art, bottom-aligned on its tile and centred across it; in a run of the same tile
+  // (the great Buddha, a long counter) each tile takes its own slice, left to right
+  function tallArt(ch, map) { var e = artEntry(ch, map); return e && e.tall && SHEETS[e.tall.sheet || e.sheet || 'tiles'] ? e : null; }
+  T.hasTall = function (ch, map) { var d = T.DEF[ch], e = ART && map && artEntry(ch, map); return !!((d && d.tall) || (e && (e.building === 'stone' || e.object) && sheetOf(e)) || (ART && map && tallArt(ch, map))); };
+  T.drawTall = function (c, x, y, tx, ty, th, map, ch) {
+    if (worldSymbolAt(map,tx,ty) || T.worldTerrainLayout(map).occupied[tx+','+ty]) return;
+    if(map.def && map.def.world && SHEETS.worldIcons && 'TPHlb'.indexOf(ch)>=0){
+      U.drawArt(c,SHEETS.worldIcons,48,64,48,32,x,y+5,16,11);return;
+    }
+    var building = artEntry(ch, map);
+    if (building && building.object && sheetOf(building)) { objectTall(c, x, y, tx, ty, map, ch, building); return; }
+    if (building && building.building && sheetOf(building) && buildingTall(c, x, y, tx, ty, map, ch, building)) return;
+    var e = tallArt(ch, map), d = T.DEF[ch];
+    if (!e) { if (d && d.tall) d.tall(c, x, y, tx, ty, th, map, ch); return; }
+    var t = e.tall, w = t.w || S, h = t.h || S, cell;
+    if (t.run) {
+      var i = 0; while (map.get(tx - i - 1, ty) === ch) i++;
+      var run = cellList(t.run); cell = run[Math.min(i, run.length - 1)];
+      w = S;
+    } else { var vs = cellList(t.at); cell = vs[Math.floor(U.hash2(tx, ty, 406) * vs.length) % vs.length]; }
+    blit(c, SHEETS[t.sheet || e.sheet || 'tiles'], cell, w, h, x + Math.round((S - w) / 2) + (t.dx || 0), y + S - h + (t.dy || 0));
   };
 
   // Draw animated water glints on visible water tiles.
@@ -1008,7 +1411,8 @@
     var x0 = Math.floor(camX / S), y0 = Math.floor(camY / S);
     for (var ty = y0; ty < y0 + 16; ty++) for (var tx = x0; tx < x0 + 21; tx++) {
       var ch = map.get(tx, ty);
-      if (ch !== '~' && ch !== 'w' && ch !== 'r') continue;
+      if (worldSymbolAt(map,tx,ty) || (ch !== '~' && ch !== 'w' && ch !== 'r')) continue;
+      if (ART && groundArt(ch, map)) continue;   // drawn water brings its own movement
       var ph = U.hash2(tx, ty, 99) * 6.28;
       var k = Math.sin(time * 2 + ph);
       if (k > 0.55) {

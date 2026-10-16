@@ -98,11 +98,11 @@
   var grid = document.getElementById('grid');
   SAMPLES.forEach(function (sm) {
     var m = tileMap(sm[2], sm[3], sm[4]);
-    var base = T.bake(m), cv = document.createElement('canvas');
-    cv.width = m.w * S; cv.height = m.h * S + 16;                      // room above for what overhangs the top row
+    var base = T.bake(m), cv = WM.util.makeWorldCanvas(m.w*S,m.h*S+16);
+                          // room above for what overhangs the top row
     var c = cv.getContext('2d'); c.imageSmoothingEnabled = false;
     c.fillStyle = '#000'; c.fillRect(0, 0, cv.width, cv.height);
-    c.drawImage(base, 0, 16);
+    c.drawImage(base, 0, 16, m.w*S, m.h*S);
     var th = T.THEMES.spring;
     for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) { var d = T.DEF[m.get(x, y)]; if (d && d.tall) d.tall(c, x * S, y * S + 16, x, y, th, m, m.get(x, y)); }
     var f = document.createElement('figure');

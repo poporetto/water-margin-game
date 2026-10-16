@@ -5,12 +5,14 @@
 var WM = window.WM = window.WM || {};
 
 WM.VERSION = '0.9.0';
-WM.LOW_W = 320;      // world render resolution (Suikoden II ran at 320x240)
+WM.LOW_W = 320;      // logical world viewport; simulation and save coordinates stay stable
 WM.LOW_H = 240;
 WM.SCALE = 3;        // UI canvas is LOW * SCALE
 WM.W = WM.LOW_W * WM.SCALE;
 WM.H = WM.LOW_H * WM.SCALE;
 WM.TILE = 16;
+WM.ART_SCALE = 2;    // 32 physical artwork pixels per 16-unit map tile
+WM.ART_TILE = WM.TILE * WM.ART_SCALE;
 WM.scenes = {};
 
 WM.util = {
@@ -49,6 +51,17 @@ WM.util = {
     var x = c.getContext('2d');
     x.imageSmoothingEnabled = false;
     return c;
+  },
+  makeWorldCanvas: function (w, h) {
+    var scale = WM.ART_SCALE || 1, cv = WM.util.makeCanvas(w * scale, h * scale);
+    cv.artScale = scale; cv.logicalWidth = w; cv.logicalHeight = h;
+    cv.getContext('2d').scale(scale, scale);
+    return cv;
+  },
+  // Source coordinates are expressed in logical art units; destination coordinates belong to the caller.
+  drawArt: function (c, img, sx, sy, sw, sh, dx, dy, dw, dh) {
+    var scale = img.artScale || 1;
+    c.drawImage(img, sx * scale, sy * scale, sw * scale, sh * scale, dx, dy, dw, dh);
   },
   // Colour helpers: '#rrggbb' -> shaded '#rrggbb'
   shade: function (hex, amt) {

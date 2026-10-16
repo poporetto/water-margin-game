@@ -1,0 +1,918 @@
+{
+  "tileSize": 32,
+  "artScale": 2,
+  "objects": [
+    {
+      "id": 0,
+      "name": "house-door",
+      "file": "objects/house-door.png",
+      "cell": [
+        0,
+        0
+      ],
+      "width": 32,
+      "height": 48,
+      "logicalWidth": 16,
+      "logicalHeight": 24,
+      "sourceBounds": [
+        32,
+        36,
+        166,
+        186
+      ]
+    },
+    {
+      "id": 1,
+      "name": "poplar",
+      "file": "objects/poplar.png",
+      "cell": [
+        4,
+        0
+      ],
+      "width": 48,
+      "height": 76,
+      "logicalWidth": 24,
+      "logicalHeight": 38,
+      "sourceBounds": [
+        223,
+        6,
+        384,
+        198
+      ]
+    },
+    {
+      "id": 2,
+      "name": "willow",
+      "file": "objects/willow.png",
+      "cell": [
+        8,
+        0
+      ],
+      "width": 96,
+      "height": 120,
+      "logicalWidth": 48,
+      "logicalHeight": 60,
+      "sourceBounds": [
+        384,
+        15,
+        559,
+        197
+      ]
+    },
+    {
+      "id": 3,
+      "name": "willow-nest",
+      "file": "objects/willow-nest.png",
+      "cell": [
+        12,
+        0
+      ],
+      "width": 96,
+      "height": 120,
+      "logicalWidth": 48,
+      "logicalHeight": 60,
+      "sourceBounds": [
+        580,
+        13,
+        761,
+        207
+      ]
+    },
+    {
+      "id": 4,
+      "name": "bamboo",
+      "file": "objects/bamboo.png",
+      "cell": [
+        16,
+        0
+      ],
+      "width": 64,
+      "height": 128,
+      "logicalWidth": 32,
+      "logicalHeight": 64,
+      "sourceBounds": [
+        788,
+        10,
+        949,
+        207
+      ]
+    },
+    {
+      "id": 5,
+      "name": "dead-tree",
+      "file": "objects/dead-tree.png",
+      "cell": [
+        20,
+        0
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        983,
+        30,
+        1127,
+        207
+      ]
+    },
+    {
+      "id": 6,
+      "name": "boulder",
+      "file": "objects/boulder.png",
+      "cell": [
+        24,
+        0
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        1153,
+        77,
+        1320,
+        207
+      ]
+    },
+    {
+      "id": 7,
+      "name": "boulder-2",
+      "file": "objects/boulder-2.png",
+      "cell": [
+        28,
+        0
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        1353,
+        56,
+        1518,
+        197
+      ]
+    },
+    {
+      "id": 8,
+      "name": "stall-vegetables",
+      "file": "objects/stall-vegetables.png",
+      "cell": [
+        0,
+        5
+      ],
+      "width": 64,
+      "height": 64,
+      "logicalWidth": 32,
+      "logicalHeight": 32,
+      "sourceBounds": [
+        12,
+        213,
+        187,
+        360
+      ]
+    },
+    {
+      "id": 9,
+      "name": "stall-cloth",
+      "file": "objects/stall-cloth.png",
+      "cell": [
+        4,
+        5
+      ],
+      "width": 64,
+      "height": 64,
+      "logicalWidth": 32,
+      "logicalHeight": 32,
+      "sourceBounds": [
+        208,
+        213,
+        387,
+        364
+      ]
+    },
+    {
+      "id": 10,
+      "name": "stall-pottery",
+      "file": "objects/stall-pottery.png",
+      "cell": [
+        8,
+        5
+      ],
+      "width": 64,
+      "height": 64,
+      "logicalWidth": 32,
+      "logicalHeight": 32,
+      "sourceBounds": [
+        408,
+        213,
+        583,
+        362
+      ]
+    },
+    {
+      "id": 11,
+      "name": "lantern",
+      "file": "objects/lantern.png",
+      "cell": [
+        12,
+        5
+      ],
+      "width": 32,
+      "height": 56,
+      "logicalWidth": 16,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        630,
+        207,
+        725,
+        372
+      ]
+    },
+    {
+      "id": 12,
+      "name": "banner-red",
+      "file": "objects/banner-red.png",
+      "cell": [
+        16,
+        5
+      ],
+      "width": 64,
+      "height": 82,
+      "logicalWidth": 32,
+      "logicalHeight": 41,
+      "sourceBounds": [
+        812,
+        207,
+        948,
+        372
+      ]
+    },
+    {
+      "id": 13,
+      "name": "banner-yellow",
+      "file": "objects/banner-yellow.png",
+      "cell": [
+        20,
+        5
+      ],
+      "width": 64,
+      "height": 82,
+      "logicalWidth": 32,
+      "logicalHeight": 41,
+      "sourceBounds": [
+        988,
+        207,
+        1150,
+        382
+      ]
+    },
+    {
+      "id": 14,
+      "name": "wine-flag",
+      "file": "objects/wine-flag.png",
+      "cell": [
+        24,
+        5
+      ],
+      "width": 48,
+      "height": 76,
+      "logicalWidth": 24,
+      "logicalHeight": 38,
+      "sourceBounds": [
+        1188,
+        207,
+        1303,
+        365
+      ]
+    },
+    {
+      "id": 15,
+      "name": "notice-board",
+      "file": "objects/notice-board.png",
+      "cell": [
+        28,
+        5
+      ],
+      "width": 48,
+      "height": 56,
+      "logicalWidth": 24,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        1346,
+        214,
+        1528,
+        366
+      ]
+    },
+    {
+      "id": 16,
+      "name": "stele",
+      "file": "objects/stele.png",
+      "cell": [
+        0,
+        10
+      ],
+      "width": 48,
+      "height": 62,
+      "logicalWidth": 24,
+      "logicalHeight": 31,
+      "sourceBounds": [
+        42,
+        370,
+        190,
+        534
+      ]
+    },
+    {
+      "id": 17,
+      "name": "grave",
+      "file": "objects/grave.png",
+      "cell": [
+        4,
+        10
+      ],
+      "width": 64,
+      "height": 40,
+      "logicalWidth": 32,
+      "logicalHeight": 20,
+      "sourceBounds": [
+        190,
+        408,
+        385,
+        524
+      ]
+    },
+    {
+      "id": 18,
+      "name": "tent",
+      "file": "objects/tent.png",
+      "cell": [
+        8,
+        10
+      ],
+      "width": 96,
+      "height": 80,
+      "logicalWidth": 48,
+      "logicalHeight": 40,
+      "sourceBounds": [
+        391,
+        367,
+        590,
+        521
+      ]
+    },
+    {
+      "id": 19,
+      "name": "rowboat",
+      "file": "objects/rowboat.png",
+      "cell": [
+        12,
+        10
+      ],
+      "width": 64,
+      "height": 40,
+      "logicalWidth": 32,
+      "logicalHeight": 20,
+      "sourceBounds": [
+        590,
+        447,
+        740,
+        512
+      ]
+    },
+    {
+      "id": 20,
+      "name": "sampan",
+      "file": "objects/sampan.png",
+      "cell": [
+        16,
+        10
+      ],
+      "width": 128,
+      "height": 56,
+      "logicalWidth": 64,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        740,
+        401,
+        1067,
+        513
+      ]
+    },
+    {
+      "id": 21,
+      "name": "guardian-lion",
+      "file": "objects/guardian-lion.png",
+      "cell": [
+        20,
+        10
+      ],
+      "width": 32,
+      "height": 44,
+      "logicalWidth": 16,
+      "logicalHeight": 22,
+      "sourceBounds": [
+        1080,
+        371,
+        1166,
+        533
+      ]
+    },
+    {
+      "id": 22,
+      "name": "tea-table",
+      "file": "objects/tea-table.png",
+      "cell": [
+        24,
+        10
+      ],
+      "width": 64,
+      "height": 56,
+      "logicalWidth": 32,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        1196,
+        365,
+        1341,
+        526
+      ]
+    },
+    {
+      "id": 23,
+      "name": "table",
+      "file": "objects/table.png",
+      "cell": [
+        28,
+        10
+      ],
+      "width": 64,
+      "height": 56,
+      "logicalWidth": 32,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        1367,
+        365,
+        1514,
+        533
+      ]
+    },
+    {
+      "id": 24,
+      "name": "counter",
+      "file": "objects/counter.png",
+      "cell": [
+        0,
+        15
+      ],
+      "width": 64,
+      "height": 56,
+      "logicalWidth": 32,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        18,
+        533,
+        191,
+        693
+      ]
+    },
+    {
+      "id": 25,
+      "name": "bed",
+      "file": "objects/bed.png",
+      "cell": [
+        4,
+        15
+      ],
+      "width": 64,
+      "height": 64,
+      "logicalWidth": 32,
+      "logicalHeight": 32,
+      "sourceBounds": [
+        218,
+        540,
+        377,
+        684
+      ]
+    },
+    {
+      "id": 26,
+      "name": "shelves-jars",
+      "file": "objects/shelves-jars.png",
+      "cell": [
+        8,
+        15
+      ],
+      "width": 64,
+      "height": 56,
+      "logicalWidth": 32,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        413,
+        544,
+        557,
+        681
+      ]
+    },
+    {
+      "id": 27,
+      "name": "shelves-scrolls",
+      "file": "objects/shelves-scrolls.png",
+      "cell": [
+        12,
+        15
+      ],
+      "width": 64,
+      "height": 56,
+      "logicalWidth": 32,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        593,
+        544,
+        736,
+        693
+      ]
+    },
+    {
+      "id": 28,
+      "name": "storage-jar",
+      "file": "objects/storage-jar.png",
+      "cell": [
+        16,
+        15
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        790,
+        565,
+        913,
+        693
+      ]
+    },
+    {
+      "id": 29,
+      "name": "incense-altar",
+      "file": "objects/incense-altar.png",
+      "cell": [
+        20,
+        15
+      ],
+      "width": 64,
+      "height": 56,
+      "logicalWidth": 32,
+      "logicalHeight": 28,
+      "sourceBounds": [
+        956,
+        533,
+        1140,
+        693
+      ]
+    },
+    {
+      "id": 30,
+      "name": "cushion",
+      "file": "objects/cushion.png",
+      "cell": [
+        24,
+        15
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        1140,
+        533,
+        1329,
+        679
+      ]
+    },
+    {
+      "id": 31,
+      "name": "hall-column",
+      "file": "objects/hall-column.png",
+      "cell": [
+        28,
+        15
+      ],
+      "width": 32,
+      "height": 78,
+      "logicalWidth": 16,
+      "logicalHeight": 39,
+      "sourceBounds": [
+        1402,
+        533,
+        1476,
+        689
+      ]
+    },
+    {
+      "id": 32,
+      "name": "buddha",
+      "file": "objects/buddha.png",
+      "cell": [
+        0,
+        20
+      ],
+      "width": 96,
+      "height": 86,
+      "logicalWidth": 48,
+      "logicalHeight": 43,
+      "sourceBounds": [
+        26,
+        686,
+        163,
+        860
+      ]
+    },
+    {
+      "id": 33,
+      "name": "offering-altar",
+      "file": "objects/offering-altar.png",
+      "cell": [
+        4,
+        20
+      ],
+      "width": 96,
+      "height": 46,
+      "logicalWidth": 48,
+      "logicalHeight": 23,
+      "sourceBounds": [
+        188,
+        720,
+        425,
+        853
+      ]
+    },
+    {
+      "id": 34,
+      "name": "censer",
+      "file": "objects/censer.png",
+      "cell": [
+        8,
+        20
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        444,
+        719,
+        545,
+        859
+      ]
+    },
+    {
+      "id": 35,
+      "name": "three-pure-ones",
+      "file": "objects/three-pure-ones.png",
+      "cell": [
+        12,
+        20
+      ],
+      "width": 96,
+      "height": 84,
+      "logicalWidth": 48,
+      "logicalHeight": 42,
+      "sourceBounds": [
+        567,
+        690,
+        835,
+        853
+      ]
+    },
+    {
+      "id": 36,
+      "name": "goddess",
+      "file": "objects/goddess.png",
+      "cell": [
+        16,
+        20
+      ],
+      "width": 48,
+      "height": 96,
+      "logicalWidth": 24,
+      "logicalHeight": 48,
+      "sourceBounds": [
+        850,
+        690,
+        943,
+        865
+      ]
+    },
+    {
+      "id": 37,
+      "name": "deity-king",
+      "file": "objects/deity-king.png",
+      "cell": [
+        20,
+        20
+      ],
+      "width": 48,
+      "height": 96,
+      "logicalWidth": 24,
+      "logicalHeight": 48,
+      "sourceBounds": [
+        980,
+        690,
+        1083,
+        862
+      ]
+    },
+    {
+      "id": 38,
+      "name": "daoist-altar",
+      "file": "objects/daoist-altar.png",
+      "cell": [
+        24,
+        20
+      ],
+      "width": 96,
+      "height": 46,
+      "logicalWidth": 48,
+      "logicalHeight": 23,
+      "sourceBounds": [
+        1106,
+        695,
+        1326,
+        854
+      ]
+    },
+    {
+      "id": 39,
+      "name": "painted-screen",
+      "file": "objects/painted-screen.png",
+      "cell": [
+        28,
+        20
+      ],
+      "width": 96,
+      "height": 68,
+      "logicalWidth": 48,
+      "logicalHeight": 34,
+      "sourceBounds": [
+        1342,
+        703,
+        1521,
+        862
+      ]
+    },
+    {
+      "id": 40,
+      "name": "dais",
+      "file": "objects/dais.png",
+      "cell": [
+        0,
+        25
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        14,
+        875,
+        261,
+        1007
+      ]
+    },
+    {
+      "id": 41,
+      "name": "official-chair",
+      "file": "objects/official-chair.png",
+      "cell": [
+        4,
+        25
+      ],
+      "width": 32,
+      "height": 60,
+      "logicalWidth": 16,
+      "logicalHeight": 30,
+      "sourceBounds": [
+        284,
+        868,
+        374,
+        1000
+      ]
+    },
+    {
+      "id": 42,
+      "name": "judge-desk",
+      "file": "objects/judge-desk.png",
+      "cell": [
+        8,
+        25
+      ],
+      "width": 96,
+      "height": 50,
+      "logicalWidth": 48,
+      "logicalHeight": 25,
+      "sourceBounds": [
+        404,
+        868,
+        617,
+        997
+      ]
+    },
+    {
+      "id": 43,
+      "name": "reeds",
+      "file": "objects/reeds.png",
+      "cell": [
+        12,
+        25
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        645,
+        873,
+        779,
+        1007
+      ]
+    },
+    {
+      "id": 44,
+      "name": "reeds-2",
+      "file": "objects/reeds-2.png",
+      "cell": [
+        16,
+        25
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        804,
+        877,
+        957,
+        1008
+      ]
+    },
+    {
+      "id": 45,
+      "name": "cliff",
+      "file": "objects/cliff.png",
+      "cell": [
+        20,
+        25
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        983,
+        870,
+        1160,
+        1008
+      ]
+    },
+    {
+      "id": 46,
+      "name": "cliff-2",
+      "file": "objects/cliff-2.png",
+      "cell": [
+        24,
+        25
+      ],
+      "width": 32,
+      "height": 32,
+      "logicalWidth": 16,
+      "logicalHeight": 16,
+      "sourceBounds": [
+        1160,
+        871,
+        1332,
+        1008
+      ]
+    },
+    {
+      "id": 47,
+      "name": "barred-door",
+      "file": "objects/barred-door.png",
+      "cell": [
+        28,
+        25
+      ],
+      "width": 32,
+      "height": 48,
+      "logicalWidth": 16,
+      "logicalHeight": 24,
+      "sourceBounds": [
+        1366,
+        865,
+        1501,
+        1004
+      ]
+    }
+  ]
+}

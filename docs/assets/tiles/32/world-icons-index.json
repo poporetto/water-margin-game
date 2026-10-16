@@ -1,0 +1,162 @@
+[
+  {
+    "name": "city",
+    "file": "world-icons/city.png",
+    "cell": [
+      0,
+      0
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "town",
+    "file": "world-icons/town.png",
+    "cell": [
+      3,
+      0
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "village",
+    "file": "world-icons/village.png",
+    "cell": [
+      6,
+      0
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "manor",
+    "file": "world-icons/manor.png",
+    "cell": [
+      9,
+      0
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "temple",
+    "file": "world-icons/temple.png",
+    "cell": [
+      0,
+      2
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "fort",
+    "file": "world-icons/fort.png",
+    "cell": [
+      3,
+      2
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "inn",
+    "file": "world-icons/inn.png",
+    "cell": [
+      6,
+      2
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "ruin",
+    "file": "world-icons/ruin.png",
+    "cell": [
+      9,
+      2
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "pass",
+    "file": "world-icons/pass.png",
+    "cell": [
+      0,
+      4
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "forest",
+    "file": "world-icons/forest.png",
+    "cell": [
+      3,
+      4
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "marsh",
+    "file": "world-icons/marsh.png",
+    "cell": [
+      6,
+      4
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "fortress",
+    "file": "world-icons/fortress.png",
+    "cell": [
+      9,
+      4
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "mountain",
+    "file": "world-icons/mountain.png",
+    "cell": [
+      0,
+      6
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "peak-1",
+    "file": "world-icons/peak-1.png",
+    "cell": [
+      3,
+      6
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "peak-2",
+    "file": "world-icons/peak-2.png",
+    "cell": [
+      6,
+      6
+    ],
+    "width": 96,
+    "height": 64
+  },
+  {
+    "name": "woodland",
+    "file": "world-icons/woodland.png",
+    "cell": [
+      9,
+      6
+    ],
+    "width": 96,
+    "height": 64
+  }
+]

@@ -27,17 +27,26 @@
         return ch === undefined || ch === ' ' ? (this.def.fill || '.') : ch;
       }
     };
-    var key = (def.cacheKey ? def.cacheKey() : 'static') + '|' + m.theme;
+    var key = (def.cacheKey ? def.cacheKey() : 'static') + '|' + m.theme + '|' + T.artVersion;   // (rebaked when new tile art arrives)
     if (!def._baked || def._bakedKey !== key) { def._baked = T.bake(m); def._bakedKey = key; }
     m.baked = def._baked;
-    m.talls = [];
     if (m.interior) m.rooms = rooms(m);
-    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) {
-      var d = T.DEF[m.get(x, y)];
-      if (d && d.tall) m.talls.push({ x: x, y: y, d: d });
-    }
+    scanTalls(m);
     return m;
   }
+  function scanTalls(m) {
+    m.talls = [];
+    for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) {
+      var ch = m.get(x, y);
+      if (T.hasTall(ch, m)) m.talls.push({ x: x, y: y, d: T.DEF[ch] || {} });
+    }
+  }
+  // tile art finished loading while a map is open: bake it again with the art, and pick up any new tall objects
+  T.onArtReady = function () {
+    var m = F.map; if (!m) return;
+    m.def._baked = m.baked = T.bake(m); m.def._bakedKey = null;
+    scanTalls(m);
+  };
   F.buildMap = buildMap;
   // An interior map holds several rooms side by side, each walled off by void ('x'). Number them, so that only the
   // room the player stands in is drawn: the house next door is not visible through the wall.
@@ -198,6 +207,9 @@
   F.loadMap = function (id, tx, ty, dir, noAuto) {
     var st = WM.state;
     F.map = buildMap(id);
+    F.map.propEntry = {x:tx,y:ty};
+    // World feature placement protects this arrival point; rebuild its matching artwork.
+    if(F.map.def.world)F.map.baked=T.bake(F.map);
     st.map = id;
     if (F.map.def.world && tileSolid(tx, ty)) {   // a save from before the map was redrawn can stand in a river: step out to the nearest road
       var seen = {}, q = [[tx, ty]], hit = null;
@@ -232,7 +244,7 @@
   function tileSolid(tx, ty) {
     var ch = F.map.get(tx, ty);
     if (ch === null) return true;
-    return T.solid(ch);
+    return T.solidAt(F.map, tx, ty);
   }
   F.tileSolid = function (tx, ty) { return tileSolid(tx, ty); };
   F.roomAt = function (tx, ty) { return F.map ? roomAt(F.map, tx, ty) : -1; };
@@ -577,8 +589,9 @@
     var cam = F.cam;
     var cx = Math.round(cam.x), cy = Math.round(cam.y);
     c.fillStyle = '#000'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H);
-    c.drawImage(F.map.baked, -cx, -cy);
+    c.drawImage(F.map.baked, -cx, -cy, F.map.w * TS, F.map.h * TS);
     T.animateWater(c, F.map, cx, cy, WM.time);
+    T.animateArt(c, F.map, cx, cy, WM.time);
 
     // in an interior, only the player's own room is drawn
     var pt = F.player.tile(), room = roomAt(F.map, pt.x, pt.y);
@@ -607,7 +620,7 @@
     list.sort(function (p, q) { return p.y - q.y; });
     for (i = 0; i < list.length; i++) {
       var it = list[i];
-      if (it.kind === 't') it.t.d.tall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map, F.map.get(it.t.x, it.t.y));
+      if (it.kind === 't') T.drawTall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map, F.map.get(it.t.x, it.t.y));
       else drawActor(c, it.a, cx, cy);
     }
     // emotes on top
@@ -848,7 +861,7 @@
   function drawActor(c, a, cx, cy) {
     var x = Math.round(a.x - cx), y = Math.round(a.y - cy + a.offY);
     if (a.img) {
-      var iw = a.img.width * (a.scale || 1), ih = a.img.height * (a.scale || 1);
+      var iw = a.img.width / (a.img.artScale || 1) * (a.scale || 1), ih = a.img.height / (a.img.artScale || 1) * (a.scale || 1);
       c.fillStyle = 'rgba(0,0,0,0.28)'; c.beginPath(); c.ellipse(x, Math.round(a.y - cy) - 1, iw * 0.35, 3, 0, 0, Math.PI * 2); c.fill();
       if (a.alpha != null) c.globalAlpha = a.alpha;
       c.save();

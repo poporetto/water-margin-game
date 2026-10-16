@@ -142,3 +142,7 @@ The world map is drawn like an **old Chinese map on silk**, not like the field m
 4. Temples and the official hall.
 5. World map set.
 6. Seasonal variants.
+
+## Adding the art to the game
+
+Put the sheets in `assets/tiles/` and list them in `assets/tiles.js`, which maps each tile to its cell on a sheet (the format is described at the top of that file). Anything not listed is still drawn by the code, so art can go in a batch at a time. Shoreline, road and fence edges use the `auto` form, picking a piece by which neighbours match.
