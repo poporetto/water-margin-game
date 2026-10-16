@@ -1339,7 +1339,7 @@
       var key=x+','+y, q=map.get(x,y);
       if(out.occupied[key] || protectedCells[key])return false;
       // Do not expand over roads, entrances, stairs, other props or room boundaries.
-      return q===ch || (ch==='o' ? '~w'.indexOf(q)>=0 : '.,fnN'.indexOf(q)>=0);
+      return q===ch || (ch==='o' ? '~w'.indexOf(q)>=0 : '.,fnN='.indexOf(q)>=0);   // (a market stall spreads over the paving)
     }
     function keepsRoutes(left,top,w,h) {
       var added={}, around={}, start=null;

@@ -98,6 +98,7 @@ WM.TILE_ART = {
   };
   // Ground footprints are independent of sprite height (canopies and poles overhang).
   ['u','t','c','h','A','g','o'].forEach(function(ch){entries[ch].object.footprint=[2,1];});
+  entries.u.object.footprint=[2,2];   // a market stall stands two tiles wide and two deep, as its awning is drawn
   entries.V.object.footprint=[3,2];
   entries.k.object.footprint=[2,2];
   ['spring','summer','autumn','dusk','marsh','south','north'].forEach(function(theme){

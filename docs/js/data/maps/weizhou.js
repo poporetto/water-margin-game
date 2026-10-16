@@ -64,6 +64,6 @@
   WM.defEvents('weizhou_in', [
     L.inn('wzinn', 47, 4, 15),
     L.save('wzrec', 53, 6),
-    L.shop('wzshop', 30, 4, 'weizhou', 'waiter', 'Food for the road? We sell what we cook.')
+    Object.assign(L.shop('wzshop', 30, 4, 'weizhou', 'waiter', 'Food for the road? We sell what we cook.'), { sign: 'tavern' })   // Pan's tavern
   ]);
 })();

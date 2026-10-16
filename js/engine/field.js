@@ -664,9 +664,10 @@
   // ---------- what each building is ----------
   // A door that leads into a room with an innkeeper, a smith or a shopkeeper gets that trade's signboard hung on the
   // wall beside it, and its name shown when the player comes near. Worked out from the events inside the room.
-  var SIGN_NAME = { smith: 'Smithy', inn: 'Inn', armour: 'Armourer & Tailor', goods: 'General Store', talis: 'Incense Shop' };
-  var SIGN_ORDER = ['smith', 'inn', 'armour', 'goods', 'talis'];
+  var SIGN_NAME = { smith: 'Smithy', inn: 'Inn', tavern: 'Tavern', armour: 'Armourer & Tailor', goods: 'General Store', talis: 'Incense Shop' };
+  var SIGN_ORDER = ['smith', 'inn', 'tavern', 'armour', 'goods', 'talis'];
   function tradeOf(ev) {
+    if (ev.sign) return ev.sign;   // what the house is, when its stock would say otherwise (a tavern selling a few caps)
     if (ev.kind === 'shop') {
       var sh = WM.data.shops[ev.shop], its = (sh && sh.items) || [];
       var gear = its.filter(function (id) { var it = WM.data.items[id]; return it && it.type !== 'use'; }).length;
@@ -710,7 +711,7 @@
       var x = sg.bx * TS - cx, y = sg.y * TS - cy;
       if (x < -16 || y < -16 || x > WM.LOW_W || y > WM.LOW_H + 16) return;
       var px = function (a, b, w, h, col) { c.fillStyle = col; c.fillRect(x + a, y + b, w, h); };
-      var bg = { smith: '#3a2a20', inn: '#7a2a20', armour: '#34384a', goods: '#2a4a36', talis: '#4a2a3e' }[sg.kind];
+      var bg = { smith: '#3a2a20', inn: '#7a2a20', tavern: '#2a3a5a', armour: '#34384a', goods: '#2a4a36', talis: '#4a2a3e' }[sg.kind];
       px(7, -3, 2, 2, '#3a2412'); px(4, -2, 8, 1, '#3a2412');                // the iron bracket under the eave
       px(5, -1, 1, 2, '#3a2412'); px(10, -1, 1, 2, '#3a2412');
       px(3, 1, 10, 13, '#c8a050'); px(4, 2, 8, 11, bg);                       // the board, with a gilt edge
@@ -722,6 +723,8 @@
       } else if (sg.kind === 'inn') {     // a crescent moon over a pillow: a bed for the night
         px(ix + 2, iy, 3, 1, '#e8c860'); px(ix + 1, iy + 1, 1, 3, '#e8c860'); px(ix + 2, iy + 4, 3, 1, '#e8c860'); px(ix + 2, iy + 1, 1, 1, '#e8c860'); px(ix + 2, iy + 3, 1, 1, '#e8c860');
         px(ix, iy + 6, 6, 2, '#e8e0cc'); px(ix, iy + 8, 6, 1, '#a8a08c');
+      } else if (sg.kind === 'tavern') {  // a wine jar with a red paper seal
+        px(ix + 1, iy, 4, 2, '#c8302a'); px(ix, iy + 2, 6, 1, '#8a5a3a'); px(ix, iy + 3, 6, 5, '#a86a3a'); px(ix + 1, iy + 8, 4, 1, '#7a4a2a'); px(ix + 1, iy + 4, 1, 2, '#c88a5a');
       } else if (sg.kind === 'armour') {  // a helmet with a red tassel, over a coat
         px(ix + 2, iy, 2, 1, '#c8302a'); px(ix + 1, iy + 1, 4, 3, '#b8b8c4'); px(ix, iy + 4, 6, 1, '#8a8a96');
         px(ix + 1, iy + 6, 4, 3, '#8a5a3a'); px(ix, iy + 6, 1, 2, '#8a5a3a'); px(ix + 5, iy + 6, 1, 2, '#8a5a3a');

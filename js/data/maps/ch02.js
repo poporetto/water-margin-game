@@ -43,14 +43,14 @@
   var smith = t.house(3, 3, 8, 5, { roof: 'z', door: 3, windows: [6] });
   t.stamp(11, 6, ['j', 'j']);
   var tavern = t.house(22, 3, 9, 5, { roof: 'z', door: 4, windows: [1, 7] });
-  t.set(21, 4, 'J');
   var store = t.house(3, 16, 7, 5, { roof: 'z', door: 3, windows: [1] });
   var tinn = t.house(22, 16, 9, 5, { roof: '^', door: 4, windows: [1, 7] });
   [smith, tavern].forEach(function (d) { t.vline(d.x, d.y + 1, 11, ':'); });
   t.hline(2, 31, 22, ':'); t.vline(12, 14, 22, ':'); t.vline(20, 14, 22, ':');
   [store, tinn].forEach(function (d) { t.vline(d.x, d.y + 1, 22, ':'); });
-  t.stamp(29, 9, ['juJ']);                         // a little tavern stall at the edge of town
+  t.stamp(27, 9, ['j.u.J']);                       // a little tavern stall at the edge of town
   t.scatter('P', 0.1, 61, '.', [1, 1, 32, 24]); t.scatter('m', 0.03, 62, '.', [1, 1, 32, 24]);
+  t.rect(26, 8, 7, 1, '.');                        // (room behind the stall's awning)
   L.clearAround(t, ':', 'Pm', '.');
   WM.defMap('wutai_town', { name: 'Town below Mount Wutai', theme: 'autumn', music: 'field', rows: t.rows(), spawn: [16, 24], battleBg: 'mountain', exits: [WM.toWorld('wutai', 16, 25, 2, 1)] });
   var ti = L.grid(44, 10, 'x');

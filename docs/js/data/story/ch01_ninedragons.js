@@ -452,7 +452,7 @@
     { id: 'ch1_lizhong', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch1_metluda'); }, run: async function (s) {
       s.spawn('luda', 'luda', 21, 13, 'left');
       s.spawn('lizhong', 'lizhong', 25, 13, 'down');
-      s.spawn('c1', 'villager', 24, 14, 'up'); s.spawn('c2', 'woman', 26, 14, 'up'); s.spawn('c3', 'merchant', 25, 12, 'down');
+      s.spawn('c1', 'villager', 24, 14, 'up'); s.spawn('c2', 'woman', 26, 14, 'up'); s.spawn('c3', 'merchant', 27, 13, 'left');   // in front of his stall, watching
       await s.say('lizhong', '...and with one plaster of this, any bruise, any sprain! Ten coppers! Watch the staff, friends, and then buy the plaster!');
       await s.say('shijin', 'That voice... Teacher Li! Li Zhong!');
       await s.say('lizhong:smile', 'Young Master Shi! What are you doing in Weizhou?');
