@@ -44,9 +44,9 @@
   WM.defMap('gaotang', { name: 'Gaotang', theme: 'summer', music: 'town', rows: g.rows(), spawn: [24, 37], battleBg: 'town',
     exits: [WM.toWorld('gaotang', 23, 39, 4, 1)] });
   var gi = L.grid(52, 11, 'x');
-  var gR = { chai: gi.room(1, 1, 14, 9), yamen: gi.room(16, 1, 18, 10, { floor: 'K' }), jail: gi.room(35, 1, 14, 9, { floor: 'N' }) };
+  var gR = { chai: gi.room(1, 1, 14, 9), yamen: gi.room(16, 1, 18, 10, { floor: 'N' }), jail: gi.room(35, 1, 14, 9, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......h.', '..........k.', '..t.........', '............']);
-  gi.stamp(17, 3, ['h....EEEEEE....h', '......q00q......', '..t...aaaa...t..', '................']);   // the prefect's hall
+  gi.stamp(17, 3, ['h....EEEEEE....h', '......q00q......', '..t...aaaa...t..', '......KKKK......', '......KKKK']);   // the prefect's hall
   gi.stamp(36, 3, ['-..F-..F-..F', '...F...F...F', 'F+FFF+FFF+FF', 'h..........h']);
   WM.defMap('gaotang_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: gi.rows(), spawn: [8, 8] });
   [[chai, gR.chai], [yamen, gR.yamen], [jail, gR.jail]].forEach(function (p) { L.link({ map: 'gaotang', x: p[0].x, y: p[0].y }, { map: 'gaotang_in', x: p[1].x, y: p[1].y }); });

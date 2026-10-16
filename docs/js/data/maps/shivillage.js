@@ -48,7 +48,7 @@
   var I = L.grid(48, 22, 'x');
   var R = {};
   R.hall = I.room(1, 1, 20, 11, { floor: 'n' });
-  I.stamp(2, 3, ['h..A.....A..h.....', '..................', '....KKKKKKKK......', '....KKKKKKKK..t...', '....KKKKKKKK......', '..................', 'j................j']);
+  I.stamp(2, 3, ['h..A.....A..h.....', '..................', '......KKKK........', '......KKKK....t...', '..................', '..................', 'j................j']);
   I.vline(14, 3, 6, 'X'); I.set(14, 5, 'n');
   I.stamp(15, 3, ['k...', '....', '...k']);
   R.houseA = I.room(22, 1, 8, 7); I.stamp(23, 3, ['k..j..', '......', '..t...']);
@@ -91,7 +91,7 @@
   });
   var H = L.grid(18, 12, 'x');
   var hallR = H.room(0, 0, 18, 12, { floor: 'n' });
-  H.stamp(1, 2, ['h...LA..AL...h..', '................', '..t..KKKKKK.....', '.....KKKKKK.....', '.....KKKKKK.....', '................', 'j..............j']);
+  H.stamp(1, 2, ['h...LA..AL...h..', '................', '..t...KKKK......', '......KKKK......', '................', '................', 'j..............j']);
   H.set(2, 3, 'k');
   WM.defMap('shaohua_in', { name: 'Shaohua Stronghold', interior: true, theme: 'spring', music: 'dungeon', rows: H.rows(), spawn: [9, 10] });
   L.link({ map: 'shaohua', x: fortHall.x, y: fortHall.y }, { map: 'shaohua_in', x: hallR.x, y: hallR.y });

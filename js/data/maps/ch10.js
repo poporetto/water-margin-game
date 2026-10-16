@@ -49,7 +49,7 @@
   WM.defMap('yishui', { name: 'Yishui — the Yi Ridge', theme: 'summer', music: 'field', rows: y.rows(), spawn: [1, 26], battleBg: 'forest',
     exits: [Object.assign(WM.toWorld('yishui', 0, 26, 1, 2), { cond: function (S2) { return !S2.has('ch10_carry') || S2.has('ch10_tigers'); }, blocked: '(Li Kui will not turn back now.)' })] });
   WM.defEvents('yishui', [L.save('yisave', 19, 28)]);
-  var yi = L.grid(22, 9, 'x'); var yR = { home: yi.room(1, 1, 8, 7), cao: yi.room(10, 1, 11, 8, { floor: 'K' }) };
+  var yi = L.grid(22, 9, 'x'); var yR = { home: yi.room(1, 1, 8, 7), cao: yi.room(10, 1, 11, 8, { floor: 'n' }) };
   yi.stamp(2, 3, ['k..j..', '......', '..t...']); yi.stamp(11, 3, ['h..A..h..', '.........', '..t......']);
   WM.defMap('yishui_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: yi.rows(), spawn: [5, 6] });
   L.link({ map: 'yishui', x: home.x, y: home.y }, { map: 'yishui_in', x: yR.home.x, y: yR.home.y });

@@ -99,7 +99,7 @@
     exits: [WM.toWorld('mengzhou', 0, 13, 1, 3), WM.toWorld('mengzhou', 55, 13, 1, 3)] });
   WM.data.mengzhouTaverns = taverns;
   var mi = L.grid(56, 12, 'x');
-  var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'K' }), tower: mi.room(31, 1, 12, 8, { floor: 'K' }), happy: mi.room(44, 1, 11, 8) };
+  var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'N' }), tower: mi.room(31, 1, 12, 8, { floor: 'n' }), happy: mi.room(44, 1, 11, 8) };
   mi.stamp(2, 3, ['h...A....h', '..........', 'kk..kk..kk', 'kk..kk..kk']);
   mi.stamp(15, 3, ['h...L....L...h', '..............', '...t..........', '..............', 'j............j']);
   mi.stamp(32, 3, ['L..t......L', '...........', '.k.......k.']);
@@ -136,7 +136,7 @@
   k.house(3, 13, 6, 4, { roof: 'z', door: false, windows: [2] }); k.set(9, 14, 'J');       // the village inn where Wu Song drank
   k.scatter('T', 0.08, 301, '.', [1, 1, 30, 22]); L.clearAround(k, ':', 'T', '.');
   WM.defMap('kongmanor', { name: 'Kong Family Manor', theme: 'snow', music: 'field', rows: k.rows(), spawn: [15, 22], battleBg: 'snow', exits: [WM.toWorld('kongmanor', 14, 23, 3, 1)] });
-  var ki = L.grid(18, 11, 'x'); var kR = ki.room(1, 1, 16, 9, { floor: 'K' }); ki.stamp(2, 3, ['h..A......A.h.', '..............', '..t...KKK.....', '..............', 'j............j']);
+  var ki = L.grid(18, 11, 'x'); var kR = ki.room(1, 1, 16, 9, { floor: 'N' }); ki.stamp(2, 3, ['h..A......A.h.', '..............', '..t...KKK.....', '..............', 'j............j']);
   WM.defMap('kongmanor_in', { name: 'Kong Family Hall', interior: true, theme: 'snow', music: 'field', rows: ki.rows(), spawn: [8, 8] });
   L.link({ map: 'kongmanor', x: km.x, y: km.y }, { map: 'kongmanor_in', x: kR.x, y: kR.y });
 })();

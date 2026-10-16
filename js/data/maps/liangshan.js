@@ -132,7 +132,7 @@
   var I = L.grid(70, 36, 'x');
   var ROOMS = {};
   ROOMS.hall = I.room(1, 1, 30, 16, { floor: 'N' });
-  I.stamp(2, 3, ['h....L.....AAAA.....L.....h.', '............................', '............................', '....KKKKKKKKKKKKKKKKKKKK....', '....KKKKKKKKKKKKKKKKKKKK....', '..t.KKKKKKKKKKKKKKKKKKKK.t..', '..t.KKKKKKKKKKKKKKKKKKKK.t..', '....KKKKKKKKKKKKKKKKKKKK....', '....KKKKKKKKKKKKKKKKKKKK....', '............................', 'j..........................j']);
+  I.stamp(2, 3, ['h....L.....AAAA.....L.....h.', '...........KKKK.............', '...........KKKK.............', '............................', '............................', '..t......................t..', '..t......................t..', '............................', '............................', '............................', 'j..........................j']);
   ROOMS.store = I.room(32, 1, 9, 7); I.stamp(33, 3, ['hhhhh..', '.......', 'ccc....']);
   ROOMS.smithy = I.room(42, 1, 9, 7); I.stamp(43, 3, ['jj..jj.', '.......', '.cccc..']);
   ROOMS.tailor = I.room(52, 1, 9, 7); I.stamp(53, 3, ['hhhhhh.', '.......', '.cccc..']);
@@ -140,7 +140,7 @@
   ROOMS.clinic = I.room(32, 10, 9, 7); I.stamp(33, 12, ['k.h.k..', '.......', '..t....']);
   ROOMS.engrave = I.room(42, 10, 9, 7, { floor: 'N' }); I.stamp(43, 12, ['h.A.h..', '.......', '.ccc...']);
   ROOMS.records = I.room(52, 10, 9, 7); I.stamp(53, 12, ['hhhhhh.', '.......', '..t....']);
-  ROOMS.banquet = I.room(1, 18, 20, 10, { floor: 'K' }); I.stamp(2, 20, ['h...L......L...h.', '..................', '.t..t..t..t..t..t.', '..................', '.t..t..t..t..t..t.', '..................']);
+  ROOMS.banquet = I.room(1, 18, 20, 10, { floor: 'N' }); I.stamp(2, 20, ['h...L......L...h.', '..................', '.t..t..t..t..t..t.', '..................', '.t..t..t..t..t..t.', '..................']);
   WM.defMap('liangshan_in', { name: '', interior: true, theme: 'marsh', music: function (S2) { return S2.has('lsWangLun') ? 'tense' : 'castle'; }, rows: I.rows(), spawn: [16, 15] });
   // exits from rooms back to the fortress (door positions are known only after the fortress is built)
   Object.defineProperty(WM.data.maps.liangshan_in, 'exits', { get: function () {

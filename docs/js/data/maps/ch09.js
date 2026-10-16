@@ -30,7 +30,7 @@
   y.scatter('b', 0.06, 342, '.', [0, 0, 44, 22]); y.scatter('T', 0.05, 343, '.', [0, 0, 44, 22]);
   L.clearAround(y, ':', 'Tb', '.'); L.clearAround(y, '=', 'Tb', '.');
   WM.defMap('jieyang', { name: 'Jieyang Town', theme: 'south', music: 'town', rows: y.rows(), spawn: [1, 8], battleBg: 'river', exits: [WM.toWorld('jieyang', 0, 8, 1, 2)] });
-  var yi = L.grid(30, 10, 'x'); var yR = { mu: yi.room(1, 1, 14, 9, { floor: 'K' }), inn: yi.room(16, 1, 12, 8) };
+  var yi = L.grid(30, 10, 'x'); var yR = { mu: yi.room(1, 1, 14, 9, { floor: 'N' }), inn: yi.room(16, 1, 12, 8) };
   yi.stamp(2, 3, ['h..A.....A.h', '............', '..t..KKK....', 'k..........k']); yi.stamp(17, 3, ['.....kk.kk', '.....kk.kk', 'ccc.......']);
   WM.defMap('jieyang_in', { name: '', interior: true, theme: 'south', music: 'town', rows: yi.rows(), spawn: [8, 8] });
   L.link({ map: 'jieyang', x: mu.x, y: mu.y }, { map: 'jieyang_in', x: yR.mu.x, y: yR.mu.y });
@@ -61,8 +61,8 @@
   WM.defMap('jiangzhou', { name: 'Jiangzhou', theme: 'south', music: 'town', rows: g.rows(), spawn: [27, 3], battleBg: 'town',
     exits: [WM.toWorld('jiangzhou', 26, 0, 4, 1)] });
   var gi = L.grid(70, 12, 'x');
-  var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'K' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7) };
-  gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..t.......t...']);   // the prefect's hall
+  var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'N' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7) };
+  gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..tKKKK...t...', '...KKKK']);   // the prefect's hall
   gi.stamp(19, 3, ['-..F-..F-..F', '...F...F...F', 'F+FFF+FFF+FF']);
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
   gi.stamp(44, 3, ['h..L.....L..', '.t..t..t..t.', '............', '.t..t..t....', 'cccc........']);

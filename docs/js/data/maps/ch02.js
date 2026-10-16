@@ -22,7 +22,7 @@
   L.clearAround(y, ':', 'T', '.'); L.clearAround(y, '=', 'T', '.');
   WM.defMap('yanmen', { name: 'Yanmen County', theme: 'autumn', music: 'town', rows: y.rows(), spawn: [15, 22], battleBg: 'town', exits: [WM.toWorld('yanmen', 14, 23, 3, 1)] });
   var yi = L.grid(40, 12, 'x');
-  var yR = { shop: yi.room(1, 1, 8, 7), inn: yi.room(10, 1, 10, 7), zhao: yi.room(21, 1, 16, 10, { floor: 'K' }) };
+  var yR = { shop: yi.room(1, 1, 8, 7), inn: yi.room(10, 1, 10, 7), zhao: yi.room(21, 1, 16, 10, { floor: 'n' }) };
   yi.stamp(2, 3, ['hhhh..', '......', 'ccc...']); yi.stamp(11, 3, ['...kk.kk', '...kk.kk', 'cccc....']);
   yi.stamp(22, 3, ['h..A....A..h..', '..............', '...t..........', '..............', 'j....kkk.....j']);
   WM.defMap('yanmen_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: yi.rows(), spawn: [5, 6] });
@@ -100,7 +100,7 @@
   // town north gap leads up the mountain
   WM.data.maps.wutai_town.exits.push({ x: 16, y: 0, w: 2, h: 1, to: 'wutai', tx: 17, ty: 40, dir: 'up' });
   var wi = L.grid(46, 15, 'x');
-  var wR = { med: wi.room(1, 1, 16, 10, { floor: 'N' }), abbot: wi.room(18, 1, 10, 8, { floor: 'K' }), main: wi.room(29, 1, 15, 13, { floor: 'n' }) };
+  var wR = { med: wi.room(1, 1, 16, 10, { floor: 'N' }), abbot: wi.room(18, 1, 10, 8, { floor: 'N' }), main: wi.room(29, 1, 15, 13, { floor: 'n' }) };
   wi.stamp(2, 3, ['kkk..kkk..kkk.', 'kkk..kkk..kkk.', '..............', 'kkk..kkk..kkk.', 'kkk..kkk..kkk.'])   // the long meditation platforms the monks sleep on;
   wi.stamp(19, 3, ['h..A..h.', '........', '..t.....']);
   // the Hall of the Great Hero: the Manjusri triad on its altar, red columns, a carpet from the door to the altar
@@ -127,7 +127,7 @@
   WM.defMap('peach', { name: 'Peach Blossom Village', theme: 'spring', music: 'field', rows: p.rows(), spawn: [14, 24], battleBg: 'plains', exits: [WM.toWorld('peach', 13, 25, 3, 1)] });
   var pi = L.grid(30, 12, 'x');
   var pR = { hall: pi.room(1, 1, 16, 10), bride: pi.room(18, 1, 9, 8) };
-  pi.stamp(2, 3, ['h..A....A..h..', '..............', '...KKKKKKKK...', '...KKKKKKKK..t', '..............', 'j............j']);
+  pi.stamp(2, 3, ['h..A....A..h..', '..............', '.....KKKK.....', '.....KKKK....t', '..............', 'j............j']);
   pi.stamp(19, 3, ['k...h..', '.......', '..t....']);
   WM.defMap('peach_in', { name: '', interior: true, theme: 'spring', music: 'field', rows: pi.rows(), spawn: [9, 9] });
   L.link({ map: 'peach', x: liu.x, y: liu.y }, { map: 'peach_in', x: pR.hall.x, y: pR.hall.y });

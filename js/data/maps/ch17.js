@@ -47,7 +47,7 @@
   [an, li].forEach(function (d) { j.vline(d.x, d.y + 1, 13, ':'); });
   j.scatter('T', 0.05, 546, '.', [1, 1, 38, 27]); L.clearAround(j, ':', 'T', '.'); L.clearAround(j, '=', 'T', '.');
   WM.defMap('jiankang', { name: 'Jiankang', theme: 'snow', music: 'town', rows: j.rows(), spawn: [19, 1], battleBg: 'town', weather: 'snow' });
-  var ji = L.grid(30, 10, 'x'); var jR = { an: ji.room(1, 1, 12, 8), li: ji.room(14, 1, 14, 9, { floor: 'K' }) };
+  var ji = L.grid(30, 10, 'x'); var jR = { an: ji.room(1, 1, 12, 8), li: ji.room(14, 1, 14, 9, { floor: 'n' }) };
   ji.stamp(2, 3, ['hhhh..k...', '..........', '..t.......']);
   ji.stamp(15, 3, ['k..h....L...', '............', '..t.........', '............']);
   WM.defMap('jiankang_in', { name: '', interior: true, theme: 'snow', music: 'town', rows: ji.rows(), spawn: [6, 6] });

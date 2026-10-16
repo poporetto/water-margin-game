@@ -18,8 +18,8 @@
   WM.defMap('huazhou', { name: 'Huazhou', theme: 'summer', music: 'tense', rows: h.rows(), spawn: [22, 35], battleBg: 'town',
     exits: [WM.toWorld('huazhou', 21, 37, 4, 1)] });
   var hi = L.grid(42, 11, 'x');
-  var hR = { hall: hi.room(1, 1, 16, 10, { floor: 'K' }), jail: hi.room(18, 1, 12, 9, { floor: 'N' }), inn: hi.room(31, 1, 10, 8) };
-  hi.stamp(2, 3, ['h...EEEEEE...h', '.....q00q.....', '..t..aaaa..t..', '..............']);   // the prefect's hall
+  var hR = { hall: hi.room(1, 1, 16, 10, { floor: 'N' }), jail: hi.room(18, 1, 12, 9, { floor: 'N' }), inn: hi.room(31, 1, 10, 8) };
+  hi.stamp(2, 3, ['h...EEEEEE...h', '.....q00q.....', '..t..aaaa..t..', '.....KKKK.....', '.....KKKK']);   // the prefect's hall
   hi.stamp(19, 3, ['-.F-.F-.F.', '..F..F..F.', 'F+FF+FF+F.']);
   hi.stamp(32, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('huazhou_in', { name: '', interior: true, theme: 'summer', music: 'tense', rows: hi.rows(), spawn: [8, 8] });
@@ -79,7 +79,7 @@
   L.clearAround(z, ':', 'T', '.');
   WM.defMap('zengtou', { name: 'Zengtou', theme: 'spring', music: 'tense', rows: z.rows(), spawn: [26, 35], battleBg: 'field',
     exits: [WM.toWorld('zengtou', 0, 34, 1, 2)] });
-  var zi = L.grid(30, 10, 'x'); var zR = { hall: zi.room(1, 1, 16, 9, { floor: 'K' }), fahua: zi.room(18, 1, 10, 8, { floor: 'N' }) };
+  var zi = L.grid(30, 10, 'x'); var zR = { hall: zi.room(1, 1, 16, 9, { floor: 'N' }), fahua: zi.room(18, 1, 10, 8, { floor: 'N' }) };
   zi.stamp(2, 3, ['h...UU....UU..', '....AA....AA..', '..t...........']);
   zi.stamp(19, 3, ['L.UUU.L.', '..AAA...', '........']);
   WM.defMap('zengtou_in', { name: '', interior: true, theme: 'spring', music: 'tense', rows: zi.rows(), spawn: [8, 8] });

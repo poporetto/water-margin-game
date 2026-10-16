@@ -38,7 +38,7 @@
     exits: [WM.toWorld('zhujia', 0, 45, 1, 2)] });
   WM.data.zhujia = { road: road, dead: dead, doors: { hall: hall, zhongli: zhongli, hu: hu } };
   var zi = L.grid(40, 12, 'x');
-  var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'K' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };
+  var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'N' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };
   zi.stamp(2, 3, ['h...UU....UU...h', '....AA....AA....', '..t.............', '................', '................']);
   zi.stamp(21, 3, ['-.F-.F-.F.', '..F..F..F.', 'F+FF+FF+F.']);
   zi.stamp(34, 3, ['kk..', 'kk..', '...t']);
@@ -67,7 +67,7 @@
   WM.defMap('dengzhou', { name: 'Dengzhou', theme: 'autumn', music: 'town', rows: d.rows(), spawn: [1, 20], battleBg: 'town',
     exits: [WM.toWorld('dengzhou', 0, 20, 1, 2)] });
   var di = L.grid(40, 11, 'x');
-  var dR = { mao: di.room(1, 1, 12, 8, { floor: 'K' }), jail: di.room(14, 1, 12, 9, { floor: 'N' }), tavern: di.room(27, 1, 10, 8) };
+  var dR = { mao: di.room(1, 1, 12, 8, { floor: 'n' }), jail: di.room(14, 1, 12, 9, { floor: 'N' }), tavern: di.room(27, 1, 10, 8) };
   di.stamp(2, 3, ['h..A...h..', '.t........', '..........']);
   di.stamp(15, 3, ['-.F-.F-.F.', '..F..F..F.', 'F+FF+FF+F.', 'h........h']);
   di.stamp(28, 3, ['h..j..k.', '.t..t...', '........', 'ccc.....']);

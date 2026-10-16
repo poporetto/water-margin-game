@@ -28,8 +28,8 @@
   L.clearAround(d, ':', 'T', '.');
   WM.defMap('dongxi', { name: 'East Creek Village', theme: 'summer', music: 'field', rows: d.rows(), spawn: [17, 28], battleBg: 'plains', exits: [WM.toWorld('dongxi', 16, 29, 3, 1)] });
   var di = L.grid(40, 12, 'x');
-  var dR = { manor: di.room(1, 1, 18, 10, { floor: 'K' }), temple: di.room(20, 1, 8, 7, { floor: 'N' }), school: di.room(29, 1, 10, 8) };
-  di.stamp(2, 3, ['h..A......A..h..', '................', '..t..KKKKKK.....', '.....KKKKKK.....', 'k..............k']);
+  var dR = { manor: di.room(1, 1, 18, 10, { floor: 'N' }), temple: di.room(20, 1, 8, 7, { floor: 'N' }), school: di.room(29, 1, 10, 8) };
+  di.stamp(2, 3, ['h..A......A..h..', '................', '..t...KKKK......', '......KKKK......', 'k..............k']);
   di.stamp(21, 3, ['.777..', '.888..']);   // the village shrine di.stamp(30, 3, ['h..h..h.', '........', '.t.t.t..', '.t.t.t..']);
   WM.defMap('dongxi_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: di.rows(), spawn: [10, 9] });
   L.link({ map: 'dongxi', x: manor.x, y: manor.y }, { map: 'dongxi_in', x: dR.manor.x, y: dR.manor.y });
@@ -148,7 +148,7 @@
   f.scatter('T', 0.06, 231, '.', [1, 1, 30, 24]); L.clearAround(f, ':', 'T', '.');
   WM.defMap('songfarm', { name: 'Song Family Farm', theme: 'summer', music: 'field', rows: f.rows(), spawn: [15, 24], battleBg: 'plains', exits: [WM.toWorld('songfarm', 14, 25, 3, 1)] });
   var fi = L.grid(30, 10, 'x');
-  var fR = { hall: fi.room(1, 1, 14, 8, { floor: 'K' }), shrine: fi.room(16, 1, 9, 8, { floor: 'N' }) };
+  var fR = { hall: fi.room(1, 1, 14, 8, { floor: 'N' }), shrine: fi.room(16, 1, 9, 8, { floor: 'N' }) };
   fi.stamp(2, 3, ['h..A.....A..', '............', '..t.........', 'k..........k']);
   fi.stamp(17, 3, ['.UUU...', '.AAA...', '.......', '....S..']);
   WM.defMap('songfarm_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: fi.rows(), spawn: [8, 7] });

@@ -45,7 +45,7 @@
   WM.defMap('jizhou_n', { name: 'Jizhou', theme: 'autumn', music: 'town', rows: g.rows(), spawn: [23, 37], battleBg: 'town',
     exits: [WM.toWorld('jizhou_n', 22, 39, 3, 1)] });
   var gi = L.grid(58, 11, 'x');
-  var gR = { yang: gi.room(1, 1, 14, 9), tavern: gi.room(16, 1, 11, 8), temple: gi.room(28, 1, 14, 10, { floor: 'N' }), lodge: gi.room(43, 1, 9, 7), prefect: gi.room(53, 1, 4, 5, { floor: 'K' }) };
+  var gR = { yang: gi.room(1, 1, 14, 9), tavern: gi.room(16, 1, 11, 8), temple: gi.room(28, 1, 14, 10, { floor: 'N' }), lodge: gi.room(43, 1, 9, 7), prefect: gi.room(53, 1, 4, 5, { floor: 'N' }) };
   gi.stamp(2, 3, ['h.ttt.c.k.k.', '......c.....', '............', 'A...........', '...........j']);   // front: the meat counter; back: the rooms
   gi.stamp(17, 3, ['h..L...h', '.t..t..t.', '.........', 'ccc......']);
   gi.stamp(29, 3, ['L...111....L', '....222.....', '...4.3.4....', 'j..........j', '............']);   // the Buddha hall of Baoen Temple
@@ -99,7 +99,7 @@
   L.clearAround(m, ':', 'T', '.');
   WM.defMap('lijia', { name: 'Li Family Manor', theme: 'autumn', music: 'field', rows: m.rows(), spawn: [1, 20], battleBg: 'field',
     exits: [WM.toWorld('lijia', 0, 20, 1, 2)] });
-  var mi = L.grid(30, 10, 'x'); var mR = { hall: mi.room(1, 1, 16, 9, { floor: 'K' }), shop: mi.room(18, 1, 10, 7) };
+  var mi = L.grid(30, 10, 'x'); var mR = { hall: mi.room(1, 1, 16, 9, { floor: 'N' }), shop: mi.room(18, 1, 10, 7) };
   mi.stamp(2, 3, ['h...UU....h...', '....AA........', '..t...........', '..............']);
   mi.stamp(19, 3, ['h..j...h', '.t..t...', 'cc......']);
   WM.defMap('lijia_in', { name: '', interior: true, theme: 'autumn', music: 'field', rows: mi.rows(), spawn: [8, 8] });
