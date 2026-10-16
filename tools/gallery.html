@@ -29,7 +29,7 @@ var bk=WM.tiles.bake(map); var tc=WM.util.makeCanvas(bk.width*3,bk.height*3); va
 var ctx2=WM.util.makeCanvas(bk.width,bk.height).getContext('2d');
 out.appendChild(tc);
 // tall pass
-var tallc=WM.util.makeCanvas(bk.width,bk.height); var tcx=tallc.getContext('2d'); tcx.drawImage(bk,0,0);
+var tallc=WM.util.makeWorldCanvas(map.w*16,map.h*16); var tcx=tallc.getContext('2d'); tcx.drawImage(bk,0,0,map.w*16,map.h*16);
 for(var y=0;y<map.h;y++)for(var x=0;x<map.w;x++){var d=WM.tiles.DEF[map.get(x,y)]; if(d&&d.tall) d.tall(tcx,x*16,y*16,x,y,WM.tiles.THEMES.spring,map);}
 var t2=WM.util.makeCanvas(bk.width*3,bk.height*3); var t2x=t2.getContext('2d'); t2x.imageSmoothingEnabled=false; t2x.drawImage(tallc,0,0,bk.width*3,bk.height*3); out.appendChild(t2);
 </script></body></html>

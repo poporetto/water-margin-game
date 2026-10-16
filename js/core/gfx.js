@@ -1,4 +1,4 @@
-// Rendering: a 320x240 pixel buffer scaled 3x, with crisp UI text drawn at full resolution on top.
+// Rendering: a 640x480 world buffer in 320x240 logical coordinates, with full-resolution UI text.
 'use strict';
 (function () {
   var U = WM.util;
@@ -17,7 +17,7 @@
     G.ctx = canvas.getContext('2d');
     G.ctx.imageSmoothingEnabled = false;
     G.k = 1;
-    G.low = U.makeCanvas(WM.LOW_W, WM.LOW_H);
+    G.low = U.makeWorldCanvas(WM.LOW_W, WM.LOW_H);
     G.lctx = G.low.getContext('2d');
     G.fade = 0;          // 0 = clear, 1 = black
     G.fadeColor = '#000';
@@ -44,7 +44,7 @@
     var sx = 0, sy = 0;
     if (G.shake > 0) { sx = (Math.random() * 2 - 1) * G.shake * WM.SCALE; sy = (Math.random() * 2 - 1) * G.shake * WM.SCALE; }
     c.imageSmoothingEnabled = false;
-    c.drawImage(G.low, 0, 0, WM.LOW_W, WM.LOW_H, Math.round(sx), Math.round(sy), WM.W, WM.H);
+    U.drawArt(c, G.low, 0, 0, WM.LOW_W, WM.LOW_H, Math.round(sx), Math.round(sy), WM.W, WM.H);
     if (G.tint) { c.fillStyle = G.tint; c.fillRect(0, 0, WM.W, WM.H); }
   };
 

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Water Margin — starter tile preview</title>
+<style>
+body{margin:0;background:#151b19;color:#e7e7d4;font:16px/1.5 system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:24px}h1{font-size:26px;margin:0}p{color:#b1bcab}select{font:inherit;padding:6px;background:#273429;color:inherit}#scenes{display:flex;flex-wrap:wrap;gap:24px}figure{margin:0}canvas,img{image-rendering:pixelated;display:block;background:#26332c}canvas{max-width:100%;height:auto}figcaption{margin:8px 0 20px}a{color:#b6d797}.sheets{display:flex;gap:24px;flex-wrap:wrap;margin-top:24px}
+</style>
+<style>figure{min-width:0;max-width:100%}img{max-width:100%;height:auto}</style>
+<main>
+<h1>Water Margin · ground and trees</h1>
+<p>Native 16 px tiles, displayed at 4×. Trees use the game’s bottom-aligned drawing pass. Water runs at three frames per second.</p>
+<label>Map palette <select id="theme"><option>spring</option><option>summer</option><option>autumn</option><option>snow</option><option>world</option></select></label>
+<p id="status">Loading sprite sheets…</p>
+<div id="scenes"></div>
+<div class="sheets"><figure><img src="../assets/tiles/32/ground.png" width="512" height="256" alt="Ground atlas"><figcaption>Ground atlas — 256 × 128 px</figcaption></figure><figure><img src="../assets/tiles/32/trees.png" width="256" height="192" alt="Tree atlas"><figcaption>Tree atlas — 128 × 96 px</figcaption></figure></div>
+<p><a href="../index.html">Play the game</a> · <a href="../assets/tiles/32/starter-index.json">Asset coordinates</a></p>
+</main>
+<script src="../js/core/base.js"></script>
+<script src="../js/core/tiles.js"></script>
+<script src="../assets/tiles.js"></script>
+<script>
+'use strict';
+Object.keys(WM.TILE_ART.sheets).forEach(function(k){WM.TILE_ART.sheets[k]='../'+WM.TILE_ART.sheets[k];});
+var T=WM.tiles, scenes=[];
+var samples=[
+ ['Forest path',['................','......PP........','..TT....P..TT...','..T..........P..',':::::..ff..:::::','....::::::::....','...T....f....T..','.....P.....P....','................']],
+ ['River, lake and bridge',['................','..~~~~..........','..~~~~....~~~...','...~~~...~~~~~..','...~~BBBBB~~~...','...~~~..~~ww~~..','...~~~..~~ww~~..','....~~~~~rr~~~..','................']],
+ ['Islands and inner corners',['~~~~~~~~~~~~~~~~','~~..~~~~~~~~~~~~','~~..~~~...~~~~~~','~~~~~~~.~.~~~~~~','~~~.......~~~~~~','~~~.~~~.~~~~~~~~','~~~.....~~~..~~~','~~~~~~~~~~~..~~~','~~~~~~~~~~~~~~~~']],
+ ['Path junctions',['................','..:.....:.......','..:.....:.......','..:::::::::::...','........:.......','..:::::::.......','..:.....:.......','..:.....:::::...','................']]
+];
+function rebuild(){
+ var theme=document.getElementById('theme').value;scenes=[];document.getElementById('scenes').replaceChildren();
+ samples.forEach(function(sample){
+  var rows=sample[1],m={w:16,h:rows.length,theme:theme,def:{world:theme==='world'},get:function(x,y){return x<0||y<0||x>=this.w||y>=this.h?null:rows[y][x];}};
+  var cv=WM.util.makeWorldCanvas(256,(m.h+2)*16);cv.style.width='512px';
+  var fig=document.createElement('figure'),cap=document.createElement('figcaption');cap.textContent=sample[0];fig.append(cv,cap);document.getElementById('scenes').append(fig);
+  scenes.push({map:m,canvas:cv,base:T.bake(m)});
+ });
+ var status=T.artStatus();document.getElementById('status').textContent=status.waiting?'Loading sprite sheets…':status.sheets.length+' sprite sheets loaded · '+(theme==='spring'||theme==='summer'?'new artwork active':'existing seasonal/world artwork');
+}
+T.onArtReady=rebuild;T.reloadArt();rebuild();document.getElementById('theme').onchange=rebuild;
+function draw(time){
+ scenes.forEach(function(s){var c=s.canvas.getContext('2d'),m=s.map;c.imageSmoothingEnabled=false;c.clearRect(0,0,s.canvas.width,s.canvas.height);c.save();c.translate(0,32);c.drawImage(s.base,0,0,m.w*16,m.h*16);T.animateArt(c,m,0,0,time/1000);T.animateWater(c,m,0,0,time/1000);for(var y=0;y<m.h;y++)for(var x=0;x<m.w;x++)if(T.hasTall(m.get(x,y),m))T.drawTall(c,x*16,y*16,x,y,T.THEMES[m.theme],m,m.get(x,y));c.restore();});
+ requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script>
+</html>

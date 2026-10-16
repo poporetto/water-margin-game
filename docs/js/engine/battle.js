@@ -43,7 +43,7 @@
   function makeBg(type) {
     var b = BG[type] || BG.plains;
     var w = 240, h = 130;
-    var cv = U.makeCanvas(w, h), c = cv.getContext('2d');
+    var cv = U.makeWorldCanvas(w, h), c = cv.getContext('2d');
     var hz = 40;
     var gr = c.createLinearGradient(0, 0, 0, hz);
     gr.addColorStop(0, b.sky[0]); gr.addColorStop(1, b.sky[1]);
@@ -785,7 +785,7 @@
     var bt = B.cur; if (!bt) return;
     var c = G.ctx;
     c.imageSmoothingEnabled = false;
-    c.drawImage(bt.bg, 0, 0, 240, 130, 0, 0, 960, 520);
+    WM.util.drawArt(c, bt.bg, 0, 0, 240, 130, 0, 0, 960, 520);
     // draw units sorted by y
     var units = bt.party.concat(bt.enemies, bt.guests).slice().sort(function (a, b) { return a.pos[1] - b.pos[1]; });
     units.forEach(function (u) { drawUnit(u, bt); });
@@ -817,9 +817,9 @@
     c.globalAlpha = u.side === 'enemy' ? u.anim.alpha : 1;
     // shadow
     c.fillStyle = 'rgba(0,0,0,0.3)';
-    c.beginPath(); c.ellipse(x, y, u.img ? u.img.width * PX * 0.35 : 26, 8, 0, 0, 7); c.fill();
+    c.beginPath(); c.ellipse(x, y, u.img ? u.img.width / (u.img.artScale || 1) * PX * 0.35 : 26, 8, 0, 0, 7); c.fill();
     if (u.img) {
-      var iw = u.img.width * PX, ih = u.img.height * PX;
+      var iw = u.img.width / (u.img.artScale || 1) * PX, ih = u.img.height / (u.img.artScale || 1) * PX;
       var bob = Math.round(Math.sin(WM.time * 3 + u.idx) * 2);
       c.drawImage(u.img, 0, 0, u.img.width, u.img.height, x - iw / 2, y - ih + bob, iw, ih);
       if (u.anim.flash > 0) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.6; c.drawImage(u.img, 0, 0, u.img.width, u.img.height, x - iw / 2, y - ih + bob, iw, ih); c.globalCompositeOperation = 'source-over'; }
@@ -831,12 +831,12 @@
       if (Math.abs(u.anim.ox) > 2) frame = Math.floor(WM.time * 8) % 2 ? 1 : 2;
       if (ko) {
         c.translate(x, y - 10); c.rotate(u.side === 'party' ? Math.PI / 2 : -Math.PI / 2);
-        c.drawImage(sh, 0, 1 * ch, cw, ch, -cw * PXH / 2, -(sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 30, cw * PXH, ch * PXH);
+        WM.util.drawArt(c, sh, 0, 1 * ch, cw, ch, -cw * PXH / 2, -(sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 30, cw * PXH, ch * PXH);
         G.base();
       } else {
         var bob2 = u.status.sleep ? 0 : Math.round(Math.sin(WM.time * 4 + u.idx * 1.3) * 1.5);
-        c.drawImage(sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - (sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 5 + bob2, cw * PXH, ch * PXH);
-        if (u.anim.flash > 0) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - ch * PXH + 5, cw * PXH, ch * PXH); c.globalCompositeOperation = 'source-over'; }
+        WM.util.drawArt(c, sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - (sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 5 + bob2, cw * PXH, ch * PXH);
+        if (u.anim.flash > 0) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; WM.util.drawArt(c, sh, frame * cw, row * ch, cw, ch, x - cw * PXH / 2, y - ch * PXH + 5, cw * PXH, ch * PXH); c.globalCompositeOperation = 'source-over'; }
         if (u.anim.glow > 0) { c.globalAlpha = 0.5; c.fillStyle = '#ffe8a0'; c.beginPath(); c.ellipse(x, y - 40, 40, 60, 0, 0, 7); c.fill(); }
       }
     }

@@ -8,7 +8,7 @@
   function ell(g, cx, cy, rx, ry, col) {
     for (var y = -ry; y <= ry; y++) { var w = Math.round(rx * Math.sqrt(Math.max(0, 1 - y * y / (ry * ry)))); for (var x = -w; x <= w; x++) g.set(cx + x, cy + y, col); }
   }
-  function fin(g, outline) { g.outline(outline || '#1b130e'); var cv = U.makeCanvas(g.w, g.h); g.toCanvas(cv, 0, 0); return cv; }
+  function fin(g, outline) { g.outline(outline || '#1b130e'); var cv = U.makeWorldCanvas(g.w, g.h); g.toCanvas(cv, 0, 0); return cv; }
 
   var ART = {
     tiger: function (p) {

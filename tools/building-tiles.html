@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Water Margin — Northern Song buildings</title>
+<style>
+body{margin:0;background:#191c19;color:#eee4cd;font:16px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:24px}h1{font-size:28px;margin:0}p{color:#b6baa8}label{display:inline-block;margin-right:20px}select,button{font:inherit;padding:6px;color:inherit;background:#31392d}#scenes{display:flex;flex-wrap:wrap;gap:24px}figure{margin:0;max-width:100%;min-width:0}canvas{display:block;image-rendering:pixelated;max-width:100%;height:auto;background:#26322a}figcaption{margin:8px 0 20px}a{color:#cbd894}
+</style>
+<main><h1>Northern Song buildings · c. 1120</h1>
+<p>Grey tube tiles, thatch, timber-framed plaster, red official walls, and timber-linteled gate passages. Native 32 px tiles, shown enlarged.</p>
+<label>Season <select id="theme"><option>spring</option><option>summer</option><option>autumn</option><option>snow</option><option>world</option></select></label>
+<label><input type="checkbox" id="closed"> Close gates</label>
+<p id="status">Loading…</p><div id="scenes"></div>
+<p><a href="../index.html">Play game</a> · <a href="starter-tiles.html">Ground and trees</a> · <a href="../assets/tiles/32/building-index.json">Tile index</a></p></main>
+<script src="../js/core/base.js"></script><script src="../js/core/tiles.js"></script><script src="../assets/tiles.js"></script>
+<script>
+'use strict';
+Object.keys(WM.TILE_ART.sheets).forEach(function(k){WM.TILE_ART.sheets[k]='../'+WM.TILE_ART.sheets[k];});
+WM.state={flags:{}};
+var samples=[
+ ['Town house · repeating roof and wall bays',['....................','..^^^^^^....^^^^^^..','..^^^^^^....^^^^^^..','..^^^^^^....^^^^^^..','..WWWWWW....WWWWWW..','..WOWDOW....WOWdOW..','....::..............','....:::::::.........','....................']],
+ ['Village · thatch, wooden fence, well',['....................','..zzzzz.............','..zzzzz...FFFFF.....','..WWWWW...F...F.....','..WODOW...F...F.....','....:.....FFFFF.....','....::::::..p.......','.........:..........','....................']],
+ ['Official hall · dark tile and red timber',['....................','...vvvvvvvvvvvv.....','...vvvvvvvvvvvv.....','...vvvvvvvvvvvv.....','...RRRRRRRRRRRR.....','...RRORRDDRRORR.....','...============.....','...=====p======.....','....................']],
+ ['City gate · four-tile walkable passage',['....................','....................','####################','########GGGG########','########GGGG########','........====........','........====........','....................','....................']],
+ ['Shrine and short roofs',['....................','..ZZZZZZZZ....^^^...','..ZZZZZZZZ....WDW...','..RRRRRRRR..........','..RRODDROR....zzz...','...====.......WdW...','...====.............','....................','....................']],
+ ['Narrow gate and corners',['....................','....########........','....###GG###........','....###GG###........','.......==...........','..FFF..==...FFFF....','..F.F..==...F..F....','..FFF..==...FFFF....','....................']]
+];
+function render(){
+ var theme=document.getElementById('theme').value;WM.state.flags['shut:preview']=document.getElementById('closed').checked;
+ document.getElementById('scenes').replaceChildren();
+ samples.forEach(function(sample){var rows=sample[1],m={id:'preview',w:20,h:rows.length,theme:theme,def:{world:theme==='world'},get:function(x,y){return x<0||x>=this.w||y<0||y>=this.h?null:rows[y][x];}};
+ var cv=WM.util.makeWorldCanvas(320,192);cv.style.width='480px';var c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.translate(0,32);c.drawImage(WM.tiles.bake(m),0,0,m.w*16,m.h*16);
+ for(var y=0;y<m.h;y++)for(var x=0;x<m.w;x++)if(WM.tiles.hasTall(m.get(x,y),m))WM.tiles.drawTall(c,x*16,y*16,x,y,WM.tiles.THEMES[theme],m,m.get(x,y));
+ var fig=document.createElement('figure'),cap=document.createElement('figcaption');cap.textContent=sample[0];fig.append(cv,cap);document.getElementById('scenes').append(fig);
+ });
+ var s=WM.tiles.artStatus();document.getElementById('status').textContent=s.waiting?'Loading…':s.sheets.length+' sheets loaded · '+(theme==='world'?'World-map rendering':theme==='snow'?'Snow roofs and detailed house facades active':'Northern Song building art active');
+}
+if(new URLSearchParams(location.search).get('theme')==='snow')document.getElementById('theme').value='snow';
+WM.tiles.onArtReady=render;WM.tiles.reloadArt();render();document.getElementById('theme').onchange=render;document.getElementById('closed').onchange=render;
+</script></html>

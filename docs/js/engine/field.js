@@ -207,6 +207,9 @@
   F.loadMap = function (id, tx, ty, dir, noAuto) {
     var st = WM.state;
     F.map = buildMap(id);
+    F.map.propEntry = {x:tx,y:ty};
+    // World feature placement protects this arrival point; rebuild its matching artwork.
+    if(F.map.def.world)F.map.baked=T.bake(F.map);
     st.map = id;
     if (F.map.def.world && tileSolid(tx, ty)) {   // a save from before the map was redrawn can stand in a river: step out to the nearest road
       var seen = {}, q = [[tx, ty]], hit = null;
@@ -241,7 +244,7 @@
   function tileSolid(tx, ty) {
     var ch = F.map.get(tx, ty);
     if (ch === null) return true;
-    return T.solid(ch);
+    return T.solidAt(F.map, tx, ty);
   }
   F.tileSolid = function (tx, ty) { return tileSolid(tx, ty); };
   F.roomAt = function (tx, ty) { return F.map ? roomAt(F.map, tx, ty) : -1; };
@@ -586,7 +589,7 @@
     var cam = F.cam;
     var cx = Math.round(cam.x), cy = Math.round(cam.y);
     c.fillStyle = '#000'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H);
-    c.drawImage(F.map.baked, -cx, -cy);
+    c.drawImage(F.map.baked, -cx, -cy, F.map.w * TS, F.map.h * TS);
     T.animateWater(c, F.map, cx, cy, WM.time);
     T.animateArt(c, F.map, cx, cy, WM.time);
 
@@ -858,7 +861,7 @@
   function drawActor(c, a, cx, cy) {
     var x = Math.round(a.x - cx), y = Math.round(a.y - cy + a.offY);
     if (a.img) {
-      var iw = a.img.width * (a.scale || 1), ih = a.img.height * (a.scale || 1);
+      var iw = a.img.width / (a.img.artScale || 1) * (a.scale || 1), ih = a.img.height / (a.img.artScale || 1) * (a.scale || 1);
       c.fillStyle = 'rgba(0,0,0,0.28)'; c.beginPath(); c.ellipse(x, Math.round(a.y - cy) - 1, iw * 0.35, 3, 0, 0, Math.PI * 2); c.fill();
       if (a.alpha != null) c.globalAlpha = a.alpha;
       c.save();

@@ -1,0 +1,123 @@
+{
+  "tileSize": 32,
+  "groups": [
+    [
+      0,
+      1,
+      2,
+      3
+    ],
+    [
+      4,
+      5,
+      6,
+      7
+    ],
+    [
+      8,
+      9,
+      10
+    ],
+    [
+      11
+    ]
+  ],
+  "tiles": [
+    {
+      "name": "autumn-1",
+      "cell": [
+        0,
+        0
+      ],
+      "file": "seasonal-ground/autumn-1.png"
+    },
+    {
+      "name": "autumn-2",
+      "cell": [
+        1,
+        0
+      ],
+      "file": "seasonal-ground/autumn-2.png"
+    },
+    {
+      "name": "autumn-long",
+      "cell": [
+        2,
+        0
+      ],
+      "file": "seasonal-ground/autumn-long.png"
+    },
+    {
+      "name": "autumn-flowers",
+      "cell": [
+        3,
+        0
+      ],
+      "file": "seasonal-ground/autumn-flowers.png"
+    },
+    {
+      "name": "snow-1",
+      "cell": [
+        0,
+        1
+      ],
+      "file": "seasonal-ground/snow-1.png"
+    },
+    {
+      "name": "snow-2",
+      "cell": [
+        1,
+        1
+      ],
+      "file": "seasonal-ground/snow-2.png"
+    },
+    {
+      "name": "snow-shade",
+      "cell": [
+        2,
+        1
+      ],
+      "file": "seasonal-ground/snow-shade.png"
+    },
+    {
+      "name": "snow-tufts",
+      "cell": [
+        3,
+        1
+      ],
+      "file": "seasonal-ground/snow-tufts.png"
+    },
+    {
+      "name": "silk-1",
+      "cell": [
+        0,
+        2
+      ],
+      "file": "seasonal-ground/silk-1.png"
+    },
+    {
+      "name": "silk-2",
+      "cell": [
+        1,
+        2
+      ],
+      "file": "seasonal-ground/silk-2.png"
+    },
+    {
+      "name": "silk-3",
+      "cell": [
+        2,
+        2
+      ],
+      "file": "seasonal-ground/silk-3.png"
+    },
+    {
+      "name": "silk-road",
+      "cell": [
+        3,
+        2
+      ],
+      "file": "seasonal-ground/silk-road.png"
+    }
+  ]
+}
