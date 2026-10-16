@@ -4,12 +4,14 @@ Water Margin, a Suikoden II–style RPG set in Northern Song China, c. 1120. Bat
 
 ## Format
 
-- **Size: 480 × 260 px**, pixel art with hard edges, no anti-aliasing or blur. The game shows it at 960 × 520 (each pixel doubled). One PNG per background, no UI, no characters.
-- **Composition:**
-  - The horizon sits about **a third of the way down** (around y = 80 of 260).
+- **Size: 1920 × 1040 px.** The game shows the backdrop over a 960 × 520 area and draws at the screen's own pixel density, so this is sharp on high-density displays. One file per background, with no UI and no characters.
+- **File type: PNG.** JPG is fine only for a soft, painterly style; it smears hard edges, which then show as blotches.
+- **Style:** a painterly, slightly soft backdrop in the game's palette sits best behind the small pixel-art characters, in an "HD-2D" look. Avoid photographic sharpness. If you prefer strict pixel art instead, draw at 480 × 260 and enlarge it 4× with nearest-neighbour to 1920 × 1040.
+- **Composition** (in 1920 × 1040 pixels):
+  - The horizon sits about **a third of the way down** (around y = 320).
   - Everything below the horizon is ground the fighters stand on: keep the lower two thirds fairly open and even, with detail at the edges, not the middle.
-  - Fighters stand in two groups, enemies on the left half and the party on the right, feet at roughly y = 150–200.
-  - A dialogue box covers the bottom of the screen, so nothing important belongs in the bottom 20 px.
+  - Fighters stand in two groups, enemies on the left half and the party on the right, feet at roughly y = 600–800.
+  - A dialogue box covers the bottom of the screen, so nothing important belongs in the bottom 80 px.
 - **View:** looking across level ground towards the horizon (a side-on stage), not top-down.
 - **Palette:** earthy and muted, as in the field art. Night and fire scenes may be darker and warmer.
 
