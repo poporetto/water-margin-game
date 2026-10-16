@@ -118,7 +118,9 @@
   var ci = L.grid(80, 12, 'x');
   var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(61, 1, 5, 8), stage: ci.room(67, 1, 12, 10) };
   ci.stamp(68, 3, ['..KKKKKKK.', '..KKKKKKK.', '..........', '.t.t.t.t..', '.t.t.t.t..', '..........']);
-  ci.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa.t.....', '..t.....t.....']);   // the county hall
+  // the county office: the magistrate's desk on the middle line before a painted screen, the clerks' desks in two
+  // rows down either side, files shelved in the back corners
+  ci.stamp(2, 3, ['hh..EEEEEE..hh', '......00......', '.....aaaa.....', '..............', '.t.........t..', '..............', '.t.........t..']);
   ci.stamp(19, 3, ['h..L...h', '.t..t...', '........', 'cc......']);
   ci.stamp(30, 3, ['k...h...X.', '........X.', '..t.....n.', '........Xk', 'j.......X.']);
   ci.stamp(43, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
