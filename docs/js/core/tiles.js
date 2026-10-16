@@ -750,7 +750,7 @@
   }
   function fence(c, x, y, tx, ty, th, m) {
     var F = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'F'; };
-    if (m && m.interior) { cellBars(c, x, y, tx, ty, m, F); return; }   // indoors a fence is the timber grille of a prison cell
+    if (m && m.interior) { cellBars(c, x, y, tx, ty, m, function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === 'F' || q === '+'; }); return; }   // indoors a fence is the timber grille of a prison cell
     // a village fence of woven wattle between sharpened stakes
     grass(c, x, y, tx, ty, th);
     var horiz = F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1));
@@ -781,6 +781,25 @@
       px(c, x + 6, y, 4, S, '#3a2412'); px(c, x + 6, y, 1, S, '#6a4428');
       for (var j = 1; j < 16; j += 4) px(c, x + 7, y + j, 2, 2, '#7a5232');
     }
+  }
+
+  // A cell door in a run of bars: the same grille, framed by two posts, with an iron lock on a chain.
+  function cellDoor(c, x, y, tx, ty) {
+    floorStone(c, x, y, tx, ty);
+    px(c, x, y + 14, S, 2, 'rgba(0,0,0,0.25)');
+    for (var i = 3; i < 14; i += 3) { px(c, x + i, y + 2, 2, 11, '#4a2e18'); px(c, x + i, y + 2, 1, 11, '#7a5232'); }
+    px(c, x, y, 2, 14, '#2e1c0e'); px(c, x + 14, y, 2, 14, '#2e1c0e');                // door posts
+    px(c, x, y, S, 2, '#3a2412'); px(c, x, y, S, 1, '#6a4428');
+    px(c, x + 2, y + 7, 12, 1, '#3a2412'); px(c, x + 2, y + 12, 12, 1, '#3a2412');     // the door's own rails
+    px(c, x + 12, y + 6, 3, 4, '#5a5a60'); px(c, x + 12, y + 6, 3, 1, '#8a8a92');      // lock
+  }
+  // A prisoner's pallet: a straw mat on the stone floor with a rough grey blanket thrown over one end.
+  function pallet(c, x, y, tx, ty) {
+    floorStone(c, x, y, tx, ty);
+    px(c, x + 1, y + 3, 14, 11, '#a8894a'); px(c, x + 1, y + 13, 14, 1, '#6e5628');
+    for (var i = 0; i < 6; i++) px(c, x + 2 + Math.floor(U.hash2(tx * 3 + i, ty, 77) * 11), y + 4 + i * 2 - (i > 3 ? 2 : 0), 3, 1, i % 2 ? '#c8aa62' : '#8a6e36');
+    px(c, x + 1, y + 3, 14, 1, '#c8aa62');
+    px(c, x + 7, y + 3, 8, 10, '#6c6a64'); px(c, x + 7, y + 3, 8, 1, '#8a8880'); px(c, x + 7, y + 12, 8, 1, '#4a4844');
   }
 
   function bridge(c, x, y, tx, ty, th, m) {
@@ -1017,6 +1036,8 @@
     'h': { draw: shelf, solid: true },
     'j': { draw: jar, solid: true },
     'F': { draw: fence, solid: true },
+    '+': { draw: cellDoor },     // the door of a prison cell, in its bars
+    '-': { draw: pallet },       // a prisoner's straw pallet
     'B': { draw: bridge, water: true },
     'S': { draw: stairs },
     'p': { draw: well, solid: true },

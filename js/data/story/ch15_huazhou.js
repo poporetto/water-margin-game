@@ -158,7 +158,7 @@
       await s.say('guard:shock', 'Bandits! Turn out the guard — the Liangshan bandits are in the prison!');
       await s.battle('ch15_jail', { bg: 'town' });
       s.lie('j1'); s.lie('j2');
-      s.spawn('sj', 'shijin', 21, 4, 'down'); s.spawn('lz', 'luzhishen', 26, 4, 'down');
+      s.spawn('sj', 'shijin', 20, 4, 'down'); s.spawn('lz', 'luzhishen', 26, 4, 'down');
       await s.say('shijin', 'Brother Song Jiang! And Master Lu — you came for me, and got yourself caught too!');
       await s.say('luzhishen:smile', 'Ha! I was keeping you company!');
       s.despawn('sj', { leave: true }); s.despawn('lz', { leave: true });

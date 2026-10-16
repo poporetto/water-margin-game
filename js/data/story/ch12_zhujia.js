@@ -360,7 +360,7 @@
       await s.say(null, '(Go to the prison in the city.)');
     } },
     { id: 'ch12_jail', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_plot') && WM.state.x >= 14 && WM.state.x < 26; }, run: async function (s) {
-      s.spawn('bj', 'baoji', 20, 4, 'down');
+      s.spawn('bj', 'baoji', 20, 7, 'down');
       await s.narrate('Gu Dasao went in with a basket, as a relative bringing food. Yue He let her through. When the signal came from outside, she drew her sabres.');
       await s.say('baoji:angry', 'What\'s this?!');
       await s.battle('ch12_jail', { bg: 'town' });

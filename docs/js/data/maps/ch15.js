@@ -20,7 +20,7 @@
   var hi = L.grid(42, 11, 'x');
   var hR = { hall: hi.room(1, 1, 16, 10, { floor: 'K' }), jail: hi.room(18, 1, 12, 9, { floor: 'N' }), inn: hi.room(31, 1, 10, 8) };
   hi.stamp(2, 3, ['h...EEEEEE...h', '.....q00q.....', '..t..aaaa..t..', '..............']);   // the prefect's hall
-  hi.stamp(19, 3, ['F.FF.FF.FF', 'F..F..F..F', '..........']);
+  hi.stamp(19, 3, ['-.F-.F-.F.', '..F..F..F.', 'F+FF+FF+F.']);
   hi.stamp(32, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('huazhou_in', { name: '', interior: true, theme: 'summer', music: 'tense', rows: hi.rows(), spawn: [8, 8] });
   [[hall, hR.hall], [jail, hR.jail], [inn, hR.inn]].forEach(function (p) { L.link({ map: 'huazhou', x: p[0].x, y: p[0].y }, { map: 'huazhou_in', x: p[1].x, y: p[1].y }); });

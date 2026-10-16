@@ -276,18 +276,18 @@
       ['lg', 'js', 'c1', 'c2'].forEach(function (k) { s.hide(k); s.despawn(k); });
       await s.narrate('Governor Liang had him beaten until he confessed to dealing with Liangshan, and threw him into the death cell.');
       // the prison of Daming: Lu Junyi in a cell, the brothers Cai keeping the keys
-      s.place('player', 4, 17, 'down'); s.lie('player');
-      s.spawn('cf', 'caifu', 6, 17, 'left'); s.spawn('cq', 'caiqing', 11, 18, 'left');   // on the walk between the cells
+      s.place('player', 2, 16, 'down'); s.lie('player');   // on the straw in the first cell
+      s.spawn('cf', 'caifu', 4, 19, 'up'); s.spawn('cq', 'caiqing', 7, 19, 'left');   // in the corridor outside his cell door
       s.spawn('lg2', 'ligu', 10, 22, 'up');
       await s.fadeIn(0.8);
-      await s.walkTo('lg2', 6, 18); s.face('lg2', 'up');
+      await s.walkTo('lg2', 4, 20); s.face('lg2', 'up');
       await s.say('ligu', 'Jailer Cai. Five hundred taels — for you and your brother. Lu Junyi has no need to see another morning. You understand me.');
       await s.say('caifu', '...Five hundred taels for a man\'s life. Leave it on the table, Steward Li, and go home.');
       s.despawn('lg2', { to: [10, 22] });
       await s.wait(0.8);
       s.night(true);
       s.spawn('cj', 'chaijin', 10, 22, 'up');
-      await s.walkTo('cj', 6, 18); s.face('cj', 'up');
+      await s.walkTo('cj', 4, 20); s.face('cj', 'up');
       await s.say('chaijin', 'Jailer Cai Fu. I am Chai Jin of Cangzhou — you will have heard the name. Here are a thousand taels of gold.');
       await s.say('chaijin', 'If Lu Junyi dies in this prison, Liangshan will come to Daming, and nobody in the city will be spared: not the governor, not you, not your brother. If he lives, you have a friend on the mountain.');
       await s.say('caifu:shock', '...Lord Chai. I hear you. He will live.');
