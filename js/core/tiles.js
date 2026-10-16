@@ -1446,7 +1446,25 @@
   // (the great Buddha, a long counter) each tile takes its own slice, left to right
   function tallArt(ch, map) { var e = artEntry(ch, map); return e && e.tall && SHEETS[e.tall.sheet || e.sheet || 'tiles'] ? e : null; }
   T.hasTall = function (ch, map) { var d = T.DEF[ch], e = ART && map && artEntry(ch, map); return !!((d && d.tall) || (e && (e.building === 'stone' || e.object) && sheetOf(e)) || (ART && map && tallArt(ch, map))); };
+  // Lanterns flanking a street or a doorway hang towards each other: the right-hand one of a pair is drawn mirrored.
+  // It is the right of a pair when the nearest lantern on its row lies to the left, with road, paving or a door between.
+  function lanternFaces(map, tx, ty) {
+    var road = false;
+    for (var d = 1; d <= 8; d++) {
+      var q = map.get(tx - d, ty);
+      if (q == null) return false;
+      if (q === 'L') return road;
+      if (':=DdBG'.indexOf(q) >= 0) road = true;
+    }
+    return false;
+  }
   T.drawTall = function (c, x, y, tx, ty, th, map, ch) {
+    if (ch === 'L' && !c.wmMirror && lanternFaces(map, tx, ty)) {
+      c.save(); c.translate(2 * x + S, 0); c.scale(-1, 1); c.wmMirror = true;
+      try { T.drawTall(c, x, y, tx, ty, th, map, ch); } finally { c.wmMirror = false; c.restore(); }
+      return;
+    }
+    if(map.def&&map.def.world&&ch==='r'&&SHEETS.part2Extra)return;
     if (worldSymbolAt(map,tx,ty) || T.worldTerrainLayout(map).occupied[tx+','+ty]) return;
     if(map.def && map.def.world && SHEETS.worldIcons && 'TPHlb'.indexOf(ch)>=0){
       U.drawArt(c,SHEETS.worldIcons,48,64,48,32,x,y+5,16,11);return;

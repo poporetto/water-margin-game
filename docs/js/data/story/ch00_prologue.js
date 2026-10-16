@@ -17,13 +17,14 @@
   g.rect(15, 14, 2, 11, '=');
   g.rect(9, 19, 14, 1, '=');
   var hall = g.house(10, 8, 12, 6, { roof: 'v', wall: 'R', door: 6 });
-  var demon = g.house(22, 8, 5, 5, { roof: '^', wall: 'W', door: 2 });
-  g.house(5, 15, 6, 4, { roof: 'z', door: false, windows: [2] });
-  g.house(5, 20, 6, 4, { roof: 'z', door: false, windows: [3] });
+  g.set(hall.x - 1, hall.y, 'D');   // the great doors are a pair, as wide as the paved way up to them
+  var demon = g.house(23, 8, 3, 5, { roof: '^', wall: 'R', door: 1 });   // the Hall of Subdued Demons: a red hall of its own, clear of the main hall and the temple wall
+  g.house(6, 15, 6, 4, { roof: 'z', door: false, windows: [2] });   // (a step in from the temple wall)
+  g.house(6, 20, 6, 4, { roof: 'z', door: false, windows: [3] });
   g.rect(20, 16, 6, 3, '~'); g.set(19, 17, 'r');
   g.set(13, 19, '3'); g.set(18, 19, '3');   // bronze censers in the courtyard
   g.set(14, 14, 'L'); g.set(17, 14, 'L'); g.set(14, 23, 'L'); g.set(17, 23, 'L');
-  g.stamp(6, 9, ['P', 'P']); g.stamp(24, 21, ['PP', 'P.']); g.stamp(21, 13, ['f']);
+  g.stamp(6, 9, ['P', 'P']); g.stamp(24, 21, ['PP', 'P.']);
   g.rect(15, 26, 2, 4, ':'); g.rect(2, 26, 15, 1, ':'); g.vline(2, 2, 26, ':'); g.vline(3, 2, 26, ':');
   g.scatter('P', 0.18, 5, '.', [2, 2, 28, 4]);
   g.scatter('T', 0.12, 6, '.', [17, 26, 13, 2]);
@@ -38,7 +39,7 @@
   var hallIn = hi0.room(1, 1, 16, 10, { floor: 'N' });
   hi0.stamp(2, 3, ['h.L..555..L..h', '....88888.....', '.i..4...4..i..', '......3.......', '.i.........i..', '..............']);
   WM.defMap('longhu_in', { name: 'Hall of the Three Pure Ones', interior: true, theme: 'summer', music: 'palace', rows: hi0.rows(), spawn: [hallIn.x, hallIn.y - 1] });
-  L.link({ map: 'longhu', x: hall.x, y: hall.y }, { map: 'longhu_in', x: hallIn.x, y: hallIn.y });
+  L.link({ map: 'longhu', x: hall.x - 1, y: hall.y, w: 2 }, { map: 'longhu_in', x: hallIn.x, y: hallIn.y });
   WM.npc('daoistElder', 'Elder Daoist', { skin: '#e8b48a', hairStyle: 'daoist', crown: '#c8a040', beard: 'long', beardColor: '#e8e8e0', hair: '#d8d8d0', body: '#3a4a6a', trim: '#e8e0d0' });
   var unsealed = function (S2) { return !S2.has('pro_opened'); }, opened = function (S2) { return S2.has('pro_opened'); };
   WM.defEvents('longhu_in', [
@@ -184,8 +185,8 @@
       s.place('player', 16, 20, 'up'); s.place('abbotT', 17, 20, 'up');
       await s.fadeIn(1);
       // the two of them walk round the pond to the sealed hall while the tour is told
-      s.move('abbotT', 'R9 U6 L3', { wait: false });
-      var walk = s.move('player', 'R10 U6 L2');
+      s.move('abbotT', 'D1 R3 U1 R6 U6 L3', { wait: false });   // round the censer
+      var walk = s.move('player', 'D1 R4 U1 R6 U6 L2');
       await s.narrate('The next day the abbot led the Marshal through the Hall of the Three Pure Ones and the halls of the Nine Heavens, and he was greatly impressed. At last they came to the north-east corner of the grounds, where a small hall stood apart, its red walls stained, its doors sealed with a great iron lock and layer upon layer of paper charms.');
       await walk;
       s.face('player', 'up'); s.face('abbotT', 'up');

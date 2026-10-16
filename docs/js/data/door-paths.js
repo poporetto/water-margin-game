@@ -5,6 +5,7 @@
 (function () {
   var maps = WM.data.maps;
   var ROAD = ':=BG';                 // a road, paving, a bridge or a gateway
+  var ON_ROAD = ROAD + '3LI';        // and what stands on one (a censer, a lantern, a notice board) without breaking it
   var CARVE = '.,f:TPbem';           // ground a path may be laid across (trees and rocks on it are cleared)
   var CLEAR = 'TPbem';               // what is cleared (never the story's willows and white poplars)
   var MAX = 30;                      // a house further than this from any road keeps its own doorstep
@@ -18,12 +19,12 @@
     // the road network: runs of road too long to be a doorstep (a door's own apron does not count)
     var comp = {}, n = 0, size = [];
     for (var y = 0; y < h; y++) for (var x = 0; x < rows[y].length; x++) {
-      if (comp[x + ',' + y] != null || !is(ROAD, get(x, y))) continue;
+      if (comp[x + ',' + y] != null || !is(ON_ROAD, get(x, y))) continue;
       var q = [[x, y]], c = 0; comp[x + ',' + y] = n;
-      while (q.length) { var p = q.pop(); c++; [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) { var k = (p[0] + d[0]) + ',' + (p[1] + d[1]); if (comp[k] == null && is(ROAD, get(p[0] + d[0], p[1] + d[1]))) { comp[k] = n; q.push([p[0] + d[0], p[1] + d[1]]); } }); }
+      while (q.length) { var p = q.pop(); c++; [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) { var k = (p[0] + d[0]) + ',' + (p[1] + d[1]); if (comp[k] == null && is(ON_ROAD, get(p[0] + d[0], p[1] + d[1]))) { comp[k] = n; q.push([p[0] + d[0], p[1] + d[1]]); } }); }
       size.push(c); n++;
     }
-    var isRoad = function (x, y) { var k = comp[x + ',' + y]; return k != null && size[k] > 6; };
+    var isRoad = function (x, y) { var k = comp[x + ',' + y]; return k != null && size[k] > 6 && is(ROAD, get(x, y)); };
     var changed = false;
     // a cheapest path (each step 1, a turn 0.5, a tree 1 more) from (sx, sy) to the road network
     function route(sx, sy) {
