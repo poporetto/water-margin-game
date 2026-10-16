@@ -35,6 +35,11 @@ async function main(){
   draws.length=0;T.bake(map(['vvv','RRR','RDR'],{theme}));
   assert(draws.some(d=>/building-walls/.test(d[0].srcPath||'')&&d[1]===224&&d[2]===0),'official hall retains red facade');
  }
+ for(const theme of ['spring','snow']){
+  draws.length=0;T.bake(map(['^^^','WWW','WDW'],{theme}));
+  const door=draws.find(d=>/objects.png/.test(d[0].srcPath||''));
+  assert(door,'closed door artwork');assert.equal(door[8],32,'door is two logical tiles high');assert.equal(door[6]+door[8],48,'threshold stays at bottom of its authored tile');
+ }
  assert(T.hasTall('#',map(['#'])),'battlements participate in tall pass');
  assert(!T.solid('D')&&!T.solid('G'));for(const ch of ['d','W','R','#','F','p','^','z','v','Z'])assert(T.solid(ch),'collision unchanged '+ch);
  const index=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/tiles/building-index.json')));assert.equal(index.walls.length,32);assert.equal(index.roofs.length,4);

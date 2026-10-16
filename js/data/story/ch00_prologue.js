@@ -83,7 +83,7 @@
     'XXXXXXXXXXXXXXX',
     'XXXXXXXXXXXXXXX',
     'XNNNNNNNNNNNNNX',
-    'XNNNNNNQNNNNNNX',
+    'XNNNNNNQQNNNNNX',
     'XNNNNNNNNNNNNNX',
     'XNNNNNNNNNNNNNX',
     'XNLNNNNNNNNNLNX',
@@ -273,7 +273,7 @@
       'Look at the writing on that tablet, sir. Like dragons and tadpoles. Not one of us can read a word of it.',
       'The old monks say that on still nights you can hear something breathing under the floor. ...I always thought they were joking.'
     ] },
-    { id: 'tablet', x: 7, y: 3, trigger: 'check', cond: beforeOpening, run: async function (s) {
+    { id: 'tablet', x: 7, y: 3, w: 2, trigger: 'check', cond: beforeOpening, run: async function (s) {
       await s.say(null, 'In the middle of the empty hall stands a stone tablet five or six feet high, set on a stone turtle half buried in the earth. The front is covered in ancient seal characters no one can read.');
       await s.say('hongxin', 'Bring torches round the back. Is there writing there too?');
       await s.say(null, 'On the back, four large characters are cut deep into the stone: 遇洪而開 — "Opened when Hong arrives."');

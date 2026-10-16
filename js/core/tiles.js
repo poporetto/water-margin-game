@@ -59,15 +59,23 @@
     }
   }
   function dirt(c, x, y, tx, ty, th, m) {
-    if (m && m.def && m.def.world) {   // on the world map a road is a full-width beaten track, edged in ink so it reads against the silk
+    if (m && m.def && m.def.world) {   // on the world map a road is a full-width beaten track, softened into the surrounding silk
       var rd = function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === ':' || q === 'B' || q === 'D' || q === 'G' || q === null; };
       if (SHEETS.seasonalGround) blit(c, SHEETS.seasonalGround, [3, 2], S, S, x, y);   // the silk-map road texture, when the art is in
       else {
         px(c, x, y, S, S, '#b58a58');
         for (var j = 0; j < 5; j++) px(c, x + Math.floor(U.hash2(tx * 7 + j, ty, 23) * 14), y + Math.floor(U.hash2(tx, ty * 7 + j, 24) * 15), 2, 1, j % 2 ? '#9c7244' : '#c9a170');
       }
-      if (!rd(0, -1)) px(c, x, y, S, 1, '#6e4a2a'); if (!rd(0, 1)) px(c, x, y + 15, S, 1, '#6e4a2a');
-      if (!rd(-1, 0)) px(c, x, y, 1, S, '#6e4a2a'); if (!rd(1, 0)) px(c, x + 15, y, 1, S, '#6e4a2a');
+      // Broken, feathered silk-colour pixels replace the continuous ink border.
+      for(var edge=0;edge<4;edge++)if(!rd([0,1,0,-1][edge],[-1,0,1,0][edge])){
+        for(var k=0;k<S;k++)for(var depth=0;depth<3;depth++){
+          var ex=edge===1?S-1-depth:edge===3?depth:k,ey=edge===0?depth:edge===2?S-1-depth:k;
+          if(U.hash2(tx*S+ex,ty*S+ey,719)>depth/3){
+            if(SHEETS.seasonalGround)U.drawArt(c,SHEETS.seasonalGround,ex,2*S+ey,1,1,x+ex,y+ey,1,1);
+            else px(c,x+ex,y+ey,1,1,th.g0);
+          }
+        }
+      }
       return;
     }
     var d = th.dirt;
@@ -112,8 +120,8 @@
     if (isLand(1, 0)) { px(c, x + 15, y, 1, S, '#2a3a3a'); }
   }
   function water(c, x, y, tx, ty, th, m) {
-    if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, false);
     if (drawGroundArt(c, x, y, tx, ty, m, '~', 0)) return;
+    if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, false);
     px(c, x, y, S, S, WATER[0]);
     for (var i = 0; i < 4; i++) {
       var wx = Math.floor(U.hash2(tx * 9 + i, ty, 40) * 12), wy = Math.floor(U.hash2(tx, ty * 9 + i, 41) * 15);
@@ -440,8 +448,16 @@
     if (!K(0, 1)) px(c, x, y + 14, S, 2, '#d8b36a');
     if (!textured && (tx + ty) % 2 === 0) { px(c, x + 6, y + 6, 4, 4, '#a8382c'); px(c, x + 7, y + 7, 2, 2, '#d8b36a'); }
   }
+  function part2(c,i,x,y,w,h,sx,sy,sw,sh){
+    if(!SHEETS.part2)return false;
+    U.drawArt(c,SHEETS.part2,(i%6)*32+(sx||0),Math.floor(i/6)*32+(sy||0),sw||w,sh||h,x,y,w,h);return true;
+  }
   function interiorWall(c, x, y, tx, ty, th, m) {
     var below = m.get(tx, ty + 1);
+    if(SHEETS.part2){
+      var floorAt=function(yy){var q=m.get(tx,yy);return !!q&&q!=='X'&&q!=='x';},lower=floorAt(ty+1),upper=below==='X'&&floorAt(ty+2);   // a face only above the floor; the walls beside and below a room stay plain brown
+      if(lower||upper){var idx=m.get(tx-1,ty)!=='X'?0:m.get(tx+1,ty)!=='X'?4:tx%9===4?3:1+(tx%2);part2(c,idx,x,y,16,16,0,lower?16:0,16,16);return;}
+    }
     if (below && below !== 'X' && below !== 'x') {
       // visible wall face
       if (surface(c, x, y, [15], tx, ty)) return;
@@ -542,7 +558,25 @@
     px(c, x + 8 + ox, y - 50 + oy, 2, 1, '#141414'); px(c, x + 6 + ox, y - 51 + oy + fl, 2, 1, '#141414'); px(c, x + 10 + ox, y - 51 + oy + fl, 2, 1, '#141414');
   }
   // the floor a piece of furniture stands on: boards if the room around it is boarded, else stone flags
+  // Props have no terrain of their own. Infer the obscured surface from nearby
+  // authored ground cells instead of placing a wood/paving square beneath them.
+  function propGround(c,x,y,tx,ty,m){
+    var th=THEMES[m.theme]||THEMES.spring,scores={},allowed=m.interior?'nNK':'.,f:=s!';
+    for(var radius=1;radius<=3;radius++){
+      for(var dy=-radius;dy<=radius;dy++)for(var dx=-radius;dx<=radius;dx++){
+        if(Math.abs(dx)+Math.abs(dy)!==radius)continue;
+        var ch=m.get(tx+dx,ty+dy);if(!ch||allowed.indexOf(ch)<0)continue;
+        if(ch===','||ch==='f')ch='.';scores[ch]=(scores[ch]||0)+1/radius;
+      }
+      if(Object.keys(scores).length)break;
+    }
+    var chosen=m.interior?'n':'.',best=scores[chosen]||0;
+    Object.keys(scores).forEach(function(ch){if(scores[ch]>best){chosen=ch;best=scores[ch];}});
+    if(chosen==='K'){if(!surface(c,x,y,[11],tx,ty))carpet(c,x,y,tx,ty,th,m);return;}
+    if(!drawGroundArt(c,x,y,tx,ty,m,chosen,0))T.DEF[chosen].draw(c,x,y,tx,ty,th,m,chosen);
+  }
   function floorUnder(c, x, y, tx, ty, m) {
+    if(m&&!m.interior){propGround(c,x,y,tx,ty,m);return;}
     var wood = 0, stone = 0;
     [[0, 1], [-1, 0], [1, 0], [0, 2], [-2, 0], [2, 0]].forEach(function (d) { var q = m && m.get(tx + d[0], ty + d[1]); if (q === 'n') wood++; else if (q === 'N') stone++; });
     if (wood >= stone) floorWood(c, x, y, tx, ty); else floorStone(c, x, y, tx, ty);   // (boards, unless the room is stone: a gap in a carpet has neither)
@@ -658,6 +692,7 @@
   // ---- a Song government hall: the official's dais and chair, his desk, and the great painted screen behind ----
   function runOf(m, tx, ty, ch) { var x0 = tx; while (m.get(x0 - 1, ty) === ch) x0--; var n = 1; while (m.get(x0 + n, ty) === ch) n++; return { x0: x0, n: n }; }
   function dais(c, x, y, tx, ty, th, m) {
+    if(SHEETS.part2){floorWood(c,x,y,tx,ty);var same=function(dx,dy){return 'q0a'.indexOf(m.get(tx+dx,ty+dy))>=0;};var front=!same(0,1),left=!same(-1,0),right=!same(1,0);if(front)part2(c,8,x,y,16,16);if(left){c.fillStyle='#503629';c.fillRect(x,y,1,16);}if(right){c.fillStyle='#503629';c.fillRect(x+15,y,1,16);}return;}
     // a raised platform of polished boards; its front edge steps down to the hall floor
     px(c, x, y, S, S, '#7a4a2a'); for (var r = 0; r < 4; r++) px(c, x, y + r * 4 + 3, S, 1, '#6a3e22');
     px(c, x, y, S, 1, '#9a6a3e');
@@ -758,7 +793,7 @@
     var F = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'F'; };
     if (m && m.interior) { cellBars(c, x, y, tx, ty, m, function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === 'F' || q === '+'; }); return; }   // indoors a fence is the timber grille of a prison cell
     // a village fence of woven wattle between sharpened stakes
-    grass(c, x, y, tx, ty, th);
+    propGround(c,x,y,tx,ty,m);
     var horiz = F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1));
     if (horiz) {
       for (var i = 0; i < 16; i += 2) { px(c, x + i, y + 6 + (i % 4 ? 1 : 0), 2, 5, i % 4 ? '#a8885a' : '#8a6a40'); }
@@ -775,6 +810,7 @@
   // squared bars between; running away from the viewer, one long beam with the bar tops along it.
   function cellBars(c, x, y, tx, ty, m, F) {
     floorStone(c, x, y, tx, ty);
+    if(SHEETS.part2){var horizontal=F(-1,0)||F(1,0)||!(F(0,-1)||F(0,1)),idx=horizontal?(F(0,-1)||F(0,1)?19:!F(-1,0)?13:!F(1,0)?15:14):!F(0,-1)?16:!F(0,1)?18:17;if(horizontal)part2(c,idx,x,y,16,16);else part2(c,17,x+6,y,4,16,6,2,4,12);return;}
     if (F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1))) {
       px(c, x, y + 14, S, 2, 'rgba(0,0,0,0.25)');                                    // shadow on the floor
       for (var i = 1; i < 16; i += 4) { px(c, x + i, y + 1, 2, 13, '#4a2e18'); px(c, x + i, y + 1, 1, 13, '#7a5232'); }
@@ -792,6 +828,7 @@
   // A cell door in a run of bars: the same grille, framed by two posts, with an iron lock on a chain.
   function cellDoor(c, x, y, tx, ty) {
     floorStone(c, x, y, tx, ty);
+    if(part2(c,20,x,y,16,16))return;
     px(c, x, y + 14, S, 2, 'rgba(0,0,0,0.25)');
     for (var i = 3; i < 14; i += 3) { px(c, x + i, y + 2, 2, 11, '#4a2e18'); px(c, x + i, y + 2, 1, 11, '#7a5232'); }
     px(c, x, y, 2, 14, '#2e1c0e'); px(c, x + 14, y, 2, 14, '#2e1c0e');                // door posts
@@ -803,6 +840,7 @@
   // man lying on the upper row lies along it), with a rolled straw pillow at the head and a rough grey blanket at the foot.
   function pallet(c, x, y, tx, ty, th, m) {
     floorStone(c, x, y, tx, ty);
+    if(SHEETS.part2){var lx=tx,topY=ty;while(m.get(lx-1,ty)==='-')lx--;while(m.get(tx,topY-1)==='-')topY--;var dx=(tx-lx)%2,dy=(ty-topY)%2;c.save();c.beginPath();c.rect(x,y,16,16);c.clip();part2(c,21,x-dx*16,y-dy*16+7,32,18);c.restore();return;}
     var head = m.get(tx - 1, ty) !== '-', foot = m.get(tx + 1, ty) !== '-', top = m.get(tx, ty - 1) !== '-';
     var x0 = x + (head ? 1 : 0), x1 = x + (foot ? 15 : 16);
     c.save(); c.beginPath(); c.rect(x, y, S, S); c.clip();
@@ -842,7 +880,7 @@
     for (var i = 0; i < 4; i++) { px(c, x, y + i * 4, S, 3, '#a7a49a'); px(c, x, y + i * 4, S, 1, '#c4c1b8'); }
   }
   function well(c, x, y, tx, ty, th, m) {
-    pave(c, x, y, tx, ty);
+    propGround(c,x,y,tx,ty,m);
     blob(c, x + 8, y + 9, 7, 6, '#6a655b'); blob(c, x + 8, y + 8, 5, 4, '#1a2a3a');
     px(c, x + 2, y + 1, 2, 8, '#5a3418'); px(c, x + 12, y + 1, 2, 8, '#5a3418'); px(c, x + 2, y, 12, 2, '#7a4e28');
   }
@@ -1053,7 +1091,7 @@
     'B': { draw: bridge, water: true },
     'S': { draw: stairs },
     'p': { draw: well, solid: true },
-    'L': { draw: function (c, x, y, tx, ty, th, m) { if (m.interior) floorWood(c, x, y, tx, ty); else pave(c, x, y, tx, ty); }, tall: lanternTall, solid: true },
+    'L': { draw: function (c, x, y, tx, ty, th, m) { propGround(c,x,y,tx,ty,m); }, tall: lanternTall, solid: true },
     'Y': { draw: function (c, x, y, tx, ty, th) { grass(c, x, y, tx, ty, th); }, tall: bannerTall, solid: true },
     'J': { draw: function (c, x, y, tx, ty, th, m) { if (m.get(tx, ty + 1) === '=' || m.get(tx, ty - 1) === '=') pave(c, x, y, tx, ty); else grass(c, x, y, tx, ty, th); }, tall: wineFlagTall, solid: true },
     'A': { draw: altar, solid: true },
@@ -1066,6 +1104,11 @@
     '>': { draw: sampanTile, solid: true, water: true },
     'I': { draw: function (c, x, y, tx, ty, th, m) { grass(c, x, y, tx, ty, th); }, tall: signTall, solid: true },
     'V': { draw: tent, solid: true },
+    '%': { draw:function(c,x,y,tx,ty,th,m){
+      dirt(c,x,y,tx,ty,th,m);
+      if(SHEETS.regional_south)U.drawArt(c,SHEETS.regional_south,32,112,16,16,x,y,16,16);
+      c.fillStyle='#73503a';if(m.get(tx-1,ty)!=='%')c.fillRect(x,y,1,16);if(m.get(tx+1,ty)!=='%')c.fillRect(x+15,y,1,16);if(m.get(tx,ty-1)!=='%')c.fillRect(x,y,16,1);if(m.get(tx,ty+1)!=='%')c.fillRect(x,y+15,16,1);
+    } },
     'y': { draw: cropField },
     '_': { draw: mapEdgeDark, solid: true },
     'C': { draw: function (c, x, y, tx, ty, th, m) { px(c, x, y, S, S, '#4a4a2a'); for (var i = 0; i < 5; i++) px(c, x + Math.floor(U.hash2(tx + i, ty, 70) * 13), y + Math.floor(U.hash2(tx, ty + i, 71) * 13), 3, 1, '#6a6a3a'); var nb = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'C'; }; if (!nb(0, -1)) px(c, x, y, S, 2, '#5a4a30'); if (!nb(-1, 0)) px(c, x, y, 2, S, '#5a4a30'); if (!nb(1, 0)) px(c, x + 14, y, 2, S, '#5a4a30'); if (!nb(0, 1)) px(c, x, y + 14, S, 2, '#5a4a30'); }, solid: true },
@@ -1150,6 +1193,7 @@
     for (var ty = 0; ty < h; ty++) for (var tx = 0; tx < w; tx++) {
       var ch = (worldSymbolAt(map,tx,ty) || terrain.occupied[tx+','+ty]) ? '.' : map.get(tx, ty);
       var d = T.DEF[ch] || T.DEF['.'];
+      if(map.def && map.def.world && ch==='r'&&SHEETS.part2Extra){water(c,tx*S,ty*S,tx,ty,th,map);U.drawArt(c,SHEETS.part2Extra,(U.hash2(tx,ty,44)>.5?32:0),64,16,16,tx*S,ty*S,16,16);continue;}
       if(map.def && map.def.world && ch==='b' && SHEETS.worldIcons){grass(c,tx*S,ty*S,tx,ty,th);U.drawArt(c,SHEETS.worldIcons,48,64,48,32,tx*S,ty*S+5,16,11);continue;}
       if (!drawGroundArt(c, tx * S, ty * S, tx, ty, map, ch, 0)) d.draw(c, tx * S, ty * S, tx, ty, th, map, ch);
     }
@@ -1202,7 +1246,7 @@
   // the art entry for a tile on this map: a season's own version ('T@autumn') before the plain one ('T')
   // (building pieces are left out indoors unless the entry says inside: true, and an entry marked indoors: true is used only indoors)
   function artEntry(ch, map) {
-    var e = ART && (ART[ch + '@' + map.theme] || ART[ch]) || null;
+    var e = ART && (ART[ch + '@' + map.id] || ART[ch + '@' + map.theme] || ART[ch]) || null;
     if (!e || (e.indoors && !map.interior)) return null;
     var world = map.theme === 'world' || (map.def && map.def.world);
     return (e.building && (world || (map.interior && !e.inside))) || (e.object && world) ? null : e;
@@ -1245,6 +1289,8 @@
     var bottom=same.indexOf(map.get(tx,ty+1))<0;
     var shrine=shrineFacade(map,tx,ty);
     var red=!shrine&&(ch==='R'||[map.get(tx-1,ty),map.get(tx+1,ty),map.get(tx,ty-1)].indexOf('R')>=0);
+    // Freestanding red boundary walls support the full roof cap, including its ends.
+    if(ch==='R'&&!shrine){left=0;right=0;}
     grass(c,x,y,tx,ty,th);
     c.save();c.beginPath();c.rect(x+left,y,S-left-right,S);c.clip();
     // Use continuous upper-wall material; the footing is shared across all lower bays.
@@ -1272,24 +1318,29 @@
       if(e.building==='window'){
         // Raise the opening above the sill; it is not a floor-height doorway.
         var red=!shrineFacade(map,tx,ty)&&[map.get(tx-1,ty),map.get(tx+1,ty),map.get(tx,ty-1)].indexOf('R')>=0;
-        var rise='WOR'.indexOf(map.get(tx,ty-1))>=0?6:0;
-        U.drawArt(c,SHEETS.buildingWalls,(red?5:3)*S+4,red?3*S+3:3,8,11,x+4,y+3-rise,8,11);
+        var rise=0;
+        U.drawArt(c,SHEETS.buildingWalls,(red?5:3)*S+4,red?3*S+3:3,8,11,x+4,y+4,8,9);
       }
+    }
+    else if(e.building==='snow-stone'){
+      var si=buildingSide(map,tx,ty,'#G');buildingCell(c,10,x,y);
+      if(map.get(tx,ty-1)!=='#'&&map.get(tx,ty-1)!=='G')U.drawArt(c,SHEETS.part2Extra,96,0,16,16,x,y-4,16,16);
     }
     else if (e.building === 'stone') buildingCell(c, 9 + buildingSide(map, tx, ty, '#G'), x, y);
     else if (e.building === 'door') {
-      // Closed Chinese house doors: 24 logical / 48 physical pixels high.
+      // Closed Chinese house doors: two tiles (32 logical / 64 physical pixels) high.
       // Keep the passable D event and blocked d collision semantics unchanged.
       facadeGround(c,x,y,tx,ty,map,ch,th);
       if (SHEETS.objects) {
         var doorCell = ch === 'd' ? [28, 25] : [0, 0];
-        blit(c, SHEETS.objects, doorCell, S, 24, x, y - 8);
-      } else U.drawArt(c, SHEETS.buildingWalls, 5 * S, 0, S, S, x, y - 8, S, 24);
+        U.drawArt(c, SHEETS.objects, doorCell[0] * S, doorCell[1] * S, S, 24, x, y - S, S, S * 2);
+      } else U.drawArt(c, SHEETS.buildingWalls, 5 * S, 0, S, S, x, y - S, S, S * 2);
     }
+    else if(e.building === 'refined-paving') blit(c,SHEETS.refinedPaving,[tx%2,ty%2],S,S,x,y);
     else if (e.building === 'paving') buildingCell(c, U.hash2(tx, ty, 408) > 0.5 ? 15 : 16, x, y);
-    else if (e.building === 'well') { buildingCell(c, 15, x, y); buildingCell(c, 24, x, y); }
+    else if (e.building === 'well') { propGround(c,x,y,tx,ty,map); buildingCell(c, 24, x, y); }
     else if (e.building === 'fence') {
-      grass(c, x, y, tx, ty, th);
+      propGround(c,x,y,tx,ty,map);
       var n = map.get(tx, ty - 1) === 'F', s = map.get(tx, ty + 1) === 'F', w = map.get(tx - 1, ty) === 'F', east = map.get(tx + 1, ty) === 'F';
       var index = !n && !s && !w && !east ? 23 : (n || s) && !(w || east) ? 18 : !(n || s) ? 17 : s && east ? 19 : s && w ? 20 : n && east ? 21 : 22;
       buildingCell(c, index, x, y);
@@ -1322,8 +1373,7 @@
   function objectGround(c, x, y, tx, ty, map, ch, e) {
     var th = THEMES[map.theme] || THEMES.spring;
     if (e.base === 'water') water(c, x, y, tx, ty, th, map);
-    else if (e.base === 'floor' || map.interior) floorUnder(c, x, y, tx, ty, map);
-    else grass(c, x, y, tx, ty, th);
+    else propGround(c,x,y,tx,ty,map);
     return true;
   }
   var propLayouts = new WeakMap();
@@ -1362,15 +1412,18 @@
     for(var y=map.h-1;y>=0;y--)for(var x=0;x<map.w;x++){
       var ch=map.get(x,y),e=artEntry(ch,map),key=x+','+y;
       if(!e||!e.object||!e.object.footprint||!sheetOf(e)||out.skipped[key])continue;
+      if(ch==='c'&&SHEETS.longCounter&&runOf(map,x,y,ch).n>=3)continue;
       var fp=e.object.footprint, chosen=null;
-      for(var offset=0;offset<fp[0]&&!chosen;offset++){
-        var left=x-offset, top=y-fp[1]+1, okay=true;
-        for(var yy=top;yy<=y;yy++)for(var xx=left;xx<left+fp[0];xx++){
+      var topChoices=ch==='3'?[y,y-fp[1]+1]:[y-fp[1]+1];
+      for(var tc=0;tc<topChoices.length&&!chosen;tc++)for(var offset=0;offset<fp[0]&&!chosen;offset++){
+        var actualOffset=('15'.indexOf(ch)>=0&&fp[0]===5)?[1,0,2,3,4][offset]:offset;
+        var left=x-actualOffset, top=topChoices[tc], okay=true;
+        for(var yy=top;yy<top+fp[1];yy++)for(var xx=left;xx<left+fp[0];xx++){
           // An event on the authored prop itself is allowed; surrounding access is protected.
           if(xx===x&&yy===y)continue;
           if(!free(xx,yy,ch))okay=false;
         }
-        if(okay && keepsRoutes(left,top,fp[0],fp[1]))chosen={x:left,y:top,w:fp[0],h:fp[1],bottom:y+1};
+        if(okay && keepsRoutes(left,top,fp[0],fp[1]))chosen={x:left,y:top,w:fp[0],h:fp[1],bottom:top+fp[1]};
       }
       if(!chosen){chosen={x:x,y:y,w:1,h:1,bottom:y+1};out.constrained.push({x:x,y:y,ch:ch});}
       out.anchors[key]=chosen;
@@ -1385,9 +1438,19 @@
     if (ch === 'l' && WM.state && WM.state.flags && WM.state.flags['felled:' + map.id]) {
       willowTall(c, x, y, tx, ty, THEMES[map.theme] || THEMES.spring, map); return;
     }
+    if(ch==='c'&&SHEETS.longCounter){
+      var counter=runOf(map,tx,ty,ch);
+      if(counter.n>=3){
+        if(tx!==counter.x0)return;
+        var cw=counter.n*S;
+        U.drawArt(c,SHEETS.longCounter,0,0,16,28,x,y-12,16,28);
+        for(var cx=16;cx<cw-16;cx+=16)U.drawArt(c,SHEETS.longCounter,16+(cx/16%2)*16,0,16,28,x+cx,y-12,16,28);
+        U.drawArt(c,SHEETS.longCounter,48,0,16,28,x+cw-16,y-12,16,28);return;
+      }
+    }
     var o = e.object, cell = o.at;
     if (o.variants) cell = o.variants[Math.floor(U.hash2(tx, ty, 905) * o.variants.length) % o.variants.length];
-    var w = o.w || S, h = o.h || S, dx = x + (S - w) / 2;
+    var w = o.w || S, h = o.h || S, dx = x + (S - w) / 2, baseY=y+S;
     var placement = o.footprint && T.propLayout(map);
     if (placement && placement.skipped[tx+','+ty]) return;
     if (ch === 'u' && !placement) {
@@ -1397,7 +1460,7 @@
     }
     if (o.run) {
       if (map.get(tx - 1, ty) === ch) return;
-      w = runOf(map, tx, ty, ch).n * S; dx = x;
+      w = o.singleSeat ? (o.w||S) : runOf(map, tx, ty, ch).n * S; dx = x;
     }
     if (o.bed && !placement) {
       if (map.get(tx - 1, ty) === ch || map.get(tx, ty + 1) === ch) return;
@@ -1406,11 +1469,17 @@
     if (ch === '[') dx = x - S;
     if (placement) {
       var bounds=placement.anchors[tx+','+ty];
-      if(bounds){dx=x+(bounds.x-tx)*S;w=bounds.w*S;}
+      if(bounds){dx=x+(bounds.x-tx)*S;w=bounds.w*S;baseY=y+(bounds.bottom-ty)*S;}
     }
     // Never stretch an object's width independently of its height to fill a map run.
     var sourceW = o.w || S, fit = ch === 'b' ? 1 : Math.min(1, w / sourceW), drawW = sourceW * fit, drawH = h * fit;
-    U.drawArt(c, sheetOf(e), cell[0] * S, cell[1] * S, sourceW, h, dx + (w - drawW) / 2, y + S - drawH, drawW, drawH);
+    if(o.pedestal&&SHEETS.refinedPaving){
+      var pedestalX=dx+(w-drawW)/2;
+      U.drawArt(c,SHEETS.refinedPaving,0,0,32,12,pedestalX,baseY-8,drawW,8);
+      px(c,pedestalX,baseY-8,drawW,1,'#b4a483');px(c,pedestalX,baseY-1,drawW,1,'#4b4540');
+      baseY-=8;
+    }
+    U.drawArt(c, sheetOf(e), cell[0] * S, cell[1] * S, sourceW, h, dx + (w - drawW) / 2, baseY - drawH, drawW, drawH);
   }
 
   // the ground of a tile from its art (returns false if it has none): a variant chosen by place, a piece joining

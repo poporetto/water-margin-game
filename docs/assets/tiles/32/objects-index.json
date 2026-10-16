@@ -434,7 +434,7 @@
       "logicalHeight": 28,
       "sourceBounds": [
         1196,
-        365,
+        409,
         1341,
         526
       ]
@@ -452,10 +452,10 @@
       "logicalWidth": 32,
       "logicalHeight": 28,
       "sourceBounds": [
-        1367,
-        365,
+        1368,
+        418,
         1514,
-        533
+        520
       ]
     },
     {
@@ -472,9 +472,9 @@
       "logicalHeight": 28,
       "sourceBounds": [
         18,
-        533,
+        552,
         191,
-        693
+        681
       ]
     },
     {
@@ -549,8 +549,8 @@
       "sourceBounds": [
         790,
         565,
-        913,
-        693
+        896,
+        683
       ]
     },
     {

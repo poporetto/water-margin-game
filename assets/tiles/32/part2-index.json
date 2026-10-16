@@ -1,0 +1,3398 @@
+{
+  "tileSize": 32,
+  "sheets": {
+    "regional-marsh": {
+      "width": 256,
+      "height": 256
+    },
+    "water-marsh": {
+      "width": 256,
+      "height": 576
+    },
+    "water-marsh-deep": {
+      "width": 256,
+      "height": 576
+    },
+    "regional-south": {
+      "width": 256,
+      "height": 256
+    },
+    "water-south": {
+      "width": 256,
+      "height": 576
+    },
+    "water-south-deep": {
+      "width": 256,
+      "height": 576
+    },
+    "regional-dusk": {
+      "width": 256,
+      "height": 256
+    },
+    "water-dusk": {
+      "width": 256,
+      "height": 576
+    },
+    "water-dusk-deep": {
+      "width": 256,
+      "height": 576
+    },
+    "regional-autumn": {
+      "width": 256,
+      "height": 256
+    },
+    "water-autumn": {
+      "width": 256,
+      "height": 576
+    },
+    "water-autumn-deep": {
+      "width": 256,
+      "height": 576
+    },
+    "regional-snow": {
+      "width": 256,
+      "height": 256
+    },
+    "water-snow": {
+      "width": 256,
+      "height": 576
+    },
+    "water-snow-deep": {
+      "width": 256,
+      "height": 576
+    },
+    "regional-world": {
+      "width": 256,
+      "height": 256
+    },
+    "water-world": {
+      "width": 256,
+      "height": 384
+    },
+    "water-world-deep": {
+      "width": 256,
+      "height": 384
+    },
+    "regional-trees": {
+      "width": 128,
+      "height": 288
+    },
+    "part2-objects": {
+      "width": 384,
+      "height": 256
+    },
+    "gate-snow": {
+      "width": 128,
+      "height": 192
+    },
+    "gate-autumn": {
+      "width": 128,
+      "height": 192
+    },
+    "part2-extra": {
+      "width": 256,
+      "height": 192
+    },
+    "vegetables": {
+      "width": 256,
+      "height": 384
+    }
+  },
+  "items": [
+    {
+      "theme": "marsh",
+      "ground": "regional-marsh",
+      "grass": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "longGrass": [
+        4,
+        5
+      ],
+      "flowers": [
+        6,
+        7
+      ],
+      "roadMasks": [
+        {
+          "mask": 0,
+          "cell": [
+            0,
+            1
+          ]
+        },
+        {
+          "mask": 1,
+          "cell": [
+            1,
+            1
+          ]
+        },
+        {
+          "mask": 2,
+          "cell": [
+            2,
+            1
+          ]
+        },
+        {
+          "mask": 3,
+          "cell": [
+            3,
+            1
+          ]
+        },
+        {
+          "mask": 4,
+          "cell": [
+            4,
+            1
+          ]
+        },
+        {
+          "mask": 5,
+          "cell": [
+            5,
+            1
+          ]
+        },
+        {
+          "mask": 6,
+          "cell": [
+            6,
+            1
+          ]
+        },
+        {
+          "mask": 7,
+          "cell": [
+            7,
+            1
+          ]
+        },
+        {
+          "mask": 8,
+          "cell": [
+            0,
+            2
+          ]
+        },
+        {
+          "mask": 9,
+          "cell": [
+            1,
+            2
+          ]
+        },
+        {
+          "mask": 10,
+          "cell": [
+            2,
+            2
+          ]
+        },
+        {
+          "mask": 11,
+          "cell": [
+            3,
+            2
+          ]
+        },
+        {
+          "mask": 12,
+          "cell": [
+            4,
+            2
+          ]
+        },
+        {
+          "mask": 13,
+          "cell": [
+            5,
+            2
+          ]
+        },
+        {
+          "mask": 14,
+          "cell": [
+            6,
+            2
+          ]
+        },
+        {
+          "mask": 15,
+          "cell": [
+            7,
+            2
+          ]
+        },
+        {
+          "mask": 19,
+          "cell": [
+            0,
+            3
+          ]
+        },
+        {
+          "mask": 23,
+          "cell": [
+            1,
+            3
+          ]
+        },
+        {
+          "mask": 27,
+          "cell": [
+            2,
+            3
+          ]
+        },
+        {
+          "mask": 31,
+          "cell": [
+            3,
+            3
+          ]
+        },
+        {
+          "mask": 38,
+          "cell": [
+            4,
+            3
+          ]
+        },
+        {
+          "mask": 39,
+          "cell": [
+            5,
+            3
+          ]
+        },
+        {
+          "mask": 46,
+          "cell": [
+            6,
+            3
+          ]
+        },
+        {
+          "mask": 47,
+          "cell": [
+            7,
+            3
+          ]
+        },
+        {
+          "mask": 55,
+          "cell": [
+            0,
+            4
+          ]
+        },
+        {
+          "mask": 63,
+          "cell": [
+            1,
+            4
+          ]
+        },
+        {
+          "mask": 76,
+          "cell": [
+            2,
+            4
+          ]
+        },
+        {
+          "mask": 77,
+          "cell": [
+            3,
+            4
+          ]
+        },
+        {
+          "mask": 78,
+          "cell": [
+            4,
+            4
+          ]
+        },
+        {
+          "mask": 79,
+          "cell": [
+            5,
+            4
+          ]
+        },
+        {
+          "mask": 95,
+          "cell": [
+            6,
+            4
+          ]
+        },
+        {
+          "mask": 110,
+          "cell": [
+            7,
+            4
+          ]
+        },
+        {
+          "mask": 111,
+          "cell": [
+            0,
+            5
+          ]
+        },
+        {
+          "mask": 127,
+          "cell": [
+            1,
+            5
+          ]
+        },
+        {
+          "mask": 137,
+          "cell": [
+            2,
+            5
+          ]
+        },
+        {
+          "mask": 139,
+          "cell": [
+            3,
+            5
+          ]
+        },
+        {
+          "mask": 141,
+          "cell": [
+            4,
+            5
+          ]
+        },
+        {
+          "mask": 143,
+          "cell": [
+            5,
+            5
+          ]
+        },
+        {
+          "mask": 155,
+          "cell": [
+            6,
+            5
+          ]
+        },
+        {
+          "mask": 159,
+          "cell": [
+            7,
+            5
+          ]
+        },
+        {
+          "mask": 175,
+          "cell": [
+            0,
+            6
+          ]
+        },
+        {
+          "mask": 191,
+          "cell": [
+            1,
+            6
+          ]
+        },
+        {
+          "mask": 205,
+          "cell": [
+            2,
+            6
+          ]
+        },
+        {
+          "mask": 207,
+          "cell": [
+            3,
+            6
+          ]
+        },
+        {
+          "mask": 223,
+          "cell": [
+            4,
+            6
+          ]
+        },
+        {
+          "mask": 239,
+          "cell": [
+            5,
+            6
+          ]
+        },
+        {
+          "mask": 255,
+          "cell": [
+            6,
+            6
+          ]
+        }
+      ],
+      "roadVariants": [
+        55,
+        56,
+        57
+      ],
+      "special": [
+        58,
+        59
+      ]
+    },
+    {
+      "theme": "south",
+      "ground": "regional-south",
+      "grass": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "longGrass": [
+        4,
+        5
+      ],
+      "flowers": [
+        6,
+        7
+      ],
+      "roadMasks": [
+        {
+          "mask": 0,
+          "cell": [
+            0,
+            1
+          ]
+        },
+        {
+          "mask": 1,
+          "cell": [
+            1,
+            1
+          ]
+        },
+        {
+          "mask": 2,
+          "cell": [
+            2,
+            1
+          ]
+        },
+        {
+          "mask": 3,
+          "cell": [
+            3,
+            1
+          ]
+        },
+        {
+          "mask": 4,
+          "cell": [
+            4,
+            1
+          ]
+        },
+        {
+          "mask": 5,
+          "cell": [
+            5,
+            1
+          ]
+        },
+        {
+          "mask": 6,
+          "cell": [
+            6,
+            1
+          ]
+        },
+        {
+          "mask": 7,
+          "cell": [
+            7,
+            1
+          ]
+        },
+        {
+          "mask": 8,
+          "cell": [
+            0,
+            2
+          ]
+        },
+        {
+          "mask": 9,
+          "cell": [
+            1,
+            2
+          ]
+        },
+        {
+          "mask": 10,
+          "cell": [
+            2,
+            2
+          ]
+        },
+        {
+          "mask": 11,
+          "cell": [
+            3,
+            2
+          ]
+        },
+        {
+          "mask": 12,
+          "cell": [
+            4,
+            2
+          ]
+        },
+        {
+          "mask": 13,
+          "cell": [
+            5,
+            2
+          ]
+        },
+        {
+          "mask": 14,
+          "cell": [
+            6,
+            2
+          ]
+        },
+        {
+          "mask": 15,
+          "cell": [
+            7,
+            2
+          ]
+        },
+        {
+          "mask": 19,
+          "cell": [
+            0,
+            3
+          ]
+        },
+        {
+          "mask": 23,
+          "cell": [
+            1,
+            3
+          ]
+        },
+        {
+          "mask": 27,
+          "cell": [
+            2,
+            3
+          ]
+        },
+        {
+          "mask": 31,
+          "cell": [
+            3,
+            3
+          ]
+        },
+        {
+          "mask": 38,
+          "cell": [
+            4,
+            3
+          ]
+        },
+        {
+          "mask": 39,
+          "cell": [
+            5,
+            3
+          ]
+        },
+        {
+          "mask": 46,
+          "cell": [
+            6,
+            3
+          ]
+        },
+        {
+          "mask": 47,
+          "cell": [
+            7,
+            3
+          ]
+        },
+        {
+          "mask": 55,
+          "cell": [
+            0,
+            4
+          ]
+        },
+        {
+          "mask": 63,
+          "cell": [
+            1,
+            4
+          ]
+        },
+        {
+          "mask": 76,
+          "cell": [
+            2,
+            4
+          ]
+        },
+        {
+          "mask": 77,
+          "cell": [
+            3,
+            4
+          ]
+        },
+        {
+          "mask": 78,
+          "cell": [
+            4,
+            4
+          ]
+        },
+        {
+          "mask": 79,
+          "cell": [
+            5,
+            4
+          ]
+        },
+        {
+          "mask": 95,
+          "cell": [
+            6,
+            4
+          ]
+        },
+        {
+          "mask": 110,
+          "cell": [
+            7,
+            4
+          ]
+        },
+        {
+          "mask": 111,
+          "cell": [
+            0,
+            5
+          ]
+        },
+        {
+          "mask": 127,
+          "cell": [
+            1,
+            5
+          ]
+        },
+        {
+          "mask": 137,
+          "cell": [
+            2,
+            5
+          ]
+        },
+        {
+          "mask": 139,
+          "cell": [
+            3,
+            5
+          ]
+        },
+        {
+          "mask": 141,
+          "cell": [
+            4,
+            5
+          ]
+        },
+        {
+          "mask": 143,
+          "cell": [
+            5,
+            5
+          ]
+        },
+        {
+          "mask": 155,
+          "cell": [
+            6,
+            5
+          ]
+        },
+        {
+          "mask": 159,
+          "cell": [
+            7,
+            5
+          ]
+        },
+        {
+          "mask": 175,
+          "cell": [
+            0,
+            6
+          ]
+        },
+        {
+          "mask": 191,
+          "cell": [
+            1,
+            6
+          ]
+        },
+        {
+          "mask": 205,
+          "cell": [
+            2,
+            6
+          ]
+        },
+        {
+          "mask": 207,
+          "cell": [
+            3,
+            6
+          ]
+        },
+        {
+          "mask": 223,
+          "cell": [
+            4,
+            6
+          ]
+        },
+        {
+          "mask": 239,
+          "cell": [
+            5,
+            6
+          ]
+        },
+        {
+          "mask": 255,
+          "cell": [
+            6,
+            6
+          ]
+        }
+      ],
+      "roadVariants": [
+        55,
+        56,
+        57
+      ],
+      "special": [
+        58,
+        59
+      ]
+    },
+    {
+      "theme": "dusk",
+      "ground": "regional-dusk",
+      "grass": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "longGrass": [
+        4,
+        5
+      ],
+      "flowers": [
+        6,
+        7
+      ],
+      "roadMasks": [
+        {
+          "mask": 0,
+          "cell": [
+            0,
+            1
+          ]
+        },
+        {
+          "mask": 1,
+          "cell": [
+            1,
+            1
+          ]
+        },
+        {
+          "mask": 2,
+          "cell": [
+            2,
+            1
+          ]
+        },
+        {
+          "mask": 3,
+          "cell": [
+            3,
+            1
+          ]
+        },
+        {
+          "mask": 4,
+          "cell": [
+            4,
+            1
+          ]
+        },
+        {
+          "mask": 5,
+          "cell": [
+            5,
+            1
+          ]
+        },
+        {
+          "mask": 6,
+          "cell": [
+            6,
+            1
+          ]
+        },
+        {
+          "mask": 7,
+          "cell": [
+            7,
+            1
+          ]
+        },
+        {
+          "mask": 8,
+          "cell": [
+            0,
+            2
+          ]
+        },
+        {
+          "mask": 9,
+          "cell": [
+            1,
+            2
+          ]
+        },
+        {
+          "mask": 10,
+          "cell": [
+            2,
+            2
+          ]
+        },
+        {
+          "mask": 11,
+          "cell": [
+            3,
+            2
+          ]
+        },
+        {
+          "mask": 12,
+          "cell": [
+            4,
+            2
+          ]
+        },
+        {
+          "mask": 13,
+          "cell": [
+            5,
+            2
+          ]
+        },
+        {
+          "mask": 14,
+          "cell": [
+            6,
+            2
+          ]
+        },
+        {
+          "mask": 15,
+          "cell": [
+            7,
+            2
+          ]
+        },
+        {
+          "mask": 19,
+          "cell": [
+            0,
+            3
+          ]
+        },
+        {
+          "mask": 23,
+          "cell": [
+            1,
+            3
+          ]
+        },
+        {
+          "mask": 27,
+          "cell": [
+            2,
+            3
+          ]
+        },
+        {
+          "mask": 31,
+          "cell": [
+            3,
+            3
+          ]
+        },
+        {
+          "mask": 38,
+          "cell": [
+            4,
+            3
+          ]
+        },
+        {
+          "mask": 39,
+          "cell": [
+            5,
+            3
+          ]
+        },
+        {
+          "mask": 46,
+          "cell": [
+            6,
+            3
+          ]
+        },
+        {
+          "mask": 47,
+          "cell": [
+            7,
+            3
+          ]
+        },
+        {
+          "mask": 55,
+          "cell": [
+            0,
+            4
+          ]
+        },
+        {
+          "mask": 63,
+          "cell": [
+            1,
+            4
+          ]
+        },
+        {
+          "mask": 76,
+          "cell": [
+            2,
+            4
+          ]
+        },
+        {
+          "mask": 77,
+          "cell": [
+            3,
+            4
+          ]
+        },
+        {
+          "mask": 78,
+          "cell": [
+            4,
+            4
+          ]
+        },
+        {
+          "mask": 79,
+          "cell": [
+            5,
+            4
+          ]
+        },
+        {
+          "mask": 95,
+          "cell": [
+            6,
+            4
+          ]
+        },
+        {
+          "mask": 110,
+          "cell": [
+            7,
+            4
+          ]
+        },
+        {
+          "mask": 111,
+          "cell": [
+            0,
+            5
+          ]
+        },
+        {
+          "mask": 127,
+          "cell": [
+            1,
+            5
+          ]
+        },
+        {
+          "mask": 137,
+          "cell": [
+            2,
+            5
+          ]
+        },
+        {
+          "mask": 139,
+          "cell": [
+            3,
+            5
+          ]
+        },
+        {
+          "mask": 141,
+          "cell": [
+            4,
+            5
+          ]
+        },
+        {
+          "mask": 143,
+          "cell": [
+            5,
+            5
+          ]
+        },
+        {
+          "mask": 155,
+          "cell": [
+            6,
+            5
+          ]
+        },
+        {
+          "mask": 159,
+          "cell": [
+            7,
+            5
+          ]
+        },
+        {
+          "mask": 175,
+          "cell": [
+            0,
+            6
+          ]
+        },
+        {
+          "mask": 191,
+          "cell": [
+            1,
+            6
+          ]
+        },
+        {
+          "mask": 205,
+          "cell": [
+            2,
+            6
+          ]
+        },
+        {
+          "mask": 207,
+          "cell": [
+            3,
+            6
+          ]
+        },
+        {
+          "mask": 223,
+          "cell": [
+            4,
+            6
+          ]
+        },
+        {
+          "mask": 239,
+          "cell": [
+            5,
+            6
+          ]
+        },
+        {
+          "mask": 255,
+          "cell": [
+            6,
+            6
+          ]
+        }
+      ],
+      "roadVariants": [
+        55,
+        56,
+        57
+      ],
+      "special": [
+        58,
+        59
+      ]
+    },
+    {
+      "theme": "autumn",
+      "ground": "regional-autumn",
+      "grass": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "longGrass": [
+        4,
+        5
+      ],
+      "flowers": [
+        6,
+        7
+      ],
+      "roadMasks": [
+        {
+          "mask": 0,
+          "cell": [
+            0,
+            1
+          ]
+        },
+        {
+          "mask": 1,
+          "cell": [
+            1,
+            1
+          ]
+        },
+        {
+          "mask": 2,
+          "cell": [
+            2,
+            1
+          ]
+        },
+        {
+          "mask": 3,
+          "cell": [
+            3,
+            1
+          ]
+        },
+        {
+          "mask": 4,
+          "cell": [
+            4,
+            1
+          ]
+        },
+        {
+          "mask": 5,
+          "cell": [
+            5,
+            1
+          ]
+        },
+        {
+          "mask": 6,
+          "cell": [
+            6,
+            1
+          ]
+        },
+        {
+          "mask": 7,
+          "cell": [
+            7,
+            1
+          ]
+        },
+        {
+          "mask": 8,
+          "cell": [
+            0,
+            2
+          ]
+        },
+        {
+          "mask": 9,
+          "cell": [
+            1,
+            2
+          ]
+        },
+        {
+          "mask": 10,
+          "cell": [
+            2,
+            2
+          ]
+        },
+        {
+          "mask": 11,
+          "cell": [
+            3,
+            2
+          ]
+        },
+        {
+          "mask": 12,
+          "cell": [
+            4,
+            2
+          ]
+        },
+        {
+          "mask": 13,
+          "cell": [
+            5,
+            2
+          ]
+        },
+        {
+          "mask": 14,
+          "cell": [
+            6,
+            2
+          ]
+        },
+        {
+          "mask": 15,
+          "cell": [
+            7,
+            2
+          ]
+        },
+        {
+          "mask": 19,
+          "cell": [
+            0,
+            3
+          ]
+        },
+        {
+          "mask": 23,
+          "cell": [
+            1,
+            3
+          ]
+        },
+        {
+          "mask": 27,
+          "cell": [
+            2,
+            3
+          ]
+        },
+        {
+          "mask": 31,
+          "cell": [
+            3,
+            3
+          ]
+        },
+        {
+          "mask": 38,
+          "cell": [
+            4,
+            3
+          ]
+        },
+        {
+          "mask": 39,
+          "cell": [
+            5,
+            3
+          ]
+        },
+        {
+          "mask": 46,
+          "cell": [
+            6,
+            3
+          ]
+        },
+        {
+          "mask": 47,
+          "cell": [
+            7,
+            3
+          ]
+        },
+        {
+          "mask": 55,
+          "cell": [
+            0,
+            4
+          ]
+        },
+        {
+          "mask": 63,
+          "cell": [
+            1,
+            4
+          ]
+        },
+        {
+          "mask": 76,
+          "cell": [
+            2,
+            4
+          ]
+        },
+        {
+          "mask": 77,
+          "cell": [
+            3,
+            4
+          ]
+        },
+        {
+          "mask": 78,
+          "cell": [
+            4,
+            4
+          ]
+        },
+        {
+          "mask": 79,
+          "cell": [
+            5,
+            4
+          ]
+        },
+        {
+          "mask": 95,
+          "cell": [
+            6,
+            4
+          ]
+        },
+        {
+          "mask": 110,
+          "cell": [
+            7,
+            4
+          ]
+        },
+        {
+          "mask": 111,
+          "cell": [
+            0,
+            5
+          ]
+        },
+        {
+          "mask": 127,
+          "cell": [
+            1,
+            5
+          ]
+        },
+        {
+          "mask": 137,
+          "cell": [
+            2,
+            5
+          ]
+        },
+        {
+          "mask": 139,
+          "cell": [
+            3,
+            5
+          ]
+        },
+        {
+          "mask": 141,
+          "cell": [
+            4,
+            5
+          ]
+        },
+        {
+          "mask": 143,
+          "cell": [
+            5,
+            5
+          ]
+        },
+        {
+          "mask": 155,
+          "cell": [
+            6,
+            5
+          ]
+        },
+        {
+          "mask": 159,
+          "cell": [
+            7,
+            5
+          ]
+        },
+        {
+          "mask": 175,
+          "cell": [
+            0,
+            6
+          ]
+        },
+        {
+          "mask": 191,
+          "cell": [
+            1,
+            6
+          ]
+        },
+        {
+          "mask": 205,
+          "cell": [
+            2,
+            6
+          ]
+        },
+        {
+          "mask": 207,
+          "cell": [
+            3,
+            6
+          ]
+        },
+        {
+          "mask": 223,
+          "cell": [
+            4,
+            6
+          ]
+        },
+        {
+          "mask": 239,
+          "cell": [
+            5,
+            6
+          ]
+        },
+        {
+          "mask": 255,
+          "cell": [
+            6,
+            6
+          ]
+        }
+      ],
+      "roadVariants": [
+        55,
+        56,
+        57
+      ],
+      "special": [
+        58,
+        59
+      ]
+    },
+    {
+      "theme": "snow",
+      "ground": "regional-snow",
+      "grass": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "longGrass": [
+        4,
+        5
+      ],
+      "flowers": [
+        6,
+        7
+      ],
+      "roadMasks": [
+        {
+          "mask": 0,
+          "cell": [
+            0,
+            1
+          ]
+        },
+        {
+          "mask": 1,
+          "cell": [
+            1,
+            1
+          ]
+        },
+        {
+          "mask": 2,
+          "cell": [
+            2,
+            1
+          ]
+        },
+        {
+          "mask": 3,
+          "cell": [
+            3,
+            1
+          ]
+        },
+        {
+          "mask": 4,
+          "cell": [
+            4,
+            1
+          ]
+        },
+        {
+          "mask": 5,
+          "cell": [
+            5,
+            1
+          ]
+        },
+        {
+          "mask": 6,
+          "cell": [
+            6,
+            1
+          ]
+        },
+        {
+          "mask": 7,
+          "cell": [
+            7,
+            1
+          ]
+        },
+        {
+          "mask": 8,
+          "cell": [
+            0,
+            2
+          ]
+        },
+        {
+          "mask": 9,
+          "cell": [
+            1,
+            2
+          ]
+        },
+        {
+          "mask": 10,
+          "cell": [
+            2,
+            2
+          ]
+        },
+        {
+          "mask": 11,
+          "cell": [
+            3,
+            2
+          ]
+        },
+        {
+          "mask": 12,
+          "cell": [
+            4,
+            2
+          ]
+        },
+        {
+          "mask": 13,
+          "cell": [
+            5,
+            2
+          ]
+        },
+        {
+          "mask": 14,
+          "cell": [
+            6,
+            2
+          ]
+        },
+        {
+          "mask": 15,
+          "cell": [
+            7,
+            2
+          ]
+        },
+        {
+          "mask": 19,
+          "cell": [
+            0,
+            3
+          ]
+        },
+        {
+          "mask": 23,
+          "cell": [
+            1,
+            3
+          ]
+        },
+        {
+          "mask": 27,
+          "cell": [
+            2,
+            3
+          ]
+        },
+        {
+          "mask": 31,
+          "cell": [
+            3,
+            3
+          ]
+        },
+        {
+          "mask": 38,
+          "cell": [
+            4,
+            3
+          ]
+        },
+        {
+          "mask": 39,
+          "cell": [
+            5,
+            3
+          ]
+        },
+        {
+          "mask": 46,
+          "cell": [
+            6,
+            3
+          ]
+        },
+        {
+          "mask": 47,
+          "cell": [
+            7,
+            3
+          ]
+        },
+        {
+          "mask": 55,
+          "cell": [
+            0,
+            4
+          ]
+        },
+        {
+          "mask": 63,
+          "cell": [
+            1,
+            4
+          ]
+        },
+        {
+          "mask": 76,
+          "cell": [
+            2,
+            4
+          ]
+        },
+        {
+          "mask": 77,
+          "cell": [
+            3,
+            4
+          ]
+        },
+        {
+          "mask": 78,
+          "cell": [
+            4,
+            4
+          ]
+        },
+        {
+          "mask": 79,
+          "cell": [
+            5,
+            4
+          ]
+        },
+        {
+          "mask": 95,
+          "cell": [
+            6,
+            4
+          ]
+        },
+        {
+          "mask": 110,
+          "cell": [
+            7,
+            4
+          ]
+        },
+        {
+          "mask": 111,
+          "cell": [
+            0,
+            5
+          ]
+        },
+        {
+          "mask": 127,
+          "cell": [
+            1,
+            5
+          ]
+        },
+        {
+          "mask": 137,
+          "cell": [
+            2,
+            5
+          ]
+        },
+        {
+          "mask": 139,
+          "cell": [
+            3,
+            5
+          ]
+        },
+        {
+          "mask": 141,
+          "cell": [
+            4,
+            5
+          ]
+        },
+        {
+          "mask": 143,
+          "cell": [
+            5,
+            5
+          ]
+        },
+        {
+          "mask": 155,
+          "cell": [
+            6,
+            5
+          ]
+        },
+        {
+          "mask": 159,
+          "cell": [
+            7,
+            5
+          ]
+        },
+        {
+          "mask": 175,
+          "cell": [
+            0,
+            6
+          ]
+        },
+        {
+          "mask": 191,
+          "cell": [
+            1,
+            6
+          ]
+        },
+        {
+          "mask": 205,
+          "cell": [
+            2,
+            6
+          ]
+        },
+        {
+          "mask": 207,
+          "cell": [
+            3,
+            6
+          ]
+        },
+        {
+          "mask": 223,
+          "cell": [
+            4,
+            6
+          ]
+        },
+        {
+          "mask": 239,
+          "cell": [
+            5,
+            6
+          ]
+        },
+        {
+          "mask": 255,
+          "cell": [
+            6,
+            6
+          ]
+        }
+      ],
+      "roadVariants": [
+        55,
+        56,
+        57
+      ],
+      "special": [
+        58,
+        59
+      ]
+    },
+    {
+      "theme": "world",
+      "ground": "regional-world",
+      "grass": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "longGrass": [
+        4,
+        5
+      ],
+      "flowers": [
+        6,
+        7
+      ],
+      "roadMasks": [
+        {
+          "mask": 0,
+          "cell": [
+            0,
+            1
+          ]
+        },
+        {
+          "mask": 1,
+          "cell": [
+            1,
+            1
+          ]
+        },
+        {
+          "mask": 2,
+          "cell": [
+            2,
+            1
+          ]
+        },
+        {
+          "mask": 3,
+          "cell": [
+            3,
+            1
+          ]
+        },
+        {
+          "mask": 4,
+          "cell": [
+            4,
+            1
+          ]
+        },
+        {
+          "mask": 5,
+          "cell": [
+            5,
+            1
+          ]
+        },
+        {
+          "mask": 6,
+          "cell": [
+            6,
+            1
+          ]
+        },
+        {
+          "mask": 7,
+          "cell": [
+            7,
+            1
+          ]
+        },
+        {
+          "mask": 8,
+          "cell": [
+            0,
+            2
+          ]
+        },
+        {
+          "mask": 9,
+          "cell": [
+            1,
+            2
+          ]
+        },
+        {
+          "mask": 10,
+          "cell": [
+            2,
+            2
+          ]
+        },
+        {
+          "mask": 11,
+          "cell": [
+            3,
+            2
+          ]
+        },
+        {
+          "mask": 12,
+          "cell": [
+            4,
+            2
+          ]
+        },
+        {
+          "mask": 13,
+          "cell": [
+            5,
+            2
+          ]
+        },
+        {
+          "mask": 14,
+          "cell": [
+            6,
+            2
+          ]
+        },
+        {
+          "mask": 15,
+          "cell": [
+            7,
+            2
+          ]
+        },
+        {
+          "mask": 19,
+          "cell": [
+            0,
+            3
+          ]
+        },
+        {
+          "mask": 23,
+          "cell": [
+            1,
+            3
+          ]
+        },
+        {
+          "mask": 27,
+          "cell": [
+            2,
+            3
+          ]
+        },
+        {
+          "mask": 31,
+          "cell": [
+            3,
+            3
+          ]
+        },
+        {
+          "mask": 38,
+          "cell": [
+            4,
+            3
+          ]
+        },
+        {
+          "mask": 39,
+          "cell": [
+            5,
+            3
+          ]
+        },
+        {
+          "mask": 46,
+          "cell": [
+            6,
+            3
+          ]
+        },
+        {
+          "mask": 47,
+          "cell": [
+            7,
+            3
+          ]
+        },
+        {
+          "mask": 55,
+          "cell": [
+            0,
+            4
+          ]
+        },
+        {
+          "mask": 63,
+          "cell": [
+            1,
+            4
+          ]
+        },
+        {
+          "mask": 76,
+          "cell": [
+            2,
+            4
+          ]
+        },
+        {
+          "mask": 77,
+          "cell": [
+            3,
+            4
+          ]
+        },
+        {
+          "mask": 78,
+          "cell": [
+            4,
+            4
+          ]
+        },
+        {
+          "mask": 79,
+          "cell": [
+            5,
+            4
+          ]
+        },
+        {
+          "mask": 95,
+          "cell": [
+            6,
+            4
+          ]
+        },
+        {
+          "mask": 110,
+          "cell": [
+            7,
+            4
+          ]
+        },
+        {
+          "mask": 111,
+          "cell": [
+            0,
+            5
+          ]
+        },
+        {
+          "mask": 127,
+          "cell": [
+            1,
+            5
+          ]
+        },
+        {
+          "mask": 137,
+          "cell": [
+            2,
+            5
+          ]
+        },
+        {
+          "mask": 139,
+          "cell": [
+            3,
+            5
+          ]
+        },
+        {
+          "mask": 141,
+          "cell": [
+            4,
+            5
+          ]
+        },
+        {
+          "mask": 143,
+          "cell": [
+            5,
+            5
+          ]
+        },
+        {
+          "mask": 155,
+          "cell": [
+            6,
+            5
+          ]
+        },
+        {
+          "mask": 159,
+          "cell": [
+            7,
+            5
+          ]
+        },
+        {
+          "mask": 175,
+          "cell": [
+            0,
+            6
+          ]
+        },
+        {
+          "mask": 191,
+          "cell": [
+            1,
+            6
+          ]
+        },
+        {
+          "mask": 205,
+          "cell": [
+            2,
+            6
+          ]
+        },
+        {
+          "mask": 207,
+          "cell": [
+            3,
+            6
+          ]
+        },
+        {
+          "mask": 223,
+          "cell": [
+            4,
+            6
+          ]
+        },
+        {
+          "mask": 239,
+          "cell": [
+            5,
+            6
+          ]
+        },
+        {
+          "mask": 255,
+          "cell": [
+            6,
+            6
+          ]
+        }
+      ],
+      "roadVariants": [
+        55,
+        56,
+        57
+      ],
+      "special": [
+        58,
+        59
+      ]
+    },
+    {
+      "name": "marsh-broadleaf-1",
+      "sheet": "regional-trees",
+      "cell": [
+        0,
+        0
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "name": "marsh-broadleaf-2",
+      "sheet": "regional-trees",
+      "cell": [
+        1,
+        0
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "name": "marsh-pine-1",
+      "sheet": "regional-trees",
+      "cell": [
+        2,
+        0
+      ],
+      "width": 32,
+      "height": 76
+    },
+    {
+      "name": "marsh-pine-2",
+      "sheet": "regional-trees",
+      "cell": [
+        3,
+        0
+      ],
+      "width": 32,
+      "height": 76
+    },
+    {
+      "name": "south-broadleaf-1",
+      "sheet": "regional-trees",
+      "cell": [
+        0,
+        3
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "name": "south-broadleaf-2",
+      "sheet": "regional-trees",
+      "cell": [
+        1,
+        3
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "name": "south-pine-1",
+      "sheet": "regional-trees",
+      "cell": [
+        2,
+        3
+      ],
+      "width": 32,
+      "height": 76
+    },
+    {
+      "name": "south-pine-2",
+      "sheet": "regional-trees",
+      "cell": [
+        3,
+        3
+      ],
+      "width": 32,
+      "height": 76
+    },
+    {
+      "name": "dusk-broadleaf-1",
+      "sheet": "regional-trees",
+      "cell": [
+        0,
+        6
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "name": "dusk-broadleaf-2",
+      "sheet": "regional-trees",
+      "cell": [
+        1,
+        6
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "name": "dusk-pine-1",
+      "sheet": "regional-trees",
+      "cell": [
+        2,
+        6
+      ],
+      "width": 32,
+      "height": 76
+    },
+    {
+      "name": "dusk-pine-2",
+      "sheet": "regional-trees",
+      "cell": [
+        3,
+        6
+      ],
+      "width": 32,
+      "height": 76
+    },
+    {
+      "number": 1,
+      "name": "wall-left",
+      "sheet": "part2-objects",
+      "cell": [
+        0,
+        0
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 2,
+      "name": "wall-middle",
+      "sheet": "part2-objects",
+      "cell": [
+        2,
+        0
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 3,
+      "name": "wall-middle-2",
+      "sheet": "part2-objects",
+      "cell": [
+        4,
+        0
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 4,
+      "name": "wall-scroll",
+      "sheet": "part2-objects",
+      "cell": [
+        6,
+        0
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 5,
+      "name": "wall-right",
+      "sheet": "part2-objects",
+      "cell": [
+        8,
+        0
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 6,
+      "name": "wall-inner-corner",
+      "sheet": "part2-objects",
+      "cell": [
+        10,
+        0
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 7,
+      "name": "wall-outer-corner",
+      "sheet": "part2-objects",
+      "cell": [
+        0,
+        2
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 8,
+      "name": "inside-door",
+      "sheet": "part2-objects",
+      "cell": [
+        2,
+        2
+      ],
+      "width": 32,
+      "height": 64
+    },
+    {
+      "number": 9,
+      "name": "dais-front",
+      "sheet": "part2-objects",
+      "cell": [
+        4,
+        2
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 10,
+      "name": "dais-left",
+      "sheet": "part2-objects",
+      "cell": [
+        6,
+        2
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 11,
+      "name": "dais-right",
+      "sheet": "part2-objects",
+      "cell": [
+        8,
+        2
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 12,
+      "name": "dais-front-left",
+      "sheet": "part2-objects",
+      "cell": [
+        10,
+        2
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 13,
+      "name": "dais-front-right",
+      "sheet": "part2-objects",
+      "cell": [
+        0,
+        4
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 14,
+      "name": "bars-left",
+      "sheet": "part2-objects",
+      "cell": [
+        2,
+        4
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 15,
+      "name": "bars-middle",
+      "sheet": "part2-objects",
+      "cell": [
+        4,
+        4
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 16,
+      "name": "bars-right",
+      "sheet": "part2-objects",
+      "cell": [
+        6,
+        4
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 17,
+      "name": "bars-top",
+      "sheet": "part2-objects",
+      "cell": [
+        8,
+        4
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 18,
+      "name": "bars-vertical",
+      "sheet": "part2-objects",
+      "cell": [
+        10,
+        4
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 19,
+      "name": "bars-bottom",
+      "sheet": "part2-objects",
+      "cell": [
+        0,
+        6
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 20,
+      "name": "bars-junction",
+      "sheet": "part2-objects",
+      "cell": [
+        2,
+        6
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 21,
+      "name": "cell-door",
+      "sheet": "part2-objects",
+      "cell": [
+        4,
+        6
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "number": 22,
+      "name": "straw-pallet",
+      "sheet": "part2-objects",
+      "cell": [
+        6,
+        6
+      ],
+      "width": 64,
+      "height": 36
+    },
+    {
+      "number": 23,
+      "name": "snow-lantern",
+      "sheet": "part2-objects",
+      "cell": [
+        8,
+        6
+      ],
+      "width": 32,
+      "height": 56
+    },
+    {
+      "number": 24,
+      "name": "snow-reeds",
+      "sheet": "part2-objects",
+      "cell": [
+        10,
+        6
+      ],
+      "width": 32,
+      "height": 32
+    }
+  ],
+  "extra": [
+    {
+      "number": 1,
+      "name": "snow-wall-left",
+      "cell": [
+        0,
+        0
+      ]
+    },
+    {
+      "number": 2,
+      "name": "snow-wall-middle",
+      "cell": [
+        2,
+        0
+      ]
+    },
+    {
+      "number": 3,
+      "name": "snow-wall-right",
+      "cell": [
+        4,
+        0
+      ]
+    },
+    {
+      "number": 4,
+      "name": "snow-crenellations",
+      "cell": [
+        6,
+        0
+      ]
+    },
+    {
+      "number": 5,
+      "name": "snow-rowboat",
+      "cell": [
+        0,
+        2
+      ]
+    },
+    {
+      "number": 6,
+      "name": "snow-reeds-1",
+      "cell": [
+        2,
+        2
+      ]
+    },
+    {
+      "number": 7,
+      "name": "snow-reeds-2",
+      "cell": [
+        4,
+        2
+      ]
+    },
+    {
+      "number": 8,
+      "name": "unused",
+      "cell": [
+        6,
+        2
+      ]
+    },
+    {
+      "number": 9,
+      "name": "world-reeds-1",
+      "cell": [
+        0,
+        4
+      ]
+    },
+    {
+      "number": 10,
+      "name": "world-reeds-2",
+      "cell": [
+        2,
+        4
+      ]
+    },
+    {
+      "number": 11,
+      "name": "vegetables-1",
+      "cell": [
+        4,
+        4
+      ]
+    },
+    {
+      "number": 12,
+      "name": "vegetables-2",
+      "cell": [
+        6,
+        4
+      ]
+    }
+  ],
+  "vegetables": {
+    "sheet": "vegetables",
+    "masks": [
+      {
+        "mask": 0,
+        "variants": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 1,
+        "variants": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 2,
+        "variants": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 3,
+        "variants": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 4,
+        "variants": [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 5,
+        "variants": [
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 6,
+        "variants": [
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 7,
+        "variants": [
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            6
+          ]
+        ]
+      },
+      {
+        "mask": 8,
+        "variants": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 9,
+        "variants": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 10,
+        "variants": [
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 11,
+        "variants": [
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 12,
+        "variants": [
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 13,
+        "variants": [
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 14,
+        "variants": [
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 15,
+        "variants": [
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            7
+          ]
+        ]
+      },
+      {
+        "mask": 19,
+        "variants": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 23,
+        "variants": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 27,
+        "variants": [
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 31,
+        "variants": [
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 38,
+        "variants": [
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 39,
+        "variants": [
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 46,
+        "variants": [
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 47,
+        "variants": [
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            8
+          ]
+        ]
+      },
+      {
+        "mask": 55,
+        "variants": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 63,
+        "variants": [
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 76,
+        "variants": [
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 77,
+        "variants": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 78,
+        "variants": [
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 79,
+        "variants": [
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 95,
+        "variants": [
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 110,
+        "variants": [
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            9
+          ]
+        ]
+      },
+      {
+        "mask": 111,
+        "variants": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 127,
+        "variants": [
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 137,
+        "variants": [
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 139,
+        "variants": [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 141,
+        "variants": [
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 143,
+        "variants": [
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 155,
+        "variants": [
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 159,
+        "variants": [
+          [
+            7,
+            4
+          ],
+          [
+            7,
+            10
+          ]
+        ]
+      },
+      {
+        "mask": 175,
+        "variants": [
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            11
+          ]
+        ]
+      },
+      {
+        "mask": 191,
+        "variants": [
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            11
+          ]
+        ]
+      },
+      {
+        "mask": 205,
+        "variants": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            11
+          ]
+        ]
+      },
+      {
+        "mask": 207,
+        "variants": [
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            11
+          ]
+        ]
+      },
+      {
+        "mask": 223,
+        "variants": [
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            11
+          ]
+        ]
+      },
+      {
+        "mask": 239,
+        "variants": [
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            11
+          ]
+        ]
+      },
+      {
+        "mask": 255,
+        "variants": [
+          [
+            6,
+            5
+          ],
+          [
+            6,
+            11
+          ]
+        ]
+      }
+    ]
+  },
+  "canonicalMasks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    19,
+    23,
+    27,
+    31,
+    38,
+    39,
+    46,
+    47,
+    55,
+    63,
+    76,
+    77,
+    78,
+    79,
+    95,
+    110,
+    111,
+    127,
+    137,
+    139,
+    141,
+    143,
+    155,
+    159,
+    175,
+    191,
+    205,
+    207,
+    223,
+    239,
+    255
+  ]
+}

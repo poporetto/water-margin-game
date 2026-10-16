@@ -93,7 +93,7 @@ WM.TILE_ART = {
     '1':object(32,48,43,'floor',{run:true}), '2':object(33,48,23,'floor',{run:true}), '3':object(34,16,16,'floor'),
     '5':object(35,48,42,'floor',{run:true}), '6':object(36,24,48,'floor'), '7':object(37,24,48,'floor'),
     '8':object(38,48,23,'floor',{run:true}), E:object(39,48,34,'floor',{run:true}),
-    '0':object(41,16,30,'floor'), a:object(42,48,25,'floor',{run:true}),
+    '0':object(41,16,30,'floor',{run:true,singleSeat:true}), a:object(42,48,25,'floor',{run:true}),
     r:object(43,16,16,'water',{variants:[cell(43),cell(44)]})
   };
   // Ground footprints are independent of sprite height (canopies and poles overhang).
@@ -162,3 +162,54 @@ WM.TILE_ART = {
   ['p'].forEach(function(ch){ themes.forEach(function(th){ if(A[ch+'@'+th])A[ch+'@'+th]=Object.assign({},A[ch+'@'+th],{inside:true}); }); });
   // (the world map's roads take the silk road texture in js/core/tiles.js, so they keep their ink edges)
 })();
+
+// Remaining-art brief: biome-matched ground and canonical 47-shape shores.
+(function(){
+ var cfg=WM.TILE_ART,masks=[],canon=function(m){[[16,1,2],[32,2,4],[64,4,8],[128,8,1]].forEach(function(d){if(!(m&d[1])||!(m&d[2]))m&=~d[0];});return m;};
+ for(var m=0;m<256;m++)if(masks.indexOf(canon(m))<0)masks.push(canon(m));
+ function cells(offset){var out={};for(var m=0;m<256;m++){var i=masks.indexOf(canon(m))+offset;out[m]=[i%8,Math.floor(i/8)];}return out;}
+ var roadSame=Object.keys(WM.tiles.DEF).filter(function(ch){return '.,fTPbHmMlegIyVQ_'.indexOf(ch)<0;}).join('');
+ ['marsh','south','dusk','autumn','snow','world'].forEach(function(theme,row){
+  var ground='regional_'+theme;cfg.sheets[ground]='assets/tiles/32/regional-'+theme+'.png';
+  if(row<3){cfg.tiles['.@'+theme]={sheet:ground,ground:[[0,0],[1,0],[2,0],[3,0]]};cfg.tiles[',@'+theme]={sheet:ground,ground:[[4,0],[5,0]]};cfg.tiles['f@'+theme]={sheet:ground,ground:[[6,0],[7,0]]};}
+  if(theme!=='world'){var roads=cells(8);roads[255]=[[7,6],[0,7],[1,7]];cfg.tiles[':@'+theme]={sheet:ground,auto:{same:roadSame,diagonal:true,cells:roads}};}
+  ['~','w'].forEach(function(ch,d){var key='water_'+theme+'_'+d;cfg.sheets[key]='assets/tiles/32/water-'+theme+(d?'-deep':'')+'.png';cfg.tiles[ch+'@'+theme]={sheet:key,fps:3,sync:true,auto:{same:'~wrBo[<>',diagonal:true,cells:cells(0),frames:theme==='world'?[[0,0],[0,6]]:[[0,0],[0,6],[0,12]]}};});
+ });
+ cfg.sheets.regionalTrees='assets/tiles/32/regional-trees.png';
+ ['marsh','south','dusk'].forEach(function(theme,row){['T','P'].forEach(function(ch,i){cfg.tiles[ch+'@'+theme]={base:'grass',sheet:'regionalTrees',object:{at:[i*2,row*3],variants:[[i*2,row*3],[i*2+1,row*3]],w:16,h:i?38:28}};});});
+ cfg.tiles['y@autumn']={sheet:'regional_autumn',ground:[[2,7],[3,7]]};cfg.tiles['=@snow']={sheet:'regional_snow',ground:[[2,7],[3,7]]};
+ cfg.sheets.part2='assets/tiles/32/part2-objects.png';cfg.sheets.part2Extra='assets/tiles/32/part2-extra.png';
+ cfg.sheets.snowGate='assets/tiles/32/gate-snow.png';cfg.sheets.autumnGate='assets/tiles/32/gate-autumn.png';
+ cfg.tiles['G@snow']={sheet:'snowGate',building:'gate'};cfg.tiles['G@autumn']={sheet:'autumnGate',building:'gate'};
+ cfg.tiles['L@snow']={sheet:'part2',base:'grass',object:{at:[8,6],w:16,h:28}};
+ cfg.tiles['r@snow']={sheet:'part2Extra',base:'water',object:{at:[2,2],variants:[[2,2],[4,2]],w:16,h:16}};
+ cfg.tiles['o@snow']={sheet:'part2Extra',base:'water',object:{at:[0,2],w:32,h:20,footprint:[2,1]}};
+ cfg.tiles['#@snow']={sheet:'part2Extra',building:'snow-stone'};
+})();
+
+(function(){
+ var cfg=WM.TILE_ART,masks=[],canonical=function(m){[[16,1,2],[32,2,4],[64,4,8],[128,8,1]].forEach(function(d){if(!(m&d[1])||!(m&d[2]))m&=~d[0];});return m;},cells={};
+ for(var m=0;m<256;m++)if(masks.indexOf(canonical(m))<0)masks.push(canonical(m));
+ for(var m=0;m<256;m++){var i=masks.indexOf(canonical(m));cells[m]=[[i%8,Math.floor(i/8)],[i%8,Math.floor(i/8)+6]];}
+ cfg.sheets.vegetables='assets/tiles/32/vegetables.png';cfg.tiles['%']={sheet:'vegetables',auto:{same:'%',diagonal:true,cells:cells}};
+})();
+
+// Refinements retain separate Buddhist and Taoist identities and the small tables.
+(function(){
+ var cfg=WM.TILE_ART;
+ cfg.sheets.longCounter='assets/tiles/32/counter-refined.png';
+ cfg.sheets.buddhistStatues='assets/tiles/32/statues-refined.png';
+ cfg.sheets.taoistStatues='assets/tiles/32/taoist-refined.png';
+ cfg.sheets.refinedPaving='assets/tiles/32/paving-refined.png';
+ cfg.sheets.largeCenser='assets/tiles/32/censer-refined.png';
+ ['spring','summer','autumn','dusk','marsh','south','north','snow'].forEach(function(theme){
+  cfg.tiles['1@'+theme]={sheet:'buddhistStatues',base:'floor',object:{at:[0,0],w:72,h:52,footprint:[5,1]}};
+  cfg.tiles['5@'+theme]={sheet:'taoistStatues',base:'floor',object:{at:[0,0],w:72,h:52,footprint:[5,1]}};
+  cfg.tiles['3@'+theme]={sheet:'largeCenser',base:'floor',object:{at:[0,0],w:32,h:32,footprint:[2,2]}};
+  ['6','7'].forEach(function(ch){var old=cfg.tiles[ch+'@'+theme];if(old)cfg.tiles[ch+'@'+theme]=Object.assign({},old,{object:Object.assign({},old.object,{pedestal:true})});});
+  if(theme!=='snow')cfg.tiles['=@'+theme]={sheet:'refinedPaving',building:'refined-paving'};
+ });
+})();
+
+WM.TILE_ART.sheets.sealedTablet='assets/tiles/32/sealed-tablet-refined.png';
+WM.TILE_ART.tiles['Q@demonhall']={sheet:'sealedTablet',base:'floor',object:{at:[0,0],w:32,h:48,run:true}};

@@ -206,6 +206,7 @@
 
   F.loadMap = function (id, tx, ty, dir, noAuto) {
     var st = WM.state;
+    if(WM.centeredEntry){var arrival=WM.centeredEntry(id,tx,ty);tx=arrival.x;ty=arrival.y;}
     F.map = buildMap(id);
     F.map.propEntry = {x:tx,y:ty};
     // World feature placement protects this arrival point; rebuild its matching artwork.
@@ -607,7 +608,9 @@
       var sx = tt.x * TS - cx, sy = tt.y * TS - cy;
       if (sx < -32 || sy < -48 || sx > WM.LOW_W + 32 || sy > WM.LOW_H + 32) continue;
       if (elsewhere(tt.x, tt.y)) continue;
-      list.push({ y: tt.y * TS + (tt.d.sortDy != null ? tt.d.sortDy : 14), kind: 't', t: tt, sx: sx, sy: sy });
+      var prop=T.propLayout(F.map).anchors[tt.x+','+tt.y];
+      var sortY=prop?prop.bottom*TS-2:tt.y*TS+(tt.d.sortDy!=null?tt.d.sortDy:14);
+      list.push({ y: sortY, kind: 't', t: tt, sx: sx, sy: sy });
     }
     var all = F.actors.concat([F.player]);
     for (i = 0; i < all.length; i++) {
