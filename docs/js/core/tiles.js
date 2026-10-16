@@ -387,6 +387,7 @@
     for (var k = 1; k < 16; k += 4) px(c, x + k, y + 1, 2, 2, '#7b8598');
   }
   function door(c, x, y, tx, ty, th, m) {
+    if (m.interior) { floorUnder(c, x, y, tx, ty, m); return; }   // indoors the way out is just the floor running out of the room
     var wallUp = m.get(tx, ty - 1);
     var outdoorWall = T.isWallChar(m.get(tx - 1, ty)) || T.isWallChar(m.get(tx + 1, ty)) || wallUp === '^' || wallUp === 'z' || wallUp === 'Z' || wallUp === 'v';
     if (outdoorWall) {
