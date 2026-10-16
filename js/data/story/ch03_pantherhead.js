@@ -102,16 +102,16 @@
       await s.say(null, '(The Fan Tower is on the north side of the city, by the palace.)');
     } },
     { id: 'ch3_fan', x: 17, y: 17, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_luqian'); }, run: async function (s) {
-      s.spawn('luqian', 'luqian', 17, 16, 'down');
-      await s.moveTo('player', 17, 17);                    // sit down across from Lu Qian
+      s.spawn('luqian', 'luqian', 18, 16, 'down');
+      await s.moveTo('player', 18, 17);                    // sit down across from Lu Qian, between the tables
       s.face('player', 'up');
       await s.say('luqian:smile', 'Drink, brother, drink! Here — another cup.');
       await s.say('linchong:sad', 'What use is a man\'s talent, Lu Qian, if he must serve a man like Gao Qiu? I swallow insult after insult.');
       await s.say('luqian', 'Don\'t think like that. The Marshal values you. He just doesn\'t know his son\'s ways. Drink.');
       await s.say('linchong', '...I must step out a moment.');
       s.despawn('luqian', { leave: true });
-      s.spawn('jiner', 'jiner', 18, 18, 'left');           // she runs in at the door and stops beside him
-      s.face('player', 'right');
+      s.spawn('jiner', 'jiner', 18, 18, 'up');             // she runs in at the door and stops behind him
+      s.face('player', 'down');
       await s.say('jiner:shock', 'Master! Master, I\'ve been looking everywhere! A man came to the house saying you had fainted at Lu Qian\'s, and the Mistress went with him — and it was the Yanei waiting there! He\'s got her upstairs in Lu Qian\'s house!');
       await s.say('linchong:angry', 'Lu Qian!!');
       s.despawn('jiner');
