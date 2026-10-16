@@ -61,8 +61,11 @@
   function dirt(c, x, y, tx, ty, th, m) {
     if (m && m.def && m.def.world) {   // on the world map a road is a full-width beaten track, edged in ink so it reads against the silk
       var rd = function (dx, dy) { var q = m.get(tx + dx, ty + dy); return q === ':' || q === 'B' || q === 'D' || q === 'G' || q === null; };
-      px(c, x, y, S, S, '#b58a58');
-      for (var j = 0; j < 5; j++) px(c, x + Math.floor(U.hash2(tx * 7 + j, ty, 23) * 14), y + Math.floor(U.hash2(tx, ty * 7 + j, 24) * 15), 2, 1, j % 2 ? '#9c7244' : '#c9a170');
+      if (SHEETS.seasonalGround) blit(c, SHEETS.seasonalGround, [3, 2], S, S, x, y);   // the silk-map road texture, when the art is in
+      else {
+        px(c, x, y, S, S, '#b58a58');
+        for (var j = 0; j < 5; j++) px(c, x + Math.floor(U.hash2(tx * 7 + j, ty, 23) * 14), y + Math.floor(U.hash2(tx, ty * 7 + j, 24) * 15), 2, 1, j % 2 ? '#9c7244' : '#c9a170');
+      }
       if (!rd(0, -1)) px(c, x, y, S, 1, '#6e4a2a'); if (!rd(0, 1)) px(c, x, y + 15, S, 1, '#6e4a2a');
       if (!rd(-1, 0)) px(c, x, y, 1, S, '#6e4a2a'); if (!rd(1, 0)) px(c, x + 15, y, 1, S, '#6e4a2a');
       return;
@@ -536,7 +539,7 @@
   function floorUnder(c, x, y, tx, ty, m) {
     var wood = 0, stone = 0;
     [[0, 1], [-1, 0], [1, 0], [0, 2], [-2, 0], [2, 0]].forEach(function (d) { var q = m && m.get(tx + d[0], ty + d[1]); if (q === 'n') wood++; else if (q === 'N') stone++; });
-    if (wood > stone) floorWood(c, x, y, tx, ty); else floorStone(c, x, y, tx, ty);
+    if (wood >= stone) floorWood(c, x, y, tx, ty); else floorStone(c, x, y, tx, ty);   // (boards, unless the room is stone: a gap in a carpet has neither)
   }
   // ---- a Buddhist hall: the great seated Buddha on his lotus throne, the offering altar, the censer, kneeling cushions ----
   function buddhaTall(c, x, y, tx, ty, th, m) {
@@ -1142,7 +1145,13 @@
   T.artStatus = function () { return { tiles: ART ? Object.keys(ART).length : 0, sheets: Object.keys(SHEETS), waiting: artWaiting }; };
 
   // the art entry for a tile on this map: a season's own version ('T@autumn') before the plain one ('T')
-  function artEntry(ch, map) { var e = ART && (ART[ch + '@' + map.theme] || ART[ch]) || null; return e && ((e.building && (map.interior || (map.def && map.def.world))) || (e.object && (map.theme === 'world' || (map.def && map.def.world)))) ? null : e; }
+  // (building pieces are left out indoors unless the entry says inside: true, and an entry marked indoors: true is used only indoors)
+  function artEntry(ch, map) {
+    var e = ART && (ART[ch + '@' + map.theme] || ART[ch]) || null;
+    if (!e || (e.indoors && !map.interior)) return null;
+    var world = map.theme === 'world' || (map.def && map.def.world);
+    return (e.building && (world || (map.interior && !e.inside))) || (e.object && world) ? null : e;
+  }
   function sheetOf(e) { return SHEETS[e.sheet || 'tiles']; }
   function cellList(v) { return !v ? [] : typeof v[0] === 'number' ? [v] : v; }
   function groundArt(ch, map) { var e = artEntry(ch, map); return !!(e && (e.ground || e.auto || e.frames || e.building || e.object) && sheetOf(e)); }
