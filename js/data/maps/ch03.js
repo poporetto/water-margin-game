@@ -96,7 +96,7 @@
     exits: [{ x: 0, y: 11, w: 1, h: 3, to: 'cangzhou', tx: 42, ty: 15, dir: 'left' }] });
   var fi = L.grid(22, 10, 'x');
   var fR = { temple: fi.room(1, 1, 9, 7, { floor: 'N' }), hut: fi.room(11, 1, 9, 7) };
-  fi.stamp(2, 3, ['..7..', '..8..']);   // the Mountain God fi.stamp(12, 3, ['k..j..', '......']);
+  fi.stamp(2, 3, ['...7...', '..888..']);   // (in the middle of the shrine)   // the Mountain God fi.stamp(12, 3, ['k..j..', '......']);
   WM.defMap('fodder_in', { name: '', interior: true, theme: 'snow', music: 'snow', rows: fi.rows(), spawn: [5, 6] });
   L.link({ map: 'fodder', x: temple.x, y: temple.y }, { map: 'fodder_in', x: fR.temple.x, y: fR.temple.y });
   L.link({ map: 'fodder', x: hut.x, y: hut.y }, { map: 'fodder_in', x: fR.hut.x, y: fR.hut.y });

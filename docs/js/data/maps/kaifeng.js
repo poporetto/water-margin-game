@@ -83,7 +83,7 @@
   R.tal = I.room(1, 11, 9, 7, { floor: 'N' }); I.stamp(2, 13, ['h.A.h', '.....', '.ccc.']);
   R.fan = I.room(11, 11, 15, 10); I.stamp(12, 13, ['h..L.....L..h', '.............', '.t..t..t..t..', '.............', '.t..t..t..t..', 'cccc.........']);
   R.li = I.room(27, 11, 10, 8, { floor: 'n' }); I.stamp(28, 13, ['hkk..h', '.kk...', '..t...']);
-  R.yue = I.room(38, 11, 12, 9, { floor: 'N' }); I.stamp(39, 13, ['L..77..L.', '...88....', '.........', 'j.......j']);
+  R.yue = I.room(38, 11, 12, 9, { floor: 'N' }); I.stamp(39, 13, ['L...77...L', '...8888...', '..........', 'j........j']);
   R.xu = I.room(51, 11, 12, 9); I.stamp(52, 13, ['k..h..j...', '..........', '...t......', 'h.........']);
   WM.defMap('kaifeng_in', { name: '', interior: true, theme: 'spring', music: 'town', rows: I.rows(), battleBg: 'interior', spawn: [6, 6] });
   WM.data.kaifengRooms = R;

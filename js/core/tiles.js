@@ -387,7 +387,12 @@
     for (var k = 1; k < 16; k += 4) px(c, x + k, y + 1, 2, 2, '#7b8598');
   }
   function door(c, x, y, tx, ty, th, m) {
-    if (m.interior) { floorUnder(c, x, y, tx, ty, m); return; }   // indoors the way out is just the floor running out of the room
+    if (m.interior) {   // indoors the way out is just the room's own floor running out through the gap
+      var inside = m.get(tx, ty - 1);
+      if (inside === 'N') floorStone(c, x, y, tx, ty); else if (inside === 'n') floorWood(c, x, y, tx, ty); else floorUnder(c, x, y, tx, ty, m);
+      return;
+    }
+    if(m.interior&&SHEETS.part2){floorUnder(c,x,y,tx,ty,m);part2(c,7,x,y-16,16,32);return;}
     var wallUp = m.get(tx, ty - 1);
     var outdoorWall = T.isWallChar(m.get(tx - 1, ty)) || T.isWallChar(m.get(tx + 1, ty)) || wallUp === '^' || wallUp === 'z' || wallUp === 'Z' || wallUp === 'v';
     if (outdoorWall) {
