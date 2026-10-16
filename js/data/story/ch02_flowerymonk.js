@@ -441,7 +441,8 @@
       await s.move('servant', 'D2');
       await s.say('servant', 'Monk, you can\'t stay here tonight! There\'s business at the manor tonight.');
       await s.say('luzhishen', 'What business is it of yours if I stay one night? Is it a wedding or a funeral, that I can\'t sleep in a barn?');
-      s.spawn('liu', 'liutaigong', 12, 9, 'down');   // out of his door
+      var door = WM.centeredEntry ? WM.centeredEntry('peach', 14, 9) : { x: 14, y: 9 };   // his door, wherever doors were centred
+      s.spawn('liu', 'liutaigong', door.x, 9, 'down');   // out of his door
       await s.move('liu', 'D2');
       await s.say('liutaigong:sad', 'Forgive my servant, Reverend. Come in, eat and rest. But it is a sorry kind of wedding tonight.');
       s.despawn('servant'); s.despawn('liu');
