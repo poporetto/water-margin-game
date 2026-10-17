@@ -588,6 +588,20 @@
     buddhaFigure(c, x + n * S / 2, y, n / 3);
   }
   // a small seated Buddha on its lotus, one to a tile: the figures along a side hall's altar
+  // An ancestral shrine: a red-lacquered cabinet under a little tiled cap, the black spirit tablets of the family's
+  // forebears standing in it in a row, each edged and lettered in gold. A run of '&' is one cabinet.
+  function tabletsTall(c, x, y, tx, ty, th, m) {
+    if (m.get(tx - 1, ty) === '&') return;
+    var n = runOf(m, tx, ty, '&').n, W = n * S, X = x + 1, w = W - 2, top = y - 12;
+    px(c, X, top, w, 27, '#5a1a10'); px(c, X + 1, top + 1, w - 2, 25, '#8a2a1a');                 // the lacquered cabinet
+    px(c, X - 1, top - 3, w + 2, 3, '#3a3a3e'); px(c, X - 1, top - 3, w + 2, 1, '#6a6a70');           // its tiled cap
+    px(c, X + 2, top + 3, w - 4, 18, '#2a0c06');                                                       // the niche
+    for (var tx2 = X + 4; tx2 + 4 <= X + w - 3; tx2 += 6) {                                            // the tablets
+      px(c, tx2, top + 6, 4, 14, '#141010'); px(c, tx2, top + 5, 4, 1, '#c8a040'); px(c, tx2 - 1, top + 19, 6, 2, '#c8a040');
+      px(c, tx2 + 1, top + 8, 2, 1, '#e8c860'); px(c, tx2 + 1, top + 11, 2, 1, '#e8c860'); px(c, tx2 + 1, top + 14, 2, 1, '#e8c860');
+    }
+    px(c, X + 1, top + 22, w - 2, 2, '#c8a040'); px(c, X, top + 25, w, 2, '#3a0e08');                 // gilt sill, base
+  }
   function smallBuddhaTall(c, x, y) { buddhaFigure(c, x + S / 2, y + 1, 0.5, true); }
   // the seated Buddha drawn about (cx, y) at scale k (1 is the great Buddha, three tiles wide); a small one (plain) has
   // only the halo behind its head, no flame-edged mandorla
@@ -1073,6 +1087,7 @@
     'i': { draw: pillar, tall: pillarTall, solid: true },
     '1': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: buddhaTall, solid: true },     // the great Buddha (a run of tiles is one figure)
     '9': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: smallBuddhaTall, solid: true },   // a small seated Buddha
+    '&': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: tabletsTall, solid: true },   // an ancestral tablet shrine
     '2': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: offeringTall, solid: true },  // the offering altar before him
     '3': { draw: function (c, x, y, tx, ty, th, m) { floorUnder(c, x, y, tx, ty, m); }, tall: censerTall, solid: true },    // a great bronze censer
     '4': { draw: cushion },                                                                                          // a kneeling cushion

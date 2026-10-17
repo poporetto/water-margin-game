@@ -38,7 +38,7 @@
   var gi = L.grid(34, 12, 'x');
   var gR = { hua: gi.room(1, 1, 15, 10, { floor: 'N' }), liu: gi.room(17, 1, 15, 10, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......Akk', '...........kk', '..t..KKK.....', '.............', '.............']);
-  gi.stamp(18, 3, ['h...UU....h..', '....AA.......', '..t......t...', '.............', 'F.FFF.FFF.F..']);
+  gi.stamp(18, 3, ['h...&&....h..', '....AA.......', '..t......t...', '.............', 'F.FFF.FFF.F..']);
   WM.defMap('qingfeng_in', { name: '', interior: true, theme: 'snow', music: 'town', rows: gi.rows(), spawn: [8, 9] });
   L.link({ map: 'qingfeng', x: hua.x, y: hua.y }, { map: 'qingfeng_in', x: gR.hua.x, y: gR.hua.y });
   L.link({ map: 'qingfeng', x: liu.x, y: liu.y }, { map: 'qingfeng_in', x: gR.liu.x, y: gR.liu.y });

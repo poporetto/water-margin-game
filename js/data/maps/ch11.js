@@ -100,7 +100,7 @@
   WM.defMap('lijia', { name: 'Li Family Manor', theme: 'autumn', music: 'field', rows: m.rows(), spawn: [1, 20], battleBg: 'field',
     exits: [WM.toWorld('lijia', 0, 20, 1, 2)] });
   var mi = L.grid(30, 10, 'x'); var mR = { hall: mi.room(1, 1, 16, 9, { floor: 'N' }), shop: mi.room(18, 1, 10, 7) };
-  mi.stamp(2, 3, ['h...UU....h...', '....AA........', '..t...........', '..............']);
+  mi.stamp(2, 3, ['h...&&....h...', '....AA........', '..t...........', '..............']);
   mi.stamp(19, 3, ['h..j...h', '.t..t...', 'cc......']);
   WM.defMap('lijia_in', { name: '', interior: true, theme: 'autumn', music: 'field', rows: mi.rows(), spawn: [8, 8] });
   L.link({ map: 'lijia', x: hall.x, y: hall.y }, { map: 'lijia_in', x: mR.hall.x, y: mR.hall.y });

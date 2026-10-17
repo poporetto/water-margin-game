@@ -39,7 +39,7 @@
   WM.data.zhujia = { road: road, dead: dead, doors: { hall: hall, zhongli: zhongli, hu: hu } };
   var zi = L.grid(40, 12, 'x');
   var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'N' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };
-  zi.stamp(2, 3, ['h...UU....UU...h', '....AA....AA....', '..t.............', '................', '................']);
+  zi.stamp(2, 3, ['h...&&....&&...h', '....AA....AA....', '..t.............', '................', '................']);
   zi.stamp(21, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.']);
   zi.stamp(34, 3, ['kk..', 'kk..', '...t']);
   WM.defMap('zhujia_in', { name: '', interior: true, theme: 'autumn', music: 'tense', rows: zi.rows(), spawn: [10, 9] });
