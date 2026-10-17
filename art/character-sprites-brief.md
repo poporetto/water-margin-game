@@ -8,14 +8,27 @@ Water Margin, a Suikoden II–style RPG set in Northern Song China, c. 1120. Eve
 - **Columns:** 1 standing still · 2 mid-step, left foot forward · 3 mid-step, right foot forward. The game walks them stand → left → stand → right.
 - **Rows:** 1 facing down (towards the viewer) · 2 facing left · 3 facing right · 4 facing up (back to the viewer).
 - **In each frame:** the figure stands centred, **feet touching the bottom edge** of the frame (the game sets the bottom of the frame on the ground). A figure fills about 32 px wide and 48–56 px tall; tall hats, helmets, spears and staves may reach the top of the frame but not past it.
-- **Proportions:** Suikoden II style: a large head, about 2½ heads tall, sturdy and readable at small size. Big men (Lu Zhishen, Li Kui, Lu Junyi) are broader and a little taller; small ones (Song Jiang, Wu Dalang) shorter.
-- **Pixel art:** hard edges, no anti-aliasing or blur, a dark outline, roughly 16–24 colours per sprite. Light from the upper left.
-- **Weapon:** carried in the hand as listed (a spear or staff upright, a sword at the hip, axes in both hands). Keep it the same in every frame.
-- **The right-facing row may mirror the left-facing row**, as long as nothing one-sided (a scar, a weapon hand, a tattoo) flips wrongly.
+- **Proportions:** Suikoden II style: about three heads tall, sturdy and readable at small size, with the legs clearly drawn so the walk reads (see [the sample](sprite-samples/songjiang-preview-x4.png)). Big men (Lu Zhishen, Li Kui, Lu Junyi) are broader and a little taller; small ones (Song Jiang, Wu Dalang) shorter.
+- **Pixel art:** hard edges, no anti-aliasing or blur, a dark outline, three tones to every material (light, middle, shadow), roughly 16–24 colours per sprite. Light from the upper left.
+- **No weapons on the walking sheet.** People do not go about town armed; the weapon appears only on the battle sheet below. Guards, soldiers and constables on duty are the exception and keep their spear or staff. (Clothes that are part of who they are, such as a monk's prayer beads or an official's hat, stay.)
+- **The right-facing row may mirror the left-facing row**, as long as nothing one-sided (a scar, a tattoo) flips wrongly.
 - **All twelve frames must be the same person**: same clothes, colours and height.
 - **No shadow** under the feet; the game draws its own.
 
-The same sheet is used everywhere: walking on the maps, shown five times larger in battles and duels (the left- and right-facing frames), and laid on its side when someone lies wounded or dead (the facing-down standing frame).
+The walking sheet is used on the maps, and laid on its side when someone lies wounded or dead (the facing-down standing frame).
+
+## The battle sheet
+
+Everyone who fights (the hundred and eight, the guests, and the enemies in section 5) has a second, smaller sheet with the weapon drawn, for battles and duels, where it is shown five times larger.
+
+- **One PNG: 96 × 128 px**, a grid of **2 columns × 2 rows** of 48 × 64 frames, transparent background.
+- **Columns:** 1 **on guard**, the weapon ready (a sword raised before him, a spear levelled, a staff held across) · 2 **the blow**, arm and weapon thrown forward.
+- **Rows:** 1 facing left (the party stands on the right of the field and faces left) · 2 facing right (enemies). Row 2 may mirror row 1.
+- **In profile, feet planted apart** in a fighting stance, feet on the bottom edge as before. The weapon may reach right to the edges of the frame.
+- **The weapon is the one listed** for each person. Archers hold the bow; Hua Rong and Zhang Qing (the stone-thrower) as their story has them.
+- File name: the file id with **`-battle`** added: `songjiang-battle.png`, `en-bandit-battle.png`. Without one, battles use the walking sheet.
+
+See [the sample battle sheet](sprite-samples/songjiang-battle-preview-x4.png).
 
 ## File names and adding them to the game
 
@@ -29,7 +42,7 @@ Animals and monsters (tigers, wolves, serpents, horses and the like: 21 in all) 
 
 The party leaders of each chapter and those always at their side.
 
-| # | file id | name | nickname | build, hair | weapon carried | reference |
+| # | file id | name | nickname | build, hair | weapon (battle sheet) | reference |
 |---|---|---|---|---|---|---|
 | 1 | `songjiang` | Song Jiang | “Timely Rain” | short, scarf | Sword | [portrait](../assets/portraits/songjiang-expressions.png) |
 | 2 | `lujunyi` | Lu Junyi | “Jade Qilin” | big, broad, scarf | Steel Spear | [portrait](../assets/portraits/lujunyi-expressions.png) |
@@ -68,7 +81,7 @@ The party leaders of each chapter and those always at their side.
 
 ## 2. The rest of the hundred and eight, and the guests
 
-| # | file id | name | nickname | build, hair | weapon carried | reference |
+| # | file id | name | nickname | build, hair | weapon (battle sheet) | reference |
 |---|---|---|---|---|---|---|
 | 11 | `liying` | Li Ying | “Sky-Striking Eagle” | medium, scarf | Flying Knives | [portrait](../assets/portraits/liying-expressions.png) |
 | 15 | `dongping` | Dong Ping | “Double Spears” | medium, helmet | Twin Spears | [portrait](../assets/portraits/dongping-expressions.png) |
@@ -349,7 +362,7 @@ One sheet each; the game reuses them across every town.
 
 File id is `en-<id>` (for example `en-bandit.png`). Many are the same soldier in a different army's colours; make the uniform match the army named.
 
-| file id | enemy | carried |
+| file id | enemy | weapon (battle sheet) |
 |---|---|---|
 | `en-bandit` | Mountain Bandit | dao |
 | `en-bandit2` | Bandit Brute | axes |

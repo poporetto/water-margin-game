@@ -323,6 +323,12 @@
   };
 
   SP.get = function (id, lk) {
+    var sh = SP.getWalk(id, lk);
+    if (SP.battles[id] && !sh.battle) sh.battle = SP.battles[id];   // its battle sheet travels with it (see tryOverride)
+    return sh;
+  };
+  SP.battles = {};
+  SP.getWalk = function (id, lk) {
     if (SP.overrides[id]) return SP.overrides[id];
     // a change of clothes the story has given someone (s.costume): their look with those parts changed
     var cos = WM.state && WM.state.costume && WM.state.costume[id];
@@ -380,5 +386,18 @@
     };
     img.onerror = function () {};
     img.src = 'assets/sprites/' + id.replace(':', '-') + '.png';   // ('en:bandit' is en-bandit.png, 'npc:villager' npc-villager.png)
+    // and the battle sheet, if there is one: <id>-battle.png, 2 columns (on guard, the blow) x 2 rows (facing left, right)
+    var bimg = new Image();
+    bimg.onload = function () {
+      var cv = U.makeCanvas(bimg.width, bimg.height);
+      cv.getContext('2d').drawImage(bimg, 0, 0);
+      var density = Math.max(1, Math.round(bimg.width / 48));
+      cv.artScale = density; cv.isOverride = true; cv.cw = bimg.width / (2 * density); cv.ch = bimg.height / (2 * density);
+      SP.battles[id] = cv;
+      Object.keys(SP.cache).forEach(function (k) { if (k === id || k.indexOf(id + '|') === 0) SP.cache[k].battle = cv; });
+      if (SP.overrides[id]) SP.overrides[id].battle = cv;
+    };
+    bimg.onerror = function () {};
+    bimg.src = 'assets/sprites/' + id.replace(':', '-') + '-battle.png';
   };
 })();

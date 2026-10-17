@@ -206,8 +206,9 @@
   };
   function drawFighter(sheet, f, row, x, y) {
     var c = G.ctx, P = 5;
-    var cw = sheet.isOverride ? sheet.cw : WM.sprites.CW, ch = sheet.isOverride ? sheet.ch : WM.sprites.CH;
     var fr = Math.abs(f.ox) > 4 ? 1 : 0;
+    if (sheet.battle) { sheet = sheet.battle; row = row === 1 ? 0 : 1; }   // drawn weapon: on guard, or the blow as they lunge; row 0 faces left
+    var cw = sheet.isOverride ? sheet.cw : WM.sprites.CW, ch = sheet.isOverride ? sheet.ch : WM.sprites.CH;
     c.fillStyle = 'rgba(0,0,0,0.3)'; c.beginPath(); c.ellipse(x + f.ox, y, 40, 10, 0, 0, 7); c.fill();
     WM.util.drawArt(c, sheet, fr * cw, row * ch, cw, ch, x + f.ox - cw * P / 2, y - (sheet.isOverride ? ch : WM.sprites.FOOT) * P + 5, cw * P, ch * P);
     if (f.flash > 0) { c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; WM.util.drawArt(c, sheet, fr * cw, row * ch, cw, ch, x + f.ox - cw * P / 2, y - (sheet.isOverride ? ch : WM.sprites.FOOT) * P + 5, cw * P, ch * P); c.restore(); }
