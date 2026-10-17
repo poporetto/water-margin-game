@@ -372,12 +372,13 @@
     img.onload = function () {
       var cv = U.makeCanvas(img.width, img.height);
       cv.getContext('2d').drawImage(img, 0, 0);
-      var density = (WM.ASSETS.spriteScales && WM.ASSETS.spriteScales[id]) || 1;
+      // 32px art is twice the 24-wide sheet the code draws (144 wide for three columns): known by its width
+      var density = (WM.ASSETS.spriteScales && WM.ASSETS.spriteScales[id]) || Math.max(1, Math.round(img.width / 72));
       cv.artScale = density;
       cv.isOverride = true; cv.cw = img.width / (3 * density); cv.ch = img.height / (4 * density);
       SP.overrides[id] = cv;
     };
     img.onerror = function () {};
-    img.src = 'assets/sprites/' + id + '.png';
+    img.src = 'assets/sprites/' + id.replace(':', '-') + '.png';   // ('en:bandit' is en-bandit.png, 'npc:villager' npc-villager.png)
   };
 })();
