@@ -310,8 +310,11 @@
   // Sheet: frames are 24x32 cells (16x24 sprite + hats above + the feet's outline and shadow row below).
   // rows: down,left,right,up; cols: stand, step1, step2. FOOT is the row the feet stand on, for anchoring.
   SP.CW = 24; SP.CH = 32; SP.OX = 4; SP.OY = 6; SP.FOOT = 30;
-  SP.build = function (id, lk) {
+  // People go about unarmed; only those on duty carry their weapon about town. In battle everyone has it (SP.battleOf).
+  var ON_DUTY = { 'npc:soldier': 1, 'npc:guard': 1, 'npc:officer': 1, 'npc:constable': 1, 'npc:hongguard': 1, 'npc:erlongguard': 1, 'npc:executioner': 1, 'npc:liaosoldier': 1, 'npc:bandit': 1, 'npc:outlaw': 1 };
+  SP.build = function (id, lk, armed) {
     var L = look(lk || {});
+    if (!armed && !ON_DUTY[id]) L = Object.assign({}, L, { weapon: 'none' });
     var cv = U.makeWorldCanvas(SP.CW * 3, SP.CH * 4);
     var dirs = ['down', 'left', 'right', 'up'];
     for (var r = 0; r < 4; r++) for (var f = 0; f < 3; f++) {
@@ -322,12 +325,34 @@
     return cv;
   };
 
+  // Every sheet carries its battle sheet (sh.battle), made when first wanted: 3 columns (stand, step, step) x 2 rows
+  // (facing west, facing east), the weapon drawn. From <id>-battle.png (one west-facing row, mirrored for east) when
+  // there is one, else the code's figure with its weapon.
   SP.get = function (id, lk) {
     var sh = SP.getWalk(id, lk);
-    if (SP.battles[id] && !sh.battle) sh.battle = SP.battles[id];   // its battle sheet travels with it (see tryOverride)
+    if (!Object.prototype.hasOwnProperty.call(sh, 'battle')) Object.defineProperty(sh, 'battle', { configurable: true, get: function () { return SP.battleOf(id, lk); } });
     return sh;
   };
   SP.battles = {};
+  SP.battleOf = function (id, lk) {
+    var key = id + '|battle';
+    if (SP.cache[key]) return SP.cache[key];
+    var art = SP.battles[id], cv;
+    if (art) {
+      cv = U.makeCanvas(art.width, art.height * 2);
+      var g = cv.getContext('2d'); g.drawImage(art, 0, 0);
+      for (var f = 0; f < 3; f++) { var w = art.width / 3; g.save(); g.translate(f * w + w, art.height); g.scale(-1, 1); g.drawImage(art, f * w, 0, w, art.height, 0, 0, w, art.height); g.restore(); }
+      cv.artScale = art.artScale; cv.isOverride = true; cv.cw = art.cw; cv.ch = art.ch;
+    } else {
+      var walk = SP.overrides[id], src = walk || SP.build(id, lk || (WM.data.chars[id] && WM.data.chars[id].look) || {}, true);
+      var cw = walk ? walk.cw * (walk.artScale || 1) : SP.CW, ch = walk ? walk.ch * (walk.artScale || 1) : SP.CH;
+      cv = walk ? U.makeCanvas(cw * 3, ch * 2) : U.makeWorldCanvas(cw * 3, ch * 2);
+      var k = walk ? 1 : (src.artScale || 1);   // (source in physical pixels; a world canvas draws in logical units)
+      cv.getContext('2d').drawImage(src, 0, ch * k, cw * 3 * k, ch * 2 * k, 0, 0, cw * 3, ch * 2);
+      if (walk) { cv.artScale = walk.artScale; cv.isOverride = true; cv.cw = walk.cw; cv.ch = walk.ch; }
+    }
+    return (SP.cache[key] = cv);
+  };
   SP.getWalk = function (id, lk) {
     if (SP.overrides[id]) return SP.overrides[id];
     // a change of clothes the story has given someone (s.costume): their look with those parts changed
@@ -382,20 +407,19 @@
       var density = (WM.ASSETS.spriteScales && WM.ASSETS.spriteScales[id]) || Math.max(1, Math.round(img.width / 72));
       cv.artScale = density;
       cv.isOverride = true; cv.cw = img.width / (3 * density); cv.ch = img.height / (4 * density);
-      SP.overrides[id] = cv;
+      SP.overrides[id] = cv; if (!SP.battles[id]) delete SP.cache[id + '|battle'];
     };
     img.onerror = function () {};
     img.src = 'assets/sprites/' + id.replace(':', '-') + '.png';   // ('en:bandit' is en-bandit.png, 'npc:villager' npc-villager.png)
-    // and the battle sheet, if there is one: <id>-battle.png, 2 columns (on guard, the blow) x 2 rows (facing left, right)
+    // and the battle sheet, if there is one: <id>-battle.png, one row of 3 frames (stand, step, step) facing west with
+    // the weapon in hand
     var bimg = new Image();
     bimg.onload = function () {
       var cv = U.makeCanvas(bimg.width, bimg.height);
       cv.getContext('2d').drawImage(bimg, 0, 0);
-      var density = Math.max(1, Math.round(bimg.width / 48));
-      cv.artScale = density; cv.isOverride = true; cv.cw = bimg.width / (2 * density); cv.ch = bimg.height / (2 * density);
-      SP.battles[id] = cv;
-      Object.keys(SP.cache).forEach(function (k) { if (k === id || k.indexOf(id + '|') === 0) SP.cache[k].battle = cv; });
-      if (SP.overrides[id]) SP.overrides[id].battle = cv;
+      var density = Math.max(1, Math.round(bimg.width / 72));
+      cv.artScale = density; cv.isOverride = true; cv.cw = bimg.width / (3 * density); cv.ch = bimg.height / density;
+      SP.battles[id] = cv; delete SP.cache[id + '|battle'];
     };
     bimg.onerror = function () {};
     bimg.src = 'assets/sprites/' + id.replace(':', '-') + '-battle.png';

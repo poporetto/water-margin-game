@@ -829,7 +829,7 @@
       var row = u.side === 'party' ? 1 : 2; // party faces left, enemies right
       var frame = 0;
       if (Math.abs(u.anim.ox) > 2) frame = Math.floor(WM.time * 8) % 2 ? 1 : 2;
-      if (sh.battle && !ko) { sh = sh.battle; cw = sh.cw; ch = sh.ch; row = u.side === 'party' ? 0 : 1; frame = Math.abs(u.anim.ox) > 2 ? 1 : 0; }   // the weapon drawn: on guard, the blow as they strike
+      if (sh.battle && !ko) { sh = sh.battle; cw = sh.isOverride ? sh.cw : WM.sprites.CW; ch = sh.isOverride ? sh.ch : WM.sprites.CH; row = u.side === 'party' ? 0 : 1; }   // in battle, the weapon in hand: facing west (the party) or east
       if (ko) {
         c.translate(x, y - 10); c.rotate(u.side === 'party' ? Math.PI / 2 : -Math.PI / 2);
         WM.util.drawArt(c, sh, 0, 1 * ch, cw, ch, -cw * PXH / 2, -(sh.isOverride ? ch : WM.sprites.FOOT) * PXH + 30, cw * PXH, ch * PXH);
