@@ -211,9 +211,9 @@
             var py = top + HEAD + i * ROW; if (py < -ROW || py > WM.H + 20) return;
             var d = S.def(id), fell = !!st.dead[id], col = fell ? '#b8ab98' : '#f0e4c8';
             try { WM.portraits.drawFramed(id, fell ? 'sad' : 'normal', 96, py + 6); } catch (e) {}
-            G.window(276, py, 262, 46, BOX); G.window(548, py, 316, 46, BOX);
-            G.text(d.starEn, 290, py + 11, { size: 19, color: '#d8c898' });
-            G.text(d.name + '  ' + d.zh, 562, py + 9, { size: 23, bold: true, color: col });
+            G.window(276, py, 316, 46, BOX); G.window(602, py, 262, 46, BOX);   // the name, then the star
+            G.text(d.name + '  ' + d.zh, 290, py + 24, { size: 23, bold: true, color: col, baseline: 'middle' });
+            G.text(d.starEn, 616, py + 24, { size: 19, color: '#d8c898', baseline: 'middle' });
             G.window(276, py + 54, 588, 122, BOX);
             (lines[id] || []).slice(0, 4).forEach(function (l, k) { G.text(l, 292, py + 68 + k * 26, { size: 21, color: col }); });
           });
