@@ -100,6 +100,14 @@
     return true;
   };
 
+  // A governor's chair spans two tiles; its occupant sits between their centres.
+  F.seatCenterX = function (map, ev) {
+    if (map.get(ev.x, ev.y) !== '0') return ev.x * TS + TS / 2;
+    var left = ev.x;
+    while (left > 0 && map.get(left - 1, ev.y) === '0') left--;
+    return left * TS + TS;
+  };
+
   F.spawnActors = function () {
     F.actors = [];
     var evs = WM.data.events[F.map.id] || [];
@@ -107,7 +115,7 @@
       if (!F.evActive(ev)) return;
       var lk = lookFor(ev);
       if (!lk) return;
-      var a = new Actor({ x: ev.x * TS + 8, y: ev.y * TS + 15, dir: ev.dir || 'down', sheetId: lk.id, look: lk.look, ev: ev, wander: ev.wander, name: lk.name, speed: ev.speed });
+      var a = new Actor({ x: F.seatCenterX(F.map, ev), y: ev.y * TS + 15, dir: ev.dir || 'down', sheetId: lk.id, look: lk.look, ev: ev, wander: ev.wander, name: lk.name, speed: ev.speed });
       if (ev.hidden) a.visible = false;
       F.actors.push(a);
     });
@@ -548,7 +556,7 @@
       if (!F.evActive(ev)) return;
       if (keep.some(function (a) { return a.ev === ev; })) return;
       var lk = lookFor(ev); if (!lk) return;
-      var a = new Actor({ x: ev.x * TS + 8, y: ev.y * TS + 15, dir: ev.dir || 'down', sheetId: lk.id, look: lk.look, ev: ev, wander: ev.wander, name: lk.name });
+      var a = new Actor({ x: F.seatCenterX(F.map, ev), y: ev.y * TS + 15, dir: ev.dir || 'down', sheetId: lk.id, look: lk.look, ev: ev, wander: ev.wander, name: lk.name });
       if (ev.hidden) a.visible = false;
       keep.push(a);
     });
@@ -629,6 +637,10 @@
     }
     // emotes on top
     for (i = 0; i < all.length; i++) if (all[i].emote && all[i].visible) drawEmote(c, all[i], cx, cy);
+    // a place that calls for a visit (crows singing in a tree): an event's markEmote, drawn over its markAt tile while the event waits
+    if (!WM.script.running && (WM.time % 3.5) < 2.2) (WM.data.events[F.map.id] || []).forEach(function (ev) {
+      if (ev.markEmote && ev.markAt && F.evActive(ev)) drawEmote(c, { x: ev.markAt[0] * TS + 8, y: ev.markAt[1] * TS + 15, offY: 0, emote: ev.markEmote }, cx, cy);
+    });
     drawMarks(c, cx, cy);
     drawSplashes(c, cx, cy);
     if (room >= 0) {
@@ -637,10 +649,6 @@
       for (var ty = y0; ty <= y0 + Math.ceil(WM.LOW_H / TS) && ty < F.map.h; ty++)
         for (var tx = x0; tx <= x0 + Math.ceil(WM.LOW_W / TS) && tx < F.map.w; tx++)
           if (elsewhere(tx, ty)) c.fillRect(tx * TS - cx, ty * TS - cy, TS, TS);
-    // a place that calls for a visit (crows singing in a tree): an event's markEmote, drawn over its markAt tile while the event waits
-    if (!WM.script.running && (WM.time % 3.5) < 2.2) (WM.data.events[F.map.id] || []).forEach(function (ev) {
-      if (ev.markEmote && ev.markAt && F.evActive(ev)) drawEmote(c, { x: ev.markAt[0] * TS + 8, y: ev.markAt[1] * TS + 15, offY: 0, emote: ev.markEmote }, cx, cy);
-    });
     }
 
     // weather & lighting

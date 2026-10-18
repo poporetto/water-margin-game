@@ -28,7 +28,7 @@ const yranges=[[0,207],[207,382],[365,533],[533,693],[690,867],[865,1024]];
   if(i===32)yt=686;if(i===33)yt=719;if(i===34)yt=716;
   // Discard detached pixels from neighbouring source sprites before fitting furniture.
   let source=data;
-  if([22,23,24,28].includes(i)){
+  if([22,23,24,28,29].includes(i)){
     source=Buffer.from(data);const width=xr-xl,height=yb-yt,seen=new Uint8Array(width*height);let largest=[];
     for(let n=0;n<seen.length;n++){
       const alpha=n=>data[(((n/width|0)+yt)*info.width+n%width+xl)*4+3];
@@ -41,12 +41,12 @@ const yranges=[[0,207],[207,382],[365,533],[533,693],[690,867],[865,1024]];
   let l=xr,t=yb,r=xl,b=yt;
   for(let y=yt;y<yb;y++)for(let x=xl;x<xr;x++)if(source[(y*info.width+x)*4+3]>=192){l=Math.min(l,x);r=Math.max(r,x);t=Math.min(t,y);b=Math.max(b,y);}
   const [w,h]=sizes[i].map(n=>n*2);
-  let raw=await sharp(source,{raw:info}).extract({left:l,top:t,width:r-l+1,height:b-t+1}).resize(w,h,{fit:'contain',position:'south',background:{r:0,g:0,b:0,alpha:0},kernel:'lanczos3'}).raw().toBuffer();
+  let raw=await sharp(source,{raw:info}).extract({left:l,top:t,width:r-l+1,height:b-t+1}).resize(w,h,{fit:'contain',position:i===25?'north':'south',background:{r:0,g:0,b:0,alpha:0},kernel:'lanczos3'}).raw().toBuffer();
   for(let p=0;p<raw.length;p+=4){if(raw[p+3]<128){raw.fill(0,p,p+4);}else raw[p+3]=255;}
   // Quantize colours, then restore hard alpha for clean pixel edges.
   const quant=await sharp(raw,{raw:{width:w,height:h,channels:4}}).png({palette:true,colours:16,dither:0}).toBuffer();
   raw=await sharp(quant).ensureAlpha().raw().toBuffer();for(let p=3;p<raw.length;p+=4)raw[p]=raw[p]<128?0:255;
-  if([22,23,24,28].includes(i)){
+  if([22,23,24,28,29].includes(i)){
     const seen=new Set();let best=[];
     for(let n=0;n<w*h;n++){if(seen.has(n)||!raw[n*4+3])continue;const q=[n];seen.add(n);
       for(let j=0;j<q.length;j++){const x=q[j]%w,y=q[j]/w|0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const xx=x+dx,yy=y+dy,k=yy*w+xx;if(xx<0||yy<0||xx>=w||yy>=h||seen.has(k)||!raw[k*4+3])continue;seen.add(k);q.push(k);}}

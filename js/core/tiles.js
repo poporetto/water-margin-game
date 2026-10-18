@@ -1311,6 +1311,11 @@
       map.get(tx, ty + 1) === ch && map.get(tx, ty + 2) === ch);
   };
   T.solidAt = function (map, tx, ty) {
+    if (WM.state && WM.state.flags && WM.state.flags['felled:' + map.id]) {
+      // Fallen willow spans four ground cells, with foliage overhanging above.
+      for (var wx = tx - 2; wx <= tx + 1; wx++) if (map.get(wx, ty) === 'l') return true;
+    }
+
     if(T.worldTerrainLayout(map).occupied[tx+','+ty])return true;
     var layout = T.propLayout(map);
     return !!layout.occupied[tx + ',' + ty] || (!T.isRemovedRoof(map, tx, ty) && T.solid(map.get(tx, ty)));
@@ -1476,15 +1481,27 @@
     }
     propLayouts.set(map,out);return out;
   };
+  function propContactShadow(c, cx, base, width, depth) {
+    c.save();
+    c.fillStyle = 'rgba(30,20,12,0.20)';
+    c.beginPath(); c.ellipse(cx, base, width * 0.46, depth, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = 'rgba(30,20,12,0.12)';
+    c.beginPath(); c.ellipse(cx, base, width * 0.36, depth * 0.58, 0, 0, Math.PI * 2); c.fill();
+    c.restore();
+  }
   function objectTall(c, x, y, tx, ty, map, ch, e) {
     if (ch === 'l' && WM.state && WM.state.flags && WM.state.flags['felled:' + map.id]) {
-      willowTall(c, x, y, tx, ty, THEMES[map.theme] || THEMES.spring, map); return;
+      if (SHEETS.uprootedWillow) propContactShadow(c,x+16,y+14,58,3);
+      if (SHEETS.uprootedWillow) U.drawArt(c,SHEETS.uprootedWillow,0,0,64,32,x-16,y-16,64,32);
+      else willowTall(c, x, y, tx, ty, THEMES[map.theme] || THEMES.spring, map);
+      return;
     }
     if(ch==='c'&&SHEETS.longCounter){
       var counter=runOf(map,tx,ty,ch);
       if(counter.n>=3){
         if(tx!==counter.x0)return;
         var cw=counter.n*S;
+        propContactShadow(c,x+cw/2,y+15,cw,2.4);
         U.drawArt(c,SHEETS.longCounter,0,0,16,28,x,y-12,16,28);
         for(var cx=16;cx<cw-16;cx+=16)U.drawArt(c,SHEETS.longCounter,16+(cx/16%2)*16,0,16,28,x+cx,y-12,16,28);
         U.drawArt(c,SHEETS.longCounter,48,0,16,28,x+cw-16,y-12,16,28);return;
@@ -1515,6 +1532,12 @@
     }
     // Never stretch an object's width independently of its height to fill a map run.
     var sourceW = o.w || S, fit = ch === 'b' ? 1 : Math.min(1, w / sourceW), drawW = sourceW * fit, drawH = h * fit;
+    // Freestanding props only: structural pieces and water props have no floor shadow.
+    if (e.base !== 'water' && 'utckhjAIQVU1235678E0a⚔LYJg'.indexOf(ch) >= 0 && o.shadow !== false) {
+      var shadowWidth = 'LYJ'.indexOf(ch) >= 0 ? Math.min(drawW, 10) : drawW;
+      propContactShadow(c, dx + w / 2, baseY - (ch === 'k' ? 3 * fit : fit),
+        shadowWidth, Math.max(0.8, Math.min(3, shadowWidth * 0.075)));
+    }
     if(o.pedestal&&SHEETS.refinedPaving){
       var pedestalX=dx+(w-drawW)/2;
       U.drawArt(c,SHEETS.refinedPaving,0,0,32,12,pedestalX,baseY-8,drawW,8);
