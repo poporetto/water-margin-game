@@ -106,14 +106,18 @@
         isDuelChoice: true,
         update: function () { var r = list.handle(); if (r && r.ok) { UI.remove(w); resolve(r.ok.v); } },
         draw: function () {
-          var boxX = 24, boxY = 534, boxW = 912, boxH = 168;
+          // the same dialogue box as everywhere else: portrait, name, then his words
+          var boxX = 24, boxW = WM.W - 48, boxH = 196, boxY = WM.H - boxH - 18;
+          var sid = tip ? (tip.name === du.foe.name ? du.foeId : du.heroId) : du.foeId;
+          var sp = UI.resolveSpeaker(sid), textX = boxX + 190;
           G.window(boxX, boxY, boxW, boxH);
-          G.text(tip ? tip.name : du.foe.name, boxX + 24, boxY + 18, { size: 22, bold: true, color: G.COL.gold });
-          var ls = G.wrap('“' + line + '”', boxW - 60, 25);
-          for (var i = 0; i < ls.length; i++) G.text(ls[i], boxX + 24, boxY + 56 + i * 32, { size: 25 });
+          WM.portraits.drawFramed(sp.portrait, sp.expr, boxX + 20, boxY + 14);
+          G.text(tip ? tip.name : du.foe.name, textX, boxY + 14, { size: 22, bold: true, color: G.COL.gold });
+          var ls = G.wrap('“' + line + '”', boxW - 214, 25);
+          for (var i = 0; i < ls.length; i++) G.text(ls[i], textX, boxY + 60 + i * 33, { size: 25 });
           // read his words for his next move: the rule, for anyone new to duels
-          if (adv) G.text(du.foe.name + ' will ' + { attack: 'attack', wild: 'make a Brute Attack', defend: 'defend' }[du.next] + '  →  answer with ' + MOVE_NAME[adv], boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.gold });
-          else G.text('Attack beats Defend  ·  Brute beats Attack  ·  Defend beats Brute', boxX + 24, boxY + boxH - 36, { size: 17, color: G.COL.dim });
+          if (adv) G.text(du.foe.name + ' will ' + { attack: 'attack', wild: 'make a Brute Attack', defend: 'defend' }[du.next] + '  →  answer with ' + MOVE_NAME[adv], textX, boxY + boxH - 36, { size: 17, color: G.COL.gold });
+          else G.text('Attack beats Defend  ·  Brute beats Attack  ·  Defend beats Brute', textX, boxY + boxH - 36, { size: 17, color: G.COL.dim });
           list.draw();
         }
       };
@@ -185,8 +189,7 @@
     var du = D.cur; if (!du) return;
     var c = G.ctx;
     c.imageSmoothingEnabled = false;
-    WM.util.drawArt(c, du.bg, 0, 0, 240, 130, 0, 0, 960, 520);
-    c.fillStyle = '#000'; c.fillRect(0, 520, 960, 200);
+    WM.battle.drawBackground(c,du.bg);
     drawFighter(du.foeSheet, du.foe, 2, du.foe.x, 380);
     drawFighter(du.heroSheet, du.hero, 1, du.hero.x, 380);
     // HP bars

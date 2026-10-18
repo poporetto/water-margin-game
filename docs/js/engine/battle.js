@@ -9,7 +9,7 @@
   WM.scenes.battle = SCN;
 
   var STAGE_H = 520, PX = 4, PXH = 5; // battle pixel scale: beasts x4, people x5
-  var MENU_W = 170, MENU_X = 480 - MENU_W / 2;   // the round and command menus, centred between the enemy and the party
+  var MENU_W = 170, MENU_X = 24;   // the round and command menus, at the left edge
   var POS = {
     party: [[600, 300], [672, 372], [744, 444], [744, 256], [816, 328], [888, 400]],
     enemy: [[364, 280], [292, 352], [220, 424], [226, 236], [154, 308], [82, 380]],
@@ -40,7 +40,29 @@
     north: { sky: ['#a8b4c0', '#e4e8ea'], far: '#8a8a7a', near: '#8a9a5a', ground: ['#8a9a5a', '#76844a'], deco: 'grass' },
     hall: { sky: ['#0a0810', '#24182a'], far: '#1a1020', near: '#2a1a24', ground: ['#3a2a30', '#241820'], deco: 'temple', stars: false }
   };
+  var paintedBackgrounds={}, paintedNames=['forest','town','field','plains','snow','river','marsh','night','palace','interior','temple','mountain','cave','fire','ridge'];
+  B.backgroundRoot='assets/backgrounds/';
+  function loadPainted(type){
+    if(paintedNames.indexOf(type)<0)return null;
+    if(!paintedBackgrounds[type]){
+      var entry=paintedBackgrounds[type]={image:new Image(),ready:false,failed:false};
+      entry.image.onload=function(){entry.ready=true;};
+      entry.image.onerror=function(){entry.failed=true;};
+      entry.image.src=B.backgroundRoot+type+'.png';
+    }
+    return paintedBackgrounds[type];
+  }
+  B.preloadBackgrounds=function(){paintedNames.forEach(loadPainted);};
+  B.backgroundStatus=function(){return paintedNames.map(function(name){var e=paintedBackgrounds[name];return {name:name,ready:!!(e&&e.ready),failed:!!(e&&e.failed)};});};
+  B.drawBackground=function(c,bg){
+    var type=bg.backgroundType||'plains',art=loadPainted(type);
+    if(art&&art.ready){c.save();c.imageSmoothingEnabled=true;c.drawImage(art.image,0,0,WM.W,WM.H);c.restore();return;}
+    // Every frame covers the menu region even while artwork loads or fails.
+    c.fillStyle=(BG[type]||BG.plains).ground[1];c.fillRect(0,0,WM.W,WM.H);
+    U.drawArt(c,bg,0,0,240,130,0,0,960,520);
+  };
   function makeBg(type) {
+    loadPainted(type);
     var b = BG[type] || BG.plains;
     var w = 240, h = 130;
     var cv = U.makeWorldCanvas(w, h), c = cv.getContext('2d');
@@ -82,7 +104,7 @@
     if (deco === 'temple' || deco === 'palace') { for (i = 0; i < w; i += 40) { c.fillStyle = '#9c2f25'; c.fillRect(i + 10, 4, 6, hz); c.fillStyle = '#5c1a14'; c.fillRect(i + 9, 4, 8, 3); } c.fillStyle = deco === 'palace' ? '#c99a2e' : '#5b6476'; c.fillRect(0, 0, w, 5); }
     if (deco === 'fire') for (i = 0; i < 30; i++) { c.fillStyle = i % 2 ? '#f08a2a' : '#e04a1a'; var fx = Math.floor(U.hash2(i, 1, 9) * w); c.fillRect(fx, hz - 10 - (i % 7), 3, 12 + (i % 7)); }
     if (deco === 'snow') for (i = 0; i < 60; i++) { c.fillStyle = '#ffffff'; c.fillRect(Math.floor(U.hash2(i, 1, 13) * w), Math.floor(U.hash2(i, 2, 13) * h), 1, 1); }
-    return cv;
+    cv.backgroundType=type;return cv;
   }
 
   // ---------- units ----------
@@ -785,7 +807,7 @@
     var bt = B.cur; if (!bt) return;
     var c = G.ctx;
     c.imageSmoothingEnabled = false;
-    WM.util.drawArt(c, bt.bg, 0, 0, 240, 130, 0, 0, 960, 520);
+    B.drawBackground(c,bt.bg);
     // draw units sorted by y
     var units = bt.party.concat(bt.enemies, bt.guests).slice().sort(function (a, b) { return a.pos[1] - b.pos[1]; });
     units.forEach(function (u) { drawUnit(u, bt); });

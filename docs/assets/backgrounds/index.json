@@ -1,0 +1,23 @@
+{
+  "width": 1920,
+  "height": 1440,
+  "era": "Northern Song, circa 1120",
+  "completed": [
+    "forest",
+    "town",
+    "field",
+    "plains",
+    "snow",
+    "river",
+    "marsh",
+    "night",
+    "palace",
+    "interior",
+    "temple",
+    "mountain",
+    "cave",
+    "fire",
+    "ridge"
+  ],
+  "pending": []
+}
