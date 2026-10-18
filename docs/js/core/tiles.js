@@ -1401,7 +1401,7 @@
     if (e.building === 'stone') { if (map.get(tx, ty - 1) !== '#' && map.get(tx, ty - 1) !== 'G') U.drawArt(c, sheetOf(e), (12 + buildingSide(map, tx, ty, '#G')) % 8 * S, S, S, 4, x, y - 4, S, 4); return true; }
     if (e.building === 'gate' && gateEligible(map, tx, ty)) {
       if (map.get(tx - 1, ty) === 'G' || map.get(tx, ty + 1) === 'G') return true;
-      var run = runOf(map, tx, ty, 'G'), sy = WM.state && WM.state.flags && WM.state.flags['shut:' + map.id] ? 48 : 0;
+      var run = runOf(map, tx, ty, 'G'), sy = (WM.state && WM.state.flags && WM.state.flags['shut:' + map.id]) || (map.def && map.def.shutGates && map.def.shutGates.indexOf(ty) >= 0) ? 48 : 0;   // (shutGates: rows of gates that never open)
       // Piers sit on neighbouring solid wall tiles; every G tile remains a visible passage.
       U.drawArt(c, sheetOf(e), 0, sy, 16, 45, x - 16, y - 29, 16, 45);
       for (var i = 0; i < run.n; i++) U.drawArt(c, sheetOf(e), 16 + (i % 2) * 16, sy, 16, 45, x + i * 16, y - 29, 16, 45);
@@ -1414,6 +1414,7 @@
   function objectGround(c, x, y, tx, ty, map, ch, e) {
     var th = THEMES[map.theme] || THEMES.spring;
     if (e.base === 'water') water(c, x, y, tx, ty, th, map);
+    else if (ch === '0') dais(c, x, y, tx, ty, th, map);   // the official's chair stands on his wooden dais
     else propGround(c,x,y,tx,ty,map);
     return true;
   }

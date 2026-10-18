@@ -65,7 +65,8 @@
   g.hline(2, 57, 21, ':'); g.hline(2, 57, 27, ':');
   g.set(26, 40, 'I'); g.set(26, 20, 'I');
 
-  WM.defMap('kaifeng', {
+  WM.defMap('kaifeng', { shutGates: [10],   // the palace gate stays shut: no one passes without a summons
+   
     name: 'The Eastern Capital', theme: 'spring', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [29, 40],
     exits: [WM.toWorld('kaifeng', 28, 44, 4, 2)]   // out of the south gate, onto the road below the Eastern Capital on the world map
   });
