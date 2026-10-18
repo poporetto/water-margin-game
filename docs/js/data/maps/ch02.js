@@ -163,12 +163,13 @@
   var x = L.grid(34, 28, '.');
   x.rect(0, 0, 34, 3, '=');                                   // the lane outside the north wall
   x.hline(0, 33, 3, 'R'); x.vline(0, 3, 27, 'R'); x.vline(33, 3, 27, 'R'); x.hline(0, 33, 27, 'R');
-  x.set(16, 27, 'D'); x.set(17, 27, 'D');
-  x.vline(16, 3, 26, 'R'); x.set(16, 21, '.'); x.set(16, 22, '.');   // wall between temple court and garden
+  x.set(7, 27, 'D');                                         // the gate, at the foot of the stone avenue
+  x.rect(23, 3, 2, 1, 'G');                                   // the garden's back gate onto the lane (who comes to the garden comes this way)
+  x.vline(16, 3, 20, 'R');                                    // wall between temple court and garden, open at its south end
   // temple court (west)
   var zhiqing = x.house(2, 5, 12, 6, { roof: 'Z', wall: 'R', door: 6 });
-  x.rect(7, 11, 2, 15, '='); x.set(5, 14, 'L'); x.set(10, 14, 'L'); x.set(5, 20, 'L'); x.set(10, 20, 'L');
-  x.rect(8, 21, 9, 2, ':'); x.rect(9, 25, 8, 1, ':'); x.vline(16, 25, 26, ':');
+  x.rect(7, 11, 2, 16, '='); x.set(5, 14, 'L'); x.set(10, 14, 'L'); x.set(5, 20, 'L'); x.set(10, 20, 'L');
+  x.rect(9, 21, 8, 2, ':');
   // vegetable garden (east)
   x.rect(18, 6, 6, 4, 'y'); x.rect(25, 6, 6, 4, 'y'); x.rect(18, 12, 6, 4, 'y');
   x.rect(26, 13, 3, 2, 'C');                                  // the cesspit
@@ -177,9 +178,9 @@
   x.rect(17, 22, 16, 1, ':'); x.vline(27, 22, 22, ':');
   x.vline(17, 10, 22, ':');
   x.scatter('f', 0.06, 101, '.', [17, 4, 16, 22]);
-  WM.defMap('xiangguo', { name: 'Great Xiangguo Monastery', theme: 'spring', music: 'field', rows: x.rows(), spawn: [16, 25], battleBg: 'temple' });
+  WM.defMap('xiangguo', { name: 'Great Xiangguo Monastery', theme: 'spring', music: 'field', rows: x.rows(), spawn: [7, 25], battleBg: 'temple' });
   var d = WM.data.kaifengDoors.xiangguo;
-  L.link({ map: 'kaifeng', x: d.x, y: d.y }, { map: 'xiangguo', x: 16, y: 27, w: 2, inside: { x: 16, y: 26, dir: 'up' } });
+  L.link({ map: 'kaifeng', x: d.x, y: d.y }, { map: 'xiangguo', x: 7, y: 27, inside: { x: 7, y: 26, dir: 'up' } });
   var xi = L.grid(24, 10, 'x');
   var xR = { zhiqing: xi.room(1, 1, 12, 8, { floor: 'n' }), hut: xi.room(14, 1, 9, 7) };
   xi.stamp(2, 3, ['h..111...h', '...222....', '..........']);   // the Buddha hall xi.stamp(15, 3, ['k...j..', '.......', '..t....']);

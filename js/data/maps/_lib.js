@@ -66,8 +66,9 @@
       if (off != null) dx += off;
       this.set(dx, dy, 'd');
     } else this.set(dx, dy, 'D');
-    (o.windows || []).forEach(function (wx) { this.set(x + wx, y + h - 1, 'O'); }, this);
-    if (o.windowsUpper) o.windowsUpper.forEach(function (wx) { this.set(x + wx, y + h - 2, 'O'); }, this);
+    // windows sit high in the upper wall, never down beside the door (a wall one row high has only that row)
+    var wy = y + h - (wallRows >= 2 ? 2 : 1);
+    (o.windows || []).concat(o.windowsUpper || []).forEach(function (wx) { this.set(x + wx, wy, 'O'); }, this);
     return { x: dx, y: dy };
   };
   // An interior room: walls 'X' (2 rows on top), floor, exit door in the bottom wall.

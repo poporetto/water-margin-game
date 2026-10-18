@@ -637,6 +637,10 @@
       for (var ty = y0; ty <= y0 + Math.ceil(WM.LOW_H / TS) && ty < F.map.h; ty++)
         for (var tx = x0; tx <= x0 + Math.ceil(WM.LOW_W / TS) && tx < F.map.w; tx++)
           if (elsewhere(tx, ty)) c.fillRect(tx * TS - cx, ty * TS - cy, TS, TS);
+    // a place that calls for a visit (crows singing in a tree): an event's markEmote, drawn over its markAt tile while the event waits
+    if (!WM.script.running && (WM.time % 3.5) < 2.2) (WM.data.events[F.map.id] || []).forEach(function (ev) {
+      if (ev.markEmote && ev.markAt && F.evActive(ev)) drawEmote(c, { x: ev.markAt[0] * TS + 8, y: ev.markAt[1] * TS + 15, offY: 0, emote: ev.markEmote }, cx, cy);
+    });
     }
 
     // weather & lighting

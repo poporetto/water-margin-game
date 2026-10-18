@@ -13,10 +13,10 @@
   g.rect(2, 33, 56, 2, '=');
   // Bian River and its bridges
   g.rect(2, 23, 56, 3, '~');
-  g.rect(28, 23, 4, 3, 'B'); g.rect(10, 23, 2, 3, 'B'); g.rect(46, 23, 2, 3, 'B');
+  g.rect(28, 23, 4, 3, 'B'); g.rect(10, 23, 2, 3, 'B'); g.rect(37, 23, 2, 3, 'B');
   g.hline(2, 57, 21, ':'); g.hline(2, 57, 27, ':');
-  g.vline(10, 21, 27, ':'); g.vline(11, 21, 27, ':'); g.vline(46, 21, 27, ':'); g.vline(47, 21, 27, ':');
-  g.rect(10, 23, 2, 3, 'B'); g.rect(46, 23, 2, 3, 'B');
+  g.vline(10, 21, 27, ':'); g.vline(11, 21, 27, ':'); g.vline(37, 21, 27, ':'); g.vline(38, 21, 27, ':');
+  g.rect(10, 23, 2, 3, 'B'); g.rect(37, 23, 2, 3, 'B');
   // the imperial palace (north)
   g.frame(21, 2, 18, 9, 'R');
   g.rect(22, 3, 16, 7, '=');
@@ -44,7 +44,13 @@
   g.stamp(21, 15, ['f.T', '.p.', 'T.f']);
   // south bank: temples
   var yueDoor = g.house(3, 28, 10, 5, { roof: 'v', wall: 'R', door: 5 });
-  var xgDoor = g.house(41, 28, 15, 5, { roof: 'v', wall: 'R', door: 8 });
+  // the Great Xiangguo Monastery: a walled compound, its hall within a paved court, one gate onto the avenue
+  g.frame(41, 26, 15, 7, 'R');
+  g.rect(42, 27, 13, 5, '=');
+  g.house(44, 27, 9, 4, { roof: 'v', wall: 'R', door: false });
+  g.set(43, 30, 'L'); g.set(53, 30, 'L');
+  g.rect(47, 32, 2, 1, 'G');
+  var xgDoor = { x: 47, y: 32, w: 2 };
   g.set(40, 31, 'L'); g.set(56, 31, 'L');
   g.stamp(15, 28, ['TfT', '.U.', 'TfT']);
   // south: residences
@@ -62,7 +68,7 @@
   g.scatter('T', 0.12, 7, '.', [2, 2, 56, 42]);
   g.scatter('f', 0.05, 8, '.', [2, 2, 56, 42]);
   // keep the riverside walk clear
-  g.hline(2, 57, 21, ':'); g.hline(2, 57, 27, ':');
+  g.hline(2, 57, 21, ':'); g.hline(2, 40, 27, ':'); g.hline(56, 57, 27, '.');   // the south walk stops at the monastery wall
   g.set(26, 40, 'I'); g.set(26, 20, 'I');
 
   WM.defMap('kaifeng', { shutGates: [10],   // the palace gate stays shut: no one passes without a summons
@@ -133,7 +139,7 @@
     { id: 'kv4', x: 44, y: 34, npc: 'monk', cond: function (S2) { return !S2.has('ch2_rascalsdone'); }, text: ['The Great Xiangguo Monastery is the largest in the realm. Its vegetable garden is plagued by idle rascals, I hear.'] },
     { id: 'kv4b', x: 44, y: 34, npc: 'monk', cond: function (S2) { return S2.has('ch2_rascalsdone') && !S2.has('ch3_saved'); }, text: ['The new keeper of the Xiangguo vegetable garden is a monk from Mount Wutai. He threw the rascals into the cesspit and pulled up a willow by the roots. Now they bring him wine.'] },
     { id: 'kv4c', x: 44, y: 34, npc: 'monk', cond: function (S2) { return S2.has('ch3_saved'); }, text: ['The big monk of the vegetable garden has gone. He left the same month Instructor Lin was sent to Cangzhou. Marshal Gao\'s men came asking for him.'] },
-    L.sign('ksign1', 26, 40, 'South Gate — the Eastern Capital, Kaifeng. Seat of the Son of Heaven.'),
-    L.sign('ksign2', 26, 20, 'The Zhou Bridge over the Bian River.')
+    L.sign('ksign1', 26, 40, 'South Gate of the Eastern Capital, Kaifeng, seat of the Son of Heaven. Up the avenue: east, the GREAT XIANGGUO MONASTERY, with its vegetable garden; west, the shrine. Beyond the river, the market; at the head of the avenue, the Imperial Palace; Marshal Gao\'s residence to the north-west; the Fan Tower to the north-east.'),
+    L.sign('ksign2', 26, 20, 'The Zhou Bridge over the Bian River. North: the Imperial Palace. North-west: the residence of Marshal Gao Qiu. North-east: the Fan Tower. South, across the bridge: the GREAT XIANGGUO MONASTERY (east) and the South Gate.')
   ]);
 })();

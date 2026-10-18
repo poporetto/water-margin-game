@@ -60,6 +60,11 @@
         path.forEach(function (p) { if (!isRoad(p[0], p[1])) { rows[p[1]][p[0]] = ':'; changed = true; } });
       }
     }
+    // Where a dirt road crosses a paved street, the paving runs on through the crossing.
+    for (y = 0; y < h; y++) for (x = 0; x < rows[y].length; x++) {
+      if (get(x, y) !== ':') continue;
+      if ((get(x, y - 1) === '=' && get(x, y + 1) === '=') || (get(x - 1, y) === '=' && get(x + 1, y) === '=')) { rows[y][x] = '='; changed = true; }
+    }
     // A lantern stands along a street or beside a gateway; one pressed against the side of an ordinary house (its roof
     // or plaster wall) looks dropped there at random, and goes. (Red gate walls and stone city walls keep theirs.)
     for (y = 0; y < h; y++) for (x = 0; x < rows[y].length; x++) {
