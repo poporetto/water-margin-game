@@ -497,7 +497,14 @@
 
   // ---------------- Waguan Monastery ----------------
   WM.defEvents('waguan_in', [
-    { id: 'ch2_oldmonks', x: 4, y: 4, npc: 'oldmonk', cond: function (S2) { return S2.has('ch2_peachdone') && !S2.has('ch2_waguanwin'); }, run: async function (s) {
+    // what the old monks say changes as the story goes on: their tale, then waiting, then fear, then hope
+    { id: 'ch2_oldmonks2', x: 4, y: 4, npc: 'oldmonk', cond: function (S2) { return S2.has('ch2_heardcui') && !S2.has('ch2_fled_cui'); },
+      text: ['Under the locust tree in the back court, Reverend. Amitabha... go carefully.'] },
+    { id: 'ch2_oldmonks3', x: 4, y: 4, npc: 'oldmonk', cond: function (S2) { return S2.has('ch2_fled_cui') && !S2.has('ch2_withshijin'); },
+      text: ['You came back! We heard the shouting and thought they had killed you. Reverend, you are weak with hunger. Go and find a meal before you face them again. There is nothing here to give you.'] },
+    { id: 'ch2_oldmonks4', x: 4, y: 4, npc: 'oldmonk', cond: function (S2) { return S2.has('ch2_withshijin') && !S2.has('ch2_waguanwin'); },
+      text: ['Two of you now, and fed? Amitabha. Perhaps the Buddha has not forgotten this monastery after all.'] },
+    { id: 'ch2_oldmonks', x: 4, y: 4, npc: 'oldmonk', cond: function (S2) { return S2.has('ch2_peachdone') && !S2.has('ch2_heardcui'); }, run: async function (s) {
       await s.say('oldmonk:sad', 'Don\'t... don\'t come shouting here, Reverend. We have not eaten in three days.');
       await s.say('luzhishen', 'Three days? In a monastery this size? Where are the monks? Where is the grain?');
       await s.say('oldmonk:sad', 'This was a great monastery once. Then a wandering monk called Cui Daocheng — they call him the Iron Buddha — and a Daoist called Qiu Xiaoyi — the Flying Yaksha — came and took it. They drove off the monks, sold the lands, and live in the back with a woman they keep. We are too old to go anywhere. We are waiting to die.');
