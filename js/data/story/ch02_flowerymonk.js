@@ -582,8 +582,8 @@
 
   // ---------------- Kaifeng: the Great Xiangguo Monastery ----------------
   WM.defEvents('xiangguo', [
-    { id: 'ch2_xg_arrive', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch2_waguanwin'); }, run: async function (s) {
-      s.spawn('mk', 'monk', 15, 25, 'right');
+    { id: 'ch2_xg_arrive', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch2_waguanwin') && !S2.has('ch2_gardener'); }, run: async function (s) {   // only on first coming, before he has seen the Abbot
+      s.spawn('mk', 'monk', 8, 25, 'left');
       await s.say('monk', 'A monk from Mount Wutai, with a letter for the Abbot? This way. The Abbot\'s quarters are at the top of the court.');
       s.despawn('mk');
     } },
@@ -628,7 +628,8 @@
       await s.say('zhangsan:shock', '...He pulled up the willow. Roots and all.');
       await s.say('lisi:shock', 'He isn\'t a man. He\'s a living arhat!');
       s.flag('ch2_willowdone');
-      s.despawn('zhangsan', { leave: true }); s.despawn('lisi', { leave: true });   // home for the day; they come back every morning
+      s.walkTo('zhangsan', 20, 25); await s.walkTo('lisi', 21, 25);   // down the garden and home for the day; they come back every morning
+      s.despawn('zhangsan'); s.despawn('lisi');
       await s.narrate('After that the rascals came every day with wine and meat. One day, to repay them, Zhishen fetched his staff and showed them his art, whirling the sixty-two catties of iron as if it were a reed.');
     } },
     { id: 'ch2_linchong', x: 17, y: 4, w: 16, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_willowdone'); }, run: async function (s) {
@@ -639,8 +640,9 @@
       s.spawn('zs', 'zhangsan', 18, 5, 'up');
       await s.say('zhangsan', 'That\'s the Arms Instructor of the Eight Hundred Thousand Imperial Guards, Master Lin Chong.');
       await s.say('luzhishen', 'Then come in, Instructor, come in!');
-      var pt = (WM.field && WM.field.player && WM.field.player.tile && WM.field.player.tile()) || { x: 29, y: 7 };   // over the wall in one bound, and down at Zhishen's side
-      s.despawn('linchong'); s.spawn('linchong', 'linchong', pt.x > 18 ? pt.x - 1 : pt.x + 1, pt.y, 'right'); await s.jump('linchong', 10);
+      var pt = (WM.field && WM.field.player && WM.field.player.tile && WM.field.player.tile()) || { x: 29, y: 7 };   // over the wall in one bound
+      s.despawn('linchong'); s.spawn('linchong', 'linchong', 23, 4, 'down'); await s.jump('linchong', 10);   // down off the wall,
+      await s.walkTo('linchong', pt.x > 18 ? pt.x - 1 : pt.x + 1, pt.y);                                   // and over to him at a walk
       s.faceEach('linchong', 'player');
       await s.say('linchong', 'Lin Chong, at your service. And you, Reverend?');
       await s.say('luzhishen', 'Lu Da, once of Weizhou. I killed too many men, so I became a monk. Your father — wasn\'t he Instructor Lin of the capital? I met him once, when I was young.');
