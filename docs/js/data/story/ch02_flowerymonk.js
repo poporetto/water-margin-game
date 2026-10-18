@@ -618,7 +618,8 @@
     } },
     { id: 'ch2_willow', x: 28, y: 6, w: 5, h: 3, trigger: 'touch', once: true, markEmote: 'note', markAt: [30, 4], cond: function (S2) { return S2.has('ch2_rascalsdone'); }, idle: { zhangsan: 'Reverend, we know our betters now. Every one of us will do as you say.', lisi: 'Those crows in the willow, Reverend. Cawing from dawn to dark. It\'s bad luck, they say.' },
       run: async function (s) {
-      s.spawn('zhangsan', 'zhangsan', 27, 8, 'right'); s.spawn('lisi', 'lisi', 28, 9, 'up');   // at his elbow, under the willow
+      s.spawn('zhangsan', 'zhangsan', 20, 17, 'up'); s.spawn('lisi', 'lisi', 22, 17, 'up');   // where they knelt to him; they follow him over to the willow
+      s.walkTo('zhangsan', 27, 8); await s.walkTo('lisi', 28, 9); s.face('zhangsan', 'right'); s.face('lisi', 'up');
       s.sfx('wind');
       await s.say('lisi', 'Those cursed crows in the willow — cawing day and night. People say it\'s bad luck. We\'ll fetch a ladder and pull the nest down.');
       await s.say('luzhishen', 'A ladder? Why bother?');
@@ -638,8 +639,8 @@
       s.spawn('zs', 'zhangsan', 18, 5, 'up');
       await s.say('zhangsan', 'That\'s the Arms Instructor of the Eight Hundred Thousand Imperial Guards, Master Lin Chong.');
       await s.say('luzhishen', 'Then come in, Instructor, come in!');
-      var pt = (WM.field && WM.field.player && WM.field.player.tile && WM.field.player.tile()) || { x: 29, y: 7 };   // in by the back gate, and up to Zhishen's side
-      await s.walkTo('linchong', pt.x > 18 ? pt.x - 1 : pt.x + 1, pt.y);
+      var pt = (WM.field && WM.field.player && WM.field.player.tile && WM.field.player.tile()) || { x: 29, y: 7 };   // over the wall in one bound, and down at Zhishen's side
+      s.despawn('linchong'); s.spawn('linchong', 'linchong', pt.x > 18 ? pt.x - 1 : pt.x + 1, pt.y, 'right'); await s.jump('linchong', 10);
       s.faceEach('linchong', 'player');
       await s.say('linchong', 'Lin Chong, at your service. And you, Reverend?');
       await s.say('luzhishen', 'Lu Da, once of Weizhou. I killed too many men, so I became a monk. Your father — wasn\'t he Instructor Lin of the capital? I met him once, when I was young.');

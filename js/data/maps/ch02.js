@@ -164,7 +164,6 @@
   x.rect(0, 0, 34, 3, '=');                                   // the lane outside the north wall
   x.hline(0, 33, 3, 'R'); x.vline(0, 3, 27, 'R'); x.vline(33, 3, 27, 'R'); x.hline(0, 33, 27, 'R');
   x.set(7, 27, 'D');                                         // the gate, at the foot of the stone avenue
-  x.rect(23, 3, 2, 1, 'G');                                   // the garden's back gate onto the lane (who comes to the garden comes this way)
   x.vline(16, 3, 20, 'R');                                    // wall between temple court and garden, open at its south end
   // temple court (west)
   var zhiqing = x.house(2, 5, 12, 6, { roof: 'Z', wall: 'R', door: 6 });
