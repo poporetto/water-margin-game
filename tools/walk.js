@@ -174,7 +174,11 @@ function mkApi(ctx) {
     ask(who, text, options) { checkSpeaker(who); return Promise.resolve(0); },
     choose(options) { return Promise.resolve(0); },
     notice() { hinted = true; return resolved; }, wait() { return resolved; }, fadeOut() { return resolved; }, fadeIn() { return resolved; },
-    actor(key) { const a = findActor(key); if (!a) err('no actor "' + key + '" on ' + cur.map); return a || {}; },
+    actor(key) {   // (with tile(), as the game's actors have, for scenes that ask where someone stands)
+      const a = findActor(key); if (!a) err('no actor "' + key + '" on ' + cur.map);
+      const r = a || {}; if (!r.tile) r.tile = () => ({ x: r.x != null ? r.x : cur.x, y: r.y != null ? r.y : cur.y });
+      return r;
+    },
     move(key, steps, opt) {
       const a = findActor(key); if (!a) { err('move: no actor "' + key + '" on ' + cur.map); return resolved; }
       const parse = Array.isArray(steps) ? steps : steps.trim().split(/\s+/).map((tk) => { const d = tk[0].toUpperCase(), n = parseInt(tk.slice(1) || '1', 10); return d === 'R' ? [n, 0] : d === 'L' ? [-n, 0] : d === 'U' ? [0, -n] : [0, n]; });

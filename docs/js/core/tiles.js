@@ -960,6 +960,19 @@
     grass(c, x, y, tx, ty, th);
     px(c, x + 7, y + 2, 2, 12, '#4a3626'); px(c, x + 4, y + 4, 3, 1, '#4a3626'); px(c, x + 9, y + 6, 4, 1, '#4a3626'); px(c, x + 3, y + 3, 1, 1, '#4a3626'); px(c, x + 12, y + 5, 1, 1, '#4a3626');
   }
+  // burnt ground: trodden earth under soot and ash (walkable), and the ruin of a burnt building (charred beams and rubble)
+  function ash(c, x, y, tx, ty, th, m) {
+    dirt(c, x, y, tx, ty, th, m);
+    px(c, x, y, S, S, 'rgba(30,24,20,0.45)');
+    for (var i = 0; i < 7; i++) px(c, x + Math.floor(U.hash2(tx * 3 + i, ty, 81) * 14), y + Math.floor(U.hash2(tx, ty * 3 + i, 82) * 14), 2, 1, i % 2 ? '#2a2420' : '#5a5148');
+    if (U.hash2(tx, ty, 83) > 0.7) px(c, x + 5, y + 8, 1, 1, '#d8601c');
+  }
+  function ruinT(c, x, y, tx, ty, th, m) {
+    ash(c, x, y, tx, ty, th, m);
+    blob(c, x + 8, y + 11, 7, 4, '#2e2824'); blob(c, x + 8, y + 10, 6, 3, '#443a32');
+    px(c, x + 2, y + 6, 2, 8, '#1c1612'); px(c, x + 11, y + 3, 2, 10, '#1c1612'); px(c, x + 2, y + 6, 2, 1, '#6a3a1c'); px(c, x + 11, y + 3, 2, 1, '#8a4a1c');
+    px(c, x + 4, y + 9, 7, 2, '#241c16'); px(c, x + 6, y + 8, 1, 1, '#d8601c'); px(c, x + 9, y + 11, 1, 1, '#e8a030');
+  }
   function voidT(c, x, y) { px(c, x, y, S, S, '#000'); }
   function steleTall(c, x, y) {
     // a stele with a rounded, dragon-carved head, standing on the back of a stone tortoise (bixi)
@@ -1128,6 +1141,7 @@
     '[': { draw: sampanTile, tall: sampanTall, solid: true, water: true },
     '>': { draw: sampanTile, solid: true, water: true },
     'I': { draw: function (c, x, y, tx, ty, th, m) { grass(c, x, y, tx, ty, th); }, tall: signTall, solid: true },
+    '⚔': { draw: propGround, solid: true },
     'V': { draw: tent, solid: true },
     '%': { draw:function(c,x,y,tx,ty,th,m){
       dirt(c,x,y,tx,ty,th,m);
@@ -1135,6 +1149,8 @@
       c.fillStyle='#73503a';if(m.get(tx-1,ty)!=='%')c.fillRect(x,y,1,16);if(m.get(tx+1,ty)!=='%')c.fillRect(x+15,y,1,16);if(m.get(tx,ty-1)!=='%')c.fillRect(x,y,16,1);if(m.get(tx,ty+1)!=='%')c.fillRect(x,y+15,16,1);
     } },
     'y': { draw: cropField },
+    '$': { draw: ash },
+    '@': { draw: ruinT, solid: true },
     '_': { draw: mapEdgeDark, solid: true },
     'C': { draw: function (c, x, y, tx, ty, th, m) { px(c, x, y, S, S, '#4a4a2a'); for (var i = 0; i < 5; i++) px(c, x + Math.floor(U.hash2(tx + i, ty, 70) * 13), y + Math.floor(U.hash2(tx, ty + i, 71) * 13), 3, 1, '#6a6a3a'); var nb = function (dx, dy) { return m.get(tx + dx, ty + dy) === 'C'; }; if (!nb(0, -1)) px(c, x, y, S, 2, '#5a4a30'); if (!nb(-1, 0)) px(c, x, y, 2, S, '#5a4a30'); if (!nb(1, 0)) px(c, x + 14, y, 2, S, '#5a4a30'); if (!nb(0, 1)) px(c, x, y + 14, S, 2, '#5a4a30'); }, solid: true },
     'Q': { draw: function (c, x, y, tx, ty, th, m) { if (m.interior) floorStone(c, x, y, tx, ty); else grass(c, x, y, tx, ty, th); }, tall: steleTall, solid: true }

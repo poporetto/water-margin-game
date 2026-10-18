@@ -64,6 +64,11 @@
     // or plaster wall) looks dropped there at random, and goes. (Red gate walls and stone city walls keep theirs.)
     for (y = 0; y < h; y++) for (x = 0; x < rows[y].length; x++) {
       if (get(x, y) !== 'L' || !(is('WO^vzZ', get(x - 1, y)) || is('WO^vzZ', get(x + 1, y)))) continue;
+      if (def.keepFlankingLanterns) {   // (a map that says so keeps the lanterns that face each other across a street)
+        var across = false;
+        for (var dd = -8; dd <= 8 && !across; dd++) if (dd && get(x + dd, y) === 'L' && is(':=', get(x + (dd > 0 ? 1 : -1), y))) across = true;
+        if (across) continue;
+      }
       rows[y][x] = [get(x, y + 1), get(x - 1, y), get(x + 1, y)].indexOf('=') >= 0 ? '=' : '.'; changed = true;
     }
     if (changed) { def.rows = rows.map(function (r) { return r.join(''); }); delete def._baked; }

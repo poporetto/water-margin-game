@@ -198,13 +198,13 @@ WM.TILE_ART = {
 (function(){
  var cfg=WM.TILE_ART;
  cfg.sheets.longCounter='assets/tiles/32/counter-refined.png';
- cfg.sheets.buddhistStatues='assets/tiles/32/statues-refined.png';
- cfg.sheets.taoistStatues='assets/tiles/32/taoist-refined.png';
+ cfg.sheets.buddhistStatues='assets/tiles/32/statues-wood-refined.png';
+ cfg.sheets.taoistStatues='assets/tiles/32/taoist-wood-refined.png';
  cfg.sheets.refinedPaving='assets/tiles/32/paving-refined.png';
  cfg.sheets.largeCenser='assets/tiles/32/censer-refined.png';
  ['spring','summer','autumn','dusk','marsh','south','north','snow'].forEach(function(theme){
-  cfg.tiles['1@'+theme]={sheet:'buddhistStatues',base:'floor',object:{at:[0,0],w:72,h:52,footprint:[5,1]}};
-  cfg.tiles['5@'+theme]={sheet:'taoistStatues',base:'floor',object:{at:[0,0],w:72,h:52,footprint:[5,1]}};
+  cfg.tiles['1@'+theme]={sheet:'buddhistStatues',base:'floor',object:{at:[0,0],w:72,h:68,footprint:[5,1]}};
+  cfg.tiles['5@'+theme]={sheet:'taoistStatues',base:'floor',object:{at:[0,0],w:72,h:68,footprint:[5,1]}};
   cfg.tiles['3@'+theme]={sheet:'largeCenser',base:'floor',object:{at:[0,0],w:32,h:32,footprint:[2,2]}};
   ['6','7'].forEach(function(ch){var old=cfg.tiles[ch+'@'+theme];if(old)cfg.tiles[ch+'@'+theme]=Object.assign({},old,{object:Object.assign({},old.object,{pedestal:true})});});
   if(theme!=='snow')cfg.tiles['=@'+theme]={sheet:'refinedPaving',building:'refined-paving'};
@@ -213,3 +213,15 @@ WM.TILE_ART = {
 
 WM.TILE_ART.sheets.sealedTablet='assets/tiles/32/sealed-tablet-refined.png';
 WM.TILE_ART.tiles['Q@demonhall']={sheet:'sealedTablet',base:'floor',object:{at:[0,0],w:32,h:48,run:true}};
+
+// Complete empty boat silhouettes; winter rowboat retains its snow covering.
+(function(){var cfg=WM.TILE_ART;cfg.sheets.completeRowboat='assets/tiles/32/rowboat-complete-refined.png';cfg.sheets.emptySampan='assets/tiles/32/sampan-empty-refined.png';
+ ['spring','summer','autumn','dusk','marsh','south','north'].forEach(function(theme){
+  cfg.tiles['o@'+theme]={sheet:'completeRowboat',base:'water',object:{at:[0,0],w:32,h:20,footprint:[2,1]}};
+  cfg.tiles['[@'+theme]={sheet:'emptySampan',base:'water',object:{at:[0,0],w:64,h:28}};
+ });
+})();
+
+// Shi Jin's practice-yard weapons; 64px sprite occupies two logical tiles per side.
+WM.TILE_ART.sheets.weaponRack='assets/tiles/32/weapon-rack-refined.png';
+WM.TILE_ART.tiles['⚔']={sheet:'weaponRack',base:'grass',object:{at:[0,0],w:32,h:32,footprint:[2,2]}};

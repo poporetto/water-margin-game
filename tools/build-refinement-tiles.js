@@ -10,8 +10,10 @@ async function sprite(name,w,h){
  await sharp(r,{raw:{width:w,height:h,channels:4}}).png().toFile(dst+name+'-refined.png');
 }
 (async()=>{
- await sprite('sealed-tablet',64,96);await sprite('counter',128,56);await sprite('statues',144,104);
- if(fs.existsSync(src+'taoist.png'))await sprite('taoist',144,104);
+ await sprite('sealed-tablet',64,96);await sprite('counter',128,56);await sprite('statues-wood',144,136);
+ await sprite('taoist-wood',144,136);
+ await sprite('weapon-rack',64,64);
+ await sprite('rowboat-complete',64,40);await sprite('sampan-empty',128,56);
  let p=await sharp(src+'paving.png').resize(64,64).png({palette:true,colours:16,dither:0}).toBuffer();
  let {data,info}=await sharp(p).ensureAlpha().raw().toBuffer({resolveWithObject:true});
  // Matching exterior scanlines make the four-cell repeating pattern seamless.

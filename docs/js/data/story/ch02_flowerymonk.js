@@ -262,7 +262,7 @@
       s.flag('ch2_monk');
       await s.warp('wutai', 17, 22, 'down');
     } },
-    { id: 'ch2_peddler', x: 9, y: 31, npc: 'peddler', cond: function (S2) { return S2.has('ch2_monk') && !S2.has('ch2_drunk1'); }, run: async function (s) {
+    { id: 'ch2_peddler', x: 9, y: 31, npc: 'peddler', ambientEmote: 'note', cond: function (S2) { return S2.has('ch2_monk') && !S2.has('ch2_drunk1'); }, run: async function (s) {
       await s.say('peddler', '(singing) "Below the Nine-Li Hill, a soldier\'s bones lie bare; the wind blows on the river, and a cowherd plays his air..."');
       await s.say('luzhishen', 'You there! What\'s in the buckets?');
       await s.say('peddler', 'Good wine, Reverend.');
@@ -286,6 +286,8 @@
       await s.battle('ch2_monks1', { bg: 'temple' });
       await s.narrate('The monks scattered, howling. Zhishen rampaged through the monastery, scattering the brethren in every direction, until the Abbot himself came out with several elders.');
       s.despawn('m1', { leave: true }); s.despawn('m2', { leave: true });
+      await s.walkTo('player', 18, 18);   // up from the gate, out from under its roof, so he can be seen
+      s.face('player', 'up');
       s.spawn('zhizhen', 'zhizhen', 17, 15, 'down');
       await s.move('zhizhen', 'D2');
       await s.say('zhizhen:angry', 'Zhishen! Stop this at once.');
@@ -295,7 +297,7 @@
       s.despawn('zhizhen', { leave: true });
       s.flag('ch2_scolded');
       await s.narrate('For three or four months after that, he did not dare leave the monastery. But one warm day in the second month he strolled out of the gate, and looking down from the hill, he saw the market town at the foot of the mountain, and heard the ring of a smith\'s hammer.');
-      s.mark([{ map: 'wutai', x: 16, y: 41, w: 3 }, { map: 'wutai_town', x: 6, y: 7 }], 'ch2_staff');   // down the mountain, to the smithy
+      s.mark([{ map: 'wutai', x: 16, y: 41, w: 3 }, { map: 'wutai_town', x: 6, y: 7, sparks: true }], 'ch2_staff');   // down the mountain, to the smithy
     } }
   ]);
 
@@ -375,7 +377,8 @@
     { id: 'ch2_tavern1', x: 15, y: 4, npc: 'innkeep', cond: function (S2) { return S2.has('ch2_scolded') && !S2.has('ch2_dogmeat'); }, text: ['Wine? For a monk? Not here, Reverend. The monastery owns this house. If I sold you wine, I\'d be out on the street tomorrow.'] },
   ]);
   WM.defEvents('wutai_town', [
-    { id: 'ch2_tavern2', x: 30, y: 11, npc: 'waiter', cond: function (S2) { return S2.has('ch2_staff') && !S2.has('ch2_dogmeat'); }, run: async function (s) {
+    { id: 'ch2_tavern2b', x: 30, y: 11, npc: 'waiter', cond: function (S2) { return S2.has('ch2_dogmeat'); }, text: ['Reverend, ten bowls and half a dog, and you walked out straight. But please — no more wine. If the Abbot hears a monk was drinking in my shop, he will have my licence, and you will have the bamboo. Drink less, I beg you.'] },
+    { id: 'ch2_tavern2', x: 30, y: 11, npc: 'waiter', ambientEmote: '!', cond: function (S2) { return S2.has('ch2_staff') && !S2.has('ch2_dogmeat'); }, run: async function (s) {
       await s.say(null, '(A little tavern at the edge of town, a wine flag hanging from a pole over its door.)');
       await s.say('waiter', '...You\'re not from the monastery up the mountain, are you, Reverend?');
       await s.say('luzhishen', 'Me? I\'m a wandering monk, just passing through. Bring me wine.');
@@ -393,7 +396,7 @@
     { id: 'ch2_gate2', x: 15, y: 22, w: 7, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_dogmeat'); },
       idle: { m1: '(The gatekeeper squints down the path at you, and his hand creeps towards the bolt.)', m2: 'Is that Brother Zhishen coming up the path? Swaying like a reed in the wind? Amitabha...' },
       run: async function (s) {
-      s.spawn('m1', 'wutaimonk', 17, 21, 'down'); s.spawn('m2', 'wutaimonk', 18, 21, 'down');   // the gatekeepers, in the gateway
+      s.spawn('m1', 'wutaimonk', 17, 19, 'down'); s.spawn('m2', 'wutaimonk', 18, 19, 'down');   // the gatekeepers, in the gateway (two tiles up, clear of its roof, so they can be seen)
       s.music('tense');
       await s.narrate('In the pavilion half-way up, he swung his arms and stretched his legs. "I haven\'t practised in an age. My joints are rusting." He took hold of a pillar of the pavilion and gave it a shake. The pillar cracked, and half the pavilion came down with a crash.');
       s.sfx('earth'); await s.shake(4, 0.5);
@@ -410,8 +413,8 @@
       await s.narrate('Inside, the gatekeepers heard the guardian come down and thought the whole gate would follow. They drew back the bolt and ran — and Zhishen, who was leaning on the leaves, tumbled in head first.');
       s.unflag('shut:wutai'); s.sfx('door');
       await s.moveTo('player', 17, 19, { run: true });
-      s.spawn('m3', 'wutaimonk', 17, 16, 'down');
-      s.move('m1', 'L1', { wait: false }); s.move('m2', 'R1', { wait: false });
+      s.move('m2', 'R1', { wait: false }); await s.move('m1', 'L1');   // the gatekeepers fall back to either side
+      s.spawn('m3', 'wutaimonk', 17, 16, 'down');                       // and a third comes running between them
       await s.say('wutaimonk:angry', 'Brothers! Take up your staves! He\'s pulled down the guardian kings!');
       await s.battle('ch2_monks2', { bg: 'temple' });
       await s.narrate('Zhishen cleared the hall with his staff. The monks who had tried to block him were laid out on every side, and he smashed his way into the meditation hall, where he flung pieces of dog meat into the faces of the meditating monks and stuffed it into one old monk\'s mouth.');

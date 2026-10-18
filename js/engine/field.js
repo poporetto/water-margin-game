@@ -380,6 +380,7 @@
       if (a.moving) { a.animT += dt * 6.5 * (a.animSpeed || 1); a.anim = Math.floor(a.animT) & 3; }
       else { a.anim = 0; a.animT = 0; }
       if (a.emoteT > 0) { a.emoteT -= dt; if (a.emoteT <= 0) a.emote = null; }
+      if (a.emoteT <= 0 && a.ev && a.ev.ambientEmote) a.emote = (WM.script.running || WM.ui.busy() || (WM.time % 3.5) >= 2.2) ? null : a.ev.ambientEmote;   // someone humming or muttering as they stand about
       if (a.jumpT > 0) { a.jumpT -= dt; a.offY = -Math.sin((1 - a.jumpT / a.jumpDur) * Math.PI) * a.jumpH; if (a.jumpT <= 0) a.offY = 0; }
     }
   };
@@ -774,6 +775,19 @@
           c.globalAlpha = a; c.fillStyle = '#ffd860';
           c.fillRect(sx - 2, sy, 5, 1); c.fillRect(sx, sy - 2, 1, 5);          // a four-pointed star
           c.fillStyle = '#ffffff'; c.fillRect(sx, sy, 1, 1);
+        }
+      }
+      if (mk.sparks) {   // a smithy at work: sparks fly off the anvil, in time with the hammer, so it is plain where to go
+        var hx = Math.round((mk.x + 0.5) * TS - cx), hy = Math.round(mk.y * TS - cy - 22), beat = (t * 1.6) % 1;
+        if (hx > -20 && hy > -20 && hx < WM.LOW_W + 20 && hy < WM.LOW_H + 20 && beat < 0.7) {
+          var k = beat / 0.7;
+          for (var j = 0; j < 6; j++) {
+            var ang = -Math.PI * (0.1 + 0.8 * j / 5), r = 3 + k * 11, px0 = Math.round(hx + Math.cos(ang) * r), py0 = Math.round(hy + Math.sin(ang) * r + k * k * 6);
+            c.globalAlpha = 1 - k; c.fillStyle = j % 2 ? '#ffd860' : '#fff4c0';
+            c.fillRect(px0 - 1, py0, 3, 1); c.fillRect(px0, py0 - 1, 1, 3);
+          }
+          c.globalAlpha = Math.max(0, 1 - k * 2); c.fillStyle = '#ffffff';
+          c.fillRect(hx - 5, hy, 11, 1); c.fillRect(hx, hy - 5, 1, 11);
         }
       }
       c.globalAlpha = 1;

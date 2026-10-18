@@ -35,7 +35,7 @@
   for (var y = 2; y < 30; y += 5) { if (y >= 10 && y <= 17) continue; g.set(18, y, 'L'); g.set(23, y, 'L'); }
   g.set(17, 29, 'I');
   WM.defMap('weizhou', {
-    name: 'Weizhou', theme: 'autumn', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [20, 29],
+    name: 'Weizhou', keepFlankingLanterns: true, theme: 'autumn', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [20, 29],
     exits: [WM.toWorld('weizhou', 19, 31, 4, 1)]
   });
 

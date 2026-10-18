@@ -281,7 +281,7 @@
       // show the way on: twinkling motes at each spot ({ map, x, y, w }) until the story flag `until` is set
       mark: function (spots, until) {
         var st = WM.state; st.marks = (st.marks || []).filter(function (m) { return !(m.until && S.has(m.until)); });
-        (spots || []).forEach(function (sp) { st.marks.push({ map: sp.map, x: sp.x, y: sp.y, w: sp.w || 1, until: until }); });
+        (spots || []).forEach(function (sp) { st.marks.push({ map: sp.map, x: sp.x, y: sp.y, w: sp.w || 1, sparks: !!sp.sparks, until: until }); });
       },
       // a change of clothes for a character (look parts to change, e.g. { body, robe: false }); null puts theirs back
       costume: function (id, look) { var st = WM.state; st.costume = st.costume || {}; if (look) st.costume[id] = look; else delete st.costume[id]; },

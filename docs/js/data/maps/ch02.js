@@ -71,25 +71,25 @@
   // ---------------- Mount Wutai: the Manjusri Monastery ----------------
   var w = L.grid(36, 42, 'M');
   // path from the town up to the half-way pavilion and the mountain gate
-  var path = [[17, 41], [17, 36], [12, 32], [12, 27], [18, 24], [18, 21]];
+  var path = [[17, 41], [17, 36], [12, 32], [12, 27], [17, 24], [17, 21]];
   function walk(fn) { for (var i = 0; i < path.length - 1; i++) { var a = path[i], b = path[i + 1], n = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])); for (var k = 0; k <= n; k++) fn(Math.round(a[0] + (b[0] - a[0]) * k / n), Math.round(a[1] + (b[1] - a[1]) * k / n)); } }
   walk(function (x, yy) { w.rect(x - 3, yy - 1, 7, 3, '.'); });
   walk(function (x, yy) { w.set(x, yy, ':'); w.set(x + 1, yy, ':'); });
   w.scatter('P', 0.2, 71, '.'); L.clearAround(w, ':', 'Pm', '.');
   // half-way pavilion
-  w.rect(8, 29, 4, 3, '.'); w.house(8, 29, 3, 3, { roof: 'v', wall: 'R', door: false, wallRows: 1 }); w.set(9, 31, '.');
+  w.rect(8, 29, 4, 3, '.'); w.house(8, 29, 3, 3, { roof: 'v', wall: 'R', door: false, wallRows: 1 }); w.set(9, 31, '.'); w.rect(9, 32, 3, 1, '.'); w.set(11, 31, 'j');   // (no tree in front of the wine peddler, a wine jar beside his pavilion)
   // monastery terrace
   w.rect(3, 2, 30, 20, '.');
   w.frame(3, 2, 30, 20, 'R');
   // the mountain gate: a gate hall in the wall, the two guardian kings standing in its wings, facing out
-  w.rect(16, 21, 4, 1, 'G'); w.set(15, 21, 'U'); w.set(20, 21, 'U');
+  w.rect(16, 21, 4, 1, 'G'); w.set(15, 22, 'U'); w.set(20, 22, 'U');   // the lions stand in front, so the gate hall meets the wall on both sides
   w.rect(16, 15, 4, 6, '=');
   w.set(14, 20, 'L'); w.set(21, 20, 'L');
   var mainHall = w.house(11, 3, 14, 7, { roof: 'Z', wall: 'R', door: 7 });
   w.rect(17, 10, 2, 5, '=');
-  var medHall = w.house(4, 11, 9, 5, { roof: 'v', wall: 'W', door: 4, windows: [1, 7] });
-  var abbotH = w.house(24, 11, 8, 5, { roof: 'v', wall: 'W', door: 4, windows: [1, 6] });
-  w.hline(8, 16, 16, ':'); w.hline(19, 28, 16, ':'); w.set(8, 16, ':'); w.set(28, 16, ':');
+  var medHall = w.house(5, 11, 9, 5, { roof: 'v', wall: 'W', door: 4, windows: [1, 7] });
+  var abbotH = w.house(23, 11, 8, 5, { roof: 'v', wall: 'W', door: 4, windows: [1, 6] });
+  w.hline(8, 16, 16, ':'); w.hline(19, 28, 16, ':'); w.set(16, 16, '='); w.set(19, 16, '=');   // (the paving meets the side paths without a patch of pebbles between) w.set(8, 16, ':'); w.set(28, 16, ':');
   w.set(26, 5, 'L'); w.set(9, 5, 'L');
   w.stamp(4, 3, ['PP', 'P.']); w.stamp(30, 3, ['PP', '.P']); w.stamp(4, 18, ['f.P']); w.stamp(29, 18, ['P.f']);
   w.set(31, 8, 'p');
@@ -104,7 +104,7 @@
   wi.stamp(2, 3, ['kkk..kkk..kkk.', 'kkk..kkk..kkk.', '..............', 'kkk..kkk..kkk.', 'kkk..kkk..kkk.'])   // the long meditation platforms the monks sleep on;
   wi.stamp(19, 3, ['h..A..h.', '........', '..t.....']);
   // the Hall of the Great Hero: the Manjusri triad on its altar, red columns, a carpet from the door to the altar
-  wi.stamp(30, 3, ['hh.L.111.L.hh', '.....222.....', '.i..4...4..i.', '.....nnn.....', '.i...nnn...i.', '.....nnn.....', '.i...nnn...i.', '.....nnn.....', 'j....nnn....j', '.....nnn.....']);
+  wi.stamp(30, 3, ['hh.L.111.L.hh', '.....222.....', '.i..4...4..i.', '.....nnn.....', '.i...nnn...i.', '.....nnn.....', '.i...nnn...i.', '.....nnn.....', '.....nnn.....', '.....nnn.....']);
   WM.defMap('wutai_in', { name: '', interior: true, theme: 'autumn', music: 'palace', rows: wi.rows(), spawn: [9, 9] });
   L.link({ map: 'wutai', x: medHall.x, y: medHall.y }, { map: 'wutai_in', x: wR.med.x, y: wR.med.y });
   L.link({ map: 'wutai', x: abbotH.x, y: abbotH.y }, { map: 'wutai_in', x: wR.abbot.x, y: wR.abbot.y });

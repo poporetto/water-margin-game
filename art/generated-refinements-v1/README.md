@@ -18,3 +18,9 @@ Preview: `tools/tile-refinements.html`. Tests: `tools/test-tile-refinements.js`,
 - The sealed tablet uses a dedicated 64×96 grey stone sprite with dragon crown, seal marks, tortoise and plinth. It is assigned only to `demonhall`; other stelae retain their existing appearance. Its two authored base cells and two-wide story interaction match the new width; the visual height overhangs without blocking extra floor rows.
 - The new tablet was created with the built-in image tool. Source: `sealed-tablet.png`; exact prompt: `sealed-tablet-prompt.txt`; export: `assets/tiles/32/sealed-tablet-refined.png`.
 - `tools/test-furniture-cleanup.js` verifies clean silhouettes, one seat, tablet rendering dimensions, collision and interaction width.
+
+## Wooden statues and complete boats (latest)
+
+The earlier painted Buddhist and Taoist statue sets are superseded by separate wood-only versions, retaining their religious identities. Production sprites are 144×136: 32px (one tile) taller than before. Ground footprints remain five tiles wide and one deep; the extra visual height does not block floor above them.
+
+The ordinary rowboat and covered sampan now have complete independent source images, avoiding the shared-sheet crop errors. The sampan contains no painted person. Production files: rowboat-complete-refined.png (64×40), sampan-empty-refined.png (128×56), statues-wood-refined.png and taoist-wood-refined.png. Built-in image generation prompts and source PNGs are saved here under those names. Snow rowboats retain their complete snow-covered version.

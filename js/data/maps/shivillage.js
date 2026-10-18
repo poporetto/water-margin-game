@@ -4,6 +4,8 @@
   var L = WM.mapLib;
 
   // ---------------- Shi Family Village ----------------
+  // the village as it stands; once the manor has burnt (after the escape) its buildings are ruins and the yard is ash
+  function buildVillage(burnt) {
   var g = L.grid(40, 32, '.');
   g.border('T', 1, [{ side: 's', from: 13, to: 15 }, { side: 'n', from: 30, to: 31 }]);
   // main road from the south gap up to the manor gate, and a lane east to the north gap
@@ -12,12 +14,12 @@
   g.rect(30, 1, 2, 19, ':');
   // the manor: fenced compound
   g.frame(5, 3, 22, 16, 'F');
-  g.rect(13, 18, 3, 1, ':');
+  g.rect(13, 17, 3, 3, ':');
   var hall = g.house(9, 4, 14, 6, { roof: '^', door: 7, windows: [2, 4, 9, 11] });
   g.house(6, 11, 5, 4, { roof: 'z', door: false, windows: [2] });       // granary
   g.house(22, 11, 4, 4, { roof: 'z', door: false, windows: [1] });      // stable
   g.rect(12, 11, 9, 6, '=');                                             // practice yard
-  g.set(12, 11, 'j'); g.set(20, 11, 'j'); g.set(12, 16, 'I'); g.set(20, 16, 'L'); g.set(12, 13, 'L');
+  g.set(12, 11, 'j'); g.set(20, 11, 'j'); g.set(13, 16, '⚔'); g.set(20, 16, 'L'); g.set(12, 13, 'L');
   g.rect(16, 10, 1, 1, ':');
   g.vline(16, 10, 10, ':');
   g.stamp(6, 16, ['ff.', 'T..']); g.stamp(24, 16, ['.T']);
@@ -34,8 +36,21 @@
   g.scatter('f', 0.05, 22, '.', [1, 1, 38, 30]);
   L.clearAround(g, ':', 'T', '.');
   g.set(12, 21, 'I');
+  if (burnt) {
+    g.rect(9, 4, 14, 6, '@'); g.rect(6, 11, 5, 4, '@'); g.rect(22, 11, 4, 4, '@');
+    g.rect(12, 11, 9, 6, '$'); g.rect(16, 10, 1, 1, '$');
+    g.set(7, 17, 'e'); g.set(24, 17, 'e'); g.set(18, 10, 'e');
+    g.scatter('$', 0.25, 31, '.', [6, 4, 20, 14]);
+    g.rect(13, 10, 3, 1, '$');
+  }
+  return { rows: g.rows(), hall: hall, houseA: houseA, shopH: shopH, houseB: houseB };
+  }
+  var burntNow = function () { return !!(WM.state && WM.state.flags && WM.state.flags.ch1_escaped); };   // (no game yet while the data is being checked at boot)
+  var V = buildVillage(false), VB = null;
+  var hall = V.hall, houseA = V.houseA, shopH = V.shopH, houseB = V.houseB;
   WM.defMap('shivillage', {
-    name: 'Shi Family Village', theme: 'spring', music: 'field', rows: g.rows(), battleBg: 'plains', spawn: [14, 30],
+    name: 'Shi Family Village', theme: 'spring', music: function (S2) { return S2.has('ch1_fire') && !S2.has('ch1_escaped') ? 'tense' : 'field'; }, cacheKey: function () { return burntNow() ? 'burnt' : 'whole'; },
+    rows: function () { if (burntNow()) return (VB = VB || buildVillage(true).rows); return V.rows; }, battleBg: 'plains', spawn: [14, 30],
     exits: [WM.toWorld('shivillage', 13, 31, 3, 1), WM.toWorld('shivillage', 30, 0, 2, 1)].map(function (e) {
       e.cond = function (S2) { return WM.state.chapter !== 1 || S2.has('ch1_escaped'); };
       e.blocked = function (S2) { return { who: WM.state.leader, text: S2.has('ch1_shijin') ? 'I can\'t leave the village unguarded.' : 'We should not wander off. Mother needs rest.' }; };

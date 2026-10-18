@@ -150,7 +150,7 @@
       s.music('field');
       s.tint('dusk');
       s.spawn('mother', 'wangmother', 15, 22, 'up');
-      s.spawn('servant', 'servant', 14, 17, 'down');
+      s.spawn('servant', 'servant', 15, 17, 'down');
       await s.move('servant', 'D2');
       await s.say('wangjin', 'Friend, my mother and I have travelled far and missed the inn. May we beg a night\'s lodging? We will pay for the room.');
       await s.say('servant', 'Wait here. I\'ll ask the Taigong.');
@@ -340,10 +340,15 @@
       await s.say('shijin:angry', 'So that is how Li Ji knew! You have brought ruin on this house!');
       await s.narrate('In his fury Shi Jin cut Wang Si down where he stood. Then he went to the gate and called out to the officers, asking for time to bind the bandits and hand them over. While the officers waited, he and the three chiefs set fire to the manor from back to front, packed what gold and silver they could carry, and took up their weapons.');
       s.lie('wangsi');   // cut down where he stood
+      // the three chiefs step in beside Shi Jin and fall in with him, one notice for each
+      var lead = s.actor('player').tile();
+      s.moveTo('zhuwu', lead.x, lead.y, { wait: false }); s.moveTo('yangchun', lead.x, lead.y, { wait: false }); await s.moveTo('chenda', lead.x, lead.y);
+      await s.wait(0.3);
+      s.hide('zhuwu'); s.hide('chenda'); s.hide('yangchun');   // stepped into Shi Jin
+      s.despawn('zhuwu'); s.despawn('chenda'); s.despawn('yangchun');
       s.addParty('zhuwu'); s.addParty('chenda'); s.addParty('yangchun');
       s.level('zhuwu', 4); s.level('chenda', 4); s.level('yangchun', 4);
       WM.state.party = ['shijin', 'chenda', 'yangchun', 'zhuwu'];
-      s.despawn('zhuwu'); s.despawn('chenda'); s.despawn('yangchun');
       s.heal();
       s.flag('ch1_fire');
       s.give('medicine', 2, true); s.give('bun', 4, true);
@@ -354,7 +359,7 @@
   var fireActive = function (S2) { return S2.has('ch1_fire') && !S2.has('ch1_escaped'); };
   WM.defEvents('shivillage', [
     { id: 'ch1_firestart', trigger: 'auto', once: true, x: 0, y: 0, cond: fireActive, run: async function (s) {
-      s.tint('fire');
+      s.tint('fire'); s.music('tense');
       await s.say('zhuwu', 'The soldiers are thickest at the front gate. Cut through the yard and out by the south road — Mount Shaohua is our only refuge now.');
     } },
     { id: 'ch1_yardfight', x: 12, y: 15, w: 9, h: 2, trigger: 'touch', once: true, cond: fireActive, run: async function (s) {
@@ -422,9 +427,8 @@
 
   // ---------------- Weizhou: Shi Jin meets Lu Da ----------------
   WM.defEvents('weizhou_in', [
-    { id: 'ch1_tea', x: 6, y: 5, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch1_toweizhou'); }, idle: { waiterT: 'Tea, sir? Sit where you like. The garrison officers come in about this hour.' },
+    { id: 'ch1_tea', x: 3, y: 7, npc: 'waiter', dir: 'right', cond: function (S2) { return S2.has('ch1_toweizhou') && !S2.has('ch1_metluda'); },   // the scene starts when Shi Jin speaks to the waiter
       run: async function (s) {
-      s.spawn('waiterT', 'waiter', 3, 7, 'right');
       await s.say('waiter', 'Tea, sir? What can I bring you?');
       await s.say('shijin', 'A pot of the strong stuff. And tell me — where is the garrison commander\'s office? I\'m looking for an instructor from the Eastern Capital named Wang Jin. Is he here?');
       await s.say('waiter', 'Lots of instructors in the garrison, sir. Three or four named Wang. Ah — there\'s the man to ask. The Major\'s just come in.');
@@ -439,7 +443,6 @@
       await s.say('shijin', 'The same.');
       await s.say('luda:smile', 'Ha ha! I\'ve heard of you! I\'m Lu Da, a major in the garrison here. Your teacher Wang Jin — I know the name. But he\'s not with us. He\'s with the old Minister at Yan\'an, not the son here at Weizhou.');
       await s.say('luda:smile', 'Never mind! Meeting you is worth a jar of wine. Come drinking with me!');
-      s.despawn('waiterT');
       s.flag('ch1_metluda');
       s.addParty('shijin');
       await s.fadeOut(0.6);
