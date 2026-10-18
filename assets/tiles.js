@@ -225,3 +225,10 @@ WM.TILE_ART.tiles['Q@demonhall']={sheet:'sealedTablet',base:'floor',object:{at:[
 // Shi Jin's practice-yard weapons; 64px sprite occupies two logical tiles per side.
 WM.TILE_ART.sheets.weaponRack='assets/tiles/32/weapon-rack-refined.png';
 WM.TILE_ART.tiles['⚔']={sheet:'weaponRack',base:'grass',object:{at:[0,0],w:32,h:32,footprint:[2,2]}};
+WM.TILE_ART.sheets.uprootedWillow='assets/tiles/32/willow-uprooted-refined.png';
+// the cesspit of the Xiangguo vegetable garden: the river's banks and ripples, recoloured to sludge (tools/build-cesspit-tiles.js)
+(function () {
+  var w = WM.TILE_ART.tiles['~'] || WM.TILE_ART.tiles['~@spring']; if (!w || !w.auto) return;
+  WM.TILE_ART.sheets.cesspit = 'assets/tiles/32/cesspit.png';
+  WM.TILE_ART.tiles.C = { sheet: 'cesspit', fps: 2, sync: true, auto: { same: 'C', diagonal: true, cells: w.auto.cells, frames: w.auto.frames } };
+})();

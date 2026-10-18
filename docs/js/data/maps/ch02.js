@@ -163,7 +163,7 @@
   var x = L.grid(34, 28, '.');
   x.rect(0, 0, 34, 3, '=');                                   // the lane outside the north wall
   x.hline(0, 33, 3, 'R'); x.vline(0, 3, 27, 'R'); x.vline(33, 3, 27, 'R'); x.hline(0, 33, 27, 'R');
-  x.set(7, 27, 'D');                                         // the gate, at the foot of the stone avenue
+  x.rect(7, 27, 2, 1, 'G');                                   // the gate, at the foot of the stone avenue, as on the Kaifeng side
   x.vline(16, 3, 20, 'R');                                    // wall between temple court and garden, open at its south end
   // temple court (west)
   var zhiqing = x.house(2, 5, 12, 6, { roof: 'Z', wall: 'R', door: 6 });
@@ -179,7 +179,7 @@
   x.scatter('f', 0.06, 101, '.', [17, 4, 16, 22]);
   WM.defMap('xiangguo', { name: 'Great Xiangguo Monastery', theme: 'spring', music: 'field', rows: x.rows(), spawn: [7, 25], battleBg: 'temple' });
   var d = WM.data.kaifengDoors.xiangguo;
-  L.link({ map: 'kaifeng', x: d.x, y: d.y }, { map: 'xiangguo', x: 7, y: 27, inside: { x: 7, y: 26, dir: 'up' } });
+  L.link({ map: 'kaifeng', x: d.x, y: d.y }, { map: 'xiangguo', x: 7, y: 27, w: 2, inside: { x: 7, y: 26, dir: 'up' } });
   var xi = L.grid(24, 10, 'x');
   var xR = { zhiqing: xi.room(1, 1, 12, 8, { floor: 'n' }), hut: xi.room(14, 1, 9, 7) };
   xi.stamp(2, 3, ['h..111...h', '...222....', '..........']);   // the Buddha hall xi.stamp(15, 3, ['k...j..', '.......', '..t....']);
