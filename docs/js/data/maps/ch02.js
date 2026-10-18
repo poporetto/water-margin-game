@@ -137,19 +137,19 @@
   var g = L.grid(34, 34, 'P');
   g.rect(2, 2, 30, 16, '.');
   g.frame(4, 3, 26, 14, 'R');
-  // ruined walls: gaps and rubble
-  [[10, 3], [11, 3], [20, 3], [4, 9], [4, 10], [29, 7], [29, 12], [16, 16], [17, 16], [18, 16]].forEach(function (q) { g.set(q[0], q[1], q[0] >= 16 && q[0] <= 18 && q[1] === 16 ? ':' : 'm'); });
+  // the gate: an opening in the wall, the width of the road
+  g.rect(16, 16, 3, 1, ':');
   g.house(11, 4, 12, 5, { roof: 'v', wall: 'R', door: false });  // the great hall, roof falling in
-  g.set(13, 4, 'e'); g.set(19, 5, 'e');
-  var kitchen = g.house(5, 11, 7, 4, { roof: 'z', door: 3 });
-  var cuiRoom = g.house(22, 10, 7, 4, { roof: '^', door: 3, windows: [1, 5] });
+  var kitchen = g.house(6, 11, 7, 4, { roof: 'z', door: 3 });   // (a step in from the monastery wall)
+  var cuiRoom = g.house(21, 10, 7, 4, { roof: '^', door: 3, windows: [1, 5] });
   g.rect(16, 9, 3, 7, ':');
   g.scatter('e', 0.04, 91, '.', [5, 4, 24, 12]); g.scatter(',', 0.25, 92, '.', [5, 4, 24, 12]);
   // the red pine forest to the south
-  g.rect(15, 17, 4, 17, ':');
+  g.rect(16, 17, 3, 17, ':');   // the road south, as wide as the gate
   g.rect(8, 22, 18, 6, '.'); g.scatter('P', 0.18, 93, '.', [8, 22, 18, 6]);
+  g.rect(16, 17, 3, 17, ':');   // the road carries on through the clearing
   L.clearAround(g, ':', 'Pe', '.');
-  WM.defMap('waguan', { name: 'Waguan Monastery', theme: 'autumn', music: 'dungeon', rows: g.rows(), spawn: [16, 32], battleBg: 'forest', exits: [WM.toWorld('waguan', 15, 33, 4, 1)],
+  WM.defMap('waguan', { name: 'Waguan Monastery', theme: 'autumn', music: 'dungeon', rows: g.rows(), spawn: [16, 32], battleBg: 'forest', exits: [WM.toWorld('waguan', 16, 33, 3, 1)],
     encounters: { rate: 0.05, troops: [['wolf', 'wolf'], ['boar'], ['bandit', 'bandit', 'banditArcher']], cond: function (S2) { return !S2.has('ch2_waguanwin'); } } });
   var gi = L.grid(20, 9, 'x');
   var gR = { kitchen: gi.room(1, 1, 8, 7), cui: gi.room(10, 1, 9, 7) };

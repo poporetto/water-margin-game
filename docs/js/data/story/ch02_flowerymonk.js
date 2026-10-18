@@ -506,10 +506,24 @@
       s.flag('ch2_heardcui');
     } }
   ]);
+  // Shi Jin on the road below Waguan: talk to him, or walk into the clearing, and he comes at you
+  async function shijinOnRoad(s) {
+      await s.say('shijin:angry', 'You there, monk! Whatever you carry, set it down on the road, and go on your way.');
+      await s.duel('lu_shijin', { canLose: true });
+      await s.say('shijin', 'Brother! After we parted at Weizhou, I went to Yan\'an to look for Master Wang and never found him. My money ran out, so I\'ve been... borrowing from travellers on the road.');
+      await s.say('luzhishen', 'Ha! And I have been a monk. Here — do you have anything to eat? I\'ve had nothing all day.');
+      await s.narrate('Shi Jin brought out dried meat and flatbread, and Zhishen ate it all. Then he told Shi Jin about the Waguan Monastery and the two villains.');
+      await s.say('shijin:angry', 'Then let\'s go back together and finish them.');
+      // (he falls in with Zhishen: the party takes him from here)
+      s.addParty('shijin'); s.level('shijin', Math.max(8, WM.state.chars.luzhishen.lv - 1));
+      S.restoreParty();
+      s.flag('ch2_withshijin');
+      await s.notice('Shi Jin joined the party.', { auto: 1.6 });
+  }
   WM.defEvents('waguan', [
     { id: 'ch2_cui1', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_heardcui'); }, idle: { cui: 'A wandering monk? This monastery has nothing left for beggars. Sit down, brother, if you want a cup.', qiu: '(Qiu Xiaoyi, the Flying Yaksha, rests a hand on his sword and smiles at you.)' },
       run: async function (s) {
-      s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
+      s.spawn('cui', 'cuidaocheng', 19, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 20, 11, 'down');
       await s.say('cuidaocheng', 'A monk? Sit down, sit down, brother. Share our wine.');
       await s.say('luzhishen:angry', 'You two have ruined this monastery and starved the old monks!');
       await s.say('cuidaocheng', 'Who told you that? Those old men lie. They lost the lands themselves, gambling and drinking...');
@@ -529,26 +543,16 @@
       await s.say('luzhishen:sad', '(If I\'d had a meal in my belly, those two... I\'ll find something to eat and come back.)');
       await s.say(null, '(Below the monastery, on the road he came by, there was a forest of red pines.)');
     } },
-    { id: 'ch2_shijin', x: 14, y: 23, w: 7, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_fled_cui'); }, idle: { shijinH: '(A man in a broad hat is waiting among the pines with a halberd.) You there, monk! Anyone who passes through these trees pays the toll.' },
-      run: async function (s) {
-      s.spawn('shijinH', 'shijin', 21, 23, 'left');
-      await s.move('shijinH', 'L3', { run: true });
-      await s.duel('lu_shijin', { canLose: true });
-      s.despawn('shijinH', { leave: true });
-      s.spawn('shijinH', 'shijin', 17, 25, 'left');
-      await s.say('shijin', 'Brother! After we parted at Weizhou, I went to Yan\'an to look for Master Wang and never found him. My money ran out, so I\'ve been... borrowing from travellers on the road.');
-      await s.say('luzhishen', 'Ha! And I have been a monk. Here — do you have anything to eat? I\'ve had nothing all day.');
-      await s.narrate('Shi Jin brought out dried meat and flatbread, and Zhishen ate it all. Then he told Shi Jin about the Waguan Monastery and the two villains.');
-      await s.say('shijin:angry', 'Then let\'s go back together and finish them.');
-      s.despawn('shijinH', { leave: true });
-      s.addParty('shijin'); s.level('shijin', Math.max(8, WM.state.chars.luzhishen.lv - 1));
-      S.restoreParty();
-      s.flag('ch2_withshijin');
-      await s.notice('Shi Jin joined the party.', { auto: 1.6 });
-    } },
+    { id: 'ch2_shijin', x: 20, y: 24, char: 'shijin', dir: 'left', once: true,   // waiting among the pines; speak to him and he comes at you
+      cond: function (S2) { return S2.has('ch2_fled_cui') && !S2.has('ch2_withshijin'); },
+      run: shijinOnRoad },
+    { id: 'ch2_shijin_road', x: 14, y: 23, w: 7, h: 3, trigger: 'touch', once: true,   // or walk into the clearing past him
+      cond: function (S2) { return S2.has('ch2_fled_cui') && !S2.has('ch2_withshijin'); },
+      run: shijinOnRoad },
+
     { id: 'ch2_cui2', x: 20, y: 13, w: 6, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch2_withshijin'); }, idle: { cui: 'Still on your feet, fat monk? Those old men filled your ears with lies.', qiu: '(This time Qiu Xiaoyi has his sword drawn across his knees.)' },
       run: async function (s) {
-      s.spawn('cui', 'cuidaocheng', 20, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 21, 11, 'down');
+      s.spawn('cui', 'cuidaocheng', 19, 11, 'down'); s.spawn('qiu', 'qiuxiaoyi', 20, 11, 'down');
       // Shi Jin came back with him: he stands at Zhishen's side
       s.spawn('sj', 'shijin', WM.state.x - 1, WM.state.y, 'up');
       await s.say('cuidaocheng:angry', 'Back again, and with a friend? We beat you once already!');
