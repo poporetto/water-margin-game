@@ -277,6 +277,8 @@
         enter(a, who, tx, ty, dir);
         return a;
       },
+      // those named fall in behind the leader and follow wherever he walks (until a scene places them again)
+      follow: function (keys) { F().trail = []; keys.forEach(function (k, i) { var a = F().findActor(k); if (!a) return; snap(k); a.following = true; a.followIdx = i; a.solid = false; }); },
       despawn: function (key, opt) { sendOff(key, pending, opt); },   // opt.to: [x, y], where they go
       // show the way on: twinkling motes at each spot ({ map, x, y, w }) until the story flag `until` is set
       mark: function (spots, until) {

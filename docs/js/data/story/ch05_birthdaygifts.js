@@ -142,11 +142,40 @@
       await s.say('liutang', 'Uncle! Uncle, save me!');
       await s.say('chaogai:shock', '...Wang Xiaosan? Is it you, nephew? Why are you here, you good-for-nothing? You left home ten years ago, and now you turn up as a thief in a temple?');
       await s.say('leiheng:shock', 'This is your nephew, Headman? ...Then I am sorry. I didn\'t know. Untie him!');
-      await s.narrate('Chao Gai gave Lei Heng ten taels of silver "for the trouble," and Lei Heng and his men went off to the county. But Liu Tang, the moment he was free, snatched up a halberd and ran after them.');
-      s.despawn('lei', { leave: true });
-      s.despawn('liutang', { leave: true });
+      // Liu Tang is untied; Chao Gai presses silver on the constable, who goes off down the path to the county road
+      s.emote('liutang', '...', 1);
+      s.faceEach('player', 'lei');
+      await s.say('chaogai', 'Constable, take this for your trouble — ten taels. And forgive the boy.');
+      s.sfx('item'); await s.emote('lei', '!', 0.8);
+      await s.say('leiheng:smile', 'Headman, you are too generous. I\'ll be on my way, then.');
+      await s.walkTo('lei', 16, 20);
+      s.face('lei', 'down');
+      // the moment he is free, Liu Tang snatches up a halberd and runs after him
+      s.face('liutang', 'down'); await s.emote('liutang', 'anger', 1);
+      await s.say('liutang:angry', 'Ten taels of the Headman\'s silver, and he calls me a thief! I\'ll have it back off him!');
+      s.camera(16, 18, 0.8);   // the view follows them down to the road
+      await s.walkTo('liutang', 16, 18, { run: true });
+      s.face('lei', 'up'); await s.emote('lei', '!', 0.8);
       await s.duel('liutang_leiheng', { hero: 'liutang', canLose: true });
-      await s.narrate('The two fought fifty bouts on the road, and neither could win, until a man in a scholar\'s gown came out of a schoolhouse by the bridge and held them apart with a pair of copper chains. This was the village schoolmaster, Wu Yong, the Resourceful Star — a friend of Chao Gai from childhood. Then Chao Gai came running, scolded his "nephew," and Lei Heng went off cursing.');
+      // fifty bouts and no winner, until the schoolmaster comes out of his schoolhouse by the bridge and parts them
+      await s.narrate('The two fought fifty bouts on the road, and neither could win.');
+      s.spawn('wuyong', 'wuyong', 29, 28, 'up');
+      await s.emote('wuyong', '!', 0.8);
+      await s.walkTo('wuyong', 17, 19, { run: true });
+      s.face('wuyong', 'left');
+      await s.say('wuyong', 'Stop, both of you! Put up your weapons. What is all this shouting on my doorstep?');
+      await s.narrate('He held them apart with a pair of copper chains. This was the village schoolmaster, Wu Yong, the Resourceful Star — a friend of Chao Gai from childhood.');
+      // Chao Gai comes running down from the manor
+      await s.walkTo('player', 15, 19, { run: true });
+      s.faceEach('player', 'liutang');
+      await s.say('chaogai:angry', 'Nephew! Have you no manners? Put that halberd down this instant!');
+      s.faceEach('player', 'lei');
+      await s.say('chaogai', 'Constable, forgive him. He is young and a fool.');
+      await s.say('leiheng:angry', 'For your sake, Headman, I\'ll let it go. But keep that whelp on a leash!');
+      await s.walkTo('lei', 17, 28);   // off down the road to the county, cursing
+      s.hide('lei'); s.despawn('lei');
+      s.cameraReset();
+      s.despawn('liutang', { leave: true }); s.despawn('wuyong', { leave: true });
       s.flag('ch5_wuyong');
       await s.warp('dongxi_in', 10, 8, 'up', { noFade: true });
       s.spawn('liutang', 'liutang', 8, 5, 'right'); s.spawn('wuyong', 'wuyong', 12, 5, 'left');
@@ -236,13 +265,15 @@
       await s.say('soldier', 'We\'re carrying a hundred catties each in this heat! Even the dogs lie in the shade!');
       await s.say('laoduguan', 'Officer Yang, have pity on the men. You don\'t rank so high that you can drive them like oxen.');
       await s.say('yangzhi:angry', 'You don\'t know these roads. This is bandit country. Keep moving!');
+      s.follow(['steward', 's1', 's2']);   // the escort trudges along behind him
       s.despawn('steward'); s.despawn('s1'); s.despawn('s2');
       await s.say(null, '(Lead the escort over the ridge. The pine grove at the crest offers shade.)');
     } },
-    { id: 'ch5_ridge', x: 19, y: 7, w: 7, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_escort'); }, idle: { steward: 'You drive these men too hard, Officer Yang. The Governor\'s lady would not want them to die on the road.', s1: 'Officer Yang, the sun is splitting the stones. Only a little rest in the shade...', s2: '(The soldier groans under his carrying pole and does not look up.)', s3: 'Bandits, bandits! He beats us with his rattan and shouts about bandits. I\'ve seen nothing but dust.' },
+    { id: 'ch5_ridge', x: 16, y: 4, w: 14, h: 9, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_escort'); }, idle: { steward: 'You drive these men too hard, Officer Yang. The Governor\'s lady would not want them to die on the road.', s1: 'Officer Yang, the sun is splitting the stones. Only a little rest in the shade...', s2: '(The soldier groans under his carrying pole and does not look up.)', s3: 'Bandits, bandits! He beats us with his rattan and shouts about bandits. I\'ve seen nothing but dust.' },
       run: async function (s) {
       s.music('tense');
       s.spawn('steward', 'laoduguan', 20, 9, 'up'); s.spawn('s1', 'soldier', 21, 10, 'up'); s.spawn('s2', 'soldier', 23, 10, 'up'); s.spawn('s3', 'soldier', 19, 10, 'right');
+      await s.walkTo('player', 22, 8); s.face('player', 'down');   // up into the shade of the pines with them, wherever on the slope the ridge was reached
       await s.narrate('At noon they reached the top of Yellow Earth Ridge. The soldiers dropped their loads and threw themselves down in the shade of the pines, and no amount of beating would make them get up.');
       await s.say('yangzhi:angry', 'Up! This is the worst place on the whole road — Yellow Earth Ridge! Bandits rob here in broad daylight!');
       await s.say('laoduguan:angry', 'Let them rest, Officer Yang! You\'re always talking of bandits. Where are they?');
@@ -252,8 +283,10 @@
       await s.say('chaogai', 'Who are you, then? We\'re seven brothers from Haozhou, taking dates to the capital to sell. We stopped here to rest in the shade. We heard there were robbers on this ridge, and when we saw you, we were afraid you were the robbers!');
       await s.say('yangzhi', '...Small traders. Very well.');
       s.spawn('bai', 'baisheng', 14, 12, 'right');
+      var baiA = s.actor('bai'); baiA.emote = 'note'; baiA.emoteT = 999;   // singing as he comes up the road
       await s.say('baisheng', '(singing) "The sun burns down like fire, and scorches all the grain; the farmers\' hearts are boiling, the young lords fan in vain..."');
       await s.move('bai', 'R6 U2');
+      baiA.emote = null; baiA.emoteT = 0;   // and stops when the soldiers hail him
       await s.say('soldier', 'What\'s in those buckets?');
       await s.say('baisheng', 'White wine. Five strings a bucket.');
       await s.say('soldier', 'Let\'s buy some! We\'re dying of thirst!');
@@ -271,16 +304,40 @@
       await s.fadeOut(1.5);
       await s.narrate('The soldiers fell one after another. Yang Zhi could see, but he could not move a finger. The seven merchants tipped the dates out of their carts, loaded the eleven packs of gold and pearls in their place, covered them with the dates, and pushed the carts away down the ridge.');
       await s.narrate('How was it done? The first bucket was clean. While the soldiers watched, Wu Yong took a ladle from the second bucket — and the drug was in the ladle. When Bai Sheng snatched it back and poured it in, the drug went with it. This is what the storytellers call "Seizing the Birthday Gifts by Guile."');
-      s.despawn('m1', { leave: true }); s.despawn('m2', { leave: true }); s.despawn('m3', { leave: true }); s.despawn('bai', { leave: true }); s.despawn('steward', { leave: true }); s.despawn('s1', { leave: true }); s.despawn('s2', { leave: true }); s.despawn('s3', { leave: true });
+      // the robbers are long gone; the escort lies drugged in the open, and Yang Zhi comes to first
+      ['m1', 'm2', 'm3', 'bai'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.place('steward', 20, 12, 'down'); s.place('s1', 24, 12, 'down'); s.place('s2', 21, 13, 'down'); s.place('s3', 25, 11, 'down');
+      s.place('player', 22, 11, 'down');
       s.lie('player', false);
       s.flag('ch5_gifts');
       await s.fadeIn(1);
-      await s.say('yangzhi:sad', '...Gone. All of it. I\'ve lost the birthday gifts. How can I go back to Liang Zhongshu now? I have no home, no country... I might as well throw myself off this ridge.');
+      await s.emote('player', '...', 1.2);
+      await s.say('yangzhi:sad', '...Gone. All of it. I\'ve lost the birthday gifts. How can I go back to Liang Zhongshu now? I have no home, no country...');
+      // he walks to the edge of the ridge and looks down
+      await s.walkTo('player', 22, 13); s.face('player', 'down');
+      await s.wait(0.6);
+      await s.say('yangzhi:sad', 'I might as well throw myself off this ridge.');
+      await s.wait(0.8);
+      await s.emote('player', '!', 1);
+      s.face('player', 'up');
       await s.say('yangzhi:sad', '...No. My father and mother gave me this body. I am not finished yet. I\'ll wander the rivers and lakes, and see what fate has left for me.');
-      await s.narrate('The soldiers, when they woke, agreed to tell the governor that Yang Zhi had plotted with the robbers. Yang Zhi had already gone, south, with nothing but his sabre.');
+      // he goes off down the road south-west, alone, with nothing but his sabre
+      s.camera(22, 11, 0.4);
+      await s.walkTo('player', 12, 15);
+      s.hide('player');
+      // the escort comes round, finds him gone, and runs for it
+      await s.wait(0.6);
+      ['steward', 's1', 's2', 's3'].forEach(function (k) { s.lie(k, false); });
+      s.emote('s1', '?', 1); s.emote('s2', '?', 1); await s.emote('steward', '...', 1);
+      await s.say('soldier:shock', 'The gifts are gone! And Officer Yang too!');
+      await s.say('laoduguan', 'He never listened to any of us. ...We\'ll tell the Governor he was in league with the robbers. Let it fall on him.');
+      ['steward', 's1', 's2', 's3'].forEach(function (k) { s.despawn(k, { to: [1, 12] }); });
+      await s.narrate('So the soldiers, when they woke, agreed to tell the governor that Yang Zhi had plotted with the robbers. Yang Zhi had already gone, south, with nothing but his sabre.');
+      await s.wait(1.5);
       WM.unlock('erlong');
       // a village inn on the road south: no money, and a long way from anywhere
       await s.fadeOut(0.8);
+      s.show('player'); s.cameraReset();   // (only once the screen is dark: he is not seen back on the ridge)
       await s.warp('roadinn_in', 4, 5, 'up', { noFade: true });
       s.spawn('cz', 'caozheng', 3, 6, 'right');
       await s.fadeIn(0.8);
@@ -296,22 +353,30 @@
       await s.say('yangzhi', 'Yang Zhi of the Eastern Capital. They call me the Blue-Faced Beast.');
       await s.say('caozheng:shock', 'Yang Zhi? Then I\'ve been fighting the finest soldier in the empire over a bowl of wine! Forgive me. I\'m Cao Zheng — a butcher, and I learned what I know from Lin Chong, Instructor of the Imperial Guard.');
       await s.say('caozheng', 'If you need a place, there\'s a temple on Mount Erlong, near here in Qingzhou, that a renegade monk called Deng Long has turned into a robbers\' den. Take it from him, and you\'ll have a mountain of your own.');
-      await s.narrate('And on the road there, Yang Zhi met a monk with a staff of iron, who had been turned away from Mount Erlong and had kicked Deng Long in the belly for it. It was Lu Zhishen.');
       s.despawn('cz');
-      s.addParty('luzhishen'); s.addParty('caozheng');
-      s.level('luzhishen', Math.max(15, WM.state.chars.luzhishen.lv)); s.level('caozheng', 13);
+      s.addParty('caozheng'); s.level('caozheng', 13);
       s.flag('ch5_toerlong');
-      await s.warp('erlong', 15, 33, 'up');
+      await s.warp('erlong', 15, 34, 'up');   // on the road to Mount Erlong, where he meets the monk (see ch5_erlongmonk)
     } }
   ]);
 
   // ---------------- Mount Erlong ----------------
   WM.defEvents('erlong', [
     // halfway up the pass, where the path opens out (not at the foot of the map, where the box would hide them all)
-    { id: 'ch5_erlongplan', trigger: 'touch', once: true, x: 8, y: 26, w: 10, h: 1, cond: function (S2) { return S2.has('ch5_toerlong'); }, run: async function (s) {
+    // on the road up: a big monk with an iron staff sits by the path, furious, and Yang Zhi walks up to him
+    { id: 'ch5_erlongmonk', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch5_toerlong') && !S2.has('ch5_erlongplan'); }, run: async function (s) {
+      s.spawn('lu', 'luzhishen', 14, 27, 'down');
+      await s.wait(0.4);
+      await s.walkTo('player', 15, 30); s.face('player', 'up');
+      await s.emote('lu', '!', 0.8);
+      await s.narrate('On the road to Mount Erlong, Yang Zhi met a monk with a staff of iron, sitting by the path in a fury. He had been turned away from the temple, and had kicked Deng Long in the belly for it. It was Lu Zhishen.');
+      await s.move('lu', 'D1');
+      s.faceEach('player', 'lu');
       await s.say('luzhishen', 'So you\'re Yang Zhi, who fought my brother Lin Chong to a standstill! Good. That cur Deng Long shut his gate on me and won\'t come down. The pass is too steep to storm.');
       await s.say('caozheng', 'I have an idea. Brother Lu, take off your robe and let us tie you up with a slip-knot. I\'ll tell them I caught the monk who kicked their chief, drugged in my inn. They\'ll open the gate to take you — and once you\'re inside...');
       await s.say('luzhishen:smile', 'Ha! Then I\'ll undo the knot and give Deng Long a staff to the skull!');
+      s.despawn('lu');
+      s.addParty('luzhishen'); s.level('luzhishen', Math.max(15, WM.state.chars.luzhishen.lv));
       s.flag('ch5_erlongplan');
     } },
     { id: 'ch5_erlonggate', x: 13, y: 14, w: 6, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch5_erlongplan'); }, run: async function (s) {

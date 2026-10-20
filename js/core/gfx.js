@@ -55,14 +55,17 @@
   };
 
   // ---------- UI primitives (full resolution) ----------
-  G.font = function (size, weight) {
-    G.ctx.font = (weight || '') + ' ' + size + 'px ' + G.FONT;
+  G.font = function (size, weight, family, italic) {
+    G.ctx.font = (italic ? 'italic ' : '') + (weight || '') + ' ' + size + 'px ' + (family || G.FONT);
   };
+  // the chapter cards' faces (loaded from Google Fonts in index.html; the usual book face stands in until they arrive)
+  G.FONT_TITLE = '"Cormorant Garamond",' + G.FONT;
+  G.FONT_ZH = '"Noto Serif TC","Songti TC","Songti SC","PMingLiU",serif';
 
   G.text = function (str, x, y, opt) {
     opt = opt || {};
     var c = G.ctx;
-    G.font(opt.size || 24, opt.bold ? 'bold' : '');
+    G.font(opt.size || 24, opt.weight || (opt.bold ? 'bold' : ''), opt.font, opt.italic);
     c.textAlign = opt.align || 'left';
     c.textBaseline = opt.baseline || 'top';
     if (opt.shadow !== false) {

@@ -9,7 +9,7 @@
   d.border('T', 1, [{ side: 's', from: 16, to: 18 }]);
   d.rect(16, 18, 3, 12, ':'); d.rect(3, 17, 30, 2, ':');
   // the creek with the stone pagoda Chao Gai carried across
-  d.rect(1, 22, 34, 2, '~'); d.rect(16, 22, 3, 2, 'B'); d.set(10, 21, 'U');
+  d.rect(1, 22, 34, 2, '~'); d.rect(16, 22, 3, 2, 'B');
   // Chao Gai's manor
   d.frame(5, 3, 20, 13, 'F'); d.rect(14, 15, 3, 1, ':');
   var manor = d.house(7, 4, 16, 6, { roof: '^', door: 8, windows: [2, 5, 10, 13] });
@@ -45,7 +45,7 @@
     else if (x < 17 + Math.round(Math.sin(y * 0.4) * 2)) s.set(x, y, '~');
     else if (U.hash2(x, y, 191) > 0.72) s.set(x, y, 'r');
   }
-  s.rect(0, 13, 6, 2, ':'); s.vline(6, 4, 26, ':');
+  s.rect(0, 13, 6, 2, ':'); s.vline(6, 4, 27, ':');   // (down to row 27, where it meets the lane to the tavern)
   var r2 = s.house(1, 3, 5, 4, { roof: 'z', door: 2 }); var r5 = s.house(8, 8, 5, 4, { roof: 'z', door: 2 }); var r7 = s.house(1, 17, 5, 4, { roof: 'z', door: 2 });
   // the waterside tavern on stilts
   s.rect(15, 23, 6, 4, '.'); var tavern = s.house(15, 22, 6, 4, { roof: 'z', door: 3 }); s.set(tavern.x, tavern.y + 1, ':'); s.hline(7, 18, 27, ':'); s.set(21, 23, 'Y');
@@ -70,6 +70,8 @@
   h.scatter('m', 0.06, 202, 's'); h.scatter('e', 0.03, 203, 's');
   L.clearAround(h, ':', 'mPe', 's');
   h.rect(20, 7, 5, 3, 's');
+  // the woods the robbers come out of: thick pines behind the grove on the east side of the crest
+  h.rect(25, 3, 9, 6, 's'); h.scatter('P', 0.55, 204, 's', [25, 3, 9, 6]); h.set(25, 6, 's'); h.rect(25, 7, 3, 3, 's');   // (clear in front of where the robbers stand, so the trees do not hide them)
   WM.defMap('huangni', { name: 'Yellow Earth Ridge', theme: 'autumn', music: 'tense', rows: h.rows(), spawn: [1, 12], battleBg: 'ridge', tint: 'dusk',
     exits: [WM.toWorld('huangni', 0, 8, 1, 10), WM.toWorld('huangni', 39, 8, 1, 10)],
     encounters: { rate: 0.05, troops: [['roadbandit', 'roadbandit', 'roadarcher'], ['wolf2', 'wolf2'], ['eagle', 'eagle']], cond: function (S2) { return !S2.has('ch5_escort') || S2.has('ch5_gifts'); } } });

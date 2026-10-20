@@ -107,11 +107,17 @@
       await s.narrate('The people of the capital, who had hated Niu Er, went with him to the prefecture and spoke for him, and many sent him food and money in prison. The prefect, knowing that the dead man had been a menace to all, reduced the charge. Yang Zhi was given twenty strokes, tattooed on the face, and exiled to the Northern Capital, Daming. His sabre was confiscated.');
       s.flag('ch4_exiled');
       WM.unlock('daming');
-      await s.warp('daming', 28, 42, 'up');
+      await s.warp('daming', 28, 31, 'up');
     } }
   ]);
   WM.defEvents('daming', [
     { id: 'ch4_arrive', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch4_exiled'); }, run: async function (s) {
+      // two soldiers of the escort march him up the main street, through the yamen gate, to the hall
+      s.spawn('esc1', 'soldier', 27, 31, 'up'); s.spawn('esc2', 'soldier', 29, 31, 'up');
+      await s.wait(0.4);
+      s.move('esc1', 'U21', { wait: false }); s.move('esc2', 'U21', { wait: false });
+      await s.move('player', 'U21');
+      await s.wait(0.3);
       await s.narrate('The governor of Daming, Liang Zhongshu, was the son-in-law of the Prime Minister Cai Jing, and the most powerful man in the north. When the escorts brought Yang Zhi before him, he recognised him at once: he had known the young officer in the capital.');
       await s.warp('daming_in', 12, 10, 'up', { noFade: true });
       s.spawn('liang', 'liangzhongshu', 12, 4, 'down');
@@ -127,7 +133,7 @@
       s.spawn('zhoujin', 'zhoujin', 50, 11, 'down');
       s.spawn('suochao', 'suochao', 46, 9, 'down');
       s.spawn('s1', 'soldier', 45, 12, 'right'); s.spawn('s2', 'soldier', 53, 12, 'left');
-      s.place('player', 49, 13, 'up');
+      await s.walkTo('player', 49, 13); s.face('player', 'up');   // he walks in from the entrance to stand before the Governor
       await s.say('liangzhongshu', 'Deputy Commander Zhou Jin! Come forward. And Yang Zhi, the convict. Let us see who deserves Zhou Jin\'s post.');
       await s.duel('yz_zhoujin');
       await s.narrate('Then the Governor ordered them to contest with the bow. Zhou Jin shot three arrows at Yang Zhi, one after another. The first Yang Zhi knocked aside with his bow, the second he dodged by leaning back in the saddle, and the third he caught in his hand.');

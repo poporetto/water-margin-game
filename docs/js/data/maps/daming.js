@@ -19,8 +19,8 @@
   // drill ground (north-east)
   g.frame(43, 3, 13, 16, 'F'); g.rect(44, 4, 11, 14, '=');
   g.house(46, 4, 7, 3, { roof: 'v', wall: 'R', door: false, wallRows: 1 });   // reviewing stand
-  g.set(44, 9, 'j'); g.set(54, 9, 'j'); g.set(44, 14, 'j'); g.set(54, 14, 'j'); g.set(49, 17, 'Y');
-  g.rect(43, 18, 3, 1, ':'); g.vline(44, 18, 21, ':');
+  g.set(44, 9, 'j'); g.set(54, 9, 'j'); g.set(44, 14, 'j'); g.set(54, 14, 'j'); g.set(47, 17, 'Y'); g.set(51, 17, 'Y');   // a banner either side of the entrance
+  g.rect(48, 18, 3, 4, ':');   // the entrance, three wide, in the middle of the south fence, and its path down to the street
   // Lu Junyi's mansion (north-west)
   g.frame(3, 3, 13, 14, '#');
   var lu = g.house(4, 4, 11, 6, { roof: '^', door: 5, windows: [1, 3, 7, 9] });
@@ -33,7 +33,7 @@
   var tal = g.house(40, 26, 6, 5, { roof: 'v', wall: 'R', door: 3 });
   // the Cuiyun Tower
   var tower = g.house(47, 25, 9, 8, { roof: 'v', door: 4, windows: [1, 7], windowsUpper: [2, 6] });
-  g.set(46, 29, 'L'); g.set(56, 29, 'L');
+  g.set(46, 29, 'L');   // (none on the right: that side of the tower is the city wall)
   [inn, shop, smith, tal, tower].forEach(function (d) { g.vline(d.x, d.y + 1, 35, ':'); });
   // the prison (south-west)
   var prison = g.house(4, 38, 11, 5, { roof: 'v', wall: '#', door: 5 });
@@ -55,7 +55,7 @@
   var I = L.grid(74, 24, 'x');
   var R = {};
   R.yamen = I.room(1, 1, 22, 12, { floor: 'N' });
-  I.stamp(2, 3, ['h...L..EEEEEE..L...h', '........q00q........', '........aaaa........', '..t.....KKKK.....t..', '..t.....KKKK.....t..', '....................', '....................', 'j..................j']);
+  I.stamp(2, 3, ['h...L..EEEEEE..L...h', '........q00q........', '........aaaa........', '..t.....KKKK.....t..', '........KKKK........', '....................', '....................', 'j..................j']);
   R.lu = I.room(24, 1, 16, 10, { floor: 'N' });
   I.stamp(25, 3, ['h..A......A.kk', '............kk', '..t...KKK.....', '.....KKKK.....', '..............']);
   R.inn = I.room(41, 1, 12, 8); I.stamp(42, 3, ['.....kk.kk', '.....kk.kk', 'cccc......']);

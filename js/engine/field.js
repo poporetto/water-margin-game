@@ -237,6 +237,7 @@
     F.nameBanner = { text: F.map.def.name, t: F.map.def.name ? 2.6 : 0 };
     F.snow = [];
     F.lastTile = F.player.tile();
+    F.trail = [];
     F.exitLock = true; // don't immediately re-trigger the exit we arrived on
     var mus = typeof F.map.def.music === 'function' ? F.map.def.music(S) : F.map.def.music;
     if (mus && !F.musicLocked) WM.audio.play(mus);
@@ -344,6 +345,7 @@
           F.encSteps += Math.abs(ix) + Math.abs(iy);
           var t = p.tile();
           if (t.x !== F.lastTile.x || t.y !== F.lastTile.y) {
+            F.trail.unshift(F.lastTile); if (F.trail.length > 12) F.trail.pop();   // where the leader has been, for anyone following
             F.lastTile = t; F.exitLock = false;
             if (F.onTileEnter(t)) return;
           }
@@ -364,6 +366,16 @@
     for (var i = 0; i < all.length; i++) {
       var a = all[i];
       if (a.hold > 0) { a.hold -= dt; a.moving = false; continue; }   // waiting to come in behind someone
+      // someone following the leader (an escort on the road) walks in his footsteps, a place apart each
+      if (a.following && !a.path.length && !WM.script.running && !frozen && F.trail) {
+        var ft = F.trail[a.followIdx], at = a.tile();
+        if (ft && (ft.x !== at.x || ft.y !== at.y)) {
+          var far = Math.abs(ft.x - at.x) + Math.abs(ft.y - at.y) > 1;
+          if (far && Math.abs(ft.x - at.x) && Math.abs(ft.y - at.y)) a.path.push({ x: ft.x * TS + 8, y: at.y * TS + 15 });   // round the corner, never through it
+          a.path.push({ x: ft.x * TS + 8, y: ft.y * TS + 15 });
+          a.speed = far ? 110 : 80;
+        }
+      }
       if (a.path.length) {
         var tgt = a.path[0];
         var dx = tgt.x - a.x, dy = tgt.y - a.y;

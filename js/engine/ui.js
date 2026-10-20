@@ -116,7 +116,7 @@
         },
         draw: function () {
           var ls = pages[page];
-          var h = ls.length * 34 + 60;
+          var h = ls.length * 34 + 44;   // as much paper below the last line as above the first
           var y = opt.y != null ? opt.y : 24;   // at the top, clear of the scene being told
           var c = G.ctx;
           c.save(); c.globalAlpha = alpha;

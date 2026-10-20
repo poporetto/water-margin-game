@@ -127,34 +127,109 @@
       var w = {
         // the card gives way to black, and the chapter's first scene fades in from it (see WM.chapterDark)
         update: function () { if (WM.time - t0 > 1.2 && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); G.fade = 1; WM.chapterDark = true; UI.remove(w); resolve(); } },
-        draw: function () {
-          var t = WM.time - t0, c = G.ctx;
-          c.fillStyle = '#0c0a08'; c.fillRect(0, 0, WM.W, WM.H);
-          var a = U.clamp(t / 0.8, 0, 1);
-          c.globalAlpha = a;
-          // paper
-          var px = 150, py = 120, pw = 660, ph = 480;
-          var gr = c.createLinearGradient(0, py, 0, py + ph); gr.addColorStop(0, '#efe4c8'); gr.addColorStop(1, '#d9c9a0');
-          c.fillStyle = gr; c.fillRect(px, py, pw, ph);
-          c.strokeStyle = '#8a5a30'; c.lineWidth = 2; c.strokeRect(px + 14, py + 14, pw - 28, ph - 28);
-          G.text(ch.label || (n === 0 ? 'Prologue' : 'Chapter ' + roman(n)), 480, py + 50, { size: 30, bold: true, align: 'center', color: '#7a1e14', shadow: false });
-          if (ch.zh) G.text(ch.zh, 480, py + 96, { size: 22, align: 'center', color: '#5a3a20', shadow: false });
-          c.fillStyle = '#7a1e14'; c.fillRect(380, py + 140, 200, 2);
-          var lines = ch.title;
-          lines.forEach(function (ln, i) {
-            var wl = G.wrap(ln, pw - 120, 26);
-            wl.forEach(function (l2, j) { G.text(l2, 480, py + 180 + i * 96 + j * 34, { size: 26, align: 'center', color: '#2a1a0e', shadow: false }); });
-          });
-          if (ch.chapters) G.text('(after the novel, ch. ' + ch.chapters + ')', 480, py + ph - 60, { size: 17, align: 'center', color: '#7a5a3a', shadow: false });
-          // seal
-          c.fillStyle = 'rgba(160,30,20,0.85)'; c.fillRect(px + pw - 90, py + ph - 100, 54, 54);
-          G.text('忠義', px + pw - 63, py + ph - 92, { size: 20, bold: true, align: 'center', color: '#f6e6c4', shadow: false });
-          c.globalAlpha = 1;
-        }
+        draw: function () { drawChapterCard(n, ch, WM.time - t0); }
       };
       UI.push(w);
     });
   };
+
+  // The chapter card: a sheet of old paper on a dark ground, as a page of a printed novel opens a chapter — the
+  // chapter number set in spaced capitals, the couplet title in Chinese, a rule with a lozenge, the English couplet
+  // in an italic book face (one line of it above the other, as couplets are), and the publisher's seal.
+  var grain = null;
+  function paperGrain() {
+    if (grain) return grain;
+    grain = document.createElement('canvas'); grain.width = 160; grain.height = 160;
+    var g = grain.getContext('2d'), img = g.createImageData(160, 160);
+    for (var i = 0; i < img.data.length; i += 4) {
+      var v = Math.random(), k = v < 0.5 ? 0 : 255, al = Math.floor(Math.abs(v - 0.5) * 34);
+      img.data[i] = k ? 255 : 90; img.data[i + 1] = k ? 250 : 60; img.data[i + 2] = k ? 235 : 30; img.data[i + 3] = al;
+    }
+    g.putImageData(img, 0, 0);
+    return grain;
+  }
+  function spaced(str, x, y, opt, gap) {   // centred text with its letters spread apart
+    G.font(opt.size, opt.weight, opt.font, opt.italic);
+    var c = G.ctx, ws = str.split('').map(function (k) { return c.measureText(k).width; });
+    var total = ws.reduce(function (a, b) { return a + b; }, 0) + gap * (str.length - 1), cx = x - total / 2;
+    for (var i = 0; i < str.length; i++) { G.text(str[i], cx, y, Object.assign({}, opt, { align: 'left' })); cx += ws[i] + gap; }
+  }
+  function lozengeRule(c, x, y, half, col) {
+    c.fillStyle = col;
+    c.fillRect(x - half, y, half - 12, 1); c.fillRect(x + 12, y, half - 12, 1);
+    c.fillRect(x - half + 6, y + 3, half - 22, 1); c.fillRect(x + 16, y + 3, half - 22, 1);
+    c.beginPath(); c.moveTo(x, y - 5); c.lineTo(x + 6, y + 2); c.lineTo(x, y + 9); c.lineTo(x - 6, y + 2); c.closePath(); c.fill();
+    c.fillRect(x - half - 4, y, 2, 4); c.fillRect(x + half + 2, y, 2, 4);
+  }
+  function corner(c, x, y, sx, sy, col) {   // a fret-work corner, as on a book's border
+    c.fillStyle = col;
+    c.fillRect(x, y, 26 * sx, 2 * sy); c.fillRect(x, y, 2 * sx, 26 * sy);
+    c.fillRect(x + 6 * sx, y + 6 * sy, 12 * sx, 2 * sy); c.fillRect(x + 6 * sx, y + 6 * sy, 2 * sx, 12 * sy);
+    c.fillRect(x + 12 * sx, y + 12 * sy, 4 * sx, 4 * sy);
+  }
+  function drawChapterCard(n, ch, t) {
+    var c = G.ctx, W = WM.W, H = WM.H, cx = W / 2;
+    // the ground: near black, warmer at the centre
+    var bg = c.createRadialGradient(cx, H / 2, 60, cx, H / 2, W * 0.75);
+    bg.addColorStop(0, '#2a1f16'); bg.addColorStop(1, '#070504');
+    c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    var a = U.clamp(t / 0.9, 0, 1), rise = (1 - a) * (1 - a) * 18;
+    c.save(); c.globalAlpha = a; c.translate(0, rise);
+    var pw = 640, ph = 500, px = cx - pw / 2, py = (H - ph) / 2;
+    // the sheet, with a soft shadow under it
+    c.save(); c.shadowColor = 'rgba(0,0,0,0.6)'; c.shadowBlur = 40; c.shadowOffsetY = 12;
+    c.fillStyle = '#e9dcbc'; c.fillRect(px, py, pw, ph); c.restore();
+    var gr = c.createLinearGradient(0, py, 0, py + ph); gr.addColorStop(0, '#f3e9d0'); gr.addColorStop(0.55, '#eadcb8'); gr.addColorStop(1, '#dccaa0');
+    c.fillStyle = gr; c.fillRect(px, py, pw, ph);
+    c.fillStyle = c.createPattern(paperGrain(), 'repeat'); c.fillRect(px, py, pw, ph);
+    var vg = c.createRadialGradient(cx, py + ph / 2, ph * 0.35, cx, py + ph / 2, pw * 0.72);   // the edges browned with age
+    vg.addColorStop(0, 'rgba(120,80,30,0)'); vg.addColorStop(1, 'rgba(120,80,30,0.28)');
+    c.fillStyle = vg; c.fillRect(px, py, pw, ph);
+    // the printed border: a heavy rule and a hairline inside it, with fret corners
+    var ink = '#6e2a18', m = 22;
+    c.strokeStyle = ink; c.lineWidth = 3; c.strokeRect(px + m, py + m, pw - 2 * m, ph - 2 * m);
+    c.lineWidth = 1; c.strokeRect(px + m + 7, py + m + 7, pw - 2 * m - 14, ph - 2 * m - 14);
+    var k = m + 13;
+    corner(c, px + k, py + k, 1, 1, ink); corner(c, px + pw - k, py + k, -1, 1, ink);
+    corner(c, px + k, py + ph - k, 1, -1, ink); corner(c, px + pw - k, py + ph - k, -1, -1, ink);
+    // the chapter number
+    var label = ch.label || (n === 0 ? 'Prologue' : 'Chapter ' + roman(n));
+    spaced(label.toUpperCase(), cx, py + 62, { size: 22, weight: '600', font: G.FONT_TITLE, color: '#8a2a1a', shadow: false }, 6);
+    // the Chinese couplet
+    if (ch.zh) {
+      var halves = ch.zh.split(/\s+/);
+      spaced(halves.join('　'), cx, py + 104, { size: 30, weight: '700', font: G.FONT_ZH, color: '#2e1c10', shadow: false }, 3);
+    }
+    lozengeRule(c, cx, py + 164, 150, '#8a2a1a');
+    // the English couplet, a line of it to each half
+    var y = py + 196;
+    (ch.title || []).forEach(function (ln, i) {
+      if (i) { c.fillStyle = 'rgba(138,42,26,0.55)'; c.fillRect(cx - 3, y + 6, 6, 6); y += 30; }   // a small dot between the halves
+      var txt = ln.replace(/[;,.]\s*$/, '');
+      G.font(31, '500', G.FONT_TITLE, true);
+      var wl = wrapWith(txt, pw - 150);
+      wl.forEach(function (l2) { G.text(l2, cx, y, { size: 31, weight: '500', italic: true, font: G.FONT_TITLE, align: 'center', color: '#2a1a0e', shadow: false }); y += 38; });
+    });
+    if (ch.chapters) spaced('AFTER THE NOVEL · CHAPTERS ' + ch.chapters.replace(/[–-]/, ' – '), cx, py + ph - 74, { size: 13, weight: '600', font: G.FONT_TITLE, color: '#7a5a3a', shadow: false }, 2.5);
+    // the seal, stamped a little askew, its red uneven where the ink took
+    c.save(); c.translate(px + pw - 86, py + ph - 108); c.rotate(-0.06);
+    c.fillStyle = 'rgba(168,36,24,0.88)'; c.fillRect(-26, -26, 52, 52);
+    c.fillStyle = 'rgba(243,233,208,0.9)'; c.fillRect(-21, -21, 42, 1); c.fillRect(-21, 20, 42, 1); c.fillRect(-21, -21, 1, 42); c.fillRect(20, -21, 1, 42);
+    G.text('忠', 0, -19, { size: 18, weight: '700', font: G.FONT_ZH, align: 'center', color: '#f6e6c4', shadow: false });
+    G.text('義', 0, 0, { size: 18, weight: '700', font: G.FONT_ZH, align: 'center', color: '#f6e6c4', shadow: false });
+    c.globalCompositeOperation = 'destination-out'; c.globalAlpha = 0.25;
+    for (var i = 0; i < 40; i++) c.fillRect(-26 + U.hash2(n, i, 7) * 50, -26 + U.hash2(i, n, 8) * 50, 2, 1);
+    c.restore();
+    c.restore();
+    // a hint to go on, once the card has settled
+    if (t > 1.2) { c.globalAlpha = 0.35 + 0.25 * Math.sin(t * 3); G.text('▼', cx, py + ph + 26 - rise, { size: 14, align: 'center', color: '#c8a870', shadow: false }); c.globalAlpha = 1; }
+  }
+  function wrapWith(text, maxW) {   // wrap in the font already set
+    var words = text.split(' '), out = [], cur = '';
+    words.forEach(function (wd) { var t2 = cur ? cur + ' ' + wd : wd; if (cur && G.ctx.measureText(t2).width > maxW) { out.push(cur); cur = wd; } else cur = t2; });
+    if (cur) out.push(cur);
+    return out;
+  }
   function roman(n) {
     var map = [[50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']], s = '';
     if (n === 0) return 'Prologue';
