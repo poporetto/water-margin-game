@@ -29,11 +29,18 @@
   };
 
   WM.defEvents('yuncheng', [
+    // the two guards at the gate of the county office
+    { id: 'ycg1', x: 21, y: 9, npc: 'soldier', dir: 'down', text: ['The county office. State your business inside — and wipe your feet.'] },
+    { id: 'ycg2', x: 23, y: 9, npc: 'soldier', dir: 'down', text: ['Clerk Song? He\'s a good man. Half the town owes him a favour.'] },
     { id: 'ch6_liutang', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 6; }, run: async function (s) {
-      s.spawn('liutang', 'liutang', 25, 19, 'left');
+      s.spawn('liutang', 'liutang', 21, 25, 'up');   // well down the street, to the south, following at a distance
       await s.narrate('One evening, as Song Jiang came out of the county office, he noticed a big man in a broad hat who kept glancing at him from under the brim and following at a distance. Song Jiang turned into a side lane, and the man followed and bowed to him.');
-      await s.move('liutang', 'L3');
+      s.face('player', 'down');
+      await s.emote('player', '?', 0.8);
+      await s.move('liutang', 'U5');   // (stopping a pace short, face to face)
+      await s.emote('liutang', '!', 0.6);
       await s.say('liutang', 'Clerk Song! Don\'t you remember me? Liu Tang — from Chao Gai\'s manor. The brothers on Liangshan sent me with a letter, and a hundred taels of gold, to thank you for saving our lives.');
+      await s.emote('player', '!', 0.8);
       await s.say('songjiang:shock', 'You came into town? Your face is on the wanted posters! Come — up to the tavern, quickly.');
       await s.narrate('In a private room of a small tavern Song Jiang read Chao Gai\'s letter. The gold he would not take: "My brothers need it more than I do. They are starting a new life." Only when Liu Tang begged did he take a single bar, and he put it, with the letter, into the document pouch at his belt.');
       await s.give('chaoletter', 1);
@@ -80,6 +87,12 @@
       await s.say('songjiang', 'I don\'t have it! Give me three days, and I\'ll sell what I own and get it for you —');
       await s.say('yanpoxi:angry', 'Three days! And by then you\'d have me dead. Do you take me for a fool? No. Tomorrow I go to the court!');
       s.music('tense');
+      // she makes for the door with the pouch, straight past him, and he catches hold of her
+      var sj = s.actor('player').tile();
+      await s.walkTo('poxi', sj.x + 1, sj.y, { run: true });
+      s.faceEach('player', 'poxi');
+      s.jump('poxi', 3); s.jump('player', 3); s.sfx('block'); await s.shake(2, 0.25);
+      s.jump('poxi', 3); s.jump('player', 3); await s.wait(0.35);
       await s.narrate('Song Jiang grabbed for the pouch, and she clutched it to her breast. As they struggled, the small knife in the pouch fell out on the bed. Song Jiang snatched it up. "Murder! Black Song Jiang is murdering me!" she screamed. The word put the thought into his head. Rage overcame him.');
       s.sfx('slash'); await s.shake(4, 0.4);
       await s.fadeOut(0.6, '#600');
@@ -95,13 +108,41 @@
       await s.say('yanpo', 'Then... then come with me now to Wang\'s shop for a coffin, before anyone wakes.');
       s.despawn('yanpo');
       await s.warp('yuncheng', 22, 9, 'down');
-      s.spawn('yanpo', 'yanpo', 21, 10, 'right'); s.spawn('tang', 'tangniuer', 25, 11, 'left');
+      // at the gate of the county office the old woman turns on him and seizes his collar
+      s.spawn('yanpo', 'yanpo', 22, 10, 'up'); s.spawn('tang', 'tangniuer', 28, 14, 'left');
+      s.face('player', 'down');
+      s.jump('yanpo', 3); await s.emote('yanpo', 'anger', 0.8);
       await s.say('yanpo:angry', 'Murderer! Help! Here is the murderer! Seize him!');
-      await s.narrate('At the gate of the county office the old woman seized Song Jiang\'s collar and shrieked for the constables. But the townspeople all loved Song Jiang, and no one would lay a hand on him. Then Tang Niu\'er, a ginger-seller Song Jiang had often helped, pushed through the crowd.');
+      s.jump('player', 2); await s.emote('player', 'sweat', 0.8);
+      await s.narrate('At the gate of the county office the old woman seized Song Jiang\'s collar and shrieked for the constables. But the townspeople all loved Song Jiang, and no one would lay a hand on him.');
+      // Tang Niu'er, who owes the clerk a kindness, comes running across the square
+      await s.emote('tang', '!', 0.6);
+      await s.walkTo('tang', 23, 10, { run: true }); s.face('tang', 'left');
       await s.say('tangniuer:angry', 'Let him go, you old hag!');
-      s.sfx('hit');
-      await s.narrate('Tang Niu\'er knocked the old woman\'s hands loose, and Song Jiang slipped away into the crowd. For his trouble Tang Niu\'er was dragged before the magistrate in Song Jiang\'s place.');
-      s.despawn('yanpo'); s.despawn('tang', { leave: true });
+      s.sfx('hit'); s.jump('tang', 4); await s.shake(3, 0.3);
+      await s.move('yanpo', 'L1 D1', { speed: 110 }); s.face('yanpo', 'right');   // knocked loose, she staggers back
+      s.face('yanpo', 'right'); s.jump('yanpo', 3); await s.emote('yanpo', 'anger', 0.6);
+      // Song Jiang slips away down the street into the crowd
+      s.camera(22, 12, 0.3);
+      await s.walkTo('player', 22, 19, { run: true });
+      s.hide('player');
+      await s.say('yanpo:angry', 'He\'s getting away! Constables! Seize this one, then — he let the murderer go!');
+      // the constables come out of the gate and take Tang Niu'er in his place
+      // the two guards at the gate step down and seize him, one at each arm, and drag him in through the gate
+      await s.walkTo('ycg1', 22, 10, { run: true }); s.face('ycg1', 'right');
+      await s.walkTo('ycg2', 23, 11, { run: true }); s.face('ycg2', 'up');
+      s.face('tang', 'left'); s.jump('tang', 3); await s.emote('tang', 'sweat', 0.8);
+      await s.say('tangniuer:shock', 'Me? I only — let go! Let go of me!');
+      await s.walkTo('ycg1', 22, 9);
+      s.walkTo('tang', 23, 9, { speed: 40 }); await s.walkTo('ycg2', 23, 10, { speed: 40 });
+      s.walkTo('ycg1', 22, 8, { speed: 40 }); await s.walkTo('tang', 22, 9, { speed: 40 });
+      s.hide('ycg1'); await s.walkTo('tang', 22, 8, { speed: 40 }); s.hide('tang');
+      await s.walkTo('ycg2', 22, 9, { speed: 40 }); await s.walkTo('ycg2', 22, 8, { speed: 40 }); s.hide('ycg2');
+      await s.narrate('So Tang Niu\'er knocked the old woman\'s hands loose, and Song Jiang slipped away into the crowd. For his trouble Tang Niu\'er was dragged before the magistrate in Song Jiang\'s place.');
+      s.despawn('tang'); s.despawn('yanpo', { leave: true });   // (she goes off after the constables)
+      // the guards back at their posts either side of the gate
+      s.place('ycg1', 21, 9, 'down'); s.place('ycg2', 23, 9, 'down'); s.show('ycg1'); s.show('ycg2');
+      s.cameraReset(); s.show('player');
       s.flag('ch6_fled');
       WM.unlock('songfarm');
       await s.say(null, '(Song Jiang\'s family farm lies south-west of the town.)');
@@ -119,7 +160,7 @@
     } }
   ]);
   WM.defEvents('songfarm_in', [
-    { id: 'ch6_cellar', x: 21, y: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch6_hide'); }, run: async function (s) {
+    { id: 'ch6_cellar', x: 23, y: 7, w: 2, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch6_hide'); }, run: async function (s) {
       await s.fadeOut(0.6);
       await s.narrate('Song Jiang lifted the board beneath the altar and climbed down into the darkness of the cellar. Above him he heard horses, and voices: the constables Zhu Tong and Lei Heng had come with the warrant, and were searching the farm.');
       s.spawn('zhutong', 'zhutong', 21, 5, 'down');
@@ -156,13 +197,15 @@
       await s.narrate('Song Jiang, a little drunk, did not see him in the dark, and trod on the handle of the shovel. The coals flew up into the man\'s face.');
       await s.say('wusong:angry', 'What dog\'s turtle-spawn —! You want to die?!');
       await s.narrate('The man leapt up, seized Song Jiang by the collar, and raised a fist like a hammer.');
+      s.jump('wusong', 4); s.jump('player', 2); s.sfx('block'); await s.shake(2, 0.25);
       s.spawn('lamp', 'servant', 9, 12, 'right');
       await s.say('servant:shock', 'Stop! Stop! This is the master\'s honoured guest, Clerk Song!');
       await s.say('wusong:concerned', '"Clerk Song"? Which Clerk Song?');
       await s.say('servant', 'Song Jiang of Yuncheng! Timely Rain!');
       await s.say('wusong:shock', '...Song Jiang? Timely Rain Song Gongming? ...You — you are Song Jiang?');
       await s.say('songjiang', 'I am.');
-      await s.narrate('The big man dropped to his knees at once and kowtowed. "I have eyes, and did not see Mount Tai in front of me! Forgive me, brother!"');
+      await s.emote('wusong', '!', 0.7);
+      await s.say('wusong:shock', 'I have eyes, and did not see Mount Tai in front of me! Forgive me, brother!');
       await s.say('wusong', 'I am Wu Song, the second son of my family, from Qinghe county. A year ago I struck a man in a drunken quarrel and thought I\'d killed him, so I fled here to Lord Chai. Then I heard he lived after all. I meant to go home, and I caught this fever. I\'ve been waiting for it to pass.');
       await s.say('songjiang:smile', 'Then come, sit with us and drink. A hero\'s fever goes the moment he meets a friend.');
       s.despawn('lamp', { leave: true }); s.despawn('wusong');

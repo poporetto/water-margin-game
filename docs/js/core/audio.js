@@ -108,6 +108,14 @@
       o.connect(flt); flt.connect(g); g.connect(out);
       env(g, t, 0.001, vol, 0.04, 0.01, 0.01, 0.01); o.start(t); o.stop(t + 0.08);
     },
+    bell: function (f, t, dur, vol, out) { // 編鐘: a struck bronze bell, its partials out of tune with each other, ringing on
+      [[1, 1, 1.8], [2.0, 0.45, 1.1], [2.76, 0.3, 0.8], [5.4, 0.12, 0.35]].forEach(function (p) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(f * p[0], t);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol * p[1], t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + p[2] * (dur || 1));
+        o.connect(g); g.connect(out); o.start(t); o.stop(t + p[2] * (dur || 1) + 0.05);
+      });
+    },
     gong: function (f, t, dur, vol, out) {
       var ratios = [1, 1.47, 2.09, 2.56, 3.2];
       for (var i = 0; i < ratios.length; i++) {
@@ -312,7 +320,13 @@
       case 'encounter': tone('sawtooth', 220, 880, 0.35, 0.12); noise(0.4, 0.3, 'highpass', 2000); break;
       case 'run': noise(0.3, 0.2, 'bandpass', 1500, 0, 600); break;
       case 'levelup': for (i = 0; i < 5; i++) tone('square', [523, 659, 784, 1046, 1318][i], 0, 0.12, 0.06, i * 0.07); break;
-      case 'join': if (INST.gong) INST.gong(110, ctx.currentTime, 1, 0.25, sfxBus); for (i = 0; i < 5; i++) tone('triangle', [392, 440, 523, 587, 659][i] * 2, 0, 0.3, 0.06, 0.3 + i * 0.09); break;
+      case 'join': {   // a hero joins: a short peal of bronze bells rising to a ringing chord, over a soft gong
+        var t0 = ctx.currentTime;
+        INST.gong(110, t0, 1, 0.18, sfxBus);
+        [392, 440, 523, 587].forEach(function (f, k) { INST.bell(f, t0 + 0.08 + k * 0.13, 0.9, 0.11, sfxBus); });
+        [784, 659, 523].forEach(function (f) { INST.bell(f, t0 + 0.68, 1.5, 0.09, sfxBus); });   // and the last stroke a chord
+        break;
+      }
       case 'gong': INST.gong(98, ctx.currentTime, 1, 0.35, sfxBus); break;
       case 'drum': INST.drum(70, ctx.currentTime, 1, 0.6, sfxBus); break;
       case 'arrow': noise(0.2, 0.25, 'highpass', 3000, 0, 8000); break;

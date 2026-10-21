@@ -375,7 +375,9 @@
       await s.say('luzhishen', 'So you\'re Yang Zhi, who fought my brother Lin Chong to a standstill! Good. That cur Deng Long shut his gate on me and won\'t come down. The pass is too steep to storm.');
       await s.say('caozheng', 'I have an idea. Brother Lu, take off your robe and let us tie you up with a slip-knot. I\'ll tell them I caught the monk who kicked their chief, drugged in my inn. They\'ll open the gate to take you — and once you\'re inside...');
       await s.say('luzhishen:smile', 'Ha! Then I\'ll undo the knot and give Deng Long a staff to the skull!');
-      s.despawn('lu');
+      // the two of them fall in behind Yang Zhi for the climb (the monk 'bound', the butcher who 'caught' him)
+      s.spawn('cz', 'caozheng', 16, 30, 'up');
+      s.follow(['lu', 'cz']);
       s.addParty('luzhishen'); s.level('luzhishen', Math.max(15, WM.state.chars.luzhishen.lv));
       s.flag('ch5_erlongplan');
     } },
@@ -392,13 +394,18 @@
   ]);
   WM.defEvents('erlong_in', [
     { id: 'ch5_denglong', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch5_erlonginside'); }, run: async function (s) {
+      // brought in with Yang Zhi: the 'bound' monk and his captor, either side of him
+      var yt = s.actor('player').tile();
+      s.spawn('lu', 'luzhishen', yt.x - 1, yt.y, 'up'); s.spawn('cz', 'caozheng', yt.x + 1, yt.y, 'up');
+      await s.wait(0.3);
       s.spawn('deng', 'denglong', 9, 4, 'down');
-      await s.say('denglong:smile', 'So, you bald thief! The one who kicked me! Tie him to a pillar and —');
+      await s.say('denglong:smile', 'So it\'s you, you bald thief — the one who kicked me! Tie him to a pillar and —');
       s.sfx('crit'); await s.shake(5, 0.4);
       await s.narrate('Lu Zhishen shook off the ropes, snatched his staff from Cao Zheng\'s hands, and leapt at Deng Long.');
       await s.battle('ch5_erlong', { bg: 'temple', music: 'boss' });
+      s.lie('deng');   // dead on the floor of his own hall
       await s.narrate('Deng Long fell to Lu Zhishen\'s staff. The bandit-monks of the temple knelt and surrendered. Lu Zhishen and Yang Zhi became the chiefs of Mount Erlong, and Cao Zheng went home to his inn.');
-      s.despawn('deng', { leave: true });
+      s.despawn('deng'); s.despawn('lu'); s.despawn('cz', { leave: true });   // Cao Zheng goes home to his inn
       s.removeParty('luzhishen'); s.removeParty('caozheng');
       s.flag('ch5_erlongtaken');
       // He Tao's investigation and Song Jiang's warning
@@ -437,8 +444,46 @@
       await s.say('chaogai:shock', '...Brother, I will never forget this.');
       await s.say('songjiang', 'Don\'t waste time with thanks. Run!');
       s.despawn('chaogai', { leave: true });
+      // Song Jiang rides back to town as if nothing had happened
+      await s.walkTo('player', 17, 21);
+      await s.fadeOut(0.8);
       await s.narrate('Song Jiang rode back to town and took He Tao to the magistrate as if nothing had happened. The magistrate sent the constables Zhu Tong and Lei Heng with soldiers to East Creek that night.');
-      await s.narrate('Both constables were Chao Gai\'s friends. Zhu Tong took the back gate, where he knew Chao Gai would come out, and let him through, shouting and waving his sword at empty air, and even pretended to stumble so the soldiers would fall over him. Chao Gai and his men escaped into the night to Shijie village, and the manor was left empty.');
+      // that night: the raid on the manor, and Zhu Tong at the east road letting Chao Gai through
+      s.hide('player'); s.night(true);
+      s.camera(20, 16, 0.1);
+      s.spawn('cg', 'chaogai', 15, 11, 'down'); s.spawn('wy', 'wuyong', 14, 11, 'down'); s.spawn('lt', 'liutang', 16, 11, 'down'); s.spawn('gs', 'gongsunsheng', 15, 12, 'down');
+      s.spawn('zt', 'zhutong', 27, 17, 'left');
+      s.spawn('lh', 'leiheng', 17, 24, 'up'); s.spawn('k1', 'soldier', 16, 25, 'up'); s.spawn('k2', 'soldier', 17, 25, 'up'); s.spawn('k3', 'soldier', 18, 25, 'up');   // up over the bridge with torches
+      await s.fadeIn(0.8);
+      s.music('tense');
+      s.move('k1', 'U5', { run: true, wait: false }); s.move('k2', 'U5', { run: true, wait: false }); s.move('k3', 'U5', { run: true, wait: false });
+      await s.move('lh', 'U5', { run: true });
+      await s.say('leiheng:angry', 'Surround the manor! Torches to the front gate! Let no one out!', { top: true });
+      await s.emote('cg', '!', 0.8);
+      await s.say('chaogai', 'They\'re here. Out by the east road — now! Leave everything!');
+      // the four run out of the gate and east along the road, straight at Zhu Tong
+      s.walkTo('wy', 23, 18, { run: true }); s.walkTo('lt', 24, 17, { run: true }); s.walkTo('gs', 22, 17, { run: true });
+      await s.walkTo('cg', 25, 17, { run: true });
+      await s.emote('zt', '!', 0.6);
+      await s.say('zhutong', '(low) Brother Chao — I\'ve kept this road open for you. Go! Don\'t stop, and don\'t look back.');
+      await s.say('chaogai', '...Zhu Tong. I won\'t forget it.');
+      // off into the dark at the end of the road
+      ['cg', 'wy', 'lt', 'gs'].forEach(function (k, i) { s.walkTo(k, 34, 17 + (i % 2), { run: true }).then(function () { s.hide(k); }); });
+      await s.wait(0.8);
+      // and then, loud enough for the soldiers behind him: sword waved at the empty dark, and a stumble across the road
+      s.face('zt', 'right');
+      await s.say('zhutong:angry', 'Robbers! Halt! Halt, I say!');
+      s.jump('zt', 4); await s.wait(0.3); s.jump('zt', 4); await s.wait(0.3);
+      s.walkTo('k1', 24, 18, { run: true }); s.walkTo('k2', 25, 18, { run: true }); s.walkTo('k3', 23, 17, { run: true });
+      await s.wait(0.6);
+      s.sfx('block'); s.lie('zt');
+      await s.wait(1.2);
+      s.emote('k1', '?', 1); await s.emote('k2', '...', 1);
+      await s.say('soldier', 'Constable Zhu has fallen! Help him up — the robbers are getting away!', { top: true });
+      await s.fadeOut(1);
+      ['cg', 'wy', 'lt', 'gs', 'zt', 'lh', 'k1', 'k2', 'k3'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.night(false); s.cameraReset(); s.show('player');
+      await s.narrate('So Chao Gai and his men escaped into the night to Shijie village, and the manor was left empty.');
       s.flag('ch5_fled');
       s.party(['chaogai', 'wuyong', 'gongsunsheng', 'liutang', 'ruanxiaoer', 'ruanxiaowu']);
       s.addParty('ruanxiaoqi');
@@ -497,9 +542,25 @@
       await s.say('linchong:angry', '...Wang Lun! When I came, you would not have me unless I brought you a head. Now heroes like these come to us, and again you send them away with a handful of silver. You are jealous of every man better than yourself — a failed scholar with no ability. What right have you to lead Liangshan?');
       await s.say('wanglun:angry', 'Lin Chong! You are drunk! You dare to insult me before guests?');
       await s.say('linchong:angry', 'Jealous, narrow little man. You\'re not fit to lead anyone!');
+      // he kicks the table over, draws a knife from his robe and goes for Wang Lun
       s.sfx('slash'); await s.shake(5, 0.5);
-      await s.narrate('Lin Chong kicked the table over, drew a knife from his robe and seized Wang Lun. Wu Yong, Chao Gai and the others leapt up — as if to stop him — and stood between Wang Lun\'s men and the two of them. And Lin Chong killed Wang Lun there in the hall.');
+      await s.walkTo('lin', 14, 5, { run: true }); s.face('lin', 'right');
+      s.face('wanglun', 'left'); await s.emote('wanglun', '!', 0.8);
+      s.jump('lin', 4); s.sfx('block');
+      await s.say('wanglun:shock', 'Guards! Du Qian, Song Wan — seize him!');
+      // Wang Lun's men start forward; Chao Gai's men leap up as if to stop the fight, and stand in their way
+      s.face('duqian', 'left'); s.face('songwan', 'left');
+      s.move('duqian', 'L1', { wait: false }); s.move('songwan', 'L1', { wait: false });
+      s.walkTo('wuyong', 17, 6, { run: true }); s.walkTo('gss', 17, 7, { run: true }); s.walkTo('r2', 17, 8, { run: true });
+      await s.walkTo('player', 16, 6, { run: true });
+      s.face('wuyong', 'right'); s.face('gss', 'right'); s.face('r2', 'right'); s.face('player', 'left');
+      await s.say('wuyong', 'Brothers, don\'t! Put the knife away — no fighting at a feast!');
+      await s.emote('duqian', '...', 0.8);
+      // and while they are held off, Lin Chong strikes
+      s.sfx('crit'); s.jump('lin', 5); await s.shake(6, 0.4);
       s.lie('wanglun');
+      await s.narrate('And Lin Chong killed Wang Lun there in the hall.');
+      s.face('lin', 'down');
       await s.say('linchong', 'I killed him for the sake of the brotherhood, not for any seat. Headman Chao is a man of honour, known to everyone. He shall be our chief. Whoever disagrees, step forward.');
       await s.say('duqian', 'We were only ever Wang Lun\'s men because there was no one better. Chief Chao — we follow you.');
       await s.say('chaogai', '...Brothers, I am a plain village headman. But if you will have me, I will not fail you.');
@@ -511,6 +572,8 @@
       s.flag('castle');
       s.music('castle');
       await s.joinMany(['wuyong', 'gongsunsheng', 'linchong', 'liutang', 'ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'duqian', 'songwan', 'zhugui']);
+      s.despawn('wanglun');   // his body is carried out
+      s.removeParty('wuyong');   // he stays in the hall as strategist (he is the one standing there to talk to), not at Chao Gai's side
       await s.narrate('THE STARS GATHER. From this day Liangshan is your stronghold. Heroes who join the cause will come to live here, and as their number grows, so will the fortress. Speak to a brother in the Assembly Hall to choose who rides out with you, and to read the Roll of Heroes.');
       s.flag('ch5_castle');
       s.level('linchong', Math.max(16, WM.state.chars.linchong.lv)); s.level('duqian', 12); s.level('songwan', 12); s.level('zhugui', 12);

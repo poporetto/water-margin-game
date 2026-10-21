@@ -25,7 +25,15 @@
   L.link({ map: 'zhugui', x: tav.x, y: tav.y }, { map: 'zhugui_in', x: zR.x, y: zR.y });
   WM.data.zhuguiTav = { door: tav, room: zR };
   // the ferry over the marsh: once Liangshan is the brothers' own, its boatman waits at Zhu Gui's pier
+  var ferry = async function (s) {
+    var k = await s.ask(null, 'A Liangshan boatman sits in the stern of the sampan, his hand on the oar. Cross the marsh to the fortress?', ['Cross over', 'Not now']);
+    if (k !== 0) return;
+    s.sfx('splash'); await s.warp('liangshan', 24, 44, 'up');
+  };
   WM.defEvents('zhugui', [
+    // walking out to the end of the pier is enough: the boatman is there
+    { id: 'zg_pier', x: 13, y: 3, w: 2, h: 1, trigger: 'touch', cond: function (S2) { return S2.has('castle'); }, run: ferry },
+    { id: 'zg_pier0', x: 13, y: 3, w: 2, h: 1, trigger: 'touch', cond: function (S2) { return !S2.has('castle'); }, run: async function (s) { await s.say(null, '(A sampan is tied at the end of the pier, its mat awning dark. No boatman comes unless the whistling arrow calls him.)'); } },
     { id: 'zg_ferry', x: 15, y: 4, trigger: 'check', cond: function (S2) { return S2.has('castle'); }, run: async function (s) {
       var k = await s.ask(null, 'A Liangshan boatman sits in the stern of the sampan, his hand on the oar. Cross the marsh to the fortress?', ['Cross over', 'Not now']);
       if (k !== 0) return;
@@ -66,11 +74,11 @@
     // mountains and pines to the north
     for (xx = 0; xx < W; xx++) for (yy = 0; yy < 8; yy++) if (g.get(xx, yy) === '.' && (yy < 4 || U.hash2(xx, yy, 9) > 0.55)) g.set(xx, yy, yy < 3 ? 'M' : 'P');
     // shore & jetty
-    g.rect(18, 40, 14, 2, 's');
+    g.rect(17, 40, 16, 2, 's');
     g.rect(23, 42, 4, 5, 'B'); g.set(21, 44, 'o'); g.set(20, 42, 'o');
     g.set(27, 45, '<'); g.set(28, 45, '['); g.set(29, 45, '>'); g.set(30, 45, '>');   // the ferry sampan that plies to Zhu Gui's pier, tied up at the jetty
     // main path
-    g.rect(24, 9, 2, 32, ':');
+    g.rect(24, 9, 2, 31, ':');   // (down to the shore: the beach itself is sand, no path across it)
     // Duanjin Pavilion near the landing
     g.house(14, 36, 3, 3, { roof: 'v', wall: 'R', door: false, wallRows: 1 }); g.set(15, 38, '.');
     g.hline(17, 23, 37, ':');
@@ -116,7 +124,7 @@
   WM.defMap('liangshan', {
     name: 'Liangshan', theme: 'marsh', rows: build, spawn: [24, 40], entry: [24, 40], battleBg: 'marsh',
     cacheKey: function () { return level() + '|' + Object.keys(SLOTS).filter(open).join(',') + '|' + S.has('loyaltyhall') + S.has('grand_assembly') + (WM.castle && WM.castle.has('huangfuduan')) + (WM.castle && WM.castle.has('lingzhen')); },
-    music: function (S2) { return S2.has('lsWangLun') ? 'tense' : 'castle'; },
+    music: function (S2) { return S2.has('lsWangLun') ? 'tense' : S2.has('castle') ? 'stronghold' : 'castle'; },   // once it is the brothers' own, the bustling stronghold tune
     get exits() {
       var out = [];
       // leaving by boat from the jetty
@@ -129,14 +137,16 @@
   });
 
   // interiors
-  var I = L.grid(70, 36, 'x');
+  var I = L.grid(86, 36, 'x');
   var ROOMS = {};
   ROOMS.hall = I.room(1, 1, 30, 16, { floor: 'N' });
-  I.stamp(2, 3, ['h....L.....AAAA.....L.....h.', '...........KKKK.............', '...........KKKK.............', '............................', '............................', '..t......................t..', '..t......................t..', '............................', '............................', '............................', 'j..........................j']);
+  I.stamp(2, 3, ['h....L.AA.00..00.AA.L.....h.', '...........KKKK.............', '...........KKKK.............', '............................', '..t......................t..', '............................', '............................', '..t......................t..', '............................', '............................', 'j..........................j']);   // two great chairs side by side at the head of the hall, an incense altar either side; the side tables set well apart
   ROOMS.store = I.room(32, 1, 9, 7); I.stamp(33, 3, ['hhhhh..', '.......', 'ccc....']);
   ROOMS.smithy = I.room(42, 1, 9, 7); I.stamp(43, 3, ['jj..jj.', '.......', '.cccc..']);
   ROOMS.tailor = I.room(52, 1, 9, 7); I.stamp(53, 3, ['hhhhhh.', '.......', '.cccc..']);
-  ROOMS.barracks = I.room(61, 1, 9, 9); I.stamp(62, 3, ['kk.kk..', 'kk.kk..', '.....kk', '.....kk', '..t....']);
+  // the hostel (its own room, apart from the others): four beds evenly along the back wall, corner to corner; the
+  // innkeeper behind his long counter, and the recorder at his desk
+  ROOMS.barracks = I.room(72, 1, 13, 10); I.stamp(73, 3, ['kk.kk.kk.kk', 'kk.kk.kk.kk', '...........', '...........', '.cccc....t.']);
   ROOMS.clinic = I.room(32, 10, 9, 7); I.stamp(33, 12, ['k.h.k..', '.......', '..t....']);
   ROOMS.engrave = I.room(42, 10, 9, 7, { floor: 'N' }); I.stamp(43, 12, ['h.A.h..', '.......', '.ccc...']);
   ROOMS.records = I.room(52, 10, 9, 7); I.stamp(53, 12, ['hhhhhh.', '.......', '..t....']);
@@ -158,7 +168,8 @@
     { id: 'ls_store', x: 34, y: 4, npc: 'outlaw', cond: notWL, run: async function (s) { await s.say('outlaw', 'Supplies for the brothers. Take what you need — the silver goes to the common store.'); await s.shop('liangshan'); } },
     { id: 'ls_smith', x: 45, y: 4, char: 'tanglong', cond: function (S2) { return C().has('tanglong') && WM.state.party.indexOf('tanglong') < 0; }, run: async function (s) { await s.say('tanglong', 'Bring me any blade, brother. The forge of Liangshan can take it as far as level ' + C().smithMax() + '.'); await s.smith(C().smithMax(), 'tanglong'); } },
     { id: 'ls_tailor', x: 55, y: 4, char: 'houjian', cond: function (S2) { return C().has('houjian') && WM.state.party.indexOf('houjian') < 0; }, run: async function (s) { await s.say('houjian', 'Banners, coats, armour — I sew them all. Have a look.'); await s.shop('liangshan_armor'); } },
-    { id: 'ls_rest', x: 64, y: 7, npc: 'outlaw', cond: notWL, run: async function (s) { await s.inn(0, 'outlaw'); } },
+    { id: 'ls_rest', x: 75, y: 6, npc: 'innkeep', dir: 'down', cond: notWL, run: async function (s) { await s.inn(0, 'innkeep'); } },
+    Object.assign(L.save('ls_innrec', 82, 6), { cond: notWL }),
     { id: 'ls_clinic', x: 36, y: 13, char: 'andaoquan', cond: function (S2) { return C().has('andaoquan'); }, run: async function (s) { await s.say('andaoquan', 'Let me see your wounds. There — all of you, mended.'); s.heal(); WM.S.restoreAll(); } },
     { id: 'ls_engrave', x: 45, y: 13, char: 'jindajian', cond: function (S2) { return C().has('jindajian'); }, run: async function (s) { await s.say('jindajian', 'Seals, tallies, and incense sticks carved with the brothers\' names. Burn one, and the spirit comes back.'); await s.shop('liangshan_t'); } },
     { id: 'ls_records', x: 56, y: 13, char: 'xiaorang', cond: function (S2) { return C().has('xiaorang'); }, run: async function (s) { var k = await s.ask('xiaorang', 'Shall I set down the record of our deeds?', ['Write a record', 'Not now']); if (k === 0) await s.saveMenu(); } },

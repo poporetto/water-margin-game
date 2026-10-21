@@ -132,6 +132,7 @@
       S.restore(id);
     });
     st.party = cp.p.slice(); st.leader = cp.ld;
+    st.followers = (cp.fol || []).slice();   // companions walking with the leader at this point of the story
     WM.setScene(WM.field, { map: cp.m, x: cp.x, y: cp.y, dir: cp.d, noAuto: cp.t !== 'auto' });
     if (cp.t !== 'auto') {   // a scene you walk into or talk to: start it
       var at = cp.ev.split(':'), ev = (WM.data.events[at[0]] || []).filter(function (e) { return e.id === at[1]; })[0];

@@ -108,18 +108,18 @@
   var inn = c.house(3, 20, 9, 5, { roof: '^', door: 4, windows: [1, 7] });
   var shop = c.house(13, 20, 6, 5, { roof: 'z', door: 3, windows: [1] });
   var store2 = c.house(26, 20, 7, 5, { roof: 'z', door: 3, windows: [1, 5] });
-  var wine = c.house(34, 20, 7, 5, { roof: 'z', door: 3, windows: [1, 5] }); c.set(33, 20, 'J');
+  var wine = c.house(34, 20, 7, 5, { roof: 'z', door: 3, windows: [1, 5] }); c.set(35, 25, 'J');   // the wine flag on its pole out front, beside the door
   [tea, yan].forEach(function (q) { c.vline(q.x, q.y + 1, 15, ':'); });
   c.hline(2, 41, 26, ':'); [inn, shop, store2, wine].forEach(function (q) { c.vline(q.x, q.y + 1, 26, ':'); });
   c.vline(22, 9, 9, '=');
   c.scatter('T', 0.07, 221, '.', [1, 1, 42, 32]); c.scatter('f', 0.04, 222, '.', [1, 1, 42, 32]);
   L.clearAround(c, ':', 'T', '.'); L.clearAround(c, '=', 'T', '.');
   c.set(18, 30, 'I');
-  var stage = c.house(27, 28, 11, 4, { roof: 'z', wall: 'R', door: 5, windows: [2, 8] }); c.set(26, 29, 'Y'); c.set(38, 29, 'Y');   // the theatre (勾欄) the Bai family open in chapter 13
+  var stage = c.house(27, 28, 11, 4, { roof: 'z', wall: 'R', door: 5, windows: [2, 8] }); c.set(31, 32, 'Y'); c.set(33, 32, 'Y');   // banners either side of its door; the theatre (勾欄) the Bai family open in chapter 13
   WM.defMap('yuncheng', { name: 'Yuncheng County', theme: 'summer', music: 'town', rows: c.rows(), spawn: [21, 31], battleBg: 'town', exits: [WM.toWorld('yuncheng', 20, 33, 4, 1)] });
-  var ci = L.grid(80, 12, 'x');
-  var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(61, 1, 5, 8), stage: ci.room(67, 1, 12, 10) };
-  ci.stamp(68, 3, ['..KKKKKKK.', '..KKKKKKK.', '..........', '.t.t.t.t..', '.t.t.t.t..', '..........']);
+  var ci = L.grid(92, 12, 'x');
+  var cR = { office: ci.room(1, 1, 16, 10, { floor: 'N' }), tea: ci.room(18, 1, 10, 8), yan: ci.room(29, 1, 12, 9), inn: ci.room(42, 1, 10, 8), shop: ci.room(53, 1, 7, 8), store2: ci.room(61, 1, 5, 8), wine: ci.room(80, 1, 10, 8), stage: ci.room(67, 1, 12, 10) };
+  ci.stamp(68, 3, ['..........', '..........', '.t...t..t.', '..........', '...t...t..', '..........']);   // the theatre: tables set apart, room to walk between them
   // the county office: the magistrate's desk on the middle line before a painted screen, the clerks' desks in two
   // rows down either side, files shelved in the back corners
   ci.stamp(2, 3, ['hh..EEEEEE..hh', '......00......', '.....aaaa.....', '..............', '.t.........t..', '..............', '.t.........t..']);
@@ -128,12 +128,14 @@
   ci.stamp(43, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   ci.stamp(54, 3, ['hhhh.', '.....', 'ccc..']);
   ci.stamp(62, 3, ['hhh', '...', 'cc.']);
+  ci.stamp(81, 3, ['hj..j..h', '........', '.t..t..t', 'cc......']);   // the wine shop: jars and shelves, tables, the counter
   WM.defMap('yuncheng_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: ci.rows(), spawn: [9, 9] });
-  [[office, cR.office], [tea, cR.tea], [yan, cR.yan], [inn, cR.inn], [shop, cR.shop], [store2, cR.store2], [stage, cR.stage]].forEach(function (p) { L.link({ map: 'yuncheng', x: p[0].x, y: p[0].y }, { map: 'yuncheng_in', x: p[1].x, y: p[1].y }); });
+  [[office, cR.office], [tea, cR.tea], [yan, cR.yan], [inn, cR.inn], [shop, cR.shop], [store2, cR.store2], [stage, cR.stage], [wine, cR.wine]].forEach(function (p) { L.link({ map: 'yuncheng', x: p[0].x, y: p[0].y }, { map: 'yuncheng_in', x: p[1].x, y: p[1].y }); });
   WM.data.yuncheng = { rooms: cR, doors: { office: office, tea: tea, yan: yan, inn: inn, shop: shop, store2: store2, wine: wine, stage: stage } };
   WM.defEvents('yuncheng_in', [
     L.inn('ycinn', 45, 4, 20), L.save('ycrec', 49, 6),
-    L.shop('ycshop', 56, 4, 'yuncheng', 'shopkeep', 'Welcome to Yuncheng. We have everything for the road.')
+    L.shop('ycshop', 56, 4, 'yuncheng', 'shopkeep', 'Welcome to Yuncheng. We have everything for the road.'),
+    { id: 'ycwine', x: 83, y: 6, npc: 'waiter', text: ['Wine, sir? The best in Yuncheng — ask anyone at the yamen. Clerk Song himself drinks here.'] }
   ]);
 })();
 
@@ -146,15 +148,15 @@
   f.frame(4, 3, 24, 12, 'F'); f.rect(14, 14, 3, 1, ':');
   var hall = f.house(6, 4, 12, 5, { roof: '^', door: 6, windows: [2, 9] });
   var shrine = f.house(20, 4, 6, 5, { roof: 'v', wall: 'R', door: 3 });     // the Buddha hall with the cellar beneath
-  f.hline(12, 23, 10, ':'); f.vline(12, 9, 13, ':'); f.vline(23, 9, 10, ':');
+  f.hline(12, 23, 10, ':'); f.vline(12, 9, 10, ':'); f.vline(23, 9, 10, ':'); f.rect(14, 11, 3, 3, ':');   // the yard path runs straight down to the gate
   f.stamp(5, 11, ['f.T.f.', 'T.f.T.']); f.stamp(20, 11, ['.f.T.f', '.T.f.T']);
   f.rect(3, 17, 9, 6, 'y'); f.rect(19, 17, 10, 6, 'y');
   f.scatter('T', 0.06, 231, '.', [1, 1, 30, 24]); L.clearAround(f, ':', 'T', '.');
   WM.defMap('songfarm', { name: 'Song Family Farm', theme: 'summer', music: 'field', rows: f.rows(), spawn: [15, 24], battleBg: 'plains', exits: [WM.toWorld('songfarm', 14, 25, 3, 1)] });
   var fi = L.grid(30, 10, 'x');
-  var fR = { hall: fi.room(1, 1, 14, 8, { floor: 'N' }), shrine: fi.room(16, 1, 9, 8, { floor: 'N' }) };
+  var fR = { hall: fi.room(1, 1, 14, 8, { floor: 'N' }), shrine: fi.room(16, 1, 10, 8, { floor: 'N' }) };
   fi.stamp(2, 3, ['h..A.....Akk', '..........kk', '..t.........', '............']);
-  fi.stamp(17, 3, ['.999...', '.AAA...', '.......', '....S..']);   // the Buddha hall: three small Buddhas over the altars, the cellar steps
+  fi.stamp(17, 3, ['...11...', '...AA...', '........', '........', '......SS']);   // the Buddha hall: one Buddha (the great Buddha's figure, drawn two tiles wide) over one altar in the middle; the cellar steps, two wide, in the back corner
   WM.defMap('songfarm_in', { name: '', interior: true, theme: 'summer', music: 'field', rows: fi.rows(), spawn: [8, 7] });
   L.link({ map: 'songfarm', x: hall.x, y: hall.y }, { map: 'songfarm_in', x: fR.hall.x, y: fR.hall.y });
   L.link({ map: 'songfarm', x: shrine.x, y: shrine.y }, { map: 'songfarm_in', x: fR.shrine.x, y: fR.shrine.y });

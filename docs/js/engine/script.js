@@ -167,7 +167,10 @@
     var twin = f.actors.some(function (o) { return o !== a && o.visible && o.ev && !o.ev.temp && (o.ev.npc === a.sheetWho || o.ev.char === a.sheetWho); });
     if (twin) { f.actors = f.actors.filter(function (o) { return o !== a; }); return; }
     a.ev.id = a.leavingKey; a.leavingKey = null; a.lingering = true;
-    a.solid = false;   // someone left standing about can never trap the player in a lane or a doorway: they can be walked past
+    // someone left standing about can never trap the player in a lane or a doorway: there they can be walked past;
+    // out in the open (three or more ways round them) they stand solid, like anyone else in the room
+    var lt = a.tile(), open = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(function (d) { return !f.tileSolid(lt.x + d[0], lt.y + d[1]); }).length;
+    a.solid = open >= 3 && !a.following;   // (one following the leader never blocks him)
     if (!a.ev.idle && lines[a.sheetWho]) a.ev.idle = lines[a.sheetWho];   // what they last said in the scene
   }
 

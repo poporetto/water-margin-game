@@ -16,7 +16,7 @@
   var tav = j.house(5, 37, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); j.set(12, 38, 'J'); j.set(13, 39, 'I');
   j.hline(8, 14, 41, ':');
   // the temple of the Mountain God halfway up, with the notice about the tiger
-  j.rect(20, 23, 6, 5, '.'); var tmp = j.house(21, 22, 4, 3, { roof: 'v', wall: 'R', door: false, wallRows: 1 }); j.set(23, 25, 'I');
+  j.rect(20, 21, 6, 7, '.'); var tmp = j.house(21, 21, 4, 4, { roof: 'v', wall: 'R', door: false }); j.set(23, 25, 'I');   // the little mountain-god shrine: walls two rows high, so its door fits under the roof
   // the great flat rock where Wu Song lay down — and the tiger came
   j.rect(10, 9, 9, 7, '.'); j.rect(13, 11, 3, 2, 'm');
   j.scatter('m', 0.04, 241, '.'); L.clearAround(j, ':', 'Pm', '.');
@@ -38,7 +38,7 @@
   var dalang = y.house(3, 18, 7, 5, { roof: '^', door: 3, windows: [1, 5], windowsUpper: [5] });   // Wu Dalang's house, the curtained window upstairs
   var wang = y.house(11, 18, 6, 5, { roof: '^', door: 3, windows: [1] });                           // Granny Wang's teashop next door
   var ximen = y.house(28, 18, 9, 5, { roof: '^', door: 4, windows: [1, 7] });                        // Ximen Qing's medicine shop
-  var lion = y.house(28, 4, 11, 6, { roof: 'v', door: 5, windows: [1, 9], windowsUpper: [2, 8] });   // the Lion Bridge tavern
+  var lion = y.house(29, 4, 10, 6, { roof: 'v', door: 5, windows: [1, 8], windowsUpper: [2, 7] });   // the Lion Bridge tavern (a lane's width clear of the county office, so their roofs do not run together)
   y.rect(27, 11, 13, 2, '~'); y.rect(32, 11, 3, 2, 'B');                                             // the stream under the Lion Bridge
   var hejiu = y.house(3, 4, 7, 5, { roof: 'z', door: 3, windows: [1] });                             // He Jiu the coroner
   var inn = y.house(3, 26, 9, 5, { roof: '^', door: 4, windows: [1, 7] });
@@ -53,11 +53,20 @@
   var yR = { office: yi.room(1, 1, 12, 9, { floor: 'N' }), dalang: yi.room(14, 1, 10, 9), wang: yi.room(25, 1, 8, 8), ximen: yi.room(34, 1, 10, 8), lion: yi.room(45, 1, 14, 10), hejiu: yi.room(60, 1, 8, 8) };
   yi.stamp(2, 3, ['hEEEEEEh.', '..q00q...', '..aaaa...']);   // the county hall
   yi.stamp(15, 3, ['k...j...', '........', '..t.....', '........']);
-  yi.stamp(26, 3, ['h..j..', '.t..t.', 'cc....']);
+  yi.stamp(26, 3, ['k...j.', '......', '...t..', '......']);   // Granny Wang's house: her bed in the corner, a jar, one table (the teashop is out front)
   yi.stamp(35, 3, ['hhhhhh..', '........', 'cccc....']);
   yi.stamp(46, 3, ['h..L....L..h', '.t..t..t..t.', '............', '.t..t..t..t.']);
   yi.stamp(61, 3, ['k..j..', '......', '..t...']);
-  WM.defMap('yanggu_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: yi.rows(), spawn: [6, 8] });
+  // once Wu Dalang is dead, an altar table with his spirit tablet stands against the back wall of his house
+  var yRows = WM.growBeds(yi.rows()), yRowsMourning = null;   // (beds grown here, as defMap does for a plain list of rows)
+  var mourning = function () { return !!(WM.state && WM.state.flags && WM.state.flags.ch7_return); };
+  WM.defMap('yanggu_in', { name: '', interior: true, theme: 'autumn', music: 'town', spawn: [6, 8],
+    cacheKey: function () { return mourning() ? 'mourning' : 'plain'; },
+    rows: function () {
+      if (!mourning()) return yRows;
+      if (!yRowsMourning) { yRowsMourning = yRows.map(function (r) { return r.split(''); }); yRowsMourning[3][20] = 'A'; yRowsMourning[3][21] = 'A'; yRowsMourning = yRowsMourning.map(function (r) { return r.join(''); }); }
+      return yRowsMourning;
+    } });
   [[office, yR.office], [dalang, yR.dalang], [wang, yR.wang], [ximen, yR.ximen], [lion, yR.lion], [hejiu, yR.hejiu]].forEach(function (p) { L.link({ map: 'yanggu', x: p[0].x, y: p[0].y }, { map: 'yanggu_in', x: p[1].x, y: p[1].y }); });
   WM.data.yanggu = { rooms: yR, doors: { office: office, dalang: dalang, wang: wang, ximen: ximen, lion: lion, hejiu: hejiu, inn: inn } };
 

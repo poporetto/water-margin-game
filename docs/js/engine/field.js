@@ -184,6 +184,28 @@
   };
 
   // Temporary actor for cutscenes.
+  // Companions the story has walking with the leader (WM.state.followers, e.g. witnesses on the way to court): they
+  // come with him from map to map, and fall in behind him in his footsteps
+  F.refreshFollowers = function () {
+    F.actors = F.actors.filter(function (a) { return !(a.ev && /^fol_/.test(a.ev.id)); });
+    if (F.map.def.world) return;   // (not on the world map, where the party is one small figure)
+    var t = F.player.tile(), taken = {};
+    var back = { up: [0, 1], down: [0, -1], left: [1, 0], right: [-1, 0] }[F.player.dir] || [0, 1];
+    var spots = [[-1, 0], [1, 0], back, [-1, back[1] || back[0]], [1, back[1] || back[0]], [-2, 0], [2, 0], [0, 0]];
+    var spotFor = function () {   // a free floor tile beside or behind the leader (on top of him only if there is none)
+      for (var k = 0; k < spots.length; k++) {
+        var x = t.x + spots[k][0], y = t.y + spots[k][1];
+        if (taken[x + ',' + y] || (spots[k][0] || spots[k][1]) && F.tileSolid(x, y)) continue;
+        taken[x + ',' + y] = 1; return [x, y];
+      }
+      return [t.x, t.y];
+    };
+    (WM.state.followers || []).forEach(function (who, i) {
+      var at = spotFor();
+      var a = F.addActor('fol_' + i, who, at[0], at[1], F.player.dir);
+      a.sheetWho = who; a.following = true; a.followIdx = i; a.solid = false;
+    });
+  };
   F.addActor = function (key, charOrLook, tx, ty, dir) {
     var lk;
     if (typeof charOrLook === 'string') {
@@ -238,6 +260,7 @@
     F.snow = [];
     F.lastTile = F.player.tile();
     F.trail = [];
+    F.refreshFollowers();
     F.exitLock = true; // don't immediately re-trigger the exit we arrived on
     var mus = typeof F.map.def.music === 'function' ? F.map.def.music(S) : F.map.def.music;
     if (mus && !F.musicLocked) WM.audio.play(mus);

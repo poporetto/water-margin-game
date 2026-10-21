@@ -150,7 +150,13 @@
     var st = WM.state;
     if (!st || !st.flags.castle || st.flags.lsWangLun) return false;
     if (id === 'chaogai') return !st.flags.chaogai_dead && st.party.indexOf('chaogai') < 0;
+    if (inScene(id)) return false;   // already standing in the fortress for a story scene (Wu Yong with the news of Huang An): no double
     return S.isRecruited(id) && !st.dead[id] && !st.flags['away:' + id] && st.party.indexOf(id) < 0;
+  }
+  function inScene(id) {
+    return ['liangshan', 'liangshan_in'].some(function (m) {
+      return (WM.data.events[m] || []).some(function (e) { return !e.resident && e.char === id && (!e.cond || e.cond(S)); });
+    });
   }
 
   async function talk(s, id) {

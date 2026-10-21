@@ -107,6 +107,20 @@
     ]
   });
 
+  // Liangshan once it is the brothers' own: a bustling, hopeful village-fortress tune — a bright dizi over a running
+  // pipa, a skipping bass and a light folk beat (original, written for the game)
+  A.defTrack('stronghold', {
+    bpm: 118, key: 'D',
+    ch: [
+      { inst: 'dizi', oct: 5, vol: 0.17, notes:
+        '1 2 3 5 6 - 5 3 | 2 3 5 - 3 2 1 - | 6, 1 2 3 5 3 2 1 | 2 - - 3 2 - - - | 5 6 1\' 6 5 3 5 6 | 1\' - 2\' 1\' 6 - 5 - | 3 5 6 5 3 2 1 2 | 1 - - - 1 - 0 0 | 5 - 6 1\' 2\' - 3\' 2\' | 1\' 6 5 6 1\' - - - | 6 1\' 6 5 3 5 6 - | 5 3 2 3 5 - - - | 3 5 6 1\' 2\' 1\' 6 5 | 6 - 5 3 2 - 3 - | 5 3 2 1 6, 1 2 3 | 1 - - - - - 0 0' },
+      { inst: 'pipa', oct: 3, vol: 0.1, notes: '1 5 1\' 5 3\' 5 1\' 5 | 5, 2 5 2 7 2 5 2 | 6, 3 6 3 1\' 3 6 3 | 5, 2 5 2 7 2 5 2 | 4, 1 4 1 6 1 4 1 | 1 5 1\' 5 3\' 5 1\' 5 | 5, 2 5 2 7 2 5 2 | 1 5 1\' 5 3\' 5 1\' 5 | 1 5 1\' 5 3\' 5 1\' 5 | 4, 1 4 1 6 1 4 1 | 6, 3 6 3 1\' 3 6 3 | 2 6 2\' 6 4\' 6 2\' 6 | 4, 1 4 1 6 1 4 1 | 5, 2 5 2 7 2 5 2 | 5, 2 5 2 7 2 5 2 | 1 5 1\' 5 3\' 5 1\' 5' },
+      { inst: 'bass', oct: 3, vol: 0.18, notes: '1, - - - 1, - 1, - | 5, - - - 5, - 5, - | 6, - - - 6, - 6, - | 5, - - - 5, - 5, - | 4, - - - 4, - 4, - | 1, - - - 1, - 1, - | 5, - - - 5, - 5, - | 1, - - - 1, - 1, - | 1, - - - 1, - 1, - | 4, - - - 4, - 4, - | 6, - - - 6, - 6, - | 2, - - - 2, - 2, - | 4, - - - 4, - 4, - | 5, - - - 5, - 5, - | 5, - - - 5, - 5, - | 1, - - - 1, - 1, -' },
+      { inst: 'drum', perc: true, vol: 0.13, f: 85, notes: 'x...x.x.x...x...' },
+      { inst: 'clap', perc: true, vol: 0.06, notes: '....x.......x.x.' }
+    ]
+  });
+
   A.defTrack('sad', {
     bpm: 58, key: 'A',
     ch: [
@@ -240,6 +254,7 @@
     boss: ['The Tiger Bares Its Teeth', 'Boss fights: faster and heavier, real danger.'],
     victory: ['Wine for the Victors', 'A short fanfare after a battle is won.'],
     castle: ['The Hall of Loyalty', 'Liangshan itself: home, brotherhood, pride.'],
+    stronghold: ['Banners over the Marsh', 'Liangshan once it is yours: bustling, hopeful, home.'],
     sad: ['Rain on a Fresh Grave', 'Deaths and partings, Game Over: grief.'],
     duel: ['Thirty Bouts, No Victor', 'One-on-one duels: tense and pulsing.'],
     war: ['Drums along the Riverbank', 'Army battles: marching drums.'],
