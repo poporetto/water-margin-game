@@ -134,8 +134,23 @@
   // ---------------- Hangzhou ----------------
   WM.defEvents('hangzhou', [
     { id: 'ch23_yongjin', x: 24, y: 14, w: 2, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch23_hangzhou'); }, run: async function (s) {
-      await s.narrate('Zhang Shun had crossed the whole of the West Lake under the water, with a knife in his teeth. He came up in the pool below the Yongjin Gate and began to climb the water-grating. A bell tinkled on the grating — and the wall above him came alive with torches.');
-      s.sfx('arrow'); await s.flash(); s.sfx('arrow');
+      await s.fadeOut(0.6);
+      s.place('player', 22, 15, 'right'); s.hide('player');
+      await s.fadeIn(0.6);
+      await s.narrate('Zhang Shun crossed the whole of the West Lake under the water, with a knife in his teeth.');
+      s.show('player'); s.splash('player');
+      await s.walkTo('player', 25, 15);
+      s.face('player', 'right');
+      await s.say('zhangshun', '(whispering, the knife in his hand now) The water-grating... up, and over, and the gate is ours.');
+      await s.jump('player', 4);
+      s.sfx('bell'); await s.wait(0.3); s.sfx('bell');
+      await s.emote('player', '!');
+      await s.say('zhangshun:shock', '(A bell — strung on the grating!)');
+      var wg = WM.data.troop(s, 'yg', 'soldier', [[27, 13], [27, 17], [28, 14], [28, 16]], 'left');
+      wg.forEach(function (k) { s.emote(k, '!', 0.8); });
+      await s.say('soldier', 'Torches! Someone at the water-grating! Shoot — shoot!');
+      s.sfx('arrow'); await s.flash(); s.sfx('arrow'); await s.shake(3, 0.3);
+      WM.data.clear(s, wg);
       await fall(s, ['zhangshun'], 'Arrows, crossbow bolts and stones rained down into the pool. Zhang Shun, the White Streak in the Waves, who could stay seven days under water, died in the pool outside the Yongjin Gate.');
       s.night(false);
       s.party(['songjiang', 'lujunyi', 'wuyong', 'guansheng', 'huarong', 'huyanzhuo']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
@@ -199,7 +214,11 @@
   WM.defEvents('qingxi', [
     { id: 'ch23_fangla', x: 18, y: 2, w: 10, h: 7, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch23_hills'); }, run: async function (s) {
       await s.narrate('Lu Zhishen had chased Xiahou Cheng deep into the hills and killed him, and had been lost there ever since, living on what an old monk in a grass hut gave him. That morning the old monk had said: "Wait by the pine trees. Catch the big man who comes out of the woods." A man in a yellow robe came stumbling out of the trees.');
-      s.spawn('fl', 'fangla', 22, 6, 'down');
+      s.spawn('fl', 'fangla', 26, 8, 'left');
+      await s.walkTo('fl', 23, 7);
+      await s.emote('fl', '!');
+      await s.say('fangla', '(in a torn yellow robe, gasping) A monk? Out of my way, monk!');
+      await s.say('luzhishen', 'The old man said: catch the big man who comes out of the woods. You\'re big enough.');
       await s.duel('lu_fangla', { hero: 'luzhishen', canLose: true });
       s.despawn('fl', { leave: true });
       await s.say('luzhishen', '"Meet Xia, and capture. Meet La, and seize." ...Xiahou Cheng, and Fang La. So that is what the old man meant.');
@@ -217,7 +236,9 @@
       await s.say('monk', 'Master, that is the tide of the Qiantang. It comes at the same hour every day and every night, and it never fails. We call it the tide\'s signal — the tide\'s faith.');
       s.despawn('mk');
       await s.say('luzhishen', '..."Hear the tide, and be complete. See the signal, and be still." The tide\'s faith... the signal. Master Zhizhen, I understand now.');
-      await s.narrate('Lu Zhishen asked for hot water and bathed, and put on the new robe the emperor had given him, and lit incense. Then he wrote a verse, and sat down in the meditation chair with his legs crossed.');
+      await s.narrate('Lu Zhishen asked for hot water and bathed, and put on the new robe the emperor had given him.');
+      s.sfx('fire'); await s.emote('player', '...', 1.4);
+      await s.say(null, '(He lights incense, writes a verse, and sits down in the meditation chair with his legs crossed.)');
       await s.say('luzhishen', '"All my life I did no good deeds; I only loved to kill and burn. Today my golden chains are broken; today my jade locks are undone. Ah! On the Qiantang River the tide\'s signal came — and today, at last, I know that I am I."');
       s.sfx('gong');
       await fall(s, ['luzhishen'], 'When Song Jiang came with the others to see him, Lu Zhishen was sitting in the meditation chair, and did not move. He had passed away.');

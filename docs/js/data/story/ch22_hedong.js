@@ -122,7 +122,17 @@
     await s.narrate('Li Kui charged ahead against orders and was caught with five hundred men; then Lu Zhishen, Wu Song and Liu Tang were lost in the sea of illusion. A figure robed in yellow — the spirit of the Earth, Wu Yong said, for earth conquers water — drained the sea away. And then Gongsun Sheng rode out with his pine-patterned sword.');
     await s.say('gongsunsheng', 'His is the magic of the left-hand way, brother — borrowed, and false. Let me meet it.');
     await s.battle('ch22_qiao', { bg: 'field' });
-    await s.narrate('Qiao Daoqing\'s divine soldiers fell down as paper. His clay dragons were smashed by a great roc that rose from Gongsun Sheng\'s whisk. He fled to Baigu Ridge, and there, surrounded, he gave himself up. Li Kui, Lu Zhishen, Wu Song and Liu Tang came back alive.');
+    await s.narrate('Qiao Daoqing\'s divine soldiers fell down as paper. His clay dragons were smashed by a great roc that rose from Gongsun Sheng\'s whisk. He fled to Baigu Ridge, and there he was surrounded.');
+    s.spawn('qd', 'qiaodaoqing', 17, 15, 'up');
+    await s.walkTo('qd', 17, 11);
+    await s.jump('qd');
+    await s.say('qiaodaoqing', '(kneeling) The Phantom Magician yields. My magic is borrowed and false — I see that now. Master Gongsun, let me learn the true Way from you.');
+    await s.say('songjiang', 'Get up. And send back my brothers.');
+    s.despawn('qd', { leave: true });
+    s.spawn('lk', 'likui', 16, 15, 'up'); s.spawn('lz', 'luzhishen', 17, 16, 'up'); s.spawn('ws', 'wusong', 18, 15, 'up'); s.spawn('lt', 'liutang', 19, 16, 'up');
+    s.walkTo('lk', 16, 11); s.walkTo('lz', 17, 12); s.walkTo('ws', 18, 11); await s.walkTo('lt', 19, 12);
+    await s.say('likui', 'Brother! We\'re back — all of us! Ha! That sea was nothing but a trick!');
+    WM.data.clear(s, ['lk', 'lz', 'ws', 'lt']);
     await s.narrate('At the next city, a girl of sixteen led the enemy: Qiongying, whose stones struck down Wang Ying, Sun Xin, Lin Chong and Li Kui one after another.');
     // that night a man comes secretly to the camp: her steward
     s.night(true);
@@ -166,12 +176,25 @@
       s.spawn('wq', 'wangqing', 31, 12, 'right'); s.spawn('lj', 'lijun', 33, 13, 'left'); s.boat('lj');   // the 'fisherman' in his boat
       await s.say('wangqing', 'Fisherman! A boat! I still have three cities on the far side — take me over and you\'ll be rich!');
       await s.say('lijun:smile', 'Splendid — more wine money! Get in, get in.');
-      await s.narrate('On the bank of the Qing River, the "fisherman" was Li Jun, and the man at the oar was Tong Wei. Halfway across, the nets came up — over Wang Qing.');
-      s.despawn('wq', { leave: true }); s.despawn('lj');
+      await s.walkTo('wq', 31, 13);
+      s.boat('wq'); s.place('wq', 34, 13, 'right');
+      s.spawn('tw', 'tongwei', 35, 13, 'right'); s.boat('tw');
+      s.move('lj', 'R4', { speed: 40, wait: false }); s.move('tw', 'R4', { speed: 40, wait: false }); await s.move('wq', 'R4', { speed: 40 });
+      await s.say('lijun:smile', '(mid-river) Brother Tong Wei — now!');
+      s.sfx('splash'); await s.shake(3, 0.3);
+      await s.emote('wq', '!'); await s.jump('wq');
+      await s.say('wangqing:shock', 'A net — over my head! Who are you?!');
+      await s.say('lijun', 'Li Jun of Liangshan, and Tong Wei at the oar. Some fishermen, eh?');
+      s.move('lj', 'L4', { speed: 40, wait: false }); s.move('tw', 'L4', { speed: 40, wait: false }); await s.move('wq', 'L4', { speed: 40 });
+      WM.data.clear(s, ['wq', 'lj', 'tw']);
       await s.say('songjiang', 'Brother Li Jun, that is no small merit.');
       s.music('sad');
-      await s.narrate('The army turned north for the capital. It was autumn. At the Qiulin ferry, a long skein of wild geese went over, crying, and Yan Qing — who had never missed — drew his bow and brought down one after another.');
-      s.spawn('yq', 'yanqing', 29, 14, 'right');
+      await s.narrate('The army turned north for the capital. It was autumn. At the Qiulin ferry, a long skein of wild geese went over, crying.');
+      s.spawn('yq', 'yanqing', 29, 14, 'up');
+      await s.say('yanqing:smile', 'Geese! Watch this, brothers.');
+      for (var gi = 0; gi < 4; gi++) { s.sfx('arrow'); await s.wait(0.35); s.sfx('hit'); await s.wait(0.25); }
+      await s.say(null, '(One after another, the wild geese fall from the sky.)');
+      s.face('yq', 'left');
       await s.say('songjiang:sad', 'Little Yi, stop. The wild goose is a bird of the five virtues: they keep their order in the sky, they mourn their mates, they guard each other in the night. They are like us — brothers. And you have shot down a whole row of them... like our brothers, falling one by one.');
       await s.say('yanqing:sad', '...Forgive me, brother. I won\'t shoot them again.');
       s.despawn('yq');

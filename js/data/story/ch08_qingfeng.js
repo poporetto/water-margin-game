@@ -155,7 +155,7 @@
       await s.say('liugao:angry', 'Guards! Seize him!');
       // soldiers come running from all sides and close in round him; the servants scatter
       s.spawn('g1', 'soldier', 20, 9, 'down'); s.spawn('g2', 'soldier', 15, 14, 'right'); s.spawn('g3', 'soldier', 25, 14, 'left'); s.spawn('g4', 'soldier', 20, 19, 'up');
-      s.walkTo('sv1', 14, 19, { run: true }); s.walkTo('sv2', 26, 19, { run: true });
+      s.walkTo('sv1', 17, 17, { run: true }); s.walkTo('sv2', 24, 19, { run: true });
       s.walkTo('g1', 20, 13, { run: true }); s.walkTo('g2', 19, 14, { run: true }); s.walkTo('g3', 21, 14, { run: true });
       await s.walkTo('g4', 20, 15, { run: true });
       s.hide('sv1'); s.hide('sv2');
@@ -174,7 +174,7 @@
       s.walkTo('liugao', 31, 13); s.walkTo('lady', 31, 14);
       s.walkTo('g2', 27, 13, { speed: 40 }); s.walkTo('g3', 27, 15, { speed: 40 });
       pl.path = [{ x: 27 * 16 + 8, y: 14 * 16 + 15 }]; pl.speed = 40;
-      s.walkTo('g1', 26, 13, { speed: 40 }); await s.walkTo('g4', 26, 15, { speed: 40 });
+      s.walkTo('g1', 26, 13, { speed: 40 }); await s.walkTo('g4', 25, 15, { speed: 40 });
       await s.fadeOut(0.8);
       ['g1', 'g2', 'g3', 'g4'].forEach(function (k) { s.hide(k); s.despawn(k); });
       s.hide('lady'); s.hide('liugao');

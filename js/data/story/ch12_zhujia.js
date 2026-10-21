@@ -188,7 +188,19 @@
       await s.say('zhongli', '...You seem an honest man. Listen. Wherever you see a white poplar, turn there. That is the living road. The roads without poplars, wide or narrow, are dead roads.');
       await s.say('zhongli', 'My name is Zhongli. My family has lived here for generations. Stay the night; it\'s not safe on the roads.');
       s.sfx('gong');
-      await s.narrate('Towards evening there was shouting outside. Shi Xiu looked out and saw a man stripped and bound being led past to the manor — Yang Lin. He had taken the wrong road and drawn his blade, and the Zhu men had pulled him down.');
+      await s.say('guard', '(outside) Caught one! A Liangshan spy! Make way, make way!');
+      await s.emote('player', '!');
+      await s.fadeOut(0.5);
+      s.despawn('zl');
+      await s.warp('zhujia', 11, 36, 'down', { noFade: true });
+      s.spawn('zl', 'zhongli', 10, 35, 'down');
+      s.spawn('yl', 'yanglin', 14, 37, 'right'); s.spawn('cg1', 'guard', 13, 37, 'right'); s.spawn('cg2', 'guard', 15, 37, 'right');
+      await s.fadeIn(0.5);
+      await s.say('guard', 'Thought you could walk in with a Daoist\'s bell, did you? Took the wide road, drew your blade — and down you came!');
+      await s.say('yanglin:sad', '(Shi Xiu... don\'t look at me. Don\'t give yourself away.)');
+      await s.emote('player', 'sweat');
+      s.walkTo('cg2', 18, 33); s.walkTo('yl', 18, 34); await s.walkTo('cg1', 18, 35);
+      s.hide('yl'); s.hide('cg1'); s.hide('cg2'); s.despawn('yl'); s.despawn('cg1'); s.despawn('cg2');
       await s.say('zhongli', 'A Liangshan spy. They say he went the wrong way. Do you see? Don\'t go out tonight. The Zhu men are signalling to each other with a red lantern: wherever the lantern moves, the men in the bamboo follow.');
       s.despawn('zl');
       s.flag('away:yanglin');
@@ -269,7 +281,10 @@
       await s.move('wy1', 'L2');
       s.level('wangying', 22);
       await s.duel('wangying_hu', { hero: 'wangying', canLose: true });
-      await s.narrate('Wang Ying the Stumpy Tiger had thought he would take her easily. Within ten bouts his hands were shaking. She hooked him out of the saddle with her lasso, and her men carried him off to the Zhu manor.');
+      await s.say('wangying:shock', '(My hands... she\'s too fast!)');
+      await s.say('husanniang:angry', 'Down you come, little tiger!');
+      s.sfx('miss'); await s.emote('wy1', '!'); await s.jump('wy1', 8); s.sfx('hit'); await s.shake(2, 0.3);
+      await s.say('husanniang', 'Tie him. Take him to the Zhu manor!');
       await s.move('wy1', 'L3', { speed: 40 }); s.hide('wy1'); s.despawn('wy1');   // dragged off among her riders
       s.flag('away:wangying');
       await s.war('ch12_second');
@@ -292,10 +307,18 @@
       D.clear(s, ours.concat(['lc', 'lk1', 'hr1']));
       await s.fadeIn(0.8);
       s.music('sad');
-      await s.narrate('That night Song Jiang could not sleep. Wang Ying, Qin Ming, Deng Fei, Huang Xin and Yang Lin were prisoners in the Zhu manor; Ou Peng was wounded. In the morning a messenger came: Wu Yong had come down from Liangshan with the three Ruan brothers, Lü Fang and Guo Sheng, and five hundred men.');
-      s.spawn('wy', 'wuyong', 31, 44, 'left');
+      await s.narrate('That night Song Jiang could not sleep. Wang Ying, Qin Ming, Deng Fei, Huang Xin and Yang Lin were prisoners in the Zhu manor; Ou Peng was wounded.');
+      s.spawn('wy', 'wuyong', 4, 45, 'right');
+      s.spawn('re', 'ruanxiaoer', 3, 46, 'right'); s.spawn('rw', 'ruanxiaowu', 2, 45, 'right'); s.spawn('rq', 'ruanxiaoqi', 1, 46, 'right');
+      s.spawn('lf', 'lufang', 2, 46, 'right'); s.spawn('gs', 'guosheng', 1, 45, 'right');
+      s.walkTo('re', 26, 46); s.walkTo('rw', 25, 45); s.walkTo('rq', 24, 46); s.walkTo('lf', 23, 46); s.walkTo('gs', 22, 45);
+      await s.walkTo('wy', 29, 45);
+      s.face('player', 'left');
+      await s.say('ruanxiaoqi:smile', 'Brother Song! Five hundred more men, and the three Ruans spoiling for a fight!');
+      await s.say('songjiang:smile', 'Mister Wu! The Ruan brothers, Lü Fang, Guo Sheng... you\'ve come down from the mountain yourselves?');
       await s.say('wuyong:smile', 'Don\'t despair, brother. The Zhu Village will be ours in a few days. Help has come to us from where we least expected it: a band of heroes from Dengzhou, at Shi Yong\'s tavern. Let me tell you how they came.');
       s.despawn('wy', { leave: true });
+      ['re', 'rw', 'rq', 'lf', 'gs'].forEach(function (k) { s.despawn(k, { leave: true }); });
       s.flag('ch12_second');
       await WM.data.chapters[12].dengzhou(s);
     } }
@@ -315,10 +338,25 @@
   WM.defEvents('dengzhou', [
     { id: 'ch12_hunt', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_dz'); }, run: async function (s) {
       await s.say('xiebao', 'The third night, brother. If we don\'t get it tonight, it\'s the stick for us.');
-      await s.narrate('In the fourth watch the spring-bow went off with a twang. The tiger, a poisoned arrow in its side, came roaring out of the dark.');
+      s.spawn('xb', 'xiebao', 10, 5, 'up');
+      await s.say('xiezhen', 'Quiet. The spring-bow is set across the path, and the arrow is poisoned. All we can do is wait.');
+      await s.emote('xb', 'zzz', 1.4);
+      await s.wait(0.6);
+      s.sfx('arrow'); await s.shake(2, 0.2);
+      s.sfx('roar');
+      var tg = s.spawnBeast('tiger', 'tiger', 15, 3, 'left');
+      await s.emote('player', '!'); await s.jump('xb');
+      await s.say('xiebao', 'The bow\'s gone off! It\'s hit — it\'s coming!');
+      await s.walkTo('tiger', 12, 4, { run: true });
       await s.battle('ch12_tiger', { bg: 'forest' });
-      await s.narrate('Wounded and poisoned, the tiger rolled away down the hillside, over the wall, into the garden of Squire Mao\'s manor at the foot of the hill.');
+      s.sfx('roar');
+      await s.say('xiezhen', 'The poison\'s in it — it\'s running! After it!');
+      await s.walkTo('tiger', 16, 8, { run: true }); await s.move('tiger', 'D3', { run: true });
+      s.hide('tiger'); s.despawn('tiger');
+      await s.walkTo('player', 16, 7, { run: true }); s.walkTo('xb', 17, 7, { run: true });
+      await s.say('xiebao', 'Rolled right down the hill... and over the wall. That\'s Squire Mao\'s garden.');
       await s.say('xiezhen', 'It\'s in Squire Mao\'s garden. In the morning we\'ll knock and ask for it.');
+      s.despawn('xb');
       s.night(false);
       s.flag('ch12_tiger');
     } }
@@ -326,16 +364,47 @@
   WM.defEvents('dengzhou_in', [
     { id: 'ch12_mao', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_tiger') && WM.state.x < 13; }, run: async function (s) {
       s.spawn('mt', 'maotaigong', 6, 4, 'down');
-      await s.say('maotaigong:smile', 'The Xie brothers! So early? Sit down, have some breakfast first.');
-      await s.narrate('Squire Mao kept them at breakfast as long as he could. When at last he took them into the garden, the grass was flattened and bloody — and there was no tiger.');
-      s.spawn('mz', 'maozhong', 8, 6, 'up');
+      s.spawn('xb', 'xiebao', 8, 7, 'up');
+      await s.say('xiezhen', 'Squire, our tiger rolled over your wall in the night. Let us into the garden to fetch it.');
+      await s.say('maotaigong:smile', 'The Xie brothers! So early? A tiger, you say? Sit down, have some breakfast first. Servants — rice, and more rice!');
+      await s.emote('xb', '...');
+      await s.fadeOut(0.6); await s.wait(0.4); await s.fadeIn(0.6);
+      await s.say('xiebao:angry', '(Third bowl. He\'s stalling us.) Squire — the garden!');
+      await s.say('maotaigong', 'Yes, yes. The garden. Come along.');
+      await s.fadeOut(0.6);
+      s.despawn('mt'); s.despawn('xb');
+      await s.warp('dengzhou', 8, 17, 'down', { noFade: true });
+      s.spawn('mt', 'maotaigong', 6, 16, 'right'); s.spawn('xb', 'xiebao', 9, 17, 'down');
+      await s.fadeIn(0.6);
+      await s.walkTo('player', 8, 18); s.walkTo('xb', 10, 18);
+      await s.emote('player', '?');
+      await s.say('xiebao', 'The grass is flattened... blood all over it... and the wall\'s broken where it came over. But where\'s the tiger?');
+      s.face('player', 'left'); s.face('xb', 'left');
       await s.say('maotaigong:angry', 'A tiger? I see no tiger. You came here to rob me, under a pretext!');
+      s.spawn('mz', 'maozhong', 13, 17, 'left');
+      await s.walkTo('mz', 7, 17);
       await s.say('maozhong', 'Father, I\'ve already taken a tiger to the prefecture this morning — the one that was killed on our land. These two smashed our things. Constables!');
       await s.say('xiezhen:angry', 'You\'ve stolen our tiger, and now you call us robbers?!');
-      await s.narrate('Mao Zhong had the constables waiting. The brothers were taken to the prefecture as robbers. Mao\'s son-in-law, the clerk Wang Zheng, saw to it that they were beaten until they confessed, and the chief jailer, Bao Ji, took Mao\'s silver to make sure they never came out of the prison alive.');
-      s.despawn('mt', { leave: true }); s.despawn('mz', { leave: true });
+      var cs = WM.data.troop(s, 'mc', 'constable', [[8, 19], [9, 19], [11, 18], [12, 17]], 'up');
+      s.walkTo(cs[0], 8, 19); await s.wait(0.3);
+      await s.emote('player', 'anger');
+      await s.say('constable', 'Hunters Xie Zhen and Xie Bao! Robbery under arms! Chain them!');
+      s.sfx('hit'); await s.shake(2, 0.3);
+      await s.fadeOut(1);
+      WM.data.clear(s, cs.concat(['mt', 'mz', 'xb']));
+      await s.warp('dengzhou_in', 19, 7, 'up', { noFade: true });
+      s.place('player', 16, 4, 'down');
+      s.spawn('xb', 'xiebao', 19, 4, 'down');
+      s.spawn('bj', 'baoji', 20, 7, 'up'); s.spawn('mt', 'maotaigong', 21, 7, 'left');
+      await s.fadeIn(1);
+      await s.say('maotaigong', 'The clerk Wang Zheng is my son-in-law; he had them beaten till they confessed. Now — Jailer Bao. Those two must never come out of here alive.');
+      s.sfx('coins');
+      await s.say('baoji:smile', 'Squire Mao is generous. A few nights in my cells... men die of all sorts of things.');
+      await s.say('xiebao:angry', '(behind the bars) Mao! You thief! You\'ll pay for this!');
+      s.despawn('mt', { leave: true });
       s.flag('ch12_arrest');
       await s.fadeOut(1);
+      WM.data.clear(s, ['bj', 'xb']);
       s.party(['gudasao']); s.level('gudasao', 23); s.setLeader('gudasao'); s.flag('protagonist', 'gudasao');
       await s.warp('dengzhou_in', 31, 6, 'up', { noFade: true });
       await s.fadeIn(1);
@@ -346,8 +415,12 @@
       await s.say('sunxin', 'We\'ll have to break them out. And for that we need my elder brother, Sun Li, the commander of the garrison. And Zou Yuan and Zou Run of Denglong Mountain.');
       s.spawn('zy', 'zouyuan', 29, 5, 'right'); s.spawn('zr', 'zourun', 29, 7, 'right');
       await s.say('zouyuan', 'Zou Yuan, the Forest-Emerging Dragon. This is my nephew Zou Run, the Single-Horned Dragon — he can knock a pine tree down with his head. We\'re in.');
-      await s.narrate('Gu Dasao sent word to Sun Li that she was gravely ill. He came at once, with his wife.');
-      s.spawn('sl', 'sunli', 31, 7, 'up');
+      await s.say('gudasao', 'Sun Xin — run and tell your brother I\'m dying. Say I\'m asking for him. He\'ll come.');
+      s.despawn('sx', { leave: true });
+      await s.fadeOut(0.6); await s.wait(0.4);
+      await s.fadeIn(0.6);
+      s.spawn('sl', 'sunli', 30, 7, 'up'); s.spawn('sx', 'sunxin', 32, 7, 'up');
+      await s.walkTo('sl', 31, 7); s.walkTo('sx', 33, 5);
       await s.say('sunli', 'Sister-in-law, you\'re not ill at all. What is this?');
       await s.say('gudasao:angry', 'Brother-in-law. We are going to break the Xie brothers out of prison. If you won\'t come, then —');
       s.sfx('slash');
@@ -360,13 +433,27 @@
       await s.say(null, '(Go to the prison in the city.)');
     } },
     { id: 'ch12_jail', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_plot') && WM.state.x >= 14 && WM.state.x < 26; }, run: async function (s) {
-      s.spawn('bj', 'baoji', 20, 7, 'down');
-      await s.narrate('Gu Dasao went in with a basket, as a relative bringing food. Yue He let her through. When the signal came from outside, she drew her sabres.');
+      s.spawn('bj', 'baoji', 23, 7, 'left'); s.spawn('yh', 'yuehe', 19, 7, 'down');
+      s.spawn('xz', 'xiezhen', 16, 4, 'down'); s.spawn('xb', 'xiebao', 19, 4, 'down');
+      await s.walkTo('player', 19, 8);
+      await s.say('gudasao', 'Rice and pickles for my cousins, Brother Jailer. A relative may bring food, may she not?');
+      await s.say('yuehe', '(loudly) Be quick about it, woman! (quietly) Wait for the signal.');
+      await s.walkTo('yh', 18, 7); await s.walkTo('player', 19, 6);
+      await s.say('gudasao', 'Eat, cousins. Eat well.');
+      await s.say('xiebao', '(whispering) Sister Gu! ...You came.');
+      s.sfx('gong'); await s.shake(2, 0.3);
+      await s.say(null, '(A shout outside the prison gate) Open up! Open up in there!');
+      s.face('player', 'right'); s.sfx('slash'); await s.flash();
+      await s.say('gudasao:angry', 'Where are my cousins? — HERE!');
+      await s.emote('bj', '!');
       await s.say('baoji:angry', 'What\'s this?!');
       await s.battle('ch12_jail', { bg: 'town' });
       s.lie('bj');   // dead in the gateway of his own prison
+      s.sfx('hit'); await s.shake(3, 0.3); await s.jump('xz'); await s.jump('xb');
+      await s.say('xiezhen:angry', 'HRRAH! The cangue\'s in two! Brother — out!');
       s.addParty('xiezhen'); s.addParty('xiebao');
-      await s.narrate('Bao Ji died in the gateway of his own prison. The Xie brothers broke their cangues. Zou Yuan and Zou Run went to the clerk Wang Zheng\'s house and came back with his head. That same night they went to Squire Mao\'s manor, where a birthday feast was going on, and killed Squire Mao, Mao Zhong and their household, took the gold and silver and the horses, and burned the manor to the ground.');
+      WM.data.clear(s, ['xz', 'xb', 'yh']);
+      await s.narrate('Zou Yuan and Zou Run went to the clerk Wang Zheng\'s house and came back with his head. That same night they went to Squire Mao\'s manor, where a birthday feast was going on, and killed Squire Mao, Mao Zhong and their household, took the gold and silver and the horses, and burned the manor to the ground.');
       await s.narrate('Then all eight of them took the road to Liangshan. At Shi Yong\'s tavern they heard that Song Jiang was fighting the Zhu Family Village and had been beaten twice.');
       await s.say('sunli', 'Then we come with a gift. Luan Tingyu, the Zhu instructor, learned the spear from the same master as I did. I\'ll go to the Zhu manor as a garrison commander on my way to a new post, and ask to stay with my old fellow-student. When you attack, we open the gates from inside.');
       s.flag('ch12_dzdone');
@@ -395,14 +482,19 @@
       s.flag('ch12_hucheng');
       await s.fadeOut(1);
       s.party(['sunli', 'sunxin', 'gudasao', 'xiezhen', 'xiebao', 'yuehe']); s.setLeader('sunli'); s.flag('protagonist', 'sunli');
-      await s.narrate('Sun Li came up the road to the Zhu manor with his banners flying and his family behind him, as a garrison commander on his way to his new post at Yunzhou.');
-      await s.warp('zhujia', 30, 15, 'up', { noFade: true });
-      s.spawn('lt', 'luantingyu', 30, 12, 'down');
+      await s.warp('zhujia', 27, 18, 'right', { noFade: true });
+      s.spawn('gd4', 'gudasao', 26, 19, 'right'); s.spawn('sx4', 'sunxin', 25, 18, 'right'); s.spawn('xz4', 'xiezhen', 24, 19, 'right'); s.spawn('xb4', 'xiebao', 24, 18, 'right'); s.spawn('yh4', 'yuehe', 25, 19, 'right');
       await s.fadeIn(1);
+      await s.say(null, '(Banners flying, a garrison commander comes up the road to the Zhu manor, his household behind him.)');
+      s.walkTo('gd4', 31, 15); s.walkTo('sx4', 30, 17); s.walkTo('xz4', 31, 17); s.walkTo('xb4', 30, 18); s.walkTo('yh4', 31, 18);
+      await s.walkTo('player', 30, 15);
+      s.spawn('lt', 'luantingyu', 30, 12, 'down');
+      await s.walkTo('lt', 30, 14);
       await s.say('luantingyu:smile', 'Brother Sun Li! The Sick Yuchi himself! We learned the spear from the same master. What brings you here?');
       await s.say('sunli', 'I\'m transferred to Yunzhou, to guard against the Liangshan bandits. I heard you were here, and that the bandits are at your gate. Let me stay a few days and help you.');
       await s.say('luantingyu', 'Heaven sends you! Come in, come in.');
       s.despawn('lt');
+      WM.data.clear(s, ['gd4', 'sx4', 'xz4', 'xb4', 'yh4']);
       s.flag('ch12_inside');
       await s.warp('zhujia_in', 10, 9, 'up');
     } }
@@ -460,15 +552,39 @@
   ]);
   WM.defEvents('lijia', [
     { id: 'ch12_ruse', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch12_aftermath'); }, run: async function (s) {
-      s.spawn('xr', 'xiaorang', 22, 17, 'down'); s.spawn('dz', 'daizong', 21, 18, 'right'); s.spawn('yl', 'yanglin', 23, 18, 'left');
+      s.hide('player');
       s.spawn('ly', 'liying', 22, 15, 'down'); s.spawn('dx', 'duxing', 23, 15, 'down');
-      await s.narrate('A few days later a prefect came to the Li manor with constables and clerks.');
+      s.spawn('xr', 'xiaorang', 22, 21, 'up'); s.spawn('dz', 'daizong', 21, 22, 'up'); s.spawn('yl', 'yanglin', 23, 22, 'up');
+      await s.say(null, '(A few days later, a prefect comes to the Li manor with constables and clerks.)');
+      s.walkTo('dz', 21, 17); s.walkTo('yl', 23, 17); await s.walkTo('xr', 22, 17);
       await s.say('xiaorang', '(in a magistrate\'s voice) Li Ying! You are in league with the Liangshan bandits who destroyed the Zhu Family Village! Bind him and his steward!');
       await s.say('liying:shock', 'Your Honour, I never — I was wounded, I never left my bed —');
-      await s.narrate('Li Ying and Du Xing were bound and led away. A few li down the road, Liangshan men burst out of the woods, drove off the "constables," and carried the prisoners up the mountain.');
-      ['xr', 'dz', 'yl', 'ly', 'dx'].forEach(function (k) { s.despawn(k); });
+      s.walkTo('dz', 21, 16, { run: true }); await s.walkTo('yl', 23, 16, { run: true });
+      s.sfx('hit'); await s.shake(2, 0.3);
+      await s.say('daizong', '(as a constable) Hands behind you, Squire. To the prefecture.');
+      s.walkTo('xr', 22, 22); s.walkTo('ly', 22, 20); s.walkTo('dx', 23, 20); s.walkTo('dz', 21, 20); await s.walkTo('yl', 24, 19);
+      await s.fadeOut(0.8);
+      WM.data.clear(s, ['xr', 'dz', 'yl', 'ly', 'dx']);
+      // a few li down the road
+      s.place('player', 8, 21, 'right');
+      s.spawn('xr', 'xiaorang', 10, 20, 'left'); s.spawn('ly', 'liying', 11, 21, 'left'); s.spawn('dx', 'duxing', 12, 20, 'left'); s.spawn('dz', 'daizong', 12, 21, 'left'); s.spawn('yl', 'yanglin', 13, 20, 'left');
+      await s.fadeIn(0.8);
+      s.sfx('gong');
+      var ol = WM.data.troop(s, 'lo', 'outlaw', [[8, 18], [9, 23], [6, 19], [7, 23]], 'right');
+      s.spawn('lk', 'likui', 7, 20, 'right');
+      await s.say('likui:angry', 'Liangshan! Drop the prisoners, you dogs!');
+      await s.say('xiaorang', '(very loudly) Bandits! Bandits! Run for your lives!');
+      s.walkTo('xr', 18, 20, { run: true }); s.walkTo('dz', 19, 21, { run: true }); await s.walkTo('yl', 19, 20, { run: true });
+      WM.data.clear(s, ['xr', 'dz', 'yl']);
+      await s.emote('ly', '?');
+      await s.say('liying:shock', 'Liangshan men... rescuing me from the prefect? What is going on?');
+      await s.say('likui:smile', 'Up the mountain with you, Squire! Brother Song is waiting!');
+      await s.fadeOut(0.8);
+      WM.data.clear(s, ol.concat(['ly', 'dx', 'lk']));
+      s.show('player');
       s.flag('ch12_ruse');
-      await s.warp('liangshan_in', 16, 12, 'up');
+      await s.warp('liangshan_in', 16, 12, 'up', { noFade: true });
+      await s.fadeIn(0.6);
     } }
   ]);
   WM.defEvents('liangshan_in', [

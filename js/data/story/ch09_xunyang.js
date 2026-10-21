@@ -71,8 +71,31 @@
     s.flag('protagonist', 'songjiang');
     WM.state.chars.songjiang.equip.acc = 'cangue'; S.restore('songjiang');
     WM.unlock('jieling', 'jieyang', 'jiangzhou');
-    await s.narrate('Song Jiang was sent south to Jiangzhou with two escorts, Zhang Qian and Li Wan. Near Liangshan, Liu Tang and a band of men stopped them on the road and brought Song Jiang across the water to Chao Gai.');
-    await s.warp('zhugui', 9, 16, 'up', { noFade: true });
+    await s.narrate('Song Jiang was sent south to Jiangzhou with two escorts, Zhang Qian and Li Wan. The road ran past the shore of Liangshan Marsh.');
+    // the road past Zhu Gui's tavern, the cangue on his neck, the escorts at his heels
+    await s.warp('zhugui', 9, 21, 'up', { noFade: true });
+    s.spawn('ez', 'escortzhang', 8, 21, 'up'); s.spawn('el', 'constable', 10, 21, 'up');
+    await s.fadeIn(0.6);
+    s.move('ez', 'U3', { speed: 40, wait: false }); s.move('el', 'U3', { speed: 40, wait: false });
+    await s.move('player', 'U3', { speed: 40 });
+    // Liu Tang and his men come out of the tavern and the reeds
+    s.spawn('lt9', 'liutang', 9, 15, 'down'); s.spawn('m91', 'outlaw', 5, 17, 'right'); s.spawn('m92', 'outlaw', 13, 17, 'left');
+    s.walkTo('m91', 7, 18, { run: true }); s.walkTo('m92', 11, 18, { run: true });
+    await s.walkTo('lt9', 9, 17, { run: true });
+    await s.say('liutang', 'Halt! You two — leave the prisoner and go, or you go into the marsh!', { top: true });
+    s.emote('ez', 'sweat', 1); await s.emote('el', 'sweat', 1);
+    await s.say('escortzhang:shock', 'B-bandits! Mercy, sirs — we\'re only escorts, we\'re only doing our duty!', { top: true });
+    await s.say('songjiang', 'Brother Liu Tang! Don\'t harm them. They have treated me well.', { top: true });
+    await s.say('liutang:smile', 'As you say, brother. Then they can come too. The chiefs are waiting for you across the water.', { top: true });
+    // down to the pier, and out across the marsh in the sampan
+    s.walkTo('lt9', 13, 8); s.walkTo('ez', 12, 9); s.walkTo('el', 14, 9);
+    await s.walkTo('player', 13, 9);
+    await s.walkTo('player', 13, 4);
+    s.sfx('splash');
+    await s.narrate('Liu Tang brought Song Jiang across the water to Chao Gai.');
+    await s.fadeOut(0.8);
+    ['lt9', 'm91', 'm92', 'ez', 'el'].forEach(function (k) { s.hide(k); s.despawn(k); });
+    await s.warp('liangshan', 24, 41, 'up', { noFade: true });
     await s.fadeIn(0.6);
   };
   WM.data.chapters[9].debugStart = async function (s) {
@@ -83,14 +106,16 @@
   };
 
   // ---------------- the offer at Liangshan ----------------
-  WM.defEvents('zhugui', [
-    { id: 'ch9_offer', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 9; }, run: async function (s) {
-      s.spawn('chaogai', 'chaogai', 11, 16, 'left'); s.spawn('wuyong', 'wuyong', 12, 16, 'left'); s.spawn('esc', 'escortzhang', 8, 18, 'up');
+  WM.defEvents('liangshan', [
+    // on the beach below the fortress, where the sampan comes in
+    { id: 'ch9_offer', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 9 && !S.has('ch9_road'); }, run: async function (s) {
+      s.spawn('chaogai', 'chaogai', 24, 38, 'down'); s.spawn('wuyong', 'wuyong', 25, 38, 'down'); s.spawn('esc', 'escortzhang', 23, 41, 'up'); s.spawn('esc2', 'constable', 25, 41, 'up');
+      await s.walkTo('chaogai', 24, 40, { run: true }); s.face('player', 'up');
       await s.say('chaogai', 'Brother Song! Stay with us. Why go to Jiangzhou to be a convict? Take off that cangue, and take the first seat on Liangshan.');
       await s.say('songjiang:sad', 'Brother, my father ordered me home and told me to serve my sentence and live as an honest man. If I stay, I disobey my father and break the law — I would be unfilial and disloyal both. If you force me, I will cut my throat here before you.');
       await s.say('chaogai:sad', '...Then go. But we will not forget you.');
       await s.say('wuyong', 'At least take this. The superintendent of the Jiangzhou prison is an old friend of mine: Dai Zong, called the Magic Traveller. I have written to him. He will look after you.');
-      s.despawn('chaogai'); s.despawn('wuyong'); s.despawn('esc');
+      s.despawn('chaogai'); s.despawn('wuyong'); s.despawn('esc'); s.despawn('esc2');
       await s.narrate('So Song Jiang went on south with his escorts. After a long journey they crossed into Jiangzhou country, and climbed a steep ridge called Jieling. At the top was an inn.');
       s.flag('ch9_road');
       await s.warp('jieling', 1, 9, 'right');
@@ -100,19 +125,19 @@
   // ---------------- Jieling Ridge ----------------
   WM.defEvents('jieling_in', [
     { id: 'ch9_lili', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_road'); }, run: async function (s) {
-      s.spawn('lili', 'lili', 5, 5, 'down'); s.spawn('esc', 'escortzhang', 4, 5, 'right');
+      s.spawn('lili', 'lili', 5, 5, 'down'); s.spawn('esc', 'escortzhang', 4, 5, 'right'); s.spawn('esc2', 'constable', 7, 6, 'left');   // Zhang Qian and Li Wan
       await s.say('lili', 'Wine? Meat? Sit, sit, travellers. You look tired.');
       await s.narrate('The wine tasted strange. Before Song Jiang could set down the bowl, the room spun. He and both escorts slid to the floor.');
-      s.lie('player'); s.lie('esc');
+      s.lie('player'); s.lie('esc'); s.lie('esc2');
       await s.say('lili:smile', 'Three fat ones. And this one has silver in his bundle... "Song Jiang"? What\'s a letter to "Song Jiang" doing here?');
       s.spawn('lijun', 'lijun', 7, 6, 'up'); s.spawn('tongwei', 'tongwei', 8, 6, 'up'); s.spawn('tongmeng', 'tongmeng', 5, 6, 'up');
       await s.say('lijun', 'Brother Li! I\'ve been waiting on the ridge for days for Song Jiang of Yuncheng, who\'s being sent to Jiangzhou. Has a convict passed?');
       await s.say('lili:shock', '...Song Jiang? He\'s lying on my butchering floor!');
       await s.narrate('They poured the antidote into Song Jiang\'s mouth and propped him up. When he came round, four men were kneeling before him.');
-      s.lie('player', false); s.lie('esc', false);
+      s.lie('player', false); s.lie('esc', false); s.lie('esc2', false);
       await s.say('lijun', 'I am Li Jun, a boatman of the Xunyang, called the River Dragon. These are the Tong brothers, Tong Wei and Tong Meng, and this is Li Li, who keeps the inn. Forgive him — he nearly made dumplings of the most righteous man in the world.');
       await s.say('songjiang', 'No harm done. ...Though I\'d rather not eat here again.');
-      s.despawn('lili'); s.despawn('esc'); s.despawn('lijun'); s.despawn('tongwei'); s.despawn('tongmeng');
+      s.despawn('lili'); s.despawn('esc'); s.despawn('esc2'); s.despawn('lijun'); s.despawn('tongwei'); s.despawn('tongmeng');
       s.flag('ch9_jieyang');
       await s.narrate('Li Jun walked with them down the ridge, and they parted with promises. Song Jiang went on to Jieyang town, on the bank of the great river.');
       await s.warp('jieyang', 1, 8, 'right');
@@ -121,19 +146,69 @@
 
   // ---------------- Jieyang ----------------
   WM.defEvents('jieyang', [
-    { id: 'ch9_xueyong', x: 14, y: 9, w: 14, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch9_jieyang'); }, run: async function (s) {
-      s.spawn('xueyong', 'xueyong', 20, 12, 'down'); s.spawn('c1', 'villager', 18, 13, 'right'); s.spawn('c2', 'woman', 22, 13, 'left');
+    { id: 'ch9_xueyong', x: 14, y: 9, w: 14, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch9_jieyang'); }, idle: { c3: 'Shh — he\'s about to start. They say this fellow can do things with a spear you won\'t believe.' }, run: async function (s) {
+      s.spawn('xueyong', 'xueyong', 20, 12, 'down'); s.spawn('c1', 'villager', 18, 13, 'up'); s.spawn('c2', 'woman', 22, 13, 'up'); s.spawn('c3', 'farmer', 20, 14, 'up');
+      // more of the town gathered round the ring
+      [['c4', 'villager2', 17, 12, 'right'], ['c5', 'oldwoman', 23, 12, 'left'], ['c6', 'merchant', 17, 13, 'right'], ['c7', 'woman2', 21, 14, 'up'], ['c8', 'villager', 23, 13, 'left'], ['c9', 'oldman', 18, 11, 'down'], ['c10', 'farmer', 22, 11, 'down']].forEach(function (c) { s.spawn(c[0], c[1], c[2], c[3], c[4]); });
+      // Song Jiang joins the ring of onlookers on the square
+      await s.walkTo('player', 19, 14); s.face('player', 'up');
+      await s.narrate('In the square a crowd had gathered round a street performer, a man with a staff, showing his skill with weapons.');
+      // the performance: spinning, leaping, the staff whirling
+      for (var r = 0; r < 4; r++) { s.face('xueyong', ['left', 'up', 'right', 'down'][r]); s.jump('xueyong', 4); s.sfx('block'); await s.wait(0.35); }
+      await s.move('xueyong', 'L1', { run: true }); s.jump('xueyong', 5); s.sfx('crit'); await s.wait(0.3);
+      await s.move('xueyong', 'R2', { run: true }); s.jump('xueyong', 5); s.sfx('crit'); await s.wait(0.3);
+      await s.move('xueyong', 'L1', { run: true }); s.face('xueyong', 'down');
+      s.emote('c1', '!', 0.8); s.emote('c3', '!', 0.8); s.emote('c5', '!', 0.8); s.emote('c9', 'heart', 0.8); await s.emote('player', '!', 0.8);
       await s.say('xueyong', '...and now, good people, if you\'ve enjoyed the show, a few coppers for a poor performer and his medicine!');
+      // he goes round with his plate; the onlookers look away
+      await s.walkTo('xueyong', 18, 12); s.face('xueyong', 'down'); s.face('c1', 'left'); await s.emote('c1', 'sweat', 0.6);
+      await s.walkTo('xueyong', 22, 12); s.face('xueyong', 'down'); s.face('c2', 'right'); await s.emote('c2', 'sweat', 0.6);
+      await s.walkTo('xueyong', 19, 13); s.face('xueyong', 'down');
       await s.narrate('No one in the crowd gave him anything. Song Jiang took out five taels of silver and gave it to him.');
+      s.sfx('item');
       await s.say('xueyong:shock', 'Five taels! Sir, I am Xue Yong of Henan, called the Sick Tiger. Who are you, who gives so freely?');
-      s.spawn('muchun', 'muchun', 26, 11, 'left');
+      // the young master of the Mu family pushes through the crowd to Song Jiang
+      s.spawn('muchun', 'muchun', 26, 14, 'left'); s.face('c3', 'right');
+      s.move('c3', 'D1', { wait: false });
+      await s.walkTo('muchun', 20, 14, { run: true }); s.face('muchun', 'left'); s.face('player', 'right');
+      await s.emote('muchun', 'anger', 0.8);
       await s.say('muchun:angry', 'Who are you, convict, to throw silver around in Jieyang? This street-performer didn\'t pay his respects to the Mu family. Nobody was to give him a copper!');
       await s.say('songjiang', 'My silver is my own, sir.');
       await s.say('muchun:angry', 'Then let\'s see if your fists are your own too!');
       await s.battle('ch9_jieyang', { bg: 'town', canLose: true, rounds: 3 });
-      await s.narrate('Xue Yong knocked Mu Chun into the dust, and Mu Chun ran off swearing vengeance. Song Jiang and the escorts hurried out of town before dark — but no inn would take them: the Mu brothers had sent word. At last, in the dark, they found a big manor and begged a night\'s lodging from a kind old man.');
-      s.despawn('xueyong', { leave: true }); s.despawn('c1', { leave: true }); s.despawn('c2', { leave: true }); s.despawn('muchun', { leave: true });
-      s.night(true);
+      // Xue Yong throws him down; he picks himself up and runs off, cursing
+      s.sfx('hit'); s.jump('xueyong', 4); await s.shake(3, 0.3);
+      s.lie('muchun');
+      await s.narrate('Xue Yong knocked Mu Chun into the dust.');
+      s.lie('muchun', false); await s.emote('muchun', 'anger', 0.6);
+      await s.say('muchun:angry', 'You\'ll pay for this, both of you! Nobody in Jieyang will give you so much as a cup of water!');
+      await s.walkTo('muchun', 30, 9, { run: true }); await s.walkTo('muchun', 43, 9, { run: true }); s.hide('muchun');
+      s.despawn('xueyong', { leave: true }); s.despawn('c1', { leave: true }); s.despawn('c2', { leave: true }); s.despawn('c3', { leave: true }); ['c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10'].forEach(function (k) { s.despawn(k, { leave: true }); }); s.despawn('muchun');
+      // with his escorts, Song Jiang tries the inn before dark
+      s.tint('dusk');
+      s.spawn('ez9', 'escortzhang', 18, 15, 'up'); s.spawn('el9', 'constable', 20, 15, 'up');
+      await s.walkTo('player', 7, 7);
+      s.walkTo('ez9', 6, 8); await s.walkTo('el9', 8, 8);
+      s.face('player', 'up');
+      s.spawn('ik9', 'innkeep', 7, 6, 'down'); s.sfx('door');
+      await s.say('innkeep:sad', 'No, no — no room. ...The Mu family sent word round: anyone who takes in the convict with the silver answers to them. Go on, please. Go.');
+      s.sfx('door'); s.hide('ik9'); s.despawn('ik9');
+      await s.emote('player', '...', 0.8);
+      await s.narrate('Song Jiang and the escorts hurried out of town before dark — but no inn would take them: the Mu brothers had sent word.');
+      // after dark, the gate of a big manor, and a kind old man
+      await s.fadeOut(0.8);
+      s.tint(null); s.night(true);
+      s.place('player', 36, 10, 'up'); s.place('ez9', 35, 10, 'up'); s.place('el9', 37, 10, 'up');
+      await s.fadeIn(0.8);
+      await s.walkTo('player', 36, 9);
+      s.spawn('om9', 'oldman', 36, 7, 'down'); s.sfx('door');
+      await s.move('om9', 'D1');
+      await s.say('songjiang', 'Venerable sir, we are travellers caught by the dark, with nowhere to sleep. Could you spare us a corner for the night?');
+      await s.say('oldman', 'A convict and two escorts, out on the road at this hour? Poor fellows. Come in, come in — there\'s a room by the gate, and rice in the pot.');
+      await s.narrate('At last, in the dark, they found a big manor and begged a night\'s lodging from a kind old man.');
+      await s.move('om9', 'U1'); s.hide('om9');
+      s.walkTo('ez9', 36, 8); s.walkTo('el9', 36, 8); await s.walkTo('player', 36, 7);
+      ['om9', 'ez9', 'el9'].forEach(function (k) { s.hide(k); s.despawn(k); });
       await s.narrate('In the night they heard the old man\'s sons come home: "Mu Chun was beaten in the market by a convict with silver! We\'ve shut every door in town against him!" They were lodging in the house of the Mu brothers. They crept out the back gate in the dark and ran for the river.');
       s.flag('ch9_river');
       await s.warp('jieyang', 20, 20, 'down');
@@ -162,6 +237,7 @@
     { id: 'ch9_prison', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_jiangzhou'); }, run: async function (s) {
       await s.narrate('At the Jiangzhou prison camp, Song Jiang gave silver to everyone — the warden, the guards, the clerks — and was made a clerk in the camp office, without a single stroke of the "welcoming" stick. Only one man he did not pay: the superintendent of the prison, Dai Zong.');
       s.spawn('daizong', 'daizong', 27, 5, 'down');
+      s.face('daizong', 'up'); s.face('player', 'down');   // the two face each other (he comes up from below)
       await s.say('daizong:angry', 'Which convict here is Song? You\'ve paid everybody in the camp but me. Do you think I can\'t have you beaten to death for it?');
       await s.say('songjiang', 'For not paying you? Is that a crime? ...But tell me, what would be the crime of a man who was a friend of Wu Yong, of Liangshan Marsh?');
       await s.say('daizong:shock', '...!! Quiet! Who are you?');
@@ -178,10 +254,29 @@
       await s.say('likui:shock', '...Song Jiang? THE Song Jiang? Timely Rain? Not some cheat?');
       await s.say('songjiang:smile', 'The very same.');
       await s.narrate('Li Kui threw himself down and kowtowed so hard the floor shook. Song Jiang gave him ten taels. Li Kui lost it all at the gambling den in an hour, robbed the den to get it back, and Song Jiang had to pay the gamblers. Li Kui was his devoted slave from that day on.');
-      await s.narrate('Then Song Jiang wanted fresh fish soup, and Li Kui ran down to the river to get some — by grabbing it from the fishermen\'s boats. The fishermen ran for their master, the fish-broker of the river.');
+      await s.narrate('Then Song Jiang wanted fresh fish soup, and Li Kui ran down to the river to get some.');
       s.despawn('likui', { leave: true });
-      await s.warp('jiangzhou', 27, 35, 'down');
-      s.spawn('likui', 'likui', 26, 35, 'right'); s.spawn('zhangshun', 'zhangshun', 29, 35, 'left');
+      // the riverbank below the city gate: fishing boats at the water's edge
+      await s.fadeOut(0.6);
+      await s.warp('jiangzhou', 24, 35, 'right', { noFade: true });   // Song Jiang and Dai Zong watching from the sand
+      s.spawn('dz9', 'daizong', 23, 35, 'right');
+      s.spawn('fb1', 'villager', 30, 36, 'left'); s.boat('fb1'); s.spawn('fb2', 'farmer', 34, 36, 'left'); s.boat('fb2');
+      s.spawn('likui', 'likui', 27, 31, 'down');
+      await s.fadeIn(0.6);
+      await s.walkTo('likui', 27, 33, { run: true }); await s.walkTo('likui', 29, 35, { run: true }); s.face('likui', 'right');
+      await s.say('likui', 'You! Fish! Hand it over — the best you\'ve got!');
+      await s.say('villager', 'We can\'t sell a single fish till the broker comes, sir — those are his rules!', { top: true });
+      // he grabs it out of their boats anyway
+      s.sfx('splash'); s.jump('likui', 4); await s.wait(0.4); s.sfx('item');
+      await s.emote('fb1', '!', 0.6);
+      await s.move('likui', 'R4', { run: true }); s.face('likui', 'right'); s.sfx('splash'); s.jump('likui', 4); await s.wait(0.3);
+      await s.emote('fb2', 'anger', 0.6);
+      await s.narrate('— by grabbing it from the fishermen\'s boats. The fishermen ran for their master, the fish-broker of the river.');
+      s.move('fb1', 'L6', { run: true, wait: false }); await s.move('fb2', 'R6', { run: true });
+      s.hide('fb1'); s.hide('fb2');
+      // and here he comes, along the sand
+      s.spawn('zhangshun', 'zhangshun', 42, 35, 'left');
+      await s.walkTo('zhangshun', 34, 35, { run: true }); s.face('likui', 'right');
       await s.say('zhangshun:angry', 'So you\'re the black ox who\'s been robbing my fishermen! Put that fish down.');
       await s.say('likui:angry', 'I want fish for my brother\'s soup, and I\'ll have it — fish-broker or no fish-broker!');
       await s.duel('likui_zhangshun_land', { hero: 'likui', canLose: true });
@@ -191,7 +286,7 @@
       await s.say('daizong', 'Zhang Shun! Stop! That\'s Li Kui — and this is Song Jiang!');
       await s.say('zhangshun:shock', '...Song Jiang? My brother Zhang Heng wrote to me about you!');
       await s.narrate('So Zhang Shun the White Streak in the Waves, and Li Kui the Black Whirlwind, became friends, though Li Kui would never again go near water if he could help it.');
-      s.despawn('likui', { leave: true }); s.despawn('zhangshun', { leave: true });
+      s.despawn('likui', { leave: true }); s.despawn('zhangshun', { leave: true }); s.despawn('dz9'); s.despawn('fb1'); s.despawn('fb2');
       s.flag('ch9_poem');
       s.removeParty('daizong');
       await s.narrate('Some days later, Song Jiang went alone to the famous Xunyang Tower overlooking the river.');
@@ -202,20 +297,26 @@
     { id: 'ch9_tower', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch9_poem') && WM.state.x >= 43 && WM.state.x <= 56; }, run: async function (s) {
       s.night(false);
       // the tower over the river: Song Jiang alone with his wine, and the white wall
-      s.place('player', 50, 5, 'up');
+      // up the stairs and through the room to a seat by the window
+      await s.walkTo('player', 50, 5); s.face('player', 'up');
       await s.narrate('Song Jiang sat by the window drinking alone, looking out over the great river. He thought of his age — past thirty, with no name and no achievement, a branded convict far from home, his father old and alone. He grew drunk, and sad, and angry.');
       await s.say('songjiang', 'Waiter! A brush. And ink. Plenty of ink.');
       s.spawn('wt9', 'waiter', 48, 8, 'up');
-      await s.moveTo('wt9', 50, 6);
-      s.face('wt9', 'up'); s.emote('wt9', '...', 1);
+      await s.walkTo('wt9', 49, 5);
+      s.face('wt9', 'right'); s.face('player', 'left'); s.emote('wt9', '...', 1);
       s.despawn('wt9', { to: [48, 8] });
+      s.face('player', 'up');
       await s.move('player', 'U2', { speed: 34 });   // unsteady, up to the white wall
       s.face('player', 'up');
       await s.say('songjiang:angry', '(writing on the wall) "In youth I studied the classics and histories; grown, I learned strategy too. Like a tiger lying in a wild hill, I hide my claws and bear it. Ill fate has branded both my cheeks, and sent me to Jiangzhou. If one day I can avenge my wrongs, I will stain the mouth of the Xunyang with blood."');
       await s.say('songjiang:angry', '(and beneath it) "My heart is in Shandong, my body in Wu; I drift on the rivers and lakes, and sigh in vain. If one day I achieve my soaring ambition, I will laugh at Huang Chao for being less than a man." ...Written by Song Jiang of Yuncheng. Ha!');
+      // he pays at the counter and staggers out down the stairs
+      await s.walkTo('player', 48, 7, { speed: 34 }); s.face('player', 'left');
+      s.sfx('item'); await s.wait(0.4);
       await s.narrate('Then he paid, staggered home, and forgot all about it.');
-      await s.fadeOut(0.8);
+      await s.walkTo('player', 50, 9, { speed: 30 }); s.emote('player', '...', 0.6); await s.move('player', 'D1', { speed: 30 });
       s.hide('player');
+      await s.fadeOut(0.8);
       s.flag('ch9_written');
       s.spawn('huang', 'huangwenbing', 50, 5, 'up');
       await s.fadeIn(0.8);
@@ -232,13 +333,13 @@
       await s.fadeIn(0.8);
       await s.narrate('Huang Wenbing copied the poem and took it at once to the prefect, Cai Jiu — the ninth son of the Prime Minister Cai Jing. The prefect sent his guards for Song Jiang that very hour. Dai Zong had run ahead to warn him: "Brother, pretend to be mad!"');
       s.move('dg', 'U1', { wait: false }); s.move('dg2', 'U1', { wait: false }); await s.move('sj9', 'U1');
-      s.lie('sj9');   // he throws himself down and rolls about the floor
+      // he raves on his feet, waving his arms, laughing at them all
+      s.jump('sj9', 4); await s.wait(0.25); s.jump('sj9', 4); s.emote('sj9', 'anger', 1);
       await s.say('songjiang:angry', 'Ha! Who dares lay hands on me? I am the son-in-law of the Jade Emperor! My father-in-law has lent me a hundred thousand heavenly soldiers to kill every one of you in Jiangzhou! The King of Hell himself is my vanguard!');
       await s.say('caijiu', '...He is mad. Huang Wenbing, you have brought me a madman.');
       await s.say('huangwenbing:smile', 'Your Honour, ask the clerks of the prison camp whether he was mad when he came. A madman does not write in that hand.');
       await s.say('caijiu:angry', '...He was not. Then he is a rebel feigning madness. Beat him until he tells the truth!');
-      s.lie('sj9', false);
-      for (var b9 = 0; b9 < 3; b9++) { s.sfx('hit'); await s.shake(3, 0.25); await s.wait(0.2); }
+      for (var b9 = 0; b9 < 3; b9++) { s.sfx('hit'); s.jump('sj9', 2); await s.shake(3, 0.25); await s.wait(0.2); }
       await s.narrate('Song Jiang was beaten until his skin split and his blood ran, and he confessed: he had written it drunk, and meant nothing by it. They locked him in a cangue in the condemned cell.');
       await s.fadeOut(0.8);
       WM.data.clear(s, g9.concat(['cj9', 'hw9', 'sj9', 'dg', 'dg2']));
@@ -270,20 +371,61 @@
       await s.say('wuyong', 'Wait. It is a long way, and if we fail, Song Jiang dies. There is a better way. We write Cai Jing\'s reply ourselves: "Do not execute the rebel there. Send him to the capital under guard." On the road, we take him.');
       await s.say('daizong', 'But who can copy the Prime Minister\'s hand, and his seal?');
       await s.say('wuyong:smile', 'In Jizhou there is a scholar, Xiao Rang, who can write in the style of any master — Su, Huang, Mi or Cai. And Jin Dajian, who carves seals in jade and stone better than anyone alive. We will invite them to Liangshan... to carve an inscription for a temple.');
-      await s.narrate('Liangshan\'s men "invited" the scholar and the carver, and their families followed soon after. Xiao Rang wrote the letter in Cai Jing\'s hand, and Jin Dajian carved Cai Jing\'s seal. Dai Zong took it and ran back to Jiangzhou with his charms on his legs.');
+      await s.narrate('Liangshan\'s men "invited" the scholar and the carver, and their families followed soon after.');
+      // the two are brought up the hall, a little bewildered, between two of the brothers
+      s.spawn('xr', 'xiaorang', 15, 15, 'up'); s.spawn('jd', 'jindajian', 17, 15, 'up');
+      s.spawn('ob1', 'outlaw', 14, 15, 'up'); s.spawn('ob2', 'outlaw', 18, 15, 'up');
+      s.walkTo('ob1', 14, 11); s.walkTo('ob2', 18, 11); s.walkTo('xr', 15, 10); await s.walkTo('jd', 17, 10);
+      s.face('xr', 'up'); s.face('jd', 'up'); s.emote('xr', 'sweat', 1); await s.emote('jd', '?', 1);
+      await s.say('chaogai:smile', 'Forgive the manner of the invitation, gentlemen. A friend\'s life hangs on your brush and your knife.');
+      // to work: Xiao Rang at the table with brush and paper, Jin Dajian at his stone
+      s.walkTo('xr', 13, 9); await s.walkTo('jd', 19, 9); s.face('xr', 'up'); s.face('jd', 'up');
+      s.emote('xr', '...', 1.6);
+      for (var cv = 0; cv < 3; cv++) { s.sfx('block'); s.jump('jd', 2); await s.wait(0.35); }
+      await s.narrate('Xiao Rang wrote the letter in Cai Jing\'s hand, and Jin Dajian carved Cai Jing\'s seal.');
+      // the letter into Dai Zong's hands, and he is off down the hall at a run, the charms on his legs
+      await s.walkTo('wuyong', 15, 11); s.faceEach('wuyong', 'player');
+      s.sfx('item'); await s.emote('player', '!', 0.6);
+      await s.say('wuyong', 'Here — sealed and ready. Run, Dai Zong. Run as you have never run.');
+      await s.narrate('Dai Zong took it and ran back to Jiangzhou with his charms on his legs.');
+      await s.walkTo('player', 16, 15, { speed: 160 }); s.hide('player');
+      s.despawn('ob1', { leave: true }); s.despawn('ob2', { leave: true });
       s.despawn('chaogai'); s.despawn('zhugui');
       await s.joinMany(['xiaorang', 'jindajian']);
-      s.spawn('xr', 'xiaorang', 15, 9, 'up'); s.spawn('jd', 'jindajian', 17, 9, 'up');
+      s.face('xr', 'right'); s.face('jd', 'left'); s.face('wuyong', 'down');
       await s.say('wuyong:shock', '...Wait. Which seal did you put on the letter?');
       await s.say('jindajian', 'The one with his name and title: "Cai Jing, Hanlin Academician."');
       await s.say('wuyong:shock', 'Aiya! That is the seal for his public writings! No father writes to his own son under his name and title. The prefect will see it at once — Dai Zong is running to his death! Gather everyone! We go to Jiangzhou ourselves!');
       s.despawn('wuyong', { leave: true });
-      s.flag('ch9_rescue');
+      s.flag('ch9_rescue'); s.show('player');
       s.party(['chaogai', 'huarong', 'liutang', 'yanshun', 'ruanxiaoqi', 'lufang']);
       s.level('chaogai', 22); ['huarong', 'liutang', 'yanshun', 'ruanxiaoqi', 'lufang'].forEach(function (id) { s.level(id, 21); });
       s.setLeader('chaogai'); s.flag('protagonist', 'chaogai');
       S.restoreParty();
-      await s.narrate('Huang Wenbing saw the flaw in the seal just as Wu Yong had feared. Dai Zong was beaten until he confessed that the letter came from Liangshan. The prefect sentenced him and Song Jiang to be beheaded together at the crossroads.');
+      // Jiangzhou: Dai Zong hands the letter up to the prefect, and Huang Wenbing reads the seal
+      await s.fadeOut(0.8);
+      await s.warp('jiangzhou_in', 14, 9, 'up', { noFade: true });
+      s.hide('player');
+      s.spawn('cj9', 'caijiu', 7, 4, 'down'); s.spawn('hw9', 'huangwenbing', 10, 5, 'left');
+      var g10 = WM.data.troop(s, 'jg2', 'soldier', [[2, 6], [12, 6], [3, 8], [12, 8]], 'down');
+      s.spawn('dz10', 'daizong', 7, 9, 'up');
+      await s.fadeIn(0.8);
+      await s.walkTo('dz10', 7, 6); s.face('dz10', 'up');
+      s.sfx('item');
+      await s.say('caijiu:smile', 'From my father already! ..."Send the rebel to the capital under guard." Excellent. Excellent.');
+      await s.walkTo('hw9', 9, 5); s.face('hw9', 'left');
+      await s.emote('hw9', '!', 0.8);
+      await s.say('huangwenbing:smile', 'Your Honour — the seal. "Cai Jing, Hanlin Academician"? A father writing to his own son, under his name and his public title? This letter is a forgery.');
+      s.emote('dz10', 'sweat', 1); await s.emote('cj9', 'anger', 0.8);
+      await s.say('caijiu:angry', 'Seize him! Beat him until he tells us who wrote it!');
+      s.walkTo(g10[0], 6, 7, { run: true }); await s.walkTo(g10[1], 8, 7, { run: true });
+      for (var b10 = 0; b10 < 3; b10++) { s.sfx('hit'); s.jump('dz10', 2); await s.shake(3, 0.25); await s.wait(0.2); }
+      await s.say('daizong:sad', '...Liangshan. It came from Liangshan.');
+      await s.say('caijiu:angry', 'Then he and Song Jiang die together. Tomorrow, at the crossroads.');
+      await s.narrate('So the prefect sentenced Dai Zong and Song Jiang to be beheaded together at the crossroads.');
+      await s.fadeOut(0.8);
+      WM.data.clear(s, g10.concat(['cj9', 'hw9', 'dz10']));
+      s.show('player');
       await s.narrate('On the day of the execution, crowds packed the square. Among them were snake-charmers, beggars, porters with their poles, and merchants with carts — all of them Liangshan men.');
       await s.warp('jiangzhou', 18, 32, 'up', { fade: 0.6 });
     } }

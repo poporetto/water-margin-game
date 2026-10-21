@@ -175,11 +175,11 @@
       // one snowy day in winter
       await s.fadeOut(0.8);
       s.despawn('dalang');
-      s.place('player', 18, 5, 'left'); s.place('jinlian', 15, 6, 'right');
+      s.place('player', 18, 6, 'left'); s.place('jinlian', 15, 7, 'right');
       s.night(false);
       await s.fadeIn(0.8);
       await s.narrate('One snowy day in winter, when Wu Dalang was out selling pancakes, she lit a brazier, warmed some wine, and came to sit beside him.');
-      await s.walkTo('jinlian', 19, 6); await s.walkTo('jinlian', 19, 5); s.face('jinlian', 'left'); s.face('player', 'right');
+      await s.walkTo('jinlian', 19, 7); await s.walkTo('jinlian', 19, 6); s.face('jinlian', 'left'); s.face('player', 'right');
       await s.emote('jinlian', 'heart', 0.8);
       await s.say('panjinlian:smile', 'Brother-in-law, they say you keep a singing girl in the east of town. Is it true?');
       await s.say('wusong', 'Don\'t listen to gossip, sister-in-law. I\'m not that sort of man.');
@@ -371,7 +371,7 @@
       await s.say('wusong', '(Hm. Then let\'s see her wine.)');
       // (the escorts, behind him, drink the drugged wine and go down)
       await s.narrate('Wu Song had heard of the Cross Slope inn. When she brought hot wine, he poured it away when she turned her back, and then fell down with his eyes rolled up. The two escorts, who had drunk theirs, were already on the floor.');
-      ['fol_0', 'fol_1'].forEach(function (k) { if (WM.field.findActor(k)) s.lie(k); });
+      ['fol_0', 'fol_1'].forEach(function (k) { if (WM.field.actors && WM.field.findActor(k)) s.lie(k); });
       s.lie('player');
       await s.say('sunerniang:smile', 'Down! "Even the cleverest ghost drinks the footwash." Lads, take them to the butchery — start with the big one.');
       await s.narrate('Two of her men could not lift him, so she came herself. And as she bent to lift him, Wu Song seized her and pinned her down.');
@@ -382,7 +382,7 @@
       await s.say('zhangqing2', 'I am Zhang Qing, called the Gardener. We keep this inn, but we have three rules: never harm wandering monks, singing girls, or convicts on their way to exile — and we broke the third today. Forgive us! Aren\'t you Wu Song, who killed the tiger of Jingyang Ridge?');
       await s.say('wusong', 'I am. ...You honour a code, at least. Get up.');
       await s.narrate('So they became sworn brothers. Zhang Qing told Wu Song of the two monks who held Mount Erlong — Lu Zhishen and Yang Zhi — and Wu Song stayed three days before going on to Mengzhou.');
-      ['fol_0', 'fol_1'].forEach(function (k) { if (WM.field.findActor(k)) s.lie(k, false); });   // the escorts are brought round with an antidote
+      ['fol_0', 'fol_1'].forEach(function (k) { if (WM.field.actors && WM.field.findActor(k)) s.lie(k, false); });   // the escorts are brought round with an antidote
       s.hide('erniang'); s.hide('zhangqing2'); s.despawn('erniang'); s.despawn('zhangqing2');   // (their standing selves below take over)
       s.flag('ch7_slope');
     } },
@@ -442,7 +442,7 @@
       await s.say(null, '(Wu Song is marched out of Mengzhou in a cangue. Walk east along the road to Enzhou.)');
     } },
     // on the road out of the city, Shi En is waiting with two roast geese
-    { id: 'ch7_geese', x: 50, y: 13, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch7_framed') && !S2.has('ch7_totower'); }, run: async function (s) {
+    { id: 'ch7_geese', x: 50, y: 13, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch7_framed') && !S2.has('ch7_totower'); }, idle: { se: '(Shi En is waiting at the roadside with a covered basket, watching the gate for you.)' }, run: async function (s) {
       s.spawn('se', 'shien', 53, 12, 'down');
       await s.emote('se', '!', 0.6);
       await s.walkTo('se', 52, 14); s.face('se', 'left'); s.face('player', 'right');
@@ -452,6 +452,7 @@
       await s.say('wusong', '(quietly) I have been watching them since the gate.');
       await s.narrate('Wu Song ate the geese one-handed, in the cangue, while the escorts looked at each other and said nothing. Shi En watched them go, until the road turned.');
       s.despawn('se', { leave: true });
+      s.flag('ch7_geese');
       // the road goes on to the Flying Cloud Pond (the escorts are there in the scene itself)
       WM.state.followers = []; WM.field.refreshFollowers();
       await s.warp('feiyun', 2, 7, 'right');

@@ -46,6 +46,7 @@
   y.rect(15, 13, 2, 1, '.'); y.hline(16, 25, 13, ':');
   y.rect(33, 2, 5, 4, 'M'); y.set(34, 5, '_'); y.set(35, 5, '_');            // the tigers' cave
   y.scatter('m', 0.03, 391, '.'); L.clearAround(y, ':', 'Pm', '.');
+  y.rect(18, 9, 3, 4, '.'); y.set(19, 10, 'A');                             // the little shrine to the Great Sage of Sizhou on the bank
   WM.defMap('yishui', { name: 'Yishui — the Yi Ridge', theme: 'summer', music: 'field', rows: y.rows(), spawn: [1, 26], battleBg: 'forest',
     exits: [Object.assign(WM.toWorld('yishui', 0, 26, 1, 2), { cond: function (S2) { return !S2.has('ch10_carry') || S2.has('ch10_tigers'); }, blocked: '(Li Kui will not turn back now.)' })] });
   WM.defEvents('yishui', [L.save('yisave', 19, 28)]);

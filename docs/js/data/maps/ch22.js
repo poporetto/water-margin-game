@@ -24,7 +24,7 @@
   // a block of tiles, x0..x1 by the given rows
   WM.data.block = function (x0, x1, rowsList) { var out = []; rowsList.forEach(function (y) { for (var x = x0; x <= x1; x++) out.push([x, y]); }); return out; };
   // the field cleared (in the dark, or as the scene moves on)
-  WM.data.clear = function (s, keys) { keys.forEach(function (k) { s.hide(k); s.despawn(k); }); };
+  WM.data.clear = function (s, keys) { keys.forEach(function (k) { var f = WM.field, a = f && f.actors ? f.findActor(k) : true; if (!a || a === f.player) return; s.hide(k); s.despawn(k); }); };   // (anyone already gone is skipped)
 
   // A council of war before a great battle, in the commander's pavilion: the leader before his tent with his strategist
   // at his side, the commanders gathered before him; a scout may come running up from the gate with news of the enemy.

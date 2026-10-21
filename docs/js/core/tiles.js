@@ -120,7 +120,7 @@
     if (isLand(1, 0)) { px(c, x + 15, y, 1, S, '#2a3a3a'); }
   }
   function water(c, x, y, tx, ty, th, m) {
-    if (drawGroundArt(c, x, y, tx, ty, m, '~', 0)) return;
+    if (drawGroundArt(c, x, y, tx, ty, m, '~', 0)) { sandShore(c, x, y, tx, ty, m); return; }
     if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, false);
     px(c, x, y, S, S, WATER[0]);
     for (var i = 0; i < 4; i++) {
@@ -134,6 +134,16 @@
     if (isLand(0, 1)) { px(c, x, y + 14, S, 2, '#7a6a48'); px(c, x, y + 13, S, 1, WATER[2]); }
     if (isLand(-1, 0)) { px(c, x, y, 2, S, landCol); px(c, x + 2, y, 1, S, '#7a6a48'); px(c, x + 3, y, 1, S, WATER[4]); }
     if (isLand(1, 0)) { px(c, x + 14, y, 2, S, landCol); px(c, x + 13, y, 1, S, '#7a6a48'); px(c, x + 12, y, 1, S, WATER[4]); }
+  }
+  // the water art's shore is a lip of grass: where the bank is sand (a beach, a riverside), the lip is sand instead
+  function sandShore(c, x, y, tx, ty, m) {
+    if (!m || (m.def && m.def.world)) return;
+    var SAND = SHEETS.surfaces || ART ? '#a37848' : '#d6c48c', SANDEDGE = SHEETS.surfaces || ART ? '#8a6440' : '#b8a46e';   // (the painted sand, or the plain one)
+    var sandy = function (dx, dy) { return m.get(tx + dx, ty + dy) === 's'; };
+    if (sandy(0, -1)) { px(c, x, y, S, 3, SAND); px(c, x, y + 3, S, 1, SANDEDGE); }
+    if (sandy(-1, 0)) { px(c, x, y, 3, S, SAND); px(c, x + 3, y, 1, S, SANDEDGE); }
+    if (sandy(1, 0)) { px(c, x + 13, y, 3, S, SAND); px(c, x + 12, y, 1, S, SANDEDGE); }
+    if (sandy(0, 1)) { px(c, x, y + 13, S, 3, SAND); px(c, x, y + 12, S, 1, SANDEDGE); }
   }
   function deep(c, x, y, tx, ty, th, m) {
     if (m && m.def && m.def.world) return worldWater(c, x, y, tx, ty, th, m, true);
@@ -1579,6 +1589,7 @@
       if (!frames) continue;
       var n = cellList(frames).length, f = Math.floor(time * (e.fps || 3) + (e.sync ? 0 : U.hash2(tx, ty, 405) * n)) % n;
       drawGroundArt(c, tx * S - camX, ty * S - camY, tx, ty, map, ch, f);
+      if (ch === '~') sandShore(c, tx * S - camX, ty * S - camY, tx, ty, map);   // (each frame, as the water moves)
     }
   };
   // a tall object from its art, bottom-aligned on its tile and centred across it; in a run of the same tile

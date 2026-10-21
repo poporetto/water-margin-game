@@ -468,7 +468,7 @@
       a.onArrive = function () { a.onArrive = null; faceLeader(a); };   // then turn to the leader
       shown.push(a);
     };
-    var hideShown = function () { var f = F(); f.actors = f.actors.filter(function (o) { return shown.indexOf(o) < 0; }); shown = []; };
+    var hideShown = function () { var f = F(); f.actors = (f.actors || []).filter(function (o) { return shown.indexOf(o) < 0; }); shown = []; };   // (no map yet on a chapter jump)
     s.beside = function (id) { showSpeaker(id); };   // bring a companion out beside the leader without a line (someone the scene is about)
     var ask0 = s.ask;
     s.ask = function (who) { showSpeaker(who); return ask0.apply(this, arguments); };

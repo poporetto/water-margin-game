@@ -187,6 +187,7 @@
   // Companions the story has walking with the leader (WM.state.followers, e.g. witnesses on the way to court): they
   // come with him from map to map, and fall in behind him in his footsteps
   F.refreshFollowers = function () {
+    if (!F.actors || !F.map || !F.player) return;   // (no field yet: the headless walker, or a chapter jump)
     F.actors = F.actors.filter(function (a) { return !(a.ev && /^fol_/.test(a.ev.id)); });
     if (F.map.def.world) return;   // (not on the world map, where the party is one small figure)
     var t = F.player.tile(), taken = {};
@@ -345,6 +346,7 @@
       var my = (I.down('down') ? 1 : 0) - (I.down('up') ? 1 : 0);
       if (mx || my) {
         var spd = (I.down('dash') ? 128 : 72) * (F.map.def.world ? 0.8 : 1);
+        if (WM.state.leader === 'daizong') spd *= 2;   // the Magic Traveller: his charms carry him twice as fast as any other man
         var len = Math.sqrt(mx * mx + my * my);
         var vx = mx / len * spd * dt, vy = my / len * spd * dt;
         if (mx && !my) p.dir = mx > 0 ? 'right' : 'left';

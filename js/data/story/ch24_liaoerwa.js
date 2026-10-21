@@ -58,13 +58,21 @@
       s.party(['songjiang']); s.setLeader('songjiang');
       s.spawn('env', 'official', 7, 4, 'down');
       await s.say('official', 'Imperial wine, sent by His Majesty to Commissioner Song.');
-      s.despawn('env');
-      await s.narrate('Song Jiang drank a cup in thanks, and the envoy would not drink with him, and left that same day. In the night Song Jiang felt the poison in his belly, and knew.');
+      s.sfx('item');
+      await s.say('songjiang', 'Ten thousand years to His Majesty. ...Your Excellency, drink a cup with me.');
+      await s.say('official', '(stepping back) I — no. No, I thank you. I must leave for the capital today. At once.');
+      s.despawn('env', { leave: true });
+      await s.fadeOut(0.8); s.night(true); await s.fadeIn(0.8);
+      await s.emote('player', 'sweat', 1.4);
+      await s.say('songjiang:sad', '(A fire in my belly... spreading. He would not drink. So that is why.)');
       await s.say('songjiang:sad', '...I never had a disloyal thought in all my life. Let the court betray me: my loyal heart will not betray the court.');
       await s.say('songjiang:sad', 'But Li Kui. Li Kui is at Runzhou. When he hears of this, he will raise his men and rebel — and all that we did, all our loyalty and righteousness, will be lost in one day. ...Send for him.');
       s.spawn('lk', 'likui', 7, 6, 'up');
       await s.say('likui:smile', 'Brother! You sent for me!');
-      await s.narrate('Song Jiang poured him wine — from the same jar — and they drank together, and when they had drunk, Song Jiang told him.');
+      await s.say('songjiang', 'Sit, Iron Ox. Drink with me. It has been a long time.');
+      s.sfx('item'); await s.emote('lk', 'heart');
+      await s.say('likui:smile', 'Ha! Good wine, brother! The emperor\'s own?');
+      await s.say('songjiang:sad', '...The emperor\'s own. From the same jar.');
       await s.say('songjiang:sad', 'Brother, the court has sent me poisoned wine, and I am dying. And I have given you the same. When I am gone, you would rebel, and ruin the name we kept so long. So I have taken you with me.');
       await s.say('likui:angry', 'Brother — let\'s rebel! Let\'s go back to the marsh!');
       await s.say('songjiang:sad', 'Our army is gone, brother. Our brothers are gone.');
@@ -77,6 +85,7 @@
       s.flag('ch24_grave');
       s.party(['wuyong', 'huarong']); s.setLeader('wuyong'); s.flag('protagonist', 'wuyong');
       await s.narrate('Far away, on the same night, Wu Yong dreamed that Song Jiang and Li Kui came to him, and took his sleeve, and said: "Come to Liaoerwa." Hua Rong dreamed the same dream.');
+      s.night(false);
       await s.warp('liaoerwa', 19, 22, 'up');
     } }
   ]);

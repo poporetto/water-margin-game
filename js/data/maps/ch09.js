@@ -55,7 +55,7 @@
   g.rect(14, 26, 8, 6, '=');                                                                            // execution ground
   g.set(14, 26, 'Y'); g.set(21, 26, 'Y');
   [prefect, prison, tower, daizong].forEach(function (d) { g.vline(d.x, d.y + 1, 17, ':'); });
-  [pipa, shop, jinn].forEach(function (d) { g.vline(d.x, d.y + 1, 32, ':'); }); g.hline(2, 53, 32, ':'); g.vline(27, 32, 33, ':');
+  [pipa, shop, jinn].forEach(function (d) { g.vline(d.x, d.y + 1, 32, ':'); }); g.hline(2, 53, 32, ':'); g.rect(26, 32, 4, 2, '=');   // (the stone avenue runs unbroken across the lane to the south gate)
   g.scatter('T', 0.05, 351, '.', [2, 2, 52, 30]); g.scatter('b', 0.03, 352, '.', [2, 2, 52, 30]);
   L.clearAround(g, ':', 'Tb', '.'); L.clearAround(g, '=', 'Tb', '.');
   WM.defMap('jiangzhou', { name: 'Jiangzhou', theme: 'south', music: 'town', rows: g.rows(), spawn: [27, 3], battleBg: 'town',
@@ -65,12 +65,13 @@
   gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..tKKKK...t...', '...KKKK']);   // the prefect's hall
   gi.stamp(19, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF']);
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
-  gi.stamp(44, 3, ['h..L.....L..', '.t..t..t..t.', '............', '.t..t..t....', 'cccc........']);
+  gi.stamp(44, 3, ['h..L.....L.h', '.t..t...t..t', '............', '.t..t...t..t', '............', 'cccc........']);   // the Xunyang Tower: tables in two even rows either side of the window aisle, the long counter by the stairs
   gi.stamp(59, 3, ['hhhh..', '......', 'ccc...']);
   WM.defMap('jiangzhou_in', { name: '', interior: true, theme: 'south', music: 'town', rows: gi.rows(), spawn: [8, 9] });
   [[prefect, gR.prefect], [prison, gR.prison], [daizong, gR.daizong], [tower, gR.tower], [shop, gR.shop]].forEach(function (p) { L.link({ map: 'jiangzhou', x: p[0].x, y: p[0].y }, { map: 'jiangzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.jiangzhou = { rooms: gR, doors: { prefect: prefect, prison: prison, daizong: daizong, tower: tower, pipa: pipa, shop: shop, inn: jinn } };
-  WM.defEvents('jiangzhou_in', [L.shop('jzshop', 61, 4, 'jiangzhou', 'shopkeep', 'Fine goods from the river trade.')]);
+  WM.defEvents('jiangzhou_in', [L.shop('jzshop', 61, 4, 'jiangzhou', 'shopkeep', 'Fine goods from the river trade.'),
+    { id: 'jztowerkeep', x: 45, y: 7, npc: 'innkeep', dir: 'down', text: ['Welcome to the Xunyang Tower, sir — the finest view on the whole river. Take any table by the window.'] }]);
 
   // ---------------- White Dragon Temple ----------------
   var w = L.grid(30, 22, '.');

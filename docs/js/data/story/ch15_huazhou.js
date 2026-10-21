@@ -87,12 +87,35 @@
   // ---------------- Huazhou ----------------
   WM.defEvents('huazhou', [
     { id: 'ch15_bridge', x: 21, y: 13, w: 4, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch15_alone'); }, run: async function (s) {
-      s.spawn('he', 'heprefect', 22, 9, 'down');
-      await s.narrate('Lu Zhishen waited on the bridge, staff in hand, for the prefect\'s procession. The prefect saw the huge monk from his sedan chair, and did not stop. A little later a runner came out: "His Honour invites the reverend master to a vegetarian meal in the hall."');
+      await s.walkTo('player', 22, 14); s.face('player', 'up');
+      await s.say('luzhishen', '(The prefect\'s procession comes over this bridge. I\'ll wait here.)');
+      s.spawn('pg1', 'guard', 22, 20, 'up'); s.spawn('he', 'heprefect', 23, 21, 'up'); s.spawn('pg2', 'guard', 24, 20, 'up');
+      s.walkTo('pg1', 21, 16); s.walkTo('pg2', 24, 16); await s.walkTo('he', 23, 17);
+      await s.emote('he', '!');
+      await s.say('heprefect', '(from his sedan chair) ...A monk the size of a temple guardian, with a staff like a mast. Don\'t stop. Back to the hall — quickly.');
+      s.walkTo('pg1', 21, 21); s.walkTo('pg2', 24, 21); await s.walkTo('he', 23, 21);
+      WM.data.clear(s, ['pg1', 'pg2', 'he']);
+      await s.emote('player', '?');
+      s.spawn('rn', 'servant', 23, 20, 'up');
+      await s.walkTo('rn', 23, 15, { run: true });
+      await s.say('servant', 'Reverend master! His Honour the Prefect invites you to a vegetarian meal in the hall.');
       await s.say('luzhishen', '(Ha! The fool\'s inviting me in. I\'ll kill him at his own table.)');
-      s.despawn('he');
-      await s.narrate('As soon as Lu Zhishen was inside the hall, they shut the gate behind him, and men leapt out from both sides and pinned him down.');
+      s.despawn('rn', { leave: true });
+      await s.fadeOut(0.6);
+      await s.warp('huazhou_in', 8, 9, 'up', { noFade: true });
+      var amb = WM.data.troop(s, 'am', 'guard', [[3, 6], [3, 8], [14, 6], [14, 8]], 'right');
+      amb.forEach(function (k) { s.hide(k); });
+      await s.fadeIn(0.6);
+      await s.walkTo('player', 8, 7);
+      s.sfx('door'); await s.shake(2, 0.2);
+      await s.emote('player', '!');
+      amb.forEach(function (k) { s.show(k); });
+      await s.say('guard', 'Now! Take him!');
+      amb.forEach(function (k, i) { s.walkTo(k, i < 2 ? 7 : 9, i % 2 ? 8 : 7, { run: true }); });
+      await s.wait(0.6);
+      s.sfx('hit'); await s.shake(4, 0.4);
       await s.say('luzhishen:angry', 'I am the Flowery Monk, Lu Zhishen of Liangshan! Song Jiang will come for me, and then you\'ll see!');
+      WM.data.clear(s, amb);
       await s.narrate('Prefect He put him in the heaviest cangue in the prison, and locked up his staff and his knife. Wu Song\'s men, who had followed Lu Zhishen at a distance, ran for Liangshan.');
       s.flag('ch15_taken');
       await s.fadeOut(1);
@@ -122,7 +145,6 @@
       s.jump('g1', 10); s.jump('g2', 10); s.move('g1', 'L1', { speed: 34, wait: false, fall: true }); await s.move('g2', 'R1', { speed: 34, fall: true });
       s.splash('g1'); s.splash('g2'); s.hide('g1'); s.hide('g2'); s.despawn('g1'); s.despawn('g2'); await s.shake(2, 0.3);
       await s.wait(0.6);   // the rings spread where they went in
-      await s.narrate('Li Jun and Zhang Shun sprang onto the landing and tipped two of the Marshal\'s guards into the river.');
       await s.say('songjiang', 'Forgive my men, Your Excellency — they are rough, and I cannot always hold them. I mean you no harm. I only ask you to step ashore for a moment.');
       s.despawn('su'); s.spawn('su', 'suyuanjing', 15, 7, 'up');   // stepped ashore
       await s.say('songjiang', 'Your Excellency, two of my brothers are in the prison of Huazhou, because a wicked prefect stole a painter\'s daughter. We need your golden bells and your regalia for a single day. We will return every piece, and no harm will come to you. I swear it.');
@@ -130,21 +152,31 @@
       await s.say('songjiang', 'We wait only for the emperor\'s pardon, Your Excellency, to serve the state. Remember us.');
       s.despawn('su'); s.cameraReset();
       s.flag('ch15_bells');
-      await s.narrate('A Liangshan man who looked a little like the Marshal put on his robes and lay behind the curtains of a sedan chair, "ill from the journey." Wu Yong dressed as the master of ceremonies. Wu Song and Shi Xiu stood at the temple gate as guards.');
+      await s.narrate('A Liangshan man who looked a little like the Marshal put on his robes and lay behind the curtains of a sedan chair, "ill from the journey."');
       await s.warp('xiyue', 17, 26, 'up');
     } }
   ]);
   WM.defEvents('xiyue', [
     { id: 'ch15_temple', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch15_bells'); }, run: async function (s) {
-      s.spawn('he', 'heprefect', 17, 29, 'up'); s.spawn('g1', 'guard', 16, 30, 'up'); s.spawn('g2', 'guard', 19, 30, 'up');
-      s.spawn('wy', 'wuyong', 17, 23, 'down');
-      await s.narrate('Prefect He came out to the temple with three hundred men to welcome the imperial envoy.');
+      s.spawn('wy', 'wuyong', 17, 22, 'down'); s.spawn('ws', 'wusong', 16, 23, 'down'); s.spawn('sx', 'shixiu', 19, 23, 'down');
+      s.hide('player');
+      await s.say('wuyong', '(in a master of ceremonies\' robe) Brothers Wu Song, Shi Xiu — stand straight, like imperial guards. Here he comes.');
+      s.spawn('he', 'heprefect', 17, 31, 'up'); s.spawn('g1', 'guard', 16, 31, 'up'); s.spawn('g2', 'guard', 19, 31, 'up');
+      s.walkTo('g1', 16, 27); s.walkTo('g2', 19, 27); await s.walkTo('he', 17, 25);
+      await s.say('heprefect', 'Prefect He of Huazhou, come with three hundred men to welcome the imperial envoy!');
       await s.say('wuyong', 'The Marshal is unwell from the road and cannot see you. But he asks: why did the Prefect not come out to meet him at the river, as the law requires?');
       await s.say('heprefect', 'I — I did not know His Excellency had arrived —');
       await s.say('wuyong', 'Seize him!');
-      s.sfx('slash');
-      await s.narrate('The Xie brothers sprang from behind the pillars. Prefect He died on the temple steps; his three hundred men were cut down or scattered.');
-      ['he', 'g1', 'g2', 'wy'].forEach(function (k) { s.despawn(k); });
+      s.spawn('xz', 'xiezhen', 12, 20, 'right'); s.spawn('xb', 'xiebao', 23, 20, 'left');
+      s.walkTo('xz', 16, 25, { run: true }); await s.walkTo('xb', 18, 25, { run: true });
+      await s.emote('he', '!');
+      s.sfx('slash'); await s.flash(); s.lie('he');
+      s.walkTo('ws', 16, 26, { run: true }); s.walkTo('sx', 19, 26, { run: true });
+      await s.emote('g1', '!');
+      s.walkTo('g1', 15, 31, { run: true }); s.walkTo('g2', 20, 31, { run: true });
+      await s.say('guard', 'The envoy\'s men are bandits! Run!');
+      ['he', 'g1', 'g2', 'wy', 'ws', 'sx', 'xz', 'xb'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.show('player');
       s.flag('ch15_he');
       await s.warp('huazhou_in', 24, 8, 'up');
     } }
@@ -165,9 +197,12 @@
       await s.narrate('They set fire to the prefect\'s hall and emptied the treasury. Then they returned every piece of Su Yuanjing\'s regalia, with gold and silver for his trouble, and let him go on his way. Su Yuanjing went back to the capital and reported that he had been robbed by bandits on the road — and said no more.');
       await s.joinMany(['shijin', 'zhuwu', 'chenda', 'yangchun']);
       s.flag('ch15_freed');
-      await s.narrate('Back at Liangshan, news came from the south: three bandit chiefs on Mount Mangdang had sworn to swallow Liangshan — Fan Rui, the Demon King Who Roils the World, a sorcerer; Xiang Chong, the Eight-Armed Nezha; and Li Gun, the Great Sage Who Flies in the Sky, whose shields bristled with throwing knives and javelins.');
-      await s.warp('liangshan_in', 16, 12, 'up');
-      s.spawn('sj', 'shijin', 16, 10, 'down');
+      await s.warp('liangshan_in', 16, 9, 'up');
+      s.spawn('sct', 'outlaw', 16, 13, 'up');
+      await s.walkTo('sct', 16, 10, { run: true });
+      await s.say('outlaw', 'Brother! News from the south. Three chiefs on Mount Mangdang have sworn to swallow Liangshan: Fan Rui, the Demon King Who Roils the World, a sorcerer; Xiang Chong, the Eight-Armed Nezha; and Li Gun, the Great Sage Who Flies in the Sky. Their shields bristle with throwing knives and javelins.');
+      s.despawn('sct', { leave: true });
+      s.spawn('sj', 'shijin', 14, 9, 'right');
       await s.say('shijin', 'Let me go. I\'ve only just come up the mountain, and I\'ve done nothing yet.');
       s.despawn('sj', { leave: true });
       s.party(['shijin', 'zhuwu', 'chenda', 'yangchun']); s.setLeader('shijin'); s.flag('protagonist', 'shijin');
@@ -190,7 +225,12 @@
       s.music('boss');
       s.despawn('xc'); s.despawn('lg');
       await s.battle('ch15_shields', { bg: 'forest', canLose: true, rounds: 4 });
-      await s.narrate('The knives and javelins came out from behind the shields faster than Shi Jin\'s men could see them. Half the Shaohua men fell; Yang Chun\'s horse was wounded under him. Then Hua Rong and Xu Ning came up with fresh troops, and Song Jiang behind them with Gongsun Sheng.');
+      await s.say('yangchun:sad', 'Brother Shi Jin — my horse is down! Half our men are hit — we can\'t get near those shields!');
+      await s.say('shijin:sad', 'Back! Fall back!');
+      s.spawn('hr', 'huarong', 17, 35, 'up'); s.spawn('xn', 'xuning', 19, 35, 'up');
+      s.walkTo('hr', 17, 31, { run: true }); await s.walkTo('xn', 19, 31, { run: true });
+      await s.say('huarong', 'Brother Shi Jin! Fall back behind us — Song Jiang is coming with Gongsun Sheng!');
+      s.despawn('hr'); s.despawn('xn');
       s.party(['songjiang', 'gongsunsheng', 'shijin', 'huarong', 'xuning']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       await s.say('gongsunsheng', 'Did you see the blue lanterns on the mountain last night? There\'s a sorcerer up there. Give me a day. I will lay out a formation.');
       await s.war('ch15_mangdang');
@@ -199,7 +239,17 @@
       await s.say('xiangchong', '...We came to destroy you, and you give us our horses back. Brother Li Gun, what do you say?');
       await s.say('ligun', 'I say we go and fetch Fan Rui.');
       s.despawn('xc', { leave: true }); s.despawn('lg', { leave: true });
-      await s.narrate('Fan Rui came down the mountain with them the next day and knelt to Song Jiang. When he saw Gongsun Sheng, he begged to become his disciple and learn the true Way of the Five Thunders. Then they burned their stockade and brought their men and stores to Liangshan.');
+      await s.fadeOut(0.8); await s.wait(0.4); await s.fadeIn(0.8);
+      s.spawn('fr', 'fanrui', 18, 26, 'down'); s.spawn('xc', 'xiangchong', 17, 26, 'down'); s.spawn('lg', 'ligun', 19, 26, 'down');
+      s.spawn('gs', 'gongsunsheng', 20, 31, 'up');
+      s.walkTo('xc', 17, 29); s.walkTo('lg', 19, 29); await s.walkTo('fr', 18, 29);
+      await s.jump('fr');
+      await s.say('fanrui', 'Fan Rui of Mangdang kneels to Song Jiang. You gave my brothers back their horses; I give you my mountain.');
+      s.face('fr', 'right');
+      await s.say('fanrui', '...And that is the one who broke my sorcery. Master Gongsun — I beg you, take me as your disciple. Teach me the true Way of the Five Thunders.');
+      await s.say('gongsunsheng:smile', 'If your heart is upright, I will teach you.');
+      await s.narrate('They burned the Mangdang stockade and brought their men and stores to Liangshan.');
+      ['fr', 'xc', 'lg', 'gs'].forEach(function (k) { s.hide(k); s.despawn(k); });
       await s.joinMany(['fanrui', 'xiangchong', 'ligun']);
       s.flag('ch15_done');
       await s.endChapter();

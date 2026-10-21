@@ -6,6 +6,7 @@
 (function () {
   var S = WM.S;
   WM.npc('wuyanguang', 'Wuyan Guang', { skin: '#e8c0a0', hairStyle: 'helmet', helmColor: '#d8b040', tassel: '#e8e8e8', beard: 'full', body: '#c8a030', trim: '#5a3a1a', weapon: 'halberd', build: 'big', face: 'square', eyes: 'sharp' }, { face: true });
+  WM.npc('ouyang', 'Ouyang, Envoy of Liao', { skin: '#e8c0a0', hairStyle: 'futou', beard: 'short', body: '#2a5a7a', trim: '#e8d8a0', face: 'long', eyes: 'narrow' }, { face: true });
   WM.npc('liaosoldier', 'Liao Rider', { skin: '#e0b090', hairStyle: 'helmet', helmColor: '#4a4a52', tassel: '#2a6a8a', body: '#2a5a7a', trim: '#e8e0c0', weapon: 'spear' }, { face: true });
   WM.npc('rationclerk', 'Ration Clerk', { skin: '#f0c49a', hairStyle: 'futou', beard: 'mustache', body: '#5a4a3a', trim: '#8a6a3a', face: 'narrow', eyes: 'sharp' }, { face: true });
 
@@ -80,13 +81,20 @@
     await s.narrate('The ministers at court wanted the men of Liangshan scattered, or dead. But the Liao had crossed the northern border, and Marshal Su Yuanjing told the emperor: "These men are bound together like brothers. Send them north." The emperor made Song Jiang Vanguard Commander against the Liao. Song Jiang buried Chao Gai\'s spirit tablet, sent the families home, and left the stronghold in the care of a few old soldiers.');
     await s.warp('roadinn', 12, 8, 'up', { noFade: true });
     s.spawn('rc', 'rationclerk', 12, 6, 'down'); s.spawn('sd', 'soldier', 14, 8, 'left');
+    var sq = WM.data.troop(s, 'sq', 'soldier', [[9, 8], [10, 9], [15, 9], [16, 8]], 'up');
     await s.fadeIn(1);
-    await s.narrate('At the posting station of Chenqiao, the emperor\'s gift of wine and meat was handed out to the soldiers. The two clerks in charge had kept back half the wine, and the meat was cut to scraps.');
-    await s.say('soldier:angry', 'Is this the emperor\'s reward? Half a cup and a sliver of meat?');
+    await s.narrate('At the posting station of Chenqiao, the emperor\'s gift of wine and meat was handed out to the soldiers.');
+    s.sfx('item'); await s.wait(0.3);
+    await s.say('rationclerk', '(ladling a thin half-cup) Next. ...Next. A cup each — and one slice of meat. The emperor is generous.');
+    await s.emote('sd', 'anger');
+    await s.say('soldier:angry', 'Is this the emperor\'s reward? Half a cup and a sliver of meat? Where\'s the rest — in your own jars?');
     await s.say('rationclerk', 'You Liangshan bandits! You should be grateful you\'re not hanging from a tree!');
-    s.sfx('slash'); await s.shake(4, 0.3);
-    await s.narrate('The soldier — one of Xiang Chong\'s shield-men — drew his blade and killed the clerk where he stood.');
-    s.despawn('rc');
+    await s.walkTo('sd', 13, 7, { run: true });
+    s.sfx('slash'); await s.flash(); await s.shake(4, 0.3);
+    s.lie('rc');
+    sq.forEach(function (k) { s.emote(k, '!', 0.8); });
+    await s.say(null, '(The soldier — one of Xiang Chong\'s shield-men — has cut the clerk down where he stood.)');
+    WM.data.clear(s, sq.concat(['rc']));
     await s.say('wuyong', 'Brother, we are under the court\'s command now. If you spare him, they will say Liangshan cannot be ruled. He must die.');
     await s.say('songjiang:sad', '...On the mountain, no one could have touched you. Under the court, I cannot even save my own man. Drink this wine, brother. Then go.');
     s.despawn('sd');
@@ -97,8 +105,14 @@
       lines: [['songjiang', 'Our first battle under the emperor\'s banner. Let the court see what the men of Liangshan are worth.'], ['zhangqing', 'Let him come close enough to see my stones, brother.']]
     });
     await s.battle('ch21_tanzhou', { bg: 'field' });
-    await s.narrate('Zhang Qing\'s stone struck the Liao general Ali Qi in the eye, and Hua Rong, Lin Chong, Qin Ming and Suo Chao took him. Dong Ping unhorsed Yelü Guozhen; the navy, disguised as grain-boats, seized the water gate of Tanzhou. Then the Liao king sent his envoy Ouyang with a gift: Song Jiang would be Grand Marshal of Liao, if he would change sides.');
+    await s.narrate('Zhang Qing\'s stone struck the Liao general Ali Qi in the eye, and Hua Rong, Lin Chong, Qin Ming and Suo Chao took him. Dong Ping unhorsed Yelü Guozhen; the navy, disguised as grain-boats, seized the water gate of Tanzhou.');
+    s.spawn('oy', 'ouyang', 17, 15, 'up');
+    await s.walkTo('oy', 17, 11);
+    await s.jump('oy');
+    s.sfx('coins');
+    await s.say('ouyang', 'Ouyang, envoy of the Great Liao. My king sends gold, and a seal. General Song — your court calls you a bandit and starves your men. Change sides, and you will be Grand Marshal of all Liao.');
     await s.say('songjiang', 'Even if the Song betray me, my loyal heart will not betray the Song.');
+    s.despawn('oy', { leave: true });
     await s.narrate('But Wu Yong said: "Then let us use their trick against them." Song Jiang pretended to accept; the Liao let him into Bazhou; and Bazhou was Song\'s by nightfall. After that, Song Jiang went with Gongsun Sheng up Erxian Mountain to call on Luo Zhenren.');
     s.flag('ch21_luo');
     await s.warp('erxian_in', 18, 8, 'up');
@@ -116,7 +130,9 @@
       s.spawn('luo', 'luozhenren', 18, 5, 'down'); s.spawn('gs', 'gongsunsheng', 16, 5, 'right');
       await s.say('songjiang', 'Master, I have brought gold and silk.');
       await s.say('luozhenren', 'A man of the Way has no use for gold. ...General, your loyalty is great, but your fate is thin. Your life will not end in full. When you are at the height of your success, step back. Do not linger over riches and rank.');
-      await s.narrate('He gave Song Jiang eight lines of verse that none of them could understand. "In time, you will."');
+      s.sfx('item');
+      await s.say('luozhenren', 'Take these eight lines. You will not understand them now. In time, you will.');
+      await s.emote('player', '?');
       await s.say('luozhenren', 'And when this war is over, let my disciple come home. I need someone to pass the Way to — and his old mother stands at the door every evening, watching the road.');
       await s.say('songjiang', '...I will not forget, Master.');
       s.despawn('luo'); s.despawn('gs');
@@ -132,7 +148,11 @@
       });
       await s.war('ch21_taiyi1', { canLose: true });
       s.music('sad');
-      await s.narrate('Again and again the formation turned and closed. Li Kui was captured and had to be exchanged for Wuyan Guang\'s son. A court instructor, Wang Wenbin, who had come with the winter clothing, rode out to show the bandits how it was done and was cut down. Song Jiang sat up night after night over the problem. At last he fell asleep at his table.');
+      await s.narrate('Again and again the formation turned and closed. Li Kui was captured and had to be exchanged for Wuyan Guang\'s son. A court instructor, Wang Wenbin, who had come with the winter clothing, rode out to show the bandits how it was done and was cut down.');
+      s.night(true);
+      await s.say('songjiang:sad', '(The sun, the moon, the five planets, the twenty-eight mansions... whichever part we strike, the rest closes round it...)');
+      await s.emote('player', '...', 1.2);
+      await s.emote('player', 'zzz', 1.6);
       s.flag('ch21_dream');
       await s.fadeOut(1, '#ffffff');
       await s.warp('xuannu', 11, 20, 'up', { noFade: true });
@@ -148,7 +168,8 @@
       await s.warp('armycamp', 17, 9, 'down', { noFade: true });
       s.night(true);
       await s.fadeIn(1);
-      await s.narrate('Song Jiang woke at his table in the pavilion. The lamp had burned down, and it was the third watch. He called for Wu Yong at once.');
+      await s.emote('player', '!'); await s.jump('player', 3);
+      await s.say('songjiang', '(The lamp has burned down... the third watch. A dream — but I remember every word.) Guards! Fetch Mister Wu — now!');
       await WM.data.warCouncil(s, {
         here: true, night: true, beside: 'wuyong', generals: ['gongsunsheng', 'guansheng', 'huyanzhuo', 'linchong', 'dongping', 'huarong'],
         lines: [['songjiang', 'I have seen the Mysterious Lady of the Ninth Heaven. She told me how the formation is broken.'],
@@ -159,8 +180,12 @@
       await s.war('ch21_taiyi2');
       s.night(false);
       await s.narrate('Hua Rong\'s arrow glanced off Wuyan Guang\'s breastplate. Zhang Qing\'s stones knocked him onto his horse\'s neck. Guan Sheng\'s blade cut him through the waist, and Zhang Qing finished him with his spear. Hu Sanniang took a Liao princess; Lu Junyi took a Liao prince.');
-      await s.narrate('The Liao king, beaten, did not surrender to Song Jiang. His chancellor went to the capital with gold for Cai Jing, Tong Guan, Gao Qiu and Yang Jian, and the four of them persuaded the emperor that Liao should be left as a buffer in the north. Su Yuanjing brought the order: the war was over. Every conquered city was handed back.');
+      await s.narrate('The Liao king, beaten, did not surrender to Song Jiang. His chancellor went to the capital with gold for Cai Jing, Tong Guan, Gao Qiu and Yang Jian, and the four of them persuaded the emperor that Liao should be left as a buffer in the north.');
+      s.spawn('su', 'suyuanjing', 17, 15, 'up');
+      await s.walkTo('su', 17, 11);
+      await s.say('suyuanjing:sad', 'General Song. The emperor\'s order. The war is over — peace has been made with Liao. Every city you took is to be handed back.');
       await s.say('songjiang:sad', 'I do not blame the court. Only... all that we did is undone.');
+      s.despawn('su', { leave: true });
       s.spawn('lz', 'luzhishen', 13, 8, 'left');
       await s.say('luzhishen', 'Brother, Mount Wutai is near. Let me go and see my old master.');
       await s.say('songjiang', 'Then I will come with you.');
@@ -176,7 +201,12 @@
       await s.say('zhizhen', 'Your time of fulfilment is near. Here are four more lines; keep them all your life. "Meet Xia, and capture. Meet La, and seize. Hear the tide, and be complete. See the signal, and be still."');
       await s.say('luzhishen', '...I will keep them, Master.');
       await s.say('zhizhen', 'And for you, General Song, four lines to keep to yourself. "Wild geese cast shadows in the wind; the eastern gate is never whole. One eye\'s merit is enough; at Shuanglin, fortune and long life are complete." It is a riddle of Chan; I cannot explain it. Ponder it yourself.');
-      await s.narrate('Before the Buddha, the chiefs who had come with Song Jiang knelt and swore: "Let us brothers live and die together, and meet again in every life to come."');
+      s.spawn('k1', 'wusong', 34, 8, 'up'); s.spawn('k2', 'likui', 38, 8, 'up'); s.spawn('k3', 'linchong', 33, 9, 'up'); s.spawn('k4', 'huarong', 39, 9, 'up');
+      s.face('player', 'up');
+      await s.jump('player', 3); ['lz', 'k1', 'k2', 'k3', 'k4'].forEach(function (k) { s.jump(k, 3); });
+      s.sfx('bell');
+      await s.say('songjiang', '(kneeling before the Buddha, with his brothers) Let us brothers live and die together, and meet again in every life to come.');
+      WM.data.clear(s, ['k1', 'k2', 'k3', 'k4']);
       s.despawn('zz'); s.despawn('lz');
       s.flag('ch21_done');
       await s.endChapter();
