@@ -93,7 +93,7 @@
   m.frame(2, 2, 14, 9, 'F'); m.set(8, 10, ':'); m.vline(8, 10, 12, ':');
   var camp = m.house(4, 3, 9, 5, { roof: 'v', wall: 'R', door: 4 });
   // Commander Zhang's residence, with the Mandarin Duck Tower (north-east)
-  m.frame(36, 2, 18, 10, '#'); m.set(44, 11, 'G'); m.vline(44, 9, 12, ':');
+  m.frame(36, 2, 18, 10, '#'); m.rect(44, 11, 2, 1, 'G'); m.rect(44, 9, 2, 4, ':');   // gate and path two wide, under the double door
   var zhang = m.house(38, 3, 14, 6, { roof: 'Z', wall: 'R', door: 6, windowsUpper: [2, 11] });
   m.set(37, 9, 'L'); m.set(52, 9, 'L');
   // the road of taverns to the Happy Forest (south, eastwards)
@@ -103,7 +103,7 @@
   m.rect(38, 17, 16, 10, 'T'); m.rect(40, 19, 12, 7, '.');
   var happy = m.house(42, 19, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); m.set(41, 19, 'J');
   m.vline(46, 23, 24, ':'); m.hline(38, 46, 24, ':');
-  m.scatter('T', 0.05, 271, '.', [1, 1, 54, 28]); L.clearAround(m, ':', 'T', '.'); m.vline(44, 9, 10, ':');
+  m.scatter('T', 0.05, 271, '.', [1, 1, 54, 28]); L.clearAround(m, ':', 'T', '.'); m.rect(44, 9, 2, 2, ':');
   WM.defMap('mengzhou', { name: 'Mengzhou', theme: 'autumn', music: 'town', rows: m.rows(), spawn: [1, 14], battleBg: 'town',
     exits: [WM.toWorld('mengzhou', 0, 13, 1, 3), WM.toWorld('mengzhou', 55, 13, 1, 3)] });
   WM.data.mengzhouTaverns = taverns;
@@ -113,6 +113,8 @@
   mi.stamp(15, 3, ['h...L....L...h', '..............', '...t..........', '..............', 'j............j']);
   mi.stamp(32, 3, ['L..t....kkL', '........kk.', '...........']);
   mi.stamp(45, 3, ['h..L....h', '.t..t..t.', 'cccc.....']);
+  mi.set(21, 3, 'S'); mi.set(22, 3, 'S');   // the stairs at the back of the Commander's hall, up to the Mandarin Duck Tower
+  mi.set(36, 7, 'S'); mi.set(37, 7, 'S');   // ...and where they come up: the entrance of the tower room, in the middle
   WM.defMap('mengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: mi.rows(), spawn: [6, 7] });
   L.link({ map: 'mengzhou', x: camp.x, y: camp.y }, { map: 'mengzhou_in', x: mR.camp.x, y: mR.camp.y });
   L.link({ map: 'mengzhou', x: zhang.x, y: zhang.y }, { map: 'mengzhou_in', x: mR.zhang.x, y: mR.zhang.y });

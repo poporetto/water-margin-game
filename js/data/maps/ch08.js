@@ -17,7 +17,7 @@
   WM.defMap('qingfengshan', { name: 'Qingfeng Mountain', theme: 'snow', music: 'dungeon', rows: m.rows(), spawn: [14, 32], battleBg: 'snow',
     exits: [WM.toWorld('qingfengshan', 12, 33, 6, 1)], encounters: { rate: 0.05, troops: [['wolf2', 'wolf2'], ['bear'], ['roadbandit', 'roadarcher']], cond: function (S2) { return !S2.has('ch8_bandits'); } } });
   var mi = L.grid(18, 11, 'x'); var mR = mi.room(1, 1, 16, 9, { floor: 'n' });
-  mi.stamp(2, 3, ['h..L....L..h..', '..............', '..t..KKKK..t..', '..............', 'j............j']);
+  mi.stamp(2, 3, ['h..L....L..h..', '......00......', '.t...KKKK...t.', '..............', 'j............j']);   // the chiefs' great chair at the head of the hall, its carpet before it
   WM.defMap('qingfengshan_in', { name: 'Qingfeng Stronghold', interior: true, theme: 'snow', music: 'dungeon', rows: mi.rows(), spawn: [9, 8] });
   L.link({ map: 'qingfengshan', x: hall.x, y: hall.y }, { map: 'qingfengshan_in', x: mR.x, y: mR.y });
 
@@ -29,7 +29,9 @@
   var hua = g.house(4, 3, 11, 6, { roof: '^', wall: 'W', door: 5, windows: [1, 3, 7, 9] });   // Hua Rong (military)
   var liu = g.house(27, 3, 11, 6, { roof: 'v', wall: 'R', door: 5, windows: [2, 8] });        // Liu Gao (civil)
   g.vline(hua.x, hua.y + 1, 12, ':'); g.vline(liu.x, liu.y + 1, 12, ':');
-  for (var x = 3; x < 40; x += 4) { g.set(x, 12, 'L'); g.set(x + 1, 16, 'L'); }               // the Lantern Festival
+  // the Lantern Festival: lanterns in pairs along both sides of the cross street, and down both sides of the main street
+  [3, 6, 12, 15, 26, 29, 35, 38].forEach(function (x) { g.set(x, 12, 'L'); g.set(x, 15, 'L'); });
+  [4, 8, 19, 23].forEach(function (y) { g.set(18, y, 'L'); g.set(23, y, 'L'); });
   g.house(4, 18, 6, 4, { roof: 'z', door: false, windows: [2] }); g.house(12, 18, 6, 4, { roof: 'z', door: false, windows: [3] });
   g.house(25, 18, 6, 4, { roof: '^', door: false, windows: [2] }); g.house(33, 18, 6, 4, { roof: 'z', door: false, windows: [3] });
   g.scatter('T', 0.05, 321, '.', [1, 1, 40, 28]); g.scatter('f', 0.03, 322, '.', [1, 1, 40, 28]);
@@ -38,7 +40,7 @@
   var gi = L.grid(34, 12, 'x');
   var gR = { hua: gi.room(1, 1, 15, 10, { floor: 'N' }), liu: gi.room(17, 1, 15, 10, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......Akk', '...........kk', '..t..KKK.....', '.............', '.............']);
-  gi.stamp(18, 3, ['h...&&....h..', '....AA.......', '..t......t...', '.............', 'F.FFF.FFF.F..']);
+  gi.stamp(18, 3, ['....F..h..h..', '....F........', '....F.....t..', 'FF+FF........']);   // Liu Gao's hall, and in its top-left corner the barred cage where he keeps his prisoners (its door on the south side)
   WM.defMap('qingfeng_in', { name: '', interior: true, theme: 'snow', music: 'town', rows: gi.rows(), spawn: [8, 9] });
   L.link({ map: 'qingfeng', x: hua.x, y: hua.y }, { map: 'qingfeng_in', x: gR.hua.x, y: gR.hua.y });
   L.link({ map: 'qingfeng', x: liu.x, y: liu.y }, { map: 'qingfeng_in', x: gR.liu.x, y: gR.liu.y });

@@ -264,25 +264,25 @@
       await s.say(null, '(Find out how Wu Dalang died. The coroner, He Jiu, lives in the north-west of town.)');
     } },
     // Granny Wang at home, next door to Wu Dalang
-    { id: 'ch7_wangpo1', x: 29, y: 5, npc: 'wangpo', dir: 'down', cond: function (S2) { return S2.has('ch7_home') && !S2.has('ch7_away'); }, run: async function (s) {
+    { id: 'ch7_wangpo1', aside: true, x: 29, y: 5, npc: 'wangpo', dir: 'down', cond: function (S2) { return S2.has('ch7_home') && !S2.has('ch7_away'); }, run: async function (s) {
       await s.say('wangpo:smile', 'Ah, the tiger-killer himself, in my humble house! Sit, sit. A cup of plum tea?');
       await s.say('wangpo', 'Your sister-in-law next door — have you ever seen a face like hers? Skin like fresh bean curd, a waist you could close your hand around. And married to your brother, three feet tall and selling pancakes in the street!');
       await s.say('wangpo:smile', 'A fresh flower stuck in a heap of cow dung, that\'s what the whole street says. Such a waste. Such a waste...');
       await s.say('wusong:angry', 'Watch your tongue, old woman. That is my brother you are talking about.');
       await s.say('wangpo', 'Hee hee... I meant no harm, Constable. An old woman talks.');
     } },
-    { id: 'ch7_wangpo2', x: 29, y: 5, npc: 'wangpo', dir: 'down', cond: function (S2) { return S2.has('ch7_return') && !S2.has('ch7_tolion'); }, run: async function (s) {
+    { id: 'ch7_wangpo2', aside: true, x: 29, y: 5, npc: 'wangpo', dir: 'down', cond: function (S2) { return S2.has('ch7_return') && !S2.has('ch7_tolion'); }, run: async function (s) {
       await s.say('wangpo:sad', 'C-Constable Wu! Such a terrible thing, your poor brother. A pain in the heart, just like that. I helped the widow with everything, I did...');
       await s.say('wusong', '(She will not meet my eyes.)');
     } },
     // the widow in her mourning white, by the bed, until Wu Song comes back for her
-    { id: 'ch7_jinlian2', x: 16, y: 5, npc: 'panjinlian', dir: 'right', cond: function (S2) { return S2.has('ch7_return') && !S2.has('ch7_evidence'); }, run: async function (s) {
+    { id: 'ch7_jinlian2', aside: true, x: 16, y: 5, npc: 'panjinlian', dir: 'right', cond: function (S2) { return S2.has('ch7_return') && !S2.has('ch7_evidence'); }, run: async function (s) {
       await s.say('panjinlian:sad', 'He was such a good husband... I burn incense for him every morning and every night. What more can a widow do?');
       await s.say('wusong', 'Who bought the coffin? Who carried it out?');
       await s.say('panjinlian:shock', '...Granny Wang next door helped me. I was too distraught to see to anything. Why do you ask, brother-in-law?');
       await s.say('wusong', '(Her hands are shaking.)');
     } },
-    { id: 'ch7_jinlian3', x: 16, y: 5, npc: 'panjinlian', dir: 'right', cond: function (S2) { return S2.has('ch7_evidence') && !S2.has('ch7_tolion'); }, run: async function (s) {
+    { id: 'ch7_jinlian3', aside: true, x: 16, y: 5, npc: 'panjinlian', dir: 'right', cond: function (S2) { return S2.has('ch7_evidence') && !S2.has('ch7_tolion'); }, run: async function (s) {
       await s.say('panjinlian:smile', 'Brother-in-law, you\'re back so late... Shall I warm some wine for you?');
       await s.say('wusong', '(Not yet. When the neighbours are gathered, before my brother\'s tablet — then.)');
     } },
@@ -387,7 +387,7 @@
       s.flag('ch7_slope');
     } },
     // the inn at Cross Slope afterwards: the landlady, beaten and now a sworn sister, and her husband
-    { id: 'ch7_erniang2', x: 8, y: 4, char: 'sunerniang', dir: 'down', cond: function (S2) { return S2.has('ch7_slope') && !S2.has('ch7_fugitive'); }, run: async function (s) {
+    { id: 'ch7_erniang2', aside: true, x: 8, y: 4, char: 'sunerniang', dir: 'down', cond: function (S2) { return S2.has('ch7_slope') && !S2.has('ch7_fugitive'); }, run: async function (s) {
       await s.say('sunerniang:smile', 'My wrists still ache! Twenty years I\'ve kept this inn, and no man ever pinned me like that. You\'ve a grip like a tiger, brother.');
       await s.say('sunerniang', 'Don\'t worry — your dumplings tonight are beef. Real beef. On my honour as your sister.');
       await s.say('wusong', '...I\'ll still look before I bite.');
@@ -396,6 +396,7 @@
     { id: 'ch7_zhangqing2', x: 8, y: 6, char: 'zhangqing2', dir: 'up', cond: function (S2) { return S2.has('ch7_slope') && !S2.has('ch7_fugitive'); }, text: ['Forgive my wife, brother. She has a temper, and the knives are always close to hand. But she keeps the three rules better than I do.'] }
   ]);
 
+  var KEEPER = { name: 'Tavern Keeper' };
   // ---------------- Mengzhou: Shi En and the Happy Forest ----------------
   WM.defEvents('mengzhou', [
     { id: 'ch7_camp', x: 7, y: 9, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch7_slope'); }, run: async function (s) {
@@ -413,10 +414,11 @@
       s.flag('ch7_road');
       await s.say(null, '(Drink three bowls at each tavern along the road east, then face Jiang Menshen at the Happy Forest.)');
     } },
-    { id: 'ch7_t1', x: 7, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t1'); }, run: async function (s) { await s.say('tavernkeep', 'Three bowls? Coming up.'); s.sfx('item'); s.flag('ch7_t1'); await s.notice('Three bowls. One.', { auto: 1 }); } },
-    { id: 'ch7_t2', x: 15, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t2'); }, run: async function (s) { await s.say('tavernkeep', 'Three bowls, for the tiger-slayer!'); s.sfx('item'); s.flag('ch7_t2'); await s.notice('Three bowls. Two.', { auto: 1 }); } },
-    { id: 'ch7_t3', x: 23, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t3'); }, run: async function (s) { await s.say('tavernkeep', 'He\'s still standing! Three more!'); s.sfx('item'); s.flag('ch7_t3'); await s.notice('Three bowls. Three.', { auto: 1 }); } },
-    { id: 'ch7_t4', x: 31, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t4'); }, run: async function (s) { await s.say('tavernkeep', 'Three bowls! Careful, officer, the road\'s swaying.'); s.sfx('item'); s.flag('ch7_t4'); await s.notice('Three bowls. Four — and the Happy Forest ahead.', { auto: 1.2 }); } },
+    // the keepers along the road of taverns: no faces of their own, and back inside once the bowls are poured
+    { id: 'ch7_t1', x: 7, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t1'); }, run: async function (s) { await s.say(KEEPER, 'Three bowls? Coming up.'); s.sfx('item'); s.flag('ch7_t1'); await s.notice('Three bowls. One.', { auto: 1 }); await s.move('ch7_t1', 'U1'); s.hide('ch7_t1'); } },
+    { id: 'ch7_t2', x: 15, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t2'); }, run: async function (s) { await s.say(KEEPER, 'Three bowls, for the tiger-slayer!'); s.sfx('item'); s.flag('ch7_t2'); await s.notice('Three bowls. Two.', { auto: 1 }); await s.move('ch7_t2', 'U1'); s.hide('ch7_t2'); } },
+    { id: 'ch7_t3', x: 23, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t3'); }, run: async function (s) { await s.say(KEEPER, 'He\'s still standing! Three more!'); s.sfx('item'); s.flag('ch7_t3'); await s.notice('Three bowls. Three.', { auto: 1 }); await s.move('ch7_t3', 'U1'); s.hide('ch7_t3'); } },
+    { id: 'ch7_t4', x: 31, y: 23, npc: 'tavernkeep', cond: function (S2) { return S2.has('ch7_road') && !S2.has('ch7_t4'); }, run: async function (s) { await s.say(KEEPER, 'Three bowls! Careful, officer, the road\'s swaying.'); s.sfx('item'); s.flag('ch7_t4'); await s.notice('Three bowls. Four — and the Happy Forest ahead.', { auto: 1.2 }); await s.move('ch7_t4', 'U1'); s.hide('ch7_t4'); } },
     { id: 'ch7_jiang', x: 40, y: 24, w: 7, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch7_t1') && S2.has('ch7_t2') && S2.has('ch7_t3') && S2.has('ch7_t4'); }, idle: { jiang: '(A huge man lounges in a folding chair under the locust trees, fanning himself and watching the tavern.) What are you staring at? Drink, if you can pay.' },
       run: async function (s) {
       s.spawn('jiang', 'jiangmenshen', 44, 25, 'left');
@@ -479,23 +481,65 @@
   WM.defEvents('mengzhou_in', [
     { id: 'ch7_tower', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_totower') && WM.state.x >= 14 && WM.state.x <= 29; }, run: async function (s) {
       await s.narrate('Wu Song climbed over the wall of the residence in the dark. Up on the Mandarin Duck Tower, the lamps were lit, and three men were drinking and laughing: Commander Zhang, Captain Zhang, and Jiang Menshen.');
+      // he goes on through the hall and up the stairs, in the dark, to the tower room
+      await s.walkTo('player', 21, 3);
+      await s.fadeOut(0.8);
       await s.warp('mengzhou_in', 37, 7, 'up', { noFade: true });
       s.spawn('zd', 'zhangdujian', 37, 4, 'down'); s.spawn('zt', 'zhangtuanlian', 34, 4, 'down'); s.spawn('jm', 'jiangmenshen', 39, 4, 'down');
+      await s.wait(0.2);
+      await s.fadeIn(0.8);
+      await s.move('player', 'U1'); s.face('player', 'up');   // up the last of the stairs, into the room
       await s.say('jiangmenshen:smile', '...They\'ll have finished him by now. Drink, Commander! To the end of Wu Song!');
       await s.say('wusong:angry', 'Wu Song is here.');
       await s.battle('ch7_tower', { bg: 'palace', music: 'boss' });
       s.lie('zd'); s.lie('zt'); s.lie('jm');   // all three dead in the Mandarin Duck Tower
       await s.narrate('That night in the Mandarin Duck Tower, and through the house below, Wu Song killed all who had plotted against him and many who stood in his way. Then he tore a strip from a dead man\'s robe, dipped it in blood, and wrote on the white wall: "The man who killed these is Wu Song, the slayer of the tiger."');
-      await s.narrate('He gathered up the silver cups from the table, climbed over the city wall in the dark, and walked through the night, until he collapsed, exhausted, in a little temple — where four men with hooks caught him, and dragged him to a tavern to be butchered. And the tavern was Cross Slope, and the landlady was Sun Erniang.');
-      s.night(false);
+      // down the stairs and away with the silver cups
+      await s.walkTo('player', 37, 7);
+      await s.fadeOut(0.8);
+      await s.narrate('He gathered up the silver cups from the table, climbed over the city wall in the dark, and walked through the night.');
       s.flag('ch7_fugitive');
-      await s.warp('crossslope_in', 8, 6, 'up');
+      // dawn on the road at Cross Slope: he staggers up from the south and drops by the roadside
+      await s.warp('crossslope', 13, 18, 'up', { noFade: true });
+      s.spawn('h1', 'bandit', 13, 10, 'down'); s.spawn('h2', 'bandit', 14, 10, 'down'); s.spawn('h3', 'bandit', 2, 12, 'right'); s.spawn('h4', 'bandit', 25, 12, 'left');
+      s.hide('h1'); s.hide('h2'); s.hide('h3'); s.hide('h4');
+      await s.fadeIn(0.8);
+      await s.move('player', 'U4', { speed: 34 });
+      s.emote('player', 'sweat', 1); await s.wait(0.6);
+      s.lie('player');
+      await s.narrate('Until he collapsed, exhausted, by the side of the road — where four men with hooks were watching.');
+      // the hook-men come out of the inn and the bushes and close in on him
+      ['h1', 'h2', 'h3', 'h4'].forEach(function (k) { s.show(k); });
+      s.walkTo('h1', 13, 13, { run: true }); s.walkTo('h2', 14, 13, { run: true }); s.walkTo('h3', 12, 14, { run: true });
+      await s.walkTo('h4', 14, 14, { run: true });
+      await s.say('bandit:smile', 'Look at this one — big as an ox, and dead asleep! The landlady\'ll pay well for him. Hooks in, lads!');
+      s.sfx('block'); await s.shake(2, 0.3);
+      // dragged up the path to the inn door
+      var pl = s.actor('player');
+      s.walkTo('h1', 13, 11, { speed: 40 }); s.walkTo('h2', 14, 11, { speed: 40 });
+      pl.path = [{ x: 13 * 16 + 8, y: 12 * 16 + 15 }, { x: 13 * 16 + 8, y: 11 * 16 + 15 }]; pl.speed = 40;
+      s.walkTo('h3', 12, 12, { speed: 40 }); await s.walkTo('h4', 14, 12, { speed: 40 });
+      await s.wait(0.8);
+      await s.narrate('They dragged him to a tavern to be butchered. And the tavern was Cross Slope, and the landlady was Sun Erniang.');
+      await s.fadeOut(0.6);
+      ['h1', 'h2', 'h3', 'h4'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.night(false);   // (only once the screen is dark)
+      await s.warp('crossslope_in', 8, 6, 'up', { noFade: true });
     } }
   ]);
   WM.defEvents('crossslope_in', [
     { id: 'ch7_pilgrim', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_fugitive'); }, run: async function (s) {
-      s.spawn('erniang', 'sunerniang', 8, 4, 'down'); s.spawn('zhangqing2', 'zhangqing2', 9, 5, 'down');
+      s.lie('player');   // bound, on the butchering floor
+      s.spawn('h1', 'bandit', 7, 6, 'right'); s.spawn('h2', 'bandit', 9, 6, 'left');
+      s.spawn('erniang', 'sunerniang', 4, 4, 'right'); s.spawn('zhangqing2', 'zhangqing2', 12, 4, 'left');
+      await s.fadeIn(0.6);
+      await s.say('bandit', 'Landlady! We caught a big one on the road — fat for a month of dumplings. Shall we start?');
+      await s.walkTo('erniang', 8, 5); s.face('erniang', 'down');
+      await s.emote('erniang', '!', 0.8);
       await s.say('sunerniang:shock', 'Brother Wu Song?! Lads, let him go!');
+      s.move('h1', 'L1', { wait: false }); await s.move('h2', 'R1');
+      s.lie('player', false); s.face('player', 'up'); s.jump('player', 2);
+      await s.walkTo('zhangqing2', 9, 5); s.face('zhangqing2', 'down');
       await s.say('zhangqing2', 'Every road in Mengzhou is watched. Posters with your face, and a reward of three thousand strings. You can\'t go anywhere as you are.');
       await s.say('sunerniang', 'Two years ago a pilgrim monk came through here, and... well, he left behind his things. A black robe, a headband, a string of a hundred and eight beads of human skull-bone, a certificate of ordination, and two snowflake steel swords that sing in the night. Let your hair down over your brand and wear them, and you\'ll be the pilgrim.');
       await s.say('wusong:smile', '...A monk. Well, why not? Lu Zhishen made a fine monk.');
@@ -504,38 +548,88 @@
       WM.state.chars.wusong.equip.body = 'monkrobe';
       await s.notice('Wu Song became the Pilgrim. (Twin Snowflake Blades)', { auto: 2 });
       await s.say('zhangqing2', 'Go to Mount Erlong. Lu Zhishen and Yang Zhi hold it. They\'ll take you in.');
-      s.despawn('erniang', { leave: true }); s.despawn('zhangqing2');
+      s.despawn('h1', { leave: true }); s.despawn('h2', { leave: true });
+      // the pilgrim walks out of the inn, and the two see him off at the door
+      await s.walkTo('player', 8, 7);
+      s.hide('player');
+      s.despawn('erniang'); s.despawn('zhangqing2');
       s.flag('ch7_isPilgrim');
+      await s.fadeOut(0.8);
+      s.show('player');
       await s.narrate('So Wu Song the Pilgrim set out for Mount Erlong. It was the tenth month, and the nights were cold. As he crossed Centipede Ridge in the moonlight, he saw a light in a hermitage among the pines, and heard a woman laughing — and a man.');
-      await s.warp('centipede', 15, 21, 'up');
+      await s.warp('centipede', 15, 21, 'up', { noFade: true });
+      await s.fadeIn(0.8);
     } }
   ]);
   WM.defEvents('centipede_in', [
     { id: 'ch7_daoist', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_isPilgrim'); }, run: async function (s) {
-      s.spawn('daoist', 'daoistwang', 5, 4, 'down');
+      // the Daoist on the bed's edge with the woman beside him, laughing; his acolyte by the door
+      s.spawn('daoist', 'daoistwang', 5, 4, 'down'); s.spawn('woman', 'woman', 6, 4, 'left'); s.spawn('boy', 'daoistA', 8, 5, 'left');
+      s.emote('woman', '...', 1.2);
+      await s.say('daoistA', 'Who\'s there? The gate is barred at night — go away!', { top: true });
+      s.face('boy', 'up');
       await s.say('daoistwang:angry', 'Who comes knocking at this hour? A monk? Get out, or my swords will see you out!');
       await s.battle('ch7_daoist', { bg: 'interior', music: 'boss' });
-      s.despawn('daoist', { leave: true });
-      s.spawn('woman', 'woman', 8, 4, 'down');
+      s.lie('daoist'); s.lie('boy');   // the false Daoist and his acolyte, dead on the floor
+      // the woman comes out from behind the bed, trembling
+      await s.walkTo('woman', 7, 5); s.faceEach('woman', 'player');
+      await s.emote('woman', 'sweat', 0.8);
       await s.say('woman:sad', 'Thank you, master monk... He killed my father and mother and my brother and kept me here. He calls himself a Daoist, but he is a wolf.');
-      await s.narrate('Wu Song gave her the Daoist\'s silver and sent her home, and burned the hermitage behind him. Then he went on towards Qingzhou. At a village inn near White Tiger Mountain, cold and thirsty, he drank, and saw a chicken and a jar of good wine being prepared for someone else — and took them.');
-      s.despawn('woman', { leave: true });
+      await s.narrate('Wu Song gave her the Daoist\'s silver and sent her home, and burned the hermitage behind him. Then he went on towards Qingzhou.');
+      await s.walkTo('woman', 6, 6); await s.move('woman', 'D1'); s.hide('woman');   // home, with the Daoist's silver
+      s.despawn('woman');
       s.flag('ch7_tokong');
       WM.unlock('kongmanor');
-      await s.warp('kongmanor', 9, 15, 'up');
+      await s.warp('kongmanor', 15, 22, 'up');
     } }
   ]);
   WM.defEvents('kongmanor', [
     { id: 'ch7_kong', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_tokong'); }, run: async function (s) {
-      s.spawn('kongliang', 'kongliang', 12, 15, 'left');
-      await s.narrate('Wu Song, in his pilgrim\'s robe, came stumbling through the snow and found men sitting round a fire with a jar of wine and a boiled chicken. He took the jar without asking, and drank.');
+      // up from the bridge through the snow to the village inn under its wine flag
+      await s.walkTo('player', 6, 17); s.face('player', 'up');
+      await s.narrate('At a village inn near White Tiger Mountain, Wu Song, in his pilgrim\'s robe, came stumbling in out of the snow, cold and thirsty.');
+      s.hide('player'); s.sfx('door');
+      await s.wait(0.8);
+      await s.narrate('He drank what wine they would sell him, and then saw a boiled chicken and a jar of good wine being made ready for someone else — and took them without asking.');
+      // the man they were meant for comes down the road with two of his father's farmhands
+      s.spawn('kongliang', 'kongliang', 16, 12, 'down'); s.spawn('kf1', 'villager', 15, 12, 'down'); s.spawn('kf2', 'villager', 17, 12, 'down');
+      s.walkTo('kf1', 9, 17); s.walkTo('kf2', 10, 17);
+      await s.walkTo('kongliang', 8, 17); s.face('kongliang', 'left');
+      await s.say('kongliang:angry', 'Where\'s my chicken? A monk? A drunk monk ate it? Come out of there, you thief!');
+      s.show('player'); s.face('player', 'right'); s.sfx('door');
+      await s.move('player', 'R1');
       await s.say('kongliang:angry', 'You thieving drunk of a monk! That wine is mine, and this is my father\'s land!');
       await s.say('wusong', 'Yours? Then I paid for it already — with my fists.');
       await s.duel('wusong_kongliang', { canLose: true });
-      await s.narrate('Wu Song threw Kong Liang into the stream. Then, staggering after a yellow dog that barked at him, he fell into the icy water himself, and was too drunk to get out. Kong Liang\'s men fished him out, tied him to a tree, and beat him with willow switches — until the elder Kong brother came out with a guest to see what the noise was about. The guest was Song Jiang.');
-      s.despawn('kongliang', { leave: true });
+      // Kong Liang is flung into the stream and runs for home, dripping; his farmhands after him
+      var kl = s.actor('kongliang'); kl.path = [{ x: kl.x, y: 18 * 16 + 12 }]; kl.speed = 70; await s.wait(0.4); s.splash('kongliang');
+      await s.wait(0.6); kl.path = [{ x: kl.x, y: 17 * 16 + 15 }]; await s.wait(0.5);
+      await s.emote('kongliang', 'sweat', 0.6);
+      s.walkTo('kf1', 16, 12, { run: true }); s.walkTo('kf2', 17, 12, { run: true });
+      await s.walkTo('kongliang', 15, 12, { run: true });
+      s.hide('kongliang'); s.hide('kf1'); s.hide('kf2');
+      // a yellow dog runs barking along the bank; the drunken pilgrim staggers after it, and into the icy water
+      var dog = s.spawnBeast('dog', 'wolf', 4, 17, 'right', { body: '#c8a050' }); dog.scale = 0.55;
+      await s.emote('dog', '!', 0.6);
+      s.emote('player', '...', 0.8);
+      dog.path = [{ x: 10 * 16 + 8, y: 17 * 16 + 15 }]; dog.speed = 60;
+      await s.move('player', 'R2', { speed: 30 });
+      s.sfx('hit'); await s.wait(0.3);
+      var pl = s.actor('player'); pl.path = [{ x: pl.x, y: 18 * 16 + 12 }]; pl.speed = 40;
+      await s.wait(0.5); s.splash('player'); s.lie('player');
+      dog.path = [{ x: 14 * 16 + 8, y: 17 * 16 + 15 }];
+      await s.narrate('Wu Song threw Kong Liang into the stream. Then, staggering after a yellow dog that barked at him, he fell into the icy water himself, and was too drunk to get out.');
+      await s.fadeOut(0.8);
+      s.hide('dog'); s.despawn('dog');
+      ['kongliang', 'kf1', 'kf2'].forEach(function (k) { s.despawn(k); });
+      s.place('player', 18, 15, 'down'); s.lie('player', false);   // tied to the tree by the road, his back to its trunk
+      s.spawn('kf3', 'villager', 17, 15, 'right'); s.spawn('kf4', 'villager', 19, 15, 'left');
+      await s.fadeIn(0.8);
+      await s.narrate('Kong Liang\'s men fished him out, tied him to a tree, and beat him with willow switches — until the elder Kong brother came out with a guest to see what the noise was about. The guest was Song Jiang.');
+      for (var hit = 0; hit < 2; hit++) { s.sfx('hit'); s.jump('player', 2); await s.wait(0.4); }
+      s.despawn('kf3', { leave: true }); s.despawn('kf4', { leave: true });
       s.spawn('songjiang', 'songjiang', 15, 12, 'down'); s.spawn('kongming', 'kongming', 16, 12, 'down');
-      await s.move('songjiang', 'D2', { run: true });
+      await s.walkTo('songjiang', 16, 15, { run: true }); s.face('songjiang', 'right');
       await s.say('songjiang:shock', 'Stop! This is my brother Wu Song!');
       await s.say('wusong:shock', '...Brother Song?!');
       await s.narrate('The Kong brothers, who had learned the spear from Song Jiang, untied him and begged his pardon. And that night Wu Song and Song Jiang talked until dawn of everything that had happened since they parted at Chai Jin\'s manor.');

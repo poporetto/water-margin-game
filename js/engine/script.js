@@ -385,7 +385,12 @@
         return UI.notice((n >= 0 ? 'Received ' : 'Paid ') + Math.abs(n) + ' taels.', { auto: 1.4 });
       },
       // --- presentation ---
-      chapter: function (n) { WM.state.chapter = n; return WM.cards.chapter(n); },
+      chapter: function (n) {
+        WM.state.chapter = n;
+        // the state as the chapter opens, so a defeat can offer to begin the chapter again from here
+        try { localStorage.setItem('wm-chapterstart', JSON.stringify({ n: n, state: WM.state })); } catch (e) {}
+        return WM.cards.chapter(n);
+      },
       card: function (text, opt) { return WM.cards.text(text, opt); },
       credits: function () { return WM.cards.credits(); },
       endChapter: function () { return WM.cards.nextTime(); },

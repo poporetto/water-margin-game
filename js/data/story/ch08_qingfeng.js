@@ -71,7 +71,27 @@
     s.flag('protagonist', 'songjiang');
     s.give('medicine', 2, true);
     WM.unlock('qingfengshan', 'qingfeng', 'kongmanor');
-    await s.narrate('Song Jiang left the Kong family manor alone and travelled towards Qingfeng Fort. It was winter, and on the road through the mountains darkness caught him. As he hurried on through the forest, his foot caught a tripwire, bells rang, and a dozen bandits sprang out and bound him.');
+    await s.narrate('Song Jiang left the Kong family manor alone and travelled towards Qingfeng Fort. It was winter, and on the road through the mountains darkness caught him.');
+    // the forest road up Qingfeng Mountain, at night
+    s.night(true);
+    await s.warp('qingfengshan', 14, 32, 'up', { noFade: true });
+    await s.fadeIn(0.8);
+    await s.move('player', 'U4', { speed: 44 });
+    s.sfx('cursor'); s.sfx('blip'); await s.shake(1, 0.2);   // a tripwire, and bells in the dark
+    await s.emote('player', '!', 0.8);
+    await s.narrate('As he hurried on through the forest, his foot caught a tripwire, and bells rang out in the trees.');
+    // bandits spring out of the dark on every side
+    var p = s.actor('player').tile();
+    s.spawn('qb1', 'bandit', p.x - 3, p.y - 1, 'right'); s.spawn('qb2', 'bandit', p.x + 3, p.y - 1, 'left'); s.spawn('qb3', 'bandit', p.x - 2, p.y + 2, 'up'); s.spawn('qb4', 'bandit', p.x + 2, p.y + 2, 'up');
+    s.walkTo('qb1', p.x - 1, p.y, { run: true }); s.walkTo('qb2', p.x + 1, p.y, { run: true }); s.walkTo('qb3', p.x, p.y + 1, { run: true });
+    await s.walkTo('qb4', p.x, p.y - 1, { run: true });
+    await s.say('bandit:smile', 'Got one! Tie him up — the chiefs will want to see this fat catch.', { top: true });
+    s.sfx('block'); await s.shake(2, 0.3);
+    await s.emote('player', 'sweat', 0.8);
+    await s.narrate('A dozen bandits sprang out and bound him, and carried him up the mountain to their stronghold.');
+    await s.fadeOut(0.8);
+    ['qb1', 'qb2', 'qb3', 'qb4'].forEach(function (k) { s.hide(k); s.despawn(k); });
+    s.night(false);
     await s.warp('qingfengshan_in', 9, 7, 'up', { noFade: true });
     await s.fadeIn(0.6);
   };
@@ -115,40 +135,132 @@
       await s.narrate('Song Jiang stayed at Hua Rong\'s house, and spoke of Lady Liu, whom he had saved on the mountain. Hua Rong frowned. "Liu Gao is a corrupt, petty man, and his wife is worse. You should not have saved her." Song Jiang only said, "A kindness is never wasted."');
       await s.narrate('The fifteenth of the first month came: the Lantern Festival. The whole fort was hung with lanterns, and Song Jiang went out with Hua Rong\'s servants to see them.');
       s.despawn('huarong', { leave: true });
+      // the festival night: out of the gate and along the lantern street
+      await s.fadeOut(0.8);
       s.night(true);
-      s.place('player', 20, 14, 'right');
-      s.spawn('lady', 'liuwife', 28, 14, 'left'); s.spawn('liugao', 'liugao', 29, 13, 'left');
+      s.place('player', 20, 18, 'up');
+      s.spawn('sv1', 'servant', 19, 19, 'up'); s.spawn('sv2', 'servant', 21, 19, 'up');
+      await s.wait(0.2);
+      await s.fadeIn(0.8);
+      s.move('sv1', 'U4', { speed: 40, wait: false }); s.move('sv2', 'U4', { speed: 40, wait: false });
+      await s.move('player', 'U4', { speed: 40 });
+      s.face('player', 'left'); await s.wait(0.5); s.face('player', 'right'); await s.wait(0.4);   // looking at the lanterns
+      // the Lius come walking along the cross street, the lady on her husband's arm; she stops dead
+      s.spawn('lady', 'liuwife', 31, 14, 'left'); s.spawn('liugao', 'liugao', 32, 13, 'left');
+      s.move('liugao', 'L4', { speed: 40, wait: false }); await s.move('lady', 'L3', { speed: 40 });
+      await s.emote('lady', '!', 0.8);
+      s.face('sv1', 'right'); s.face('sv2', 'right');
       await s.say('liuwife:angry', 'There! That short dark man — he\'s the bandit chief from Qingfeng Mountain who carried me off!');
       await s.say('songjiang:shock', 'What?!');
-      await s.say('liugao:angry', 'Seize him!');
+      await s.say('liugao:angry', 'Guards! Seize him!');
+      // soldiers come running from all sides and close in round him; the servants scatter
+      s.spawn('g1', 'soldier', 20, 9, 'down'); s.spawn('g2', 'soldier', 15, 14, 'right'); s.spawn('g3', 'soldier', 25, 14, 'left'); s.spawn('g4', 'soldier', 20, 19, 'up');
+      s.walkTo('sv1', 14, 19, { run: true }); s.walkTo('sv2', 26, 19, { run: true });
+      s.walkTo('g1', 20, 13, { run: true }); s.walkTo('g2', 19, 14, { run: true }); s.walkTo('g3', 21, 14, { run: true });
+      await s.walkTo('g4', 20, 15, { run: true });
+      s.hide('sv1'); s.hide('sv2');
+      await s.emote('player', 'sweat', 0.8);
       await s.battle('ch8_liugao', { bg: 'snow', canLose: true, rounds: 2 });
-      await s.narrate('Song Jiang was overpowered and dragged before Liu Gao. "I am Zhang San, a merchant from Yuncheng!" he protested. "Liar! You\'re the bandit chief!" Liu Gao had him beaten until his skin split, and locked him in a cage.');
-      s.despawn('lady', { leave: true }); s.despawn('liugao', { leave: true });
+      // overpowered, and dragged before Liu Gao
+      s.sfx('block'); await s.shake(3, 0.3);
+      await s.say('songjiang:shock', 'I am Zhang San, a merchant from Yuncheng! You have the wrong man!');
+      await s.say('liugao:angry', 'Liar! You\'re the bandit chief! My wife knows your face. Beat him!');
+      for (var hit = 0; hit < 3; hit++) { s.sfx('hit'); s.jump('g2', 3); s.jump('player', 2); await s.shake(2, 0.2); await s.wait(0.25); }
+      s.lie('player');
+      await s.narrate('Liu Gao had him beaten until his skin split, and locked him in a cage.');
+      // dragged away east to Liu Gao's residence, a soldier at each arm
+      s.lie('player', false);
+      var pl = s.actor('player');
+      s.walkTo('liugao', 31, 13); s.walkTo('lady', 31, 14);
+      s.walkTo('g2', 27, 13, { speed: 40 }); s.walkTo('g3', 27, 15, { speed: 40 });
+      pl.path = [{ x: 27 * 16 + 8, y: 14 * 16 + 15 }]; pl.speed = 40;
+      s.walkTo('g1', 26, 13, { speed: 40 }); await s.walkTo('g4', 26, 15, { speed: 40 });
+      await s.fadeOut(0.8);
+      ['g1', 'g2', 'g3', 'g4'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.hide('lady'); s.hide('liugao');
+      s.despawn('lady'); s.despawn('liugao'); s.despawn('sv1'); s.despawn('sv2');
       s.party(['huarong']); s.level('huarong', 18); s.setLeader('huarong');
       WM.state.chars.huarong.equip.body = 'leather';
       s.flag('protagonist', 'huarong');
       s.flag('ch8_caged');
       await s.narrate('When Hua Rong heard, he wrote to Liu Gao, calling the prisoner his kinsman Liu Zhang. Liu Gao tore up the letter. So Hua Rong armed his men, and went himself.');
+      s.place('player', 20, 18, 'up');
+      await s.fadeIn(0.8);
       await s.say(null, '(Liu Gao\'s residence is on the east side of the fort.)');
     } }
   ]);
   WM.defEvents('qingfeng_in', [
     { id: 'ch8_rescue', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch8_caged') && WM.state.x >= 17; }, run: async function (s) {
-      s.spawn('sj', 'songjiang', 20, 8, 'up'); s.lie('sj');
-      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[18, 6], [24, 5], [27, 5], [29, 6]], 'down');
+      s.spawn('sj', 'songjiang', 19, 4, 'up'); s.lie('sj');   // beaten, in the cage
+      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[24, 6], [26, 5], [28, 5], [29, 7]], 'down');
       await s.say('huarong:angry', 'Liu Gao! You beat my kinsman half to death on a lie! Where is he?');
       await s.say('guard', 'The Commandant\'s orders — no one goes near the prisoner! Stand back, Major Hua!');
       s.sfx('arrow'); await s.flash('#ffffff', 0.15); s.emote('lgg0', '!', 0.8);
       await s.say('huarong:angry', 'That arrow went where I meant it to. The next one goes where I mean it to as well. Who is first?');
       lg.forEach(function (k) { s.move(k, 'U2', { run: true, wait: false }); });
       await s.wait(0.5);
-      await s.moveTo('player', 21, 8);
+      await s.walkTo('player', 20, 7); s.face('player', 'up');
+      s.sfx('door'); await s.wait(0.3);   // the cage door wrenched open
+      await s.move('player', 'U2');
       s.sfx('hit');
       await s.narrate('Liu Gao\'s guards fell back before Hua Rong\'s bow. He broke open the cage and lifted Song Jiang out himself, and on the way out he put an arrow into the lintel of Liu Gao\'s gate: "The next one will be for your heart."');
-      D.clear(s, lg);
-      s.despawn('sj');
-      await s.narrate('But Song Jiang could not stay at Hua Rong\'s. "Liu Gao will report to Qingzhou that you harbour bandits. I must go back to Qingfeng Mountain." That night he slipped out — and Liu Gao\'s men, waiting in ambush on the road, caught him again.');
-      await s.narrate('Liu Gao reported to the prefect of Qingzhou, who sent his military supervisor Huang Xin, the "Suppressor of Three Mountains." Huang Xin invited Hua Rong to a feast "to make peace with Liu Gao" — and seized him at the table. Song Jiang and Hua Rong were put in prison carts to be taken to Qingzhou.');
+      // back at Hua Rong's house, Song Jiang on his feet again, bandaged
+      await s.fadeOut(0.8);
+      D.clear(s, lg); s.hide('sj'); s.despawn('sj');
+      await s.warp('qingfeng_in', 8, 7, 'left', { noFade: true });
+      s.spawn('sj2', 'songjiang', 7, 7, 'right');
+      await s.wait(0.2);
+      await s.fadeIn(0.8);
+      await s.say('songjiang:sad', 'Brother, I cannot stay here. Liu Gao will report to Qingzhou that you harbour bandits, and then it is your head as well as mine. I must go back to Qingfeng Mountain.');
+      await s.say('huarong', 'You can hardly walk, brother. At least wait until —');
+      await s.say('songjiang', 'Tonight. While the fort sleeps.');
+      // that night he slips out of the gate and down the street towards the south gate
+      await s.fadeOut(0.8);
+      s.hide('sj2'); s.despawn('sj2');
+      s.night(true);
+      await s.warp('qingfeng', 20, 10, 'down', { noFade: true }); s.hide('player');
+      s.spawn('sj3', 'songjiang', 9, 9, 'down');
+      s.camera(15, 15, 0.1);
+      await s.fadeIn(0.8);
+      await s.walkTo('sj3', 9, 13, { speed: 34 }); await s.walkTo('sj3', 19, 14, { speed: 34 });
+      s.camera(20, 19, 0.6);
+      await s.walkTo('sj3', 20, 21, { speed: 34 });
+      // Liu Gao's men rise out of the dark on every side
+      s.spawn('am1', 'soldier', 17, 21, 'right'); s.spawn('am2', 'soldier', 23, 21, 'left'); s.spawn('am3', 'soldier', 20, 25, 'up'); s.spawn('am4', 'soldier', 20, 17, 'down');
+      s.walkTo('am1', 19, 21, { run: true }); s.walkTo('am2', 21, 21, { run: true }); s.walkTo('am4', 20, 20, { run: true });
+      await s.walkTo('am3', 20, 22, { run: true });
+      await s.emote('sj3', '!', 0.8);
+      await s.say('soldier', 'The Commandant said you\'d try the road tonight. Take him!', { top: true });
+      s.sfx('block'); s.jump('am1', 3); s.jump('am2', 3); await s.shake(3, 0.3);
+      s.lie('sj3');
+      await s.narrate('Liu Gao\'s men, waiting in ambush on the road, caught him again.');
+      await s.fadeOut(0.8);
+      ['am1', 'am2', 'am3', 'am4', 'sj3'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.night(false); s.cameraReset(); s.show('player');
+      await s.narrate('Liu Gao reported to the prefect of Qingzhou, who sent his military supervisor Huang Xin, the "Suppressor of Three Mountains." Huang Xin invited Hua Rong to a feast "to make peace with Liu Gao."');
+      // the feast in Liu Gao's hall: Huang Xin between the two rivals, cups raised
+      await s.warp('qingfeng_in', 27, 6, 'left', { noFade: true });
+      s.spawn('hx', 'huangxin', 26, 5, 'down'); s.spawn('lg', 'liugao', 25, 6, 'right');
+      s.spawn('fs1', 'soldier', 24, 9, 'up'); s.spawn('fs2', 'soldier', 28, 9, 'up'); s.hide('fs1'); s.hide('fs2');
+      await s.wait(0.2);
+      await s.fadeIn(0.8);
+      await s.say('huangxin:smile', 'Major Hua, Commandant Liu — two officers of the same fort, quarrelling like fishwives! Drink with me, both of you, and let it be forgotten.');
+      await s.say('huarong', '...If the Commandant will drink to it, so will I.');
+      await s.emote('hx', '...', 0.8);
+      // he dashes his cup to the floor: the signal
+      s.sfx('block'); await s.shake(2, 0.3);
+      await s.say('huangxin:angry', 'Now!', { top: true });
+      s.show('fs1'); s.show('fs2');
+      s.walkTo('fs1', 26, 6, { run: true }); await s.walkTo('fs2', 28, 6, { run: true });
+      s.face('player', 'down'); await s.emote('player', '!', 0.8);
+      await s.say('huarong:angry', 'Huang Xin! A peace feast, and soldiers behind the screen?!');
+      await s.say('huangxin', 'Orders from the prefecture, Major. You harboured the bandit chief. Take him!');
+      s.sfx('hit'); s.jump('fs1', 3); s.jump('fs2', 3); await s.shake(3, 0.3);
+      s.lie('player');
+      await s.narrate('He was seized at the table. Song Jiang and Hua Rong were put in prison carts to be taken to Qingzhou.');
+      await s.fadeOut(0.8);
+      ['hx', 'lg', 'fs1', 'fs2'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.lie('player', false);
       s.flag('ch8_carts');
       s.party(['songjiang', 'huarong']); s.setLeader('songjiang');
       s.addParty('yanshun'); s.addParty('wangying'); s.addParty('zhengtianshou');
@@ -176,21 +288,73 @@
   ]);
   WM.defEvents('qingfengshan_in', [
     { id: 'ch8_qinming', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch8_qinmingtaken'); }, run: async function (s) {
-      s.spawn('qinming', 'qinming', 9, 5, 'down'); s.spawn('huarong', 'huarong', 7, 6, 'right'); s.spawn('yanshun', 'yanshun', 11, 6, 'left');
+      // Song Jiang in the great chair; Qin Ming, bound, brought before him; the chiefs either side
+      s.place('player', 8, 4, 'down'); s.actor('player').x += 8;   // (the chair is two tiles wide: he sits in its middle)
+      s.spawn('qinming', 'qinming', 8, 6, 'up'); s.actor('qinming').x += 8;
+      s.spawn('huarong', 'huarong', 6, 5, 'right'); s.spawn('yanshun', 'yanshun', 11, 5, 'left');
+      await s.emote('qinming', 'anger', 0.8);
       await s.say('songjiang', 'Untie him! Commander Qin, forgive us. We are not bandits by choice. Stay with us.');
       await s.say('qinming:angry', 'I am an officer of the Song. I would rather die than join you. Let me go back to Qingzhou.');
       await s.say('songjiang', '...Then rest tonight, and go in the morning. We will return your horse and your weapons.');
       await s.narrate('Song Jiang feasted Qin Ming and kept him drinking late. That night, men of the mountain dressed in his armour and rode on his horse to the villages around Qingzhou, burning and killing, crying "Qin Ming has joined the bandits!"');
-      await s.narrate('In the morning Qin Ming rode home. He found the villages around Qingzhou burned, and the city gate shut against him. On a spear above the wall was the head of his wife. "Traitor!" shouted the prefect. "Your family has paid for your treason!"');
-      s.place('qinming', 9, 5, 'down');
+      // morning: Qin Ming rides back to Qingzhou, past the burned villages, to find the gate shut against him
+      await s.fadeOut(0.8);
+      s.hide('qinming'); s.hide('huarong'); s.hide('yanshun');
+      var home = s.actor('player'); var homeAt = home.tile();
+      s.flag('shut:qingzhou');
+      await s.warp('qingzhou', 16, 19, 'right', { noFade: true }); s.hide('player');
+      s.spawn('qm9', 'qinming', 3, 19, 'right');
+      s.spawn('pf9', 'official', 27, 18, 'left'); s.spawn('wg1', 'soldier', 27, 17, 'left'); s.spawn('wg2', 'soldier', 27, 21, 'left');
+      s.tint('dusk'); s.camera(20, 19, 0.1);   // the road up to the west gate
+      await s.fadeIn(0.8);
+      await s.narrate('In the morning Qin Ming rode home. He found the villages around Qingzhou burned to the ground.');
+      await s.walkTo('qm9', 22, 19, { speed: 50 });
+      await s.emote('qm9', '?', 0.8);
+      await s.say('qinming', 'Open the gate! It is Qin Ming — Commander of Qingzhou! Open up!');
+      await s.say('official:angry', 'Traitor! You burned the villages with your bandits last night — the whole countryside saw you! Your family has paid for your treason. Archers!', { top: true });
+      s.sfx('arrow'); await s.flash('#ffffff', 0.12); s.sfx('arrow');
+      await s.emote('qm9', '!', 0.8);
+      await s.move('qm9', 'L3', { run: true });
+      s.face('qm9', 'right');
+      await s.say('qinming:sad', '...My family. What has happened to my family?');
+      await s.narrate('The gate stayed shut. There was nowhere left for him to go but back up the mountain.');
+      await s.walkTo('qm9', 3, 19, { speed: 40 });
+      await s.fadeOut(0.8);
+      ['qm9', 'pf9', 'wg1', 'wg2'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.unflag('shut:qingzhou'); s.tint(null); s.cameraReset();
+      await s.warp('qingfengshan_in', 8, 4, 'down', { noFade: true });
+      s.actor('player').x += 8;
+      s.spawn('huarong', 'huarong', 6, 5, 'right'); s.spawn('yanshun', 'yanshun', 11, 5, 'left');
+      await s.wait(0.2);
+      await s.fadeIn(0.8);
+      // he bursts in at the door and storms up the hall to the chair
+      s.sfx('door');
+      s.spawn('qinming', 'qinming', 9, 8, 'up');
       s.music('sad');
+      await s.walkTo('qinming', 9, 6, { run: true }); s.face('qinming', 'up'); s.actor('qinming').x -= 8;
+      s.jump('qinming', 3); await s.emote('qinming', 'anger', 0.8);
+      s.face('huarong', 'down'); s.face('yanshun', 'down');
       await s.say('qinming:angry', 'Song Jiang!! You did this! You and your bandits — you burned the villages in my name! My wife — my family — !');
       await s.say('songjiang:sad', 'Commander... it is true. It was my plan. I wanted a man like you among us, and I knew you would never come of your own will. I am responsible for your family\'s death. Kill me if you must.');
       await s.say('songjiang', 'But hear me first. Hua Rong has a sister, wise and virtuous. If you will stay with us, she will be your wife, and we will be your family.');
       await s.narrate('Qin Ming stood a long while in silence. Their kindness, the hopelessness of his position, and the respect they showed him wore down his anger. At last he bowed his head. "You have left me no road back. ...So be it."');
       await s.say('qinming', 'My lieutenant Huang Xin holds Qingfeng Fort. He was my pupil. I will bring him to you.');
-      s.despawn('qinming'); s.despawn('huarong'); s.despawn('yanshun');
-      await s.narrate('Huang Xin came over with the fort. Qin Ming married Hua Rong\'s sister. And when they heard that Qingzhou was raising a great army against them, Song Jiang said: "There is only one place for us now. Liangshan Marsh."');
+      // he goes to fetch his lieutenant, and comes back up the hall with him
+      await s.walkTo('qinming', 9, 8); s.hide('qinming');
+      await s.fadeOut(0.6); await s.wait(0.4); await s.fadeIn(0.6);
+      s.show('qinming'); s.place('qinming', 9, 8, 'up'); s.spawn('hx9', 'huangxin', 8, 8, 'up');
+      s.walkTo('qinming', 10, 6); await s.walkTo('hx9', 8, 6); s.face('qinming', 'up'); s.face('hx9', 'up');
+      await s.say('huangxin', 'Brother Song. My teacher has told me everything. Qingfeng Fort is yours — the gates are open, and the men will follow me.');
+      await s.say('songjiang:smile', 'Commander Huang. Welcome, brother.');
+      await s.narrate('So Huang Xin brought Qingfeng Fort over to them, and Qin Ming married Hua Rong\'s sister.');
+      // a scout runs in with bad news
+      s.sfx('door'); s.spawn('sc9', 'bandit', 9, 8, 'up');
+      await s.walkTo('sc9', 9, 7, { run: true }); s.face('sc9', 'up');
+      await s.say('bandit', 'Chiefs! Qingzhou is raising a great army — horse and foot — to come and burn us off this mountain!');
+      ['huarong', 'yanshun', 'qinming', 'hx9'].forEach(function (k) { s.face(k, 'up'); });
+      await s.emote('player', '...', 0.8);
+      await s.say('songjiang', 'This mountain is too small to hold against an army. There is only one place for us now. Liangshan Marsh.');
+      s.despawn('qinming'); s.despawn('huarong'); s.despawn('yanshun'); s.despawn('hx9'); s.despawn('sc9');
       // on the road south, in a valley below Duiying Mountain: two young men on horseback, one in red, one in white
       await s.fadeOut(0.8);
       await s.warp('roadinn', 4, 8, 'right', { noFade: true });
@@ -214,6 +378,9 @@
       await s.fadeOut(0.8);
       await s.warp('roadinn_in', 6, 6, 'up', { noFade: true });
       s.spawn('sy', 'shiyong', 4, 4, 'down');
+      // the whole band crowding in behind Song Jiang, stamping the snow off their boots
+      var band = [['b1', 'huarong', 5, 7], ['b2', 'qinming', 7, 7], ['b3', 'huangxin', 4, 8], ['b4', 'yanshun', 6, 8], ['b5', 'wangying', 8, 8], ['b6', 'zhengtianshou', 5, 9], ['b7', 'lufang', 7, 9], ['b8', 'guosheng', 9, 9]];
+      band.forEach(function (b) { s.spawn(b[0], b[1], b[2], b[3], 'up'); });
       await s.fadeIn(0.8);
       await s.say('songjiang', 'Friend, my companions are many. Would you move to another table?');
       await s.say('shiyong:angry', 'Move? For you? There are only two men in the world I would move for: Chai Jin of Cangzhou, and Song Jiang of Yuncheng!');
@@ -221,8 +388,30 @@
       await s.say('shiyong:shock', 'You — ! I\'ve been searching the roads for you! I\'m Shi Yong, the Stone General. I have a letter for you from your brother, Song Qing.');
       await s.say('songjiang:shock', '(reading) "...Father died in the first month of this year... we await your return to bury him..." Father! Father!');
       s.lie('player');
-      await s.narrate('Song Jiang fell down weeping and beating his breast. He would not go on to Liangshan. He wrote a letter to Chao Gai for the others to carry, and set out for home alone, by night.');
-      s.lie('player', false); s.hide('sy'); s.despawn('sy');
+      s.emote('b1', '...', 1.2); s.emote('b2', '...', 1.2); s.emote('b4', 'sweat', 1.2);
+      await s.narrate('Song Jiang fell down weeping and beating his breast.');
+      // the brothers gather round him
+      await s.walkTo('b1', 5, 6); s.face('b1', 'right');
+      await s.say('huarong:sad', 'Brother, Chao Gai is waiting for us at Liangshan. Come with us — your father would want you safe.');
+      s.lie('player', false); s.face('player', 'left');
+      await s.say('songjiang:sad', 'A son who does not bury his father is no son at all. I must go home. You go on to Liangshan without me.');
+      await s.narrate('He would not go on to Liangshan. He sat down at a table and wrote a letter to Chao Gai for the others to carry.');
+      await s.walkTo('player', 6, 5); s.face('player', 'up'); await s.wait(0.8);   // writing at the table
+      s.face('player', 'left'); s.sfx('item'); await s.emote('b1', '!', 0.6);   // the letter into Hua Rong's hands
+      await s.say('songjiang', 'Give this to Chao Gai. Tell him I will come when I can.');
+      // that night he leaves alone; the brothers watch him go from the door
+      await s.fadeOut(0.8);
+      s.night(true);
+      s.place('player', 8, 9, 'down'); s.place('b5', 9, 7, 'down');
+      band.forEach(function (b) { s.face(b[0], 'down'); });
+      await s.fadeIn(0.8);
+      await s.narrate('And he set out for home alone, by night.');
+      await s.walkTo('player', 8, 10); s.hide('player');
+      await s.wait(0.6);
+      await s.fadeOut(0.8);
+      s.night(false); s.show('player');
+      s.hide('sy'); s.despawn('sy');
+      band.forEach(function (b) { s.hide(b[0]); s.despawn(b[0]); });
       s.flag('ch8_letter');
       await s.notice('The heroes of Qingfeng go on to Liangshan.', { auto: 2 });
       await s.joinMany(['huarong', 'qinming', 'huangxin', 'yanshun', 'wangying', 'zhengtianshou', 'lufang', 'guosheng', 'shiyong']);
@@ -238,7 +427,26 @@
       await s.say('songjiang:shock', 'Father?! You\'re alive!');
       await s.say('songtaigong', 'My son, forgive me. There has been an amnesty for the new Crown Prince. Your crime is reduced; you will only be exiled, not executed. I feared you would join those bandits at Liangshan and be a rebel forever. So I had Qing write that letter, to bring you home.');
       await s.say('songjiang:sad', '...Father.');
-      await s.narrate('That same night the constables surrounded the farm. Song Jiang gave himself up. Because of the amnesty, he was sentenced only to twenty strokes and exile to Jiangzhou, on the Yangtze, far in the south.');
+      // that night torches come up the road and round the farm
+      await s.fadeOut(0.8);
+      s.night(true);
+      s.place('player', 15, 15, 'down'); s.place('father', 14, 14, 'down'); s.place('qing', 16, 14, 'down');
+      ['c1', 'c2', 'c3', 'c4'].forEach(function (k, i) { s.spawn(k, 'constable', [13, 17, 12, 18][i], 23, 'up'); });
+      await s.fadeIn(0.8);
+      s.walkTo('c1', 14, 17, { run: true }); s.walkTo('c2', 16, 17, { run: true }); s.walkTo('c3', 12, 16, { run: true });
+      await s.walkTo('c4', 18, 16, { run: true });
+      await s.emote('father', '!', 0.8);
+      await s.say('constable', 'Song Jiang! The farm is surrounded. Come out quietly, and no one else need be hurt.', { top: true });
+      await s.say('songjiang', 'Father, stay inside. ...I am coming.');
+      await s.walkTo('player', 15, 16); s.face('player', 'down');
+      await s.walkTo('c1', 15, 17); s.face('c1', 'up');
+      s.sfx('block'); s.jump('c1', 2); await s.wait(0.3);   // the cangue and the ropes
+      await s.narrate('So Song Jiang gave himself up. Because of the amnesty, he was sentenced only to twenty strokes and exile to Jiangzhou, on the Yangtze, far in the south.');
+      s.walkTo('c1', 15, 22, { speed: 34 }); s.walkTo('c2', 16, 21, { speed: 34 }); s.walkTo('c3', 14, 20, { speed: 34 });   // led away between them
+      await s.walkTo('player', 15, 21, { speed: 34 }); s.face('father', 'down'); s.face('qing', 'down');
+      await s.fadeOut(0.8);
+      ['c1', 'c2', 'c3', 'c4'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      s.night(false);
       s.despawn('father'); s.despawn('qing');
       s.flag('ch8_done');
       await s.endChapter();

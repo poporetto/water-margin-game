@@ -869,7 +869,7 @@
       if (map === 'world' || !R[map]) continue;
       evs[map].forEach(function (ev) {
         var cm = /^ch(\d+)_/.exec(ev.id);
-        if (!ev.run || !cm || +cm[1] !== ch || (ev.once ? S.has('ev:' + map + ':' + ev.id) : !(ev.cond && /!\s*\w+\.has\(/.test(ev.cond.toString())))) return;   // a repeatable scene counts only while flags of its own keep it open (it closes when the story moves on)
+        if (!ev.run || ev.aside || !cm || +cm[1] !== ch || (ev.once ? S.has('ev:' + map + ':' + ev.id) : !(ev.cond && /!\s*\w+\.has\(/.test(ev.cond.toString())))) return;   // a repeatable scene counts only while flags of its own keep it open (it closes when the story moves on)
         // a scene that waits for the player to reach part of its map counts if it would fire anywhere there
         var sx0 = st.x, sy0 = st.y, ok = false, spots = ev.cond && /\.x\b|\.y\b/.test(ev.cond.toString()) ? [[sx0, sy0], [0, 0], [400, 400], [0, 400], [400, 0]] : [[sx0, sy0]];
         st.map = map;

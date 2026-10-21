@@ -338,16 +338,62 @@
       WM.audio.play('sad');
       var t0 = WM.time;
       UI.stack.length = 0;
+      // what the player may do next: load a record, begin the chapter again from its opening, or go to the title
+      var snap = null;
+      try { snap = JSON.parse(localStorage.getItem('wm-chapterstart') || 'null'); } catch (e) { snap = null; }
+      var items = [];
+      if (S.anySave()) items.push({ label: 'Load a Record', v: 'load' });
+      if (snap && snap.state && WM.data.chapters[snap.n] && WM.data.chapters[snap.n].begin) items.push({ label: 'Restart ' + (snap.n === 0 ? 'the Prologue' : 'Chapter ' + roman(snap.n)), v: 'chapter' });
+      items.push({ label: 'Return to Title', v: 'title' });
+      var list = new UI.List(items, { x: 110, y: 300, w: 300, cancel: false });
+      var busy = false;
+      var finish = function () { UI.remove(w); WM.script.running = 0; resolve(); };
       var w = {
         update: function () {
-          if (WM.time - t0 > 2 && (I.pressed('ok') || I.pressed('cancel'))) { I.clear(); UI.remove(w); WM.script.running = 0; WM.setScene(WM.scenes.title); resolve(); }
+          if (busy || WM.time - t0 < 2) return;
+          var r = list.handle(); if (!r || !r.ok) return;
+          var v = r.ok.v;
+          if (v === 'title') { finish(); WM.setScene(WM.scenes.title); return; }
+          if (v === 'load') {
+            busy = true;
+            WM.menu.saveMenu(true).then(function (slot) {
+              if (slot === false || slot == null || !S.load(slot)) { busy = false; return; }
+              finish();
+              WM.audio.setVolumes(WM.state.opts.music, WM.state.opts.sfx);
+              WM.setScene(WM.field, { map: WM.state.map, x: WM.state.x, y: WM.state.y, dir: WM.state.dir, noAuto: false });
+              G.fade = 1; WM.fadeIn(0.6);
+            });
+            return;
+          }
+          if (v === 'chapter') {
+            busy = true; finish();
+            var st = snap.state, defaults = S.newGame();
+            for (var k in defaults) if (st[k] === undefined) st[k] = defaults[k];
+            WM.state = st;
+            WM.audio.setVolumes(WM.state.opts.music, WM.state.opts.sfx);
+            WM.script.run(function (s) { return WM.data.chapters[snap.n].begin(s); });
+          }
         },
         draw: function () {
           var c = G.ctx; c.fillStyle = '#000'; c.fillRect(0, 0, WM.W, WM.H);
           c.globalAlpha = U.clamp((WM.time - t0) / 1.5, 0, 1);
-          G.text('The heroes have fallen.', 480, 300, { size: 36, bold: true, align: 'center', color: '#c04030' });
-          G.text('Heaven\'s mandate is not yet fulfilled...', 480, 360, { size: 22, align: 'center', color: '#a09080' });
+          // Song Jiang alone in a pool of light on the dark ground
+          var sx = 640, sy = 560;
+          c.save(); c.translate(sx, sy); c.scale(1, 0.42);
+          var rg = c.createRadialGradient(0, 0, 20, 0, 0, 230);
+          rg.addColorStop(0, 'rgba(236,206,150,0.55)'); rg.addColorStop(0.55, 'rgba(190,150,96,0.32)'); rg.addColorStop(0.85, 'rgba(120,90,50,0.1)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+          c.fillStyle = rg; c.beginPath(); c.arc(0, 0, 230, 0, Math.PI * 2); c.fill();
+          c.restore();
+          var sheet = WM.sprites.get('songjiang'), k = 5;
+          c.save(); c.imageSmoothingEnabled = false;
+          c.fillStyle = 'rgba(0,0,0,0.35)'; c.beginPath(); c.ellipse(sx, sy + 4, 34, 9, 0, 0, Math.PI * 2); c.fill();
+          c.translate(sx, sy + 4); c.scale(k, k);
+          WM.sprites.draw(c, sheet, 'down', 0, 0, 0);
+          c.restore();
+          G.text('The heroes have fallen.', 480, 120, { size: 36, bold: true, align: 'center', color: '#c04030' });
+          G.text('Heaven\'s mandate is not yet fulfilled...', 480, 180, { size: 22, align: 'center', color: '#a09080' });
           c.globalAlpha = 1;
+          if (WM.time - t0 >= 2 && !busy) list.draw();
         }
       };
       G.fade = 0;
