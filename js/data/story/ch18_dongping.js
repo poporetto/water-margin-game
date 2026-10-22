@@ -224,10 +224,11 @@
       await s.fadeIn(0.8);
       s.flag('away:shijin');
       await s.narrate('Song Jiang brought the army up to the walls of Dongping. The gate opened, and out rode the city\'s commander with a spear in each hand and a little banner on his back: "A Hero of Hedong; the Double Spear General."');
-      s.spawn('dp0', 'dongping', 10, 17, 'left');
+      s.spawn('dp0', 'dongping', 24, 17, 'left');   // out of the city gate, east of the camp
+      await s.walkTo('dp0', 10, 17);
       await s.say('dongping', 'Song Jiang! You marsh-rats have the gall to come to my city? Which of you will meet my two spears?');
       await s.say('xuning', 'Brother, let me. I want to see these two spears for myself.');
-      s.despawn('dp0', { leave: true });   // back to his lines, to meet Xu Ning in the field
+      s.despawn('dp0', { to: [24, 17] });   // back to his lines at the gate, to meet Xu Ning in the field
       await s.duel('xuning_dongping', { hero: 'xuning', canLose: true });
       s.spawn('xn', 'xuning', 14, 17, 'left'); s.spawn('dp', 'dongping', 20, 17, 'left');
       await s.say('xuning', '(wheeling his horse) Too strong for me — fall back!');
@@ -238,14 +239,18 @@
       s.spawn('wy', 'wangying', 8, 15, 'down'); s.spawn('hs', 'husanniang', 10, 15, 'down'); s.spawn('zq2', 'zhangqing2', 8, 18, 'up'); s.spawn('se', 'sunerniang', 10, 18, 'up');
       await s.say('husanniang', 'The ropes have him — horse and all! Tie him!');
       await s.say('dongping:shock', 'Ropes — across the lane —!');
-      s.despawn('xn');
-      await s.fadeOut(0.6);
-      WM.data.clear(s, ['wy', 'hs', 'zq2', 'se', 'dp']);
-      await s.fadeIn(0.6);
-      s.spawn('dp', 'dongping', 10, 17, 'left');
+      s.walkTo('wy', 9, 16, { run: true }); s.walkTo('hs', 10, 17, { run: true }); s.walkTo('se', 9, 18, { run: true }); await s.walkTo('zq2', 8, 18, { run: true });
+      s.sfx('hit'); await s.shake(2, 0.2); await s.emote('dp', 'anger');
+      await s.say('wangying', 'Tied fast! Brother Song — the Double Spear General, trussed and waiting for you!');
+      s.walkTo('xn', 7, 16);
+      await s.walkTo('player', 7, 17); s.face('player', 'right'); s.face('dp', 'left');
       await s.say('songjiang', 'Untie him! Give the General back his armour and his horse. General, we are men driven to the marsh by evil officials. We wait for the emperor\'s pardon. Will you join us?');
+      s.walkTo('wy', 9, 15); s.walkTo('hs', 11, 17); s.walkTo('se', 9, 19); await s.walkTo('zq2', 8, 19);   // the ropes come off
+      s.face('wy', 'down'); s.face('hs', 'left'); s.face('se', 'up'); s.face('zq2', 'right');
       await s.say('dongping', '...I have been a fool, fighting for a prefect who would not even give me his daughter. I will open Dongping for you tonight.');
-      s.despawn('dp', { leave: true });
+      await s.jump('dp');
+      s.despawn('dp', { to: [24, 17] });
+      ['xn', 'wy', 'hs', 'zq2', 'se'].forEach(function (k) { s.despawn(k, { leave: true }); });
       await s.narrate('Dong Ping called up to the gate, and it opened. He went straight to Prefect Cheng\'s hall, killed him and his household, and took the prefect\'s daughter for himself. Shi Jin was freed, and Li Ruilan\'s house was paid back for its treachery. Song Jiang emptied the granary for Liangshan and posted notices to calm the people.');
       s.unflag('away:shijin');
       await s.join('dongping');

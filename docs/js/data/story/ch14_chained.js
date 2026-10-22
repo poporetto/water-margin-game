@@ -309,9 +309,9 @@
       await s.fadeOut(0.6);
       WM.data.clear(s, dr.concat(['xn']));
       s.show('player');
+      s.party(['songjiang', 'xuning', 'linchong', 'huarong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       await s.warp('liangshan_in', 16, 9, 'up', { noFade: true });
       await s.fadeIn(0.6);
-      s.party(['songjiang', 'xuning', 'linchong', 'huarong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       await s.war('ch14_hooks');
       await s.join('hantao');
       await s.narrate('Huyan Zhuo escaped alone towards Qingzhou. On the way he stopped at a village inn, and in the night his black horse, Snow-Treading Black, was stolen. "That will be the bandits of Peach Blossom Mountain," said the innkeeper.');

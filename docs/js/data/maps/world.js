@@ -307,6 +307,14 @@
       }
     };
     trim();
+    // a road that turns a corner on the water (round a town's wall at the shore) is no bridge: it goes on as path
+    for (var bk in under) {
+      var bxy = bk.split(','), bx = +bxy[0], by = +bxy[1];
+      if (g.get(bx, by) !== 'B') continue;
+      var hz = isRd(bx - 1, by) || isRd(bx + 1, by), vt = isRd(bx, by - 1) || isRd(bx, by + 1);
+      var lands = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(function (d) { var c = g.get(bx + d[0], by + d[1]); return c === ':'; }).length;
+      if (hz && vt && lands >= 2) g.set(bx, by, ':');
+    }
     // and no little loops: where two roads part and meet again round a patch of ground, one side of the ring goes,
     // as long as every place stays joined to every place it was joined to
     var D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]], doors = Object.keys(door);
@@ -373,6 +381,24 @@
       // clear approach tile
       var below = g.get(lx, ly + 1);
       if (ic !== 'fortress' && (below === 'M' || below === 'T' || below === 'P' || below === 'b' || below === 'w')) g.set(lx, ly + 1, ':');
+      // a gate standing in the water with the bridge turning off to the shore beside it: its doorstep is a landing, not a bent plank
+      if (ic !== 'fortress' && g.get(lx, ly + 1) === 'B' && (g.get(lx - 1, ly + 1) === ':' || g.get(lx + 1, ly + 1) === ':') && g.get(lx, ly + 2) === 'B') g.set(lx, ly + 1, ':');
+    }
+    // a bridge that stops one stretch of water short of the road straight ahead of it, and bends off instead: carry it across
+    for (y = 1; y < H - 1; y++) for (x = 1; x < W - 1; x++) {
+      if (!WM.tiles.isWaterChar(g.get(x, y))) continue;
+      [[1, 0], [0, 1]].forEach(function (d) {
+        var a = g.get(x - d[0], y - d[1]), b = g.get(x + d[0], y + d[1]);
+        var aRun = a === 'B' && isRd(x - 2 * d[0], y - 2 * d[1]), bRun = b === 'B' && isRd(x + 2 * d[0], y + 2 * d[1]);   // the bridge runs along this line, not across it
+        if (!((aRun && isRd(x + d[0], y + d[1])) || (bRun && isRd(x - d[0], y - d[1])))) return;
+        g.set(x, y, 'B');
+        var e = aRun ? -1 : 1;   // the bridge's end, and the bend that went round the water beside it now goes
+        [[d[1], d[0]], [-d[1], -d[0]]].forEach(function (s) {
+          var k1 = (x + e * d[0] + s[0]) + ',' + (y + e * d[1] + s[1]), k2 = (x + s[0]) + ',' + (y + s[1]);
+          if (g.get(x + e * d[0] + s[0], y + e * d[1] + s[1]) === ':' && g.get(x + s[0], y + s[1]) === ':' && isRd(x - e * d[0] + s[0], y - e * d[1] + s[1]) &&
+              !door[k1] && !door[k2] && (k1 in under) && (k2 in under)) { g.set(x + e * d[0] + s[0], y + e * d[1] + s[1], under[k1]); g.set(x + s[0], y + s[1], under[k2]); }
+        });
+      });
     }
     return g.rows();
   }

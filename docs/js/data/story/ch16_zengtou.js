@@ -52,9 +52,9 @@
     await s.say('chaogai', 'The wind blows when it blows. What has it to do with me? We go.');
     await s.fadeOut(0.6);
     WM.data.clear(s, mt.concat(['cg', 'wy', 'bn']));
-    await s.fadeIn(0.6);
     s.addParty('chaogai'); s.level('chaogai', 29);
     s.party(['chaogai', 'linchong', 'liutang', 'ruanxiaoer', 'huyanzhuo', 'baisheng']); s.setLeader('chaogai'); s.flag('protagonist', 'chaogai');
+    await s.fadeIn(0.6);
     ['linchong', 'liutang', 'ruanxiaoer', 'huyanzhuo', 'baisheng'].forEach(function (id) { s.level(id, 28); });
     WM.unlock('zengtou');
     s.flag('ch16_march');

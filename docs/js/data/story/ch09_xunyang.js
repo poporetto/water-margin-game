@@ -343,12 +343,12 @@
       await s.narrate('Song Jiang was beaten until his skin split and his blood ran, and he confessed: he had written it drunk, and meant nothing by it. They locked him in a cangue in the condemned cell.');
       await s.fadeOut(0.8);
       WM.data.clear(s, g9.concat(['cj9', 'hw9', 'sj9', 'dg', 'dg2']));
-      s.show('player');
-      await s.fadeIn(0.8);
       s.flag('ch9_condemned');
-      s.party(['daizong']); s.level('daizong', 21); s.setLeader('daizong');
+      s.party(['daizong']); s.level('daizong', 21); s.setLeader('daizong');   // (while the screen is dark: no glimpse of Song Jiang)
       s.flag('protagonist', 'daizong');
       WM.state.chars.daizong.equip.body = 'leather';
+      s.show('player');
+      await s.fadeIn(0.8);
       await s.narrate('Cai Jiu wrote to his father in the capital asking what to do with the rebel, and chose as his messenger the swiftest man in Jiangzhou: Dai Zong, the Magic Traveller, who could walk eight hundred li a day with his charms tied to his legs.');
       await s.say('daizong', '(The road to the capital passes Liangshan. Brother Wu Yong will know what to do.)');
       WM.unlock('zhugui');

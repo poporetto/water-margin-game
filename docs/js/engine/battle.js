@@ -296,6 +296,7 @@
         var cmds = choice === 'auto' ? autoCommands(bt) : await gatherCommands(bt);
         if (!cmds) continue; // backed out
         await executeRound(bt, cmds);
+        if (bt.escaped) { WM.audio.sfx('run'); await say('The party escaped.'); result = 'run'; break; }   // Dai Zong's Divine March carried the party away
       }
       if (!living(bt.enemies).length) result = 'win';
       else if (!living(bt.party).length) result = 'lose';
@@ -493,6 +494,7 @@
   // what a skill reaches, in a few words, ahead of its description
   function reach(sp) {
     var who = { enemy1: 'One enemy', enemyAll: 'All enemies', ally1: 'One ally', allyAll: 'The party', allyKO: 'A fallen ally', self: 'Self' }[sp.target] || '';
+    if (sp.effect === 'escape') who = 'The party escapes';
     if (sp.hits > 1) who = sp.scatter ? sp.hits + ' blows at random' : who + ', ' + sp.hits + ' blows';
     if (sp.status && sp.effect === 'phys') who += ', may ' + ({ sleep: 'stun', poison: 'poison', silence: 'silence' }[sp.status] || sp.status);
     return who;
@@ -547,7 +549,7 @@
       if (a.u.hp <= 0) continue;
       if (a.u.status.sleep) { pop(a.u, 'Asleep', '#a0a0ff'); await WM.wait(0.3); continue; }
       if (a.u.status.unbalanced) { delete a.u.status.unbalanced; pop(a.u, 'Unbalanced', '#d0d0d0'); await WM.wait(0.35); continue; }
-      if (!living(bt.enemies).length || !living(bt.party).length) break;
+      if (!living(bt.enemies).length || !living(bt.party).length || bt.escaped) break;
       await perform(bt, a);
       await WM.wait(0.08);
     }
@@ -651,6 +653,7 @@
       else if (sp.effect === 'revive') { if (t.hp <= 0) { t.hp = Math.round(t.mhp * (sp.power || 0.5)); pop(t, 'Revived', '#7fe07a'); } else applyHeal(t, Math.round(t.mhp * 0.5)); }
       else if (sp.effect === 'cure') { t.status = {}; pop(t, 'Cured', '#7fe07a'); if (sp.power) applyHeal(t, Math.round(sp.power * (1 + u.mgc / 80))); }
       else if (sp.effect === 'status') { if (Math.random() < (sp.statusChance || 0.6) && !(t.def && t.def.boss && sp.status === 'sleep')) { t.status[sp.status] = 3; pop(t, statusName(sp.status), '#c0a0ff'); } else pop(t, 'Resisted', '#c0c0c0'); }
+      else if (sp.effect === 'escape') { if (bt.noRun) pop(t, 'No way out!', '#c0c0c0'); else bt.escaped = true; }
       else if (sp.effect === 'buff') { t.status[sp.status] = sp.turns || 3; if (sp.also) t.status[sp.also] = sp.turns || 3; pop(t, statusName(sp.status), '#a0e0ff'); }
     });
     await WM.wait(0.5);

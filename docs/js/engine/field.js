@@ -279,6 +279,7 @@
   function tileSolid(tx, ty) {
     var ch = F.map.get(tx, ty);
     if (ch === null) return true;
+    if (ch === 'G' && ((F.map.def.shutGates && F.map.def.shutGates.indexOf(ty) >= 0) || (WM.state.flags && WM.state.flags['shut:' + F.map.id]))) return true;   // a gate drawn shut is shut
     return T.solidAt(F.map, tx, ty);
   }
   F.tileSolid = function (tx, ty) { return tileSolid(tx, ty); };
@@ -347,7 +348,8 @@
       var my = (I.down('down') ? 1 : 0) - (I.down('up') ? 1 : 0);
       if (mx || my) {
         var spd = (I.down('dash') ? 128 : 72) * (F.map.def.world ? 0.8 : 1);
-        if (WM.state.leader === 'daizong') spd *= 2;   // the Magic Traveller: his charms carry him twice as fast as any other man
+        var divine = WM.state.leader === 'daizong' && I.down('dash');   // the Magic Traveller's Divine March: running, his charms carry him twice as fast as any other man
+        if (divine) spd *= 2;
         var len = Math.sqrt(mx * mx + my * my);
         var vx = mx / len * spd * dt, vy = my / len * spd * dt;
         if (mx && !my) p.dir = mx > 0 ? 'right' : 'left';
@@ -365,7 +367,8 @@
           if (tryMove(p, ddx, ddy)) moved = true;
         }
         p.moving = true;
-        p.animSpeed = I.down('dash') ? 1.6 : 1;
+        p.animSpeed = I.down('dash') ? (divine ? 2.4 : 1.6) : 1;
+        if (moved && divine && !F.map.def.world) kickDust(p, dt);
         if (moved) {
           st.steps += 1 / 16;
           F.encSteps += Math.abs(ix) + Math.abs(iy);
@@ -668,6 +671,7 @@
       list.push({ y: a.y + (a.layer || 0), kind: 'a', a: a });
     }
     list.sort(function (p, q) { return p.y - q.y; });
+    drawDust(c, cx, cy);   // (under the people)
     for (i = 0; i < list.length; i++) {
       var it = list[i];
       if (it.kind === 't') T.drawTall(c, it.sx, it.sy, it.t.x, it.t.y, th, F.map, F.map.get(it.t.x, it.t.y));
@@ -984,6 +988,33 @@
     'heart': function (c, x, y) { c.fillStyle = '#e04a7a'; c.fillRect(x - 3, y - 5, 2, 2); c.fillRect(x + 1, y - 5, 2, 2); c.fillRect(x - 3, y - 4, 6, 2); c.fillRect(x - 2, y - 2, 4, 1); c.fillRect(x - 1, y - 1, 2, 1); },
     'zzz': function (c, x, y) { c.fillStyle = '#5a5a8a'; c.fillRect(x - 3, y - 5, 4, 1); c.fillRect(x - 1, y - 4, 1, 1); c.fillRect(x - 2, y - 3, 1, 1); c.fillRect(x - 3, y - 2, 4, 1); }
   };
+  // the Divine March: Dai Zong running on his charms kicks up a trail of dust behind his heels
+  F.dust = [];
+  var dustT = 0;
+  function kickDust(p, dt) {
+    dustT -= dt; if (dustT > 0) return;
+    dustT = 0.025;
+    var back = { left: [1, 0], right: [-1, 0], up: [0, 1], down: [0, -1] }[p.dir] || [0, 0];
+    for (var i = 0; i < 3; i++) {
+      F.dust.push({ x: p.x + back[0] * 5 + (Math.random() - 0.5) * 6, y: p.y - 1 + back[1] * 3 + (Math.random() - 0.5) * 3,
+        vx: back[0] * (14 + Math.random() * 16) + (Math.random() - 0.5) * 10, vy: back[1] * (10 + Math.random() * 10) - 6 - Math.random() * 10,
+        t: 0, life: 0.45 + Math.random() * 0.35, s: Math.random() < 0.4 ? 4 : 3 });
+    }
+    if (F.dust.length > 120) F.dust.splice(0, F.dust.length - 120);
+  }
+  function drawDust(c, cx, cy) {
+    for (var i = F.dust.length - 1; i >= 0; i--) {
+      var d = F.dust[i]; d.t += 1 / 60;
+      if (d.t > d.life) { F.dust.splice(i, 1); continue; }
+      var k = d.t / d.life, x = Math.round(d.x + d.vx * d.t - cx), y = Math.round(d.y + d.vy * d.t + 30 * d.t * d.t - cy);
+      var sz = d.s + (k > 0.4 ? 1 : 0) + (k > 0.7 ? 1 : 0);   // a puff grows a little as it thins
+      c.globalAlpha = k < 0.45 ? 1 : k < 0.75 ? 0.65 : 0.35;   // in hard steps, like the pixels themselves
+      c.fillStyle = k < 0.3 ? '#efe2c0' : '#c8b088';
+      c.fillRect(x, y, sz, sz);
+      if (sz > 2) { c.fillStyle = '#a89068'; c.fillRect(x, y + sz - 1, sz, 1); }
+    }
+    c.globalAlpha = 1;
+  }
   // someone going into the water: a ring spreading on the surface, and spray thrown up and falling back
   F.splashes = [];
   F.splash = function (x, y) { F.splashes.push({ x: x, y: y, t: 0 }); };

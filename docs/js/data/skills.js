@@ -120,7 +120,7 @@
   ]);
   sk('daizong', [
     P('Swift Sword', 0.95, 'Too fast to see.', { hits: 2 }),
-    BF('Divine March', 'atkUp', 'allyAll', 'He ties his paper charms to the brothers\' legs.'),
+    { name: 'Divine March', effect: 'escape', target: 'self', element: 'wind', vfx: 'rush', desc: 'He ties his paper charms to the brothers\' legs, and the whole party is gone before the enemy can blink. Always escapes (not from battles that cannot be fled).' },
     P('Eight Hundred Li a Day', 0.95, 'He is everywhere at once.', { hits: 5, scatter: true })
   ]);
   sk('liutang', [
