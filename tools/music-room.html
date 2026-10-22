@@ -29,6 +29,8 @@
   <div class="vol">Volume <input id="vol" type="range" min="0" max="1" step="0.05" value="0.55"></div>
   <h2>Story, battle and ceremony</h2>
   <div id="story"></div>
+  <h2>Towns</h2>
+  <div id="towns"></div>
   <h2>Places</h2>
   <div id="places"></div>
 </main>
@@ -61,7 +63,7 @@
       rows[k].querySelector('button').setAttribute('aria-label', on ? 'Stop' : 'Play');
     });
   }
-  Object.keys(A.tracks).forEach(function (id) { document.getElementById(PLACES.indexOf(id) >= 0 ? 'places' : 'story').appendChild(row(id)); });
+  Object.keys(A.tracks).forEach(function (id) { document.getElementById(A.tracks[id].group === 'towns' || id === 'town' || id === 'market' ? 'towns' : PLACES.indexOf(id) >= 0 ? 'places' : 'story').appendChild(row(id)); });
   document.getElementById('vol').oninput = function (e) { A.unlock(); A.setVolumes(+e.target.value, A.sfxVol); };
 </script>
 </body>

@@ -104,7 +104,7 @@
   };
   // Start any scene that moves the story on (js/data/checkpoints.js, written by `node tools/walk.js --checkpoints`):
   // the story as it stood just before it, with the party raised to the level of the chapter's next fight.
-  D.jumpTo = function (i) {
+  D.jumpTo = function (i, opt) {
     var C = WM.data.checkpoints || [], cp = C[i];
     if (!cp) return;
     WM.ui.stack.length = 0; WM.script.running = 0; WM.gfx.fade = 0; WM.gfx.flash = 0;
@@ -133,11 +133,32 @@
     });
     st.party = cp.p.slice(); st.leader = cp.ld;
     st.followers = (cp.fol || []).slice();   // companions walking with the leader at this point of the story
-    WM.setScene(WM.field, { map: cp.m, x: cp.x, y: cp.y, dir: cp.d, noAuto: cp.t !== 'auto' });
+    WM.setScene(WM.field, { map: cp.m, x: cp.x, y: cp.y, dir: cp.d, noAuto: cp.t !== 'auto' || !!(opt && opt.quiet) });
+    if (opt && opt.quiet) return;   // (the state only: the caller starts what it wants)
     if (cp.t !== 'auto') {   // a scene you walk into or talk to: start it
       var at = cp.ev.split(':'), ev = (WM.data.events[at[0]] || []).filter(function (e) { return e.id === at[1]; })[0];
       if (ev) setTimeout(function () { if (!WM.script.running) WM.field.runEvent(ev); }, 400);
     }
+  };
+  // Straight into one of the great battles (WM.data.wars), with the story as it stands at the scene that leads into
+  // it (or, for a battle a chapter opens with, at the start of that chapter). Losing is allowed, to test defeat.
+  D.warList = function () {
+    var CPS = WM.data.checkpoints || [];
+    return Object.keys(WM.data.wars || {}).filter(function (id) { return /^ch\d+_/.test(id); }).map(function (id) {
+      var ch = +((/^ch(\d+)_/.exec(id) || [])[1] || 0), cp = -1, needle = "war('" + id + "'";
+      CPS.forEach(function (c, k) {
+        if (cp >= 0) return;
+        var at = c.ev.split(':'), ev = (WM.data.events[at[0]] || []).filter(function (e) { return e.id === at[1]; })[0];
+        if (ev && ev.run && ev.run.toString().indexOf(needle) >= 0) cp = k;
+      });
+      if (cp < 0) CPS.forEach(function (c, k) { if (cp < 0 && c.ch === ch) cp = k; });
+      return { id: id, ch: ch, cp: cp, name: WM.data.wars[id].name };
+    }).filter(function (w) { return w.cp >= 0; }).sort(function (a, b) { return a.ch - b.ch || a.cp - b.cp; });
+  };
+  D.jumpWar = function (id) {
+    var w = D.warList().filter(function (x) { return x.id === id; })[0]; if (!w) return;
+    D.jumpTo(w.cp, { quiet: true });
+    setTimeout(function () { WM.script.run(function (s) { return s.war(id, { canLose: true }); }); }, 300);
   };
   // The whole world map at once, every place named: for judging the lie of the land (debug panel button).
   D.worldPreview = function () {
@@ -185,6 +206,20 @@
     encLabel();
     enc.addEventListener('click', function (e) { e.stopPropagation(); D.setNoEnc(!D.noEnc); encLabel(); });
     panel.appendChild(enc);
+    // the great battles, one click each
+    var wrow = document.createElement('div'); wrow.className = 'row';
+    var wbtn = document.createElement('button'); wbtn.innerHTML = '<b>\u2694</b>Major battles';
+    var wlist = document.createElement('div'); wlist.className = 'scenes';
+    D.warList().forEach(function (w) {
+      var sb = document.createElement('button');
+      sb.innerHTML = '<i>Ch ' + w.ch + '</i>'; sb.appendChild(document.createTextNode(w.name)); sb.title = w.id;
+      sb.addEventListener('click', function (e) { e.stopPropagation(); panel.style.display = 'none'; D.jumpWar(w.id); });
+      wlist.appendChild(sb);
+    });
+    var wmore = document.createElement('button'); wmore.className = 'more'; wmore.textContent = '\u25b8';
+    var wopen = function (e) { e.stopPropagation(); var open = wlist.style.display === 'block'; wlist.style.display = open ? 'none' : 'block'; wmore.textContent = open ? '\u25b8' : '\u25be'; };
+    wbtn.addEventListener('click', wopen); wmore.addEventListener('click', wopen);
+    wrow.appendChild(wbtn); wrow.appendChild(wmore); panel.appendChild(wrow); panel.appendChild(wlist);
     var CPS = WM.data.checkpoints || [];
     WM.data.chapters.forEach(function (c, i) {
       if (i > 0 && !c.debugStart) return;
@@ -218,6 +253,34 @@
   };
   if (typeof document !== 'undefined' && document.addEventListener) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', D.buildPicker); else setTimeout(D.buildPicker, 0);
+  }
+  // ---------- sound on / off (a button in the corner, or M) ----------
+  // Muting sets music and effects to nothing and remembers the levels they had; the choice survives a reload.
+  var MUTE = WM.mute = { on: false, keep: null };
+  MUTE.set = function (on) {
+    var A = WM.audio; if (!A || !A.setVolumes) return;
+    if (on && !MUTE.on) { MUTE.keep = [A.musicVol, A.sfxVol]; A.setVolumes(0, 0); }
+    if (!on && MUTE.on) { var k = MUTE.keep || [0.55, 0.7]; A.setVolumes(k[0], k[1]); }
+    MUTE.on = !!on;
+    try { localStorage.setItem('wm-muted', on ? '1' : '0'); } catch (e) {}
+    var b = typeof document !== 'undefined' && document.getElementById('wm-mute');
+    if (b) { b.textContent = on ? '\ud83d\udd07' : '\ud83d\udd0a'; b.title = on ? 'Sound off (M)' : 'Sound on (M)'; }
+  };
+  MUTE.toggle = function () { MUTE.set(!MUTE.on); };
+  MUTE.build = function () {
+    if (typeof document === 'undefined' || !document.body || document.getElementById('wm-mute')) return;
+    var st = document.createElement('style');
+    st.textContent = '#wm-mute{position:fixed;top:8px;right:8px;z-index:50;width:36px;height:32px;font:16px sans-serif;line-height:28px;text-align:center;color:#f4e6c4;background:#5a1a12;border:2px solid #d8b36a;border-radius:6px;cursor:pointer;opacity:.85;user-select:none}';
+    document.head.appendChild(st);
+    var b = document.createElement('div'); b.id = 'wm-mute';
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); MUTE.toggle(); });
+    document.body.appendChild(b);
+    var was = false; try { was = localStorage.getItem('wm-muted') === '1'; } catch (e) {}
+    MUTE.on = false; MUTE.set(was);
+    document.addEventListener('keydown', function (e) { if (e.code === 'KeyM' && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) MUTE.toggle(); });
+  };
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', MUTE.build); else setTimeout(MUTE.build, 0);
   }
   D.open = function () {
     if (!D.enabled) return;

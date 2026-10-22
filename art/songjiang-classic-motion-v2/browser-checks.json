@@ -1,0 +1,20 @@
+{
+  "phases": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "pauseAndStep": true,
+  "directionSync": true,
+  "threeMaps": true,
+  "comparison": true,
+  "geometry": {
+    "density": 8,
+    "logicalWidth": 24,
+    "logicalHeight": 32,
+    "referenceX": 100,
+    "playerX": 138
+  },
+  "errors": []
+}

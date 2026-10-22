@@ -117,6 +117,7 @@
       if (!lk) return;
       var a = new Actor({ x: F.seatCenterX(F.map, ev), y: ev.y * TS + 15, dir: ev.dir || 'down', sheetId: lk.id, look: lk.look, ev: ev, wander: ev.wander, name: lk.name, speed: ev.speed });
       if (ev.hidden) a.visible = false;
+      if (ev.lying) a.static = 'down';   // the wounded or the dead, on the ground
       F.actors.push(a);
     });
   };
@@ -694,7 +695,15 @@
       if (F.map.def.weather === 'rain' || WM.state.flags.weather === 'rain') drawRain(c);
     }
     var tint = (!F.map.interior && WM.state.flags.tintOverride) || F.map.def.tint || (WM.state.flags.night && !F.map.interior ? 'night' : null);
-    if (tint === 'night') { c.fillStyle = 'rgba(10,20,60,0.42)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); drawLanternGlow(c, cx, cy); }
+    // night comes on (and goes off) gradually while the scene stays on one map; arriving somewhere it is simply night
+    var nightGoal = tint === 'night' ? 1 : 0, nowT = WM.time || 0;
+    if (F.nightMap !== F.map || F.nightK == null) { F.nightK = nightGoal; F.nightMap = F.map; }
+    else F.nightK = nightGoal > F.nightK ? Math.min(nightGoal, F.nightK + (nowT - F.nightT) / 1.5) : Math.max(nightGoal, F.nightK - (nowT - F.nightT) / 1.5);
+    F.nightT = nowT;
+    if (F.nightK > 0 && (tint === 'night' || !tint)) {
+      c.fillStyle = 'rgba(10,20,60,' + (0.42 * F.nightK).toFixed(3) + ')'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H);
+      c.globalAlpha = F.nightK; drawLanternGlow(c, cx, cy); c.globalAlpha = 1;
+    }
     else if (tint === 'dusk') { c.fillStyle = 'rgba(120,50,20,0.18)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }
     else if (tint === 'fire') { c.fillStyle = 'rgba(160,40,10,' + (0.22 + Math.sin(WM.time * 7) * 0.04).toFixed(3) + ')'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }
     else if (tint === 'dark') { c.fillStyle = 'rgba(0,0,10,0.5)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }

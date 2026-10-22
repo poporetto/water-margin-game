@@ -57,12 +57,26 @@
       { name: 'Constables', type: 'naval', atk: 46, def: 40, x: 13, y: 4 },
       { name: 'Archer Boats', type: 'arch', atk: 48, def: 36, x: 13, y: 2 }
     ],
-    intro: [['wuyong', 'He Tao has brought five hundred men in boats into the marsh. He doesn\'t know these waters. The Ruan brothers do.'], ['ruanxiaoqi:smile', 'Let them come into the reeds. We\'ll take them one boat at a time.'], [null, 'Victory: capture He Tao. Naval units (the Ruan brothers) can move through water.']],
+    intro: [
+      ['wuyong', 'He Tao has brought five hundred men in boats into the marsh. He doesn\'t know these waters. The Ruan brothers do.'],
+      ['ruanxiaoqi:smile', 'Let them come into the reeds. We\'ll take them one boat at a time.'],
+      // the first great battle: the schoolmaster gives his lesson on how armies fight (the rules of war)
+      ['wuyong:smile', 'Patience, Brother Seven. Ten years I taught village boys their characters; I can spare a moment for grown men with oars. Attend.'],
+      ['ruanxiaoqi', 'A lesson? Now? They\'re rowing at us!'],
+      ['wuyong', 'Master Sun says: know the enemy and know yourself. So — horse and foot run down the bowman. The bowman shoots the conjuror before his chant is done. And the conjuror\'s fire puts horses to flight. Send each man against the foe he was made to beat.'],
+      ['wuyong', 'Now look at any company on the water. It faces the way it last moved, or the way it last struck — the little arrow on its square tells you. Strike a man in the face, and he strikes you back.'],
+      ['wuyong:smile', 'Strike him in the side, and your blow lands a quarter harder, and his answer comes weak. Come at him from behind, and it lands half as hard again — he cannot answer at all, and his ranks are shaken. Hardly a new idea. Every schoolboy who ever threw a stone knows it.'],
+      ['ruanxiaowu', 'So we row round the back of them.'],
+      ['wuyong:smile', 'Just so. You see? Not hopeless after all. Arrows and sorcery strike from afar, and no one answers those. But He Tao\'s men can read an arrow as well as you can — guard your own backs, and never let them come up behind Brother Chao Gai.'],
+      ['chaogai:smile', 'You heard the professor. Into the reeds!'],
+      [null, 'Victory: capture He Tao. Naval units (the Ruan brothers) can move through water. (The lesson can be read again from the menu: Rules of War.)']
+    ],
     events: [{ turn: 3, run: async function (s, api) {
       await s.say('gongsunsheng', 'The wind is turning. Light the fire boats!');
       s.sfx('wind'); s.sfx('fire');
       await s.say(null, 'Gongsun Sheng raised a great wind from the south-east, and the fire boats drove into the official fleet. The enemy are thrown into confusion!');
-      api.weaken('enemy', 0.75);
+      api.weaken('enemy', 0.75); api.confuse('enemy');
+      await s.say('wuyong:smile', 'See how they spin about in the smoke? A fleet in confusion can neither row nor fight this turn. Now, brothers — round behind them, as I taught you.');
     } }],
     win: [['ruanxiaoqi', 'Got him! He Tao himself, dragged out of the water like a wet dog!']],
     lose: [['wuyong:sad', 'We must fall back...']]

@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "leader": "songjiang",
+      "dir": "down",
+      "density": 4
+    },
+    {
+      "leader": "songjiang",
+      "dir": "left",
+      "density": 4
+    },
+    {
+      "leader": "songjiang",
+      "dir": "up",
+      "density": 4
+    },
+    {
+      "leader": "linchong",
+      "dir": "down",
+      "density": 4
+    },
+    {
+      "leader": "linchong",
+      "dir": "left",
+      "density": 4
+    },
+    {
+      "leader": "linchong",
+      "dir": "up",
+      "density": 4
+    }
+  ],
+  "errors": []
+}

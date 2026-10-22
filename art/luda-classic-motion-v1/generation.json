@@ -1,0 +1,16 @@
+{
+  "tool": "image_gen.imagegen",
+  "initial": {
+    "front": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-b5984889-c600-4824-b1d8-48f11e67c17f.png",
+    "left": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-b93db137-0ff4-4e8e-a917-39a2438384d3.png",
+    "right": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-9c3821be-ff8d-40e8-9324-23906bc78ef6.png",
+    "back": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-6693f7d3-8d0b-4925-b1f7-d0f378c2da16.png"
+  },
+  "rightPhaseRevision": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-12158c3c-ea81-4046-be38-f300d019fb4b.png",
+  "toneRevisions": {
+    "front": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-dfc7c9be-8812-4541-9f57-41067766a4e3.png",
+    "left": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-e5ec4b6e-886b-4d99-8c1e-c969976eab2f.png",
+    "right": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-a621b344-b4e0-42e5-a78d-d79508ab3e95.png",
+    "back": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-09a542c5-e23f-4bae-a79a-e66276369e29.png"
+  }
+}

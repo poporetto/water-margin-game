@@ -211,30 +211,46 @@
       await s.say('cangzhouboy', 'Beard! Big beard! Carry me!');
       await s.say('official', 'Ha! My son has chosen for me. He\'s four, and he won\'t go with anyone else now. Look after him, Zhu Tong.');
       await s.say('zhutong:smile', 'I will, Your Honour.');
-      s.despawn('cpf', { leave: true }); s.hide('boy'); s.despawn('boy');
+      await s.walkTo('cpf', 22, 15); WM.data.clear(s, ['cpf']);   // back up the road to his yamen
+      // the little master will not let him out of his sight: he trots along behind Zhu Tong from now on
+      s.hide('boy'); s.despawn('boy');
+      WM.state.followers = ['cangzhouboy']; WM.field.refreshFollowers();
     } }
   ]);
 
   // ---------------- Cangzhou: the lanterns, and the woods ----------------
   WM.defEvents('cangzhou', [
     { id: 'ch13_lanterns', x: 28, y: 8, w: 10, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch13_zhutong'); }, run: async function (s) {
-      s.spawn('boy', 'cangzhouboy', 30, 10, 'up');
+      // the boy who has been following Zhu Tong runs on ahead to the riverbank (from where he walks behind him)
+      var fb = WM.field.actors && WM.field.findActor('fol_0'), ft = fb && fb.tile ? fb.tile() : { x: 30, y: 11 };
+      WM.state.followers = []; WM.field.refreshFollowers();
+      s.spawn('boy', 'cangzhouboy', ft.x, ft.y, 'up');
+      s.walkTo('boy', 30, 10).then(function () { s.face('boy', 'up'); });   // and stands looking at the lanterns
       s.night(true);
       await s.narrate('On the fifteenth night of the seventh month — the Feast of the Hungry Ghosts — Zhu Tong carried the little master on his shoulders to the temple of Ksitigarbha to watch the river lanterns float away.');
-      s.spawn('lh', 'leiheng', 35, 10, 'left'); s.spawn('wy', 'wuyong', 35, 11, 'left');
+      // Zhu Tong stands a little behind the boy; two travellers come up the lane from the east and stop before him
+      await s.walkTo('player', 33, 11); s.face('player', 'right');
+      s.spawn('lh', 'leiheng', 42, 11, 'left'); s.spawn('wy', 'wuyong', 42, 12, 'left');
+      s.walkTo('wy', 34, 12); await s.walkTo('lh', 34, 11);
+      s.face('lh', 'left'); s.face('wy', 'left');
       await s.say('leiheng', 'Brother Zhu Tong.');
       await s.say('zhutong:shock', 'Lei Heng! And — Professor Wu Yong?');
       await s.say('wuyong', 'Song Jiang and Chao Gai have long admired you. You saved Brother Lei Heng, and lost everything for it. Come up the mountain with us.');
       await s.say('zhutong:angry', 'Don\'t say it. I am a convict under the law, and the prefect has been good to me. I will serve out my sentence and go home a free man. If you go on, I\'ll take it as an insult.');
       await s.say('leiheng', '...Then let us at least talk a while, there by the bank.');
+      s.face('player', 'left'); s.face('boy', 'down');
       await s.say('zhutong', 'Little master, stay here and watch the lanterns. I\'ll be back in a moment.');
+      await s.say('cangzhouboy', 'I\'ll wait right here, Beard! Look — that one\'s going all the way out!');
+      s.face('boy', 'up');   // back to the lanterns, and he waits there as he was told
       s.walkTo('lh', 36, 13); s.walkTo('wy', 37, 12); await s.walkTo('player', 35, 12);
+      await s.wait(0.6);
       await s.fadeOut(0.6);
       s.hide('boy'); s.despawn('boy'); s.hide('wy'); s.despawn('wy');
       await s.fadeIn(0.6);
-      await s.walkTo('player', 31, 10);
+      // back from the bank, Lei Heng a step behind him
+      s.walkTo('lh', 32, 11); await s.walkTo('player', 31, 10);
       await s.emote('player', '!');
-      s.place('lh', 33, 10, 'left');
+      s.face('lh', 'left');
       await s.say('zhutong:shock', 'The boy! Where is the boy?!');
       await s.say('leiheng', 'Our companion — the black one, Li Kui — must have taken him to play.');
       await s.say('zhutong:angry', '...If anything has happened to that child —');
@@ -244,19 +260,19 @@
     } }
   ]);
   WM.defEvents('cangforest', [
+    { id: 'ch13_body', x: 15, y: 11, npc: 'cangzhouboy', dir: 'down', lying: true, cond: function (S2) { return S2.has('ch13_gone') && WM.state.chapter === 13; },
+      text: ['(The little master, who rode on your shoulders to see the lanterns. He is not breathing.)'] },
     { id: 'ch13_child', x: 13, y: 9, w: 5, h: 5, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch13_gone'); }, run: async function (s) {
       s.music('sad');
-      await s.fadeOut(0.3);
-      s.spawn('boy', 'cangzhouboy', 15, 11, 'down'); s.lie('boy');
-      await s.fadeIn(0.5);
-      await s.walkTo('player', 14, 11);
+      await s.walkTo('player', 14, 11);   // (the little master lies in the clearing: the 'ch13_body' event below)
       await s.emote('player', '!');
       await s.narrate('In a clearing in the woods, twenty li from the city, the little master lay on the ground. He was dead. His head had been split open.');
       await s.say('zhutong:sad', '...A child. A child of four.');
       s.spawn('lk', 'likui', 30, 9, 'left');
       await s.say('likui:smile', 'Hey! Beard! Over here!');
       await s.say('zhutong:angry', 'YOU!');
-      s.despawn('lk', { leave: true });
+      await s.walkTo('lk', 34, 8, { run: true });   // off up the path to where he waits for the chase (ch13_chase stands him there)
+      WM.data.clear(s, ['lk']);
       s.flag('ch13_found');
     } },
     { id: 'ch13_chase', x: 30, y: 6, w: 10, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch13_found'); }, run: async function (s) {
@@ -281,16 +297,21 @@
       await s.say('zhutong:angry', 'Kill the Black Whirlwind. Then I will come.');
       await s.say('chaijin', 'That — we cannot do. But let Li Kui stay here with me, and keep out of your sight, and you three go up the mountain.');
       await s.say('zhutong', '...So be it. As long as I don\'t have to look at him.');
-      s.despawn('wy', { leave: true }); s.despawn('lh', { leave: true });
+      // Zhu Tong goes out of the gate with Wu Yong and Lei Heng; the scene stays with Li Kui
+      s.walkTo('wy', 16, 25); s.walkTo('lh', 18, 25); await s.walkTo('player', 17, 24);
+      await s.fadeOut(0.6);
+      s.hide('wy'); s.despawn('wy'); s.hide('lh'); s.despawn('lh');
+      s.party(['likui']); s.setLeader('likui'); s.flag('protagonist', 'likui');
+      s.place('player', 16, 18, 'up');
+      await s.fadeIn(0.6);
       await s.join('zhutong');
       await s.narrate('Zhu Tong went to Liangshan with Wu Yong and Lei Heng. Li Kui stayed at Chai Jin\'s manor, out of the way.');
-      s.spawn('lk3', 'likui', 16, 18, 'up');
       s.spawn('msg', 'servant', 14, 21, 'up');
       await s.walkTo('msg', 14, 18, { run: true });
       await s.say('servant', 'My lord! A letter from Gaotang. Your uncle, Lord Chai Huangcheng, is gravely ill — he asks for you to come at once.');
       await s.say('chaijin:sad', 'Uncle... Saddle the horses.');
       await s.say('likui', 'I\'ll come too, Lord Chai! I\'m sick of sitting about.');
-      s.despawn('msg', { leave: true }); s.hide('lk3'); s.despawn('lk3');
+      s.despawn('msg', { leave: true });
       s.despawn('cj', { leave: true });
       s.addParty('chaijin'); s.level('chaijin', 24);
       s.party(['likui']); s.setLeader('likui'); s.flag('protagonist', 'likui');

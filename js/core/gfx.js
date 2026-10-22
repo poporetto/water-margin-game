@@ -1,4 +1,4 @@
-// Rendering: a 640x480 world buffer in 320x240 logical coordinates, with full-resolution UI text.
+// Rendering: a world buffer sized for registered sprite detail, in 320x240 logical coordinates.
 'use strict';
 (function () {
   var U = WM.util;
@@ -17,7 +17,11 @@
     G.ctx = canvas.getContext('2d');
     G.ctx.imageSmoothingEnabled = false;
     G.k = 1;
-    G.low = U.makeWorldCanvas(WM.LOW_W, WM.LOW_H);
+    // Preserve detailed sprites through the viewport without enlarging every baked map.
+    var density = WM.ART_SCALE || 1;
+    var spriteScales = (WM.ASSETS && WM.ASSETS.spriteScales) || {};
+    Object.keys(spriteScales).forEach(function (id) { density = Math.max(density, spriteScales[id]); });
+    G.low = U.makeWorldCanvas(WM.LOW_W, WM.LOW_H, density);
     G.lctx = G.low.getContext('2d');
     G.fade = 0;          // 0 = clear, 1 = black
     G.fadeColor = '#000';

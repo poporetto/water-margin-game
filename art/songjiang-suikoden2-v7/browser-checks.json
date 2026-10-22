@@ -1,0 +1,23 @@
+{
+  "sheet": [
+    288,
+    512
+  ],
+  "density": 4,
+  "logical": [
+    24,
+    32
+  ],
+  "battle": {
+    "width": 384,
+    "cw": 32,
+    "dir": "left"
+  },
+  "phases": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "errors": []
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Song Jiang · Preserved detail</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#161c24;color:#eee8d9;font:16px system-ui}main{max-width:1450px;margin:auto;padding:28px}h1{font:32px Georgia;margin:0 0 12px}p{color:#b7baca;line-height:1.5}button,input{accent-color:#d5aa5d}button,a{color:inherit}button{background:#28323e;border:1px solid #68707a;border-radius:6px;padding:9px 14px;cursor:pointer}button[aria-pressed=true]{background:#68512d;border-color:#dfb366}nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:24px 0}.grid{display:flex;flex-wrap:wrap;gap:14px}figure{margin:0;width:258px;background:#222c35;border:1px solid #46525c;border-radius:8px;overflow:hidden}figcaption{text-align:center;padding:12px;color:#d7bc8a}canvas{display:block;width:256px;height:288px;image-rendering:pixelated;background:repeating-conic-gradient(#26333c 0% 25%,#2d3c46 0% 50%) 0/24px 24px}.comparison{max-width:100%;image-rendering:pixelated}#status{color:#d7bc8a}.note{font-size:13px}details{margin:28px 0}summary{cursor:pointer;color:#d7bc8a}.links{display:flex;gap:20px;flex-wrap:wrap}
+</style>
+<main>
+<h1>Song Jiang · Preserved detail</h1>
+<p>Original colours and sharper facial features. Same character size on screen.</p>
+<nav><button id="compare" aria-pressed="false">Compare previous version</button><button id="pause">Pause</button><label>Speed <input id="speed" type="range" min="3" max="10" value="5"> <span id="fps">5</span> poses/sec</label><a href="in-game.html">View in game</a></nav>
+<div class="grid">
+<figure><canvas width="256" height="288" data-row="0"></canvas><figcaption>Down</figcaption></figure>
+<figure><canvas width="256" height="288" data-row="1"></canvas><figcaption>Left</figcaption></figure>
+<figure><canvas width="256" height="288" data-row="2"></canvas><figcaption>Right</figcaption></figure>
+<figure><canvas width="256" height="288" data-row="3"></canvas><figcaption>Up / back</figcaption></figure>
+<figure><canvas width="256" height="288" data-battle="true"></canvas><figcaption>Sword guard</figcaption></figure>
+</div>
+<p id="status">Loading…</p>
+<p class="note">The revised sprites retain the generated colours and use twice the resolution. The sword has a wider frame so the character keeps his scale. This is a detail-preserving revision; the source artwork still has small differences between poses.</p>
+<details><summary>Still comparison: previous above, revised below</summary><p>Both rows display the character at the same height.</p><img class="comparison" src="before-after.png" width="768" height="512" alt="Previous reduction on top and preserved detail below, at matching display size"></details>
+<p class="links"><a href="songjiang-walking.png">Walking sheet</a><a href="songjiang-battle.png">Battle sheet</a><a href="README.md">Design notes</a></p>
+</main>
+<script>
+(async()=>{
+  async function load(src){const img=new Image();img.src=src;await img.decode();return img}
+  const [walk,battle,oldWalk,oldBattle]=await Promise.all(['songjiang-walking.png','songjiang-battle.png','../songjiang-suikoden2-v6/songjiang-walking.png','../songjiang-suikoden2-v6/songjiang-battle.png'].map(load));
+  let old=false,paused=false,time=0,last=0;const seq=[0,1,0,2],speed=document.querySelector('#speed'),status=document.querySelector('#status');
+  function label(){status.textContent=old?'Previous · small frames and reduced palette':'Revised · original colours and preserved detail'}
+  document.querySelector('#compare').onclick=e=>{old=!old;e.target.setAttribute('aria-pressed',old);e.target.textContent=old?'Show revised version':'Compare previous version';label()};
+  document.querySelector('#pause').onclick=e=>{paused=!paused;e.target.textContent=paused?'Play':'Pause'};
+  speed.oninput=()=>document.querySelector('#fps').textContent=speed.value;
+  label();window.spritePreviewReady=true;
+  function draw(now){if(last&&!paused)time+=Math.min(now-last,100);last=now;const col=seq[Math.floor(time*Number(speed.value)/1000)%4];
+    document.querySelectorAll('canvas').forEach(cv=>{
+      const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,256,288);
+      const battleMode=!!cv.dataset.battle,row=Number(cv.dataset.row||0),fw=old?48:battleMode?128:96,fh=old?64:128;
+      const img=old?(battleMode?oldBattle:oldWalk):(battleMode?battle:walk),factor=old?4:2;
+      c.drawImage(img,col*fw,row*fh,fw,fh,(256-fw*factor)/2,16,fw*factor,fh*factor);
+    });requestAnimationFrame(draw);
+  }requestAnimationFrame(draw);
+})().catch(e=>document.querySelector('#status').textContent=e.message);
+</script>
+</html>

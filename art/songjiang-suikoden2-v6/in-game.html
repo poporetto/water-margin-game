@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base href="../../">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#050505">
+<title>Song Jiang · In-game preview</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="game" width="960" height="720" tabindex="0"></canvas>
+<div id="preview-controls" style="position:fixed;z-index:100;bottom:12px;left:50%;transform:translateX(-50%);background:#18211fee;color:#eee;padding:12px 16px;border:1px solid #bc9a58;border-radius:8px;font:13px system-ui;width:min(94vw,680px);box-sizing:border-box;text-align:center"><strong>Song Jiang · Suikoden II study</strong><div style="margin:8px"><button data-facing="down">Front</button> <button data-facing="left">Left</button> <button data-facing="right">Right</button> <button data-facing="up">Back</button> <select id="preview-map" aria-label="Preview location"><option value="zhugui">Marsh tavern</option><option value="liangshan">Liangshan courtyard</option><option value="zhugui_in">Tavern interior</option></select> <select id="preview-pose" aria-label="Pose preview"><option value="walking">Walking</option><option value="jian">Sword guard</option></select></div><span id="preview-status">Loading latest design…</span><div style="font-size:11px;opacity:.7;margin-top:6px">48 × 64 frames · right mirrors left · preview candidate</div></div><noscript>This game needs JavaScript.</noscript>
+
+<!-- core -->
+<script src="js/core/base.js"></script>
+<script src="js/core/input.js"></script>
+<script src="js/core/touch.js"></script>
+<script src="js/core/gfx.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/tiles.js"></script>
+<script src="js/core/sprites.js"></script>
+<script src="js/core/portraits.js"></script>
+<script src="js/core/monsters.js"></script>
+<!-- engine -->
+<script src="js/engine/ui.js"></script>
+<script src="js/engine/main.js"></script>
+<script src="js/engine/state.js"></script>
+<script src="js/engine/script.js"></script>
+<script src="js/engine/field.js"></script>
+<script src="js/engine/battle.js"></script>
+<script src="js/engine/duel.js"></script>
+<script src="js/engine/war.js"></script>
+<script src="js/engine/menu.js"></script>
+<script src="js/engine/shops.js"></script>
+<script src="js/engine/cards.js"></script>
+<script src="js/engine/game.js"></script>
+<!-- data -->
+<script src="assets/manifest.js"></script>
+<script src="assets/tiles.js"></script>
+<script src="js/data/music.js"></script>
+<script src="js/data/music-places.js"></script>
+<script src="js/data/chars.js"></script>
+<script src="js/data/skills.js"></script>
+<script src="js/data/npcs.js"></script>
+<script src="js/data/items.js"></script>
+<script src="js/data/enemies.js"></script>
+<script src="js/data/unites.js"></script>
+<script src="js/data/chapters.js"></script>
+<script src="js/data/maps/_lib.js"></script>
+<script src="js/data/maps/world.js"></script>
+<script src="js/data/maps/kaifeng.js"></script>
+<script src="js/data/maps/shivillage.js"></script>
+<script src="js/data/maps/weizhou.js"></script>
+<script src="js/data/maps/ch02.js"></script>
+<script src="js/data/maps/ch03.js"></script>
+<script src="js/data/maps/liangshan.js"></script>
+<script src="js/data/maps/daming.js"></script>
+<script src="js/data/maps/ch05.js"></script>
+<script src="js/data/maps/ch07.js"></script>
+<script src="js/data/maps/ch08.js"></script>
+<script src="js/data/maps/ch09.js"></script>
+<script src="js/data/maps/ch10.js"></script>
+<script src="js/data/maps/ch11.js"></script>
+<script src="js/data/maps/ch12.js"></script>
+<script src="js/data/maps/ch13.js"></script>
+<script src="js/data/maps/ch14.js"></script>
+<script src="js/data/maps/ch15.js"></script>
+<script src="js/data/maps/ch17.js"></script>
+<script src="js/data/maps/ch18.js"></script>
+<script src="js/data/maps/ch20.js"></script>
+<script src="js/data/maps/ch22.js"></script>
+<script src="js/data/maps/ch23.js"></script>
+<script src="js/data/maps/ch24.js"></script>
+<script src="js/data/residents.js"></script>
+<!-- story: one file per chapter -->
+<script src="js/data/story/ch00_prologue.js"></script>
+<script src="js/data/story/ch01_ninedragons.js"></script>
+<script src="js/data/story/ch02_flowerymonk.js"></script>
+<script src="js/data/story/ch03_pantherhead.js"></script>
+<script src="js/data/story/ch04_blueface.js"></script>
+<script src="js/data/story/ch05_birthdaygifts.js"></script>
+<script src="js/data/story/ch06_timelyrain.js"></script>
+<script src="js/data/story/ch07_pilgrim.js"></script>
+<script src="js/data/story/ch08_qingfeng.js"></script>
+<script src="js/data/story/ch09_xunyang.js"></script>
+<script src="js/data/story/ch10_heavenlybooks.js"></script>
+<script src="js/data/story/ch11_cuiping.js"></script>
+<script src="js/data/story/ch12_zhujia.js"></script>
+<script src="js/data/story/ch13_gaotang.js"></script>
+<script src="js/data/story/ch14_chained.js"></script>
+<script src="js/data/story/ch15_huazhou.js"></script>
+<script src="js/data/story/ch16_zengtou.js"></script>
+<script src="js/data/story/ch17_qilin.js"></script>
+<script src="js/data/story/ch18_dongping.js"></script>
+<script src="js/data/story/ch19_assembly.js"></script>
+<script src="js/data/story/ch20_amnesty.js"></script>
+<script src="js/data/story/ch21_liao.js"></script>
+<script src="js/data/story/ch22_hedong.js"></script>
+<script src="js/data/story/ch23_fangla.js"></script>
+<script src="js/data/story/ch24_liaoerwa.js"></script>
+<script src="js/data/checkpoints.js"></script>
+<script src="js/data/fates.js"></script>
+<script src="js/data/portrait-looks.js"></script>
+<script src="js/data/centered-doors.js"></script>
+<script src="js/data/door-paths.js"></script>
+<script src="art/songjiang-suikoden2-v6/in-game.js"></script>
+</body>
+</html>

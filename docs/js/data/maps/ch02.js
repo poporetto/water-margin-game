@@ -20,12 +20,12 @@
   y.rect(24, 22, 1, 1, ':'); y.vline(24, 21, 22, ':'); y.hline(16, 24, 22, ':');
   y.scatter('T', 0.08, 51, '.', [1, 1, 30, 22]); y.scatter('f', 0.05, 52, '.', [1, 1, 30, 22]);
   L.clearAround(y, ':', 'T', '.'); L.clearAround(y, '=', 'T', '.');
-  WM.defMap('yanmen', { name: 'Yanmen County', theme: 'autumn', music: 'town', rows: y.rows(), spawn: [15, 22], battleBg: 'town', exits: [WM.toWorld('yanmen', 14, 23, 3, 1)] });
+  WM.defMap('yanmen', { name: 'Yanmen County', theme: 'autumn', music: 'town_yanmen', rows: y.rows(), spawn: [15, 22], battleBg: 'town', exits: [WM.toWorld('yanmen', 14, 23, 3, 1)] });
   var yi = L.grid(40, 12, 'x');
   var yR = { shop: yi.room(1, 1, 8, 7), inn: yi.room(10, 1, 10, 7), zhao: yi.room(21, 1, 16, 10, { floor: 'n' }) };
   yi.stamp(2, 3, ['hhhh..', '......', 'ccc...']); yi.stamp(11, 3, ['...kk.kk', '...kk.kk', 'cccc....']);
   yi.stamp(22, 3, ['h..A....A..hkk', '............kk', '...t..........', '..............', 'j............j']);
-  WM.defMap('yanmen_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: yi.rows(), spawn: [5, 6] });
+  WM.defMap('yanmen_in', { name: '', interior: true, theme: 'autumn', music: 'town_yanmen', rows: yi.rows(), spawn: [5, 6] });
   L.link({ map: 'yanmen', x: yShop.x, y: yShop.y }, { map: 'yanmen_in', x: yR.shop.x, y: yR.shop.y });
   L.link({ map: 'yanmen', x: yInn.x, y: yInn.y }, { map: 'yanmen_in', x: yR.inn.x, y: yR.inn.y });
   L.link({ map: 'yanmen', x: zhao.x, y: zhao.y }, { map: 'yanmen_in', x: yR.zhao.x, y: yR.zhao.y });

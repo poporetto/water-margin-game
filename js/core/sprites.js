@@ -334,17 +334,24 @@
     return sh;
   };
   SP.battles = {};
+  // Resolve on every lookup so exile, save loading and chapter selection update existing actors too.
+  SP.resolveId = function (id) {
+    if (id !== 'linchong') return id;
+    var state = WM.state;
+    return state && ((state.flags && state.flags.ch3_exiled) || state.chapter > 3)
+      ? 'linchong-exile' : 'linchong-official';
+  };
   SP.battleOf = function (id, lk) {
-    var key = id + '|battle';
+    var variant = SP.resolveId(id), key = variant + '|battle';
     if (SP.cache[key]) return SP.cache[key];
-    var art = SP.battles[id], cv;
+    var art = SP.battles[variant] || SP.battles[id], cv;
     if (art) {
       cv = U.makeCanvas(art.width, art.height * 2);
       var g = cv.getContext('2d'); g.drawImage(art, 0, 0);
       for (var f = 0; f < 3; f++) { var w = art.width / 3; g.save(); g.translate(f * w + w, art.height); g.scale(-1, 1); g.drawImage(art, f * w, 0, w, art.height, 0, 0, w, art.height); g.restore(); }
       cv.artScale = art.artScale; cv.isOverride = true; cv.cw = art.cw; cv.ch = art.ch;
     } else {
-      var walk = SP.overrides[id], src = walk || SP.build(id, lk || (WM.data.chars[id] && WM.data.chars[id].look) || {}, true);
+      var walk = SP.overrides[variant] || SP.overrides[id], src = walk || SP.build(id, lk || (WM.data.chars[id] && WM.data.chars[id].look) || {}, true);
       var cw = walk ? walk.cw * (walk.artScale || 1) : SP.CW, ch = walk ? walk.ch * (walk.artScale || 1) : SP.CH;
       cv = walk ? U.makeCanvas(cw * 3, ch * 2) : U.makeWorldCanvas(cw * 3, ch * 2);
       var k = walk ? 1 : (src.artScale || 1);   // (source in physical pixels; a world canvas draws in logical units)
@@ -354,6 +361,8 @@
     return (SP.cache[key] = cv);
   };
   SP.getWalk = function (id, lk) {
+    var variant = SP.resolveId(id);
+    if (SP.overrides[variant]) return SP.overrides[variant];
     if (SP.overrides[id]) return SP.overrides[id];
     // a change of clothes the story has given someone (s.costume): their look with those parts changed
     var cos = WM.state && WM.state.costume && WM.state.costume[id];

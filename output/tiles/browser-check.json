@@ -1,0 +1,14 @@
+{
+  "result": "pass",
+  "errors": [],
+  "missing": [],
+  "checks": [
+    "preview",
+    "five themes",
+    "mobile width",
+    "game boot",
+    "keyboard movement",
+    "collision flags",
+    "docs build"
+  ]
+}

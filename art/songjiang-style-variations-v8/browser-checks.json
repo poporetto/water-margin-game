@@ -1,0 +1,59 @@
+{
+  "checks": [
+    {
+      "v": "variant-a",
+      "dir": "down",
+      "size": [
+        288,
+        512
+      ],
+      "density": 4
+    },
+    {
+      "v": "variant-a",
+      "dir": "left",
+      "size": [
+        288,
+        512
+      ],
+      "density": 4
+    },
+    {
+      "v": "variant-a",
+      "dir": "up",
+      "size": [
+        288,
+        512
+      ],
+      "density": 4
+    },
+    {
+      "v": "variant-b",
+      "dir": "down",
+      "size": [
+        288,
+        512
+      ],
+      "density": 4
+    },
+    {
+      "v": "variant-b",
+      "dir": "left",
+      "size": [
+        288,
+        512
+      ],
+      "density": 4
+    },
+    {
+      "v": "variant-b",
+      "dir": "up",
+      "size": [
+        288,
+        512
+      ],
+      "density": 4
+    }
+  ],
+  "errors": []
+}

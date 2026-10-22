@@ -2,7 +2,11 @@
 
 Water Margin, a Suikoden II–style RPG set in Northern Song China, c. 1120. Every person in the game walks the maps and fights in battle as a small sprite. Today these are drawn by code from a description; this list is for drawn replacements. Each sprite should match that character's portrait (linked in the lists) for face, hair, clothes and colours, and the style of the 32 px tiles.
 
-## Format
+## Preferred preparation method for generated sprites
+
+Use the [user-approved detail-preserving workflow](sprite-workflow.md) (21 October 2026): preserve original colours, use 96 × 128 walking frames, and compare candidates against actual game locations with a higher-density preview renderer. This supersedes the older generated-asset size/palette targets below. **Song Jiang Classic variant A, with its original head size, is the approved style template.**
+
+## Original 48 × 64 format reference
 
 - **One PNG per person: 144 × 256 px, transparent background.** A grid of **3 columns × 4 rows**, each frame **48 × 64 px**, no padding between frames.
 - **Columns:** 1 standing still · 2 mid-step, left foot forward · 3 mid-step, right foot forward. The game walks them stand → left → stand → right.
@@ -17,15 +21,18 @@ Water Margin, a Suikoden II–style RPG set in Northern Song China, c. 1120. Eve
 
 The walking sheet is used on the maps, and laid on its side when someone lies wounded or dead (the facing-down standing frame).
 
-## The battle sheet
+## Battle sprite — one static dynamic pose
 
-In battles and duels everyone is seen side-on, five times larger, **with the weapon in hand**. So everyone who fights (the hundred and eight, the guests, and the enemies in section 5) has a second sheet: their walking side view again, carrying the weapon.
+Every fighting character (the hundred and eight, guests, and enemies in section 5) needs **one static battle sprite**, **facing left**, with their listed weapon. This replaces the former three-frame battle-sheet requirement for all future battle artwork.
 
-- **One PNG: 144 × 64 px**, a single row of **3 frames** of 48 × 64, transparent background.
-- **The frames:** the same as the left-facing row of the walking sheet (stand, step, step), **facing west (left)**, but holding the weapon listed for them: a spear or staff upright beside them, a sword in the hand, Li Kui's two axes, a bow for an archer.
-- **Facing west only.** The party stands on the right of the field and faces west; the game mirrors the sheet for enemies, who face east.
-- Same size, position and proportions as the walking sheet; feet on the bottom edge. The weapon may reach to the top and sides of the frame.
+- **One transparent PNG containing one pose**, not three frames and not an animation strip.
+- **Dynamic pose:** an energetic, grounded combat stance with purposeful weapon handling, bent knees, torso angle and a clear silhouette. A static image can communicate action; do not use a neutral walking pose with a weapon added.
+- **Facing west (left) only.** The party stands on the right of the field and faces west; the game may mirror the pose for enemies facing east.
+- Match the approved Classic character proportions, original head size, costume, colours and rendering. Preserve body scale relative to the walking sprite. Use a suitably wide canvas for swords, spears or extended limbs; do not shrink the character to make the weapon fit. Start at 128 × 128 and widen as necessary.
+- No background, ground shadow, motion blur or attack effects. Keep the entire weapon and all extremities within the frame.
 - File name: the file id with **`-battle`** added: `songjiang-battle.png`, `en-bandit-battle.png`. Without one, battles draw the code's own figure with the weapon.
+
+The older game loader assumes a three-column battle sheet. A single-pose preview may adapt the pose in memory for that renderer; the saved battle deliverable must remain a single pose. Do not duplicate the artwork into a three-pose deliverable.
 
 ## File names and adding them to the game
 

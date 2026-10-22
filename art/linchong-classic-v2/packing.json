@@ -1,0 +1,71 @@
+{
+  "scale": 0.2650887573964497,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "outfit": "official",
+      "source": "/Users/andriastaniwan/Documents/github/water-margin-game/art/linchong-classic-v2/official-original.png",
+      "bounds": [
+        {
+          "left": 194,
+          "top": 52,
+          "width": 392,
+          "height": 845
+        },
+        {
+          "left": 715,
+          "top": 53,
+          "width": 256,
+          "height": 844
+        },
+        {
+          "left": 1098,
+          "top": 52,
+          "width": 384,
+          "height": 845
+        }
+      ],
+      "sourceSize": [
+        1660,
+        948
+      ]
+    },
+    {
+      "outfit": "exile",
+      "source": "/Users/andriastaniwan/Documents/github/water-margin-game/art/linchong-classic-v2/exile-original.png",
+      "bounds": [
+        {
+          "left": 198,
+          "top": 52,
+          "width": 394,
+          "height": 843
+        },
+        {
+          "left": 716,
+          "top": 55,
+          "width": 267,
+          "height": 839
+        },
+        {
+          "left": 1093,
+          "top": 53,
+          "width": 379,
+          "height": 841
+        }
+      ],
+      "sourceSize": [
+        1659,
+        948
+      ]
+    }
+  ]
+}

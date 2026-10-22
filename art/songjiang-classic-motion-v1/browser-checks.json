@@ -1,0 +1,15 @@
+{
+  "phases": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "pauseAndStep": true,
+  "keyboardMovement": 8.065200000000004,
+  "staticState": {
+    "phase": 0,
+    "direction": "left"
+  },
+  "errors": []
+}

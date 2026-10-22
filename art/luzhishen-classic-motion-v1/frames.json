@@ -1,0 +1,157 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "artScale": 8,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "columns": [
+    "neutral",
+    "strideA",
+    "strideB"
+  ],
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ],
+  "fps": 5,
+  "headLock": false,
+  "paletteQuantization": false,
+  "reports": [
+    {
+      "facing": "front",
+      "sourceSize": [
+        1882,
+        836
+      ],
+      "bounds": [
+        {
+          "left": 109,
+          "top": 93,
+          "width": 464,
+          "height": 697
+        },
+        {
+          "left": 701,
+          "top": 95,
+          "width": 477,
+          "height": 699
+        },
+        {
+          "left": 1317,
+          "top": 94,
+          "width": 458,
+          "height": 700
+        }
+      ],
+      "scale": 0.33428981348637016,
+      "approvedNeutral": true,
+      "targetHead": 95
+    },
+    {
+      "facing": "left",
+      "sourceSize": [
+        1882,
+        836
+      ],
+      "bounds": [
+        {
+          "left": 215,
+          "top": 98,
+          "width": 279,
+          "height": 704
+        },
+        {
+          "left": 690,
+          "top": 98,
+          "width": 433,
+          "height": 700
+        },
+        {
+          "left": 1259,
+          "top": 98,
+          "width": 493,
+          "height": 700
+        }
+      ],
+      "scale": 0.33238636363636365,
+      "approvedNeutral": true,
+      "targetHead": 91
+    },
+    {
+      "facing": "right",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "bounds": [
+        {
+          "left": 141,
+          "top": 104,
+          "width": 353,
+          "height": 726
+        },
+        {
+          "left": 654,
+          "top": 104,
+          "width": 450,
+          "height": 726
+        },
+        {
+          "left": 1210,
+          "top": 106,
+          "width": 483,
+          "height": 722
+        }
+      ],
+      "scale": 0.32231404958677684,
+      "approvedNeutral": false,
+      "targetHead": 101
+    },
+    {
+      "facing": "back",
+      "sourceSize": [
+        1882,
+        836
+      ],
+      "bounds": [
+        {
+          "left": 140,
+          "top": 100,
+          "width": 444,
+          "height": 672
+        },
+        {
+          "left": 721,
+          "top": 96,
+          "width": 442,
+          "height": 676
+        },
+        {
+          "left": 1304,
+          "top": 99,
+          "width": 437,
+          "height": 673
+        }
+      ],
+      "scale": 0.3482142857142857,
+      "approvedNeutral": true,
+      "targetHead": 97.5
+    }
+  ]
+}

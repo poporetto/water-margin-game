@@ -1,0 +1,17 @@
+{
+  "frame_size": [
+    48,
+    64
+  ],
+  "sheet_size": [
+    144,
+    256
+  ],
+  "step_head_offset": [
+    0,
+    1
+  ],
+  "exact_head_translation": true,
+  "foot_baseline": 64,
+  "eye_patch_uses_original_palette": true
+}

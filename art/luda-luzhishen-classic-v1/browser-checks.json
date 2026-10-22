@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "map": "zhugui_in",
+      "facing": "down"
+    },
+    {
+      "map": "zhugui_in",
+      "facing": "left"
+    },
+    {
+      "map": "zhugui_in",
+      "facing": "up"
+    },
+    {
+      "map": "zhugui",
+      "facing": "down"
+    },
+    {
+      "map": "zhugui",
+      "facing": "left"
+    },
+    {
+      "map": "zhugui",
+      "facing": "up"
+    },
+    {
+      "map": "liangshan",
+      "facing": "down"
+    },
+    {
+      "map": "liangshan",
+      "facing": "left"
+    },
+    {
+      "map": "liangshan",
+      "facing": "up"
+    }
+  ],
+  "errors": [],
+  "density": 8,
+  "detailImagesLoaded": true
+}

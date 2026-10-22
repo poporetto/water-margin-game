@@ -1,0 +1,22 @@
+{
+  "mode": "built-in imagegen",
+  "sourceDesign": "../luda-luzhishen-classic-v1/luzhishen-original.png",
+  "prompts": [
+    "front-prompt.txt",
+    "left-prompt.txt",
+    "right-prompt.txt",
+    "back-prompt.txt",
+    "left-phase-prompt.txt",
+    "right-phase-prompt.txt",
+    "back-phase-prompt.txt"
+  ],
+  "selected": {
+    "front": "front-raw.png",
+    "left": "left-raw.png",
+    "right": "right-raw.png",
+    "back": "back-raw.png"
+  },
+  "review": "in-game.html",
+  "sheet": "luzhishen-walking.png",
+  "status": "walking review candidate; not installed"
+}

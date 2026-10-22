@@ -1,0 +1,155 @@
+{
+  "checks": [
+    {
+      "outfit": "official",
+      "direction": "front",
+      "approvedNeutralExact": true,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "official",
+      "direction": "left",
+      "approvedNeutralExact": true,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "official",
+      "direction": "right",
+      "approvedNeutralExact": false,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "official",
+      "direction": "back",
+      "approvedNeutralExact": true,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "exile",
+      "direction": "front",
+      "approvedNeutralExact": true,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "exile",
+      "direction": "left",
+      "approvedNeutralExact": true,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "exile",
+      "direction": "right",
+      "approvedNeutralExact": false,
+      "distinctStrides": true,
+      "noClipping": true
+    },
+    {
+      "outfit": "exile",
+      "direction": "back",
+      "approvedNeutralExact": true,
+      "distinctStrides": true,
+      "noClipping": true
+    }
+  ],
+  "toneChecks": [
+    {
+      "outfit": "official",
+      "direction": "front",
+      "clothLuma": [
+        55,
+        56,
+        55
+      ]
+    },
+    {
+      "outfit": "official",
+      "direction": "left",
+      "clothLuma": [
+        55,
+        54,
+        53
+      ]
+    },
+    {
+      "outfit": "official",
+      "direction": "right",
+      "clothLuma": [
+        60,
+        60,
+        58
+      ]
+    },
+    {
+      "outfit": "official",
+      "direction": "back",
+      "clothLuma": [
+        54,
+        54,
+        54
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "front",
+      "clothLuma": [
+        60,
+        57,
+        57
+      ],
+      "mantleLuma": [
+        140,
+        146,
+        146
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "left",
+      "clothLuma": [
+        52,
+        52,
+        54
+      ],
+      "mantleLuma": [
+        144,
+        145,
+        144
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "right",
+      "clothLuma": [
+        60,
+        62,
+        62
+      ],
+      "mantleLuma": [
+        145,
+        146,
+        147
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "back",
+      "clothLuma": [
+        61,
+        61,
+        62
+      ],
+      "mantleLuma": [
+        142,
+        148,
+        147
+      ]
+    }
+  ],
+  "note": "Material median luminance is a diagnostic, not proof of identical pixel colours. Cloth spread <=4/255 and mantle <=7/255 within each direction."
+}

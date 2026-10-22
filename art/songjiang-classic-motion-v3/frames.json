@@ -1,0 +1,124 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "logicalFrame": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "columns": [
+    "neutral",
+    "stride-a",
+    "stride-b"
+  ],
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ],
+  "fps": 5,
+  "headShoulderLock": false,
+  "sideRowsCopiedExactlyFrom": "../songjiang-classic-motion-v2",
+  "paletteQuantization": false,
+  "tops": [
+    {
+      "direction": "front",
+      "column": 0,
+      "top": 40,
+      "height": 216
+    },
+    {
+      "direction": "front",
+      "column": 1,
+      "top": 39,
+      "height": 217
+    },
+    {
+      "direction": "front",
+      "column": 2,
+      "top": 39,
+      "height": 217
+    },
+    {
+      "direction": "back",
+      "column": 0,
+      "top": 40,
+      "height": 216
+    },
+    {
+      "direction": "back",
+      "column": 1,
+      "top": 38,
+      "height": 218
+    },
+    {
+      "direction": "back",
+      "column": 2,
+      "top": 39,
+      "height": 217
+    }
+  ],
+  "report": [
+    {
+      "direction": "front",
+      "sharedScale": 0.3020979020979021,
+      "bounds": [
+        {
+          "l": 107,
+          "t": 223,
+          "w": 300,
+          "h": 715
+        },
+        {
+          "l": 620,
+          "t": 222,
+          "w": 302,
+          "h": 719
+        },
+        {
+          "l": 1134,
+          "t": 222,
+          "w": 296,
+          "h": 719
+        }
+      ]
+    },
+    {
+      "direction": "back",
+      "sharedScale": 0.297111416781293,
+      "bounds": [
+        {
+          "l": 106,
+          "t": 211,
+          "w": 300,
+          "h": 727
+        },
+        {
+          "l": 620,
+          "t": 211,
+          "w": 311,
+          "h": 734
+        },
+        {
+          "l": 1113,
+          "t": 211,
+          "w": 319,
+          "h": 730
+        }
+      ]
+    }
+  ]
+}

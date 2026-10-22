@@ -1,0 +1,96 @@
+{
+  "errors": [],
+  "state": {
+    "density": 8,
+    "error": null
+  },
+  "keyboardMovement": true,
+  "checks": [
+    {
+      "outfit": "official",
+      "dir": "down",
+      "columns": [
+        1,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "outfit": "official",
+      "dir": "left",
+      "columns": [
+        0,
+        2,
+        0,
+        1
+      ]
+    },
+    {
+      "outfit": "official",
+      "dir": "right",
+      "columns": [
+        2,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "outfit": "official",
+      "dir": "up",
+      "columns": [
+        0,
+        1,
+        0,
+        2
+      ]
+    },
+    {
+      "outfit": "exile",
+      "dir": "down",
+      "columns": [
+        1,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "outfit": "exile",
+      "dir": "left",
+      "columns": [
+        0,
+        2,
+        0,
+        1
+      ]
+    },
+    {
+      "outfit": "exile",
+      "dir": "right",
+      "columns": [
+        2,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "outfit": "exile",
+      "dir": "up",
+      "columns": [
+        0,
+        1,
+        0,
+        2
+      ]
+    }
+  ],
+  "locations": [
+    "zhugui_in",
+    "zhugui",
+    "liangshan"
+  ],
+  "detailImagesLoaded": true
+}

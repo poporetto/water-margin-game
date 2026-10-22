@@ -64,14 +64,14 @@
   d.hline(0, 26, 20, ':'); d.hline(0, 26, 21, ':'); d.vline(9, 19, 21, ':'); d.vline(8, 19, 21, ':');
   [yamen, jail].forEach(function (h) { d.vline(h.x, h.y + 1, 19, '='); });
   d.scatter('T', 0.06, 472, '.', [0, 22, 18, 14]); L.clearAround(d, ':', 'T', '.');
-  WM.defMap('dengzhou', { name: 'Dengzhou', theme: 'autumn', music: 'town', rows: d.rows(), spawn: [1, 20], battleBg: 'town',
+  WM.defMap('dengzhou', { name: 'Dengzhou', theme: 'autumn', music: 'town_dengzhou', rows: d.rows(), spawn: [1, 20], battleBg: 'town',
     exits: [WM.toWorld('dengzhou', 0, 20, 1, 2)] });
   var di = L.grid(40, 11, 'x');
   var dR = { mao: di.room(1, 1, 12, 8, { floor: 'n' }), jail: di.room(14, 1, 12, 9, { floor: 'N' }), tavern: di.room(27, 1, 10, 8) };
   di.stamp(2, 3, ['h..A...h..', '.t........', '..........']);
   di.stamp(15, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.', 'h........h']);
   di.stamp(28, 3, ['h..j..k.', '.t..t...', '........', 'ccc.....']);
-  WM.defMap('dengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: di.rows(), spawn: [31, 7] });
+  WM.defMap('dengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town_dengzhou', rows: di.rows(), spawn: [31, 7] });
   [[mao, dR.mao], [jail, dR.jail], [gdt, dR.tavern]].forEach(function (p) { L.link({ map: 'dengzhou', x: p[0].x, y: p[0].y }, { map: 'dengzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.dengzhou = { doors: { mao: mao, jail: jail, tavern: gdt, yamen: yamen }, rooms: dR };
 })();

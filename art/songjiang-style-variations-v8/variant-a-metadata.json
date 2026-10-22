@@ -1,0 +1,38 @@
+{
+  "sourceSize": [
+    1774,
+    887
+  ],
+  "bounds": [
+    {
+      "l": 308,
+      "t": 80,
+      "w": 310,
+      "h": 734
+    },
+    {
+      "l": 781,
+      "t": 82,
+      "w": 224,
+      "h": 732
+    },
+    {
+      "l": 1157,
+      "t": 82,
+      "w": 308,
+      "h": 732
+    }
+  ],
+  "scale": 0.14713896457765668,
+  "frame": [
+    96,
+    128
+  ],
+  "order": [
+    "front",
+    "left",
+    "back"
+  ],
+  "animation": false,
+  "colors": "original; no palette quantization"
+}

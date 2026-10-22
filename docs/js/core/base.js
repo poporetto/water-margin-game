@@ -52,8 +52,8 @@ WM.util = {
     x.imageSmoothingEnabled = false;
     return c;
   },
-  makeWorldCanvas: function (w, h) {
-    var scale = WM.ART_SCALE || 1, cv = WM.util.makeCanvas(w * scale, h * scale);
+  makeWorldCanvas: function (w, h, density) {
+    var scale = density || WM.ART_SCALE || 1, cv = WM.util.makeCanvas(w * scale, h * scale);
     cv.artScale = scale; cv.logicalWidth = w; cv.logicalHeight = h;
     cv.getContext('2d').scale(scale, scale);
     return cv;

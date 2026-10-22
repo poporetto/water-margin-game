@@ -190,6 +190,13 @@
     var c = G.ctx;
     c.imageSmoothingEnabled = false;
     WM.battle.drawBackground(c,du.bg);
+    // a fight in the dark: the painted day scene is washed over with night blue (the fighters stay readable)
+    if (du.opt.night || (du.opt.night !== false && WM.state.flags.night)) {
+      c.fillStyle = 'rgba(8,16,52,0.58)'; c.fillRect(0, 0, WM.W, WM.H);
+      var vg = c.createRadialGradient(WM.W / 2, 420, 120, WM.W / 2, 420, 620);
+      vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,12,0.45)');
+      c.fillStyle = vg; c.fillRect(0, 0, WM.W, WM.H);
+    }
     drawFighter(du.foeSheet, du.foe, 2, du.foe.x, 380);
     drawFighter(du.heroSheet, du.hero, 1, du.hero.x, 380);
     // HP bars

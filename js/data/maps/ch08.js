@@ -36,12 +36,12 @@
   g.house(25, 18, 6, 4, { roof: '^', door: false, windows: [2] }); g.house(33, 18, 6, 4, { roof: 'z', door: false, windows: [3] });
   g.scatter('T', 0.05, 321, '.', [1, 1, 40, 28]); g.scatter('f', 0.03, 322, '.', [1, 1, 40, 28]);
   L.clearAround(g, ':', 'T', '.'); L.clearAround(g, '=', 'T', '.');
-  WM.defMap('qingfeng', { name: 'Qingfeng Fort', theme: 'snow', music: 'town', rows: g.rows(), spawn: [20, 28], battleBg: 'town', exits: [WM.toWorld('qingfeng', 19, 29, 4, 1)] });
+  WM.defMap('qingfeng', { name: 'Qingfeng Fort', theme: 'snow', music: 'town_qingfeng', rows: g.rows(), spawn: [20, 28], battleBg: 'town', exits: [WM.toWorld('qingfeng', 19, 29, 4, 1)] });
   var gi = L.grid(34, 12, 'x');
   var gR = { hua: gi.room(1, 1, 15, 10, { floor: 'N' }), liu: gi.room(17, 1, 15, 10, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......Akk', '...........kk', '..t..KKK.....', '.............', '.............']);
   gi.stamp(18, 3, ['....F..h..h..', '....F........', '....F.....t..', 'FF+FF........']);   // Liu Gao's hall, and in its top-left corner the barred cage where he keeps his prisoners (its door on the south side)
-  WM.defMap('qingfeng_in', { name: '', interior: true, theme: 'snow', music: 'town', rows: gi.rows(), spawn: [8, 9] });
+  WM.defMap('qingfeng_in', { name: '', interior: true, theme: 'snow', music: 'town_qingfeng', rows: gi.rows(), spawn: [8, 9] });
   L.link({ map: 'qingfeng', x: hua.x, y: hua.y }, { map: 'qingfeng_in', x: gR.hua.x, y: gR.hua.y });
   L.link({ map: 'qingfeng', x: liu.x, y: liu.y }, { map: 'qingfeng_in', x: gR.liu.x, y: gR.liu.y });
   WM.data.qingfeng = { rooms: gR };

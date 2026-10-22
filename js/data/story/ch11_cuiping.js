@@ -128,7 +128,7 @@
       run: async function (s) {
       await s.walkTo('player', 23, 25); s.face('player', 'left');
       s.spawn('yx', 'yangxiong', 8, 22, 'right'); s.spawn('pb1', 'servant', 7, 23, 'right'); s.spawn('pb2', 'servant', 6, 22, 'right');
-      s.music('town');
+      s.music('town_jizhou');
       s.walkTo('pb1', 16, 23); s.walkTo('pb2', 15, 22); await s.walkTo('yx', 17, 22);
       await s.say('yanglin', 'Who\'s that, with all the silk behind him?');
       s.spawn('vl', 'villager', 24, 26, 'up');

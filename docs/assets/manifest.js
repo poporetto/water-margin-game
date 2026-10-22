@@ -3,7 +3,9 @@
 //   assets/portraits/<id>.png  - any size, shown in a 144x168 frame (bottom-aligned)
 //   assets/sprites/<id>.png    - 3 columns (stand, step, step) x 4 rows (down, left, right, up)
 // Example: WM.ASSETS = { portraits: ['linchong', 'songjiang'], sprites: ['linchong'] };
-WM.ASSETS = { portraits: ['songjiang', 'linchong', 'luzhishen', 'wusong', 'wuyong', 'huarong'], sprites: [] };
+WM.ASSETS = { portraits: ['songjiang', 'linchong', 'luzhishen', 'wusong', 'wuyong', 'huarong'], sprites: ['songjiang', 'linchong-official', 'linchong-exile', 'luzhishen', 'luda'] };
+// Approved Classic walk: 192x256 physical cells at the existing 24x32 world size.
+WM.ASSETS.spriteScales = { songjiang: 8, 'linchong-official': 8, 'linchong-exile': 8, luzhishen: 8, luda: 8 };
 // Cells are read left-to-right, then top-to-bottom.
 WM.ASSETS.portraitSheets = {};
 WM.ASSETS.portraitGroups = {

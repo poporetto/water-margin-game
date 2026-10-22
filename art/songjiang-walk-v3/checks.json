@@ -1,0 +1,33 @@
+{
+  "size": [
+    144,
+    256
+  ],
+  "cell": [
+    48,
+    64
+  ],
+  "shared_scale": 0.15384615384615385,
+  "heads_identical_to_master": true,
+  "standing_identical_to_master": true,
+  "distinct_steps_each_direction": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "bottom_baselines": [
+    64,
+    64,
+    64,
+    64,
+    64,
+    64,
+    64,
+    64,
+    64,
+    64,
+    64,
+    64
+  ]
+}

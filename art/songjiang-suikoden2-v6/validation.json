@@ -1,0 +1,46 @@
+{
+  "songjiang-walking": {
+    "size": [
+      144,
+      256
+    ],
+    "colors": 23,
+    "alpha": [
+      0,
+      255
+    ],
+    "heights": [
+      54,
+      54,
+      54,
+      54,
+      54,
+      54,
+      54,
+      54,
+      54,
+      52,
+      53,
+      53
+    ],
+    "footBaseline": 63,
+    "exactMirror": true
+  },
+  "songjiang-battle": {
+    "size": [
+      144,
+      64
+    ],
+    "colors": 22,
+    "alpha": [
+      0,
+      255
+    ],
+    "heights": [
+      46,
+      44,
+      45
+    ],
+    "footBaseline": 63
+  }
+}

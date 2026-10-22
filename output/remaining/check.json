@@ -1,0 +1,16 @@
+{
+  "result": "pass",
+  "objects": 48,
+  "checks": [
+    "dimensions",
+    "binary transparency",
+    "wall margin alpha",
+    "catalogue desktop/mobile",
+    "outdoor props",
+    "furniture",
+    "temple run objects",
+    "felled willow"
+  ],
+  "errors": [],
+  "missing": []
+}

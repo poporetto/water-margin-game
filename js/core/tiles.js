@@ -1151,7 +1151,7 @@
     '[': { draw: sampanTile, tall: sampanTall, solid: true, water: true },
     '>': { draw: sampanTile, solid: true, water: true },
     'I': { draw: function (c, x, y, tx, ty, th, m) { grass(c, x, y, tx, ty, th); }, tall: signTall, solid: true },
-    '⚔': { draw: propGround, solid: true },
+    '⚔': { draw: function (c, x, y, tx, ty, th, m) { propGround(c,x,y,tx,ty,m); }, solid: true },   // (draw gets the theme before the map)
     'V': { draw: tent, solid: true },
     '%': { draw:function(c,x,y,tx,ty,th,m){
       dirt(c,x,y,tx,ty,th,m);
@@ -1419,7 +1419,10 @@
       var run = runOf(map, tx, ty, 'G'), sy = (WM.state && WM.state.flags && WM.state.flags['shut:' + map.id]) || (map.def && map.def.shutGates && map.def.shutGates.indexOf(ty) >= 0) ? 48 : 0;   // (shutGates: rows of gates that never open)
       // Piers sit on neighbouring solid wall tiles; every G tile remains a visible passage.
       U.drawArt(c, sheetOf(e), 0, sy, 16, 45, x - 16, y - 29, 16, 45);
-      for (var i = 0; i < run.n; i++) U.drawArt(c, sheetOf(e), 16 + (i % 2) * 16, sy, 16, 45, x + i * 16, y - 29, 16, 45);
+      if (run.n >= 3 && run.n % 2) {   // an odd width (the art is a left and a right half): whole gates, each spread a little wider
+        var pairs = (run.n - 1) / 2, pw = run.n * 16 / pairs;
+        for (var p = 0; p < pairs; p++) U.drawArt(c, sheetOf(e), 16, sy, 32, 45, Math.round(x + p * pw), y - 29, Math.round(pw), 45);
+      } else for (var i = 0; i < run.n; i++) U.drawArt(c, sheetOf(e), 16 + (i % 2) * 16, sy, 16, 45, x + i * 16, y - 29, 16, 45);
       U.drawArt(c, sheetOf(e), 48, sy, 16, 45, x + run.n * 16, y - 29, 16, 45);
       return true;
     }

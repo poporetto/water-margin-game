@@ -1,0 +1,95 @@
+{
+  "changedStrips": [
+    "official-front",
+    "exile-left",
+    "exile-back"
+  ],
+  "frame": [
+    192,
+    256
+  ],
+  "rows": [
+    "front",
+    "left",
+    "right",
+    "back"
+  ],
+  "artScale": 8,
+  "neutralFramesUnchanged": true,
+  "otherDirectionsUnchanged": true,
+  "paletteQuantization": false,
+  "reports": [
+    {
+      "name": "official-front",
+      "scale": 0.3279648609077599,
+      "bounds": [
+        {
+          "left": 153,
+          "top": 141,
+          "width": 322,
+          "height": 683
+        },
+        {
+          "left": 785,
+          "top": 140,
+          "width": 315,
+          "height": 685
+        },
+        {
+          "left": 1413,
+          "top": 132,
+          "width": 317,
+          "height": 693
+        }
+      ]
+    },
+    {
+      "name": "exile-left",
+      "scale": 0.32840236686390534,
+      "bounds": [
+        {
+          "left": 204,
+          "top": 145,
+          "width": 220,
+          "height": 676
+        },
+        {
+          "left": 750,
+          "top": 146,
+          "width": 362,
+          "height": 675
+        },
+        {
+          "left": 1387,
+          "top": 145,
+          "width": 384,
+          "height": 676
+        }
+      ]
+    },
+    {
+      "name": "exile-back",
+      "scale": 0.3333333333333333,
+      "bounds": [
+        {
+          "left": 156,
+          "top": 142,
+          "width": 316,
+          "height": 669
+        },
+        {
+          "left": 788,
+          "top": 142,
+          "width": 308,
+          "height": 670
+        },
+        {
+          "left": 1416,
+          "top": 136,
+          "width": 307,
+          "height": 676
+        }
+      ]
+    }
+  ]
+}

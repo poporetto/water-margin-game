@@ -1,0 +1,43 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "artScale": 8,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "columns": [
+    "neutral",
+    "strideA",
+    "strideB"
+  ],
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ],
+  "fps": 5,
+  "headLock": false,
+  "paletteQuantization": false,
+  "source": "../linchong-classic-motion-v1",
+  "colourCorrection": "colour-report.json",
+  "correctedRows": [
+    "official-front",
+    "exile-left",
+    "exile-back"
+  ],
+  "productionInstalled": true
+}

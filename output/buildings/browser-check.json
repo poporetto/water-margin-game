@@ -1,0 +1,14 @@
+{
+  "result": "pass",
+  "errors": [],
+  "missing": [],
+  "checks": [
+    "six building scenes",
+    "gate state toggle",
+    "five themes",
+    "mobile layout",
+    "real Kaifeng map",
+    "keyboard gate traversal",
+    "docs build"
+  ]
+}

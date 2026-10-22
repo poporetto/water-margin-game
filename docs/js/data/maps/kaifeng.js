@@ -73,7 +73,7 @@
 
   WM.defMap('kaifeng', { shutGates: [10],   // the palace gate stays shut: no one passes without a summons
    
-    name: 'The Eastern Capital', theme: 'spring', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [29, 40],
+    name: 'The Eastern Capital', theme: 'spring', music: 'town_kaifeng', rows: g.rows(), battleBg: 'town', spawn: [29, 40],
     exits: [WM.toWorld('kaifeng', 28, 44, 4, 2)]   // out of the south gate, onto the road below the Eastern Capital on the world map
   });
   WM.data.kaifengDoors = { gao: gaoDoor, fan: fanDoor, li: liDoor, shop: shopDoor, smith: smithDoor, inn: innDoor, tal: talDoor, luqian: luDoor, yue: yueDoor, xiangguo: xgDoor, wang: wangDoor, lin: linDoor, xu: xuDoor };
@@ -92,7 +92,7 @@
   R.li = I.room(27, 11, 10, 8, { floor: 'n' }); I.stamp(28, 13, ['hkk..h', '.kk...', '..t...']);
   R.yue = I.room(38, 11, 12, 9, { floor: 'N' }); I.stamp(39, 13, ['L...77...L', '...8888...', '..........', 'j........j']);
   R.xu = I.room(51, 11, 12, 9); I.stamp(52, 13, ['k..h..j...', '..........', '...t......', 'h.........']);
-  WM.defMap('kaifeng_in', { name: '', interior: true, theme: 'spring', music: 'town', rows: I.rows(), battleBg: 'interior', spawn: [6, 6] });
+  WM.defMap('kaifeng_in', { name: '', interior: true, theme: 'spring', music: 'town_kaifeng', rows: I.rows(), battleBg: 'interior', spawn: [6, 6] });
   WM.data.kaifengRooms = R;
 
   var d = WM.data.kaifengDoors;

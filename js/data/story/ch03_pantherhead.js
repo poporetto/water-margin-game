@@ -323,7 +323,7 @@
 
   // ---------------- Cangzhou ----------------
   WM.defEvents('cangzhou', [
-    { id: 'ch3_camp', x: 9, y: 12, w: 3, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_tocangzhou'); }, run: async function (s) {
+    { id: 'ch3_camp', x: 10, y: 13, w: 1, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch3_tocangzhou'); }, run: async function (s) {
       await s.narrate('At the prison camp, every new convict received a hundred "welcoming strokes" unless he paid the guards. Lin Chong paid, and gave the warden Lord Chai\'s letter. The hundred strokes were "postponed on account of illness." He was given an easy post: keeping the Celestial King Hall, sweeping and burning incense.');
       s.flag('ch3_incamp');
       await s.narrate('One day as he walked in the town, someone called out behind him: "Master Lin! Is it you?"');

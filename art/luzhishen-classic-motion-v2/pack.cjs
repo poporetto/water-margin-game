@@ -1,0 +1,13 @@
+// Exact user-requested atlas remapping: swap side rows and mirror EACH CELL, retaining frame order.
+const fs=require('fs'),path=require('path'),sharp=require('sharp'),assert=require('node:assert/strict');
+const dir=__dirname,source=path.resolve(dir,'../luzhishen-classic-motion-v1');
+(async()=>{const results=[];
+for(const kind of ['walking','standing','walking-master']){const name='luzhishen-'+kind+'.png',raw=await sharp(source+'/'+name).ensureAlpha().raw().toBuffer({resolveWithObject:true}),{width,height}=raw.info,fw=width/3,fh=height/4,out=Buffer.from(raw.data);assert(Number.isInteger(fw)&&Number.isInteger(fh));
+for(const [destRow,sourceRow]of [[1,2],[2,1]])for(let c=0;c<3;c++)for(let y=0;y<fh;y++)for(let x=0;x<fw;x++){const from=((sourceRow*fh+y)*width+c*fw+(fw-1-x))*4,to=((destRow*fh+y)*width+c*fw+x)*4;raw.data.copy(out,to,from,from+4);}
+await sharp(out,{raw:raw.info}).png().toFile(dir+'/'+name);
+// Verify the complete output against the requested mapping, including transparent RGB and alpha.
+for(let row=0;row<4;row++)for(let c=0;c<3;c++)for(let y=0;y<fh;y++)for(let x=0;x<fw;x++){const side=row===1||row===2,sr=side?3-row:row,sx=side?fw-1-x:x,from=((sr*fh+y)*width+c*fw+sx)*4,to=((row*fh+y)*width+c*fw+x)*4;assert(raw.data.subarray(from,from+4).equals(out.subarray(to,to+4)));}
+if(kind==='walking')for(const[row,facing]of ['front','left','right','back'].entries()){const strip=Buffer.alloc(width*fh*4);out.copy(strip,0,row*fh*width*4,(row+1)*fh*width*4);await sharp(strip,{raw:{width,height:fh,channels:4}}).png().toFile(dir+'/'+facing+'-strip.png');for(let c=0;c<3;c++){const cell=Buffer.alloc(fw*fh*4);for(let y=0;y<fh;y++)strip.copy(cell,y*fw*4,(y*width+c*fw)*4,(y*width+(c+1)*fw)*4);if(row===0||row===3)fs.copyFileSync(source+'/'+facing+'-'+c+'.png',dir+'/'+facing+'-'+c+'.png');else await sharp(cell,{raw:{width:fw,height:fh,channels:4}}).png().toFile(dir+'/'+facing+'-'+c+'.png');}}
+results.push({sheet:name,size:[width,height],allPixelsVerified:true,frontAndBackUnchanged:true,left:'horizontal mirror of v1 right, same columns',right:'horizontal mirror of v1 left, same columns'});
+}
+fs.writeFileSync(dir+'/validation.json',JSON.stringify({method:'Exact RGBA cell remapping. No regeneration, resampling, recolouring or frame-order change.',results},null,2));const meta=JSON.parse(fs.readFileSync(source+'/frames.json'));delete meta.reports;meta.source='../luzhishen-classic-motion-v1';meta.sideCorrection={left:'mirror previous right',right:'mirror previous left'};fs.writeFileSync(dir+'/frames.json',JSON.stringify(meta,null,2));console.log('PASS: walking, standing and master sheets match the requested mirror/swap exactly; front/back RGBA unchanged.');})();

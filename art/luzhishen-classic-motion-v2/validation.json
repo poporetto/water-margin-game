@@ -1,0 +1,38 @@
+{
+  "method": "Exact RGBA cell remapping. No regeneration, resampling, recolouring or frame-order change.",
+  "results": [
+    {
+      "sheet": "luzhishen-walking.png",
+      "size": [
+        576,
+        1024
+      ],
+      "allPixelsVerified": true,
+      "frontAndBackUnchanged": true,
+      "left": "horizontal mirror of v1 right, same columns",
+      "right": "horizontal mirror of v1 left, same columns"
+    },
+    {
+      "sheet": "luzhishen-standing.png",
+      "size": [
+        576,
+        1024
+      ],
+      "allPixelsVerified": true,
+      "frontAndBackUnchanged": true,
+      "left": "horizontal mirror of v1 right, same columns",
+      "right": "horizontal mirror of v1 left, same columns"
+    },
+    {
+      "sheet": "luzhishen-walking-master.png",
+      "size": [
+        2304,
+        4096
+      ],
+      "allPixelsVerified": true,
+      "frontAndBackUnchanged": true,
+      "left": "horizontal mirror of v1 right, same columns",
+      "right": "horizontal mirror of v1 left, same columns"
+    }
+  ]
+}

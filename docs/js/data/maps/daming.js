@@ -48,7 +48,7 @@
   g.scatter('T', 0.08, 171, '.', [2, 2, 54, 42]); g.scatter('f', 0.04, 172, '.', [2, 2, 54, 42]);
   L.clearAround(g, ':', 'T', '.'); L.clearAround(g, '=', 'T', '.');
   g.set(25, 42, 'I');
-  WM.defMap('daming', { name: 'Daming Prefecture', theme: 'autumn', music: 'town', rows: g.rows(), spawn: [28, 42], battleBg: 'town',
+  WM.defMap('daming', { name: 'Daming Prefecture', theme: 'autumn', music: 'town_daming', rows: g.rows(), spawn: [28, 42], battleBg: 'town',
     exits: [WM.toWorld('daming', 27, 45, 4, 1)] });
   WM.data.damingDoors = { yamen: yamen, lu: lu, inn: inn, shop: shop, smith: smith, tal: tal, tower: tower, prison: prison };
 
@@ -64,7 +64,7 @@
   R.tal = I.room(41, 10, 9, 8, { floor: 'N' }); I.stamp(42, 12, ['h.A.h..', '.......', '.ccc...']);
   R.tower = I.room(51, 10, 14, 10); I.stamp(52, 12, ['h..L....L...', '.t..t..t..t.', '............', '.t..t..t..t.', 'cccc........']);
   R.prison = I.room(1, 14, 18, 9, { floor: 'N' }); I.stamp(2, 16, ['--..F--..F--..F.', '--..F--..F--..F.', 'F+FFFF+FFFF+FFF.']);
-  WM.defMap('daming_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: I.rows(), spawn: [12, 11] });
+  WM.defMap('daming_in', { name: '', interior: true, theme: 'autumn', music: 'town_daming', rows: I.rows(), spawn: [12, 11] });
   var D = WM.data.damingDoors;
   Object.keys(R).forEach(function (k) { L.link({ map: 'daming', x: D[k].x, y: D[k].y }, { map: 'daming_in', x: R[k].x, y: R[k].y }); });
   WM.data.damingRooms = R;

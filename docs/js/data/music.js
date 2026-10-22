@@ -32,7 +32,7 @@
     ]
   });
 
-  A.defTrack('town', {
+  A.defTrack('market', {   // Weizhou's own: the original lively town tune
     bpm: 112, key: 'D',
     ch: [
       { inst: 'pipa', oct: 5, vol: 0.2, notes:
@@ -42,6 +42,55 @@
       { inst: 'bass', oct: 2, vol: 0.18, notes: '1 . 5, . 1 . 5, . | 6, . 3, . 6, . 3, . | 6, . 3, . 6, . 3, . | 5, . 2 . 5, . 2 . | 6, . 3, . 6, . 3, . | 1 . 5, . 1 . 5, . | 1 . 5, . 1 . 5, . | 5, . 2 . 5, . 2 .' },
       { inst: 'clap', perc: true, vol: 0.06, notes: 'x.o.x.o.x.o.x.o.' },
       { inst: 'drum', perc: true, vol: 0.12, f: 90, notes: 'x.......x...x...' }
+    ]
+  });
+
+  // Old Streets of the County Town (every town but Weizhou): looking back rather than bustling. The pipa sings the
+  // tune in a slow rolling tremolo over the moon lute, the erhu remembers the middle verse, the xiao brings the tune
+  // home; the sheng breathes under the second half, the zheng lets notes fall between the phrases. It turns on the
+  // minor (6) and comes home to 1 only at the very end, so the loop always starts again in a minor key.
+  function rest(n) { return 'x' + new Array(n).join('.'); }   // one hit, then silence until the loop comes round
+  function rest16(bars) { return new Array(bars * 16 + 1).join('0 '); }   // bars of silence in a sixteenth-note line
+  A.defTrack('town', {
+    bpm: 78, key: 'D',
+    ch: [
+      { inst: 'pipa', oct: 4, vol: 0.36, trem: true, pan: -0.15, notes:
+        '3\' - - 2\' 1\' - 6 - | 1\' - 2\' 1\' 6 - 5 - | 3 - 5 6 5 - 3 2 | 2 - - 3 2 - - - |' +
+        '3\' - - 2\' 1\' - 6 - | 1\' - 2\' 3\' 5\' - 3\' - | 2\' - 3\' 2\' 1\' - 6 - | 6 - - - - - 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0' },
+      { inst: 'erhu', oct: 4, vol: 0.15, notes:
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '6 - 1\' 2\' 3\' - 2\' 1\' | 2\' - - 1\' 6 - 5 - | 6 - 5 3 5 - 6 1\' | 2\' - - 3\' 2\' - - - |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0' },
+      { inst: 'xiao', oct: 4, vol: 0.17, pan: 0.2, notes:
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '3\' - - 2\' 1\' - 6 - | 1\' - 2\' 1\' 6 - 5 - | 6 - 5 3 2 - 3 - | 1 - - - - - 0 0' },
+      { inst: 'ruan', oct: 3, vol: 0.12, pan: -0.3, notes:
+        '6, - 3 6 1\' - 6 3 | 4, - 1 4 6 - 4 1 | 1 - 5 1\' 3\' - 1\' 5 | 5, - 2 5 7 - 5 2 |' +
+        '6, - 3 6 1\' - 6 3 | 4, - 1 4 6 - 4 1 | 2 - 6 2\' 5, - 2 5 | 6, - 3 6 1\' - - - |' +
+        '4, - 1 4 6 - 4 1 | 1 - 5 1\' 3\' - 1\' 5 | 6, - 3 6 1\' - 6 3 | 5, - 2 5 7 - 5 2 |' +
+        '6, - 3 6 1\' - 6 3 | 4, - 1 4 6 - 4 1 | 5, - 2 5 7 - 5 2 | 1 - 5 1\' 3\' - - -' },
+      { inst: 'guqin', oct: 2, vol: 0.11, notes:
+        '6 - - - - - - - | 4 - - - - - - - | 1 - - - - - - - | 5 - - - - - - - |' +
+        '6 - - - - - - - | 4 - - - - - - - | 2 - - - 5 - - - | 6 - - - - - - - |' +
+        '4 - - - - - - - | 1 - - - - - - - | 6 - - - - - - - | 5 - - - - - - - |' +
+        '6 - - - - - - - | 4 - - - - - - - | 5 - - - - - - - | 1 - - - - - - -' },
+      { inst: 'sheng', oct: 4, vol: 0.06, pan: 0.3, notes:
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '6,+1+4 - - - - - - - | 1+3+5 - - - - - - - | 6,+1+3 - - - - - - - | 5,+7,+2 - - - - - - - |' +
+        '6,+1+3 - - - - - - - | 6,+1+4 - - - - - - - | 5,+7,+2 - - - - - - - | 1+3+5 - - - - - 0 0' },
+      { inst: 'zheng', oct: 4, div: 2, vol: 0.12, pan: 0.4, notes:   // in sixteenths: notes falling between the phrases
+        rest16(3) + '| 0 0 0 0 0 0 0 0 5\' 3\' 2\' 1\' 6 5 3 2 |' +
+        rest16(3) + '| 0 0 0 0 0 0 0 0 1\' 6 5 3 2 1 6, - |' +
+        rest16(3) + '| 0 0 0 0 0 0 0 0 2 3 5 6 1\' 2\' 3\' - |' +
+        rest16(4) },
+      { inst: 'muyu', perc: true, f: 600, vol: 0.05, pan: 0.2, notes: 'o...............' },
+      { inst: 'pengling', perc: true, f: 2600, vol: 0.04, pan: 0.3, notes: rest(64) }
     ]
   });
 
@@ -121,14 +170,34 @@
     ]
   });
 
+  // Rain on a Fresh Grave: a lament for a small band. The erhu weeps the tune over the low guqin, the xiao takes the
+  // middle verse while the sheng breathes under it, one zheng run falls between the halves, one bell for the loop.
   A.defTrack('sad', {
-    bpm: 58, key: 'A',
+    bpm: 58, key: 'D',
     ch: [
       { inst: 'erhu', oct: 4, vol: 0.16, notes:
-        '3 - - 2 1 - 6, - | 1 - 2 3 2 - - - | 5 - 3 2 3 - 2 1 | 6, - - - - - - - |' +
-        '6, - 1 2 3 - 5 3 | 2 - 1 2 3 - - - | 2 - 1 6, 5, - 6, 1 | 6, - - - - - - -' },
-      { inst: 'zheng', oct: 3, vol: 0.1, notes: '6, 3 6 - 1\' - - - | 4, 1 4 - 6 - - - | 1 5 1\' - 3\' - - - | 6, 3 6 - 1\' - - - | 4, 1 4 - 6 - - - | 5, 2 5 - 7 - - - | 5, 2 5 - 2\' - - - | 6, 3 6 - - - - -' },
-      { inst: 'bass', oct: 2, vol: 0.14, notes: '6, - - - - - - - | 4, - - - - - - - | 1 - - - - - - - | 6, - - - - - - - | 4, - - - - - - - | 5, - - - - - - - | 5, - - - - - - - | 6, - - - - - - -' }
+        '6 - - 1\' 3\' - 2\' 1\' | 2\' - - - 1\' 6 5 - | 5 - 6 1\' 2\' - 1\' 6 | 6 - - - - - 0 0 |' +
+        '6 - - 1\' 3\' - 5\' 3\' | 2\' - - 3\' 2\' 1\' 6 - | 3 - 5 6 5 - 3 2 | 6 - - - - - 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '6 - - 1\' 3\' - 2\' 1\' | 2\' - - - 1\' 6 5 - | 3 - 2 1 2 - 3 - | 6 - - - - - 0 0' },
+      { inst: 'xiao', oct: 4, vol: 0.17, pan: 0.2, notes:
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '1\' - - 6 5 - 6 - | 3 - 5 6 5 - 3 2 | 2 - 3 5 6 - 5 - | 6 - - - - - 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0' },
+      { inst: 'guqin', oct: 2, vol: 0.12, notes:
+        '6, - - - 3 - - - | 4 - - - 1\' - - - | 5, - - - 2 - - - | 6, - - - 3 - - - |' +
+        '6, - - - 3 - - - | 2 - - - 6 - - - | 3 - - - 7 - - - | 6, - - - 3 - - - |' +
+        '4 - - - 1\' - - - | 1 - - - 5 - - - | 5, - - - 2 - - - | 6, - - - 3 - - - |' +
+        '6, - - - 3 - - - | 4 - - - 1\' - - - | 3 - - - 7 - - - | 6, - - - 3 - - -' },
+      { inst: 'sheng', oct: 4, vol: 0.05, pan: 0.3, notes:
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 0 |' +
+        '4+6+1\' - - - - - - - | 1+3+5 - - - - - - - | 5,+7,+2 - - - - - - - | 6,+1+3 - - - - - - - |' +
+        '6,+1+3 - - - - - - - | 4+6+1\' - - - - - - - | 3+5+7 - - - - - - - | 6,+1+3 - - - - - - -' },
+      { inst: 'zheng', oct: 3, div: 2, vol: 0.1, pan: 0.4, notes:   // in sixteenths: one run falling between the halves
+        new Array(7 * 16 + 1).join('0 ') + '0 0 0 0 0 0 0 0 2\'\' 1\'\' 6\' 5\' 3\' 2\' 1\' 6 ' + new Array(8 * 16 + 1).join('0 ') },
+      { inst: 'pengling', perc: true, f: 2000, vol: 0.04, pan: 0.3, notes: 'x' + new Array(128).join('.') }
     ]
   });
 
@@ -248,7 +317,8 @@
   var NAMES = {
     title: ['Moon over the Marsh', 'Title screen and chapter cards: calm, moonlit, the whole saga ahead.'],
     field: ['Willows along the Highway', 'Country roads and hillsides between towns: light and pastoral.'],
-    town: ['Market Day in the County Town', 'A busy ordinary town: stalls, porters, a lively crowd.'],
+    market: ['Market Day in the County Town', 'Weizhou: a busy ordinary town, stalls, porters, a lively crowd.'],
+    town: ['Old Streets of the County Town', 'Yuncheng, Song Jiang\'s home county: tiled roofs and old streets, familiar, wistful, looking back.'],
     world: ['Roads under Heaven', 'The world map: setting out on a long journey.'],
     battle: ['Clash of Blades', 'Ordinary fights: fast and driving.'],
     boss: ['The Tiger Bares Its Teeth', 'Boss fights: faster and heavier, real danger.'],

@@ -197,7 +197,31 @@
   function pop(u, text, col, big) {
     B.cur.pops.push({ x: u.pos[0] + u.anim.ox, y: u.pos[1] - 120, text: String(text), col: col || '#ffffff', t: 0, big: big });
   }
-  function fx(kind, x, y, opt) { B.cur.fx.push({ kind: kind, x: x, y: y, t: 0, dur: (opt && opt.dur) || 0.5, opt: opt || {} }); }
+  function fx(kind, x, y, opt) { opt = opt || {}; if (!opt.seed) opt.seed = 1 + Math.floor(Math.random() * 997); B.cur.fx.push({ kind: kind, x: x, y: y, t: 0, dur: opt.dur || WM.bfx.dur(kind), opt: opt }); }
+  // the look of a skill (js/engine/battlefx.js): a hero's skill by its number, anything else by its own fx or element
+  function styleOf(u, sk) {
+    var list = u.side === 'party' ? (WM.data.skills[u.id] || []) : [], idx = -1;
+    for (var i = 0; i < list.length; i++) if (list[i].name === sk.name) idx = i;
+    return idx >= 0 ? WM.bfx.forSkill(sk, { hero: u.id, idx: idx }) : WM.bfx.forSkill(sk, {});
+  }
+  function isSignature(u, sk) { var list = u.side === 'party' ? (WM.data.skills[u.id] || []) : []; return !!sk.screen || (list.length > 2 && list[2].name === sk.name); }
+  // a great skill: the one who uses it gathers their strength, and the field darkens in its colour
+  async function gather(u, style) {
+    var col = WM.bfx.tintFor(style);
+    B.cur.tint = { col: col, t: 0, dur: 1.4 };
+    fx('charge', u.pos[0] + u.anim.ox, u.pos[1] - 40, { col: col, dur: 0.5 });
+    WM.bfx.sound('charge', 'hit');
+    await WM.wait(0.4);
+  }
+  // the effect at each target; a thrown weapon starts at the one who throws it, and the damage waits for it to land
+  async function strike(u, style, targets, ox, oy, dirX, silent) {
+    var from = [u.pos[0] + (ox || 0), u.pos[1] - 50 + (oy || 0)];
+    targets.forEach(function (t) { if (t) fx(style, t.pos[0], t.pos[1] - 50, { from: from, dir: dirX }); });
+    WM.bfx.sound(style, 'launch');
+    var wait = WM.bfx.travels(style) || (style === 'volley' || style === 'stars' ? 0.35 : style === 'dragon' ? 0.5 : 0);
+    if (wait) await WM.wait(wait);
+    if (!silent && targets.length) WM.bfx.sound(style, 'hit');
+  }
 
   function tweenAnim(u, ox, oy, dur) {
     var a = u.anim, sx = a.ox, sy = a.oy;
@@ -329,7 +353,9 @@
       var u = members[i];
       if (usedByUnite[u.id]) { i++; continue; }
       bt.active = u;
-      var c = await commandFor(bt, u, usedByUnite);
+      // a unite needs every partner free: not already given an order this round, nor drawn into another unite
+      var busy = Object.assign({}, usedByUnite); cmds.forEach(function (cm) { if (cm.u) busy[cm.u.id] = true; });
+      var c = await commandFor(bt, u, busy);
       if (c === 'back') {
         if (i === 0) { bt.active = null; return null; }
         // undo previous command
@@ -357,7 +383,7 @@
         { label: 'Skill', v: 'tal', disabled: !arts.length, help: arts.length ? arts.map(function (a) { return a.name; }).join(', ') : 'No skills.' },
         { label: 'Item', v: 'item', disabled: !S.invList(function (it) { return it.battle; }).length },
         { label: 'Defend', v: 'defend' },
-        { label: 'Unite', v: 'unite', disabled: !unites.length, help: unites.length ? unites.map(function (x) { return x.name; }).join(', ') : 'No unite partners in the party.' }
+        { label: 'Unite', v: 'unite', disabled: !unites.length, help: unites.length ? unites.map(function (x) { return x.name; }).join(', ') : uniteBlocked(bt, u) }
       ];
       var list = new UI.List(items, { x: MENU_X, y: 196, w: MENU_W, help: true });
       list.idx = u.lastCmd || (canAttack(u) ? 0 : 3);
@@ -452,6 +478,16 @@
       .filter(function (sk) { return max[sk.lvl - 1] > 0; });
   }
   B.skillsOf = skillsOf;
+  // (debug) a party member uses one of their skills now, in the battle under way: WM.battle.demo('linchong', 2)
+  B.demo = function (who, i) {
+    var bt = B.cur; if (!bt) return null;
+    var u = bt.party.filter(function (p) { return p.id === who; })[0] || bt.party[0];
+    var sk = Object.assign({ lvl: i + 1 }, (WM.data.skills[u.id] || [])[i]);
+    u.mp[i] = Math.max(1, u.mp[i] || 0); u.hp = Math.max(1, u.hp);
+    bt.enemies.forEach(function (e) { e.hp = e.mhp; e.anim.alpha = 1; });   // (keep them standing for the next one)
+    return perform(bt, { type: 'tal', u: u, spell: sk, target: null });
+  };
+  B.demoAction = function (a) { return B.cur ? perform(B.cur, a) : null; };   // (debug) any action: an enemy's skill, a unite attack, an item
   function magical(sk) { return sk.effect !== 'phys'; }
 
   // what a skill reaches, in a few words, ahead of its description
@@ -474,13 +510,23 @@
     return UI.choose(items, { x: 250, y: 60, w: 420, help: true, title: 'Items', rows: 7 }).then(function (k) { return k < 0 ? null : inv[k]; });
   }
 
+  // the unites this hero can lead now: every partner standing, awake and not yet given an order this round,
+  // and the unite not yet used in this battle (each can be done once)
   function availableUnites(bt, u, used) {
     var inParty = {};
     bt.party.forEach(function (p) { if (p.hp > 0 && !p.status.sleep && !used[p.id]) inParty[p.id] = p; });
     return (WM.data.unites || []).filter(function (un) {
-      if (un.members.indexOf(u.id) < 0) return false;
-      return un.members.every(function (m) { return inParty[m]; });
+      if (un.members.indexOf(u.id) < 0 || (bt.unitesUsed && bt.unitesUsed[un.id])) return false;
+      return un.members.every(function (m) { return m === u.id || inParty[m]; });
     });
+  }
+  // why there is no unite to offer, for the menu's help line
+  function uniteBlocked(bt, u) {
+    var ids = bt.party.map(function (p) { return p.id; });
+    var mine = (WM.data.unites || []).filter(function (un) { return un.members.indexOf(u.id) >= 0 && un.members.every(function (m) { return ids.indexOf(m) >= 0; }); });
+    if (!mine.length) return 'No unite partners in the party.';
+    if (mine.every(function (un) { return bt.unitesUsed && bt.unitesUsed[un.id]; })) return 'Already used in this battle (each unite once per battle).';
+    return 'Every partner must be free: standing, awake, and not yet given an order this round.';
   }
 
   // ---------- executing a round ----------
@@ -550,11 +596,18 @@
       await tweenAnim(u, dx, dy, 0.16);
       var res = physDamage(u, t);
       var weaponFx = u.side === 'party' ? S.weapon(u.id).fx : (u.def.fx);
-      if (u.range === 'L' && (weaponFx === 'arrow' || weaponFx === 'stone')) { fx(weaponFx, t.pos[0], t.pos[1] - 50, { from: [u.pos[0] + dx, u.pos[1] - 50 + dy] }); WM.audio.sfx('arrow'); await WM.wait(0.18); }
+      var shot = u.range === 'L' && (weaponFx === 'arrow' || weaponFx === 'stone');
+      if (shot) { fx(weaponFx, t.pos[0], t.pos[1] - 50, { from: [u.pos[0] + dx, u.pos[1] - 50 + dy], dir: dirX }); WM.bfx.sound(weaponFx, 'launch'); await WM.wait(WM.bfx.travels(weaponFx)); }
       if (res.miss) { WM.audio.sfx('miss'); pop(t, 'Miss', '#c0c0c0'); }
       else {
-        fx(weaponFx === 'claw' ? 'claw' : weaponFx === 'blunt' ? 'blunt' : 'slash', t.pos[0], t.pos[1] - 50, { flip: dirX > 0 });
-        WM.audio.sfx(res.crit ? 'crit' : 'hit');
+        if (!shot) {
+          // the blow drawn as the weapon strikes: a cut, a thrust, a chop, a smash (see WM.bfx.strikeOf)
+          var look = u.def && u.def.sprite && u.def.sprite.look, wname = u.side === 'party' ? S.weapon(u.id).name : (look && look.weapon) || '';
+          var strike = WM.bfx.strikeOf(wname, weaponFx);
+          fx(strike, t.pos[0], t.pos[1] - 50, { dir: dirX, dur: Math.min(0.5, WM.bfx.dur(strike)), scale: 0.8, from: [u.pos[0] + dx, u.pos[1] - 50 + dy] });
+        }
+        if (shot) WM.bfx.sound(weaponFx, 'hit');
+        WM.audio.sfx(res.crit ? 'crit' : shot ? 'step' : 'hit');
         if (res.crit) { G.shake = 2; pop(t, res.dmg, '#ffd040', true); } else pop(t, res.dmg, '#ffffff');
         applyDamage(t, res.dmg);
       }
@@ -574,9 +627,9 @@
       u.mp[sp.lvl - 1]--;
     }
     await banner(sp.name);
-    u.anim.glow = 0.6;
-    WM.audio.sfx('magic');
-    await WM.wait(0.3);
+    var style = styleOf(u, sp);
+    if (isSignature(u, sp)) await gather(u, style);
+    else { u.anim.glow = 0.6; WM.audio.sfx('magic'); await WM.wait(0.3); }
     var targets;
     var tt = sp.target;
     if (tt === 'enemy1') targets = [target && target.hp > 0 ? target : U.pick(living(foes(u)))].filter(Boolean);
@@ -586,10 +639,11 @@
     else if (tt === 'allyAll') targets = living(allies(u));
     else if (tt === 'self') targets = [u];
     else targets = [];
-    WM.audio.sfx(sp.element || 'magic');
-    targets.forEach(function (t) { if (t) fx(sp.element || 'magic', t.pos[0], t.pos[1] - 50, { dur: 0.7 }); });
+    WM.bfx.sound(style, 'hit');
+    var buffCol = sp.status === 'defUp' ? '130,200,255' : sp.status === 'atkUp' ? '255,190,90' : null;
+    targets.forEach(function (t) { if (t) fx(style, t.pos[0], t.pos[1] - 50, { col: buffCol, dir: u.side === 'party' ? -1 : 1, from: [u.pos[0], u.pos[1] - 50] }); });
     if (sp.screen) { G.flash = 0.6; G.shake = 3; }
-    await WM.wait(0.45);
+    await WM.wait(Math.max(0.45, WM.bfx.dur(style) * 0.6));
     targets.forEach(function (t) {
       if (!t) return;
       if (sp.effect === 'damage') { var d = magicDamage(u, t, sp.power, sp.element); pop(t, d, '#ffb070'); applyDamage(t, d); if (sp.status && t.hp > 0 && Math.random() < (sp.statusChance || 0.5)) { t.status[sp.status] = 3; pop(t, statusName(sp.status), '#c0a0ff'); } }
@@ -606,12 +660,14 @@
     if (u.mp[sk.lvl - 1] <= 0) { pop(u, 'No uses left', '#c0c0c0'); return; }
     u.mp[sk.lvl - 1]--;
     await banner(sk.name);
-    u.anim.glow = 0.5;
+    var style = styleOf(u, sk);
+    if (isSignature(u, sk)) await gather(u, style);
+    else u.anim.glow = 0.5;
     var pool = function () { return living(foes(u)); };
     var single = sk.target === 'enemy1';
     var first = single ? (target && target.hp > 0 ? target : U.pick(pool())) : null;
     if (single && !first) return;
-    var dirX = u.side === 'party' ? -1 : 1, near = !sk.shot && u.range !== 'L';
+    var dirX = u.side === 'party' ? -1 : 1, near = !sk.shot && u.range !== 'L' && !WM.bfx.travels(style) && ['volley', 'roar', 'whip', 'net', 'stars', 'dragon', 'thunder', 'water', 'earth', 'wind', 'sand', 'drug', 'dark', 'fire'].indexOf(style) < 0;
     var aim = first || { pos: [u.pos[0] + dirX * 160, u.pos[1]] };
     var dx = (aim.pos[0] - u.pos[0]) * (near ? 0.55 : 0.15), dy = (aim.pos[1] - u.pos[1]) * (near ? 0.55 : 0.15);
     await tweenAnim(u, dx, dy, 0.16);
@@ -622,18 +678,18 @@
       targets = targets.filter(function (t) { return t && t.hp > 0; });
       if (!targets.length && single && !sk.scatter) targets = [U.pick(pool())].filter(Boolean);   // the first one fell: go on to the next
       if (!targets.length) break;
-      if (sk.shot) { targets.forEach(function (t) { fx(sk.shot, t.pos[0], t.pos[1] - 50, { from: [u.pos[0] + dx, u.pos[1] - 50 + dy] }); }); WM.audio.sfx('arrow'); await WM.wait(0.16); }
+      await strike(u, style, targets, dx, dy, dirX, true);
       var anyCrit = false;
       targets.forEach(function (t) {
         var r = physDamage(u, t, sk.power, sk);
         if (r.miss) { pop(t, 'Miss', '#c0c0c0'); return; }
-        fx(sk.fx || (sk.shot ? 'burst' : 'slash'), t.pos[0], t.pos[1] - 50, { flip: dirX > 0 });
         if (r.crit) anyCrit = true;
         pop(t, r.dmg, r.crit ? '#ffd040' : '#ffe0a0', r.crit);
         applyDamage(t, r.dmg);
         if (sk.status && t.hp > 0 && Math.random() < (sk.statusChance || 0.5) && !(t.def && t.def.boss && sk.status === 'sleep' && Math.random() < 0.6)) { t.status[sk.status] = sk.status === 'sleep' ? 1 : 3; pop(t, statusName(sk.status), '#c0a0ff'); }
       });
-      WM.audio.sfx(anyCrit ? 'crit' : 'hit');
+      if (targets.length) WM.bfx.sound(style, 'hit');
+      if (anyCrit) WM.audio.sfx('crit');
       if (anyCrit) G.shake = 2;
       await WM.wait(hits > 1 ? 0.2 : 0.3);
     }
@@ -648,11 +704,12 @@
     if (S.count(itemId) <= 0) { pop(u, 'None left', '#c0c0c0'); return; }
     S.take(itemId, 1);
     await banner(it.name);
-    WM.audio.sfx(it.sfx || 'heal');
+    var istyle = WM.bfx.forOther({ fx: it.fx, effect: it.effect, target: it.battle });
+    if (it.sfx) WM.audio.sfx(it.sfx); else WM.bfx.sound(istyle, 'hit');
     var targets = it.battle === 'allyAll' ? living(allies(u)) : it.battle === 'enemyAll' ? living(foes(u)) : [target && (target.hp > 0 || it.battle === 'allyKO') ? target : (it.battle === 'enemy1' ? U.pick(living(foes(u))) : u)];
     targets.forEach(function (t) {
       if (!t) return;
-      fx(it.fx || 'heal', t.pos[0], t.pos[1] - 50);
+      fx(WM.bfx.forOther({ fx: it.fx, effect: it.effect, target: it.battle }), t.pos[0], t.pos[1] - 50, { dir: u.side === 'party' ? -1 : 1, from: [u.pos[0], u.pos[1] - 50] });
       var e = it.effect || {};
       if (e.revive && t.hp <= 0) { t.hp = Math.round(t.mhp * e.revive); pop(t, 'Revived', '#7fe07a'); }
       if (e.heal && t.hp > 0) applyHeal(t, e.heal === 'full' ? t.mhp : e.heal);
@@ -666,17 +723,24 @@
   }
 
   async function doUnite(bt, un) {
+    (bt.unitesUsed = bt.unitesUsed || {})[un.id] = true;   // once per battle
     var mem = un.members.map(function (m) { return bt.party.filter(function (p) { return p.id === m; })[0]; }).filter(Boolean);
     if (mem.some(function (m) { return m.hp <= 0; })) { pop(mem[0], 'Unite failed', '#c0c0c0'); return; }
     await banner(un.name, true);
+    var ustyle = WM.bfx.forOther(Object.assign({ target: un.target === 'all' ? 'all' : 'one' }, un));
+    if (ustyle === 'smash') ustyle = 'rush';   // (a joint charge, not one club)
+    B.cur.tint = { col: WM.bfx.tintFor(ustyle), t: 0, dur: 1.6 };
+    mem.forEach(function (m) { fx('charge', m.pos[0], m.pos[1] - 40, { col: WM.bfx.tintFor(ustyle), dur: 0.5 }); });
+    await WM.wait(0.35);
     var targets = un.target === 'all' ? living(bt.enemies) : [U.pick(living(bt.enemies).filter(function (t) { return t.row === 0 || frontRowEmpty(bt.enemies); }) || living(bt.enemies))].filter(Boolean);
     if (!targets.length) return;
     var focus = targets[0];
     await Promise.all(mem.map(function (m, i) { return tweenAnim(m, (focus.pos[0] - m.pos[0]) * 0.5 + i * 12, (focus.pos[1] - m.pos[1]) * 0.4 - i * 8, 0.22); }));
     G.flash = 0.5; G.shake = 4;
-    WM.audio.sfx(un.sfx || 'crit');
-    targets.forEach(function (t) { fx(un.fx || 'burst', t.pos[0], t.pos[1] - 50, { dur: 0.8 }); });
-    await WM.wait(0.4);
+    if (un.sfx) WM.audio.sfx(un.sfx); else WM.bfx.sound(ustyle, 'hit');
+    WM.audio.sfx('crit');
+    targets.forEach(function (t) { fx(ustyle, t.pos[0], t.pos[1] - 50, { dir: -1, from: [focus.pos[0] + 120, focus.pos[1] - 50] }); });
+    await WM.wait(Math.max(0.4, WM.bfx.travels(ustyle)));
     var atk = 0; mem.forEach(function (m) { atk += m.atk; });
     targets.forEach(function (t) {
       var raw = atk * (un.mult || 1) * (0.9 + Math.random() * 0.2) - t.dfs * 0.5;
@@ -693,9 +757,12 @@
     var pool = living(bt.party.concat(bt.guests));
     if (!pool.length) return;
     var targets = sk.target === 'all' ? pool : sk.target === 'self' ? [u] : sk.target === 'allyAll' ? living(bt.enemies) : [U.pick(pool)];
-    if (sk.type === 'phys') await tweenAnim(u, 60, -10, 0.15);
-    WM.audio.sfx(sk.sfx || sk.element || 'magic');
-    targets.forEach(function (t) { fx(sk.fx || sk.element || 'slash', t.pos[0], t.pos[1] - 50, { dur: 0.6 }); });
+    var estyle = WM.bfx.forOther(sk);
+    if (sk.screen || (u.def && u.def.boss && sk.type === 'magic')) await gather(u, estyle);
+    var ranged = WM.bfx.travels(estyle) || estyle === 'volley';
+    if (sk.type === 'phys' && !ranged) await tweenAnim(u, 60, -10, 0.15);
+    if (sk.sfx) WM.audio.sfx(sk.sfx);
+    await strike(u, estyle, targets, 0, 0, 1, !!sk.sfx);
     if (sk.screen) { G.flash = 0.5; G.shake = 3; }
     await WM.wait(0.4);
     targets.forEach(function (t) {
@@ -795,6 +862,7 @@
     bt.pops = bt.pops.filter(function (p) { return p.t < 1.1; });
     bt.fx.forEach(function (f) { f.t += dt; });
     bt.fx = bt.fx.filter(function (f) { return f.t < f.dur; });
+    if (bt.tint) { bt.tint.t += dt; if (bt.tint.t >= bt.tint.dur) bt.tint = null; }
     bt.party.concat(bt.enemies, bt.guests).forEach(function (u) {
       if (u.anim.flash > 0) u.anim.flash -= dt;
       if (u.anim.shake > 0) u.anim.shake -= dt;
@@ -808,6 +876,11 @@
     var c = G.ctx;
     c.imageSmoothingEnabled = false;
     B.drawBackground(c,bt.bg);
+    if (bt.tint) {   // a great skill: the field dims, washed with the skill's colour
+      var tk = bt.tint.t / bt.tint.dur, ta = Math.sin(Math.min(1, tk) * Math.PI);
+      c.fillStyle = 'rgba(10,8,20,' + (ta * 0.45).toFixed(3) + ')'; c.fillRect(0, 0, 960, 720);
+      c.globalCompositeOperation = 'lighter'; c.fillStyle = 'rgba(' + bt.tint.col + ',' + (ta * 0.12).toFixed(3) + ')'; c.fillRect(0, 0, 960, 720); c.globalCompositeOperation = 'source-over';
+    }
     // draw units sorted by y
     var units = bt.party.concat(bt.enemies, bt.guests).slice().sort(function (a, b) { return a.pos[1] - b.pos[1]; });
     units.forEach(function (u) { drawUnit(u, bt); });
@@ -872,58 +945,9 @@
     if (u.side === 'enemy' && !ko && u.hp < u.mhp) G.bar(x - 30, y + 6, 60, 6, u.hp / u.mhp, G.hpColor(u.hp / u.mhp));
   }
 
-  function drawFx(bt) {
+  function drawFx(bt) {   // every effect is drawn by its style in js/engine/battlefx.js
     var c = G.ctx;
-    bt.fx.forEach(function (f) {
-      var k = f.t / f.dur;
-      c.save();
-      switch (f.kind) {
-        case 'slash': case 'claw':
-          c.strokeStyle = 'rgba(255,255,255,' + (1 - k) + ')'; c.lineWidth = f.kind === 'claw' ? 4 : 6;
-          var n = f.kind === 'claw' ? 3 : 1;
-          for (var i = 0; i < n; i++) { c.beginPath(); var off = (i - (n - 1) / 2) * 16; c.moveTo(f.x - 40 + off, f.y - 40); c.lineTo(f.x - 40 + off + 80 * Math.min(1, k * 3), f.y - 40 + 80 * Math.min(1, k * 3)); c.stroke(); }
-          break;
-        case 'blunt': case 'burst':
-          c.fillStyle = 'rgba(255,240,180,' + (1 - k) + ')';
-          for (i = 0; i < 8; i++) { var an = i / 8 * Math.PI * 2, r = 10 + k * (f.kind === 'burst' ? 90 : 50); c.fillRect(f.x + Math.cos(an) * r - 4, f.y + Math.sin(an) * r - 4, 8, 8); }
-          if (f.kind === 'burst') { c.strokeStyle = 'rgba(255,200,80,' + (1 - k) + ')'; c.lineWidth = 6; c.beginPath(); c.arc(f.x, f.y, k * 110, 0, 7); c.stroke(); }
-          break;
-        case 'arrow': case 'stone':
-          var from = f.opt.from || [f.x + 200, f.y];
-          var px = from[0] + (f.x - from[0]) * Math.min(1, k * 2.5), py = from[1] + (f.y - from[1]) * Math.min(1, k * 2.5) - Math.sin(Math.min(1, k * 2.5) * Math.PI) * 30;
-          if (f.kind === 'arrow') { c.strokeStyle = '#e8e0d0'; c.lineWidth = 3; c.beginPath(); c.moveTo(px, py); c.lineTo(px + 24, py - 4); c.stroke(); }
-          else { c.fillStyle = '#9a9a92'; c.fillRect(px - 5, py - 5, 10, 10); }
-          break;
-        case 'fire':
-          for (i = 0; i < 14; i++) { var fx2 = f.x + Math.sin(i * 7.3) * 40, fy = f.y + 40 - (k * 120 + i * 9) % 100; c.fillStyle = i % 2 ? 'rgba(255,140,40,' + (1 - k) + ')' : 'rgba(255,220,80,' + (1 - k) + ')'; c.fillRect(fx2 - 6, fy - 10, 12, 18); }
-          break;
-        case 'thunder':
-          c.strokeStyle = 'rgba(255,255,160,' + (1 - k) + ')'; c.lineWidth = 6; c.beginPath();
-          var lx = f.x, ly = f.y - 300; c.moveTo(lx, ly);
-          for (i = 0; i < 8; i++) { lx = f.x + (Math.random() - 0.5) * 50; ly += 40; c.lineTo(lx, ly); } c.stroke();
-          break;
-        case 'water': case 'heal':
-          for (i = 0; i < 12; i++) { var hx = f.x + Math.sin(i * 2.4) * 40, hy = f.y + 40 - k * 100 - (i % 4) * 14; c.fillStyle = f.kind === 'heal' ? 'rgba(160,255,170,' + (1 - k) + ')' : 'rgba(140,200,255,' + (1 - k) + ')'; c.fillRect(hx - 3, hy - 3, 6, 6); }
-          break;
-        case 'wind':
-          c.strokeStyle = 'rgba(220,255,230,' + (1 - k) + ')'; c.lineWidth = 3;
-          for (i = 0; i < 4; i++) { c.beginPath(); c.arc(f.x, f.y, 20 + i * 14 + k * 30, k * 8 + i, k * 8 + i + 2.2); c.stroke(); }
-          break;
-        case 'earth':
-          c.fillStyle = 'rgba(140,110,70,' + (1 - k) + ')';
-          for (i = 0; i < 10; i++) c.fillRect(f.x + Math.sin(i * 3.1) * 50 - 6, f.y + 40 - Math.abs(Math.sin(k * 6 + i)) * 60, 12, 12);
-          break;
-        case 'dark': case 'magic':
-          c.fillStyle = f.kind === 'dark' ? 'rgba(120,40,160,' + (1 - k) * 0.6 + ')' : 'rgba(255,230,140,' + (1 - k) * 0.6 + ')';
-          c.beginPath(); c.arc(f.x, f.y, 20 + k * 60, 0, 7); c.fill();
-          break;
-        case 'sand':
-          c.fillStyle = 'rgba(200,170,90,' + (1 - k) * 0.8 + ')';
-          for (i = 0; i < 30; i++) c.fillRect(f.x - 120 + ((i * 37 + k * 400) % 240), f.y - 60 + (i * 13) % 120, 5, 3);
-          break;
-      }
-      c.restore();
-    });
+    WM.bfx.drawLayer(c, bt.fx);
   }
 
   function drawPanel(bt) {

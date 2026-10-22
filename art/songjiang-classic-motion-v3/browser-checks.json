@@ -1,0 +1,13 @@
+{
+  "phases": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "fourDirections": true,
+  "threeMaps": true,
+  "standingAndPreviousModes": true,
+  "comparison": true,
+  "errors": []
+}

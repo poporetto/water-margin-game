@@ -47,7 +47,7 @@
   y.vline(lion.x, lion.y + 1, 10, ':'); y.vline(33, 13, 14, ':'); y.vline(hejiu.x, hejiu.y + 1, 14, ':');
   y.scatter('T', 0.06, 251, '.', [1, 1, 40, 32]); y.scatter('f', 0.04, 252, '.', [1, 1, 40, 32]);
   L.clearAround(y, ':', 'T', '.'); L.clearAround(y, '=', 'T', '.');
-  WM.defMap('yanggu', { name: 'Yanggu County', theme: 'autumn', music: 'town', rows: y.rows(), spawn: [21, 31], battleBg: 'town',
+  WM.defMap('yanggu', { name: 'Yanggu County', theme: 'autumn', music: 'town_yanggu', rows: y.rows(), spawn: [21, 31], battleBg: 'town',
     exits: [WM.toWorld('yanggu', 20, 33, 3, 1)] });
   var yi = L.grid(70, 12, 'x');
   var yR = { office: yi.room(1, 1, 12, 9, { floor: 'N' }), dalang: yi.room(14, 1, 10, 9), wang: yi.room(25, 1, 8, 8), ximen: yi.room(34, 1, 10, 8), lion: yi.room(45, 1, 14, 10), hejiu: yi.room(60, 1, 8, 8) };
@@ -60,7 +60,7 @@
   // once Wu Dalang is dead, an altar table with his spirit tablet stands against the back wall of his house
   var yRows = WM.growBeds(yi.rows()), yRowsMourning = null;   // (beds grown here, as defMap does for a plain list of rows)
   var mourning = function () { return !!(WM.state && WM.state.flags && WM.state.flags.ch7_return); };
-  WM.defMap('yanggu_in', { name: '', interior: true, theme: 'autumn', music: 'town', spawn: [6, 8],
+  WM.defMap('yanggu_in', { name: '', interior: true, theme: 'autumn', music: 'town_yanggu', spawn: [6, 8],
     cacheKey: function () { return mourning() ? 'mourning' : 'plain'; },
     rows: function () {
       if (!mourning()) return yRows;
@@ -104,7 +104,7 @@
   var happy = m.house(42, 19, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); m.set(41, 19, 'J');
   m.vline(46, 23, 24, ':'); m.hline(38, 46, 24, ':');
   m.scatter('T', 0.05, 271, '.', [1, 1, 54, 28]); L.clearAround(m, ':', 'T', '.'); m.rect(44, 9, 2, 2, ':');
-  WM.defMap('mengzhou', { name: 'Mengzhou', theme: 'autumn', music: 'town', rows: m.rows(), spawn: [1, 14], battleBg: 'town',
+  WM.defMap('mengzhou', { name: 'Mengzhou', theme: 'autumn', music: 'town_mengzhou', rows: m.rows(), spawn: [1, 14], battleBg: 'town',
     exits: [WM.toWorld('mengzhou', 0, 13, 1, 3), WM.toWorld('mengzhou', 55, 13, 1, 3)] });
   WM.data.mengzhouTaverns = taverns;
   var mi = L.grid(56, 12, 'x');
@@ -115,7 +115,7 @@
   mi.stamp(45, 3, ['h..L....h', '.t..t..t.', 'cccc.....']);
   mi.set(21, 3, 'S'); mi.set(22, 3, 'S');   // the stairs at the back of the Commander's hall, up to the Mandarin Duck Tower
   mi.set(36, 7, 'S'); mi.set(37, 7, 'S');   // ...and where they come up: the entrance of the tower room, in the middle
-  WM.defMap('mengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: mi.rows(), spawn: [6, 7] });
+  WM.defMap('mengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town_mengzhou', rows: mi.rows(), spawn: [6, 7] });
   L.link({ map: 'mengzhou', x: camp.x, y: camp.y }, { map: 'mengzhou_in', x: mR.camp.x, y: mR.camp.y });
   L.link({ map: 'mengzhou', x: zhang.x, y: zhang.y }, { map: 'mengzhou_in', x: mR.zhang.x, y: mR.zhang.y });
   L.link({ map: 'mengzhou', x: happy.x, y: happy.y }, { map: 'mengzhou_in', x: mR.happy.x, y: mR.happy.y });

@@ -44,10 +44,10 @@
   g.rect(20, 31, 4, 1, 'G');
   g.rect(20, 1, 4, 30, ':'); g.rect(1, 14, 42, 3, ':');
   // prison camp (north-west), walled
-  g.frame(2, 2, 16, 10, 'F'); g.set(10, 11, ':'); g.vline(10, 11, 13, ':');
-  var camp = g.house(4, 3, 9, 5, { roof: 'v', wall: 'R', door: 4 });
+  // (two rows deeper than the buildings need, so the tents have ground of their own below them)
+  g.frame(2, 2, 16, 12, 'F'); g.vline(10, 8, 13, ':');
+  var camp = g.house(4, 3, 8, 5, { roof: 'v', wall: 'R', door: 4 });   // a step clear of the guardhouse, so their walls don't run together
   g.house(13, 3, 4, 4, { roof: 'z', door: false });
-  g.stamp(4, 9, ['V.V.V']);
   // Celestial King Hall (north-east)
   var tw = g.house(28, 3, 9, 6, { roof: 'v', wall: 'R', door: 4 });
   g.set(27, 7, 'L'); g.set(37, 7, 'L');
@@ -59,9 +59,11 @@
   g.vline(32, 9, 13, ':');
   g.scatter('T', 0.06, 131, '.', [1, 1, 42, 30]); g.scatter('f', 0.03, 132, '.', [1, 1, 42, 30]);
   L.clearAround(g, ':', 'T', '.');
+  // the convicts' tents along the bottom of the camp, each with the 3x2 of open ground its art stands on
+  [[3, 12], [7, 12], [12, 12]].forEach(function (p) { g.rect(p[0], p[1] - 1, 3, 2, '.'); g.set(p[0], p[1], 'V'); });
   // Lin Chong is here in the snows of winter; Zhu Tong's exile (chapter 13) falls in the seventh month
   var summer = function () { return WM.S.has('ch12_done'); };
-  WM.defMap('cangzhou', { name: 'Cangzhou', get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town' : 'snow'; }, rows: g.rows(), spawn: [21, 29], get battleBg() { return summer() ? 'town' : 'snow'; },
+  WM.defMap('cangzhou', { name: 'Cangzhou', get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town_cangzhou' : 'snow'; }, rows: g.rows(), spawn: [21, 29], get battleBg() { return summer() ? 'town' : 'snow'; },
     exits: [WM.toWorld('cangzhou', 20, 31, 4, 1), { x: 43, y: 14, w: 1, h: 3, to: 'fodder', tx: 1, ty: 12, dir: 'right' }] });
   var gi = L.grid(56, 12, 'x');
   var gR = { camp: gi.room(1, 1, 12, 8, { floor: 'N' }), tw: gi.room(14, 1, 10, 8, { floor: 'N' }), lix: gi.room(25, 1, 10, 8), shop: gi.room(36, 1, 8, 8), inn: gi.room(45, 1, 10, 8) };
@@ -70,7 +72,7 @@
   gi.stamp(26, 3, ['h..L...h', '........', '.t..t..t', 'cc......']);
   gi.stamp(37, 3, ['hhhh..', '......', 'ccc...']);
   gi.stamp(46, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
-  WM.defMap('cangzhou_in', { name: '', interior: true, get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town' : 'snow'; }, rows: gi.rows(), spawn: [6, 7] });
+  WM.defMap('cangzhou_in', { name: '', interior: true, get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town_cangzhou' : 'snow'; }, rows: gi.rows(), spawn: [6, 7] });
   [[camp, gR.camp], [tw, gR.tw], [lix, gR.lix], [shop, gR.shop], [inn, gR.inn]].forEach(function (p) { L.link({ map: 'cangzhou', x: p[0].x, y: p[0].y }, { map: 'cangzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.cangzhou = { rooms: gR };
   WM.defEvents('cangzhou_in', [

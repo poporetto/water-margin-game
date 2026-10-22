@@ -1,0 +1,14 @@
+{
+  "mode": "built-in imagegen",
+  "luda": {
+    "source": "luda-original.png",
+    "prompt": "luda-prompt.txt",
+    "generatedPath": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-f8d2ba1d-fdab-4e37-877b-6142869b1ab5.png"
+  },
+  "luzhishen": {
+    "source": "luzhishen-original.png",
+    "prompt": "luzhishen-prompt.txt",
+    "generatedPath": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-d275d013-7576-4e00-b3e7-04ad6bc554c8.png"
+  },
+  "status": "standing design candidates, pending user review"
+}

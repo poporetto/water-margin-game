@@ -1,0 +1,8 @@
+EDIT this Song Jiang walking sprite sheet. Preserve the character, palette, costume, head wrap, moustache and short beard, coarse Suikoden II pixel-art style, every standing pose, all four directions and 3x4 layout. Fix only WALK ANIMATION CONSISTENCY.
+The current second and third columns repeat the same leading arm/leg. They must be OPPOSITE WALK PHASES.
+Rows: DOWN, LEFT, RIGHT, UP. Columns: standing neutral, near/left leg forward, near/left leg back (opposite leg forward).
+For front/back rows, make column 3 the horizontally mirrored limb phase of column 2 with the same centrally aligned head.
+For LEFT row: column 2 shows NEAR arm to viewer swinging BACK toward image right and NEAR leg toward image left; column 3 shows NEAR arm swinging FORWARD toward image left and NEAR leg toward image right, with far arm/leg oppositely placed. This is mandatory: the visible near hand in col3 must be on the LEFT side of the torso, whereas in col2 it is on the RIGHT side. Feet can overlap in projection but shading distinguishes near and far legs.
+For RIGHT row mirror the corrected LEFT row exactly.
+LOCK THE HEAD AND TORSO: within each row, all three heads have exactly identical size, shape, face pixels and position. Standing and step poses have identical shoulder width, collar and belt position. Only arm swing, leg swing and lower robe hem move. Small one pixel bob at most. No resizing, no changing head angles or inventing details. Fixed boot baseline.
+Exactly 12 separate sprites, 3 columns x4 rows, on real transparency. Keep strong crisp square pixel blocks, limited palette, dark outlines; no antialias, no blur, no shadow. All sprites comfortably separated with clear transparent gutters.

@@ -35,7 +35,7 @@
   for (var y = 2; y < 30; y += 5) { if (y >= 10 && y <= 17) continue; g.set(18, y, 'L'); g.set(23, y, 'L'); }
   g.set(17, 29, 'I');
   WM.defMap('weizhou', {
-    name: 'Weizhou', keepFlankingLanterns: true, theme: 'autumn', music: 'town', rows: g.rows(), battleBg: 'town', spawn: [20, 29],
+    name: 'Weizhou', keepFlankingLanterns: true, theme: 'autumn', music: 'market', rows: g.rows(), battleBg: 'town', spawn: [20, 29],
     exits: [WM.toWorld('weizhou', 19, 31, 4, 1)]
   });
 
@@ -46,7 +46,7 @@
   R.pan = I.room(25, 1, 18, 10); I.stamp(26, 3, ['h...L.....L...h.', '................', '.t..t..t....t...', '................', '.t..t..t..cccc..']);
   R.inn = I.room(44, 1, 12, 8); I.stamp(45, 3, ['.....kk.kk', '.....kk.kk', 'cccc......']);
   R.butcher = I.room(1, 12, 12, 8); I.stamp(2, 14, ['jj..hh..jj', '..........', '.cccccccc.']);
-  WM.defMap('weizhou_in', { name: '', interior: true, theme: 'autumn', music: 'town', rows: I.rows(), spawn: [6, 7] });
+  WM.defMap('weizhou_in', { name: '', interior: true, theme: 'autumn', music: 'market', rows: I.rows(), spawn: [6, 7] });
   var link = function (door, room) { L.link({ map: 'weizhou', x: door.x, y: door.y }, { map: 'weizhou_in', x: room.x, y: room.y }); };
   link(tea, R.tea); link(garrison, R.garrison); link(pan, R.pan); link(inn, R.inn); link(butcher, R.butcher);
   WM.data.weizhouRooms = R;

@@ -1,0 +1,34 @@
+{
+  "checks": [
+    {
+      "direction": "down",
+      "originalIdlePixelExact": true,
+      "headPixelExact": true,
+      "stridesDistinct": true
+    },
+    {
+      "direction": "left",
+      "originalIdlePixelExact": true,
+      "headPixelExact": true,
+      "stridesDistinct": true
+    },
+    {
+      "direction": "right",
+      "originalIdlePixelExact": true,
+      "headPixelExact": true,
+      "stridesDistinct": true
+    },
+    {
+      "direction": "up",
+      "originalIdlePixelExact": true,
+      "headPixelExact": true,
+      "stridesDistinct": true
+    }
+  ],
+  "rightMirrorsLeft": true,
+  "size": [
+    576,
+    1024
+  ],
+  "detailPixelCountIncrease": 4
+}

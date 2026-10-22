@@ -1,0 +1,91 @@
+{
+  "sides": [
+    {
+      "file": "songjiang-walking.png",
+      "pixelIdentical": true
+    },
+    {
+      "file": "songjiang-walking-96.png",
+      "pixelIdentical": true
+    },
+    {
+      "file": "songjiang-walking-master.png",
+      "pixelIdentical": true
+    }
+  ],
+  "colourStats": [
+    {
+      "direction": "front",
+      "values": [
+        {
+          "redMedian": 158,
+          "goldLumaMedian": 157.9614
+        },
+        {
+          "redMedian": 160,
+          "goldLumaMedian": 158.25179999999997
+        },
+        {
+          "redMedian": 160,
+          "goldLumaMedian": 155.25300000000001
+        }
+      ]
+    },
+    {
+      "direction": "back",
+      "values": [
+        {
+          "redMedian": 147,
+          "goldLumaMedian": 168.6646
+        },
+        {
+          "redMedian": 148,
+          "goldLumaMedian": 172.7432
+        },
+        {
+          "redMedian": 152,
+          "goldLumaMedian": 173.9414
+        }
+      ]
+    }
+  ],
+  "headShoulderLock": false,
+  "frameTops": [
+    {
+      "direction": "front",
+      "column": 0,
+      "top": 40,
+      "height": 216
+    },
+    {
+      "direction": "front",
+      "column": 1,
+      "top": 39,
+      "height": 217
+    },
+    {
+      "direction": "front",
+      "column": 2,
+      "top": 39,
+      "height": 217
+    },
+    {
+      "direction": "back",
+      "column": 0,
+      "top": 40,
+      "height": 216
+    },
+    {
+      "direction": "back",
+      "column": 1,
+      "top": 38,
+      "height": 218
+    },
+    {
+      "direction": "back",
+      "column": 2,
+      "top": 39,
+      "height": 217
+    }
+  ]
+}

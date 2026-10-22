@@ -1,0 +1,18 @@
+{
+  "errors": [],
+  "ready": true,
+  "density": 8,
+  "actors": 3,
+  "lastError": null,
+  "directions": [
+    "front",
+    "left",
+    "back"
+  ],
+  "maps": [
+    "zhugui_in",
+    "zhugui",
+    "liangshan"
+  ],
+  "detailImages": "all loaded"
+}

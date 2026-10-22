@@ -1,0 +1,32 @@
+[
+  {
+    "entry": "index.html",
+    "approvedV1": true,
+    "frameChecks": 16,
+    "keyboardDirections": 4,
+    "idleResets": true,
+    "logicalSize": [
+      24,
+      32
+    ],
+    "density": 8,
+    "monkCostumeDistinct": true,
+    "battleFallback": true,
+    "errors": []
+  },
+  {
+    "entry": "docs/index.html",
+    "approvedV1": true,
+    "frameChecks": 16,
+    "keyboardDirections": 4,
+    "idleResets": true,
+    "logicalSize": [
+      24,
+      32
+    ],
+    "density": 8,
+    "monkCostumeDistinct": true,
+    "battleFallback": true,
+    "errors": []
+  }
+]

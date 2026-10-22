@@ -1,0 +1,74 @@
+[
+  {
+    "entry": "index.html",
+    "storyStates": [
+      {
+        "chapter": 3,
+        "exiled": false,
+        "outfit": "official"
+      },
+      {
+        "chapter": 3,
+        "exiled": true,
+        "outfit": "exile"
+      },
+      {
+        "chapter": 4,
+        "exiled": false,
+        "outfit": "exile"
+      },
+      {
+        "chapter": 2,
+        "exiled": false,
+        "outfit": "official"
+      }
+    ],
+    "frameChecks": 32,
+    "logicalSize": [
+      24,
+      32
+    ],
+    "density": 8,
+    "battleCachesSeparate": true,
+    "keyboardDirections": 4,
+    "outfits": 2,
+    "idleResets": true,
+    "errors": []
+  },
+  {
+    "entry": "docs/index.html",
+    "storyStates": [
+      {
+        "chapter": 3,
+        "exiled": false,
+        "outfit": "official"
+      },
+      {
+        "chapter": 3,
+        "exiled": true,
+        "outfit": "exile"
+      },
+      {
+        "chapter": 4,
+        "exiled": false,
+        "outfit": "exile"
+      },
+      {
+        "chapter": 2,
+        "exiled": false,
+        "outfit": "official"
+      }
+    ],
+    "frameChecks": 32,
+    "logicalSize": [
+      24,
+      32
+    ],
+    "density": 8,
+    "battleCachesSeparate": true,
+    "keyboardDirections": 4,
+    "outfits": 2,
+    "idleResets": true,
+    "errors": []
+  }
+]

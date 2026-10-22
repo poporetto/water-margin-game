@@ -1,0 +1,37 @@
+{
+  "walkSize": [
+    288,
+    512
+  ],
+  "cell": [
+    96,
+    128
+  ],
+  "heights": [
+    106,
+    108,
+    108,
+    104,
+    104,
+    104,
+    104,
+    104,
+    104,
+    104,
+    106,
+    106
+  ],
+  "footBaseline": 127,
+  "distinctStridePixelComponents": [
+    3956,
+    8623,
+    8623,
+    7412
+  ],
+  "rightExactlyMirrorsLeft": true,
+  "battleSize": [
+    192,
+    128
+  ],
+  "battleFrames": 1
+}

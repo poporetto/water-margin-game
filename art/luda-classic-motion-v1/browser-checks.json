@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "facing": "down",
+      "columns": [
+        1,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "facing": "left",
+      "columns": [
+        0,
+        2,
+        0,
+        1
+      ]
+    },
+    {
+      "facing": "right",
+      "columns": [
+        0,
+        2,
+        0,
+        1
+      ]
+    },
+    {
+      "facing": "up",
+      "columns": [
+        0,
+        2,
+        0,
+        1
+      ]
+    }
+  ],
+  "state": {
+    "density": 8,
+    "error": null,
+    "worldSize": [
+      24,
+      32
+    ]
+  },
+  "keyboardMovement": true,
+  "locations": [
+    "zhugui_in",
+    "zhugui",
+    "liangshan"
+  ],
+  "detailImagesLoaded": true,
+  "characterSelections": [
+    "songjiang",
+    "linchong-official",
+    "linchong-exile",
+    "luzhishen",
+    "luda"
+  ],
+  "allCharacters": true,
+  "selectionDirectionsAndPhases": true,
+  "mobileControls": true,
+  "errors": []
+}

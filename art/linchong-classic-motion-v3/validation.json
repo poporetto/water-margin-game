@@ -1,0 +1,130 @@
+{
+  "untouchedFrames": 18,
+  "correctedFrames": 6,
+  "alphaPixelsChecked": 1179648,
+  "allAlphaAndTransparentRgbPreserved": true,
+  "darkOutlinesPreserved": true,
+  "losslessPacking": true,
+  "dimensions": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "toneChecks": [
+    {
+      "name": "official-front",
+      "frame": 1,
+      "material": "hair",
+      "beforeError": 4.222506397515002,
+      "afterError": 0.8384491866907213
+    },
+    {
+      "name": "official-front",
+      "frame": 1,
+      "material": "trousers",
+      "beforeError": 8.256239269664645,
+      "afterError": 0.1741324497305928
+    },
+    {
+      "name": "official-front",
+      "frame": 2,
+      "material": "hair",
+      "beforeError": 4.117534289341612,
+      "afterError": 0.5636824671562076
+    },
+    {
+      "name": "official-front",
+      "frame": 2,
+      "material": "trousers",
+      "beforeError": 7.329189341493078,
+      "afterError": 0.1607224345439923
+    },
+    {
+      "name": "exile-left",
+      "frame": 1,
+      "material": "hair",
+      "beforeError": 4.74511129807514,
+      "afterError": 0.24128378338958592
+    },
+    {
+      "name": "exile-left",
+      "frame": 1,
+      "material": "trousers",
+      "beforeError": 7.6203863579316975,
+      "afterError": 0.6861855228724499
+    },
+    {
+      "name": "exile-left",
+      "frame": 1,
+      "material": "mantle",
+      "beforeError": 5.722460371554832,
+      "afterError": 0.8336595003727384
+    },
+    {
+      "name": "exile-left",
+      "frame": 2,
+      "material": "hair",
+      "beforeError": 4.789100139498079,
+      "afterError": 0.21220296262096147
+    },
+    {
+      "name": "exile-left",
+      "frame": 2,
+      "material": "trousers",
+      "beforeError": 7.495678665925529,
+      "afterError": 0.18552843666685082
+    },
+    {
+      "name": "exile-left",
+      "frame": 2,
+      "material": "mantle",
+      "beforeError": 5.328103122844269,
+      "afterError": 0.8184932806836341
+    },
+    {
+      "name": "exile-back",
+      "frame": 1,
+      "material": "hair",
+      "beforeError": 4.969221240705463,
+      "afterError": 0.17011693080044754
+    },
+    {
+      "name": "exile-back",
+      "frame": 1,
+      "material": "trousers",
+      "beforeError": 3.8941311143039563,
+      "afterError": 0.1145430635497758
+    },
+    {
+      "name": "exile-back",
+      "frame": 1,
+      "material": "mantle",
+      "beforeError": 3.872257689817784,
+      "afterError": 0.18316075456600048
+    },
+    {
+      "name": "exile-back",
+      "frame": 2,
+      "material": "hair",
+      "beforeError": 5.476120291742027,
+      "afterError": 0.2483314811479206
+    },
+    {
+      "name": "exile-back",
+      "frame": 2,
+      "material": "trousers",
+      "beforeError": 4.646169264944388,
+      "afterError": 0.0977764638602799
+    },
+    {
+      "name": "exile-back",
+      "frame": 2,
+      "material": "mantle",
+      "beforeError": 3.8151084402316258,
+      "afterError": 0.18760462247008883
+    }
+  ]
+}

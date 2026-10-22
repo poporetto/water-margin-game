@@ -1,0 +1,46 @@
+[
+  {
+    "entry": "index.html",
+    "sheet": [
+      576,
+      1024
+    ],
+    "density": 8,
+    "logicalSize": [
+      24,
+      32
+    ],
+    "sourceSampling": "all 16 direction/phase combinations exact",
+    "mapDensity": 2,
+    "keyboardDirections": [
+      "left",
+      "right",
+      "up",
+      "down"
+    ],
+    "idleResets": true,
+    "errors": []
+  },
+  {
+    "entry": "docs/index.html",
+    "sheet": [
+      576,
+      1024
+    ],
+    "density": 8,
+    "logicalSize": [
+      24,
+      32
+    ],
+    "sourceSampling": "all 16 direction/phase combinations exact",
+    "mapDensity": 2,
+    "keyboardDirections": [
+      "left",
+      "right",
+      "up",
+      "down"
+    ],
+    "idleResets": true,
+    "errors": []
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "result": "pass",
+  "characters": 113,
+  "monsterTypes": 15,
+  "worldBuffer": [
+    2560,
+    1920
+  ],
+  "logicalTile": 16,
+  "physicalTile": 32,
+  "errors": []
+}

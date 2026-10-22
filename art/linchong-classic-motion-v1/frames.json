@@ -1,0 +1,849 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "artScale": 8,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "columns": [
+    "neutral",
+    "strideA",
+    "strideB"
+  ],
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ],
+  "fps": 5,
+  "headLock": false,
+  "paletteQuantization": false,
+  "reports": [
+    {
+      "outfit": "official",
+      "direction": "front",
+      "sourceBounds": [
+        {
+          "left": 61,
+          "top": 103,
+          "width": 391,
+          "height": 843
+        },
+        {
+          "left": 579,
+          "top": 105,
+          "width": 387,
+          "height": 847
+        },
+        {
+          "left": 1082,
+          "top": 103,
+          "width": 389,
+          "height": 858
+        }
+      ],
+      "sharedScale": 0.265717674970344,
+      "originalIdle": true,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 3415,
+            "median": [
+              41,
+              59,
+              51,
+              55
+            ]
+          },
+          "skin": {
+            "pixels": 888,
+            "median": [
+              246,
+              158,
+              88,
+              172
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 3472,
+            "median": [
+              44,
+              60,
+              54,
+              56
+            ]
+          },
+          "skin": {
+            "pixels": 980,
+            "median": [
+              250,
+              162,
+              88,
+              176
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 3471,
+            "median": [
+              43,
+              59,
+              53,
+              55
+            ]
+          },
+          "skin": {
+            "pixels": 997,
+            "median": [
+              250,
+              163,
+              89,
+              176
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "official",
+      "direction": "left",
+      "sourceBounds": [
+        {
+          "left": 124,
+          "top": 95,
+          "width": 270,
+          "height": 848
+        },
+        {
+          "left": 525,
+          "top": 95,
+          "width": 432,
+          "height": 841
+        },
+        {
+          "left": 1061,
+          "top": 95,
+          "width": 427,
+          "height": 848
+        }
+      ],
+      "sharedScale": 0.26383833872948537,
+      "originalIdle": true,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 2087,
+            "median": [
+              42,
+              59,
+              52,
+              55
+            ]
+          },
+          "skin": {
+            "pixels": 667,
+            "median": [
+              245,
+              154,
+              85,
+              168
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2482,
+            "median": [
+              43,
+              58,
+              49,
+              54
+            ]
+          },
+          "skin": {
+            "pixels": 827,
+            "median": [
+              247,
+              156,
+              89,
+              170
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2423,
+            "median": [
+              43,
+              56,
+              48,
+              53
+            ]
+          },
+          "skin": {
+            "pixels": 843,
+            "median": [
+              245,
+              150,
+              85,
+              165
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "official",
+      "direction": "right",
+      "sourceBounds": [
+        {
+          "left": 110,
+          "top": 103,
+          "width": 257,
+          "height": 843
+        },
+        {
+          "left": 559,
+          "top": 111,
+          "width": 429,
+          "height": 835
+        },
+        {
+          "left": 1068,
+          "top": 111,
+          "width": 455,
+          "height": 835
+        }
+      ],
+      "sharedScale": 0.2654032161833969,
+      "originalIdle": false,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 2480,
+            "median": [
+              45,
+              64,
+              57,
+              60
+            ]
+          },
+          "skin": {
+            "pixels": 695,
+            "median": [
+              246,
+              156,
+              90,
+              169
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2673,
+            "median": [
+              46,
+              65,
+              57,
+              60
+            ]
+          },
+          "skin": {
+            "pixels": 792,
+            "median": [
+              245,
+              154,
+              88,
+              169
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2584,
+            "median": [
+              44,
+              63,
+              55,
+              58
+            ]
+          },
+          "skin": {
+            "pixels": 663,
+            "median": [
+              244,
+              150,
+              84,
+              165
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "official",
+      "direction": "back",
+      "sourceBounds": [
+        {
+          "left": 66,
+          "top": 100,
+          "width": 382,
+          "height": 845
+        },
+        {
+          "left": 585,
+          "top": 106,
+          "width": 369,
+          "height": 841
+        },
+        {
+          "left": 1098,
+          "top": 103,
+          "width": 380,
+          "height": 844
+        }
+      ],
+      "sharedScale": 0.2650887573964497,
+      "originalIdle": true,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 4176,
+            "median": [
+              41,
+              59,
+              51,
+              54
+            ]
+          },
+          "skin": {
+            "pixels": 296,
+            "median": [
+              232,
+              138,
+              67,
+              150
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 4046,
+            "median": [
+              42,
+              58,
+              51,
+              54
+            ]
+          },
+          "skin": {
+            "pixels": 301,
+            "median": [
+              240,
+              135,
+              63,
+              151
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 4246,
+            "median": [
+              42,
+              58,
+              51,
+              54
+            ]
+          },
+          "skin": {
+            "pixels": 315,
+            "median": [
+              242,
+              141,
+              72,
+              154
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "front",
+      "sourceBounds": [
+        {
+          "left": 58,
+          "top": 74,
+          "width": 409,
+          "height": 866
+        },
+        {
+          "left": 565,
+          "top": 74,
+          "width": 407,
+          "height": 876
+        },
+        {
+          "left": 1075,
+          "top": 74,
+          "width": 404,
+          "height": 882
+        }
+      ],
+      "sharedScale": 0.2580482938628258,
+      "originalIdle": true,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 2781,
+            "median": [
+              53,
+              59,
+              80,
+              60
+            ]
+          },
+          "skin": {
+            "pixels": 855,
+            "median": [
+              243,
+              160,
+              90,
+              171
+            ]
+          },
+          "mantle": {
+            "pixels": 1490,
+            "median": [
+              163,
+              136,
+              115,
+              140
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2823,
+            "median": [
+              54,
+              57,
+              75,
+              57
+            ]
+          },
+          "skin": {
+            "pixels": 1265,
+            "median": [
+              235,
+              147,
+              91,
+              157
+            ]
+          },
+          "mantle": {
+            "pixels": 1351,
+            "median": [
+              174,
+              140,
+              119,
+              146
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2790,
+            "median": [
+              54,
+              57,
+              75,
+              57
+            ]
+          },
+          "skin": {
+            "pixels": 1189,
+            "median": [
+              237,
+              147,
+              89,
+              158
+            ]
+          },
+          "mantle": {
+            "pixels": 1363,
+            "median": [
+              173,
+              141,
+              118,
+              146
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "left",
+      "sourceBounds": [
+        {
+          "left": 98,
+          "top": 81,
+          "width": 414,
+          "height": 871
+        },
+        {
+          "left": 512,
+          "top": 81,
+          "width": 438,
+          "height": 869
+        },
+        {
+          "left": 1024,
+          "top": 81,
+          "width": 482,
+          "height": 874
+        }
+      ],
+      "sharedScale": 0.25534956079864674,
+      "originalIdle": true,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 1298,
+            "median": [
+              47,
+              52,
+              69,
+              52
+            ]
+          },
+          "skin": {
+            "pixels": 621,
+            "median": [
+              242,
+              157,
+              86,
+              169
+            ]
+          },
+          "mantle": {
+            "pixels": 1342,
+            "median": [
+              168,
+              139,
+              118,
+              144
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 1611,
+            "median": [
+              48,
+              52,
+              68,
+              52
+            ]
+          },
+          "skin": {
+            "pixels": 1097,
+            "median": [
+              241,
+              146,
+              93,
+              159
+            ]
+          },
+          "mantle": {
+            "pixels": 1444,
+            "median": [
+              172,
+              139,
+              117,
+              145
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 1560,
+            "median": [
+              50,
+              54,
+              71,
+              54
+            ]
+          },
+          "skin": {
+            "pixels": 999,
+            "median": [
+              241,
+              147,
+              88,
+              161
+            ]
+          },
+          "mantle": {
+            "pixels": 1279,
+            "median": [
+              171,
+              138,
+              117,
+              144
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "right",
+      "sourceBounds": [
+        {
+          "left": 89,
+          "top": 101,
+          "width": 301,
+          "height": 843
+        },
+        {
+          "left": 556,
+          "top": 101,
+          "width": 434,
+          "height": 843
+        },
+        {
+          "left": 1073,
+          "top": 110,
+          "width": 452,
+          "height": 834
+        }
+      ],
+      "sharedScale": 0.26383092224866106,
+      "originalIdle": false,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 1787,
+            "median": [
+              54,
+              60,
+              80,
+              60
+            ]
+          },
+          "skin": {
+            "pixels": 711,
+            "median": [
+              245,
+              154,
+              90,
+              168
+            ]
+          },
+          "mantle": {
+            "pixels": 1585,
+            "median": [
+              170,
+              140,
+              120,
+              145
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2066,
+            "median": [
+              56,
+              62,
+              82,
+              62
+            ]
+          },
+          "skin": {
+            "pixels": 755,
+            "median": [
+              244,
+              153,
+              85,
+              167
+            ]
+          },
+          "mantle": {
+            "pixels": 1561,
+            "median": [
+              171,
+              141,
+              120,
+              146
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 1649,
+            "median": [
+              56,
+              61,
+              81,
+              62
+            ]
+          },
+          "skin": {
+            "pixels": 593,
+            "median": [
+              246,
+              156,
+              89,
+              171
+            ]
+          },
+          "mantle": {
+            "pixels": 1476,
+            "median": [
+              172,
+              142,
+              121,
+              147
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "outfit": "exile",
+      "direction": "back",
+      "sourceBounds": [
+        {
+          "left": 73,
+          "top": 81,
+          "width": 376,
+          "height": 852
+        },
+        {
+          "left": 582,
+          "top": 79,
+          "width": 377,
+          "height": 854
+        },
+        {
+          "left": 1091,
+          "top": 82,
+          "width": 377,
+          "height": 863
+        }
+      ],
+      "sharedScale": 0.2616662499652749,
+      "originalIdle": true,
+      "tones": [
+        {
+          "cloth": {
+            "pixels": 2044,
+            "median": [
+              54,
+              61,
+              83,
+              61
+            ]
+          },
+          "skin": {
+            "pixels": 293,
+            "median": [
+              218,
+              138,
+              63,
+              145
+            ]
+          },
+          "mantle": {
+            "pixels": 2402,
+            "median": [
+              166,
+              137,
+              115,
+              142
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2244,
+            "median": [
+              56,
+              61,
+              83,
+              61
+            ]
+          },
+          "skin": {
+            "pixels": 518,
+            "median": [
+              177,
+              141,
+              116,
+              148
+            ]
+          },
+          "mantle": {
+            "pixels": 1744,
+            "median": [
+              176,
+              142,
+              121,
+              148
+            ]
+          }
+        },
+        {
+          "cloth": {
+            "pixels": 2150,
+            "median": [
+              56,
+              62,
+              83,
+              62
+            ]
+          },
+          "skin": {
+            "pixels": 559,
+            "median": [
+              183,
+              140,
+              113,
+              147
+            ]
+          },
+          "mantle": {
+            "pixels": 1805,
+            "median": [
+              175,
+              142,
+              120,
+              147
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -617,6 +617,16 @@ async function main() {
     checkTotals();
   }
   global.__checkTotals();
+  // every skill, unite attack, enemy skill and battle item has an effect that is actually drawn (js/engine/battlefx.js)
+  if (WM.bfx) {
+    curEvent = '(battle effects)';
+    Object.keys(D.skills).forEach((id) => D.skills[id].forEach((sk, i) => { const st = WM.bfx.forSkill(sk, { hero: id, idx: i }); if (!WM.bfx.has(st)) err('skill ' + id + ':' + i + ' "' + sk.name + '" has no drawn effect (' + st + ')'); }));
+    const audioSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'js/core/audio.js'), 'utf8');
+    Object.keys(WM.bfx.STYLES).concat(Object.keys(WM.bfx.ALIAS)).forEach((st) => ['launch', 'hit'].forEach((ph) => { const n = WM.bfx.soundFor(st, ph); if (n && audioSrc.indexOf(n + ': function') < 0) err('effect ' + st + ' plays "' + n + '", which audio.js does not have'); }));
+    Object.keys(D.unites || {}).forEach((id) => { const st = WM.bfx.forOther(D.unites[id]); if (!WM.bfx.has(st)) err('unite ' + id + ' has no drawn effect (' + st + ')'); });
+    Object.keys(D.enemies).forEach((id) => (D.enemies[id].skills || []).forEach((sk) => { const st = WM.bfx.forOther(sk); if (!WM.bfx.has(st)) err('enemy ' + id + ' skill "' + sk.name + '" has no drawn effect (' + st + ')'); }));
+    Object.keys(D.items).forEach((id) => { const it = D.items[id]; if (!it.battle) return; const st = WM.bfx.forOther({ fx: it.fx, effect: it.effect, target: it.battle }); if (!WM.bfx.has(st)) err('item ' + id + ' has no drawn effect (' + st + ')'); });
+  }
   // ---------- report ----------
   const order = D.charOrder;
   const missing = order.filter((id) => !joins[id]);

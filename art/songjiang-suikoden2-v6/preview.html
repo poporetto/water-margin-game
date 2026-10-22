@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Song Jiang · Suikoden II sprite study</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#161c24;color:#eee8d9;font:16px system-ui}main{max-width:1080px;margin:auto;padding:32px}h1{font:32px Georgia;margin:0 0 12px}p{color:#b7baca;line-height:1.5}button,input{accent-color:#d5aa5d}button,a{color:inherit}button{background:#28323e;border:1px solid #68707a;border-radius:6px;padding:9px 14px;cursor:pointer}nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:24px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}figure{margin:0;background:#222c35;border:1px solid #46525c;border-radius:8px;overflow:hidden}figcaption{text-align:center;padding:12px;color:#d7bc8a}canvas{display:block;width:100%;height:auto;image-rendering:pixelated;background:repeating-conic-gradient(#26333c 0% 25%,#2d3c46 0% 50%) 0/24px 24px}.sheets{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;margin-top:32px}.sheets img{image-rendering:pixelated;max-width:100%;background:#28333d}.note{font-size:13px}#status{color:#d7bc8a}
+</style>
+<main>
+<h1>Song Jiang</h1>
+<p>Suikoden II sprite study · red and gold robes, black head wrap, sword guard.</p>
+<nav><button id="pause">Pause</button><label>Speed <input id="speed" type="range" min="3" max="10" value="5"> <span id="fps">5</span> poses/sec</label><button id="travel">Show movement</button><a href="in-game.html">View in game</a></nav>
+<div class="grid">
+<figure><canvas width="192" height="256" data-row="0"></canvas><figcaption>Down</figcaption></figure>
+<figure><canvas width="192" height="256" data-row="1"></canvas><figcaption>Left</figcaption></figure>
+<figure><canvas width="192" height="256" data-row="2"></canvas><figcaption>Right</figcaption></figure>
+<figure><canvas width="192" height="256" data-row="3"></canvas><figcaption>Up / back</figcaption></figure>
+<figure><canvas width="192" height="256" data-battle="true"></canvas><figcaption>Sword guard</figcaption></figure>
+</div>
+<p id="status">Loading sprites…</p>
+<div class="sheets"><div><p>Walking · 144 × 256</p><a href="songjiang-walking.png"><img src="songjiang-walking.png" width="288" height="512" alt="Four-direction walking sprite sheet"></a></div><div><p>Battle · 144 × 64</p><a href="songjiang-battle.png"><img src="songjiang-battle.png" width="432" height="192" alt="Three left-facing sword guard poses"></a></div></div>
+<p class="note">48 × 64 transparent frames. Walking order: stand → first stride → stand → opposite stride. Right mirrors left. Candidate artwork for review.</p>
+</main>
+<script>
+(async()=>{
+  const walk=new Image(),battle=new Image();walk.src='songjiang-walking.png';battle.src='songjiang-battle.png';await Promise.all([walk.decode(),battle.decode()]);
+  let paused=false,travel=false,time=0,last=0;const sequence=[0,1,0,2];
+  const speed=document.querySelector('#speed');
+  document.querySelector('#pause').onclick=e=>{paused=!paused;e.target.textContent=paused?'Play':'Pause'};
+  document.querySelector('#travel').onclick=e=>{travel=!travel;e.target.textContent=travel?'Show in place':'Show movement'};
+  speed.oninput=()=>document.querySelector('#fps').textContent=speed.value;
+  document.querySelector('#status').textContent='Playing four directions and sword guard';
+  function draw(now){if(last&&!paused)time+=Math.min(now-last,100);last=now;
+    const col=sequence[Math.floor(time*Number(speed.value)/1000)%4];
+    document.querySelectorAll('canvas').forEach(cv=>{
+      const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,192,256);
+      const row=Number(cv.dataset.row||0),isBattle=!!cv.dataset.battle;
+      let x=24,y=40;
+      if(travel&&!isBattle){const offset=Math.sin(time/900)*20;if(row===1)x-=offset;else if(row===2)x+=offset;else if(row===0)y+=offset;else y-=offset;}
+      c.drawImage(isBattle?battle:walk,col*48,row*64,48,64,Math.round(x),Math.round(y),144,192);
+    });requestAnimationFrame(draw);
+  }requestAnimationFrame(draw);
+})().catch(e=>document.querySelector('#status').textContent=e.message);
+</script>
+</html>

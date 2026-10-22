@@ -1,0 +1,13 @@
+{
+  "head_beard_collar_exact_translation": true,
+  "bob_pixels": 1,
+  "unchanged_lower_body": true,
+  "foot_baseline": 64,
+  "frame_duration_ms": 200,
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ]
+}

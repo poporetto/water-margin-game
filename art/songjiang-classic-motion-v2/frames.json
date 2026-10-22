@@ -1,0 +1,133 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "logicalFrame": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "columns": [
+    "original-idle",
+    "stride-a",
+    "stride-b"
+  ],
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ],
+  "fps": 5,
+  "originalIdleLocked": true,
+  "originalHeadLocked": true,
+  "paletteQuantization": false,
+  "master": {
+    "file": "songjiang-walking-master.png",
+    "frame": [
+      768,
+      1024
+    ],
+    "note": "Source-scale figures; no source downsampling"
+  },
+  "reports": [
+    {
+      "direction": "front",
+      "sourceBounds": [
+        {
+          "l": 105,
+          "t": 169,
+          "w": 303,
+          "h": 727
+        },
+        {
+          "l": 617,
+          "t": 169,
+          "w": 305,
+          "h": 737
+        },
+        {
+          "l": 1132,
+          "t": 169,
+          "w": 299,
+          "h": 737
+        }
+      ],
+      "sharedScale": 0.297111416781293,
+      "headLockRows": 113,
+      "idleSize": [
+        91,
+        216
+      ]
+    },
+    {
+      "direction": "left",
+      "sourceBounds": [
+        {
+          "l": 154,
+          "t": 170,
+          "w": 213,
+          "h": 729
+        },
+        {
+          "l": 607,
+          "t": 170,
+          "w": 314,
+          "h": 729
+        },
+        {
+          "l": 1127,
+          "t": 170,
+          "w": 314,
+          "h": 729
+        }
+      ],
+      "sharedScale": 0.29548894943990317,
+      "headLockRows": 114,
+      "idleSize": [
+        66,
+        215
+      ]
+    },
+    {
+      "direction": "back",
+      "sourceBounds": [
+        {
+          "l": 106,
+          "t": 172,
+          "w": 301,
+          "h": 720
+        },
+        {
+          "l": 621,
+          "t": 172,
+          "w": 311,
+          "h": 720
+        },
+        {
+          "l": 1113,
+          "t": 172,
+          "w": 317,
+          "h": 725
+        }
+      ],
+      "sharedScale": 0.2991825613079019,
+      "headLockRows": 114,
+      "idleSize": [
+        91,
+        215
+      ]
+    }
+  ]
+}

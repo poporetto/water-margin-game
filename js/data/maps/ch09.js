@@ -29,10 +29,10 @@
   y.rect(18, 15, 6, 7, ':'); y.rect(19, 22, 4, 2, 'B'); y.set(17, 23, 'o'); y.set(24, 23, 'o'); y.set(26, 22, 'o');
   y.scatter('b', 0.06, 342, '.', [0, 0, 44, 22]); y.scatter('T', 0.05, 343, '.', [0, 0, 44, 22]);
   L.clearAround(y, ':', 'Tb', '.'); L.clearAround(y, '=', 'Tb', '.');
-  WM.defMap('jieyang', { name: 'Jieyang Town', theme: 'south', music: 'town', rows: y.rows(), spawn: [1, 8], battleBg: 'river', exits: [WM.toWorld('jieyang', 0, 8, 1, 2)] });
+  WM.defMap('jieyang', { name: 'Jieyang Town', theme: 'south', music: 'town_jieyang', rows: y.rows(), spawn: [1, 8], battleBg: 'river', exits: [WM.toWorld('jieyang', 0, 8, 1, 2)] });
   var yi = L.grid(30, 10, 'x'); var yR = { mu: yi.room(1, 1, 14, 9, { floor: 'N' }), inn: yi.room(16, 1, 12, 8) };
   yi.stamp(2, 3, ['h..A.....Akk', '..........kk', '..t..KKK....', '............']); yi.stamp(17, 3, ['.....kk.kk', '.....kk.kk', 'ccc.......']);
-  WM.defMap('jieyang_in', { name: '', interior: true, theme: 'south', music: 'town', rows: yi.rows(), spawn: [8, 8] });
+  WM.defMap('jieyang_in', { name: '', interior: true, theme: 'south', music: 'town_jieyang', rows: yi.rows(), spawn: [8, 8] });
   L.link({ map: 'jieyang', x: mu.x, y: mu.y }, { map: 'jieyang_in', x: yR.mu.x, y: yR.mu.y });
   L.link({ map: 'jieyang', x: yinn.x, y: yinn.y }, { map: 'jieyang_in', x: yR.inn.x, y: yR.inn.y });
   WM.defEvents('jieyang_in', [L.inn('jyinn', 18, 4, 20), L.save('jyrec', 25, 6)]);
@@ -58,7 +58,7 @@
   [pipa, shop, jinn].forEach(function (d) { g.vline(d.x, d.y + 1, 32, ':'); }); g.hline(2, 53, 32, ':'); g.rect(26, 32, 4, 2, '=');   // (the stone avenue runs unbroken across the lane to the south gate)
   g.scatter('T', 0.05, 351, '.', [2, 2, 52, 30]); g.scatter('b', 0.03, 352, '.', [2, 2, 52, 30]);
   L.clearAround(g, ':', 'Tb', '.'); L.clearAround(g, '=', 'Tb', '.');
-  WM.defMap('jiangzhou', { name: 'Jiangzhou', theme: 'south', music: 'town', rows: g.rows(), spawn: [27, 3], battleBg: 'town',
+  WM.defMap('jiangzhou', { name: 'Jiangzhou', theme: 'south', music: 'town_jiangzhou', rows: g.rows(), spawn: [27, 3], battleBg: 'town',
     exits: [WM.toWorld('jiangzhou', 26, 0, 4, 1)] });
   var gi = L.grid(70, 12, 'x');
   var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'N' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7) };
@@ -67,7 +67,7 @@
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
   gi.stamp(44, 3, ['h..L.....L.h', '.t..t...t..t', '............', '.t..t...t..t', '............', 'cccc........']);   // the Xunyang Tower: tables in two even rows either side of the window aisle, the long counter by the stairs
   gi.stamp(59, 3, ['hhhh..', '......', 'ccc...']);
-  WM.defMap('jiangzhou_in', { name: '', interior: true, theme: 'south', music: 'town', rows: gi.rows(), spawn: [8, 9] });
+  WM.defMap('jiangzhou_in', { name: '', interior: true, theme: 'south', music: 'town_jiangzhou', rows: gi.rows(), spawn: [8, 9] });
   [[prefect, gR.prefect], [prison, gR.prison], [daizong, gR.daizong], [tower, gR.tower], [shop, gR.shop]].forEach(function (p) { L.link({ map: 'jiangzhou', x: p[0].x, y: p[0].y }, { map: 'jiangzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.jiangzhou = { rooms: gR, doors: { prefect: prefect, prison: prison, daizong: daizong, tower: tower, pipa: pipa, shop: shop, inn: jinn } };
   WM.defEvents('jiangzhou_in', [L.shop('jzshop', 61, 4, 'jiangzhou', 'shopkeep', 'Fine goods from the river trade.'),

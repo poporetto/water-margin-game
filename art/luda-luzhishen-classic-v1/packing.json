@@ -1,0 +1,71 @@
+{
+  "scale": 0.31763122476446837,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "character": "luda",
+      "source": "luda-original.png",
+      "bounds": [
+        {
+          "left": 162,
+          "top": 94,
+          "width": 443,
+          "height": 734
+        },
+        {
+          "left": 769,
+          "top": 96,
+          "width": 260,
+          "height": 735
+        },
+        {
+          "left": 1168,
+          "top": 94,
+          "width": 443,
+          "height": 734
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    },
+    {
+      "character": "luzhishen",
+      "source": "luzhishen-original.png",
+      "bounds": [
+        {
+          "left": 134,
+          "top": 98,
+          "width": 476,
+          "height": 740
+        },
+        {
+          "left": 761,
+          "top": 98,
+          "width": 283,
+          "height": 742
+        },
+        {
+          "left": 1170,
+          "top": 95,
+          "width": 479,
+          "height": 743
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    }
+  ]
+}
