@@ -74,7 +74,8 @@
         for (var dd = -8; dd <= 8 && !across; dd++) if (dd && get(x + dd, y) === 'L' && is(':=', get(x + (dd > 0 ? 1 : -1), y))) across = true;
         if (across) continue;
       }
-      rows[y][x] = [get(x, y + 1), get(x - 1, y), get(x + 1, y)].indexOf('=') >= 0 ? '=' : '.'; changed = true;
+      // (paved over only where it stood in the line of the paving; beside a street, the ground it stood on, not a nub of paving)
+      rows[y][x] = (get(x - 1, y) === '=' && get(x + 1, y) === '=') || (get(x, y - 1) === '=' && get(x, y + 1) === '=') ? '=' : '.'; changed = true;
     }
     if (changed) { def.rows = rows.map(function (r) { return r.join(''); }); delete def._baked; }
   });

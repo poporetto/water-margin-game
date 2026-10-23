@@ -1,0 +1,19 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "transparent_background": true,
+  "prompt_file": "prompt.txt",
+  "references": [
+    {
+      "path": "../../assets/portraits/wuyong-expressions.png",
+      "role": "identity and costume"
+    },
+    {
+      "path": "../songjiang-style-variations-v8/variant-a-original.png",
+      "role": "approved original Classic style/proportions"
+    }
+  ],
+  "native_tool_output": "/Users/andriastaniwan/.codex/generated_images/01a1656c-5c45-78a3-9e50-b4f5fcc6a04a/exec-f370c79b-36ff-40a0-ac95-e709c96ecf18.png",
+  "preserved_native": "wuyong-original.png",
+  "note": "Native PNG copied unchanged. Only common nearest-neighbour scale and lossless RGBA packing; no recolouring or quantization."
+}

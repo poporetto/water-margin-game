@@ -1,0 +1,177 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "artScale": 8,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "columns": [
+    "neutral",
+    "strideA",
+    "strideB"
+  ],
+  "sequence": [
+    0,
+    1,
+    0,
+    2
+  ],
+  "fps": 5,
+  "headLock": false,
+  "paletteQuantization": false,
+  "reports": [
+    {
+      "facing": "front",
+      "sourceSize": [
+        1881,
+        836
+      ],
+      "bounds": [
+        {
+          "left": 107,
+          "top": 114,
+          "width": 414,
+          "height": 662
+        },
+        {
+          "left": 727,
+          "top": 112,
+          "width": 411,
+          "height": 666
+        },
+        {
+          "left": 1347,
+          "top": 112,
+          "width": 411,
+          "height": 666
+        }
+      ],
+      "baseScale": 0.35347432024169184,
+      "adjustments": [
+        1,
+        1,
+        1
+      ],
+      "approvedNeutral": true,
+      "targetHead": 101.5
+    },
+    {
+      "facing": "left",
+      "sourceSize": [
+        1882,
+        836
+      ],
+      "bounds": [
+        {
+          "left": 187,
+          "top": 119,
+          "width": 254,
+          "height": 658
+        },
+        {
+          "left": 702,
+          "top": 119,
+          "width": 377,
+          "height": 656
+        },
+        {
+          "left": 1336,
+          "top": 119,
+          "width": 370,
+          "height": 656
+        }
+      ],
+      "baseScale": 0.35714285714285715,
+      "adjustments": [
+        1,
+        1,
+        1
+      ],
+      "approvedNeutral": true,
+      "targetHead": 97
+    },
+    {
+      "facing": "right",
+      "sourceSize": [
+        1880,
+        837
+      ],
+      "bounds": [
+        {
+          "left": 159,
+          "top": 100,
+          "width": 294,
+          "height": 682
+        },
+        {
+          "left": 747,
+          "top": 102,
+          "width": 422,
+          "height": 681
+        },
+        {
+          "left": 1354,
+          "top": 99,
+          "width": 436,
+          "height": 684
+        }
+      ],
+      "baseScale": 0.34457478005865105,
+      "adjustments": [
+        1,
+        1,
+        1
+      ],
+      "approvedNeutral": false,
+      "targetHead": 95
+    },
+    {
+      "facing": "back",
+      "sourceSize": [
+        1882,
+        836
+      ],
+      "bounds": [
+        {
+          "left": 105,
+          "top": 106,
+          "width": 420,
+          "height": 666
+        },
+        {
+          "left": 731,
+          "top": 106,
+          "width": 421,
+          "height": 668
+        },
+        {
+          "left": 1360,
+          "top": 105,
+          "width": 423,
+          "height": 670
+        }
+      ],
+      "baseScale": 0.35435435435435436,
+      "adjustments": [
+        1,
+        1,
+        1
+      ],
+      "approvedNeutral": true,
+      "targetHead": 91.5
+    }
+  ]
+}

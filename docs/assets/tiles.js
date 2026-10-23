@@ -156,6 +156,9 @@ WM.TILE_ART = {
   't c k h j A 4 i 1 2 3 5 6 7 8 E 0 a U'.split(' ').forEach(function(ch){ if(!A[ch+'@snow'])A[ch+'@snow']=A[ch+'@spring']; });
   // The lantern too, but only indoors: outdoors in snow it waits for a snowy version.
   A['L@snow']=Object.assign({},A['L@spring'],{indoors:true});
+  // Outdoor props with no snowy version (tents, banners, notice boards, wells, graves, wine flags, stalls, steles) use
+  // their ordinary art standing on the snow, rather than the small placeholder the code draws.
+  'V Y I p g J u Q'.split(' ').forEach(function (ch) { if (!A[ch + '@snow'] && A[ch + '@spring']) A[ch + '@snow'] = A[ch + '@spring']; });
   // A well that stands inside an interior map. (Indoors a fence is a prison cell's bars, drawn by the code until there
   // is art for them; red walls indoors keep the plain lacquer the code draws, as the outdoor wall art shows the ground
   // through its edges.)
@@ -230,7 +233,6 @@ WM.TILE_ART.tiles['⚔']={sheet:'weaponRack',base:'grass',object:{at:[0,0],w:32,
 WM.TILE_ART.sheets.governorChair='assets/tiles/32/governor-chair-refined.png';
 ['spring','summer','autumn','snow','dusk','marsh','south','north'].forEach(function(theme){WM.TILE_ART.tiles['0@'+theme]={sheet:'governorChair',base:'floor',object:{at:[0,0],w:32,h:32,run:true,singleSeat:true}};});
 
-WM.TILE_ART.sheets.uprootedWillow='assets/tiles/32/willow-uprooted-refined.png';
 WM.TILE_ART.sheets.uprootedWillow='assets/tiles/32/willow-uprooted-refined.png';
 // the cesspit of the Xiangguo vegetable garden: the river's banks and ripples, recoloured to sludge (tools/build-cesspit-tiles.js)
 (function () {

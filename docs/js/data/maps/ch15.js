@@ -10,7 +10,7 @@
   h.border('#', 1, [{ side: 's', from: 21, to: 24 }]); h.rect(21, 37, 4, 1, 'G');
   h.rect(21, 1, 4, 36, '='); h.rect(1, 18, 44, 2, '=');
   for (var x = 1; x < 45; x++) h.set(x, 13, '~'); h.rect(21, 13, 4, 1, 'B');      // the canal, and the bridge where Lu Zhishen waited
-  var hall = h.house(5, 3, 14, 6, { roof: 'Z', wall: 'R', door: 7 }); h.set(4, 8, 'L'); h.set(19, 8, 'L'); h.vline(hall.x, 9, 12, '='); h.hline(hall.x, 20, 12, '=');
+  var hall = h.house(5, 3, 14, 6, { roof: 'Z', wall: 'R', door: 7 }); h.set(4, 8, 'L'); h.set(19, 8, 'L'); h.rect(hall.x - 1, 9, 2, 4, '='); h.hline(hall.x, 20, 12, '=');   // (paved the width of the hall's double door)
   var jail = h.house(29, 3, 11, 6, { roof: 'v', wall: '#', door: 5 }); h.vline(jail.x, 9, 12, '='); h.hline(25, jail.x, 12, '=');
   var inn = h.house(5, 22, 9, 5, { roof: 'z', door: 4, windows: [1, 7] });
   h.house(29, 22, 8, 5, { roof: '^', door: false, windows: [2, 5] }); h.house(5, 29, 7, 4, { roof: '^', door: false, windows: [3] }); h.house(30, 29, 9, 4, { roof: 'z', door: false, windows: [2, 6] });
@@ -20,7 +20,7 @@
   var hi = L.grid(42, 11, 'x');
   var hR = { hall: hi.room(1, 1, 16, 10, { floor: 'N' }), jail: hi.room(18, 1, 12, 9, { floor: 'N' }), inn: hi.room(31, 1, 10, 8) };
   hi.stamp(2, 3, ['h...EEEEEE...h', '.....q00q.....', '..t..aaaa..t..', '.....KKKK.....', '.....KKKK']);   // the prefect's hall
-  hi.stamp(19, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.']);
+  hi.stamp(19, 3, ['--.F--.F..', '--.F--.F..', 'F+FFF+FF..']);   // two cells, each with room to stand beside the pallet
   hi.stamp(32, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('huazhou_in', { name: '', interior: true, theme: 'summer', music: 'tense', rows: hi.rows(), spawn: [8, 8] });
   [[hall, hR.hall], [jail, hR.jail], [inn, hR.inn]].forEach(function (p) { L.link({ map: 'huazhou', x: p[0].x, y: p[0].y }, { map: 'huazhou_in', x: p[1].x, y: p[1].y }); });
@@ -40,7 +40,7 @@
   t.rect(0, 0, 36, 6, 'M');
   t.rect(4, 6, 28, 26, '.'); t.frame(6, 8, 24, 16, 'R'); t.rect(16, 23, 4, 1, 'G');
   var shrine = t.house(10, 9, 16, 7, { roof: 'v', wall: 'R', door: 8 }); t.set(9, 15, 'L'); t.set(26, 15, 'L');
-  t.rect(16, 17, 4, 6, '='); t.set(12, 19, 'Q'); t.set(23, 19, 'Q'); t.set(11, 21, 'U'); t.set(24, 21, 'U');
+  t.rect(16, 16, 4, 7, '='); t.set(12, 19, 'Q'); t.set(23, 19, 'Q'); t.set(11, 21, 'U'); t.set(24, 21, 'U');   // (paved right up to the shrine's door)
   t.rect(16, 24, 4, 8, ':');
   t.scatter('T', 0.05, 534, '.', [4, 24, 28, 8]); L.clearAround(t, ':', 'T', '.');
   WM.defMap('xiyue', { name: 'Temple of the Western Peak', theme: 'summer', music: 'palace', rows: t.rows(), spawn: [17, 30], battleBg: 'palace',
@@ -54,12 +54,14 @@
   var m = L.grid(36, 36, 'P');
   var mp = [[18, 35], [18, 29], [11, 23], [16, 16], [23, 11], [18, 5]];
   walk(mp, function (x0, y0) { m.rect(x0 - 2, y0 - 1, 5, 3, '.'); });
-  walk(mp, function (x0, y0) { m.set(x0, y0, ':'); });
   m.rect(8, 1, 20, 7, '.'); m.frame(8, 1, 20, 7, 'F'); m.rect(17, 7, 3, 1, ':');
   var fort = m.house(12, 2, 12, 4, { roof: 'z', door: 6, windows: [2, 9] }); m.set(10, 5, 'Y'); m.set(25, 5, 'Y');
   m.rect(6, 26, 24, 8, '.');                                                  // the plain below, where the formation is laid
-  [[9, 28], [14, 28], [19, 28], [24, 28], [9, 32], [14, 32], [19, 32], [24, 32]].forEach(function (p) { m.set(p[0], p[1], 'm'); });
-  m.scatter('m', 0.03, 535, '.'); L.clearAround(m, ':', 'Pm', '.');
+  var stones = [[9, 28], [14, 28], [19, 28], [24, 28], [9, 32], [14, 32], [19, 32], [24, 32]];
+  m.scatter('m', 0.03, 535, '.');
+  walk(mp, function (x0, y0) { if (y0 > 5) { m.set(x0, y0, ':'); m.set(x0 + 1, y0, ':'); } });   // the trail, two tiles wide, across the plain and up to the fort's doorstep
+  L.clearAround(m, ':', 'Pm', '.');
+  stones.forEach(function (p) { if (m.get(p[0], p[1]) !== ':') m.set(p[0], p[1], 'm'); });
   WM.defMap('mangdang', { name: 'Mount Mangdang', theme: 'summer', music: 'dungeon', rows: m.rows(), spawn: [18, 34], battleBg: 'forest',
     exits: [WM.toWorld('mangdang', 16, 35, 5, 1)] });
 
@@ -81,7 +83,7 @@
     exits: [WM.toWorld('zengtou', 0, 34, 1, 2)] });
   var zi = L.grid(30, 10, 'x'); var zR = { hall: zi.room(1, 1, 16, 9, { floor: 'N' }), fahua: zi.room(18, 1, 10, 8, { floor: 'N' }) };
   zi.stamp(2, 3, ['h...&&....&&..', '....AA....AA..', '..t...........']);
-  zi.stamp(19, 3, ['L.999.L.', '..AAA...', '........']);   // Fahua Temple's Buddhas
+  zi.stamp(19, 3, ['L.999.L.', '..AA....', '........']);   // Fahua Temple's Buddhas
   WM.defMap('zengtou_in', { name: '', interior: true, theme: 'spring', music: 'tense', rows: zi.rows(), spawn: [8, 8] });
   L.link({ map: 'zengtou', x: zhall.x, y: zhall.y }, { map: 'zengtou_in', x: zR.hall.x, y: zR.hall.y });
   L.link({ map: 'zengtou', x: fahua.x, y: fahua.y }, { map: 'zengtou_in', x: zR.fahua.x, y: zR.fahua.y });

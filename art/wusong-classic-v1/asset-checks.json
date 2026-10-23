@@ -1,0 +1,40 @@
+{
+  "nativeSource": [
+    1774,
+    887
+  ],
+  "nativeAlpha": true,
+  "checks": [
+    {
+      "name": "front",
+      "dimensions": [
+        192,
+        256
+      ],
+      "opaquePixels": 14989,
+      "noClipping": true,
+      "losslessPacking": true
+    },
+    {
+      "name": "left",
+      "dimensions": [
+        192,
+        256
+      ],
+      "opaquePixels": 12082,
+      "noClipping": true,
+      "losslessPacking": true
+    },
+    {
+      "name": "back",
+      "dimensions": [
+        192,
+        256
+      ],
+      "opaquePixels": 14773,
+      "noClipping": true,
+      "losslessPacking": true
+    }
+  ],
+  "rightRowBlank": true
+}

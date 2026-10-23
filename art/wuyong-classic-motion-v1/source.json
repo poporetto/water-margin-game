@@ -1,0 +1,33 @@
+{
+  "character": "wuyong",
+  "approved": "../wuyong-classic-v2",
+  "native": {
+    "front": {
+      "source": "../wuyong-classic-v2/wuyong-original.png",
+      "bounds": {
+        "left": 277,
+        "top": 92,
+        "width": 329,
+        "height": 753
+      }
+    },
+    "left": {
+      "source": "../wuyong-classic-v1/wuyong-original.png",
+      "bounds": {
+        "left": 776,
+        "top": 92,
+        "width": 239,
+        "height": 751
+      }
+    },
+    "back": {
+      "source": "../wuyong-classic-v1/wuyong-original.png",
+      "bounds": {
+        "left": 1157,
+        "top": 92,
+        "width": 330,
+        "height": 751
+      }
+    }
+  }
+}

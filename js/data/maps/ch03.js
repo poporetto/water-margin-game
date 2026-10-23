@@ -69,7 +69,7 @@
   var gR = { camp: gi.room(1, 1, 12, 8, { floor: 'N' }), tw: gi.room(14, 1, 10, 8, { floor: 'N' }), lix: gi.room(25, 1, 10, 8), shop: gi.room(36, 1, 8, 8), inn: gi.room(45, 1, 10, 8) };
   gi.stamp(2, 3, ['h...A....h', '..........', '..t..t....']);
   gi.stamp(15, 3, ['7.7..7.7', '...AA...', '........']);   // the Heavenly King Hall: the four kings, two to a side, the altar between
-  gi.stamp(26, 3, ['h..L...h', '........', '.t..t..t', 'cc......']);
+  gi.stamp(26, 3, ['h..LL.h.', '........', 't..t..t.', '........', 'cc......']);
   gi.stamp(37, 3, ['hhhh..', '......', 'ccc...']);
   gi.stamp(46, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('cangzhou_in', { name: '', interior: true, get theme() { return summer() ? 'summer' : 'snow'; }, get music() { return summer() ? 'town_cangzhou' : 'snow'; }, rows: gi.rows(), spawn: [6, 7] });

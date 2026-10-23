@@ -1,0 +1,10 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-f0b43986-4e0d-4e88-bec6-b3c93df84834.png",
+  "reference": "art/wuyong-classic-v1/wuyong-original.png",
+  "prompt": "prompt-v2.txt",
+  "selectedViews": [
+    "front"
+  ],
+  "leftAndBack": "exact v1 packed PNGs"
+}

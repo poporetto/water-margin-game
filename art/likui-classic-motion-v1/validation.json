@@ -1,0 +1,184 @@
+{
+  "frame": [
+    192,
+    256
+  ],
+  "sheet": [
+    576,
+    1024
+  ],
+  "losslessPacking": true,
+  "checks": [
+    {
+      "direction": "front",
+      "exactApprovedNeutral": true,
+      "distinctFrames": true,
+      "noClipping": true,
+      "stats": [
+        {
+          "bounds": {
+            "left": 24,
+            "right": 167,
+            "top": 20,
+            "bottom": 253
+          },
+          "opaque": 20370,
+          "skinLuma": 107.06219999999999,
+          "darkMaterialLuma": 31.9776
+        },
+        {
+          "bounds": {
+            "left": 24,
+            "right": 169,
+            "top": 17,
+            "bottom": 252
+          },
+          "opaque": 20117,
+          "skinLuma": 113.2474,
+          "darkMaterialLuma": 34.90539999999999
+        },
+        {
+          "bounds": {
+            "left": 24,
+            "right": 169,
+            "top": 17,
+            "bottom": 252
+          },
+          "opaque": 20107,
+          "skinLuma": 114.036,
+          "darkMaterialLuma": 34.059
+        }
+      ]
+    },
+    {
+      "direction": "left",
+      "exactApprovedNeutral": true,
+      "distinctFrames": true,
+      "noClipping": true,
+      "stats": [
+        {
+          "bounds": {
+            "left": 52,
+            "right": 139,
+            "top": 20,
+            "bottom": 254
+          },
+          "opaque": 14167,
+          "skinLuma": 108.169,
+          "darkMaterialLuma": 31.059
+        },
+        {
+          "bounds": {
+            "left": 23,
+            "right": 157,
+            "top": 20,
+            "bottom": 254
+          },
+          "opaque": 18014,
+          "skinLuma": 106.1672,
+          "darkMaterialLuma": 30.484199999999998
+        },
+        {
+          "bounds": {
+            "left": 25,
+            "right": 157,
+            "top": 20,
+            "bottom": 254
+          },
+          "opaque": 17422,
+          "skinLuma": 97.057,
+          "darkMaterialLuma": 31.816
+        }
+      ]
+    },
+    {
+      "direction": "right",
+      "exactApprovedNeutral": false,
+      "distinctFrames": true,
+      "noClipping": true,
+      "stats": [
+        {
+          "bounds": {
+            "left": 46,
+            "right": 146,
+            "top": 20,
+            "bottom": 255
+          },
+          "opaque": 16401,
+          "skinLuma": 107.822,
+          "darkMaterialLuma": 34.330600000000004
+        },
+        {
+          "bounds": {
+            "left": 33,
+            "right": 178,
+            "top": 20,
+            "bottom": 254
+          },
+          "opaque": 18975,
+          "skinLuma": 102.6908,
+          "darkMaterialLuma": 33.1994
+        },
+        {
+          "bounds": {
+            "left": 21,
+            "right": 171,
+            "top": 18,
+            "bottom": 253
+          },
+          "opaque": 19516,
+          "skinLuma": 100.9166,
+          "darkMaterialLuma": 32.339800000000004
+        }
+      ]
+    },
+    {
+      "direction": "back",
+      "exactApprovedNeutral": true,
+      "distinctFrames": true,
+      "noClipping": true,
+      "stats": [
+        {
+          "bounds": {
+            "left": 24,
+            "right": 167,
+            "top": 19,
+            "bottom": 254
+          },
+          "opaque": 20392,
+          "skinLuma": 99.06619999999998,
+          "darkMaterialLuma": 33.0286
+        },
+        {
+          "bounds": {
+            "left": 20,
+            "right": 169,
+            "top": 18,
+            "bottom": 253
+          },
+          "opaque": 20427,
+          "skinLuma": 110.6856,
+          "darkMaterialLuma": 35.765
+        },
+        {
+          "bounds": {
+            "left": 20,
+            "right": 170,
+            "top": 16,
+            "bottom": 253
+          },
+          "opaque": 20954,
+          "skinLuma": 116.402,
+          "darkMaterialLuma": 35.696799999999996
+        }
+      ]
+    }
+  ],
+  "manualReview": [
+    "Four facing directions; three distinct full frames",
+    "Alternating near arm and leg depth",
+    "Native colour family retained without quantization or recolouring",
+    "Head/torso visual scale compared against approved neutral"
+  ],
+  "note": "Material medians approximate due to pose-dependent sampling. Natural small bob allowed."
+}

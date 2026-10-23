@@ -1,0 +1,17 @@
+{
+  "tool": "image_gen.imagegen",
+  "initial": {
+    "front": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-441a93a2-31ad-4edb-adae-fd58be0da0f1.png",
+    "left": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-b1998b97-9b34-468b-a569-982c2a71a49a.png",
+    "right": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-a3eac5cd-7f1b-48b4-afe1-042c5cd4673c.png",
+    "back": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-76454da2-1543-4370-886b-33776e5a7ace.png"
+  },
+  "phaseCorrections": {
+    "front": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-2f869b08-b048-44fb-8475-0db28b038214.png",
+    "left": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-159b8735-45d2-48c0-ad0f-ee5a7a5bb91c.png"
+  },
+  "finalPhaseCorrections": {
+    "front": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-120ebb70-f1e9-475f-9b9e-93a5950e89ea.png",
+    "right": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-4cc308c9-dc73-46a1-8f1c-7de40ef543bb.png"
+  }
+}

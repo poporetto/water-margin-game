@@ -80,7 +80,25 @@
     this.set(ex, y + h - 1, 'D');
     return { x: ex, y: y + h - 1, fx: x + 1, fy: y + 2 };
   };
-  Grid.prototype.rows = function () { return this.c.map(function (r) { return r.join(''); }); };
+  Grid.prototype.rows = function () { this.bannersToFront(); return this.c.map(function (r) { return r.join(''); }); };
+  // A tavern's wine banner ('J') set beside the roof stands behind the house; it belongs out beside the front wall,
+  // where people see it from the street and it doesn't stand in their way. (Swapped with the open ground there.)
+  Grid.prototype.bannersToFront = function () {
+    var g = this, ROOF = 'z^v', WALL = 'WORDd#', GROUND = '.Pf';
+    for (var y = 0; y < g.h; y++) for (var x = 0; x < g.w; x++) {
+      if (g.get(x, y) !== 'J') continue;
+      [-1, 1].some(function (sd) {
+        if (ROOF.indexOf(g.get(x + sd, y) || '-') < 0) return false;
+        var yy = y; while (ROOF.indexOf(g.get(x + sd, yy + 1) || '-') >= 0) yy++;
+        if (WALL.indexOf(g.get(x + sd, yy + 1) || '-') < 0) return false;
+        while (WALL.indexOf(g.get(x + sd, yy + 1) || '-') >= 0) yy++;   // the house's front wall, at the bottom
+        var to = g.get(x, yy);
+        if (!to || GROUND.indexOf(to) < 0) return false;
+        g.set(x, yy, 'J'); g.set(x, y, to);
+        return true;
+      });
+    }
+  };
   L.grid = function (w, h, fill) { return new Grid(w, h, fill); };
   // Clear obstacles (chars in `what`) that touch any tile of `pathCh`, replacing with `withCh`.
   L.clearAround = function (g, pathCh, what, withCh) {

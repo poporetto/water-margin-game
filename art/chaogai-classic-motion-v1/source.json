@@ -1,0 +1,33 @@
+{
+  "character": "chaogai",
+  "approved": "../chaogai-classic-v2",
+  "native": {
+    "front": {
+      "source": "../chaogai-classic-v2/chaogai-original.png",
+      "bounds": {
+        "left": 183,
+        "top": 67,
+        "width": 412,
+        "height": 777
+      }
+    },
+    "left": {
+      "source": "../chaogai-classic-v1/chaogai-original.png",
+      "bounds": {
+        "left": 740,
+        "top": 71,
+        "width": 323,
+        "height": 771
+      }
+    },
+    "back": {
+      "source": "../chaogai-classic-v1/chaogai-original.png",
+      "bounds": {
+        "left": 1174,
+        "top": 73,
+        "width": 420,
+        "height": 769
+      }
+    }
+  }
+}

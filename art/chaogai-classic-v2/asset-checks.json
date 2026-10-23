@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-23T02:04:56.038Z",
+  "frames": [
+    {
+      "direction": "front",
+      "width": 192,
+      "height": 256,
+      "alphaBounds": [
+        34,
+        21,
+        157,
+        254
+      ],
+      "edgePixels": 0
+    },
+    {
+      "direction": "left",
+      "width": 192,
+      "height": 256,
+      "alphaBounds": [
+        47,
+        23,
+        143,
+        254
+      ],
+      "edgePixels": 0
+    },
+    {
+      "direction": "back",
+      "width": 192,
+      "height": 256,
+      "alphaBounds": [
+        33,
+        24,
+        158,
+        254
+      ],
+      "edgePixels": 0
+    }
+  ],
+  "checks": {
+    "nativeTransparency": true,
+    "frameDimensions": true,
+    "noCellEdgeClipping": true,
+    "turnaroundDimensions": true,
+    "atlasDimensions": true,
+    "repeatedStandingRowsIdentical": true,
+    "rightRowBlank": true,
+    "leftAndBackByteIdenticalToV1": true
+  },
+  "native": {
+    "width": 1774,
+    "height": 887,
+    "transparentPixels": 966201,
+    "opaquePixels": 922
+  }
+}

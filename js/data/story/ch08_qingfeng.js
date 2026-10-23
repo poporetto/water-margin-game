@@ -60,6 +60,8 @@
       s.sfx('earth');
       var q = api.unit('Qin Ming'); if (q && q.losses < 2) q.losses = 1;
       api.weaken('enemy', 0.8);
+      api.confuse('enemy');   // every unit caught in the pits is thrown into confusion
+      await s.say('huarong', 'They\'re floundering in the pits — they won\'t move this turn. Now!');
     } }],
     win: [['yanshun', 'Qin Ming is in the pit! Drag him out!']], lose: [['songjiang:sad', 'Fall back to the stronghold!']]
   };
@@ -192,7 +194,7 @@
   WM.defEvents('qingfeng_in', [
     { id: 'ch8_rescue', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch8_caged') && WM.state.x >= 17; }, run: async function (s) {
       s.spawn('sj', 'songjiang', 19, 4, 'up'); s.lie('sj');   // beaten, in the cage
-      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[24, 6], [26, 5], [28, 5], [29, 7]], 'down');
+      var D = WM.data, lg = D.troop(s, 'lgg', 'guard', [[24, 7], [26, 7], [28, 8], [30, 7]], 'down');
       await s.say('huarong:angry', 'Liu Gao! You beat my kinsman half to death on a lie! Where is he?');
       await s.say('guard', 'The Commandant\'s orders — no one goes near the prisoner! Stand back, Major Hua!');
       s.sfx('arrow'); await s.flash('#ffffff', 0.15); s.emote('lgg0', '!', 0.8);
@@ -200,7 +202,7 @@
       lg.forEach(function (k) { s.move(k, 'U2', { run: true, wait: false }); });
       await s.wait(0.5);
       await s.walkTo('player', 20, 7); s.face('player', 'up');
-      s.sfx('door'); await s.wait(0.3);   // the cage door wrenched open
+      s.sfx('door'); s.flag('ch8_cageopen'); s.refreshMap(); await s.shake(2, 0.2);   // the cage door wrenched open
       await s.move('player', 'U2');
       s.sfx('hit');
       await s.narrate('Liu Gao\'s guards fell back before Hua Rong\'s bow. He broke open the cage and lifted Song Jiang out himself, and on the way out he put an arrow into the lintel of Liu Gao\'s gate: "The next one will be for your heart."');
@@ -226,7 +228,7 @@
       s.camera(20, 19, 0.6);
       await s.walkTo('sj3', 20, 21, { speed: 34 });
       // Liu Gao's men rise out of the dark on every side
-      s.spawn('am1', 'soldier', 17, 21, 'right'); s.spawn('am2', 'soldier', 23, 21, 'left'); s.spawn('am3', 'soldier', 20, 25, 'up'); s.spawn('am4', 'soldier', 20, 17, 'down');
+      s.spawn('am1', 'soldier', 18, 21, 'right'); s.spawn('am2', 'soldier', 23, 21, 'left'); s.spawn('am3', 'soldier', 20, 25, 'up'); s.spawn('am4', 'soldier', 20, 17, 'down');
       s.walkTo('am1', 19, 21, { run: true }); s.walkTo('am2', 21, 21, { run: true }); s.walkTo('am4', 20, 20, { run: true });
       await s.walkTo('am3', 20, 22, { run: true });
       await s.emote('sj3', '!', 0.8);
@@ -272,15 +274,53 @@
   ]);
   WM.defEvents('qingfengshan', [
     { id: 'ch8_ambush', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch8_carts'); }, run: async function (s) {
+      // the prisoners on the road north to Qingzhou: Huang Xin and Liu Gao in front, Song Jiang and Hua Rong bound, two soldiers behind
+      s.hide('player');
+      s.spawn('hx', 'huangxin', 14, 30, 'up'); s.spawn('lg', 'liugao', 15, 30, 'up');
+      s.spawn('sj', 'songjiang', 14, 31, 'up'); s.spawn('hr', 'huarong', 15, 31, 'up');
+      s.spawn('so1', 'soldier', 14, 32, 'up'); s.spawn('so2', 'soldier', 15, 32, 'up');
+      ['hx', 'lg', 'sj', 'hr', 'so1'].forEach(function (k) { s.move(k, 'U4'); });
+      await s.move('so2', 'U4');
+      await s.say('liugao', 'Keep moving! By tomorrow you two will be in the Qingzhou jail, and the day after on the execution ground.');
+      await s.say('huangxin', 'Quiet. These hills are bandit country — keep your eyes on the trees.');
+      // out of the pines: gongs, and three chiefs with their men
+      s.sfx('gong'); await s.shake(3, 0.4);
+      s.spawn('ys', 'yanshun', 14, 22, 'down'); s.spawn('wy', 'wangying', 11, 25, 'right'); s.spawn('zt', 'zhengtianshou', 17, 27, 'left');
+      s.spawn('b1', 'bandit', 13, 29, 'up'); s.spawn('b2', 'bandit', 16, 29, 'up');
+      s.walkTo('ys', 14, 24, { run: true }); s.walkTo('wy', 12, 26, { run: true }); await s.walkTo('zt', 16, 26, { run: true });
+      s.emote('hx', '!'); s.emote('lg', '!'); s.face('so1', 'down'); await s.face('so2', 'down');
       await s.say('yanshun', 'Halt! Leave the carts and the silver, and you can keep your heads!');
+      await s.say('liugao:shock', 'B-bandits! Huang Xin, do something!');
       await s.battle('ch8_escort', { bg: 'snow', music: 'boss' });
+      // Huang Xin breaks away south; the soldiers scatter; Liu Gao is dragged before Hua Rong
+      s.walkTo('hx', 14, 33, { run: true }); s.despawn('hx', { leave: true });
+      s.lie('so1'); s.lie('so2');
+      s.face('lg', 'down'); await s.emote('lg', 'sweat', 1);
+      await s.say('wangying', 'Untie them! Brother Song Jiang, Major Hua — Yan Shun has waited for you on this road since dawn.');
+      await s.say('huarong:angry', 'Liu Gao. You had my kinsman beaten half to death on your wife\'s lie.');
       await s.narrate('Huang Xin fled back to Qingzhou alone. Liu Gao was taken, and Hua Rong, who had suffered from him more than anyone, ended his life. Song Jiang and Hua Rong went up to the stronghold. They knew Qingzhou would send an army next — and that its commander would be Qin Ming, the Thunderbolt.');
+      s.lie('lg');
+      // Song Jiang leads on from here, his new companions with him
+      var st = s.actor('sj').tile();
+      WM.data.clear(s, ['sj', 'hr', 'ys', 'wy', 'zt', 'b1', 'b2']);
+      s.place('player', st.x, st.y, 'up'); s.show('player');
       s.flag('ch8_ambushed');
       s.heal();
     } },
     { id: 'ch8_war', x: 13, y: 12, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch8_ambushed'); }, run: async function (s) {
       await s.narrate('Qin Ming came, as they had known he would, with five hundred men, and rode up to the foot of the mountain roaring for the bandits to come down.');
+      // up the mountain road below the stockade: the Thunderbolt and his vanguard
+      s.spawn('qm', 'qinming', 12, 24, 'up'); s.spawn('qs1', 'soldier', 11, 25, 'up'); s.spawn('qs2', 'soldier', 13, 25, 'up');
+      s.face('player', 'down');
+      s.walkTo('qs1', 14, 17); s.walkTo('qs2', 16, 17); await s.walkTo('qm', 15, 16);
+      s.faceEach('qm', 'player');
+      await s.say('qinming:angry', 'Bandits of Qingfeng Mountain! Qin Ming of Qingzhou is here! Come down and be bound — or I will level this mountain stone by stone!');
+      await s.say('huarong', 'Commander Qin. Hua Rong of Qingfeng Fort greets you.');
+      await s.say('qinming:angry', 'Hua Rong! An officer of the Song, gone over to the bandits?! Come down and face me!');
       await s.duel('huarong_qinming', { hero: 'huarong', canLose: true });
+      await s.emote('qm', 'anger', 0.8);
+      s.walkTo('qs1', 11, 25, { run: true }); s.walkTo('qs2', 13, 25, { run: true }); await s.walkTo('qm', 12, 24, { run: true });
+      WM.data.clear(s, ['qm', 'qs1', 'qs2']);
       await s.narrate('Hua Rong turned his horse as if fleeing, drew his bow, and shot the red tassel off the top of Qin Ming\'s helmet. Qin Ming, beside himself, chased the outlaws up and down the mountain all day, and found only arrows and empty slopes.');
       await s.war('ch8_qinming');
       s.flag('ch8_qinmingtaken');
@@ -337,8 +377,8 @@
       await s.say('qinming:angry', 'Song Jiang!! You did this! You and your bandits — you burned the villages in my name! My wife — my family — !');
       await s.say('songjiang:sad', 'Commander... it is true. It was my plan. I wanted a man like you among us, and I knew you would never come of your own will. I am responsible for your family\'s death. Kill me if you must.');
       await s.say('songjiang', 'But hear me first. Hua Rong has a sister, wise and virtuous. If you will stay with us, she will be your wife, and we will be your family.');
-      await s.narrate('Qin Ming stood a long while in silence. Their kindness, the hopelessness of his position, and the respect they showed him wore down his anger. At last he bowed his head. "You have left me no road back. ...So be it."');
-      await s.say('qinming', 'My lieutenant Huang Xin holds Qingfeng Fort. He was my pupil. I will bring him to you.');
+      await s.narrate('Qin Ming stood a long while in silence. Their kindness, the hopelessness of his position, and the respect they showed him wore down his anger. At last he bowed his head.');
+      await s.say('qinming:sad', 'You have left me no road back. ...So be it. My lieutenant Huang Xin holds Qingfeng Fort. He was my pupil. I will bring him to you.');
       // he goes to fetch his lieutenant, and comes back up the hall with him
       await s.walkTo('qinming', 9, 8); s.hide('qinming');
       await s.fadeOut(0.6); await s.wait(0.4); await s.fadeIn(0.6);
@@ -357,6 +397,8 @@
       s.despawn('qinming'); s.despawn('huarong'); s.despawn('yanshun'); s.despawn('hx9'); s.despawn('sc9');
       // on the road south, in a valley below Duiying Mountain: two young men on horseback, one in red, one in white
       await s.fadeOut(0.8);
+      await s.narrate('So the men of Qingfeng Mountain loaded their stores onto carts, set fire to the stockade, and set out for Liangshan in three companies — flying government banners, as if they were troops out hunting bandits. Song Jiang and Hua Rong rode ahead with the first company.');
+      await s.narrate('After some days on the road they came to Duiying Mountain. From the valley ahead came the clash of gongs and drums — and there on the road two young men, one all in red and one all in white, were fighting with painted halberds.');
       await s.warp('roadinn', 4, 8, 'right', { noFade: true });
       s.spawn('hr8', 'huarong', 3, 7, 'right');
       s.spawn('lf8', 'lufang', 14, 8, 'right'); s.spawn('gs8', 'guosheng', 16, 8, 'left');
@@ -373,9 +415,11 @@
       await s.moveTo('lf8', 7, 8); await s.moveTo('gs8', 8, 8);
       await s.say('lufang', 'What archery! ...Song Jiang? Song Jiang of Yuncheng, Timely Rain? I am Lü Fang, the Little Marquis, and this mountain is mine — or it was until this morning.');
       await s.say('guosheng', 'And I am Guo Sheng, who came to take it from him. ...We will both follow you, brother, if you will have us.');
-      s.hide('lf8'); s.despawn('lf8'); s.hide('gs8'); s.despawn('gs8');
+      await s.say('songjiang:smile', 'Gladly! Put up your halberds, brothers — a mountain is nothing to fight over. We are on our way to Liangshan Marsh, and there is room there for men like you. Ride with us.');
+      s.emote('lf8', 'note'); await s.emote('gs8', 'note');
       // and an inn further on, where a stranger will not give up the best seat
       await s.fadeOut(0.8);
+      s.hide('lf8'); s.despawn('lf8'); s.hide('gs8'); s.despawn('gs8');
       await s.warp('roadinn_in', 6, 6, 'up', { noFade: true });
       s.spawn('sy', 'shiyong', 4, 4, 'down');
       // the whole band crowding in behind Song Jiang, stamping the snow off their boots

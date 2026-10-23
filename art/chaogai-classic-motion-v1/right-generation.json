@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in-edit",
+  "source": "/Users/andriastaniwan/.codex/generated_images/01a16685-513a-79c1-8865-9a529a5ea87f/exec-47572065-d6a9-4480-ac16-08901e0bcfa5.png",
+  "prompt": "right-prompt.txt",
+  "target": "right-edit.png"
+}

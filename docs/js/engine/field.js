@@ -18,6 +18,7 @@
       if (!def._rows || def._rowsKey !== rk) { def._rows = def.rows(); def._rowsKey = rk; }
       rows = def._rows;
     } else rows = def.rows;
+    rows = shutDeadDoors(def, rows);
     var w = 0; rows.forEach(function (r) { w = Math.max(w, r.length); });
     var m = {
       id: id, def: def, rows: rows, w: w, h: rows.length, theme: def.theme || 'spring', interior: !!def.interior,
@@ -34,6 +35,17 @@
     scanTalls(m);
     return m;
   }
+  // A door drawn on a house with nothing behind it (no exit through it) is drawn shut, so no one walks onto the wall.
+  function shutDeadDoors(def, rows) {
+    if (def.interior || def.world) return rows;
+    if (def._shutFor === rows) return def._shutRows;
+    var ex = def.exits || [], out = rows.map(function (r, y) {
+      if (r.indexOf('D') < 0) return r;
+      return r.replace(/D/g, function (ch, x) { return ex.some(function (e) { return x >= e.x && x < e.x + (e.w || 1) && y >= e.y && y < e.y + (e.h || 1); }) ? 'D' : 'd'; });
+    });
+    def._shutFor = rows; def._shutRows = out;
+    return out;
+  }
   function scanTalls(m) {
     m.talls = [];
     for (var y = 0; y < m.h; y++) for (var x = 0; x < m.w; x++) {
@@ -48,6 +60,14 @@
     scanTalls(m);
   };
   F.buildMap = buildMap;
+  // the map's tiles changed with the story mid-scene (a map whose rows depend on a flag): build it again in place,
+  // everyone standing where they are
+  F.refreshMap = function () {
+    if (!F.map) return;
+    var m = buildMap(F.map.id);
+    ['rows', 'w', 'h', 'baked', 'rooms', 'talls'].forEach(function (k) { F.map[k] = m[k]; });
+    F.map.signs = null;
+  };
   // An interior map holds several rooms side by side, each walled off by void ('x'). Number them, so that only the
   // room the player stands in is drawn: the house next door is not visible through the wall.
   function rooms(m) {
@@ -191,10 +211,19 @@
     if (!F.actors || !F.map || !F.player) return;   // (no field yet: the headless walker, or a chapter jump)
     F.actors = F.actors.filter(function (a) { return !(a.ev && /^fol_/.test(a.ev.id)); });
     if (F.map.def.world) return;   // (not on the world map, where the party is one small figure)
-    var t = F.player.tile(), taken = {};
+    var list = WM.state.followers || [], spots = F.followerSpots(list.length);
+    list.forEach(function (who, i) {
+      var at = spots[i];
+      var a = F.addActor('fol_' + i, who, at[0], at[1], F.player.dir);
+      a.sheetWho = who; a.following = true; a.followIdx = i; a.solid = false;
+    });
+  };
+  // where n followers stand: free floor tiles beside or behind the leader (on top of him only if there is none)
+  F.followerSpots = function (n) {
+    var t = F.player.tile(), taken = {}, out = [];
     var back = { up: [0, 1], down: [0, -1], left: [1, 0], right: [-1, 0] }[F.player.dir] || [0, 1];
     var spots = [[-1, 0], [1, 0], back, [-1, back[1] || back[0]], [1, back[1] || back[0]], [-2, 0], [2, 0], [0, 0]];
-    var spotFor = function () {   // a free floor tile beside or behind the leader (on top of him only if there is none)
+    var spotFor = function () {
       for (var k = 0; k < spots.length; k++) {
         var x = t.x + spots[k][0], y = t.y + spots[k][1];
         if (taken[x + ',' + y] || (spots[k][0] || spots[k][1]) && F.tileSolid(x, y)) continue;
@@ -202,11 +231,8 @@
       }
       return [t.x, t.y];
     };
-    (WM.state.followers || []).forEach(function (who, i) {
-      var at = spotFor();
-      var a = F.addActor('fol_' + i, who, at[0], at[1], F.player.dir);
-      a.sheetWho = who; a.following = true; a.followIdx = i; a.solid = false;
-    });
+    for (var i = 0; i < n; i++) out.push(spotFor());
+    return out;
   };
   F.addActor = function (key, charOrLook, tx, ty, dir) {
     var lk;
@@ -656,10 +682,11 @@
     for (var i = 0; i < F.map.talls.length; i++) {
       var tt = F.map.talls[i];
       var sx = tt.x * TS - cx, sy = tt.y * TS - cy;
-      if (sx < -32 || sy < -48 || sx > WM.LOW_W + 32 || sy > WM.LOW_H + 32) continue;
+      if (sx < -32 || sy < -48 || sx > WM.LOW_W + 32 || sy > WM.LOW_H + (tt.d.sortAt ? 80 : 32)) continue;   // (a side gate's tower is drawn from below, up over its passage)
       if (elsewhere(tt.x, tt.y)) continue;
       var prop=T.propLayout(F.map).anchors[tt.x+','+tt.y];
-      var sortY=prop?prop.bottom*TS-2:tt.y*TS+(tt.d.sortDy!=null?tt.d.sortDy:14);
+      var at=!prop&&tt.d.sortAt?tt.d.sortAt(F.map,tt.x,tt.y):null;
+      var sortY=prop?prop.bottom*TS-2:at!=null?at:tt.y*TS+(tt.d.sortDy!=null?tt.d.sortDy:14);
       list.push({ y: sortY, kind: 't', t: tt, sx: sx, sy: sy });
     }
     var all = F.actors.concat([F.player]);
@@ -962,12 +989,42 @@
       c.restore();
       return;
     }
+    if (a.static === 'swim') { // in the water to the shoulders, bobbing, a ring of ripples round him
+      var by = Math.round(Math.sin(WM.time * 3 + a.x * 0.1) * 1.2);
+      c.save(); c.beginPath(); c.rect(x - 24, y - 80, 48, 76 + by); c.clip();
+      SP.draw(c, a.sheet(), a.dir, 0, x, y + 9 + by);
+      c.restore();
+      c.fillStyle = 'rgba(255,255,255,0.55)'; c.fillRect(x - 7, y - 4 + by, 14, 1); c.fillRect(x - 9, y - 2 + by, 3, 1); c.fillRect(x + 6, y - 2 + by, 3, 1);
+      return;
+    }
+    if (a.static === 'sit') { // seated cross-legged on a cushion or a chair: the figure sinks and its legs fold out of sight
+      var sh = a.sheet(), robe = robeColour(sh);
+      SP.shadow(c, x, y - a.offY, 9);
+      c.fillStyle = '#5a2a1a'; c.fillRect(x - 10, y - 4, 20, 4); c.fillStyle = '#8a4428'; c.fillRect(x - 10, y - 4, 20, 1);   // the cushion
+      c.save(); c.beginPath(); c.rect(x - 24, y - 80, 48, 75); c.clip();
+      SP.draw(c, sh, a.dir, 0, x, y + 3);
+      c.restore();
+      c.fillStyle = robe; c.fillRect(x - 8, y - 7, 16, 3); c.fillRect(x - 7, y - 8, 14, 1);   // the crossed knees under the robe
+      c.fillStyle = 'rgba(0,0,0,0.3)'; c.fillRect(x - 8, y - 5, 16, 1); c.fillRect(x, y - 7, 1, 2);
+      return;
+    }
     if (a.boat) y += Math.round(Math.sin(WM.time * 2 + a.x) * 0.8);   // riding the swell
     else SP.shadow(c, x, Math.round(a.y - cy), a.big ? 7 : 5);
     if (a.alpha != null) c.globalAlpha = a.alpha;
     SP.draw(c, a.sheet(), a.dir, a.anim, x, y);
     c.globalAlpha = 1;
     if (a.boat) drawBoat(c, x, y);
+  }
+  // the colour of a figure's robe at the waist (front-facing frame), for drawing them seated
+  function robeColour(sh) {
+    if (sh.robeColour) return sh.robeColour;
+    var col = '#6a5a48';
+    try {
+      var k = sh.artScale || 1, cw = (sh.isOverride ? sh.cw : SP.CW) * k, ch = (sh.isOverride ? sh.ch : SP.CH) * k;
+      var d = sh.getContext('2d').getImageData(Math.round(cw * 1.5), Math.round(ch * 0.72), 1, 1).data;   // (middle column, down row)
+      if (d[3] > 200) col = 'rgb(' + d[0] + ',' + d[1] + ',' + d[2] + ')';
+    } catch (e) {}
+    return (sh.robeColour = col);
   }
   // a small boat around a character's legs, for scenes on the water
   function drawBoat(c, x, y) {

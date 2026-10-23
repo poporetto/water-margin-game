@@ -318,7 +318,60 @@
     }
   }
 
+  // A gate in a wall that runs north-south: the run of 'G' tiles is vertical, with wall above and below it.
+  function sideGate(m, tx, ty) {
+    var g = function (dx, dy) { return m.get(tx + dx, ty + dy); }, wallish = function (q) { return q === 'G' || q === '#' || q === 'R'; };
+    if (g(-1, 0) === 'G' || g(1, 0) === 'G') return false;
+    var t = ty, b = ty; while (g(0, t - ty - 1) === 'G') t--; while (g(0, b - ty + 1) === 'G') b++;
+    return (t !== b || wallish(g(0, -1)) || wallish(g(0, 1))) && wallish(m.get(tx, t - 1)) && wallish(m.get(tx, b + 1)) ? { top: t, bottom: b } : false;
+  }
+  // its floor: the road running through from side to side, the timber jambs at either end, the leaves pushed back
+  function cityGateSide(c, x, y, tx, ty, m, run) {
+    px(c, x, y, S, S, '#7d7a72');
+    c.fillStyle = '#6f6c64'; for (var r = 2; r < 16; r += 5) c.fillRect(x, y + r, S, 1);           // the stone courses of the road, east to west
+    c.fillStyle = '#8c897f'; for (r = 0; r < 16; r += 5) c.fillRect(x + ((ty * 7 + r) % 9), y + r, 5, 1);
+    if (ty === run.top) { px(c, x, y, S, 3, '#5d584f'); px(c, x, y + 3, S, 2, '#6a3e22'); px(c, x + 1, y + 5, 4, 2, '#7a3a22'); px(c, x + 11, y + 5, 4, 2, '#7a3a22'); }
+    if (ty === run.bottom) { px(c, x, y + 13, S, 3, '#5d584f'); px(c, x, y + 11, S, 2, '#6a3e22'); px(c, x + 1, y + 9, 4, 2, '#7a3a22'); px(c, x + 11, y + 9, 4, 2, '#7a3a22'); }
+  }
+  // its tower, seen from above: a hipped roof along the top of the wall, its ridge north-south, and the red south gable
+  // end facing us; drawn a row at a time (over whoever walks beneath it), raised by the height of the wall
+  function cityGateSideOver(c, x, y, tx, ty, m, run) {
+    var lift = 10, x0 = x - 6, w = S + 12, top = ty === run.top, bot = ty === run.bottom;
+    var y0 = y - lift - (top ? 6 : 0), y1 = y - lift + S;
+    var shut = WM.state && WM.state.flags && WM.state.flags['shut:' + m.id];
+    // the mouths of the passage on either face of the wall: dark, or with the leaves drawn across them
+    var my0 = y + (top ? 3 : 0), my1 = y + (bot ? 13 : 16);
+    // (drawn last, below: they stand just outside the eaves)
+    if (bot) {   // the tower's stone base, standing on the wall south of the passage
+      var by = y1 + lift - 2;
+      px(c, x - 4, by, S + 8, 14, '#8f8a80'); c.fillStyle = '#6f6a61';
+      for (var br = 3; br < 14; br += 4) c.fillRect(x - 4, by + br, S + 8, 1);
+      for (br = 0; br < 14; br += 4) for (var bx = (br % 8 ? 2 : 6); bx < S + 8; bx += 8) c.fillRect(x - 4 + bx, by + br, 1, 3);
+      px(c, x - 4, by, 1, 14, '#5d584f'); px(c, x + S + 3, by, 1, 14, '#5d584f'); px(c, x - 4, by + 13, S + 8, 1, '#5d584f');
+    }
+    px(c, x0, y0, w, y1 - y0, '#55585b');
+    for (var k = x0 + 2; k < x0 + w - 1; k += 3) if (Math.abs(k - (x + 7)) > 2) px(c, k, y0, 1, y1 - y0, '#74787b');   // rows of tiles running down to east and west
+    px(c, x + 5, y0, 6, y1 - y0, '#2a2c2f'); px(c, x + 7, y0, 2, y1 - y0, '#44474b');                                   // the ridge along the wall
+    px(c, x0, y0, 2, y1 - y0, '#2a2c2f'); px(c, x0 + w - 2, y0, 2, y1 - y0, '#2a2c2f');                                 // the eaves
+    if (top) { px(c, x0, y0, w, 2, '#2a2c2f'); px(c, x0 - 2, y0 - 2, 3, 3, '#2a2c2f'); px(c, x0 + w - 1, y0 - 2, 3, 3, '#2a2c2f'); px(c, x + 5, y0 - 4, 6, 4, '#2a2c2f'); }
+    if (bot) {
+      px(c, x0, y1 - 2, w, 2, '#2a2c2f');
+      px(c, x0 + 2, y1, w - 4, lift - 2, '#8e2a20');                                                                  // the tower's red south end
+      for (var q = x0 + 3; q < x0 + w - 2; q += 4) px(c, q, y1, 1, lift - 2, '#5a1812');
+      px(c, x0 + 2, y1, w - 4, 1, '#b8a070');                                                                         // the painted beam under the eave
+      px(c, x0 - 2, y1 - 4, 3, 3, '#2a2c2f'); px(c, x0 + w - 1, y1 - 4, 3, 3, '#2a2c2f');                             // upturned corners
+    }
+    [x0 - 3, x0 + w].forEach(function (mx) {
+      if (shut) {
+        px(c, mx, my0, 3, my1 - my0, '#7a2a1c'); px(c, mx + 1, my0, 1, my1 - my0, '#9a4a32');
+        if (top) px(c, mx, my0, 3, 1, '#3a1a10'); if (bot) px(c, mx, my1 - 1, 3, 1, '#3a1a10');
+        c.fillStyle = '#d8b36a'; for (var sy = my0 + 2; sy < my1 - 1; sy += 3) c.fillRect(mx + 1, sy, 1, 1);
+      }
+    });
+  }
+
   function cityGate(c, x, y, tx, ty, th, m) {
+    var side = sideGate(m, tx, ty); if (side) { cityGateSide(c, x, y, tx, ty, m, side); return; }
     // a Song gate passage: flat-topped, framed in timber, the leaves of the gate pushed back inside
     px(c, x, y, S, S, '#8a8478');
     var G = function (dx) { return m.get(tx + dx, ty) === 'G'; };
@@ -331,6 +384,9 @@
   }
   // the gate tower: a tiled roof on the wall over the passage
   function cityGateOver(c, x, y, tx, ty, th, m) {
+    // a side gate's tower is drawn whole from the bottom tile of its passage, so the roof covers whoever is inside
+    var side = sideGate(m, tx, ty);
+    if (side) { if (ty === side.bottom) for (var gy = side.top; gy <= side.bottom; gy++) cityGateSideOver(c, x, y + (gy - ty) * S, tx, gy, m, side); return; }
     if (m.get(tx, ty - 1) === 'G') return;
     var G = function (dx) { return m.get(tx + dx, ty) === 'G'; };
     // shut: the two leaves are drawn across the passage (a scene sets the flag 'shut:<map>')
@@ -843,7 +899,8 @@
   // squared bars between; running away from the viewer, one long beam with the bar tops along it.
   function cellBars(c, x, y, tx, ty, m, F) {
     floorStone(c, x, y, tx, ty);
-    if(SHEETS.part2){var horizontal=F(-1,0)||F(1,0)||!(F(0,-1)||F(0,1)),idx=horizontal?(F(0,-1)||F(0,1)?19:!F(-1,0)?13:!F(1,0)?15:14):!F(0,-1)?16:!F(0,1)?18:17;if(horizontal)part2(c,idx,x,y,16,16);else part2(c,17,x+6,y,4,16,6,2,4,12);return;}
+    // (the grille is drawn stretched to the full height of the cell door's art, so bars and door meet in one line)
+    if(SHEETS.part2){var horizontal=F(-1,0)||F(1,0)||!(F(0,-1)||F(0,1)),idx=horizontal?(F(0,-1)||F(0,1)?19:!F(-1,0)?13:!F(1,0)?15:14):!F(0,-1)?16:!F(0,1)?18:17;if(horizontal){var post=idx===19?6:idx===13?0:idx===15?12:-1;if(idx!==16&&idx!==18&&idx!==17)idx=14;part2(c,idx,x,y,16,16,0,3.5,16,12.5);if(post>=0)part2(c,17,x+post,y,4,16,6,2,4,12);}else part2(c,17,x+6,y,4,16,6,2,4,12);return;}
     if (F(-1, 0) || F(1, 0) || !(F(0, -1) || F(0, 1))) {
       px(c, x, y + 14, S, 2, 'rgba(0,0,0,0.25)');                                    // shadow on the floor
       for (var i = 1; i < 16; i += 4) { px(c, x + i, y + 1, 2, 13, '#4a2e18'); px(c, x + i, y + 1, 1, 13, '#7a5232'); }
@@ -1103,7 +1160,7 @@
     'R': { draw: wallRed, tall: wallRedOver, solid: true, wall: true },
     '#': { draw: wallStone, solid: true, wall: true },
     // the tower over the passage hides anyone in the passage or on the road behind it (sorted after its own row)
-    'G': { draw: cityGate, tall: cityGateOver, sortDy: 17 },
+    'G': { draw: cityGate, tall: cityGateOver, sortDy: 17, sortAt: function (m, tx, ty) { var g = sideGate(m, tx, ty); return g ? (g.bottom + 2) * S : null; } },   // (a side gate's tower sorts below its stone base)
     'D': { draw: door },
     'd': { draw: door, solid: true, shut: true },   // a house's own door, shut: nobody lives there for the player to visit
     'u': { draw: stall, tall: stallTall, solid: true },
@@ -1297,7 +1354,7 @@
   // the art entry for a tile on this map: a season's own version ('T@autumn') before the plain one ('T')
   // (building pieces are left out indoors unless the entry says inside: true, and an entry marked indoors: true is used only indoors)
   function artEntry(ch, map) {
-    var e = ART && (ART[ch + '@' + map.id] || ART[ch + '@' + map.theme] || ART[ch]) || null;
+    var e = ART && (ART[ch + '@' + map.id] || (map.interior && map.theme === 'snow' && ch === 'L' && ART['L@spring']) || ART[ch + '@' + map.theme] || ART[ch]) || null;   // (indoors a lantern has no snow on it)
     if (!e || (e.indoors && !map.interior)) return null;
     var world = map.theme === 'world' || (map.def && map.def.world);
     return (e.building && (world || (map.interior && !e.inside))) || (e.object && world) ? null : e;
@@ -1521,7 +1578,18 @@
       }
     }
     var o = e.object, cell = o.at;
-    if (o.variants) cell = o.variants[Math.floor(U.hash2(tx, ty, 905) * o.variants.length) % o.variants.length];
+    var pick = map.def && map.def.variants && map.def.variants[tx + ',' + ty];   // a map can choose the look of one prop (a table set with wine)
+    // a table among tables (a tavern, a hall set for a feast) is always the one laid with a wine pot and cups
+    if (pick == null && ch === 't' && map.interior) for (var nb = 1; nb <= 5 && pick == null; nb++) if (map.get(tx - nb, ty) === 't' || map.get(tx + nb, ty) === 't' || (nb <= 2 && (map.get(tx, ty - nb) === 't' || map.get(tx, ty + nb) === 't'))) pick = 0;
+    // a lantern stand in the right half of a room hangs its lantern the other way, so a pair frames the room
+    var mirror = false;
+    if (ch === 'L' && map.interior) {
+      var wl = tx, wr = tx, isWall = function (q) { return q == null || q === 'X' || q === 'x'; };
+      while (!isWall(map.get(wl - 1, ty))) wl--;
+      while (!isWall(map.get(wr + 1, ty))) wr++;
+      mirror = tx > (wl + wr) / 2;
+    }
+    if (o.variants) cell = o.variants[pick != null ? pick % o.variants.length : Math.floor(U.hash2(tx, ty, 905) * o.variants.length) % o.variants.length];
     var w = o.w || S, h = o.h || S, dx = x + (S - w) / 2, baseY=y+S;
     var placement = o.footprint && T.propLayout(map);
     if (placement && placement.skipped[tx+','+ty]) return;
@@ -1545,6 +1613,8 @@
     }
     // Never stretch an object's width independently of its height to fill a map run.
     var sourceW = o.w || S, fit = ch === 'b' ? 1 : Math.min(1, w / sourceW), drawW = sourceW * fit, drawH = h * fit;
+    // an army tent is painted small in its cell: drawn half again as large, it stands taller than the soldiers around it
+    var grow = o.scale || (ch === 'V' ? 1.5 : 1); drawW *= grow; drawH *= grow;
     // Freestanding props only: structural pieces and water props have no floor shadow.
     if (e.base !== 'water' && 'utckhjAIQVU1235678E0a⚔LYJg'.indexOf(ch) >= 0 && o.shadow !== false) {
       var shadowWidth = 'LYJ'.indexOf(ch) >= 0 ? Math.min(drawW, 10) : drawW;
@@ -1557,7 +1627,9 @@
       px(c,pedestalX,baseY-8,drawW,1,'#b4a483');px(c,pedestalX,baseY-1,drawW,1,'#4b4540');
       baseY-=8;
     }
+    if (mirror) { c.save(); c.translate(2 * dx + w, 0); c.scale(-1, 1); }   // (flipped about the prop's own middle)
     U.drawArt(c, sheetOf(e), cell[0] * S, cell[1] * S, sourceW, h, dx + (w - drawW) / 2, baseY - drawH, drawW, drawH);
+    if (mirror) c.restore();
   }
 
   // the ground of a tile from its art (returns false if it has none): a variant chosen by place, a piece joining

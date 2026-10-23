@@ -1,0 +1,16 @@
+{
+  "unchanged": {
+    "right-strip.png": true,
+    "right-0.png": true,
+    "right-1.png": true,
+    "right-2.png": true,
+    "wusong-walking-master.png": true
+  },
+  "strideScale": {
+    "front": 0.95,
+    "left": 0.94,
+    "right": 1,
+    "back": 0.95
+  },
+  "method": "Single nearest-neighbour sample from native raw sources; exact approved neutrals; preserve prior foot baselines"
+}

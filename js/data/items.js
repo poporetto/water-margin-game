@@ -131,6 +131,7 @@
   SH.cangzhou = { name: 'Cangzhou Store', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'quilted', 'leathercap', 'buckler', 'straw'] };
   SH.daming = { name: 'Daming Market', items: ['beef', 'medicine', 'needle', 'goodwine', 'soulcharm', 'lime', 'tigerwine', 'ironhelm', 'leather', 'lamellar', 'rattan', 'gauntlet', 'amulet'] };
   SH.daming_t = { name: 'Daming Incense Shop', items: ['incense', 'templeincense', 'soulcharm'] };
+  SH.yanggu = { name: 'Yanggu Store', items: ['bun', 'beef', 'medicine', 'antidote', 'needle', 'wine', 'goodwine', 'soulcharm', 'bandana', 'leathercap', 'quilted', 'leather', 'buckler', 'rattan', 'straw'] };
   SH.yuncheng = { name: 'Yuncheng Store', items: ['bun', 'beef', 'medicine', 'antidote', 'wine', 'menghan', 'bandana', 'leathercap', 'quilted', 'leather', 'buckler', 'straw'] };
   SH.liangshan = { name: 'Liangshan Stores', items: ['beef', 'medicine', 'ginseng', 'needle', 'wine', 'goodwine', 'soulcharm', 'menghan', 'lime', 'firepot', 'tigerwine', 'incense'] };
   SH.liangshan_armor = { name: 'Hou Jian\'s Tailor', items: ['ironhelm', 'phoenixhelm', 'hairpin', 'daoistcrown', 'lamellar', 'brigandine', 'daoistrobe', 'silkrobe', 'ironshield', 'rattan', 'jadering', 'legcharm', 'gauntlet', 'beltjade', 'amulet'] };

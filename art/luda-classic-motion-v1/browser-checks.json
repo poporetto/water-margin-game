@@ -3,10 +3,10 @@
     {
       "facing": "down",
       "columns": [
-        1,
         0,
         2,
-        0
+        0,
+        1
       ]
     },
     {
@@ -57,9 +57,16 @@
     "linchong-official",
     "linchong-exile",
     "luzhishen",
-    "luda"
+    "luda",
+    "wusong",
+    "likui",
+    "chaogai",
+    "yangzhi",
+    "wuyong"
   ],
   "allCharacters": true,
+  "batchComparison": true,
+  "newCharacterDefaultPages": true,
   "selectionDirectionsAndPhases": true,
   "mobileControls": true,
   "errors": []

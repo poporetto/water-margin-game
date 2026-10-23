@@ -438,7 +438,7 @@
       await s.walkTo('player', 19, 8);
       await s.say('gudasao', 'Rice and pickles for my cousins, Brother Jailer. A relative may bring food, may she not?');
       await s.say('yuehe', '(loudly) Be quick about it, woman! (quietly) Wait for the signal.');
-      await s.walkTo('yh', 18, 7); await s.walkTo('player', 19, 6);
+      await s.walkTo('yh', 18, 7); await s.walkTo('player', 20, 6);   // (at the door of Xie Bao's cell)
       await s.say('gudasao', 'Eat, cousins. Eat well.');
       await s.say('xiebao', '(whispering) Sister Gu! ...You came.');
       s.sfx('gong'); await s.shake(2, 0.3);

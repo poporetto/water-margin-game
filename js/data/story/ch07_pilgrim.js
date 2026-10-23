@@ -91,14 +91,23 @@
   };
 
   // ---------------- Jingyang Ridge ----------------
+  // after Wu Song's reckoning in his brother's house, until he is exiled
+  function rvAfter(S2) { return S2.has('ch7_tolion') && !S2.has('ch7_exiled'); }
   WM.defEvents('jingyang', [
     { id: 'ch7_sign', x: 13, y: 39, trigger: 'check', text: ['A banner over the tavern door: "Three bowls and you can\'t cross the ridge."'] },
-    { id: 'ch7_notice', x: 23, y: 25, trigger: 'check', run: async function (s) {
+    { id: 'ch7_notice', x: 21, y: 25, trigger: 'check', run: async function (s) {
+      if (S.has('ch7_tigerslain')) { await s.say(null, '(The county\'s notice about the tiger, with a fresh sheet pasted over it: "The tiger of Jingyang Ridge has been killed by the hero Wu Song of Qinghe. The road over the ridge is open at all hours.")'); return; }
       await s.say(null, '"Notice from the county of Yanggu: A tiger has appeared on Jingyang Ridge and has killed many travellers. Hunters are ordered to take it within a set time. Travellers may cross only between the hours of 9 and 3, in groups. Crossing alone, or at other hours, is forbidden."');
       if (S.has('ch7_drunk') && !S.has('ch7_noticeread')) {
         s.flag('ch7_noticeread');
         await s.say('wusong', '(...So there really is a tiger. If I go back now, that innkeeper will laugh at me. What\'s there to fear? Let\'s go on.)');
       }
+    } }
+  ]);
+  WM.defEvents('jingyang_shrine', [
+    { id: 'ch7_mountaingod', x: 5, y: 4, trigger: 'check', run: async function (s) {
+      if (S.has('ch7_tigerslain')) await s.say(null, '(Fresh incense burns before the Mountain God, and someone has left him a bowl of wine — in thanks for the man who killed the tiger, or in apology to the tiger.)');
+      else await s.say(null, '(A clay Mountain God, his paint flaking, a few cold sticks of incense before him. Travellers stop here to pray before they cross the ridge — in daylight, and together.)');
     } }
   ]);
   WM.defEvents('jingyang_in', [
@@ -133,7 +142,14 @@
       s.despawn('tiger', { leave: true });
       await s.narrate('Wu Song seized the tiger by the scruff of the neck and forced its head to the ground. The tiger clawed two pits in the earth beneath it. Holding it down with his left hand, Wu Song beat it with his right fist, fifty, seventy blows, until blood ran from its eyes, nose, mouth and ears, and it lay still.');
       await s.say('wusong', '(...It\'s dead. I killed a tiger with my bare hands. And I can barely stand.)');
-      s.spawn('h1', 'tigerhunter', 12, 15, 'up'); s.spawn('h2', 'tigerhunter', 16, 15, 'up');
+      // two more striped shapes come down the road from the north
+      var pp = WM.field.player, pt = pp && pp.tile ? pp.tile() : { x: 14, y: 13 }, free = function (x, y) { var m = WM.field.map; return !!(m && m.get) && !WM.tiles.solidAt(m, x, y); };
+      var a1 = free(pt.x - 1, pt.y - 2) ? [pt.x - 1, pt.y - 2] : [12, 9], a2 = free(pt.x + 1, pt.y - 2) ? [pt.x + 1, pt.y - 2] : [15, 9];
+      s.spawn('h1', 'tigerhunter', 13, 1, 'down'); s.spawn('h2', 'tigerhunter', 14, 1, 'down');
+      s.face('player', 'up');
+      s.walkTo('h1', a1[0], a1[1]); await s.walkTo('h2', a2[0], a2[1]);
+      s.faceEach('h1', 'player'); s.faceEach('h2', 'player');
+      await s.emote('player', '!');
       await s.say('wusong:shock', '(Two more tigers?! I\'m finished...)');
       await s.say('tigerhunter', 'Don\'t be afraid! We\'re men — hunters, in tiger skins. Who are you? Where did you come from at this hour? ...Is that the tiger? Dead?! You killed it?!');
       await s.narrate('The hunters ran down to the villages. Torches came up the ridge, and the villagers carried the dead tiger down in triumph, with Wu Song before it. Next morning the whole town of Yanggu turned out to see the man who had killed the tiger of Jingyang Ridge with his fists.');
@@ -152,12 +168,14 @@
       s.music('heroic');
       await s.narrate('The magistrate of Yanggu received Wu Song in his hall, gave him the thousand strings of reward money — which Wu Song gave away at once to the hunters — and made him chief constable of the county.');
       s.despawn('c1'); s.despawn('c2'); s.despawn('c3'); s.despawn('c4');
-      s.spawn('dalang', 'wudalang', 20, 20, 'down');
+      // his brother comes hurrying down the street from the north end of town
+      s.spawn('dalang', 'wudalang', 21, 12, 'down');
+      await s.walkTo('dalang', 21, 29, { run: true });
       await s.say('wudalang', 'Second Brother! Second Brother, it\'s me!');
       await s.say('wusong:smile', 'Elder Brother! What are you doing in Yanggu?');
       await s.narrate('Wu Dalang, Wu Song\'s elder brother, was barely five feet tall, ugly and good-natured, and sold steamed pancakes in the street for a living. People called him "Three-Inch Mulberry Bark." He had married a beautiful woman, Pan Jinlian, and the gossip in Qinghe had driven them to move here.');
       await s.say('wudalang', 'Come home! Come home and see your sister-in-law. She\'ll be so pleased.');
-      s.despawn('dalang');
+      await s.fallIn('dalang', 'wudalang');   // and he leads the way home at his brother's side
       s.flag('ch7_home');
       setWeapon('wusong', { name: 'Constable\'s Sabre', range: 'S', pow: 1.1 });
       await s.say(null, '(Wu Dalang\'s house is on the south side of the street, next to Granny Wang\'s teashop.)');
@@ -165,7 +183,9 @@
   ]);
   WM.defEvents('yanggu_in', [
     { id: 'ch7_jinlian', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_home') && WM.state.x >= 14 && WM.state.x <= 23; }, run: async function (s) {
-      s.spawn('jinlian', 'panjinlian', 17, 4, 'down'); s.spawn('dalang', 'wudalang', 20, 6, 'left');
+      var fb = WM.field.actors && WM.field.findActor('fol_0'), ft = fb && fb.tile ? fb.tile() : { x: 20, y: 8 };
+      WM.state.followers = []; WM.field.refreshFollowers();
+      s.spawn('jinlian', 'panjinlian', 17, 4, 'down'); s.spawn('dalang', 'wudalang', ft.x, ft.y, 'up'); s.walkTo('dalang', 20, 6).then(function () { s.face('dalang', 'down'); });
       await s.say('panjinlian:smile', 'So this is the famous brother-in-law who killed the tiger! Come and live with us, brother. Why should you sleep at the barracks, when your own family is here?');
       // she comes round the table to him, all smiles
       await s.walkTo('jinlian', 18, 7); s.faceEach('jinlian', 'player');
@@ -194,10 +214,12 @@
       await s.walkTo('player', 19, 8);
       await s.move('player', 'D1');
       s.hide('player');
+      await s.fadeOut(0.8);
       await s.narrate('Wu Song moved back to the barracks that very day. Soon after, the magistrate sent him to the Eastern Capital with gifts for a relative — a journey of two months. Before he left, he came to say goodbye to his brother.');
       s.show('player'); s.place('player', 19, 8, 'up');
       s.place('jinlian', 16, 4, 'down');
-      s.spawn('dalang', 'wudalang', 19, 5, 'up');
+      s.spawn('dalang', 'wudalang', 19, 5, 'down');
+      await s.fadeIn(0.8);
       await s.say('wusong', 'Brother, I must be away two months. You are an honest man, and people take advantage of honest men. Sell fewer pancakes. Go out late and come home early. Bar your door. Don\'t drink with anyone. If anyone bullies you, wait till I come back and I will deal with them.');
       await s.say('wudalang', 'I will, brother. I promise.');
       await s.say('wusong', 'And sister-in-law — "a strong fence keeps the dogs out."');
@@ -294,7 +316,7 @@
       await s.say('hejiu', 'There is a boy who saw more than I did — Yun Ge, the pear-seller. Your brother was kind to him. You will find him by the stream, near the Lion Bridge.');
       await s.say('wusong', 'Then you will come with me, He Jiu. When I have the boy, we go to the magistrate together.');
       s.flag('ch7_hejiutold');
-      s.hide('ch7_hejiu'); WM.state.followers = ['hejiu']; WM.field.refreshFollowers();   // he comes along with Wu Song
+      await s.fallIn('ch7_hejiu', 'hejiu');   // he comes along with Wu Song
       await s.say(null, '(Find Yun Ge the pear-seller by the stream, near the Lion Bridge.)');
     } },
     // the county hall: Wu Song brings his witnesses before the magistrate
@@ -331,26 +353,78 @@
       await s.say('yunge', 'Granny Wang let them use her back room, every afternoon — your sister-in-law and Ximen Qing. I told Uncle Wu, and he went to catch them, and Ximen Qing kicked him in the chest. He never got up again.');
       await s.say('wusong', '...You are a good boy. Come with me. We will tell the magistrate.');
       s.flag('ch7_yunge');
-      s.hide('ch7_yunge'); WM.state.followers = ['hejiu', 'yunge']; WM.field.refreshFollowers();   // and the boy too
+      await s.fallIn('ch7_yunge', 'yunge');   // and the boy too
       s.mark([{ map: 'yanggu', x: 20, y: 9, w: 2 }], 'ch7_evidence');
       await s.say(null, '(Take He Jiu and Yun Ge to the county office, north up the main street.)');
     } },
     { id: 'ch7_revenge', x: 4, y: 23, w: 4, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch7_evidence'); }, run: async function (s) {
-      await s.narrate('Wu Song bought paper and a brush, and invited the neighbours to his brother\'s house for a meal of remembrance — a schoolmaster to write, and old men of the street as witnesses. He barred the door. Then before the spirit tablet he drew his knife, and made Granny Wang and Pan Jinlian tell the whole story, and the schoolmaster wrote it all down, and the neighbours signed it.');
-      s.music('tense');
-      await s.narrate('"Brother, your spirit is not far away. Today I avenge you." Before the spirit tablet of Wu Dalang, Wu Song killed Pan Jinlian. Then he asked the neighbours to keep Granny Wang under guard, and went out with his knife to find Ximen Qing.');
+      await s.fadeOut(0.8);
+      await s.narrate('Wu Song bought paper and a brush, and invited the neighbours to his brother\'s house for a meal of remembrance — a schoolmaster to write, and old men of the street as witnesses. Pan Jinlian was there, and Granny Wang from next door.');
+      // Wu Dalang's house, before his spirit tablet
+      await s.warp('yanggu_in', 19, 8, 'up', { noFade: true });
+      s.spawn('sch', 'scholar', 16, 5, 'right'); s.spawn('nb1', 'oldman', 15, 7, 'right'); s.spawn('nb2', 'villager', 16, 8, 'right');
+      s.spawn('jinlian', 'panjinlian', 20, 4, 'down'); s.spawn('wangpo', 'wangpo', 22, 5, 'left');
+      await s.fadeIn(0.8);
+      s.sfx('door'); await s.say(null, '(Wu Song bars the door behind them.)');
+      await s.walkTo('player', 20, 6); s.face('player', 'up');
+      s.sfx('block'); await s.emote('player', 'anger', 0.8);
+      s.emote('nb1', '!'); await s.emote('nb2', '!');
+      await s.say('wusong:angry', 'Neighbours, forgive me — I asked you here as witnesses. Schoolmaster, write down every word. Sister-in-law: how did my brother die?');
+      await s.say('panjinlian:shock', 'He... he had a pain in his heart, and...');
+      await s.shake(3, 0.3);
+      await s.say('wusong:angry', 'The truth!');
+      s.face('player', 'right');
+      await s.say('wangpo', 'Mercy, Constable, mercy! It was my plan — mine! Ximen Qing brought the arsenic, and she gave it to him in his medicine...');
+      await s.emote('jinlian', 'sweat', 1);
+      await s.say('panjinlian:sad', 'It\'s true... it was Ximen Qing...');
+      await s.emote('sch', '...', 1.2);
+      await s.narrate('The schoolmaster wrote it all down, and the neighbours signed it.');
+      s.music('tense'); s.face('player', 'up');
+      await s.say('wusong', 'Brother, your spirit is not far away. Today I avenge you.');
+      await s.move('player', 'U1');
+      s.sfx('slash'); await s.flash(); s.lie('jinlian'); await s.shake(4, 0.3);
+      s.emote('nb1', '!'); s.emote('nb2', '!'); await s.emote('wangpo', 'sweat', 1);
+      await s.say('wusong:angry', 'Neighbours — keep Granny Wang here, and don\'t let her out of your sight. I am going to find Ximen Qing.');
+      await s.walkTo('player', 19, 8);
+      await s.fadeOut(0.6);
+      await s.warp('yanggu', 6, 23, 'down', { noFade: true });
+      await s.fadeIn(0.6);
       s.flag('ch7_tolion');
       await s.say(null, '(Ximen Qing is drinking at the Lion Bridge tavern, north-east across the stream.)');
     } }
   ]);
   WM.defEvents('yanggu_in', [
+    // Wu Dalang's house after the reckoning: everyone stays as Wu Song left them, until he is sent into exile
+    { id: 'ch7_rv_body', x: 20, y: 4, char: 'panjinlian', lying: true, cond: rvAfter, text: ['(Pan Jinlian lies before her husband\'s spirit tablet. The incense Wu Song lit is still burning.)'] },
+    { id: 'ch7_rv_wangpo', x: 22, y: 5, npc: 'wangpo', dir: 'left', cond: rvAfter, run: async function (s) {
+      await s.say('wangpo:sad', 'Constable... mercy... I am an old woman. It was the silver that talked, not me. It was all Ximen Qing...');
+      await s.say('wusong:angry', 'You will say it again before the magistrate.');
+    } },
+    { id: 'ch7_rv_sch', x: 16, y: 5, npc: 'scholar', dir: 'right', cond: rvAfter, run: async function (s) {
+      await s.say('scholar', 'Every word is written down, Constable, and the neighbours have set their marks to it. I have never held a brush so steady in a room like this.');
+      await s.say('scholar', 'When the time comes I will carry the paper to the county office myself.');
+    } },
+    { id: 'ch7_rv_nb1', x: 15, y: 7, npc: 'oldman', dir: 'right', cond: rvAfter, run: async function (s) {
+      await s.say('oldman:sad', 'We will watch her, Constable. She will not set a foot out of this house. Heaven sees everything... your brother can rest now.');
+    } },
+    { id: 'ch7_rv_nb2', x: 16, y: 8, npc: 'villager', dir: 'right', cond: rvAfter, run: async function (s) {
+      await s.say('villager', 'Wu Dalang sold me pancakes every morning for three years, and never short a single one. Go, Constable. Ximen Qing drinks at the Lion Bridge tavern.');
+    } },
     { id: 'ch7_lion', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_tolion') && WM.state.x >= 45 && WM.state.x <= 58; }, run: async function (s) {
-      s.spawn('ximen', 'ximenqing', 52, 4, 'down');
+      // Ximen Qing at his wine upstairs, a bodyguard at either hand
+      s.spawn('ximen', 'ximenqing', 52, 4, 'down'); s.spawn('xg1', 'gambler', 49, 4, 'right'); s.spawn('xg2', 'gambler', 55, 4, 'left');
+      await s.say('ximenqing:smile', 'Drink, drink! The whole street is talking, and what can they do? The dwarf is ashes, and his brother is off in the capital. Tonight Ximen Qing pays for everything!');
+      s.emote('xg1', 'note'); await s.emote('xg2', 'note');
+      await s.emote('ximen', '!');
       await s.say('ximenqing:shock', 'Wu Song!');
+      s.face('xg1', 'down'); s.face('xg2', 'down');
+      await s.emote('xg1', 'anger', 0.8);
+      await s.say({ name: 'Bodyguard' }, 'You heard him, convict. The master is drinking. Get out before we throw you down the stairs!');
       await s.say('wusong:angry', 'Ximen Qing. My brother sends his greetings.');
       await s.battle('ch7_lion', { bg: 'interior', music: 'boss' });
       await s.narrate('Ximen Qing kicked the knife from Wu Song\'s hand and leapt for the window. Wu Song caught him by the leg and hurled him headfirst out of the window into the street below, then leapt down after him. There, in the street beneath the Lion Bridge tavern, the matter was ended.');
       s.hide('ximen'); s.despawn('ximen');   // out of the window, into the street below
+      WM.data.clear(s, ['xg1', 'xg2']);   // (his bodyguards fled down the stairs)
       await s.narrate('Wu Song went straight to the county office with the confession, the bones, the silver and Granny Wang, and gave himself up. The magistrate, who had a conscience after all, wrote the report as mercifully as he could. Granny Wang was executed. Wu Song was beaten forty strokes, tattooed on the face, and exiled to Mengzhou, two thousand li away. The people of Yanggu gave him money and wine for the journey.');
       s.flag('ch7_exiled');
       WM.state.followers = ['constable', 'constable'];   // his two escorts walk with him to Mengzhou
@@ -400,7 +474,14 @@
   // ---------------- Mengzhou: Shi En and the Happy Forest ----------------
   WM.defEvents('mengzhou', [
     { id: 'ch7_camp', x: 7, y: 9, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch7_slope'); }, run: async function (s) {
-      WM.state.followers = []; WM.field.refreshFollowers();   // handed over at the camp: the escorts' work is done
+      // handed over at the camp: the escorts hand in his papers, and their work is done
+      var fa = ['fol_0', 'fol_1'].map(function (k) { var a = WM.field.actors && WM.field.findActor(k); return a && a.tile ? a.tile() : null; });
+      WM.state.followers = []; WM.field.refreshFollowers();
+      var e1 = fa[0] || { x: 7, y: 12 }, e2 = fa[1] || { x: 9, y: 12 };
+      s.spawn('esc1', 'constable', e1.x, e1.y, 'up'); s.spawn('esc2', 'constable', e2.x, e2.y, 'up');
+      await s.say({ name: 'Escort' }, 'The prisoner Wu Song, from Yanggu county, for the Anping camp — here are his papers. Well, Constable Wu... this is where we leave you.');
+      await s.say({ name: 'Escort' }, 'Mind what you say to the guards in there. They don\'t love a man who won\'t pay. Good luck to you.');
+      s.despawn('esc1', { leave: true }); s.despawn('esc2', { leave: true });
       await s.narrate('At the Anping camp in Mengzhou, every new prisoner who did not pay received a hundred "welcoming strokes." Wu Song refused to pay a single copper. "Beat me if you like!" But the strokes never came. Instead, every day the guards brought him good food and wine, a bath, and a fresh bed.');
       s.spawn('shien', 'shien', 9, 12, 'up');
       await s.say('shien', 'Brother Wu Song. I am Shi En, son of the warden. It was I who had you spared and fed. I have a favour to ask, though I hardly dare.');
@@ -462,16 +543,29 @@
   // ---------------- Flying Cloud Pond and the Mandarin Duck Tower ----------------
   WM.defEvents('feiyun', [
     { id: 'ch7_feiyun', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_framed'); }, run: async function (s) {
-      s.spawn('e1', 'constable', 4, 7, 'right'); s.spawn('e2', 'constable', 4, 8, 'right');
-      s.spawn('k1', 'bandit', 16, 7, 'left'); s.spawn('k2', 'bandit', 16, 8, 'left');
-      await s.narrate('At the Flying Cloud Pond, two men with knives stepped out onto the bridge ahead, and the escorts drew back behind him.');
+      // up the road with the two escorts at his back
+      s.spawn('e1', 'constable', 1, 7, 'right'); s.spawn('e2', 'constable', 1, 8, 'right');
+      s.walkTo('e1', 9, 7); s.walkTo('e2', 9, 8);
+      await s.walkTo('player', 11, 7);
+      // two men with knives step out of the reeds onto the bridge ahead
+      s.spawn('k1', 'bandit', 21, 7, 'left'); s.spawn('k2', 'bandit', 21, 8, 'left');
+      s.walkTo('k1', 16, 7); await s.walkTo('k2', 16, 8);
+      await s.emote('player', '!');
+      await s.narrate('At the Flying Cloud Pond, two men with knives stepped out onto the bridge ahead. Behind him, the escorts drew back — and drew knives of their own.');
+      s.move('e1', 'L2'); await s.move('e2', 'L2'); s.face('e1', 'right'); s.face('e2', 'right');
+      s.face('player', 'left'); await s.emote('player', 'anger', 0.8); s.face('player', 'right');
       await s.say('wusong:angry', '(So this is where it ends for me. Or for you.)');
       s.sfx('block'); await s.shake(4, 0.4);
       await s.narrate('Wu Song twisted his wrists, and the cangue split in two.');
       WM.state.chars.wusong.equip.acc = null; S.restore('wusong');
       await s.battle('ch7_feiyun', { bg: 'marsh', music: 'battle' });
-      await s.narrate('When it was over, Wu Song held the last of them by the collar. "Who sent you?" "Jiang Menshen... and Commander Zhang, and Captain Zhang. They\'re waiting for us tonight at the Commander\'s residence, in the Mandarin Duck Tower, to hear that you\'re dead."');
-      s.despawn('e1', { leave: true }); s.despawn('e2', { leave: true }); s.despawn('k1', { leave: true }); s.despawn('k2', { leave: true });
+      // the two on the bridge and one escort down; the last escort on his knees
+      s.lie('k1'); s.lie('k2'); s.lie('e1');
+      await s.emote('e2', 'sweat', 1);
+      await s.walkTo('player', 8, 8); s.face('player', 'left'); s.face('e2', 'right');
+      await s.say('wusong:angry', 'Who sent you?');
+      await s.say({ name: 'Escort' }, 'J-Jiang Menshen... and Commander Zhang, and Captain Zhang! They\'re waiting for us tonight at the Commander\'s residence, up in the Mandarin Duck Tower — to hear that you\'re dead...');
+      s.sfx('slash'); await s.flash(); s.lie('e2');
       await s.say('wusong:angry', '"Waiting to hear that I\'m dead." ...Then I will bring them the news myself.');
       setWeapon('wusong', { name: 'Knife', range: 'S', pow: 1.15 });
       s.flag('ch7_totower');
@@ -480,6 +574,13 @@
     } }
   ]);
   WM.defEvents('mengzhou_in', [
+    // the Door God at home in the tavern he stole, until Wu Song has drunk his way down the road and he goes out under the trees
+    { id: 'ch7_jiangin', x: 52, y: 4, npc: 'jiangmenshen', dir: 'down', cond: function (S2) { return WM.state.chapter === 7 && !S2.has('ch7_happy') && !(S2.has('ch7_t1') && S2.has('ch7_t2') && S2.has('ch7_t3') && S2.has('ch7_t4')); }, run: async function (s) {
+      await s.say('jiangmenshen', 'Looking for the owner? You\'re looking at him. Jiang Zhong — "Jiang the Door God," they call me.');
+      await s.say('jiangmenshen:smile', 'This place used to belong to some warden\'s whelp called Shi En. Soft hands, softer head. I broke a few of his ribs, and now it\'s mine — and Commander Zhang himself says so. Every merchant on the east road pays me now.');
+      await s.say('jiangmenshen:angry', 'Got a complaint? No? Then drink, if you can pay — or get out.');
+      if (S.has('ch7_road')) await s.say('wusong', '(Not yet. Three bowls at every tavern on the road first — then the Door God.)');
+    } },
     { id: 'ch7_tower', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_totower') && WM.state.x >= 14 && WM.state.x <= 29; }, run: async function (s) {
       await s.narrate('Wu Song climbed over the wall of the residence in the dark. Up on the Mandarin Duck Tower, the lamps were lit, and three men were drinking and laughing: Commander Zhang, Captain Zhang, and Jiang Menshen.');
       // he goes on through the hall and up the stairs, in the dark, to the tower room
@@ -532,7 +633,7 @@
     { id: 'ch7_pilgrim', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch7_fugitive'); }, run: async function (s) {
       s.lie('player');   // bound, on the butchering floor
       s.spawn('h1', 'bandit', 7, 6, 'right'); s.spawn('h2', 'bandit', 9, 6, 'left');
-      s.spawn('erniang', 'sunerniang', 4, 4, 'right'); s.spawn('zhangqing2', 'zhangqing2', 12, 4, 'left');
+      s.spawn('erniang', 'sunerniang', 4, 4, 'right'); s.spawn('zhangqing2', 'zhangqing2', 11, 4, 'left');
       await s.fadeIn(0.6);
       await s.say('bandit', 'Landlady! We caught a big one on the road — fat for a month of dumplings. Shall we start?');
       await s.walkTo('erniang', 8, 5); s.face('erniang', 'down');

@@ -1,0 +1,7 @@
+{
+  "method": "native-source uniform scale correction",
+  "source": "../yangzhi-classic-v1/yangzhi-original.png",
+  "previousTargetHeight": 228,
+  "targetHeight": 250,
+  "generation": "unchanged v1 native"
+}

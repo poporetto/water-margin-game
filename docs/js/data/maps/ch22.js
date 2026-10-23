@@ -9,7 +9,7 @@
   c.frame(4, 3, 26, 20, 'F'); c.rect(15, 22, 4, 1, '.'); c.rect(29, 12, 1, 3, '.');
   c.rect(12, 6, 10, 5, '.'); c.set(14, 6, 'V'); c.set(17, 6, 'V'); c.set(20, 6, 'V'); c.rect(15, 7, 4, 2, 'V');   // the commander's pavilion
   c.set(13, 10, 'Y'); c.set(21, 10, 'Y');
-  [[6, 13], [9, 13], [24, 13], [27, 13], [6, 18], [9, 18], [24, 18], [27, 18]].forEach(function (p) { c.set(p[0], p[1], 'V'); });
+  [[6, 13], [9, 13], [24, 13], [27, 13], [6, 18], [9, 18], [22, 18], [25, 18]].forEach(function (p) { c.set(p[0], p[1], 'V'); });
   c.rect(16, 11, 2, 11, ':'); c.rect(18, 13, 11, 2, ':');
   c.scatter('T', 0.06, 572, '.', [0, 0, 32, 3]); c.scatter('T', 0.06, 573, '.', [0, 23, 32, 5]);
   WM.defMap('armycamp', { name: 'Song Jiang\'s Camp', theme: 'autumn', music: 'tense', rows: c.rows(), spawn: [16, 20], battleBg: 'field' });

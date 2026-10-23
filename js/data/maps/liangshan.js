@@ -20,7 +20,8 @@
     exits: [WM.toWorld('zhugui', 8, 21, 3, 1)] });
   var zi = L.grid(14, 9, 'x');
   var zR = zi.room(1, 1, 12, 7);
-  zi.stamp(2, 3, ['h..L....h.', '.t..t..t..', 'cc........']);
+  zi.stamp(2, 3, ['h..L..L.h.', '..........', 't...t...t.', '..cc......']);   // tables in an even row clear of the shelves
+  WM.defEvents('zhugui_in', [{ id: 'zgwaiter', x: 9, y: 4, npc: 'waiter', dir: 'down', text: ['Wine and meat, sir? ...Or is it the other kind of business, across the water? Then you\'ll want the master.'] }]);
   WM.defMap('zhugui_in', { name: 'Zhu Gui\'s Tavern', interior: true, theme: 'marsh', music: 'field', rows: zi.rows(), spawn: [7, 6] });
   L.link({ map: 'zhugui', x: tav.x, y: tav.y }, { map: 'zhugui_in', x: zR.x, y: zR.y });
   WM.data.zhuguiTav = { door: tav, room: zR };

@@ -1,0 +1,62 @@
+{
+  "nativeSource": [
+    1774,
+    887
+  ],
+  "nativeAlpha": true,
+  "checks": [
+    {
+      "name": "front",
+      "dimensions": [
+        192,
+        256
+      ],
+      "alphaBounds": [
+        46,
+        29,
+        145,
+        254
+      ],
+      "nonTransparentPixels": 15450,
+      "partialAlphaPixels": 15409,
+      "noClipping": true,
+      "losslessPacking": true
+    },
+    {
+      "name": "left",
+      "dimensions": [
+        192,
+        256
+      ],
+      "alphaBounds": [
+        60,
+        29,
+        131,
+        254
+      ],
+      "nonTransparentPixels": 12291,
+      "partialAlphaPixels": 12246,
+      "noClipping": true,
+      "losslessPacking": true
+    },
+    {
+      "name": "back",
+      "dimensions": [
+        192,
+        256
+      ],
+      "alphaBounds": [
+        46,
+        29,
+        144,
+        254
+      ],
+      "nonTransparentPixels": 15203,
+      "partialAlphaPixels": 15183,
+      "noClipping": true,
+      "losslessPacking": true
+    }
+  ],
+  "rightRowBlank": true,
+  "standingOnly": true
+}

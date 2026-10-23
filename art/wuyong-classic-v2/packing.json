@@ -1,0 +1,43 @@
+{
+  "scale": 0.3009320905459387,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "character": "wuyong",
+      "source": "wuyong-original.png",
+      "bounds": [
+        {
+          "left": 277,
+          "top": 92,
+          "width": 329,
+          "height": 753
+        },
+        {
+          "left": 776,
+          "top": 92,
+          "width": 239,
+          "height": 753
+        },
+        {
+          "left": 1154,
+          "top": 92,
+          "width": 334,
+          "height": 753
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    }
+  ]
+}

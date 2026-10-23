@@ -27,7 +27,7 @@
   // the moated manor at the north, on the ridge
   z.rect(12, 0, 38, 14, '.');
   for (var xx = 14; xx < 48; xx++) { z.set(xx, 1, '~'); z.set(xx, 12, '~'); } for (var yy = 1; yy < 13; yy++) { z.set(14, yy, '~'); z.set(47, yy, '~'); }
-  z.frame(16, 2, 30, 10, '#'); z.rect(30, 11, 2, 1, 'G'); z.rect(30, 12, 2, 2, 'B');
+  z.frame(16, 2, 30, 10, '#'); z.rect(30, 11, 2, 1, 'G'); z.rect(30, 12, 2, 1, 'B'); z.rect(30, 13, 2, 1, ':');   // (the bridge spans the moat only; the road takes up on the far bank)
   var hall = z.house(22, 3, 18, 6, { roof: 'Z', wall: 'R', door: 9 }); z.set(21, 8, 'L'); z.set(40, 8, 'L');
   z.house(17, 3, 4, 4, { roof: '^', door: false, wallRows: 1 }); z.house(41, 3, 4, 4, { roof: '^', door: false, wallRows: 1 });
   z.rect(30, 9, 2, 2, ':'); z.set(18, 9, 'Y'); z.set(43, 9, 'Y');
@@ -40,8 +40,8 @@
   var zi = L.grid(40, 12, 'x');
   var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'N' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };
   zi.stamp(2, 3, ['h...&&....&&...h', '....AA....AA....', '..t.............', '................', '................']);
-  zi.stamp(21, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.']);
-  zi.stamp(34, 3, ['kk..', 'kk..', '...t']);
+  zi.stamp(21, 3, ['--.F--.F..', '--.F--.F..', 'F+FFF+FF..']);   // two cells, each with room to stand beside the pallet
+  zi.stamp(34, 3, ['kkt.', 'kk..', '....']);
   WM.defMap('zhujia_in', { name: '', interior: true, theme: 'autumn', music: 'tense', rows: zi.rows(), spawn: [10, 9] });
   L.link({ map: 'zhujia', x: hall.x, y: hall.y }, { map: 'zhujia_in', x: zR.hall.x, y: zR.hall.y });
   L.link({ map: 'zhujia', x: zhongli.x, y: zhongli.y }, { map: 'zhujia_in', x: zR.cottage.x, y: zR.cottage.y });
@@ -56,12 +56,15 @@
   d.set(8, 19, ':'); d.set(9, 19, ':');
   d.frame(18, 12, 20, 22, '#'); d.rect(37, 20, 1, 3, 'G'); d.rect(27, 33, 3, 1, 'G');
   d.rect(19, 20, 18, 2, '='); d.rect(27, 13, 3, 20, '=');
-  var yamen = d.house(19, 13, 8, 5, { roof: 'Z', wall: 'R', door: 4 });
-  var jail = d.house(30, 13, 7, 5, { roof: 'v', wall: '#', door: 3 });
-  d.house(19, 24, 6, 4, { roof: 'z', door: false, windows: [2] }); d.house(31, 25, 5, 4, { roof: 'z', door: false, windows: [2] });
-  var gdt = d.house(40, 18, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); d.set(39, 19, 'J');   // Gu Dasao's tavern, outside the east gate
-  d.rect(38, 20, 10, 3, ':'); d.vline(43, 21, 22, ':');
-  d.hline(0, 26, 20, ':'); d.hline(0, 26, 21, ':'); d.vline(9, 19, 21, ':'); d.vline(8, 19, 21, ':');
+  // (the yamen and the prison stand a step clear of the city wall, so their walls don't run into it)
+  var yamen = d.house(20, 14, 7, 5, { roof: 'Z', wall: 'R', door: 3 });
+  var jail = d.house(31, 14, 5, 5, { roof: 'v', wall: '#', door: 2 });
+  d.house(20, 24, 6, 4, { roof: 'z', door: false, windows: [2] }); d.house(31, 25, 5, 4, { roof: 'z', door: false, windows: [2] });
+  var gdt = d.house(40, 16, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); d.set(39, 17, 'J');   // Gu Dasao's tavern, outside the east gate, its door on the road
+  d.rect(38, 20, 10, 3, ':');
+  // the road from the west runs along under Squire Mao's fence and round to the south gate (the city wall is unbroken)
+  d.hline(0, 17, 20, ':'); d.hline(0, 17, 21, ':'); d.vline(9, 19, 21, ':'); d.vline(8, 19, 21, ':');
+  d.rect(16, 20, 2, 16, ':'); d.rect(16, 34, 14, 2, ':');
   [yamen, jail].forEach(function (h) { d.vline(h.x, h.y + 1, 19, '='); });
   d.scatter('T', 0.06, 472, '.', [0, 22, 18, 14]); L.clearAround(d, ':', 'T', '.');
   WM.defMap('dengzhou', { name: 'Dengzhou', theme: 'autumn', music: 'town_dengzhou', rows: d.rows(), spawn: [1, 20], battleBg: 'town',
@@ -69,8 +72,8 @@
   var di = L.grid(40, 11, 'x');
   var dR = { mao: di.room(1, 1, 12, 8, { floor: 'n' }), jail: di.room(14, 1, 12, 9, { floor: 'N' }), tavern: di.room(27, 1, 10, 8) };
   di.stamp(2, 3, ['h..A...h..', '.t........', '..........']);
-  di.stamp(15, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.', 'h........h']);
-  di.stamp(28, 3, ['h..j..k.', '.t..t...', '........', 'ccc.....']);
+  di.stamp(15, 3, ['--.F--.F..', '--.F--.F..', 'F+FFF+FF..', '........h.']);   // two cells, each with room to stand beside the pallet
+  di.stamp(28, 3, ['j..j..k.', 't..t....', '........', 'ccc.....']);
   WM.defMap('dengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town_dengzhou', rows: di.rows(), spawn: [31, 7] });
   [[mao, dR.mao], [jail, dR.jail], [gdt, dR.tavern]].forEach(function (p) { L.link({ map: 'dengzhou', x: p[0].x, y: p[0].y }, { map: 'dengzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.dengzhou = { doors: { mao: mao, jail: jail, tavern: gdt, yamen: yamen }, rooms: dR };

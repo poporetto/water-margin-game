@@ -2,7 +2,7 @@
 
 Requested on 22 October 2026 after approval and installation of Lu Zhishen walking v2. This is Lu Da before his monastic vows: the same broad, bearded man in his olive garrison uniform, wrapped cap, ivory trim, brown belt and boots. The reference is `../luda-luzhishen-classic-v1/luda-original.png`; Song Jiang's original Classic remains the series style anchor.
 
-`in-game.html` compares the standing pose with the walking animation on three actual game backgrounds. The Character selector includes Song Jiang, both Lin Chong outfits, Lu Zhishen and Lu Da. Choose **All characters together** to compare all five approved sprite sets at the same world scale. The preview reads the installed production PNGs directly. Use direction buttons, pause/step and arrow keys. `compare.html` shows the full directional strips and animated detail views. Approved and installed unchanged in `assets/sprites/luda.png` and `docs/assets/sprites/luda.png` on 22 October 2026. Both manifests declare 8× density.
+`in-game.html` compares the standing pose with the walking animation on three actual game backgrounds. The Character selector includes Song Jiang, both Lin Chong outfits, Lu Zhishen and Lu Da. Choose **All characters together** to compare the five approved sprite sets plus Wu Song’s walking review and Li Kui’s standing candidate at the same world scale. Candidate selections use Song Jiang as the standing comparison and expose only their authored front/left/back views. The preview reads the installed production PNGs directly. Use direction buttons, pause/step and arrow keys. `compare.html` shows the full directional strips and animated detail views. Approved and installed unchanged in `assets/sprites/luda.png` and `docs/assets/sprites/luda.png` on 22 October 2026. Both manifests declare 8× density.
 
 ## Assets and method
 
@@ -22,3 +22,7 @@ The right strip initially repeated its near-arm phase. The third pose was regene
 Run these scripts with Sharp and Playwright available through NODE_PATH. Native generation paths are recorded in `generation.json`.
 
 Production integration is checked by `tools/test-luda-sprite.js`, including exact installed PNG bytes, frame sampling, movement, idle, density and separation from the monk costume in both root and docs builds. The expanded preview check covers all five selections and the group lineup, all directions/phases, stationary references, map changes, mobile controls and detail links.
+
+Chao Gai, Yang Zhi and Wu Yong standing reviews are now in the selector, along with a three-character new-batch comparison. Li Kui’s standing design is approved. All ten sets appear in a two-row roster. The batch has front/left/back only; no walking or right-facing artwork is implied. The browser check covers the three new default pages, detail images and batch controls.
+
+The animation batch now shows Chao Gai, Li Kui, Yang Zhi and Wu Yong in four directions, with original approved standing references available in individual selections. All ten character sets support right-facing walking. Wu Song uses the v2 stride-size correction. New motion sets are reviews; production manifests are unchanged.

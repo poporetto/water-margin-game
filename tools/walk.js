@@ -120,7 +120,7 @@ function actorsOnMap(mid) {
   const out = {};
   (D.events[mid] || []).forEach((ev) => {
     if (!eventHasActor(ev) || !eventActive(ev)) return;
-    const a = { x: ev.x, y: ev.y };
+    const a = { x: ev.x, y: ev.y, dir: ev.dir || 'down', who: ev.char || ev.npc, ev: ev, lying: !!ev.lying };
     out[ev.id] = a; if (ev.char) out[ev.char] = a; if (ev.npc) out[ev.npc] = a;
   });
   return out;
@@ -128,6 +128,24 @@ function actorsOnMap(mid) {
 // like the real field, actors are fixed when a map loads or an event starts, not re-evaluated mid-script
 let frozen = {};
 function freezeActors() { frozen = actorsOnMap(cur.map); }
+// a speaker near the player should be turned towards him (unless it is the one he walked up to, who turns by itself)
+const facing = [], FACING = process.argv.includes('--facing');
+function checkFacing(id, text) {
+  if (id === WM.state.leader || WM.state.party.indexOf(id) >= 0) return;
+  if (curEv && (curEv.npc === id || curEv.char === id)) return;
+  if (cur.hidden) return;
+  const pool = Object.keys(temp).map((k) => temp[k]).concat(Object.keys(frozen).map((k) => frozen[k]));
+  const a = pool.filter((o) => o.who === id && !o.hidden && !o.lying && o !== cur)[0];
+  if (!a || !a.dir) return;
+  const dx = cur.x - a.x, dy = cur.y - a.y, d = Math.abs(dx) + Math.abs(dy);
+  if (!d || d > 5) return;
+  const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[a.dir] || [0, 1];
+  if (v[0] * dx + v[1] * dy > 0) return;
+  if (!a.faced) { a.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); return; }   // (the game turns them to the leader as they speak)
+  const k = curEvent + '|' + id + '|' + a.x + ',' + a.y + '|' + a.dir;
+  if (facing.some((f) => f.k === k)) return;
+  facing.push({ k: k, msg: '[' + curEvent + '] "' + id + '" at ' + cur.map + '(' + a.x + ',' + a.y + ') faces ' + a.dir + ', the player is at (' + cur.x + ',' + cur.y + '): ' + String(text || '').slice(0, 50) });
+}
 function findActor(key) {
   if (key === 'player' || key === WM.state.leader) return cur;
   if (temp[key]) return temp[key];
@@ -167,6 +185,7 @@ function mkApi(ctx) {
       checkSpeaker(who); gone(who, 'say'); if (!text) err('empty say');
       if (who == null && /^\(/.test(text || '')) hinted = true;
       spoken += ' ' + (text || '');
+      if (who && typeof who === 'string') checkFacing(who.split(':')[0], text);
       if (who && typeof who === 'string' && !present(who) && !/^\((outside|off|offstage|from|voice|inside|behind|far|calling|shouting|letter)/i.test(text || '')) sceneWarn('"' + who.split(':')[0] + '" speaks but is not in the scene on ' + cur.map);
       return resolved;
     },
@@ -185,6 +204,7 @@ function mkApi(ctx) {
       let hit = null;
       parse.forEach((st) => {
         const n = Math.abs(st[0]) + Math.abs(st[1]), sx = Math.sign(st[0]), sy = Math.sign(st[1]);
+        a.faced = false; if (n) a.dir = sx > 0 ? 'right' : sx < 0 ? 'left' : sy > 0 ? 'down' : 'up';
         for (let i = 0; i < n; i++) { a.x += sx; a.y += sy; if (!hit && !a.boat && !walkable(cur.map, a.x, a.y)) hit = [a.x, a.y]; }
       });
       if (hit && opt && opt.fall) hit = null;   // knocked into the water, or over an edge, on purpose
@@ -195,21 +215,24 @@ function mkApi(ctx) {
       if (key !== 'player') { const on = Object.keys(temp).filter((k) => k !== key && temp[k] !== a && !temp[k].lying && temp[k].x === a.x && temp[k].y === a.y); if (on.length) sceneWarn('"' + (a.who || key) + '" walks onto "' + on.join('", "') + '" at ' + cur.map + '(' + a.x + ',' + a.y + ')'); }
       return resolved;
     },
-    walkTo(key, tx, ty) { const a = findActor(key); if (!a) err('walkTo: no actor "' + key + '"'); else if (!walkable(cur.map, tx, ty)) err('walkTo: ' + key + ' to a solid tile ' + cur.map + '(' + tx + ',' + ty + ')'); else { a.x = tx; a.y = ty; } return resolved; },
+    walkTo(key, tx, ty) { const a = findActor(key); if (!a) err('walkTo: no actor "' + key + '"'); else if (!walkable(cur.map, tx, ty)) err('walkTo: ' + key + ' to a solid tile ' + cur.map + '(' + tx + ',' + ty + ')'); else { const dx = tx - a.x, dy = ty - a.y; a.faced = false; if (dx || dy) a.dir = Math.abs(dy) >= Math.abs(dx) ? (dy > 0 ? 'down' : 'up') : (dx > 0 ? 'right' : 'left'); a.x = tx; a.y = ty; } return resolved; },
     moveTo(key, tx, ty) { const a = findActor(key); if (!a) err('moveTo: no actor "' + key + '"'); else { a.x = tx; a.y = ty; } return resolved; },
     place(key, tx, ty) {
       const a = findActor(key); if (!a) { err('place: no actor "' + key + '" on ' + cur.map); return; }
-      a.x = tx; a.y = ty;
+      a.x = tx; a.y = ty; if (arguments[3]) a.dir = arguments[3];
       if (key === 'player' || key === WM.state.leader) { if (!a.boat && !walkable(cur.map, tx, ty)) err('place player on solid tile ' + cur.map + '(' + tx + ',' + ty + ') "' + blocker(cur.map, tx, ty) + '"'); }
     },
-    face(key) { if (!findActor(key)) err('face: no actor "' + key + '"'); },
-    faceEach(a, b) { if (!findActor(a)) err('faceEach: no actor "' + a + '"'); if (!findActor(b)) err('faceEach: no actor "' + b + '"'); },
+    face(key, dir) { const a = findActor(key); if (!a) err('face: no actor "' + key + '"'); else if (dir) { a.dir = dir; a.faced = true; } },
+    faceEach(a, b) { const A = findActor(a), B = findActor(b); if (!A) err('faceEach: no actor "' + a + '"'); if (!B) err('faceEach: no actor "' + b + '"'); if (A && B) { A.faced = B.faced = true; const dx = B.x - A.x, dy = B.y - A.y; if (Math.abs(dx) > Math.abs(dy)) { A.dir = dx > 0 ? 'right' : 'left'; B.dir = dx > 0 ? 'left' : 'right'; } else { A.dir = dy > 0 ? 'down' : 'up'; B.dir = dy > 0 ? 'up' : 'down'; } } },
     emote(key) { if (!findActor(key)) err('emote: no actor "' + key + '"'); return resolved; },
     jump(key) { if (!findActor(key)) err('jump: no actor "' + key + '"'); return resolved; },
     show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = false; },
     beside(id) { if (WM.state.party.indexOf(id) < 0) err('beside: "' + id + '" is not in the party'); },
     splash(key) { if (!findActor(key)) err('splash: no actor "' + key + '"'); },
-    hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; },
+    hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; if (key === 'player') cur.hidden = true; },
+    refreshMap() {},
+    swim(key) { if (!findActor(key)) err('swim: no actor "' + key + '"'); },
+    sit(key) { if (!findActor(key)) err('sit: no actor "' + key + '"'); },
     lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing
     boat(key, on) { const a = findActor(key); if (!a) err('boat: no actor "' + key + '"'); else { a.boat = on !== false; pendingWet = pendingWet.filter((m) => !m.endsWith('|' + key)); } },
     spawn(key, who, tx, ty) {
@@ -226,7 +249,7 @@ function mkApi(ctx) {
         const pr = roomOf(cur.map, cur.x, cur.y), ar = roomOf(cur.map, tx, ty);
         if (pr >= 0 && ar >= 0 && pr !== ar) sceneWarn('"' + wid + '" placed in another room from the player (' + cur.map + ' ' + tx + ',' + ty + ' vs player ' + cur.x + ',' + cur.y + ')');
       }
-      temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key };
+      temp[key] = { x: tx, y: ty, who: typeof who === 'string' ? who : key, dir: arguments[4] || 'down' };
     },
     spawnBeast(key, art, tx, ty) { if (!WM.monsters.ART[art]) err('spawnBeast: unknown art "' + art + '"'); temp[key] = { x: tx, y: ty, who: key }; return {}; },   // (the scene may set .scale on it)
     despawn(key, opt) { if (opt && opt.to && tile(cur.map, opt.to[0], opt.to[1]) == null) err('despawn: ' + key + ' sent to ' + opt.to + ', off the map'); if (!temp[key] && !findActor(key)) err('despawn: no actor "' + key + '"'); if (temp[key]) { temp[key].pending = true; temp[key].leave = !!(opt && (opt.leave || opt.to)) || !!temp[key].hidden || !!temp[key].lying; } },   // the story sends them away (opt.leave / opt.to), or they stay   // (the fallen are carried off)
@@ -236,6 +259,7 @@ function mkApi(ctx) {
       if (until && typeof until !== 'string') err('mark: until must be a flag name');
     },
     costume(id, look) { if (!D.chars[id] && !D.npcs[id]) err('costume: unknown ' + id); },
+    fallIn(key, who) { if (!findActor(key)) err('fallIn: no actor "' + key + '"'); else if (temp[key]) temp[key].idle = true; WM.state.followers = (WM.state.followers || []).concat([who]); return resolved; },
     follow(keys) { (keys || []).forEach((k) => { if (!findActor(k)) err('follow: no actor "' + k + '"'); else if (temp[k]) temp[k].idle = true; }); },   // (walking with the leader, not left standing)
     idle(key, lines) { if (!temp[key]) err('idle: no actor "' + key + '"'); else if (!lines || !lines.length) err('idle: no line for "' + key + '"'); else temp[key].idle = true; },
     leader(id) { if (!D.chars[id]) err('leader: unknown char ' + id); },
@@ -663,6 +687,8 @@ async function main() {
   const sc = Array.from(new Set(scene));
   if (sc.length) console.log('\nScene staging to review: ' + sc.length + (SCENES ? '' : ' (list them with --scenes)'));
   if (SCENES) sc.forEach((e) => console.log('  ' + e));
+  if (facing.length) console.log('\nSpeakers turned away from the player: ' + facing.length + (FACING ? '' : ' (list them with --facing)'));
+  if (FACING) facing.forEach((f) => console.log('  ' + f.msg));
   const uniq = Array.from(new Set(errors));
   if (uniq.length) { console.log('\nERRORS (' + uniq.length + '):'); uniq.forEach((e) => console.log('  ' + e)); process.exitCode = 1; }
   else console.log('No script errors.');

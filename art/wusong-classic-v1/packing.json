@@ -1,0 +1,43 @@
+{
+  "scale": 0.31361760660247595,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "character": "wusong",
+      "source": "wusong-original.png",
+      "bounds": [
+        {
+          "left": 275,
+          "top": 98,
+          "width": 350,
+          "height": 727
+        },
+        {
+          "left": 785,
+          "top": 98,
+          "width": 260,
+          "height": 727
+        },
+        {
+          "left": 1160,
+          "top": 101,
+          "width": 345,
+          "height": 724
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    }
+  ]
+}

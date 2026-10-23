@@ -9,7 +9,7 @@
 
   var l = L.grid(40, 30, 'w');
   l.scatter('r', 0.35, 591, 'w');
-  l.rect(8, 6, 24, 18, '.'); l.scatter('r', 0.15, 592, '.', [8, 6, 24, 18]); l.scatter('m', 0.04, 593, '.', [8, 6, 24, 18]);
+  l.rect(8, 6, 24, 18, '.'); l.scatter(',', 0.15, 592, '.', [8, 6, 24, 18]); l.scatter('m', 0.04, 593, '.', [8, 6, 24, 18]);   // (tussocks on the dry ground; the reeds stand in the water)
   l.rect(16, 9, 8, 6, '.'); l.set(19, 10, 'g'); l.set(20, 10, 'g'); l.set(21, 11, 'g'); l.set(18, 11, 'g');   // the graves
   l.set(17, 9, 'Q'); l.set(22, 9, 'T'); l.set(16, 12, 'T');
   l.rect(19, 15, 2, 9, ':'); l.rect(19, 24, 2, 6, 'B');

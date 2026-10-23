@@ -1,0 +1,43 @@
+{
+  "scale": 0.32175032175032175,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "character": "yangzhi",
+      "source": "yangzhi-original.png",
+      "bounds": [
+        {
+          "left": 225,
+          "top": 58,
+          "width": 363,
+          "height": 777
+        },
+        {
+          "left": 767,
+          "top": 60,
+          "width": 276,
+          "height": 775
+        },
+        {
+          "left": 1186,
+          "top": 60,
+          "width": 364,
+          "height": 775
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    }
+  ]
+}

@@ -41,14 +41,14 @@
     hall: { sky: ['#0a0810', '#24182a'], far: '#1a1020', near: '#2a1a24', ground: ['#3a2a30', '#241820'], deco: 'temple', stars: false }
   };
   var paintedBackgrounds={}, paintedNames=['forest','town','field','plains','snow','river','marsh','night','palace','interior','temple','mountain','cave','fire','ridge'];
-  B.backgroundRoot='assets/backgrounds/';
+  B.backgroundRoot='assets/backgrounds-web/';B.backgroundExt='.webp';   // WebP copies of assets/backgrounds/ (tools/build-web-art.js)
   function loadPainted(type){
     if(paintedNames.indexOf(type)<0)return null;
     if(!paintedBackgrounds[type]){
       var entry=paintedBackgrounds[type]={image:new Image(),ready:false,failed:false};
       entry.image.onload=function(){entry.ready=true;};
       entry.image.onerror=function(){entry.failed=true;};
-      entry.image.src=B.backgroundRoot+type+'.png';
+      entry.image.src=B.backgroundRoot+type+B.backgroundExt;
     }
     return paintedBackgrounds[type];
   }
@@ -565,9 +565,37 @@
     if (all.some(function (u) { return u.status.poison; })) await WM.wait(0.4);
   }
 
+  // A Star met as a foe before he joins fights with his own skills (as many as his level has opened: the second at 8,
+  // the signature at 18), beside whatever the enemy already had.
+  var HERO_STYLE = { enemy1: 'one', enemyAll: 'all', allyAll: 'allyAll', ally1: 'self', self: 'self' };
+  function heroSkillsOf(d) {
+    if (d._heroSkills) return d._heroSkills;
+    var C = WM.data.chars, hid = d.hero || Object.keys(C).filter(function (c) { return C[c].name === d.name; })[0];
+    var own = (d.skills || []).slice(), have = own.map(function (k) { return k.name; });
+    ((hid && WM.data.skills[hid]) || []).forEach(function (h, i) {
+      if (have.indexOf(h.name) >= 0 || (i === 1 && d.lv < 8) || (i === 2 && d.lv < 18)) return;
+      var t = HERO_STYLE[h.target] || 'one', k = { name: h.name, chance: i === 2 ? 0.12 : 0.15, target: t, fromHero: true };
+      if (i === 2) { k.hpBelow = 0.7; k.screen = !!h.screen; }
+      if (h.effect === 'phys') Object.assign(k, { type: 'phys', power: h.power || 1.5, status: h.status, statusChance: h.statusChance, fx: h.fx, shot: h.shot });
+      else if (h.effect === 'damage') Object.assign(k, { type: 'magic', power: h.power || 40, element: h.element });
+      else if (h.effect === 'heal') Object.assign(k, { heal: h.power || 40, target: t === 'one' ? 'self' : t });
+      else if (h.effect === 'buff') Object.assign(k, { buff: h.status, target: t === 'one' ? 'self' : t });
+      else if (h.effect === 'status') Object.assign(k, { type: 'magic', statusOnly: true, status: h.status, statusChance: h.statusChance || 0.5 });
+      else return;   // (cures and revivals have nothing to do on the enemy's side)
+      own.push(k); have.push(h.name);
+    });
+    // his own skills come up now and then: never so often that he stops simply fighting (at most 60% of his turns)
+    var base = own.filter(function (k) { return !k.fromHero; }).reduce(function (n, k) { return n + (k.chance || 0); }, 0);
+    var added = own.filter(function (k) { return k.fromHero; }), sum = added.reduce(function (n, k) { return n + k.chance; }, 0);
+    var room = Math.max(0.12, 0.6 - base);
+    if (sum > room) added.forEach(function (k) { k.chance = k.chance * room / sum; });
+    return (d._heroSkills = own);
+  }
+  B.heroSkillsOf = heroSkillsOf;
+
   function enemyChoice(bt, e) {
     var d = e.def;
-    var skills = d.skills || [];
+    var skills = heroSkillsOf(d);
     var r = Math.random();
     for (var i = 0; i < skills.length; i++) {
       var sk = skills[i];
@@ -772,7 +800,8 @@
       if (sk.heal) { applyHeal(t, sk.heal); return; }
       if (sk.buff) { t.status[sk.buff] = 3; pop(t, statusName(sk.buff), '#a0e0ff'); return; }
       var d;
-      if (sk.type === 'phys') { var r = physDamage(u, t, sk.power || 1.5); if (r.miss) { pop(t, 'Miss', '#c0c0c0'); return; } d = r.dmg; }
+      if (sk.statusOnly) d = 0;
+      else if (sk.type === 'phys') { var r = physDamage(u, t, sk.power || 1.5); if (r.miss) { pop(t, 'Miss', '#c0c0c0'); return; } d = r.dmg; }
       else d = magicDamage(u, t, sk.power || 40, sk.element);
       if (d) { pop(t, d, '#ffb070'); applyDamage(t, d); }
       if (sk.status && t.hp > 0 && Math.random() < (sk.statusChance || 0.4)) { t.status[sk.status] = 3; pop(t, statusName(sk.status), '#c0a0ff'); }

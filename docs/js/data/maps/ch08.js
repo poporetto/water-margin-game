@@ -14,10 +14,11 @@
   var hall = m.house(8, 3, 14, 5, { roof: 'z', door: 7, windows: [2, 11] });
   m.set(6, 9, 'Y'); m.set(23, 9, 'Y'); m.set(9, 10, 'V'); m.set(20, 10, 'V'); m.rect(15, 8, 2, 4, ':');
   m.scatter('P', 0.2, 311, '.'); L.clearAround(m, ':', 'P', '.');
+  [[9, 10], [20, 10]].forEach(function (p) { L.clearAround(m, 'V', 'P', '.'); for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) if (m.get(p[0] + dx, p[1] + dy) === 'P') m.set(p[0] + dx, p[1] + dy, '.'); });   // (room for the tents to stand full size, not squeezed by the pines)
   WM.defMap('qingfengshan', { name: 'Qingfeng Mountain', theme: 'snow', music: 'dungeon', rows: m.rows(), spawn: [14, 32], battleBg: 'snow',
     exits: [WM.toWorld('qingfengshan', 12, 33, 6, 1)], encounters: { rate: 0.05, troops: [['wolf2', 'wolf2'], ['bear'], ['roadbandit', 'roadarcher']], cond: function (S2) { return !S2.has('ch8_bandits'); } } });
   var mi = L.grid(18, 11, 'x'); var mR = mi.room(1, 1, 16, 9, { floor: 'n' });
-  mi.stamp(2, 3, ['h..L....L..h..', '......00......', '.t...KKKK...t.', '..............', 'j............j']);   // the chiefs' great chair at the head of the hall, its carpet before it
+  mi.stamp(2, 3, ['h...L....L.h..', '......00......', '.t...KKKK...t.', '..............', 'j............j']);   // the chiefs' great chair at the head of the hall, its carpet before it
   WM.defMap('qingfengshan_in', { name: 'Qingfeng Stronghold', interior: true, theme: 'snow', music: 'dungeon', rows: mi.rows(), spawn: [9, 8] });
   L.link({ map: 'qingfengshan', x: hall.x, y: hall.y }, { map: 'qingfengshan_in', x: mR.x, y: mR.y });
 
@@ -41,7 +42,11 @@
   var gR = { hua: gi.room(1, 1, 15, 10, { floor: 'N' }), liu: gi.room(17, 1, 15, 10, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......Akk', '...........kk', '..t..KKK.....', '.............', '.............']);
   gi.stamp(18, 3, ['....F..h..h..', '....F........', '....F.....t..', 'FF+FF........']);   // Liu Gao's hall, and in its top-left corner the barred cage where he keeps his prisoners (its door on the south side)
-  WM.defMap('qingfeng_in', { name: '', interior: true, theme: 'snow', music: 'town_qingfeng', rows: gi.rows(), spawn: [8, 9] });
+  // once Hua Rong has wrenched the cage door open, it stays open
+  var giRows = gi.rows(), giOpen = giRows.map(function (r) { return r.replace('+', 'N'); });
+  var cageOpen = function () { return !!(WM.state && WM.state.flags && WM.state.flags.ch8_cageopen); };
+  WM.defMap('qingfeng_in', { name: '', interior: true, theme: 'snow', music: 'town_qingfeng', spawn: [8, 9],
+    cacheKey: function () { return cageOpen() ? 'open' : 'shut'; }, rows: function () { return cageOpen() ? giOpen : giRows; } });
   L.link({ map: 'qingfeng', x: hua.x, y: hua.y }, { map: 'qingfeng_in', x: gR.hua.x, y: gR.hua.y });
   L.link({ map: 'qingfeng', x: liu.x, y: liu.y }, { map: 'qingfeng_in', x: gR.liu.x, y: gR.liu.y });
   WM.data.qingfeng = { rooms: gR };

@@ -1,0 +1,43 @@
+{
+  "scale": 0.3009079118028534,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "character": "chaogai",
+      "source": "chaogai-original.png",
+      "bounds": [
+        {
+          "left": 185,
+          "top": 73,
+          "width": 416,
+          "height": 769
+        },
+        {
+          "left": 740,
+          "top": 71,
+          "width": 323,
+          "height": 771
+        },
+        {
+          "left": 1174,
+          "top": 73,
+          "width": 420,
+          "height": 769
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    }
+  ]
+}

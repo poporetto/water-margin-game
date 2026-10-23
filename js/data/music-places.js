@@ -642,4 +642,33 @@
         { inst: 'pengling', perc: true, f: 2400, vol: 0.04, pan: 0.3, notes: rest(64) }
       ] });
   })();
+  // ---------------- the theme song ----------------
+  // A Hundred and Eight Stars: the game's own song, on the title screen. Gentle and hopeful, lifting at the end. A
+  // zheng plays the opening motif like a music box, the xiao sings the tune, the erhu's short minor verse is the
+  // ache of the road, and then the whole small band brings the tune home, the dizi and erhu an octave apart,
+  // climbing to its highest note before it settles. Twenty-four bars: intro 4, verse 8, middle 4, last verse 8.
+  (function () {
+    var C = [1, 4, 6, 5, 1, 6, 4, 5, 1, '3/6', '4/5', 1, 6, 3, 4, 5, 1, 6, 4, 5, 1, '3/6', '4/5', 1];
+    var tune = "1 - 5 - 6 - - - | 6 - 5 - 3 - - - | 3 - 2 - 1 - - - | 2 - - - - - - - |" +
+      "1 - 5 - 6 5 3 5 | 6 - - 1' 6 - 5 - | 3 - 5 6 1' - 2' 1' | 6 - - 5 6 - - - |" +
+      "1 - 5 - 6 5 3 5 | 3 - 5 3 2 - 1 - | 6 - 1' 6 5 - 2 - | 1 - - - - - 0 0 |" +
+      "3' - - 2' 1' - 6 - | 5 - 6 5 3 - - - | 6 - 1' 6 5 - 3 5 | 5 - 6 1' 2' - 3' - |" +
+      "1 - 5 - 6 5 3 5 | 6 - - 1' 6 - 5 - | 3 - 5 6 1' - 2' 1' | 6 - - 5 6 - 1' 2' |" +
+      "1' - 2' 3' 5' - 3' 2' | 3' - 2' 1' 6 - 1' - | 6 - 1' 6 2' - - 3' | 1' - - - - - 0 0";
+    var dots = function (n) { return new Array(n + 1).join('.'); };
+    track('theme', 'A Hundred and Eight Stars', 'The theme song, on the title screen: gentle and hopeful, lifting at the end; the stars of destiny gathering.', {
+      bpm: 76, key: 'D', ch: [
+        { inst: 'zheng', oct: 5, vol: 0.14, pan: 0.25, notes: part(tune, '1111 00000000 0000 00000000') },
+        { inst: 'xiao', oct: 4, vol: 0.17, pan: 0.1, notes: part(tune, '0000 11111111 0000 00000000') },
+        { inst: 'erhu', oct: 4, vol: 0.15, notes: part(tune, '0000 00000000 1111 00000000') },
+        { inst: 'dizi', oct: 4, vol: 0.15, pan: 0.1, notes: part(tune, '0000 00000000 0000 11111111') },
+        { inst: 'erhu', oct: 3, vol: 0.12, pan: -0.1, notes: part(tune, '0000 00000000 0000 11111111') },
+        { inst: 'ruan', oct: 3, vol: 0.11, pan: -0.3, notes: band(C, 'arp', '0000 11111111 1111 11111111') },
+        { inst: 'guqin', oct: 2, vol: 0.1, notes: band(C, 'bass2') },
+        { inst: 'sheng', oct: 4, vol: 0.06, pan: 0.3, notes: band(C, 'pad', '0000 00000000 1111 11111111') },
+        { inst: 'zheng', oct: 4, div: 2, vol: 0.11, pan: 0.4, notes: runs(C, '000u 0000000d 000u 00000000') },
+        { inst: 'xiaogu', perc: true, f: 200, vol: 0.07, notes: dots(128) + new Array(5).join('x.......o...o...') },
+        { inst: 'pengling', perc: true, f: 2400, vol: 0.045, pan: 0.3, notes: 'x' + dots(127) + 'x' + dots(63) }
+      ] });
+  })();
 })();

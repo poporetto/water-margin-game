@@ -10,8 +10,8 @@
   var r = L.grid(60, 24, 'T');
   var rp = [[0, 12], [10, 12], [16, 8], [24, 8], [30, 14], [38, 14], [44, 9], [50, 12], [59, 12]];
   walk(rp, function (x, y) { r.rect(x - 1, y - 1, 3, 3, '.'); });
-  walk(rp, function (x, y) { r.set(x, y, ':'); });
-  r.rect(34, 2, 8, 5, '.'); r.set(37, 3, 'Y'); r.set(36, 3, 'V'); r.set(38, 3, 'V'); r.vline(37, 7, 13, '.');   // the hill with the yellow banner
+  walk(rp, function (x, y) { r.set(x, y, ':'); r.set(x + 1, y, ':'); });   // (two tiles wide, so the road stays joined where it climbs on the slant)
+  r.rect(34, 2, 8, 5, '.'); r.set(37, 3, 'Y'); r.set(34, 3, 'V'); r.set(39, 3, 'V'); r.vline(37, 7, 13, '.');   // the hill with the yellow banner (each tent on its own 3x2 of ground)
   for (var y = 0; y < 24; y++) for (var x = 52; x < 60; x++) if (r.get(x, y) !== ':' && r.get(x, y) !== '.') r.set(x, y, y % 3 ? 'r' : '~');
   r.rect(52, 10, 8, 5, '~'); r.rect(52, 11, 3, 3, '.'); r.set(55, 12, 'o');
   r.scatter('b', 0.06, 541, 'T');
@@ -27,13 +27,13 @@
   var y2 = L.grid(40, 26, '.');
   for (y = 6; y < 20; y++) for (x = 0; x < 40; x++) y2.set(x, y, y < 8 || y > 17 ? '~' : 'w');
   y2.scatter('r', 0.2, 542, '~', [0, 6, 40, 2]); y2.scatter('r', 0.2, 543, '~', [0, 18, 40, 2]);
-  y2.rect(18, 3, 3, 4, 'B'); y2.set(19, 8, 'o');
+  y2.rect(18, 3, 3, 3, ':'); y2.rect(18, 6, 3, 2, 'B'); y2.set(19, 8, 'o');   // the landing, and the jetty out over the shallows
   var wtav = y2.house(4, 20, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); y2.set(12, 21, 'Y'); y2.hline(0, 39, 25, ':'); y2.vline(wtav.x, 24, 25, ':');
   y2.rect(0, 1, 40, 2, ':'); y2.vline(19, 3, 3, ':');
   y2.scatter('T', 0.08, 544, '.', [0, 0, 40, 6]); y2.scatter('T', 0.05, 545, '.', [14, 20, 26, 5]); L.clearAround(y2, ':', 'T', '.');
   WM.defMap('yangtze', { name: 'The Yangtze, below Jiankang', theme: 'snow', music: 'snow', rows: y2.rows(), spawn: [1, 1], battleBg: 'river', weather: 'snow' });
   var yi = L.grid(12, 8, 'x'); var yR = yi.room(1, 1, 10, 7);
-  yi.stamp(2, 3, ['h..j..k.', '.t..t...', 'cc......']);
+  yi.stamp(2, 3, ['h..j..k.', '......k.', 't.....t.', '......cc']);
   WM.defMap('yangtze_in', { name: 'Wang Dingliu\'s Tavern', interior: true, theme: 'snow', music: 'inn', rows: yi.rows(), spawn: [6, 6] });
   L.link({ map: 'yangtze', x: wtav.x, y: wtav.y }, { map: 'yangtze_in', x: yR.x, y: yR.y });
 
@@ -44,7 +44,7 @@
   var an = j.house(4, 4, 10, 5, { roof: '^', door: 4, windows: [1, 8] }); j.set(14, 6, 'I');                 // An Daoquan's clinic
   var li = j.house(24, 4, 11, 5, { roof: '^', door: 5, windows: [1, 3, 7, 9], windowsUpper: [2, 8] }); j.set(23, 5, 'L'); j.set(35, 5, 'L');   // Li Qiaonu's house
   j.house(4, 18, 9, 5, { roof: 'z', door: false, windows: [2, 6] }); j.house(25, 18, 9, 5, { roof: '^', door: false, windows: [2, 6] });
-  [an, li].forEach(function (d) { j.vline(d.x, d.y + 1, 13, ':'); });
+  j.rect(an.x, an.y + 1, 2, 5, ':'); j.vline(li.x, li.y + 1, 13, ':');   // (An's path as wide as his double door)
   j.scatter('T', 0.05, 546, '.', [1, 1, 38, 27]); L.clearAround(j, ':', 'T', '.'); L.clearAround(j, '=', 'T', '.');
   WM.defMap('jiankang', { name: 'Jiankang', theme: 'snow', music: 'town_jiankang', rows: j.rows(), spawn: [19, 1], battleBg: 'town', weather: 'snow' });
   var ji = L.grid(30, 10, 'x'); var jR = { an: ji.room(1, 1, 12, 8), li: ji.room(14, 1, 14, 9, { floor: 'n' }) };
@@ -65,8 +65,9 @@
   var g = L.grid(48, 30, '.');
   g.frame(26, 2, 20, 24, '#'); g.rect(26, 13, 1, 3, 'G'); g.rect(27, 13, 18, 3, '=');
   g.house(29, 4, 14, 6, { roof: 'Z', wall: 'R', door: false }); g.house(29, 18, 6, 4, { roof: 'z', door: false }); g.house(37, 18, 6, 4, { roof: 'z', door: false });
-  g.rect(0, 13, 26, 3, ':'); g.set(6, 10, 'V'); g.set(10, 10, 'V'); g.set(8, 9, 'Y');
+  g.rect(0, 13, 26, 3, ':');
   g.scatter('T', 0.07, 548, '.', [0, 0, 24, 30]); L.clearAround(g, ':', 'T', '.');
+  g.rect(5, 8, 9, 3, '.'); g.set(5, 10, 'V'); g.set(10, 10, 'V'); g.set(9, 9, 'Y');   // the camp: each tent on its own 3x2 of ground, the banner between
   WM.defMap('lingzhou', { name: 'Lingzhou', theme: 'autumn', music: 'tense', rows: g.rows(), spawn: [1, 14], battleBg: 'field',
     exits: [WM.toWorld('lingzhou', 0, 13, 1, 3)] });
 })();

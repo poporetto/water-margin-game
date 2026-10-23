@@ -8,7 +8,7 @@
   var d = L.grid(56, 36, '.');
   d.frame(24, 2, 30, 30, '#'); d.rect(24, 16, 1, 3, 'G');
   d.rect(25, 16, 28, 3, '='); d.rect(37, 3, 3, 28, '=');
-  var hall = d.house(26, 4, 10, 6, { roof: 'Z', wall: 'R', door: 5 }); d.vline(hall.x, 10, 15, '=');
+  var hall = d.house(26, 4, 10, 6, { roof: 'Z', wall: 'R', door: 5 }); d.rect(hall.x - 1, 10, 2, 6, '=');   // (paved the width of the double door)
   var jail = d.house(42, 4, 10, 6, { roof: 'v', wall: '#', door: 5 }); d.vline(jail.x, 10, 15, '=');
   var rui = d.house(42, 22, 9, 5, { roof: '^', door: 4, windows: [1, 3, 6, 7], windowsUpper: [2, 6] }); d.set(41, 23, 'L'); d.set(51, 23, 'L');
   d.house(26, 22, 8, 5, { roof: 'z', door: false, windows: [2, 5] });
@@ -21,7 +21,7 @@
     exits: [WM.toWorld('dongping', 0, 16, 1, 3)] });
   var di = L.grid(44, 11, 'x'); var dR = { hall: di.room(1, 1, 14, 9, { floor: 'N' }), jail: di.room(16, 1, 12, 9, { floor: 'N' }), rui: di.room(29, 1, 13, 9, { floor: 'n' }) };
   di.stamp(2, 3, ['h.EEEEEE..h.', '...q00q.....', '..taaaa..t..', '...KKKK', '...KKKK']);   // the prefect's hall
-  di.stamp(17, 3, ['--F--F--F.', '--F--F--F.', 'F+FF+FF+F.']);
+  di.stamp(17, 3, ['--.F--.F..', '--.F--.F..', 'F+FFF+FF..']);   // two cells, each with room to stand beside the pallet
   di.stamp(30, 3, ['k..h...L..k', '...........', '..t........']);
   WM.defMap('dongping_in', { name: '', interior: true, theme: 'spring', music: 'tense', rows: di.rows(), spawn: [8, 8] });
   [[hall, dR.hall], [jail, dR.jail], [rui, dR.rui]].forEach(function (p) { L.link({ map: 'dongping', x: p[0].x, y: p[0].y }, { map: 'dongping_in', x: p[1].x, y: p[1].y }); });

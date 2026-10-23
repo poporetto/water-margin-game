@@ -41,9 +41,9 @@
 
   var I = L.grid(64, 26, 'x');
   var R = {};
-  R.tea = I.room(1, 1, 12, 8); I.stamp(2, 3, ['h..L....h.', '..........', '.t..t..t..', 'cc........']);
+  R.tea = I.room(1, 1, 12, 8); I.stamp(2, 3, ['h..L..L.h.', '..........', 't...t...t.', '..........', '..........']);
   R.garrison = I.room(14, 1, 10, 8, { floor: 'N' }); I.stamp(15, 3, ['h..A...h', '........', '..t..t..']);
-  R.pan = I.room(25, 1, 18, 10); I.stamp(26, 3, ['h...L.....L...h.', '................', '.t..t..t....t...', '................', '.t..t..t..cccc..']);
+  R.pan = I.room(25, 1, 18, 10); I.stamp(26, 3, ['h...L......L..h.', '................', '..t....t....t...', '................', '..t....t....t...', '................', 'cccc............']);
   R.inn = I.room(44, 1, 12, 8); I.stamp(45, 3, ['.....kk.kk', '.....kk.kk', 'cccc......']);
   R.butcher = I.room(1, 12, 12, 8); I.stamp(2, 14, ['jj..hh..jj', '..........', '.cccccccc.']);
   WM.defMap('weizhou_in', { name: '', interior: true, theme: 'autumn', music: 'market', rows: I.rows(), spawn: [6, 7] });

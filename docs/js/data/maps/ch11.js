@@ -18,7 +18,7 @@
     exits: [WM.toWorld('yinma', 0, 12, 1, 2)],
     encounters: { rate: 0.05, troops: [['n_wolf', 'n_wolf'], ['n_bandit', 'n_bandit', 'n_archer'], ['n_bear']], cond: function (S2) { return !S2.has('ch11_yinma'); } } });
   var yi = L.grid(12, 8, 'x'); var yR = yi.room(1, 1, 10, 7, { floor: 'N' });
-  yi.stamp(2, 3, ['h..A...h', '.t..t...', '........']);
+  yi.stamp(2, 3, ['h..A..h.', '.t..t...', '........']);
   WM.defMap('yinma_in', { name: 'Pei Xuan\'s Hall', interior: true, theme: 'autumn', music: 'field', rows: yi.rows(), spawn: [6, 6] });
   L.link({ map: 'yinma', x: camp.x, y: camp.y }, { map: 'yinma_in', x: yR.x, y: yR.y });
 
@@ -46,8 +46,8 @@
     exits: [WM.toWorld('jizhou_n', 22, 39, 3, 1)] });
   var gi = L.grid(58, 11, 'x');
   var gR = { yang: gi.room(1, 1, 14, 9), tavern: gi.room(16, 1, 11, 8), temple: gi.room(28, 1, 14, 10, { floor: 'N' }), lodge: gi.room(43, 1, 9, 7), prefect: gi.room(53, 1, 4, 5, { floor: 'N' }) };
-  gi.stamp(2, 3, ['h.ttt.c.k.k.', '......c.....', '............', 'A...........', '...........j']);   // front: the meat counter; back: the rooms
-  gi.stamp(17, 3, ['h..L...h', '.t..t..t.', '.........', 'ccc......']);
+  gi.stamp(2, 3, ['h.ttt...k.k.', '............', '....cc......', 'A...........', '...........j']);   // front: the meat counter; back: the rooms
+  gi.stamp(17, 3, ['j..L..h.', '.t..t....', '.........', 'ccc......']);
   gi.stamp(29, 3, ['L...111....L', '....222.....', '...4.3.4....', 'j..........j', '............']);   // the Buddha hall of Baoen Temple
   gi.stamp(44, 3, ['k..h...', '.......', '..t....']);
   WM.defMap('jizhou_in', { name: '', interior: true, theme: 'autumn', music: 'town_jizhou', rows: gi.rows(), spawn: [7, 8] });
@@ -60,7 +60,7 @@
   var cp = [[14, 31], [14, 26], [9, 21], [12, 15], [19, 11], [16, 6]];
   var walk = function (fn) { for (var i = 0; i < cp.length - 1; i++) { var a = cp[i], b = cp[i + 1], n = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])); for (var k = 0; k <= n; k++) fn(Math.round(a[0] + (b[0] - a[0]) * k / n), Math.round(a[1] + (b[1] - a[1]) * k / n)); } };
   walk(function (x, yy) { c.rect(x - 2, yy - 1, 5, 3, '.'); });
-  walk(function (x, yy) { c.set(x, yy, ':'); });
+  walk(function (x, yy) { c.set(x, yy, ':'); c.set(x + 1, yy, ':'); });   // (two tiles wide, so the path stays joined where it climbs on the slant)
   c.rect(8, 1, 16, 7, '.');                                                     // the old tombs at the top
   c.set(11, 2, 'g'); c.set(14, 2, 'g'); c.set(19, 3, 'g'); c.set(16, 2, 'Q'); c.set(21, 2, 'e'); c.set(9, 4, 'e');
   c.rect(12, 3, 3, 2, 'm');                                                     // the great grave mound
@@ -74,13 +74,13 @@
   z.rect(0, 0, 36, 5, 'M'); z.scatter('P', 0.5, 441, '.', [0, 5, 36, 3]);       // Dulong Ridge behind
   var inn = z.house(10, 6, 10, 5, { roof: 'z', door: 4, windows: [1, 8] }); z.vline(14, 11, 12, ':'); z.set(20, 7, 'J'); z.set(21, 11, 'I');
   z.frame(21, 8, 4, 3, 'F'); z.set(22, 10, '.');                                // the hen-coop yard
-  z.rect(30, 12, 6, 5, '.'); z.frame(31, 11, 5, 7, '#'); z.rect(31, 13, 1, 3, 'G');   // the road on to Zhu Family Village (barred)
+  z.rect(30, 12, 6, 5, '.'); z.frame(31, 11, 5, 7, '#'); z.rect(31, 13, 1, 3, 'G'); z.rect(30, 13, 1, 3, ':');   // the road on to Zhu Family Village (barred), up to its gate
   z.scatter('T', 0.12, 442, '.', [0, 16, 30, 8]); z.scatter('b', 0.04, 443, '.', [0, 16, 30, 8]);
   L.clearAround(z, ':', 'TbP', '.');
   WM.defMap('zhuinn', { name: 'Inn below Dulong Ridge', theme: 'autumn', music: 'town_zhuinn', rows: z.rows(), spawn: [1, 14], battleBg: 'forest',
     exits: [WM.toWorld('zhuinn', 0, 13, 1, 3)] });
   var zi = L.grid(14, 9, 'x'); var zR = zi.room(1, 1, 12, 8);
-  zi.stamp(2, 3, ['h..j..k.k.', '.t..t.....', '..........', 'ccc.......']);
+  zi.stamp(2, 3, ['j..j..k.k.', 't..t......', '..........', 'ccc.......']);
   WM.defMap('zhuinn_in', { name: 'Zhu Family Inn', interior: true, theme: 'autumn', music: 'inn', rows: zi.rows(), spawn: [7, 7] });
   L.link({ map: 'zhuinn', x: inn.x, y: inn.y }, { map: 'zhuinn_in', x: zR.x, y: zR.y });
 
@@ -101,7 +101,7 @@
     exits: [WM.toWorld('lijia', 0, 20, 1, 2)] });
   var mi = L.grid(30, 10, 'x'); var mR = { hall: mi.room(1, 1, 16, 9, { floor: 'N' }), shop: mi.room(18, 1, 10, 7) };
   mi.stamp(2, 3, ['h...&&....h...', '....AA........', '..t...........', '..............']);
-  mi.stamp(19, 3, ['h..j...h', '.t..t...', 'cc......']);
+  mi.stamp(19, 3, ['h..j..h.', '........', 'cc......', 't.....t.']);
   WM.defMap('lijia_in', { name: '', interior: true, theme: 'autumn', music: 'field', rows: mi.rows(), spawn: [8, 8] });
   L.link({ map: 'lijia', x: hall.x, y: hall.y }, { map: 'lijia_in', x: mR.hall.x, y: mR.hall.y });
   L.link({ map: 'lijia', x: shop.x, y: shop.y }, { map: 'lijia_in', x: mR.shop.x, y: mR.shop.y });

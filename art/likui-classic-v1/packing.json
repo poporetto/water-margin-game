@@ -1,0 +1,43 @@
+{
+  "scale": 0.2874543239951279,
+  "frame": [
+    192,
+    256
+  ],
+  "footBaseline": 255,
+  "logicalSize": [
+    24,
+    32
+  ],
+  "artScale": 8,
+  "records": [
+    {
+      "character": "likui",
+      "source": "likui-original.png",
+      "bounds": [
+        {
+          "left": 57,
+          "top": 32,
+          "width": 508,
+          "height": 821
+        },
+        {
+          "left": 756,
+          "top": 35,
+          "width": 313,
+          "height": 818
+        },
+        {
+          "left": 1209,
+          "top": 32,
+          "width": 507,
+          "height": 821
+        }
+      ],
+      "sourceSize": [
+        1774,
+        887
+      ]
+    }
+  ]
+}

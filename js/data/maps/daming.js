@@ -57,13 +57,14 @@
   R.yamen = I.room(1, 1, 22, 12, { floor: 'N' });
   I.stamp(2, 3, ['h...L..EEEEEE..L...h', '........q00q........', '........aaaa........', '..t.....KKKK.....t..', '........KKKK........', '....................', '....................', 'j..................j']);
   R.lu = I.room(24, 1, 16, 10, { floor: 'N' });
-  I.stamp(25, 3, ['h..A......A.kk', '............kk', '..t...KKK.....', '.....KKKK.....', '..............']);
+  I.stamp(25, 3, ['h..A......A.kk', '............kk', '..t..KKKK.....', '.....KKKK.....', '..............']);
   R.inn = I.room(41, 1, 12, 8); I.stamp(42, 3, ['.....kk.kk', '.....kk.kk', 'cccc......']);
   R.shop = I.room(54, 1, 9, 8); I.stamp(55, 3, ['hhhhh..', '.......', 'ccc....']);
   R.smith = I.room(64, 1, 9, 8); I.stamp(65, 3, ['jj..jj.', '.......', '.cccc..']);
   R.tal = I.room(41, 10, 9, 8, { floor: 'N' }); I.stamp(42, 12, ['h.A.h..', '.......', '.ccc...']);
-  R.tower = I.room(51, 10, 14, 10); I.stamp(52, 12, ['h..L....L...', '.t..t..t..t.', '............', '.t..t..t..t.', 'cccc........']);
+  R.tower = I.room(51, 10, 14, 10); I.stamp(52, 12, ['h..L....L.h.', '............', '............', '..t..t..t...', '............', '..t..t..t...']);
   R.prison = I.room(1, 14, 18, 9, { floor: 'N' }); I.stamp(2, 16, ['--..F--..F--..F.', '--..F--..F--..F.', 'F+FFFF+FFFF+FFF.']);
+  WM.defEvents('daming_in', [{ id: 'dmwaiter', x: 57, y: 13, npc: 'waiter', dir: 'down', text: ['The Cuiyun Tower, the finest wine house in Daming! The singing girls come on after dark, sir.'] }]);
   WM.defMap('daming_in', { name: '', interior: true, theme: 'autumn', music: 'town_daming', rows: I.rows(), spawn: [12, 11] });
   var D = WM.data.damingDoors;
   Object.keys(R).forEach(function (k) { L.link({ map: 'daming', x: D[k].x, y: D[k].y }, { map: 'daming_in', x: R[k].x, y: R[k].y }); });

@@ -16,24 +16,30 @@
   var tav = j.house(5, 37, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); j.set(12, 38, 'J'); j.set(13, 39, 'I');
   j.hline(8, 14, 41, ':');
   // the temple of the Mountain God halfway up, with the notice about the tiger
-  j.rect(20, 21, 6, 7, '.'); var tmp = j.house(21, 21, 4, 4, { roof: 'v', wall: 'R', door: false }); j.set(23, 25, 'I');   // the little mountain-god shrine: walls two rows high, so its door fits under the roof
+  j.rect(20, 21, 6, 7, '.'); var tmp = j.house(21, 21, 4, 4, { roof: 'v', wall: 'R', door: 2 }); j.set(21, 25, 'I');   // the little mountain-god shrine (walls two rows high, so its door fits under the roof), the notice pasted up beside its door
   // the great flat rock where Wu Song lay down — and the tiger came
   j.rect(10, 9, 9, 7, '.'); j.rect(13, 11, 3, 2, 'm');
+  walk(function (x, y) { [x, x + 1].forEach(function (xx) { var q = j.get(xx, y); if (q === '.') j.set(xx, y, ':'); }); });   // (the road runs on unbroken past the rock and the shrine)
   j.scatter('m', 0.04, 241, '.'); L.clearAround(j, ':', 'Pm', '.');
   j.set(13, 11, 'm'); j.set(14, 11, 'm');
   WM.defMap('jingyang', { name: 'Jingyang Ridge', theme: 'autumn', music: 'dungeon', rows: j.rows(), spawn: [14, 42], battleBg: 'forest', tint: 'dusk',
     exits: [WM.toWorld('jingyang', 13, 43, 3, 1), { x: 13, y: 0, w: 3, h: 1, to: 'yanggu', tx: 21, ty: 31, dir: 'up' }] });
   var ji = L.grid(12, 8, 'x');
   var jR = ji.room(1, 1, 10, 7);
-  ji.stamp(2, 3, ['h..L...h', '.t..t...', 'cc......']);
+  ji.stamp(2, 3, ['h.L..Lh.', '........', 't.....t.', '......cc']);
   WM.defMap('jingyang_in', { name: 'Ridge Tavern', interior: true, theme: 'autumn', music: 'field', rows: ji.rows(), spawn: [6, 6] });
   L.link({ map: 'jingyang', x: tav.x, y: tav.y }, { map: 'jingyang_in', x: jR.x, y: jR.y });
+  // inside the shrine: the Mountain God in clay, his altar, a cushion for travellers to kneel and pray before the crossing
+  var js = L.grid(10, 9, 'x'); var jsR = js.room(1, 1, 8, 8, { floor: 'N' });
+  js.stamp(3, 3, ['L.1.L', '..2..', '.....', '..4..']);
+  WM.defMap('jingyang_shrine', { name: 'Shrine of the Mountain God', interior: true, theme: 'autumn', music: 'dungeon', rows: js.rows(), spawn: [5, 7] });
+  L.link({ map: 'jingyang', x: tmp.x, y: tmp.y }, { map: 'jingyang_shrine', x: jsR.x, y: jsR.y });
 
   // ---------------- Yanggu county ----------------
   var y = L.grid(42, 34, '.');
   y.border('#', 1, [{ side: 's', from: 20, to: 22 }]);
   y.rect(20, 33, 3, 1, 'G');
-  y.rect(20, 1, 3, 32, '='); y.rect(1, 15, 40, 2, '=');
+  y.rect(20, 9, 3, 24, '='); y.rect(1, 15, 40, 2, '=');   // (the avenue runs from the county office's door to the south gate)
   var office = y.house(14, 3, 14, 6, { roof: 'v', wall: 'R', door: 7 });
   var dalang = y.house(3, 18, 7, 5, { roof: '^', door: 3, windows: [1, 5], windowsUpper: [5] });   // Wu Dalang's house, the curtained window upstairs
   var wang = y.house(11, 18, 6, 5, { roof: '^', door: 3, windows: [1] });                           // Granny Wang's teashop next door
@@ -51,16 +57,18 @@
     exits: [WM.toWorld('yanggu', 20, 33, 3, 1)] });
   var yi = L.grid(70, 12, 'x');
   var yR = { office: yi.room(1, 1, 12, 9, { floor: 'N' }), dalang: yi.room(14, 1, 10, 9), wang: yi.room(25, 1, 8, 8), ximen: yi.room(34, 1, 10, 8), lion: yi.room(45, 1, 14, 10), hejiu: yi.room(60, 1, 8, 8) };
-  yi.stamp(2, 3, ['hEEEEEEh.', '..q00q...', '..aaaa...']);   // the county hall
+  yi.stamp(2, 3, ['.EEEEEE.h', '..q00q...', '..aaaa...']);   // the county hall
   yi.stamp(15, 3, ['k...j...', '........', '..t.....', '........']);
   yi.stamp(26, 3, ['k...j.', '......', '...t..', '......']);   // Granny Wang's house: her bed in the corner, a jar, one table (the teashop is out front)
   yi.stamp(35, 3, ['hhhhhh..', '........', 'cccc....']);
-  yi.stamp(46, 3, ['h..L....L..h', '.t..t..t..t.', '............', '.t..t..t..t.']);
+  yi.stamp(46, 3, ['h..L....L.h.', '............', '..t..t..t...', '............', '..t..t..t...']);   // the Lion Bridge tavern: two even rows of tables, the shelves clear of them
   yi.stamp(61, 3, ['k..j..', '......', '..t...']);
   // once Wu Dalang is dead, an altar table with his spirit tablet stands against the back wall of his house
   var yRows = WM.growBeds(yi.rows()), yRowsMourning = null;   // (beds grown here, as defMap does for a plain list of rows)
   var mourning = function () { return !!(WM.state && WM.state.flags && WM.state.flags.ch7_return); };
+  WM.defEvents('yanggu_in', [{ id: 'ygwaiter', x: 50, y: 4, npc: 'waiter', dir: 'down', cond: function (S2) { return !S2.has('ch7_tolion') || S2.has('ch7_exiled'); }, text: ['The Lion Bridge tavern, the best wine in Yanggu! Upstairs, sir? The window seats look out on the bridge.'] }]);
   WM.defMap('yanggu_in', { name: '', interior: true, theme: 'autumn', music: 'town_yanggu', spawn: [6, 8],
+    variants: { '17,5': 0 },   // Wu Dalang's table, with the wine jug and cups on it
     cacheKey: function () { return mourning() ? 'mourning' : 'plain'; },
     rows: function () {
       if (!mourning()) return yRows;
@@ -68,6 +76,16 @@
       return yRowsMourning;
     } });
   [[office, yR.office], [dalang, yR.dalang], [wang, yR.wang], [ximen, yR.ximen], [lion, yR.lion], [hejiu, yR.hejiu]].forEach(function (p) { L.link({ map: 'yanggu', x: p[0].x, y: p[0].y }, { map: 'yanggu_in', x: p[1].x, y: p[1].y }); });
+  // the inn by the south gate: beds for travellers on one side, a counter of goods for the road on the other
+  var yn = L.grid(14, 10, 'x'); var ynR = yn.room(1, 1, 12, 9);
+  yn.stamp(2, 3, ['kk.kk..hhh', 'kk.kk.....', '..........', 'ccc....ccc']);
+  WM.defMap('yanggu_inn', { name: 'Yanggu Inn', interior: true, theme: 'autumn', music: 'town_yanggu', rows: yn.rows(), spawn: [7, 8] });
+  L.link({ map: 'yanggu', x: inn.x, y: inn.y }, { map: 'yanggu_inn', x: ynR.x, y: ynR.y });
+  WM.defEvents('yanggu_inn', [
+    L.inn('yginn', 3, 5, 18),
+    L.shop('ygshop', 10, 5, 'yanggu', 'shopkeep', 'With the tiger dead, the road over Jingyang Ridge is busy again. Everything a traveller needs!'),
+    L.save('ygrec', 7, 4)
+  ]);
   WM.data.yanggu = { rooms: yR, doors: { office: office, dalang: dalang, wang: wang, ximen: ximen, lion: lion, hejiu: hejiu, inn: inn } };
 
   // ---------------- Cross Slope ----------------
@@ -81,7 +99,7 @@
   WM.defMap('crossslope', { name: 'Cross Slope', theme: 'autumn', music: 'tense', rows: c.rows(), spawn: [13, 18], battleBg: 'plains', exits: [WM.toWorld('crossslope', 12, 19, 3, 1)] });
   var ci = L.grid(16, 9, 'x');
   var cR = ci.room(1, 1, 14, 8);
-  ci.stamp(2, 3, ['h..j....j.kk', '.t..t..t..kk', '..........cc', '.........jjj']);
+  ci.stamp(2, 3, ['h..j....j.kk', '..........kk', 't..t......cc', '.........jjj', 't..t........']);   // (the middle kept clear: it is where the drugged escorts fall)
   WM.defMap('crossslope_in', { name: 'Cross Slope Inn', interior: true, theme: 'autumn', music: 'tense', rows: ci.rows(), spawn: [8, 7] });
   L.link({ map: 'crossslope', x: cs.x, y: cs.y }, { map: 'crossslope_in', x: cR.x, y: cR.y });
 
@@ -99,7 +117,7 @@
   // the road of taverns to the Happy Forest (south, eastwards)
   var taverns = [];
   [[4, 19], [12, 19], [20, 19], [28, 19]].forEach(function (q, i) { m.house(q[0], q[1], 6, 4, { roof: 'z', door: false, windows: [2] }); m.set(q[0] + 6, q[1] + 1, 'J'); taverns.push([q[0] + 3, q[1] + 4]); });
-  m.hline(1, 54, 24, ':'); taverns.forEach(function (t) { m.set(t[0], t[1], ':'); });
+  m.hline(1, 37, 24, ':'); taverns.forEach(function (t) { m.set(t[0], t[1], ':'); });
   m.rect(38, 17, 16, 10, 'T'); m.rect(40, 19, 12, 7, '.');
   var happy = m.house(42, 19, 8, 4, { roof: 'z', door: 4, windows: [1, 6] }); m.set(41, 19, 'J');
   m.vline(46, 23, 24, ':'); m.hline(38, 46, 24, ':');
@@ -107,12 +125,14 @@
   WM.defMap('mengzhou', { name: 'Mengzhou', theme: 'autumn', music: 'town_mengzhou', rows: m.rows(), spawn: [1, 14], battleBg: 'town',
     exits: [WM.toWorld('mengzhou', 0, 13, 1, 3), WM.toWorld('mengzhou', 55, 13, 1, 3)] });
   WM.data.mengzhouTaverns = taverns;
-  var mi = L.grid(56, 12, 'x');
-  var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'N' }), tower: mi.room(31, 1, 12, 8, { floor: 'n' }), happy: mi.room(44, 1, 11, 8) };
-  mi.stamp(2, 3, ['h...A....h', '..........', 'kk..kk..kk', 'kk..kk..kk']);
+  var mi = L.grid(62, 12, 'x');
+  var mR = { camp: mi.room(1, 1, 12, 8, { floor: 'N' }), zhang: mi.room(14, 1, 16, 10, { floor: 'N' }), tower: mi.room(31, 1, 12, 8, { floor: 'n' }), happy: mi.room(44, 1, 17, 10) };
+  mi.stamp(2, 3, ['kk....j.h.', 'kk........', '....t.....', '..........']);   // the room at the prison camp Shi En gave Wu Song: a proper bed, wine, a table for his meals
   mi.stamp(15, 3, ['h...L....L...h', '..............', '...t..........', '..............', 'j............j']);
-  mi.stamp(32, 3, ['L..t....kkL', '........kk.', '...........']);
-  mi.stamp(45, 3, ['h..L....h', '.t..t..t.', 'cccc.....']);
+  mi.stamp(32, 3, ['L..t...Lkk', '........kk', '..........']);   // (the lanterns inside the room, not in its wall)
+  // the Happy Forest: the biggest tavern east of the city — shelves of wine, two even rows of tables either side of the aisle from the door, the counter and the vats
+  mi.stamp(45, 3, ['h...L.....L..h.', '...............', '..t..t..t..t...', '...............', '..t..t..t..t...', 'ccc.........jjj']);
+  WM.defEvents('mengzhou_in', [{ id: 'mzwaiter', x: 46, y: 7, npc: 'waiter', dir: 'down', text: ['Welcome to the Happy Forest! The strongest wine east of the city, and the meat is fresh today.'] }]);
   mi.set(21, 3, 'S'); mi.set(22, 3, 'S');   // the stairs at the back of the Commander's hall, up to the Mandarin Duck Tower
   mi.set(36, 7, 'S'); mi.set(37, 7, 'S');   // ...and where they come up: the entrance of the tower room, in the middle
   WM.defMap('mengzhou_in', { name: '', interior: true, theme: 'autumn', music: 'town_mengzhou', rows: mi.rows(), spawn: [6, 7] });
@@ -124,7 +144,7 @@
   // ---------------- Flying Cloud Pond ----------------
   var f = L.grid(32, 16, 'T');
   f.rect(0, 6, 32, 4, '.'); f.hline(0, 31, 7, ':'); f.hline(0, 31, 8, ':');
-  f.rect(12, 2, 9, 4, '~'); f.rect(13, 10, 7, 4, '~'); f.rect(14, 6, 5, 4, '~'); f.rect(15, 7, 3, 2, 'B');   // the stream between the two ponds runs under the bridge
+  f.rect(12, 2, 9, 4, '~'); f.rect(13, 10, 7, 4, '~'); f.rect(14, 6, 5, 4, '~'); f.rect(14, 7, 5, 2, 'B');   // the stream between the two ponds runs under the bridge, bank to bank
   f.scatter('r', 0.3, 281, '~');
   WM.defMap('feiyun', { name: 'Flying Cloud Pond', theme: 'autumn', music: 'tense', rows: f.rows(), spawn: [1, 7], battleBg: 'marsh', exits: [] });
 
@@ -134,7 +154,7 @@
   var hut = w.house(11, 4, 9, 4, { roof: 'z', door: 4, windows: [1, 7] });
   w.scatter('P', 0.25, 291, '.'); L.clearAround(w, ':', 'P', '.');
   WM.defMap('centipede', { name: 'Centipede Ridge', theme: 'autumn', music: 'dungeon', rows: w.rows(), spawn: [15, 22], battleBg: 'mountain', tint: 'night', exits: [] });
-  var wi = L.grid(12, 8, 'x'); var wR = wi.room(1, 1, 10, 7, { floor: 'N' }); wi.stamp(2, 3, ['hkkA....', '.kk.....', '..t.....']);
+  var wi = L.grid(12, 8, 'x'); var wR = wi.room(1, 1, 10, 7, { floor: 'N' }); wi.stamp(2, 3, ['.kkA..h.', '.kk.....', '..t.....']);
   WM.defMap('centipede_in', { name: 'Hermitage', interior: true, theme: 'autumn', music: 'dungeon', rows: wi.rows(), spawn: [6, 6] });
   L.link({ map: 'centipede', x: hut.x, y: hut.y }, { map: 'centipede_in', x: wR.x, y: wR.y });
 

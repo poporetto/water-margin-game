@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "direction": "front",
+      "size": [
+        192,
+        256
+      ],
+      "opaqueBounds": [
+        24,
+        20,
+        167,
+        253
+      ]
+    },
+    {
+      "direction": "left",
+      "size": [
+        192,
+        256
+      ],
+      "opaqueBounds": [
+        52,
+        20,
+        139,
+        254
+      ]
+    },
+    {
+      "direction": "back",
+      "size": [
+        192,
+        256
+      ],
+      "opaqueBounds": [
+        24,
+        19,
+        167,
+        254
+      ]
+    }
+  ],
+  "blankRightRow": true
+}

@@ -40,13 +40,14 @@
   var pts = [[22, 26], [26, 20], [24, 14], [30, 9], [32, 4]];
   var walk = function (fn) { for (var i = 0; i < pts.length - 1; i++) { var a = pts[i], b = pts[i + 1], n = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])); for (var k = 0; k <= n; k++) fn(Math.round(a[0] + (b[0] - a[0]) * k / n), Math.round(a[1] + (b[1] - a[1]) * k / n)); } };
   walk(function (x, yy) { y.rect(x - 2, yy - 1, 5, 3, '.'); });
-  walk(function (x, yy) { y.set(x, yy, ':'); });
   y.rect(26, 8, 8, 5, '.'); y.rect(29, 9, 2, 2, 'm');                     // the great rock where he set her down
   y.rect(14, 10, 4, 3, '~');                                                // the stream in the valley below
   y.rect(15, 13, 2, 1, '.'); y.hline(16, 25, 13, ':');
   y.rect(33, 2, 5, 4, 'M'); y.set(34, 5, '_'); y.set(35, 5, '_');            // the tigers' cave
   y.scatter('m', 0.03, 391, '.'); L.clearAround(y, ':', 'Pm', '.');
   y.rect(18, 9, 3, 4, '.'); y.set(19, 10, 'A');                             // the little shrine to the Great Sage of Sizhou on the bank
+  walk(function (x, yy) { [x, x + 1].forEach(function (xx) { var rock = xx >= 29 && xx <= 30 && yy >= 9 && yy <= 10; if (!rock && '.:mP'.indexOf(y.get(xx, yy)) >= 0) y.set(xx, yy, ':'); }); });   // the ridge path, two tiles wide so it stays joined on the slant
+  y.hline(0, 39, 26, ':'); y.hline(0, 39, 27, ':');                        // and the village road unbroken where the path leaves it
   WM.defMap('yishui', { name: 'Yishui — the Yi Ridge', theme: 'summer', music: 'field', rows: y.rows(), spawn: [1, 26], battleBg: 'forest',
     exits: [Object.assign(WM.toWorld('yishui', 0, 26, 1, 2), { cond: function (S2) { return !S2.has('ch10_carry') || S2.has('ch10_tigers'); }, blocked: '(Li Kui will not turn back now.)' })] });
   WM.defEvents('yishui', [L.save('yisave', 19, 28)]);

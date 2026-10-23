@@ -55,7 +55,7 @@
   WM.defMap('wutai_town', { name: 'Town below Mount Wutai', theme: 'autumn', music: 'field', rows: t.rows(), spawn: [16, 24], battleBg: 'mountain', exits: [WM.toWorld('wutai', 16, 25, 2, 1)] });
   var ti = L.grid(44, 10, 'x');
   var tR = { smith: ti.room(1, 1, 10, 8), tavern: ti.room(12, 1, 12, 8), store: ti.room(25, 1, 8, 8), inn: ti.room(34, 1, 10, 8) };
-  ti.stamp(2, 3, ['jj..hh..', '........', '.cccc...']); ti.stamp(13, 3, ['h...L....h', '..........', '.t..t..t..', 'cc........']);
+  ti.stamp(2, 3, ['jj..hh..', '........', '.cccc...']); ti.stamp(13, 3, ['h..L..L.h.', '..........', 't...t...t.', '..........', 'cc........']);
   ti.stamp(26, 3, ['hhhh..', '......', 'ccc...']); ti.stamp(35, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   WM.defMap('wutai_town_in', { name: '', interior: true, theme: 'autumn', music: 'field', rows: ti.rows(), spawn: [5, 6] });
   L.link({ map: 'wutai_town', x: smith.x, y: smith.y }, { map: 'wutai_town_in', x: tR.smith.x, y: tR.smith.y });

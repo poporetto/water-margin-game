@@ -12,7 +12,8 @@
   r.scatter('.', 0.25, 481, 'T', [0, 0, 26, 16]); r.rect(0, 7, 26, 3, '.'); r.hline(0, 25, 8, ':'); r.vline(12, 6, 7, ':');
   WM.defMap('roadinn', { name: 'Roadside Inn', theme: 'summer', music: 'field', rows: r.rows(), spawn: [1, 8], battleBg: 'forest' });
   var ri = L.grid(16, 11, 'x'); var rR = ri.room(1, 1, 14, 10);   // (room enough for a band of travellers)
-  ri.stamp(2, 3, ['h..j...h...j', '.t..t.......', 'cc......t...', '............', '..........t.']);
+  ri.stamp(2, 3, ['h..L....L.h.', '............', 'cc..........', '............', 't.........t.', '............', 't.........t.']);   // (tables down either wall: travellers meet in the middle of the room in several chapters)
+  WM.defEvents('roadinn_in', [{ id: 'riwaiter', x: 11, y: 4, npc: 'waiter', dir: 'down', text: ['Rest your legs, traveller. Wine, noodles, and a bench by the window — sit anywhere.'] }]);
   WM.defMap('roadinn_in', { name: 'Roadside Inn', interior: true, theme: 'summer', music: 'inn', rows: ri.rows(), spawn: [6, 6] });
   L.link({ map: 'roadinn', x: rinn.x, y: rinn.y }, { map: 'roadinn_in', x: rR.x, y: rR.y });
 
@@ -29,25 +30,26 @@
   var g = L.grid(50, 40, '.');
   g.border('#', 1, [{ side: 's', from: 23, to: 26 }]);
   g.rect(23, 39, 4, 1, 'G');
-  g.rect(23, 1, 4, 38, '='); g.rect(1, 20, 48, 2, '=');
-  var yamen = g.house(14, 3, 18, 6, { roof: 'Z', wall: 'R', door: 9 }); g.set(13, 8, 'L'); g.set(32, 8, 'L'); g.vline(yamen.x, 9, 19, '=');
+  g.rect(23, 9, 4, 30, '='); g.rect(1, 20, 48, 2, '=');   // (the avenue runs from the yamen's door to the south gate)
+  var yamen = g.house(15, 3, 18, 6, { roof: 'Z', wall: 'R', door: 9 }); g.set(14, 8, 'L'); g.set(33, 8, 'L');   // (its double door opens straight onto the avenue)
   // the prison yard, and the old dry well in its corner
   g.frame(34, 3, 14, 12, '#'); g.rect(40, 14, 2, 1, 'G'); g.vline(40, 15, 19, ':'); g.vline(41, 15, 19, ':');
   var jail = g.house(36, 4, 10, 5, { roof: 'v', wall: '#', door: 4 }); g.set(45, 12, 'p');
   // Chai Huangcheng's house and the garden Yin Tianxi covets
   var chai = g.house(4, 23, 10, 5, { roof: '^', door: 5, windows: [1, 8] }); g.frame(2, 22, 14, 14, 'F'); g.rect(3, 29, 12, 6, 'f'); g.rect(8, 35, 3, 1, '.');
   g.set(5, 31, 'p'); g.set(12, 30, 'T'); g.set(4, 33, 'T');
-  g.hline(9, 22, 36, ':'); g.vline(chai.x, chai.y + 1, 34, ':');
+  g.hline(9, 22, 36, ':'); g.vline(chai.x, chai.y + 1, 34, ':'); g.set(9, 35, ':');   // (the path runs out through the gap in Chai's fence)
   var inn = g.house(30, 24, 9, 5, { roof: 'z', door: 4, windows: [1, 7] });
   g.house(40, 24, 7, 4, { roof: '^', door: false, windows: [2] }); g.house(30, 32, 7, 4, { roof: '^', door: false, windows: [2] }); g.house(3, 11, 8, 4, { roof: '^', door: false, windows: [2, 5] });
   g.scatter('T', 0.04, 491, '.', [1, 1, 48, 37]); L.clearAround(g, '=', 'T', '.'); L.clearAround(g, ':', 'T', '.');
+  for (var py = 4; py < 14; py++) for (var px = 35; px < 47; px++) if (g.get(px, py) === 'T') g.set(px, py, '.');   // no trees in the prison yard
   WM.defMap('gaotang', { name: 'Gaotang', theme: 'summer', music: 'town_gaotang', rows: g.rows(), spawn: [24, 37], battleBg: 'town',
     exits: [WM.toWorld('gaotang', 23, 39, 4, 1)] });
   var gi = L.grid(52, 11, 'x');
   var gR = { chai: gi.room(1, 1, 14, 9), yamen: gi.room(16, 1, 18, 10, { floor: 'N' }), jail: gi.room(35, 1, 14, 9, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......kk', '..........kk', '..t.........', '............']);
   gi.stamp(17, 3, ['h....EEEEEE....h', '......q00q......', '..t...aaaa...t..', '......KKKK......', '......KKKK']);   // the prefect's hall
-  gi.stamp(36, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF', 'h..........h']);
+  gi.stamp(36, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF', '.h........h.']);
   WM.defMap('gaotang_in', { name: '', interior: true, theme: 'summer', music: 'town_gaotang', rows: gi.rows(), spawn: [8, 8] });
   [[chai, gR.chai], [yamen, gR.yamen], [jail, gR.jail]].forEach(function (p) { L.link({ map: 'gaotang', x: p[0].x, y: p[0].y }, { map: 'gaotang_in', x: p[1].x, y: p[1].y }); });
   WM.data.gaotang = { doors: { chai: chai, yamen: yamen, jail: jail, inn: inn }, rooms: gR, well: [45, 12] };
@@ -56,15 +58,15 @@
   var k = L.grid(22, 16, '_');
   walk([[3, 2], [3, 7], [9, 9], [14, 6], [18, 11], [12, 13]], function (x, y) { k.rect(x - 1, y - 1, 3, 3, 'N'); });
   k.rect(2, 1, 3, 3, 'N'); k.set(6, 8, 'm'); k.set(15, 9, 'm'); k.set(10, 11, 'g'); k.set(17, 13, 'g'); k.set(5, 5, 'g');
-  WM.defMap('gaowell', { name: 'The Dry Well', interior: true, theme: 'snow', music: 'dungeon', rows: k.rows(), spawn: [3, 2], battleBg: 'cave', tint: 'dark' });
+  WM.defMap('gaowell', { name: 'The Dry Well', interior: true, theme: 'summer', music: 'dungeon', rows: k.rows(), spawn: [3, 2], battleBg: 'cave', tint: 'dark' });
 
   // ---------------- Erxian Mountain ----------------
   var e = L.grid(34, 36, 'P');
   var ep = [[16, 35], [16, 30], [10, 25], [14, 18], [20, 12], [17, 7]];
   walk(ep, function (x, y) { e.rect(x - 2, y - 1, 5, 3, '.'); });
-  walk(ep, function (x, y) { e.set(x, y, ':'); });
   e.rect(4, 26, 10, 7, '.'); var home = e.house(5, 27, 6, 4, { roof: 'z', door: 3, windows: [1] }); e.hline(8, 15, 31, ':');   // Mother Gongsun's cottage
   e.rect(8, 1, 18, 9, '.'); var temple = e.house(10, 1, 14, 6, { roof: 'v', wall: 'R', door: 7 }); e.set(9, 6, 'L'); e.set(24, 6, 'L'); e.vline(17, 7, 8, ':');   // the Purple Void Temple
+  walk(ep, function (x, y) { e.set(x, y, ':'); e.set(x + 1, y, ':'); });   // the path up, two tiles wide so it stays joined where it turns on the slant
   e.scatter('m', 0.04, 501, '.'); e.scatter('T', 0.03, 502, '.'); L.clearAround(e, ':', 'PmT', '.');
   WM.defMap('erxian', { name: 'Erxian Mountain', theme: 'summer', music: 'palace', rows: e.rows(), spawn: [16, 34], battleBg: 'forest',
     exits: [WM.toWorld('erxian', 14, 35, 5, 1)] });
@@ -85,7 +87,7 @@
   WM.defMap('wugang', { name: 'Wugang Market', theme: 'summer', music: 'town_wugang', rows: m.rows(), spawn: [0, 10], battleBg: 'town',
     exits: [WM.toWorld('wugang', 0, 10, 1, 2)] });
   var mi = L.grid(12, 8, 'x'); var mR = mi.room(1, 1, 10, 7);
-  mi.stamp(2, 3, ['hjj..h..', '..t.....', '........']);
+  mi.stamp(2, 3, ['.h.jj.h.', '..t.....', '........']);
   WM.defMap('wugang_in', { name: 'Smithy', interior: true, theme: 'summer', music: 'town_wugang', rows: mi.rows(), spawn: [6, 6] });
   L.link({ map: 'wugang', x: smithy.x, y: smithy.y }, { map: 'wugang_in', x: mR.x, y: mR.y });
 })();

@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen.imagegen",
+  "initial": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-715fb852-d27c-4c1e-9d5a-7720be5d0d70.png",
+  "faceCorrection": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-437b8d33-599e-44ed-b4d2-6b420fe88af5.png",
+  "designReference": "assets/portraits/wusong-expressions.png",
+  "styleReferences": [
+    "art/songjiang-style-variations-v8/variant-a-original.png",
+    "art/linchong-classic-v2/official-original.png"
+  ]
+}

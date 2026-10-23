@@ -1,11 +1,16 @@
 // Illustrated portrait overrides with procedural pixel portraits (48x56) as fallback.
-// Expressions: normal, angry, sad, smile, shock. Drop-in override: assets/portraits/<id>.png (any size, shown scaled to 144x168).
+// Expressions: normal, angry, sad, smile, shock. Drop-in override: assets/portraits/<id>.png (any size, shown scaled to 144x168),
+// then node tools/build-web-art.js to make the assets/portraits-web/ copy the game loads.
 'use strict';
 (function () {
   var U = WM.util;
   var PT = WM.portraits = { cache: {}, overrides: {} };
   var PW = 48, PH = 56;
   PT.W = PW; PT.H = PH;
+  // Painted art is served as WebP copies cut for the screen (tools/build-web-art.js); the full-size PNGs in
+  // assets/portraits/ are the masters. The background preloader asks for the same URLs.
+  PT.root = 'assets/portraits-web/'; PT.ext = '.webp';
+  PT.sheetUrl = function (id, spec) { return PT.root + (spec.file || id) + '-expressions' + PT.ext; };
 
   function ellipseRows(g, cx, cy, rx, ry, col, x0clip, x1clip) {
     for (var y = -ry; y <= ry; y++) {
@@ -246,7 +251,7 @@
       img.isOverride = true;
       if (!PT.overrides[id + ':normal']) PT.overrides[id] = img;
     };
-    img.src = 'assets/portraits/' + id + '.png';
+    img.src = PT.root + id + PT.ext;
   };
 
   // Expression sheets share one image download; each cell becomes a cached portrait.
@@ -272,7 +277,7 @@
       img.onerror = function () { PT.sheetSettled[id] = true; resolve(false); };
       // never hold up a line of dialogue on art: if the sheet is slow, go on with the plain portrait
       setTimeout(function () { if (!PT.sheetSettled[id]) { PT.sheetSettled[id] = true; resolve(false); } }, 2500);
-      img.src = 'assets/portraits/' + (spec.file || id) + '-expressions.png';   // a sheet may be shared (spec.file)
+      img.src = PT.sheetUrl(id, spec);   // a sheet may be shared (spec.file)
     });
     return PT.sheetLoads[id];
   };

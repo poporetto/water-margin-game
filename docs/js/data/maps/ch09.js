@@ -12,7 +12,7 @@
   j.scatter('m', 0.04, 331, '.'); L.clearAround(j, ':', 'Pm', '.');
   WM.defMap('jieling', { name: 'Jieling Ridge', theme: 'south', music: 'tense', rows: j.rows(), spawn: [1, 9], battleBg: 'forest', exits: [WM.toWorld('jieling', 0, 8, 1, 4), WM.toWorld('jieling', 27, 8, 1, 4)] });
   var ji = L.grid(12, 8, 'x'); var jR = ji.room(1, 1, 10, 7);
-  ji.stamp(2, 3, ['h..j..kk', '.t..t...', 'cc......']);
+  ji.stamp(2, 3, ['j..j..kk', 't..t..kk', 'cc......']);
   WM.defMap('jieling_in', { name: 'Li Li\'s Inn', interior: true, theme: 'south', music: 'tense', rows: ji.rows(), spawn: [6, 6] });
   L.link({ map: 'jieling', x: inn.x, y: inn.y }, { map: 'jieling_in', x: jR.x, y: jR.y });
 
@@ -23,7 +23,7 @@
   y.rect(0, 8, 44, 2, ':'); y.rect(20, 0, 3, 22, ':');
   y.rect(14, 10, 14, 5, '=');                                        // the market square where Xue Yong performs
   var mu = y.house(30, 2, 12, 5, { roof: '^', door: 6, windows: [2, 9] });   // the Mu family manor
-  y.frame(29, 1, 14, 8, 'F'); y.set(36, 8, ':');
+  y.frame(29, 1, 14, 8, 'F'); y.set(35, 8, ':'); y.set(36, 8, ':');   // (the gap in the fence as wide as the manor's double door)
   var yinn = y.house(3, 2, 9, 5, { roof: 'z', door: 4, windows: [1, 7] });
   y.house(3, 12, 6, 4, { roof: 'z', door: false, windows: [2] }); y.house(32, 12, 6, 4, { roof: '^', door: false, windows: [3] });
   y.rect(18, 15, 6, 7, ':'); y.rect(19, 22, 4, 2, 'B'); y.set(17, 23, 'o'); y.set(24, 23, 'o'); y.set(26, 22, 'o');
@@ -60,17 +60,21 @@
   L.clearAround(g, ':', 'Tb', '.'); L.clearAround(g, '=', 'Tb', '.');
   WM.defMap('jiangzhou', { name: 'Jiangzhou', theme: 'south', music: 'town_jiangzhou', rows: g.rows(), spawn: [27, 3], battleBg: 'town',
     exits: [WM.toWorld('jiangzhou', 26, 0, 4, 1)] });
-  var gi = L.grid(70, 12, 'x');
-  var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'N' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7) };
+  var gi = L.grid(92, 12, 'x');
+  var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'N' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7), pipa: gi.room(67, 1, 12, 8), inn: gi.room(80, 1, 10, 8) };
   gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..tKKKK...t...', '...KKKK']);   // the prefect's hall
   gi.stamp(19, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF']);
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
-  gi.stamp(44, 3, ['h..L.....L.h', '.t..t...t..t', '............', '.t..t...t..t', '............', 'cccc........']);   // the Xunyang Tower: tables in two even rows either side of the window aisle, the long counter by the stairs
+  gi.stamp(44, 3, ['h..L....L.h.', '..t.....t...', '............', '..t.....t...', '............', 'cccc........']);   // the Xunyang Tower: tables in two even rows either side of the window aisle, the long counter by the stairs
   gi.stamp(59, 3, ['hhhh..', '......', 'ccc...']);
+  gi.stamp(68, 3, ['h..L..L.h.', '..........', '.t..t..t..', '..........', 'ccc.....jj']);   // the Pipa Pavilion: wine by the river, where Song Jiang first drank with Dai Zong and Li Kui
+  gi.stamp(81, 3, ['kk.kk.kk', 'kk.kk.kk', '........', 'cc......']);   // the Jiangzhou inn by the south lane
   WM.defMap('jiangzhou_in', { name: '', interior: true, theme: 'south', music: 'town_jiangzhou', rows: gi.rows(), spawn: [8, 9] });
-  [[prefect, gR.prefect], [prison, gR.prison], [daizong, gR.daizong], [tower, gR.tower], [shop, gR.shop]].forEach(function (p) { L.link({ map: 'jiangzhou', x: p[0].x, y: p[0].y }, { map: 'jiangzhou_in', x: p[1].x, y: p[1].y }); });
+  [[prefect, gR.prefect], [prison, gR.prison], [daizong, gR.daizong], [tower, gR.tower], [shop, gR.shop], [pipa, gR.pipa], [jinn, gR.inn]].forEach(function (p) { L.link({ map: 'jiangzhou', x: p[0].x, y: p[0].y }, { map: 'jiangzhou_in', x: p[1].x, y: p[1].y }); });
   WM.data.jiangzhou = { rooms: gR, doors: { prefect: prefect, prison: prison, daizong: daizong, tower: tower, pipa: pipa, shop: shop, inn: jinn } };
   WM.defEvents('jiangzhou_in', [L.shop('jzshop', 61, 4, 'jiangzhou', 'shopkeep', 'Fine goods from the river trade.'),
+    { id: 'jzpipa', x: 69, y: 6, npc: 'waiter', dir: 'down', text: ['The Pipa Pavilion, sir — named for the lute-girl the poet Bai Juyi met on this river. Our fish soup is the best in Jiangzhou, if the fish-broker has been by.'] },
+    L.inn('jzinn', 82, 5, 20), L.save('jzrec', 87, 6),
     { id: 'jztowerkeep', x: 45, y: 7, npc: 'innkeep', dir: 'down', text: ['Welcome to the Xunyang Tower, sir — the finest view on the whole river. Take any table by the window.'] }]);
 
   // ---------------- White Dragon Temple ----------------

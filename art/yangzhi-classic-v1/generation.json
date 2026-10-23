@@ -1,0 +1,12 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedAt": "2026-10-23",
+  "nativeSource": "/Users/andriastaniwan/.codex/generated_images/01a1656c-2c99-7042-859d-06bbc4111274/exec-a6cf9f06-24ed-40ac-8e3e-5c5fafc8ea47.png",
+  "selectedNative": "yangzhi-original.png",
+  "prompt": "prompt.txt",
+  "transparent_background": true,
+  "designReference": "assets/portraits/yangzhi-expressions.png",
+  "styleReference": "art/songjiang-style-variations-v8/variant-a-original.png",
+  "postprocessing": "Crop and shared nearest-neighbour scaling only; no recolouring, quantization, or artwork recreation."
+}

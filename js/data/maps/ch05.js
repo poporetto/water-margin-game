@@ -57,7 +57,8 @@
   var si = L.grid(34, 10, 'x');   // each house its own room, with void between (the next house is not seen through the wall)
   var sR = { r2: si.room(1, 1, 7, 7), r5: si.room(9, 1, 7, 7), r7: si.room(17, 1, 7, 7), tavern: si.room(25, 1, 8, 8) };
   si.stamp(2, 3, ['k..j.', '.....', '..t..']); si.stamp(10, 3, ['k..j.', '.....', '..t..']); si.stamp(18, 3, ['k..j.', '.....', '..t..']);
-  si.stamp(26, 3, ['h..h..', '.t..t.', 'cc....']);
+  si.stamp(26, 3, ['h...h.', '......', 't...t.', '......', 'cc....']);
+  WM.defEvents('shijie_in', [{ id: 'sjwaiter', x: 28, y: 4, npc: 'waiter', dir: 'down', text: ['Fish from the lake this morning, and wine from the jar. Sit wherever you like.'] }]);
   WM.defMap('shijie_in', { name: '', interior: true, theme: 'marsh', music: 'field', rows: si.rows(), spawn: [4, 6] });
   [[r2, sR.r2], [r5, sR.r5], [r7, sR.r7], [tavern, sR.tavern]].forEach(function (p) { L.link({ map: 'shijie', x: p[0].x, y: p[0].y }, { map: 'shijie_in', x: p[1].x, y: p[1].y }); });
   WM.data.shijie = { rooms: sR };
@@ -100,7 +101,7 @@
   var c = L.grid(44, 34, '.');
   c.border('#', 1, [{ side: 's', from: 20, to: 23 }]);
   c.rect(20, 33, 4, 1, 'G');
-  c.rect(20, 1, 4, 32, '='); c.rect(1, 16, 42, 2, '=');
+  c.rect(20, 9, 4, 24, '='); c.rect(1, 16, 42, 2, '=');   // (the avenue runs from the county office's door to the south gate)
   var office = c.house(14, 3, 16, 6, { roof: 'v', wall: 'R', door: 8 });     // the county yamen, where Song Jiang is a clerk
   c.set(13, 7, 'L'); c.set(30, 7, 'L');
   var tea = c.house(3, 10, 8, 5, { roof: '^', door: 4, windows: [1, 6] });   // the teahouse opposite the yamen
@@ -123,12 +124,12 @@
   // the county office: the magistrate's desk on the middle line before a painted screen, the clerks' desks in two
   // rows down either side, files shelved in the back corners
   ci.stamp(2, 3, ['hh..EEEEEE..hh', '......00......', '.....aaaa.....', '..............', '.t.........t..', '..............', '.t.........t..']);
-  ci.stamp(19, 3, ['h..L...h', '.t..t...', '........', 'cc......']);
+  ci.stamp(19, 3, ['h..LL.h.', '........', 't.....t.', '........', 'cc......']);
   ci.stamp(30, 3, ['k...h..Xkk', '.......Xkk', '..t....n..', '.......X..', 'j......X..']);   // her own room behind the partition, its bed in the corner
   ci.stamp(43, 3, ['...kk.kk', '...kk.kk', 'ccc.....']);
   ci.stamp(54, 3, ['hhhh.', '.....', 'ccc..']);
-  ci.stamp(62, 3, ['hhh', '...', 'cc.']);
-  ci.stamp(81, 3, ['hj..j..h', '........', '.t..t..t', 'cc......']);   // the wine shop: jars and shelves, tables, the counter
+  ci.stamp(62, 3, ['hh.', '...', 'cc.']);
+  ci.stamp(81, 3, ['h..jj.h.', '........', 't..t..t.', '........', 'cc......']);   // the wine shop: jars and shelves, tables, the counter
   WM.defMap('yuncheng_in', { name: '', interior: true, theme: 'summer', music: 'town', rows: ci.rows(), spawn: [9, 9] });
   [[office, cR.office], [tea, cR.tea], [yan, cR.yan], [inn, cR.inn], [shop, cR.shop], [store2, cR.store2], [stage, cR.stage], [wine, cR.wine]].forEach(function (p) { L.link({ map: 'yuncheng', x: p[0].x, y: p[0].y }, { map: 'yuncheng_in', x: p[1].x, y: p[1].y }); });
   WM.data.yuncheng = { rooms: cR, doors: { office: office, tea: tea, yan: yan, inn: inn, shop: shop, store2: store2, wine: wine, stage: stage } };

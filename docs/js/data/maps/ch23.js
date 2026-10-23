@@ -7,12 +7,13 @@
   // ---------------- Hangzhou and the West Lake ----------------
   var h = L.grid(48, 32, '.');
   for (var y = 0; y < 32; y++) for (var x = 0; x < 22; x++) h.set(x, y, (x < 2 || y < 2 || y > 29) ? '~' : 'w');   // the West Lake
-  h.scatter('r', 0.08, 581, 'w', [2, 2, 20, 28]);
-  h.rect(4, 14, 14, 1, 'B'); h.set(10, 13, 'B'); h.set(10, 15, 'B');          // Xiling bridge and causeway
+  for (y = 2; y < 30; y++) { h.set(20, y, '~'); h.set(21, y, '~'); }                 // the shallows along the eastern shore
+  h.scatter('r', 0.08, 581, 'w', [2, 2, 18, 28]);
+  h.rect(4, 14, 18, 1, 'B'); h.set(10, 13, 'B'); h.set(10, 15, 'B');          // Xiling bridge and causeway, out from the eastern shore
   h.rect(22, 0, 2, 32, '.');
   h.frame(26, 1, 21, 30, '#'); h.rect(26, 14, 1, 3, 'G');                     // the city wall; the Yongjin Gate faces the lake
-  h.rect(22, 14, 4, 3, ':'); h.set(24, 13, 'Y'); h.set(24, 17, 'Y');
-  for (y = 13; y < 18; y++) h.set(25, y, y === 15 ? ':' : '~');               // the moat-pool before the gate
+  h.rect(22, 14, 4, 3, ':'); h.set(23, 13, 'Y'); h.set(23, 17, 'Y');
+  h.rect(24, 11, 2, 3, '~'); h.rect(24, 17, 2, 3, '~');                         // the pools of the water-grating, either side of the road to the gate
   h.house(29, 3, 14, 6, { roof: 'Z', wall: 'R', door: false }); h.house(29, 21, 7, 4, { roof: 'z', door: false }); h.house(38, 21, 7, 4, { roof: '^', door: false });
   h.rect(27, 14, 19, 3, '=');
   WM.defMap('hangzhou', { name: 'Hangzhou — the West Lake', theme: 'spring', music: 'tense', rows: h.rows(), spawn: [23, 28], battleBg: 'river', tint: 'night',
@@ -33,9 +34,9 @@
   for (y = 18; y < 28; y++) for (x = 0; x < 34; x++) t.set(x, y, y < 20 ? '~' : 'w');   // the Qiantang River, where the tide comes in
   t.scatter('r', 0.15, 584, '~', [0, 18, 34, 2]);
   t.frame(5, 2, 24, 14, 'R'); t.rect(15, 15, 4, 1, 'G'); t.rect(15, 16, 4, 2, ':');
-  var hall = t.house(8, 3, 12, 6, { roof: 'v', wall: 'R', door: 6 });
-  t.rect(22, 4, 4, 6, 'M'); t.set(23, 9, 'U'); t.set(24, 9, 'U');                      // the Liuhe Pagoda
-  t.vline(hall.x, 9, 14, '='); t.rect(15, 12, 4, 3, '=');
+  var hall = t.house(11, 3, 12, 6, { roof: 'v', wall: 'R', door: 6 });               // (its double door straight above the gate)
+  t.stamp(24, 3, ['vvv', 'RRR', 'vvv', 'RRR', 'vvv', 'RdR']); t.set(23, 8, 'U'); t.set(27, 8, 'U');   // the Liuhe Pagoda, tier on tier, its lions either side of the door
+  t.rect(16, 9, 2, 3, '='); t.rect(15, 12, 4, 3, '=');
   t.scatter('T', 0.08, 585, '.', [0, 0, 34, 2]); t.scatter('T', 0.06, 586, '.', [0, 2, 5, 16]); t.scatter('T', 0.06, 587, '.', [29, 2, 5, 16]);
   WM.defMap('liuhe', { name: 'The Liuhe Temple', theme: 'autumn', music: 'sad', rows: t.rows(), spawn: [16, 17], battleBg: 'palace',
     exits: [WM.toWorld('liuhe', 15, 17, 4, 1)] });

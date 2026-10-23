@@ -1,0 +1,33 @@
+{
+  "character": "yangzhi",
+  "approved": "../yangzhi-classic-v2",
+  "native": {
+    "front": {
+      "source": "../yangzhi-classic-v2/yangzhi-original.png",
+      "bounds": {
+        "left": 225,
+        "top": 58,
+        "width": 363,
+        "height": 777
+      }
+    },
+    "left": {
+      "source": "../yangzhi-classic-v2/yangzhi-original.png",
+      "bounds": {
+        "left": 767,
+        "top": 60,
+        "width": 276,
+        "height": 775
+      }
+    },
+    "back": {
+      "source": "../yangzhi-classic-v2/yangzhi-original.png",
+      "bounds": {
+        "left": 1186,
+        "top": 60,
+        "width": 364,
+        "height": 775
+      }
+    }
+  }
+}

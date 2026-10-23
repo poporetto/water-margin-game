@@ -65,7 +65,7 @@
   var T = WM.scenes.title = {};
   T.enter = function () {
     T.t = 0; T.mode = 'press';
-    WM.audio.play('title');
+    WM.audio.play('theme');
     WM.script.running = 0;
     UI.stack.length = 0;
     G.fade = 0;
@@ -75,7 +75,7 @@
     if (WM.script.running) return;   // a chapter is being started (debug picker): the title takes no input
     if (T.mode === 'press') {
       if (I.pressed('ok')) {
-        I.clear(); WM.audio.unlock(); WM.audio.sfx('ok'); WM.audio.play('title');
+        I.clear(); WM.audio.unlock(); WM.audio.sfx('ok'); WM.audio.play('theme');
         T.mode = 'menu';
         var items = [{ label: 'New Game', v: 'new' }];
         if (S.anySave()) { items.unshift({ label: 'Continue', v: 'cont' }); items.push({ label: 'Load', v: 'load' }); }
@@ -102,7 +102,7 @@
   T.draw = function () {
     inkScene(T.t);
     var c = G.ctx;
-    var a = U.clamp(T.t / 2, 0, 1);
+    var a = T.mode === 'press' ? U.clamp(T.t / 0.8, 0, 1) : 1;   // (quick to appear, and whole at once when a key is pressed)
     c.globalAlpha = a;
     // seal-red cartouche + titles
     c.fillStyle = 'rgba(150,30,20,0.9)'; c.fillRect(480 - 54, 70, 108, 290);
@@ -111,7 +111,7 @@
     G.text('OUTLAWS OF THE MARSH', 480, 378, { size: 40, bold: true, align: 'center', color: '#f2e6c8' });
     G.text('The One Hundred and Eight Stars', 480, 426, { size: 22, align: 'center', color: '#c8b890' });
     c.globalAlpha = 1;
-    if (T.mode === 'press' && T.t > 1.5) { c.globalAlpha = 0.5 + 0.5 * Math.sin(T.t * 3); G.text(WM.input.lastDevice === 'touch' ? 'Tap A' : 'Press Z / Enter', 480, 520, { size: 24, align: 'center', color: '#f2e6c8' }); c.globalAlpha = 1; }
+    if (T.mode === 'press' && T.t > 0.5) { c.globalAlpha = 0.5 + 0.5 * Math.sin(T.t * 3); G.text(WM.input.lastDevice === 'touch' ? 'Tap A' : 'Press Z / Enter', 480, 520, { size: 24, align: 'center', color: '#f2e6c8' }); c.globalAlpha = 1; }
     if (T.mode === 'menu' || (T.mode === 'busy' && T.list)) T.list.draw();
     G.text(WM.input.lastDevice === 'touch' ? 'A: confirm   B: cancel   Menu: menu   hold Dash to run   L / R: turn pages' : 'Z / Enter: confirm   X / Esc: cancel & menu   Shift: dash   Arrows / WASD: move', 480, 690, { size: 15, align: 'center', color: 'rgba(240,230,200,0.5)' });
   };

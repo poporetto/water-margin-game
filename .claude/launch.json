@@ -18,6 +18,15 @@
         "8770"
       ],
       "port": 8770
+    },
+    {
+      "name": "game-art",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "tools/serve.py",
+        "8774"
+      ],
+      "port": 8774
     }
   ]
 }

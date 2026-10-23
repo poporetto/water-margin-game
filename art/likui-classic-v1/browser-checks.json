@@ -1,0 +1,312 @@
+{
+  "checks": [
+    {
+      "preview": {
+        "facing": "down",
+        "map": "zhugui_in"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "left",
+        "map": "zhugui_in"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "up",
+        "map": "zhugui_in"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "down",
+        "map": "zhugui"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "left",
+        "map": "zhugui"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "up",
+        "map": "zhugui"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "down",
+        "map": "liangshan"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "down",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "left",
+        "map": "liangshan"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "left",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "preview": {
+        "facing": "up",
+        "map": "liangshan"
+      },
+      "density": 8,
+      "actors": [
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        },
+        {
+          "dir": "up",
+          "size": [
+            24,
+            32
+          ],
+          "artScale": 8
+        }
+      ],
+      "error": null
+    }
+  ],
+  "errors": [],
+  "detailImagesLoaded": true
+}

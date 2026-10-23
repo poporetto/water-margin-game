@@ -200,7 +200,7 @@
       move: function (key, steps, opt) {
         opt = opt || {};
         snap(key);
-        var a = actor(key);
+        var a = actor(key); a.faced = false;   // (once they move, the next line they speak turns them to the leader again)
         var path = parseSteps(steps);
         var x = a.path.length ? a.path[a.path.length - 1].x : a.x, y = a.path.length ? a.path[a.path.length - 1].y : a.y;
         path.forEach(function (st) { x += st[0] * TS; y += st[1] * TS; a.path.push({ x: x, y: y }); });
@@ -231,18 +231,22 @@
         return s.move(key, steps, opt);
       },
       place: function (key, tx, ty, dir) { snap(key); var a = actor(key); a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; if (dir) a.dir = dir; if (a.isPlayer) { F().lastTile = a.tile(); if (!F().camTarget) F().updateCamera(true); } },   // the view goes with the player
-      face: function (key, dir) { var a = actor(key); if (a.entering) a.finalDir = dir; else a.dir = dir; },
+      face: function (key, dir) { var a = actor(key); a.faced = true; if (a.entering) a.finalDir = dir; else a.dir = dir; },   // (turned on purpose: a line they speak will not turn them back to the leader)
       faceEach: function (k1, k2) {
         var a = actor(k1), b = actor(k2);
         var dx = b.x - a.x, dy = b.y - a.y;
         if (Math.abs(dx) > Math.abs(dy)) { a.dir = dx > 0 ? 'right' : 'left'; b.dir = dx > 0 ? 'left' : 'right'; }
         else { a.dir = dy > 0 ? 'down' : 'up'; b.dir = dy > 0 ? 'up' : 'down'; }
+        a.faced = b.faced = true;
       },
       emote: function (key, type, dur) { snap(key); var a = actor(key); a.emote = type; a.emoteT = dur || 1.2; WM.audio.sfx(type === '!' ? 'cursor' : 'blip'); return WM.wait(Math.min(0.6, dur || 0.6)); },
       jump: function (key, h) { snap(key); var a = actor(key); a.jumpDur = a.jumpT = 0.35; a.jumpH = h || 6; return WM.wait(0.36); },
       show: function (key) { actor(key).visible = true; },
       hide: function (key) { actor(key).visible = false; },
       lie: function (key, on) { snap(key); actor(key).static = on === false ? null : 'down'; },
+      refreshMap: function () { if (F().refreshMap) F().refreshMap(); },   // the map's own tiles changed with a story flag (a door broken open)
+      swim: function (key, on) { snap(key); var a = actor(key); a.static = on === false ? null : 'swim'; if (on !== false) a.boat = false; },   // in the water, head and shoulders above it
+      sit: function (key, on) { snap(key); actor(key).static = on === false ? null : 'sit'; },   // seated cross-legged (a monk at his meditation)
       splash: function (key) { var a = actor(key); F().splash(a.x, a.y - 3); WM.audio.sfx('splash'); },   // someone goes into the water
       boat: function (key, on) { actor(key).boat = on !== false; },   // seat a character in a small boat (on water)
       spawn: function (key, who, tx, ty, dir) {
@@ -281,6 +285,16 @@
         return a;
       },
       // those named fall in behind the leader and follow wherever he walks (until a scene places them again)
+      // someone falls in with the leader for good, from map to map: they walk over to their place at his side first
+      fallIn: async function (key, who) {
+        var f = F(), a = f.findActor(key), list = (WM.state.followers || []).concat([who]);
+        if (a && a.visible !== false && f.player && f.followerSpots) {
+          var sp = f.followerSpots(list.length)[list.length - 1], at = a.tile();
+          if (sp && (at.x !== sp[0] || at.y !== sp[1])) { try { await s.walkTo(key, sp[0], sp[1]); } catch (e) {} }
+        }
+        if (a) a.visible = false;
+        WM.state.followers = list; f.refreshFollowers();
+      },
       follow: function (keys) { F().trail = []; keys.forEach(function (k, i) { var a = F().findActor(k); if (!a) return; snap(k); a.following = true; a.followIdx = i; a.solid = false; }); },
       despawn: function (key, opt) { sendOff(key, pending, opt); },   // opt.to: [x, y], where they go
       // show the way on: twinkling motes at each spot ({ map, x, y, w }) until the story flag `until` is set
@@ -472,9 +486,21 @@
     s.beside = function (id) { showSpeaker(id); };   // bring a companion out beside the leader without a line (someone the scene is about)
     var ask0 = s.ask;
     s.ask = function (who) { showSpeaker(who); return ask0.apply(this, arguments); };
+    // whoever speaks near the leader turns to him, unless the scene has turned them to someone else on purpose
+    var turnToLeader = function (who) {
+      var f = F(), id = typeof who === 'string' ? who.split(':')[0] : null;
+      if (!id || id === WM.state.leader || !f.player || !f.actors || f.player.visible === false) return;
+      var a = f.actors.filter(function (o) { return o !== f.player && o.visible !== false && (o.sheetWho === id || (o.ev && (o.ev.char === id || o.ev.npc === id))); })[0];
+      if (!a || a.faced || a.static || a.following || a.boat || a.entering || (a.path && a.path.length)) return;
+      var t = a.tile(), p = f.player.tile(), dx = p.x - t.x, dy = p.y - t.y;
+      if (!(dx || dy) || Math.abs(dx) + Math.abs(dy) > 5) return;
+      var v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[a.dir] || [0, 1];
+      if (v[0] * dx + v[1] * dy > 0) return;   // (already turned his way)
+      a.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
+    };
     var say0 = s.say;
     s.say = function (who, text) {
-      showSpeaker(who);
+      showSpeaker(who); turnToLeader(who);
       var id = typeof who === 'string' ? who.split(':')[0] : null, last = Array.isArray(text) ? text[text.length - 1] : text;
       if (id && last && !/^\(/.test(last)) lines[id] = last;   // remembered as what they say if spoken to afterwards
       return say0.apply(this, arguments);

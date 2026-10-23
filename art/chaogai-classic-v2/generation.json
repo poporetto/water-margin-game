@@ -1,0 +1,10 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/andriastaniwan/.codex/generated_images/01a158a8-0bab-75d1-a8d6-f3488a581a16/exec-728d9863-7dde-407d-89bd-9a5eaef1a8c1.png",
+  "reference": "art/chaogai-classic-v1/chaogai-original.png",
+  "prompt": "prompt-v2.txt",
+  "selectedViews": [
+    "front"
+  ],
+  "leftAndBack": "exact v1 packed PNGs"
+}
