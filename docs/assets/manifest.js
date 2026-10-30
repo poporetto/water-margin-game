@@ -3,9 +3,9 @@
 //   assets/portraits/<id>.png  - any size, shown in a 144x168 frame (bottom-aligned)
 //   assets/sprites/<id>.png    - 3 columns (stand, step, step) x 4 rows (down, left, right, up)
 // Example: WM.ASSETS = { portraits: ['linchong', 'songjiang'], sprites: ['linchong'] };
-WM.ASSETS = { portraits: ['songjiang', 'linchong', 'luzhishen', 'wusong', 'wuyong', 'huarong'], sprites: ['songjiang', 'linchong-official', 'linchong-exile', 'luzhishen', 'luda', 'wusong', 'chaogai', 'likui', 'yangzhi', 'wuyong'] };
+WM.ASSETS = { portraits: ['songjiang', 'linchong', 'luzhishen', 'wusong', 'wuyong', 'huarong'], sprites: ['songjiang', 'linchong-official', 'linchong-exile', 'luzhishen', 'luda', 'wusong', 'chaogai', 'likui', 'yangzhi', 'wuyong', 'lujunyi', 'gongsunsheng', 'huarong', 'shijin', 'hongxin', 'daizong', 'yanqing', 'wangjin', 'liutang', 'ruanxiaoer', 'ruanxiaowu', 'ruanxiaoqi', 'baisheng', 'zhutong', 'leiheng', 'chaijin', 'zhangshun', 'lijun', 'qinming', 'shixiu', 'yangxiong', 'shiqian', 'husanniang', 'guansheng', 'huyanzhuo', 'zhuwu'] };
 // Approved Classic walk: 192x256 physical cells at the existing 24x32 world size.
-WM.ASSETS.spriteScales = { songjiang: 8, 'linchong-official': 8, 'linchong-exile': 8, luzhishen: 8, luda: 8, wusong: 8, chaogai: 8, likui: 8, yangzhi: 8, wuyong: 8 };
+WM.ASSETS.spriteScales = { songjiang: 8, 'linchong-official': 8, 'linchong-exile': 8, luzhishen: 8, luda: 8, wusong: 8, chaogai: 8, likui: 8, yangzhi: 8, wuyong: 8, lujunyi: 8, gongsunsheng: 8, huarong: 8, shijin: 8, hongxin: 8, daizong: 8, yanqing: 8, wangjin: 8, liutang: 8, ruanxiaoer: 8, ruanxiaowu: 8, ruanxiaoqi: 8, baisheng: 8, zhutong: 8, leiheng: 8, chaijin: 8, zhangshun: 8, lijun: 8, qinming: 8, shixiu: 8, yangxiong: 8, shiqian: 8, husanniang: 8, guansheng: 8, huyanzhuo: 8, zhuwu: 8 };
 // Cells are read left-to-right, then top-to-bottom.
 WM.ASSETS.portraitSheets = {};
 WM.ASSETS.portraitGroups = {

@@ -383,7 +383,7 @@
     var col = WALK[animStep & 3];
     var cw = SP.CW, ch = SP.CH;
     if (sheet.isOverride) { cw = sheet.cw; ch = sheet.ch; }
-    var dx = Math.round(x - cw / 2), dy = Math.round(sheet.isOverride ? y - ch : y - SP.FOOT + 1);
+    var dx = Math.round(x - cw / 2), dy = Math.round(sheet.isOverride ? y - ch + 2 : y - SP.FOOT + 1);   // (the painted sheets have a little air below the feet: set them down level with the drawn figures)
     U.drawArt(c, sheet, col * cw, row * ch, cw, ch, dx, dy, cw, ch);
   };
 
