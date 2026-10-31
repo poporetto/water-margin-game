@@ -15,7 +15,7 @@
   var camp = y.house(24, 2, 8, 5, { roof: 'z', door: 4, windows: [1, 6] }); y.set(23, 7, 'Y'); y.set(32, 7, 'Y');
   y.scatter('m', 0.05, 411, '.'); L.clearAround(y, ':', 'Pm', '.');
   WM.defMap('yinma', { name: 'Yinma River', theme: 'autumn', music: 'field', rows: y.rows(), spawn: [1, 12], battleBg: 'forest',
-    exits: [WM.toWorld('yinma', 0, 12, 1, 2)],
+    exits: [WM.toWorld('yinma', 0, 12, 1, 2), WM.toWorld('yinma', 35, 12, 1, 2)],   // (the road runs on east past the stockade, too)
     encounters: { rate: 0.05, troops: [['n_wolf', 'n_wolf'], ['n_bandit', 'n_bandit', 'n_archer'], ['n_bear']], cond: function (S2) { return !S2.has('ch11_yinma'); } } });
   var yi = L.grid(12, 8, 'x'); var yR = yi.room(1, 1, 10, 7, { floor: 'N' });
   yi.stamp(2, 3, ['h..A..h.', '.t..t...', '........']);
@@ -79,10 +79,12 @@
   L.clearAround(z, ':', 'TbP', '.');
   WM.defMap('zhuinn', { name: 'Inn below Dulong Ridge', theme: 'autumn', music: 'town_zhuinn', rows: z.rows(), spawn: [1, 14], battleBg: 'forest',
     exits: [WM.toWorld('zhuinn', 0, 13, 1, 3)] });
-  var zi = L.grid(14, 9, 'x'); var zR = zi.room(1, 1, 12, 8);
-  zi.stamp(2, 3, ['j..j..k.k.', 't..t......', '..........', 'ccc.......']);
-  WM.defMap('zhuinn_in', { name: 'Zhu Family Inn', interior: true, theme: 'autumn', music: 'inn', rows: zi.rows(), spawn: [7, 7] });
+  // the inn: beds along the back wall, the counter and jars by the door, and racks of the Zhu Family tenants' arms along the wall
+  var zi = L.grid(18, 11, 'x'); var zR = zi.room(1, 1, 16, 10);
+  zi.stamp(2, 3, ['j.j...k..k..k.', '..............', '..............', '..............', 'ccc.....⚔.⚔.⚔.']);
+  WM.defMap('zhuinn_in', { name: 'Zhu Family Inn', interior: true, theme: 'autumn', music: 'inn', rows: zi.rows(), spawn: [9, 9] });
   L.link({ map: 'zhuinn', x: inn.x, y: inn.y }, { map: 'zhuinn_in', x: zR.x, y: zR.y });
+  WM.defEvents('zhuinn_in', [{ id: 'zhuinn_sign', x: 4, y: 5, sign: 'inn', cond: function () { return false; } }]);   // (no one stands here: it marks the house as an inn, so the door gets the inn's signboard)
 
   // ---------------- the Li family manor ----------------
   var m = L.grid(44, 32, '.');
@@ -91,7 +93,7 @@
   for (var xx = 10; xx < 34; xx++) { m.set(xx, 0, '~'); m.set(xx, 17, '~'); } for (yy = 0; yy < 18; yy++) { m.set(10, yy, '~'); m.set(33, yy, '~'); }
   m.rect(21, 17, 3, 1, 'B'); m.rect(21, 16, 3, 1, ':'); m.vline(22, 18, 19, ':'); m.vline(21, 18, 19, ':'); m.vline(23, 18, 19, ':');
   var hall = m.house(15, 4, 14, 6, { roof: 'Z', wall: 'R', door: 7 }); m.vline(22, 10, 14, ':'); m.set(14, 9, 'L'); m.set(29, 9, 'L');
-  m.house(13, 11, 5, 3, { roof: '^', door: false, windowsUpper: [], wallRows: 1 }); m.house(26, 11, 5, 3, { roof: '^', door: false, wallRows: 1 });
+  m.house(13, 11, 5, 4, { roof: '^', door: false }); m.house(26, 11, 5, 4, { roof: '^', door: false });   // (walls two rows high, so their doors fit under the eaves)
   var shop = m.house(3, 23, 7, 4, { roof: 'z', door: 3, windows: [1, 5] }); m.set(10, 24, 'J');   // the village tavern
   m.rect(36, 18, 8, 6, '.');                                                    // the fields towards Zhu Family Village
   m.rect(14, 23, 18, 7, 'y');
@@ -99,9 +101,9 @@
   L.clearAround(m, ':', 'T', '.');
   WM.defMap('lijia', { name: 'Li Family Manor', theme: 'autumn', music: 'field', rows: m.rows(), spawn: [1, 20], battleBg: 'field',
     exits: [WM.toWorld('lijia', 0, 20, 1, 2)] });
-  var mi = L.grid(30, 10, 'x'); var mR = { hall: mi.room(1, 1, 16, 9, { floor: 'N' }), shop: mi.room(18, 1, 10, 7) };
+  var mi = L.grid(31, 10, 'x'); var mR = { hall: mi.room(1, 1, 16, 9, { floor: 'N' }), shop: mi.room(18, 1, 12, 8) };
   mi.stamp(2, 3, ['h...&&....h...', '....AA........', '..t...........', '..............']);
-  mi.stamp(19, 3, ['h..j..h.', '........', 'cc......', 't.....t.']);
+  mi.stamp(19, 3, ['h..j..k.k.', '..........', 'cc........', '..........', 't.........']);   // the village inn: beds in the far corner, the counter by the door
   WM.defMap('lijia_in', { name: '', interior: true, theme: 'autumn', music: 'field', rows: mi.rows(), spawn: [8, 8] });
   L.link({ map: 'lijia', x: hall.x, y: hall.y }, { map: 'lijia_in', x: mR.hall.x, y: mR.hall.y });
   L.link({ map: 'lijia', x: shop.x, y: shop.y }, { map: 'lijia_in', x: mR.shop.x, y: mR.shop.y });

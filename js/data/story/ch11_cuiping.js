@@ -69,22 +69,32 @@
   // ---------------- the Yinma River ----------------
   WM.defEvents('yinma', [
     { id: 'ch11_yanglin', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 11; }, run: async function (s) {
-      s.spawn('yl', 'yanglin', 6, 12, 'left');
-      await s.say('yanglin', 'Divine Traveller! Dai Zong of Jiangzhou! Wait!');
+      var pt = s.actor('player').tile();
+      s.spawn('yl', 'yanglin', 0, pt.y + 1, 'right');   // (running up the road behind him)
+      await s.say('yanglin', 'Divine Traveller! Dai Zong of Jiangzhou! Wait!', { top: true });
+      s.face('player', 'left'); await s.emote('player', '?', 0.6);
+      await s.walkTo('yl', pt.x - 1, pt.y, { run: true }); s.faceEach('player', 'yl');
       await s.say('daizong', 'Who are you, to know my name?');
       await s.say('yanglin', 'Yang Lin of Zhangde. They call me the Brocade Leopard. I\'ve lived on the rivers and lakes by the strength of this spear. Some months ago I met a man of the Way in a tavern — Gongsun Sheng. He wrote me a letter to take to Liangshan, but I never dared go up alone. Then I heard the Divine Traveller was on the road, and I knew you by the charms on your legs.');
       await s.say('daizong', 'Gongsun Sheng! I\'m going to Jizhou to find him. Come with me — I\'ll tie a charm on your legs too, and you\'ll keep up.');
       await s.say('yanglin', 'Gladly. The road ahead crosses the Yinma River. There\'s a band in those hills — let me go first.');
-      s.despawn('yl'); s.addParty('yanglin'); s.level('yanglin', 22);
+      s.addParty('yanglin'); s.level('yanglin', 22);
+      await s.fallIn('yl', 'yanglin');   // and he walks on at Dai Zong's side
       s.flag('ch11_withyanglin');
     } },
     { id: 'ch11_block', x: 13, y: 10, w: 3, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_withyanglin'); }, run: async function (s) {
-      s.spawn('b1', 'bandit', 16, 11, 'left'); s.spawn('b2', 'bandit', 16, 14, 'left'); s.spawn('df', 'dengfei', 17, 12, 'left');
+      // a band of robbers comes over the bridge from the hills
+      var bx = 24;
+      s.spawn('df', 'dengfei', bx, 12, 'left'); s.spawn('b1', 'bandit', bx + 1, 13, 'left'); s.spawn('b2', 'bandit', bx + 2, 12, 'left');
+      s.walkTo('b1', 16, 11, { run: true }); s.walkTo('b2', 16, 14, { run: true }); await s.walkTo('df', 16, 12, { run: true });
+      s.face('b1', 'left'); s.face('b2', 'left'); s.face('df', 'left');
       await s.say('dengfei:angry', 'Halt! Leave your packs and go — or stay here for ever!');
       await s.say('yanglin', '...Brother Deng Fei? It\'s me — Yang Lin!');
       await s.say('dengfei:smile', 'Yang Lin! Ha! I almost chained you to a tree! Brothers, put down your blades. This is an old friend.');
       await s.say('dengfei', 'I\'m Deng Fei of Xiangyang, the Fiery-Eyed Lion. My eyes go red when I\'m angry. Come up to the stockade and meet my brothers.');
-      s.despawn('b1', { leave: true }); s.despawn('b2', { leave: true }); s.despawn('df', { leave: true });   // back up to their stockade
+      // back over the bridge and up the path to their stockade
+      s.walkTo('b1', 27, 8); s.walkTo('b2', 28, 8); await s.walkTo('df', 27, 7);
+      WM.data.clear(s, ['b1', 'b2', 'df']);
       s.flag('ch11_metdeng');
       await s.say(null, '(The stockade is in the hills north-east of the river.)');
     } }
@@ -122,6 +132,12 @@
       await s.narrate('For days they searched Jizhou, inside the walls and out. No one had heard of anyone called Gongsun Sheng.');
       await s.say('yanglin:sad', 'Not a trace. Perhaps he lives in the hills, under his Daoist name.');
       await s.say('daizong', 'One more day in the city. Let\'s try the main street.');
+      // and the next morning, out again along the street
+      await s.fadeOut(0.8);
+      s.place('player', 23, 31, 'up');
+      await s.fadeIn(0.8);
+      await s.say(null, '(The next morning.)');
+      await s.walkTo('player', 23, 27);
       s.flag('ch11_searched');
     } },
     { id: 'ch11_brawl', x: 21, y: 22, w: 5, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_searched'); }, idle: { yx: '(Yang Xiong walks at the head of the procession, his red-tasselled sword at his hip. He nods to you, but does not stop.)', zb: 'Out of my way. I\'ve business with the warden.', t1: 'Heh. Zhang Bao\'s going to have a word with the executioner about all that silk.', t2: 'Silk! Bolts of it! Somebody has a lot of friends...' },
@@ -145,10 +161,10 @@
       await s.emote('pb1', '!'); s.walkTo('pb1', 12, 24, { run: true }); s.walkTo('pb2', 11, 22, { run: true });
       await s.say('yangxiong:angry', 'Let go of me! Thieves — in broad daylight!');
       s.spawn('sx', 'shixiu', 26, 24, 'left');
-      await s.walkTo('sx', 20, 23);
+      await s.walkTo('sx', 19, 22); s.faceEach('sx', 'zb');
       s.sfx('hit'); await s.wait(0.3);
       await s.say('shixiu:angry', '(He sets down a load of firewood in the road.) Why are you beating this officer?');
-      s.face('zb', 'right');
+      s.faceEach('zb', 'sx');
       await s.say('zhangbao:angry', 'Beggar! Mind your own business!');
       s.hide('sx'); s.despawn('sx');
       var keep = WM.state.party.slice();
@@ -187,7 +203,26 @@
       s.despawn('ym1', { leave: true }); s.despawn('ym2', { leave: true });
       s.show('player');
       s.despawn('sx');
-      await s.narrate('Since Gongsun Sheng was not to be found, Dai Zong and Yang Lin went back to the Yinma River. Pei Xuan, Deng Fei and Meng Kang burned their stockade, and with all their men and carts went south, dressed as government troops, to Liangshan.');
+      // back at the Yinma River: the stockade burned, and the whole band marching south under government banners
+      await s.fadeOut(0.6);
+      await s.warp('yinma', 27, 11, 'down', { noFade: true });
+      s.hide('player');
+      s.spawn('dz', 'daizong', 26, 12, 'left'); s.spawn('yl', 'yanglin', 27, 12, 'left');
+      s.spawn('px', 'peixuan', 27, 9, 'down'); s.spawn('df', 'dengfei', 28, 10, 'down'); s.spawn('mk', 'mengkang', 26, 10, 'down');
+      s.spawn('m1', 'bandit', 29, 11, 'left'); s.spawn('m2', 'bandit', 30, 12, 'left'); s.spawn('m3', 'bandit', 31, 11, 'left');
+      s.tint('fire'); s.flames(24, 2, 8, 5);
+      await s.fadeIn(0.6);
+      await s.narrate('Since Gongsun Sheng was not to be found, Dai Zong and Yang Lin went back to the Yinma River. Pei Xuan, Deng Fei and Meng Kang burned their stockade behind them.');
+      await s.say('dengfei', 'Let it burn! We won\'t be needing it again.');
+      await s.say('peixuan', 'Banners up, brothers — government colours. Any patrol that sees us will think we\'re troops on the march.');
+      await s.say('daizong', 'Then south, to Liangshan. Brother Song Jiang will be glad of every one of you.');
+      // and away west over the bridge, carts and all
+      ['dz', 'yl', 'px', 'df', 'mk', 'm1', 'm2', 'm3'].forEach(function (k, n) { s.walkTo(k, 1 + (n % 3), 12 + (n % 2)); });
+      await s.wait(2.4);
+      await s.fadeOut(0.8);
+      s.flames(); s.tint(null);
+      WM.data.clear(s, ['dz', 'yl', 'px', 'df', 'mk', 'm1', 'm2', 'm3']);
+      await s.narrate('With all their men and carts they went south, dressed as government troops, to Liangshan.');
       await s.joinMany(['yanglin', 'dengfei', 'mengkang', 'peixuan']);
       // Shi Xiu's story begins
       s.party(['shixiu']); s.setLeader('shixiu'); s.level('shixiu', 23); s.flag('protagonist', 'shixiu');
@@ -215,10 +250,13 @@
       s.despawn('yx', { leave: true }); s.despawn('qy'); s.despawn('pg');
       await s.narrate('So the butcher\'s shop opened at the front of Yang Xiong\'s house, and Shi Xiu kept it.');
     } },
-    { id: 'ch11_service', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_brothers') && WM.state.x < 15; }, run: async function (s) {
-      await s.narrate('Two months went by. Then Old Pan held a service for the second anniversary of the death of Qiaoyun\'s first husband, Clerk Wang.');
+    { id: 'ch11_service', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_brothers') && WM.state.x < 15; }, idle: { qy: 'The service is about to begin, Brother Shi Xiu.', pg: 'Sit, sit, Brother Shi Xiu. The monks are ready.', mk1: '(The monk turns the pages of his sutra.)', mk2: '(The monk lights a stick of incense.)' }, run: async function (s) {
+      // (already in the room, at the altar, when Shi Xiu comes in)
       s.spawn('qy', 'qiaoyun', 5, 7, 'right'); s.spawn('pg', 'pangong', 4, 6, 'right');
       s.spawn('mk1', 'monk', 3, 7, 'left'); s.spawn('mk2', 'monk', 3, 8, 'left');
+      await s.fadeOut(0.8);
+      await s.narrate('Two months went by. Then Old Pan held a service for the second anniversary of the death of Qiaoyun\'s first husband, Clerk Wang.');
+      await s.fadeIn(0.8);
       s.spawn('pr', 'peiruhai', 7, 8, 'up');
       await s.walkTo('pr', 6, 7);
       s.face('pr', 'left'); s.face('qy', 'right');
@@ -232,7 +270,7 @@
       await s.emote('pr', 'heart'); await s.emote('qy', 'heart');
       await s.emote('mk1', '?');
       await s.say('monk', '"...may the... the..." (He has lost his place, staring at the two of them.)');
-      await s.emote('player', 'anger');
+      s.face('player', 'left'); await s.emote('player', 'anger');   // (watching the two of them across the room)
       await s.say('shixiu:angry', '(The monk\'s eyes never leave her, and hers never leave him. And Brother Yang Xiong is on night duty in the prison tonight... This is not right.)');
       s.sfx('bell');
       s.despawn('pr', { leave: true }); s.despawn('mk1', { leave: true }); s.despawn('mk2', { leave: true });
@@ -254,19 +292,26 @@
     { id: 'ch11_dawn', x: 1, y: 30, w: 8, h: 2, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch11_service') && !S2.has('ch11_dawnseen'); },
       idle: { hd: '(The wandering monk beats his wooden fish and does not look up.) Save us from suffering, O Bodhisattva...', pr: '(A man in a scarf turns his face to the wall and says nothing.)' },
       run: async function (s) {
-      s.spawn('hd', 'hudao', 3, 30, 'right');
-      await s.say('hudao', '(tok... tok... tok...) "Save us from suffering, O Bodhisattva..."');
+      // into the shadow beside the house, where he can see the lane
       await s.say('shixiu', '(Into the shadow of the wall. Watch.)');
+      await s.walkTo('player', 3, 28); s.face('player', 'down');
+      // the wooden fish, coming up the lane from the south
+      s.spawn('hd', 'hudao', 4, 37, 'up');
+      await s.walkTo('hd', 4, 31); s.face('hd', 'right');
+      await s.say('hudao', '(tok... tok... tok...) "Save us from suffering, O Bodhisattva..."');
+      s.face('player', 'right');
       s.sfx('door');
-      s.spawn('pr', 'peiruhai', 10, 30, 'left');
-      await s.say('shixiu', '(The back door... A man in a scarf.)');
+      s.spawn('pr', 'peiruhai', 9, 30, 'left');
+      await s.say('shixiu', '(The door... A man in a scarf.)');
       await s.walkTo('pr', 5, 30);
-      s.face('pr', 'right'); await s.wait(0.4); s.face('pr', 'left');
+      s.face('pr', 'up'); await s.wait(0.4); s.face('pr', 'left'); s.face('player', 'down');
       await s.emote('player', '!');
       await s.say('shixiu:angry', '(Under the scarf — a shaven head. Pei Ruhai!)');
       await s.say('peiruhai', '(whispering) Hu Dao. Same again in three days.');
-      s.despawn('pr', { leave: true }); s.despawn('hd', { leave: true });
-      await s.wait(1.2);
+      // the monk goes off east along the street beating his fish; Pei Ruhai slips away the other way
+      s.walkTo('hd', 21, 31); s.despawn('pr', { leave: true });
+      await s.wait(2.2);
+      WM.data.clear(s, ['hd']);
       await s.say('shixiu:angry', '(So that is the signal. When Brother is on duty, an incense table goes out by the back door. And at dawn Hu Dao beats his fish to wake the monk.)');
       s.night(false);
       s.flag('ch11_dawnseen');
@@ -284,8 +329,8 @@
       // that night, in Yang Xiong's house (Shi Xiu away buying pigs)
       await s.fadeOut(0.8);
       s.night(true);
-      s.hide('player');
       await s.warp('jizhou_in', 8, 8, 'up', { noFade: true });
+      s.hide('player');   // (after the warp: loading the room makes the player anew)
       s.spawn('qy', 'qiaoyun', 11, 4, 'down'); s.spawn('yx', 'yangxiong', 8, 8, 'up');
       await s.fadeIn(0.8);
       await s.walkTo('yx', 9, 5);
@@ -356,6 +401,7 @@
       s.costume('shixiu', null);
       s.night(false);
       s.place('player', 18, 31, 'left'); s.hide('player');
+      s.camera(6, 30, 0.01);   // (the view stays on the lane where the two monks lie, not on the hidden player)
       await s.fadeIn(1);
       s.spawn('pc', 'peddler', 8, 31, 'left');
       await s.walkTo('pc', 6, 31);
@@ -368,7 +414,7 @@
       await s.fadeOut(0.8);
       s.hide('hd'); s.hide('pr'); s.hide('pc'); s.hide('kc1'); s.hide('kc2');
       s.despawn('hd'); s.despawn('pr'); s.despawn('pc'); s.despawn('kc1'); s.despawn('kc2');
-      s.show('player'); s.place('player', 5, 31, 'right');
+      s.show('player'); s.place('player', 5, 31, 'right'); s.cameraReset();
       s.flag('ch11_proof');
       await s.fadeIn(1);
       await s.say('shixiu', '(All Jizhou is talking of nothing else. And the clothes of both monks are in my bundle.)');
@@ -480,7 +526,7 @@
       s.spawn('zt1', 'farmer', 1, 13, 'right'); s.spawn('zt2', 'farmer', 1, 15, 'right'); s.spawn('zt3', 'farmer', 20, 13, 'left'); s.spawn('zt4', 'farmer', 20, 15, 'left');
       await s.emote('player', '!');
       await s.say('yangxiong:shock', 'Torches! On both sides of the road — a hundred, two hundred of them!');
-      await s.say('farmer', 'Liangshan thieves! Burnt the inn! Hook them, hook them!');
+      await s.say('farmer', 'It\'s the Liangshan thieves who burnt the inn! Get the hooks on them!');
       s.walkTo('zt1', 6, 13, { run: true }); s.walkTo('zt2', 6, 15, { run: true }); s.walkTo('zt3', 12, 13, { run: true }); await s.walkTo('zt4', 12, 15, { run: true });
       await s.battle('ch11_pursuit', { bg: 'night', rounds: 4 });
       s.hide('zt1'); s.hide('zt2'); s.despawn('zt1'); s.despawn('zt2');
@@ -552,6 +598,7 @@
   WM.defEvents('lijia', [
     { id: 'ch11_arrow', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_torn'); }, run: async function (s) {
       s.spawn('ly', 'liying', 39, 20, 'right'); s.spawn('zb', 'zhubiao', 42, 20, 'left');
+      s.faceEach('ly', 'zb'); s.face('player', 'right');   // (the two of them face to face, and kept so while they speak)
       s.music('duel');
       await s.narrate('Li Ying rode out with three hundred men to the Zhu Family Village. Zhu Biao came out to meet him.');
       await s.say('liying:angry', 'Zhu Biao! Our fathers swore an oath of life and death between our villages. And you tear up my letter?');
@@ -582,8 +629,30 @@
       s.heal();
       await s.say('yangxiong', 'Master Li Ying is wounded because of us. We have no road but one. To Liangshan — and ask them to save Shi Qian.');
       s.flag('ch11_toliangshan');
-      await s.narrate('They came to Shi Yong\'s tavern on the shore of the marsh, and Shi Yong knew Shi Xiu\'s name from Dai Zong. He shot a whistling arrow across the water, and a boat came for them.');
-      await s.warp('liangshan_in', 16, 12, 'up');
+      // to the tavern on the shore of the marsh, where Liangshan keeps watch on the road
+      await s.fadeOut(0.8);
+      await s.warp('zhugui', 9, 20, 'up', { noFade: true });
+      s.spawn('yx', 'yangxiong', 10, 21, 'up');
+      await s.fadeIn(0.8);
+      s.walkTo('yx', 10, 16); await s.walkTo('player', 9, 16); s.face('player', 'up');
+      s.sfx('door'); s.spawn('sy', 'shiyong', 9, 14, 'down'); await s.move('sy', 'D1');
+      await s.say('shiyong', 'Wine? Meat? ...You two have come a long way, by the look of your boots. Where are you headed?');
+      await s.say('shixiu', 'To Liangshan. I am Shi Xiu of Jinling, and this is my sworn brother Yang Xiong of Jizhou. Dai Zong of Liangshan once asked me to join him.');
+      await s.emote('sy', '!', 0.8);
+      await s.say('shiyong:smile', 'Shi Xiu, the Daredevil! Brother Dai Zong told us about you. I\'m Shi Yong, the Stone General — I keep this tavern for the mountain. Wait here.');
+      // down to the water's edge, and a whistling arrow across the marsh
+      s.camera(12, 8, 0.8); await s.walkTo('sy', 13, 9); s.face('sy', 'up');   // (the view follows him down to the jetty)
+      s.sfx('arrow'); await s.emote('sy', 'note', 1);
+      await s.narrate('Shi Yong drew his bow and shot a whistling arrow far out over the reeds. A moment later, a boat came gliding out of the reeds towards the jetty.');
+      s.spawn('bm', 'boatman', 12, 1, 'down'); s.boat('bm', 3);
+      await s.moveTo('bm', 12, 6);
+      s.face('sy', 'down');
+      await s.say('shiyong', 'There\'s your boat, brothers. The chiefs will want to hear your story themselves.');
+      s.walkTo('yx', 14, 8); await s.walkTo('player', 13, 8); s.face('player', 'up');
+      await s.fadeOut(0.8);
+      s.cameraReset(); WM.data.clear(s, ['yx', 'sy', 'bm']);
+      await s.warp('liangshan_in', 16, 12, 'up', { noFade: true });
+      await s.fadeIn(0.8);
     } }
   ]);
 
@@ -591,7 +660,18 @@
   WM.defEvents('liangshan_in', [
     { id: 'ch11_chaogai', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch11_toliangshan') && WM.state.x < 31 && WM.state.y < 17; }, run: async function (s) {
       s.spawn('cg', 'chaogai', 15, 5, 'down'); s.spawn('sj', 'songjiang', 13, 6, 'down'); s.spawn('wy', 'wuyong', 17, 6, 'down'); s.spawn('dz', 'daizong', 19, 7, 'left');
-      await s.narrate('Yang Xiong and Shi Xiu told the whole story: Cuiping Mountain, Shi Qian, the rooster, the fire, Li Ying\'s letters.');
+      // the two newcomers come up the hall and stand before the chiefs, and tell it from the beginning
+      s.spawn('yx', 'yangxiong', 15, 12, 'up');
+      s.walkTo('yx', 14, 8); await s.walkTo('player', 15, 8);
+      s.face('player', 'up'); s.face('yx', 'up');
+      await s.say('yangxiong', 'Chiefs, I am Yang Xiong, warden of the prisons of Jizhou, and this is my sworn brother Shi Xiu. We have come to join Liangshan — and to beg your help.');
+      await s.say('shixiu', 'My brother\'s wife was carrying on with a monk, Pei Ruhai. I saw it, and told him. She lied, and he drove me out of his house — so I killed the monk and his lookout in the lane, and laid their clothes at my brother\'s door.');
+      await s.say('yangxiong:sad', 'Then I knew the truth. We took her up Cuiping Mountain, and there I ended it. A thief called Shi Qian was hiding on the mountain, and he came with us.');
+      await s.say('shixiu', 'On the road we stopped at the Zhu Family inn below Dulong Ridge. Shi Qian stole the inn\'s rooster and cooked it — the cock that crows the dawn for the whole village. There was a fight, and we burned the inn.');
+      await s.say('yangxiong', 'The Zhu men came after us in hundreds, and Shi Qian was dragged off with a hook. We fled to Li Ying of the Li Family Village. He wrote to the Zhu master twice for Shi Qian\'s release — and twice the Zhu sons tore up his letters, and shot him with an arrow besides.');
+      await s.say('shixiu:angry', 'And when we said we were going to Liangshan, the Zhu sons laughed: "Let the bandits of Liangshan come. We will take every one of them in a cage to the capital."');
+      s.face('sj', 'up'); s.face('wy', 'up');
+      await s.emote('cg', 'anger', 1);
       await s.say('chaogai:angry', 'These two went about under the name of the heroes of Liangshan stealing chickens to eat — and brought shame on all of us! Take them out and cut off their heads!');
       await s.say('songjiang', 'No, brother! They came hundreds of li to join us. It was Shi Qian who stole the chicken, not these two. And the Zhu family has long boasted that it will destroy Liangshan. They insult us — and we should kill the men who came to us for help?');
       await s.say('wuyong', 'Brother, the Zhu Village has been our enemy a long time. This is not their fault.');

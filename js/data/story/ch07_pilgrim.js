@@ -395,7 +395,7 @@
   ]);
   WM.defEvents('yanggu_in', [
     // Wu Dalang's house after the reckoning: everyone stays as Wu Song left them, until he is sent into exile
-    { id: 'ch7_rv_body', x: 20, y: 4, char: 'panjinlian', lying: true, cond: rvAfter, text: ['(Pan Jinlian lies before her husband\'s spirit tablet. The incense Wu Song lit is still burning.)'] },
+    { id: 'ch7_rv_body', x: 20, y: 4, npc: 'panjinlian', lying: true, cond: rvAfter, text: ['(Pan Jinlian lies before her husband\'s spirit tablet. The incense Wu Song lit is still burning.)'] },
     { id: 'ch7_rv_wangpo', x: 22, y: 5, npc: 'wangpo', dir: 'left', cond: rvAfter, run: async function (s) {
       await s.say('wangpo:sad', 'Constable... mercy... I am an old woman. It was the silver that talked, not me. It was all Ximen Qing...');
       await s.say('wusong:angry', 'You will say it again before the magistrate.');

@@ -23,7 +23,7 @@
   y.rect(0, 8, 44, 2, ':'); y.rect(20, 0, 3, 22, ':');
   y.rect(14, 10, 14, 5, '=');                                        // the market square where Xue Yong performs
   var mu = y.house(30, 2, 12, 5, { roof: '^', door: 6, windows: [2, 9] });   // the Mu family manor
-  y.frame(29, 1, 14, 8, 'F'); y.set(35, 8, ':'); y.set(36, 8, ':');   // (the gap in the fence as wide as the manor's double door)
+  y.frame(29, 1, 14, 8, 'F'); y.set(35, 8, ':'); y.set(36, 8, ':'); y.set(42, 7, ':');   // (and a little back gate in the east fence, behind the house)   // (the gap in the fence as wide as the manor's double door)
   var yinn = y.house(3, 2, 9, 5, { roof: 'z', door: 4, windows: [1, 7] });
   y.house(3, 12, 6, 4, { roof: 'z', door: false, windows: [2] }); y.house(32, 12, 6, 4, { roof: '^', door: false, windows: [3] });
   y.rect(18, 15, 6, 7, ':'); y.rect(19, 22, 4, 2, 'B'); y.set(17, 23, 'o'); y.set(24, 23, 'o'); y.set(26, 22, 'o');
@@ -62,7 +62,7 @@
     exits: [WM.toWorld('jiangzhou', 26, 0, 4, 1)] });
   var gi = L.grid(92, 12, 'x');
   var gR = { prefect: gi.room(1, 1, 16, 10, { floor: 'N' }), prison: gi.room(18, 1, 14, 9, { floor: 'N' }), daizong: gi.room(33, 1, 9, 7), tower: gi.room(43, 1, 14, 10), shop: gi.room(58, 1, 8, 7), pipa: gi.room(67, 1, 12, 8), inn: gi.room(80, 1, 10, 8) };
-  gi.stamp(2, 3, ['h.EEEEEE..h...', '...q00q.......', '..taaaa...t...', '..tKKKK...t...', '...KKKK']);   // the prefect's hall
+  gi.stamp(2, 3, ['h...EEEEEE..h.', '.....q00q.....', '.t...aaaa..t..', '.t...KKKK..t..', '.....KKKK']);   // the prefect's hall: the dais, desk and carpet in line with the door, side tables either hand
   gi.stamp(19, 3, ['--.F--.F--.F', '--.F--.F--.F', 'F+FFF+FFF+FF']);
   gi.stamp(34, 3, ['k...h..', '.......', '..t....']);
   gi.stamp(44, 3, ['h..L....L.h.', '..t.....t...', '............', '..t.....t...', '............', 'cccc........']);   // the Xunyang Tower: tables in two even rows either side of the window aisle, the long counter by the stairs

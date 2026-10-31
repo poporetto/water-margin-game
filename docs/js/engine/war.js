@@ -50,7 +50,20 @@
     whirlwind: { hero: 'likui', name: 'Black Whirlwind', desc: 'Black Whirlwind: charges ahead whatever the orders — +40% attack, -25% defence.' },
     dragon: { hero: 'guansheng', name: 'Green-Dragon Blade', desc: 'Green-Dragon Blade: the heir of Lord Guan — when he attacks, the enemy cannot strike back.' },
     chained: { hero: 'huyanzhuo', name: 'Chained Cavalry', desc: 'Chained Cavalry: horses chained in line — +35% defence beside allied cavalry.' },
-    hooks: { hero: 'xuning', name: 'Hooked Lances', desc: 'Hooked Lances: the lance that broke the chained horses — +60% attack against cavalry.' }
+    hooks: { hero: 'xuning', name: 'Hooked Lances', desc: 'Hooked Lances: the lance that broke the chained horses — +60% attack against cavalry.' },
+    // the way they always fight (atk / def: their unit's attack or defence; charge: attack after moving; move: squares)
+    qilin: { hero: 'lujunyi', name: 'Jade Qilin', atk: 1.3, def: 1.1, desc: 'Jade Qilin: the finest spear in Hebei — +30% attack, +10% defence.' },
+    thunderbolt: { hero: 'qinming', name: 'Thunderbolt', charge: 1.35, desc: 'Thunderbolt: his wolf-tooth mace comes down like a thunderclap — +35% attack after moving.' },
+    doublespears: { hero: 'dongping', name: 'Double Spears', atk: 1.25, desc: 'Double Spears: a spear in each hand, the bravest general of the Hedong garrison — +25% attack.' },
+    ninedragons: { hero: 'shijin', name: 'Nine Dragons', atk: 1.2, desc: 'Nine Dragons: the eighteen arms Wang Jin taught him — +20% attack.' },
+    beard: { hero: 'zhutong', name: 'Beautiful Beard', def: 1.25, desc: 'Beautiful Beard: steady as Lord Guan, whom he resembles — +25% defence.' },
+    sabre: { hero: 'yangzhi', name: 'Precious Sabre', atk: 1.15, def: 1.1, desc: 'Precious Sabre: the heirloom blade of the Yang generals — +15% attack, +10% defence.' },
+    traveller: { hero: 'daizong', name: 'Divine Traveller', move: 2, desc: 'Divine Traveller: the charms on his legs carry him eight hundred li a day — +2 movement.' },
+    // an order they can give once in a battle (kind: strike, a sure loss; ruse, confusion; thunder, both; range: squares)
+    goldenaxe: { hero: 'suochao', name: 'Golden Axe', active: true, kind: 'strike', range: 1, fx: 'clash', sfx: 'crit', words: '{who}\'s golden axe splits the front rank of {t}!', desc: 'Golden Axe: once per battle, the Impatient Vanguard hews into an adjacent enemy unit — a sure loss.' },
+    ruse: { hero: 'wuyong', name: 'Clever Ruse', active: true, kind: 'ruse', range: 3, fx: 'smoke', sfx: 'miss', words: '{who}\'s false orders reach {t} — the unit is thrown into confusion!', desc: 'Clever Ruse: once per battle, false orders throw an enemy unit within 3 into confusion — it cannot move or attack in its next turn.' },
+    fivethunders: { hero: 'gongsunsheng', name: 'Five Thunders', active: true, kind: 'thunder', range: 4, fx: 'thunder', sfx: 'thunder', words: '{who} calls down the Five Thunders on {t}!', desc: 'Five Thunders: once per battle, thunder falls on an enemy unit within 4 — a sure loss, and the unit is thrown into confusion.' },
+    wrestler: { hero: 'yanqing', name: 'Wrestler of the Capital', active: true, kind: 'ruse', leaderless: true, range: 1, fx: 'clash', sfx: 'hit', words: '{who} throws an officer of {t} to the ground — the unit stands leaderless!', desc: 'Wrestler of the Capital: once per battle, Yan Qing throws an officer of an adjacent enemy unit — it cannot move or attack in its next turn.' }
   };
   W.SIG = SIG;
   var HERO_SIG = {}; Object.keys(SIG).forEach(function (k) { HERO_SIG[SIG[k].hero] = k; });
@@ -62,6 +75,7 @@
     'm': { name: 'Hills', def: 0.25, col: '#9a8a6e', col2: '#8a7a5e', move: 2 },
     '~': { name: 'Water', def: 0, col: '#3b78c0', col2: '#2f67ad', water: true },
     'r': { name: 'Reeds', def: 0.3, col: '#6a8a5a', col2: '#4a7a8a', water: true, reeds: true },
+    'v': { name: 'Reed marsh', def: 0.3, col: '#7a9a5a', col2: '#6a8a4a', move: 2, reeds: true },   // reeds on wet ground: men and horses wade through
     '#': { name: 'Wall', def: 0, col: '#8a8478', col2: '#6a655b', block: true },
     'G': { name: 'Gate', def: 0.4, col: '#7a5a3a', col2: '#5a3a1a' },
     'H': { name: 'Fort', def: 0.35, col: '#a7a49a', col2: '#8a877e' },
@@ -107,7 +121,7 @@
       var prev = WM.scene, prevMusic = WM.audio.current;
       var wr = W.cur = {
         id: id, d: d, opt: opt, turn: 1, phase: 'player', sel: null, cursor: { x: 0, y: 0 }, msg: null, fx: [],
-        units: [], terrain: d.map, log: [], resolve: resolve
+        units: [], terrain: d.map, log: [], resolve: resolve, evDone: {}, phaseId: 0, phaseOpen: false
       };
       d.player.forEach(function (o) {
         // skip heroes not yet recruited (optional slots)
@@ -164,7 +178,7 @@
     if (along < 0 && -along >= across) return 'rear';
     return 'flank';
   }
-  function moveOf(u) { return TYPE[u.type].move + (u.abil.indexOf('scout') >= 0 ? 2 : 0); }
+  function moveOf(u) { return TYPE[u.type].move + (u.abil.indexOf('scout') >= 0 ? 2 : 0) + (u.sig || []).reduce(function (m, id) { return m + (SIG[id].move || 0); }, 0); }
   function rangeOf(u) {
     var r = TYPE[u.type].range;
     if (u.type === 'arch' && u.abil.indexOf('arrows') >= 0) r += 1;
@@ -204,19 +218,21 @@
     await turnEvents(wr);
     while (true) {
       // player phase
-      wr.phase = 'player';
+      wr.phase = 'player'; wr.phaseId++; wr.phaseOpen = true;
       active('player').forEach(function (u) { u.done = !!u.confused; u.moved = false; u.cannonUsed = false; });   // a confused unit sits this turn out
       await banner(wr, 'Turn ' + wr.turn + ' — Liangshan moves');
       var dazed = active('player').filter(function (u) { return u.confused; });
       for (var di = 0; di < dazed.length; di++) { wr.cursor = { x: dazed[di].x, y: dazed[di].y }; await banner(wr, dazed[di].name + '\'s unit is in confusion, and cannot move or attack this turn.', 1); }
       if (active('player').some(function (u) { return !u.done; })) await playerPhase(wr);
-      wr.units.forEach(function (u) { if (u.side === 'player') { u.shaken = false; u.confused = false; } });
+      wr.phaseOpen = false;
+      wr.units.forEach(function (u) { if (u.side === 'player') { u.shaken = false; if (u.confusedUntil <= wr.phaseId) u.confused = false; } });
       var res = checkEnd(wr); if (res) return await endWar(wr, res);
       // enemy phase
-      wr.phase = 'enemy';
+      wr.phase = 'enemy'; wr.phaseId++; wr.phaseOpen = true;
       await banner(wr, 'Enemy moves');
       await enemyPhase(wr);
-      wr.units.forEach(function (u) { if (u.side === 'enemy') { u.shaken = false; u.confused = false; } });
+      wr.phaseOpen = false;
+      wr.units.forEach(function (u) { if (u.side === 'enemy') { u.shaken = false; if (u.confusedUntil <= wr.phaseId) u.confused = false; } });
       res = checkEnd(wr); if (res) return await endWar(wr, res);
       wr.turn++;
       await turnEvents(wr);
@@ -225,11 +241,30 @@
     }
   }
 
+  // Confusion lasts through the next turn of the unit's own side, whenever it falls: phases are numbered (Liangshan's
+  // odd, the enemy's even), and a unit is confused until the end of its side's next phase that has not yet begun.
+  function confuseUnit(u, how) {
+    var wr = W.cur, own = u.side === 'player' ? 1 : 0, n = wr.phaseId + 1;
+    if (wr.phaseOpen && wr.phase === u.side) n = wr.phaseId + 2;   // (its own turn is under way: the next one)
+    while (n % 2 !== own) n++;
+    u.confused = how || true; u.confusedUntil = Math.max(u.confusedUntil || 0, n);
+  }
+  // A war's events, each run once a battle (kept on the battle, so a second attempt at the war plays them again):
+  //   turn: n — at the start of that turn; enter: function (unit, terrain) — when a unit ends its move where it says.
+  function evKey(e, i) { return e.id || 'ev' + i; }
+  async function runEvent(wr, e, i) {
+    wr.evDone[evKey(e, i)] = true;
+    await WM.script.run(function (s) { return e.run(s, W.api(wr)); });
+  }
   async function turnEvents(wr) {
-    var evs = (wr.d.events || []).filter(function (e) { return e.turn === wr.turn && !e.done; });
+    var evs = wr.d.events || [];
+    for (var i = 0; i < evs.length; i++) if (evs[i].turn === wr.turn && !wr.evDone[evKey(evs[i], i)]) await runEvent(wr, evs[i], i);
+  }
+  async function enterEvents(wr, u) {
+    var evs = wr.d.events || [];
     for (var i = 0; i < evs.length; i++) {
-      evs[i].done = true;
-      await WM.script.run(function (s) { return evs[i].run(s, W.api(wr)); });
+      var e = evs[i];
+      if (e.enter && !wr.evDone[evKey(e, i)] && u.losses < 2 && e.enter(u, terr(u.x, u.y))) await runEvent(wr, e, i);
     }
   }
   // helpers usable by war events
@@ -238,9 +273,30 @@
       addUnit: function (side, o) { var u = mkUnit(side, o); wr.units.push(u); faceNearestFoe(u); },
       rout: function (name) { wr.units.forEach(function (u) { if (u.name === name || u.leader === name) u.losses = 2; }); },
       // throw a side (or one unit, by name or leader) into confusion: it cannot move or attack in its next turn
-      confuse: function (who) { wr.units.forEach(function (u) { if (u.losses < 2 && (u.side === who || u.name === who || u.leader === who)) u.confused = true; }); },
+      confuse: function (who) { wr.units.forEach(function (u) { if (u.losses < 2 && (u.side === who || u.name === who || u.leader === who)) confuseUnit(u); }); },
       weaken: function (side, f) { wr.units.forEach(function (u) { if (u.side === side) { u.def = Math.round(u.def * f); u.atk = Math.round(u.atk * f); } }); },
       unit: function (name) { return wr.units.filter(function (u) { return u.name === name || u.leader === name; })[0]; },
+      // march a unit (by name or leader) to the free square nearest (x, y), and watch it go there
+      moveTo: async function (name, x, y) {
+        var u = wr.units.filter(function (o) { return (o.name === name || o.leader === name) && o.losses < 2; })[0]; if (!u) return;
+        var best = null, bs = 1e9;
+        for (var yy = 0; yy < ROWS; yy++) for (var xx = 0; xx < COLS; xx++) {
+          var t = terr(xx, yy), o = unitAt(xx, yy);
+          if (!t || t.block || (t.water && !u.naval) || (o && o !== u)) continue;
+          var sc = (Math.abs(xx - x) + Math.abs(yy - y)) * 100 + Math.abs(xx - u.x) + Math.abs(yy - u.y);
+          if (sc < bs) { bs = sc; best = [xx, yy]; }
+        }
+        if (!best || (best[0] === u.x && best[1] === u.y)) return;
+        var d = Math.abs(best[0] - u.x) + Math.abs(best[1] - u.y);
+        u.face = dirTo(u.x, u.y, best[0], best[1], u.face);
+        u.slide = { x0: u.x, y0: u.y, t: 0, dur: Math.min(1.4, 0.2 + d * 0.16) };
+        u.x = best[0]; u.y = best[1]; wr.cursor = { x: u.x, y: u.y };
+        await WM.wait(u.slide.dur + 0.15);
+        faceNearestFoe(u);   // and turns at the gate to face the enemy again
+      },
+      // whether an event (by its id) has happened in this battle; finish(id) marks it so (one event standing in for another)
+      done: function (id) { return !!wr.evDone[id]; },
+      finish: function (id) { wr.evDone[id] = true; },
       win: function () { wr.forced = 'win'; },
       lose: function () { wr.forced = 'lose'; }
     };
@@ -260,6 +316,7 @@
 
   async function endWar(wr, res) {
     var lines = res === 'win' ? wr.d.win : wr.d.lose;
+    if (res === 'win' && WM.audio) WM.audio.play('warvictory');   // (a great battle won: the victory drums)
     await banner(wr, res === 'win' ? 'Victory' : 'Defeat', 1.2);
     for (var i = 0; i < (lines || []).length; i++) await UI.message(lines[i][0], lines[i][1]);
     // wounded heroes are restored afterwards (the novel's heroes all survive until the southern campaign)
@@ -343,7 +400,8 @@
     var u = wr.sel;
     var items = [];
     var melee = enemiesInRange(u, 1), ranged = enemiesInRange(u, rangeOf(u));
-    if (ranged.length) items.push({ label: rangeOf(u) > 1 ? 'Attack (range ' + rangeOf(u) + ')' : 'Attack', v: 'attack', help: rangeOf(u) > 1 ? 'Strike an enemy unit up to ' + rangeOf(u) + ' squares away. A blow from afar is never answered; one from the side lands +25%, from behind +50%.' : 'Strike an adjacent enemy unit. It strikes back from the front; less from the side (+25% to you); not at all from behind (+50%).' });
+    var auto = passives(u);
+    if (ranged.length) items.push({ label: rangeOf(u) > 1 ? 'Attack (range ' + rangeOf(u) + ')' : 'Attack', v: 'attack', help: (auto.length ? 'Your skills work by themselves as you strike: ' + auto.join('; ') + '. ' : '') + (rangeOf(u) > 1 ? 'Strike an enemy unit up to ' + rangeOf(u) + ' squares away. A blow from afar is never answered; one from the side lands +25%, from behind +50%.' : 'Strike an adjacent enemy unit. It strikes back from the front; less from the side (+25% to you); not at all from behind (+50%).') });
     if (u.abil.indexOf('cannon') >= 0 && !u.cannonUsed && enemiesInRange(u, 4).length) items.push({ label: 'Fire Trebuchet', v: 'cannon', help: ABIL.cannon });
     if (u.abil.indexOf('heal') >= 0 && !u.usedAbil.heal && active('player').some(function (a) { return a.losses > 0 && dist(a, u) <= 1; })) items.push({ label: 'Treat Wounded', v: 'heal', help: ABIL.heal });
     if (u.abil.indexOf('infiltrate') >= 0 && !u.usedAbil.infiltrate && melee.length) items.push({ label: 'Infiltrate', v: 'infiltrate', help: ABIL.infiltrate });
@@ -356,7 +414,7 @@
     });
     items.push({ label: 'Wait', v: 'wait', help: 'Stand here, and choose which way the unit faces.' });
     UI.remove(w);
-    UI.choose(items, { x: 700, y: 120, title: u.name, help: items.some(function (it) { return it.help; }) }).then(function (k) {
+    UI.choose(items, { x: 640, y: 96, w: 290, title: u.name, help: items.some(function (it) { return it.help; }) }).then(function (k) {
       UI.push(w);
       if (k < 0) { u.slide = null; u.x = wr.orig.x; u.y = wr.orig.y; u.face = wr.origFace || u.face; wr.mode = 'move'; wr.reach = reach(u); wr.cursor = { x: u.x, y: u.y }; return; }
       var v = items[k].v;
@@ -380,6 +438,13 @@
     });
   }
 
+  // the skills of a unit that work by themselves (no order to give): its abilities, and its heroes' passive deeds
+  var ORDERS = { heal: 1, cannon: 1, stratagem: 1, infiltrate: 1 };
+  function passives(u) {
+    var ab = u.abil.filter(function (a, i) { return u.abil.indexOf(a) === i && !ORDERS[a]; }).map(function (a) { return ABIL[a] || a; });
+    var sg = (u.sig || []).filter(function (id) { return !SIG[id].active; }).map(function (id) { return '\u2605 ' + SIG[id].desc; });
+    return ab.concat(sg).map(function (d) { return d.replace(/\.$/, ''); });
+  }
   // who a hero's deed can reach (for the orders with no target, a non-empty list means it can be given)
   function sigTargets(u, id) {
     var foes = active(u.side === 'player' ? 'enemy' : 'player');
@@ -389,6 +454,7 @@
     if (id === 'bore') return foes.filter(function (e) { var t = terr(e.x, e.y); return dist(u, e) <= 1 && (e.naval || (t && t.water)); });
     if (id === 'panther' || id === 'tiger' || id === 'lasso' || id === 'uproot') return foes.filter(function (e) { return dist(u, e) <= 1; });
     if (id === 'timelyrain') return active(u.side).filter(function (o) { return o.losses > 0 && dist(o, u) <= 2; });
+    if (SIG[id].kind) return foes.filter(function (e) { return dist(u, e) <= SIG[id].range; });
     return [];
   }
 
@@ -416,7 +482,7 @@
   function unitList(wr) {
     var items = active('player').map(function (u) {
       // what the unit can do, in words: its skills and its heroes' deeds
-      var skills = u.abil.map(function (a) { return ABIL[a] || a; }).concat((u.sig || []).map(function (id) { return SIG[id].desc + (SIG[id].active && u.usedSig[id] ? ' (used)' : ''); }));
+      var skills = u.abil.filter(function (a, i) { return u.abil.indexOf(a) === i; }).map(function (a) { return ABIL[a] || a; }).concat((u.sig || []).map(function (id) { return SIG[id].desc + (SIG[id].active && u.usedSig[id] ? ' (used)' : ''); }));
       return { label: (u.done ? '\u2713 ' : '') + u.name + ' (' + TYPE[u.type].name + ')', right: 'ATK ' + u.atk + ' DEF ' + u.def + (u.losses ? '  Loss ' + u.losses : ''), help: skills.length ? skills.join('  ') : 'No special skills.' };
     });
     UI.choose(items, { x: 120, y: 60, w: 720, title: 'Units', help: true }).then(function (k) {
@@ -432,6 +498,7 @@
     if (active(u.side).some(function (o) { return o !== u && dist(o, u) <= 1 && o.abil.indexOf('morale') >= 0; })) a *= 1.1;
     if (hasSig(u, 'whirlwind')) a *= 1.4;
     if (hasSig(u, 'hooks') && other.type === 'cav') a *= 1.6;
+    (u.sig || []).forEach(function (id) { var g = SIG[id]; if (g.atk) a *= g.atk; if (g.charge && attacking && u.moved) a *= g.charge; });
     a *= 1 - (u.atkDebuff || 0);
     if (u.shaken) a *= 0.85;
     return a;
@@ -440,6 +507,7 @@
     var t = terr(u.x, u.y);
     var d = u.def * (1 + (t ? t.def : 0));
     if (u.abil.indexOf('guard') >= 0) d *= 1.25;
+    (u.sig || []).forEach(function (id) { if (SIG[id].def) d *= SIG[id].def; });
     if (hasSig(u, 'whirlwind')) d *= 0.75;
     if (hasSig(u, 'chained') && active(u.side).some(function (o) { return o !== u && o.type === 'cav' && dist(o, u) <= 1; })) d *= 1.35;
     d *= 1 - (u.debuff || 0);
@@ -466,7 +534,7 @@
       return;
     }
     if (act === 'infiltrate') {
-      t.confused = true; a.usedAbil.infiltrate = true; WM.audio.sfx('miss'); fxAt(wr, t, 'smoke'); await banner(wr, t.name + '\'s ranks are thrown into confusion! They cannot move or attack next turn.', 1.3);
+      confuseUnit(t); a.usedAbil.infiltrate = true; WM.audio.sfx('miss'); fxAt(wr, t, 'smoke'); await banner(wr, t.name + '\'s ranks are thrown into confusion! They cannot move or attack next turn.', 1.3);
       return;
     }
     if (typeof act === 'string' && act.indexOf('sig:') === 0) return sigDeed(wr, a, t, act.slice(4));
@@ -488,9 +556,12 @@
     if (id === 'panther') { t.atkDebuff = 0.25; return sureLoss(wr, t, 'clash', 'crit', who + '\'s snake spear lifts ' + t.name + ' from the saddle!'); }
     if (id === 'bore') return sureLoss(wr, t, 'smoke', 'splash', who + ' comes up under the boats — ' + t.name + '\'s hulls are holed!');
     if (id === 'lasso') return sureLoss(wr, t, 'clash', 'hit', who + '\'s red lasso drags an officer of ' + t.name + '\'s from the saddle!');
-    if (id === 'stones') { t.confused = 'leaderless'; WM.audio.sfx('hit'); fxAt(wr, t, 'clash'); await banner(wr, who + '\'s stone knocks ' + t.name + ' from his horse — the unit stands leaderless!', 1.4); return; }
+    if (id === 'stones') { confuseUnit(t, 'leaderless'); WM.audio.sfx('hit'); fxAt(wr, t, 'clash'); await banner(wr, who + '\'s stone knocks ' + t.name + ' from his horse — the unit stands leaderless!', 1.4); return; }
     if (id === 'flea') { t.debuff = Math.max(t.debuff || 0, 0.3); WM.audio.sfx('fire'); fxAt(wr, t, 'boom'); await banner(wr, 'Fire behind the lines! ' + t.name + '\'s ranks are thrown into disorder.', 1.4); return; }
     if (id === 'tiger') { await banner(wr, who + ' throws down his weapons and goes in with his fists!', 1); await clash(wr, a, t, false, 'attack'); if (t.losses < 2 && a.losses < 2) await clash(wr, a, t, false, 'attack'); return; }
+    var g = SIG[id], words = (g.words || '').replace('{who}', who).replace('{t}', t.name + '\'s unit');
+    if (g.kind === 'strike' || g.kind === 'thunder') { await sureLoss(wr, t, g.fx, g.sfx, words); if (g.kind === 'thunder' && t.losses < 2) confuseUnit(t); return; }
+    if (g.kind === 'ruse') { confuseUnit(t, g.leaderless ? 'leaderless' : true); WM.audio.sfx(g.sfx); fxAt(wr, t, g.fx); animate(t, 'hit', null, 0.1); await banner(wr, words, 1.4); return; }
   }
   async function sigOrder(wr, a, id) {   // the deeds that need no single target
     a.usedSig[id] = true;
@@ -550,6 +621,7 @@
       else e.moved = false;
       wr.cursor = { x: e.x, y: e.y };
       await WM.wait(Math.max(0.25, travel + 0.05));
+      if (travel) { await enterEvents(wr, e); if (checkEnd(wr)) return; if (e.confused || e.losses >= 2) continue; }   // the ground it came to may spring something
       if (plan.target && plan.target.losses < 2 && dist(e, plan.target) <= rangeOf(e)) {
         await clash(wr, e, plan.target, dist(e, plan.target) > 1, 'attack');
         if (checkEnd(wr)) return;
@@ -608,7 +680,7 @@
 
   // ---------- the battlefield, painted with the field-map tiles ----------
   // War letters that mean something else to the tile painter (H is a poplar there, s sand, x the void).
-  var TILE_OF = { 'H': '^', 's': '.', 'x': 'M' };
+  var TILE_OF = { 'H': '^', 's': '.', 'x': 'M', 'v': 'r' };
   function warTheme(wr) {
     if (wr.d.theme) return wr.d.theme;
     var rows = wr.terrain.join(''), wet = (rows.match(/[~r]/g) || []).length;
@@ -768,11 +840,13 @@
       if (hu.side === 'player') WM.portraits.drawFramed(hu.leader, 'normal', 6, 6);
       else if (hu.portrait) WM.portraits.drawFramed(hu.portrait, 'angry', 6, 6);
       pc.restore();
+      // the generals supporting him, small and round on the corner of his portrait (the first on the corner itself)
+      if (hu.side === 'player') (hu.supports || []).forEach(function (sid, i) { roundPortrait(sid, 150 - i * 48, 676, 24); });
       var x0 = hu.portrait || hu.side === 'player' ? 210 : 40;
       G.text(hu.name + (hu.commander ? '  (Commander)' : ''), x0, 548, { size: 24, bold: true, color: hu.side === 'player' ? G.COL.gold : '#f0a090' });
       G.text(TYPE[hu.type].name + '   ATK ' + hu.atk + '   DEF ' + hu.def + '   Losses ' + hu.losses + '/2', x0, 582, { size: 20 });
       if (hu.supports && hu.supports.length) G.text('Support: ' + hu.supports.map(function (s) { return WM.data.chars[s].name; }).join(', '), x0, 610, { size: 20, color: '#c0d0e0' });
-      var tags = hu.abil.map(function (a) { return (ABIL[a] || a).split(':')[0]; });
+      var tags = hu.abil.filter(function (a, i) { return hu.abil.indexOf(a) === i; }).map(function (a) { return (ABIL[a] || a).split(':')[0]; });   // (each skill once, however many of its heroes have it)
       if (tags.length) G.text(tags.join(' · '), x0, 638, { size: 18, color: '#a0e0a0' });
       // what has been done to the unit this battle
       var st = [];
@@ -782,7 +856,7 @@
       if (hu.atkDebuff) st.push('Unhorsed -' + Math.round(hu.atkDebuff * 100) + '% atk');
       if (st.length) G.text(st.join(' · '), x0, 686, { size: 16, color: '#ff9080' });
       preview(wr, hu);
-      if (hu.sig && hu.sig.length) G.text(hu.sig.map(function (id) { return '\u2605 ' + SIG[id].name + (SIG[id].active && hu.usedSig[id] ? ' (used)' : ''); }).join('   '), x0, 664, { size: 18, color: '#ffd070' });
+      if (hu.sig && hu.sig.length) G.text(hu.sig.map(function (id) { return '\u2605 ' + SIG[id].name + (!SIG[id].active ? ' (always on)' : hu.usedSig[id] ? ' (used)' : ''); }).join('   '), x0, 664, { size: 18, color: '#ffd070' });
       var tt = terr(cp.x, cp.y); if (tt) G.text(tt.name + (tt.def ? ' (+' + Math.round(tt.def * 100) + '% def)' : ''), 920, 548, { size: 18, align: 'right', color: G.COL.dim });
     } else {
       var tt2 = terr(cp.x, cp.y);
@@ -798,6 +872,21 @@
     }
   };
 
+  // A hero's face in a small gold ring (a support general, beside the leader's portrait).
+  function roundPortrait(id, cx, cy, r) {
+    var c = G.ctx, img = WM.portraits.get(id, 'normal'); if (!img) return;
+    c.save();
+    c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.closePath();
+    c.fillStyle = '#2a3448'; c.fill(); c.clip();
+    // the whole face in the ring: the portrait drawn a little wider than the ring, its face (about a third of the
+    // way down a painted portrait) at the ring's centre
+    var w = 2 * r * (img.isOverride ? 1.25 : 1.1), h = img.height * w / img.width;
+    c.imageSmoothingEnabled = !!img.isOverride; if (img.isOverride) c.imageSmoothingQuality = 'high';
+    c.drawImage(img, cx - w / 2, cy - h * (img.isOverride ? 0.3 : 0.36), w, h);
+    c.restore();
+    c.beginPath(); c.arc(cx, cy, r + 1, 0, Math.PI * 2); c.lineWidth = 4; c.strokeStyle = '#1a120c'; c.stroke();
+    c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.lineWidth = 2; c.strokeStyle = '#d8b36a'; c.stroke();
+  }
   // While choosing whom to strike: the angle, its bonus, and the odds of the blow and of the counter.
   function preview(wr, hu) {
     if (wr.mode === 'face' && hu === wr.sel) {
@@ -999,6 +1088,7 @@
     return (troopCache[key] = cv);
   }
   W.troopSprite = troopSprite;   // (for the debug panel and art checks)
+  W.roundPortrait = function (id, cx, cy, r) { roundPortrait(id, cx, cy, r); };
   function flashOf(spr) {   // the figure blanched white, for the instant it is struck
     if (spr.flash) return spr.flash;
     var cv = U.makeCanvas(spr.width, spr.height), c = cv.getContext('2d');

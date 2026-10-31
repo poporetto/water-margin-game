@@ -14,8 +14,15 @@
   z.rect(13, 3, 2, 5, 'B'); z.set(15, 4, '<'); z.set(16, 4, '['); z.set(17, 4, '>'); z.set(18, 4, '>'); z.set(11, 6, 'o');   // the landing: Liangshan's sampan tied up at the end of the pier, a fisherman's skiff by the reeds
   var tav = z.house(4, 10, 10, 5, { roof: 'z', door: 5, windows: [1, 3, 7] }); z.set(15, 10, 'J');
   z.rect(13, 8, 2, 2, ':'); z.vline(9, 15, 21, ':'); z.hline(9, 14, 15, ':'); z.vline(14, 8, 15, ':');
-  z.scatter('T', 0.1, 152, '.', [0, 9, 30, 13]); z.scatter(',', 0.2, 153, '.', [0, 9, 30, 13]);
-  L.clearAround(z, ':', 'T', '.');
+  // the shore meadow: a few clumps of marsh grass and small stands of willow, not a speckle over everything
+  [[2, 18, 2.6, 1.8], [23, 12, 3.2, 1.6], [22, 19, 3, 1.8], [18, 16, 1.8, 1.2], [1, 11, 1.6, 1.4]].forEach(function (p) {
+    for (var yy = 9; yy < 22; yy++) for (var xx = 0; xx < 30; xx++) {
+      var dx = (xx - p[0]) / p[2], dy = (yy - p[1]) / p[3];
+      if (dx * dx + dy * dy <= 1 && z.get(xx, yy) === '.') z.set(xx, yy, ',');
+    }
+  });
+  [[17, 9], [18, 10], [26, 9], [27, 10], [28, 12], [1, 9], [2, 14], [1, 15], [5, 20], [26, 17], [28, 18], [27, 20], [13, 19], [18, 21]].forEach(function (p) { if ('.,'.indexOf(z.get(p[0], p[1])) >= 0) z.set(p[0], p[1], 'T'); });
+  L.clearAround(z, ':', 'T,', '.');
   WM.defMap('zhugui', { name: 'Zhu Gui\'s Tavern, Liangshan Marsh', theme: 'marsh', music: 'field', rows: z.rows(), spawn: [9, 20], battleBg: 'marsh',
     exits: [WM.toWorld('zhugui', 8, 21, 3, 1)] });
   var zi = L.grid(14, 9, 'x');
@@ -67,15 +74,16 @@
     var g = L.grid(W, H, 'w');
     for (var yy = 0; yy < H; yy++) for (var xx = 0; xx < W; xx++) {
       var dx = (xx - 25) / 22, dy = (yy - 22) / 20.5;
-      var d = dx * dx + dy * dy + (U.hash2(xx, yy, 7) - 0.5) * 0.06;
+      var d = dx * dx + dy * dy + (U.hash2(xx, yy, 7) - 0.5) * 0.015;   // (a smooth shore, with only a little wander)
       if (d < 0.88) g.set(xx, yy, '.');
       else if (d < 1.0) g.set(xx, yy, '~');
-      else if (d < 1.12 && U.hash2(xx, yy, 8) > 0.45) g.set(xx, yy, 'r');
+      else if (d < 1.12 && U.hash2(Math.floor(xx / 3), Math.floor(yy / 3), 8) > 0.6 && U.hash2(xx, yy, 18) > 0.25) g.set(xx, yy, 'r');   // reeds in clumps
     }
     // mountains and pines to the north
     for (xx = 0; xx < W; xx++) for (yy = 0; yy < 8; yy++) if (g.get(xx, yy) === '.' && (yy < 4 || U.hash2(xx, yy, 9) > 0.55)) g.set(xx, yy, yy < 3 ? 'M' : 'P');
     // shore & jetty
     g.rect(17, 40, 16, 2, 's');
+    for (xx = 16; xx <= 33; xx++) { if (g.get(xx, 42) !== 'B') g.set(xx, 42, '~'); if (g.get(xx, 39) === '~' || g.get(xx, 39) === 'r') g.set(xx, 39, '.'); }   // a clean line of shallows along the beach, and grass behind it
     g.rect(23, 42, 4, 5, 'B'); g.set(21, 44, 'o'); g.set(20, 42, 'o');
     g.set(27, 45, '<'); g.set(28, 45, '['); g.set(29, 45, '>'); g.set(30, 45, '>');   // the ferry sampan that plies to Zhu Gui's pier, tied up at the jetty
     // main path
@@ -89,7 +97,7 @@
     // second pass
     g.hline(5, 44, 24, wallCh); g.rect(24, 24, 2, 1, lv >= 3 ? 'G' : ':');
     // drill ground (lower terrace, west of the path) and the meadow
-    g.rect(6, 35, 8, 4, lv >= 2 ? '=' : ':');
+    g.rect(6, 35, 8, 4, lv >= 2 ? '=' : ':'); g.set(5, 35, 'Y'); g.set(5, 38, 'Y');   // the practice ground, its banners at the corners
     // terraces: buildings
     var doors = {};
     Object.keys(SLOTS).forEach(function (k) {
@@ -105,7 +113,7 @@
     // the great hall
     var hallRoof = lv >= 3 ? 'Z' : lv >= 2 ? 'v' : '^';
     var hall = g.house(15, 6, 20, 6, { roof: hallRoof, wall: lv >= 2 ? 'R' : 'W', door: 10, windows: lv >= 2 ? [] : [3, 16] });
-    doors.hall = hall;
+    doors.hall = hall; g.set(hall.x - 1, hall.y, 'D'); g.set(hall.x - 1, hall.y + 1, ':');   // (a double door, two tiles wide, in line with the two-tile road up to it)
     g.set(23, 12, 'L'); g.set(26, 12, 'L');
     if (S.has('loyaltyhall')) { g.set(20, 13, 'Y'); g.set(29, 13, 'Y'); }   // "Act on Heaven's behalf"
     if (S.has('grand_assembly')) g.set(31, 14, 'Q');                    // the stone tablet from heaven
@@ -131,7 +139,7 @@
       // leaving by boat from the jetty
       out.push({ x: 23, y: 46, w: 4, h: 1, to: 'zhugui', tx: 13, ty: 8, dir: 'down', sfx: 'splash' });
       var doors = WM.data.lsDoors || {};
-      if (doors.hall) out.push({ x: doors.hall.x, y: doors.hall.y, to: 'liangshan_in', tx: ROOMS.hall.x, ty: ROOMS.hall.y - 1, dir: 'up' });
+      if (doors.hall) out.push({ x: doors.hall.x - 1, y: doors.hall.y, w: 2, h: 1, to: 'liangshan_in', tx: ROOMS.hall.x, ty: ROOMS.hall.y - 1, dir: 'up' });
       Object.keys(SLOTS).forEach(function (k) { if (doors[k] && ROOMS[k]) out.push({ x: doors[k].x, y: doors[k].y, to: 'liangshan_in', tx: ROOMS[k].x, ty: ROOMS[k].y - 1, dir: 'up' }); });
       return out;
     }

@@ -71,6 +71,31 @@
     await WM.data.chapters[16].begin(s);
   };
 
+  // the Hall at Chao Gai's death: anyone already standing where the bier goes steps out of sight for the scene
+  function clearAround(cx, cy) {
+    var f = WM.field; if (!f || !f.map || !Array.isArray(f.actors)) return [];
+    var gone = f.actors.filter(function (a) { if (a.visible === false || !a.ev || a.ev.resident) return false; var t = a.tile(); return Math.abs(t.x - cx) <= 1 && Math.abs(t.y - cy) <= 1; });
+    gone.forEach(function (a) { a.visible = false; });
+    return gone;
+  }
+  // ...and the heroes standing about the hall break their places: a few steps this way and that, then turn to the
+  // bier, weeping (or still not believing it)
+  function mourn(cx, cy) {
+    var f = WM.field, T = WM.TILE || 16; if (!f || !f.map || !Array.isArray(f.actors)) return;
+    f.actors.forEach(function (a, i) {
+      if (!a.ev || !a.ev.resident || a.visible === false) return;
+      var t = a.tile(), tx = t.x, ty = t.y;
+      for (var k = 0; k < 2; k++) {
+        var nx = tx + Math.round((Math.random() - 0.5) * 4), ny = ty + (ty < cy ? 1 : -1) * Math.round(Math.random() * 2);
+        if (f.tileSolid(nx, ny) || (Math.abs(nx - cx) <= 2 && Math.abs(ny - cy) <= 2)) continue;
+        a.path.push({ x: nx * T + 8, y: ny * T + 15 }); tx = nx; ty = ny;
+      }
+      a.speed = 55 + Math.random() * 60; a.faced = true;
+      a.onArrive = function () { var dx = cx - tx, dy = cy - ty; a.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); };
+      setTimeout(function () { a.emote = ['tears', 'tears', 'tears', '!', '...'][i % 5]; a.emoteT = 9; }, (i * 170) % 1600);
+    });
+  }
+
   WM.defEvents('zengtou', [
     { id: 'ch16_first', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch16_march'); }, run: async function (s) {
       await s.narrate('Chao Gai\'s army came to Zengtou and made camp before its walls: five thousand men, and twenty chiefs. At dawn the gate opened, and a young man in silver armour rode out at the head of a troop of horse — Zeng Kui, the fourth of the Zeng sons.');
@@ -84,6 +109,7 @@
       s.spawn('m1', 'fahuamonk', 4, 34, 'right'); s.spawn('m2', 'fahuamonk', 4, 35, 'right');
       s.walkTo('m1', 24, 34); await s.walkTo('m2', 24, 35);
       s.face('m1', 'right'); s.face('m2', 'right');
+      s.beside('linchong'); s.face('player', 'left'); s.face('linchong', 'left');   // both turn to the monks
       await s.jump('m1'); await s.jump('m2');
       await s.say('fahuamonk', 'Great King, we are monks of the Fahua Temple, to the west. The Zeng family have plundered our temple and abused us beyond bearing. We know a back way to their camp. If you come tonight, we will lead you to it.');
       await s.say('linchong', 'Brother, I don\'t trust them. Let me go, and you stay with the camp.');
@@ -111,20 +137,47 @@
       s.sfx('drum');
       await s.say('guard', 'The bandit king walked right into it! Torches! Take him!');
       await s.battle('ch16_ambush', { bg: 'night' });
+      await s.fadeOut(0.4);
       WM.data.clear(s, amb);
+      s.spawn('lt', 'liutang', 8, 22, 'right'); s.spawn('bs', 'baisheng', 10, 21, 'down'); s.spawn('hy', 'huyanzhuo', 11, 22, 'left'); s.spawn('rx', 'ruanxiaoer', 10, 23, 'up');
+      await s.fadeIn(0.4);
+      await s.emote('hy', 'anger');
+      await s.say('huyanzhuo', 'They\'ll be back with more torches. Brother, we must get out of these woods!');
+      await s.emote('rx', 'sweat');
+      await s.say('ruanxiaoer', 'The camp is south-east, past the trees. Stay close, Great King!');
+      await s.fallIn('lt', 'liutang'); await s.fallIn('bs', 'baisheng'); await s.fallIn('hy', 'huyanzhuo'); await s.fallIn('rx', 'ruanxiaoer');
       s.flag('ch16_ambushed');
-      await s.say(null, '(Fight your way back east to the camp!)');
+      await s.say(null, '(Fight your way back to the camp, south of the woods!)');
     } },
-    { id: 'ch16_arrow', x: 0, y: 20, w: 17, h: 6, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch16_ambushed'); }, run: async function (s) {
-      s.music('sad');
-      s.spawn('lt', 'liutang', 3, 23, 'right'); s.spawn('bs', 'baisheng', 3, 24, 'right');
+    { id: 'ch16_arrow', x: 0, y: 30, w: 26, h: 1, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch16_ambushed'); }, run: async function (s) {
+      // out of the trees, the camp in sight: Shi Wengong's arrow from the edge of the wood
+      WM.data.clear(s, ['lt', 'bs', 'hy', 'rx']);   // (the four who fell in after the ambush: on stage again where they walk)
+      var at = {}, f = WM.field, near = [[14, 29], [13, 29], [15, 28], [14, 28]];
+      if (f && f.map && Array.isArray(f.actors)) f.actors.forEach(function (a) { if (a.following && a.sheetWho) { var t = a.tile(); at[a.sheetWho] = [t.x, t.y, a.dir]; } });
+      WM.state.followers = []; if (f.refreshFollowers) f.refreshFollowers();
+      [['lt', 'liutang'], ['bs', 'baisheng'], ['hy', 'huyanzhuo'], ['rx', 'ruanxiaoer']].forEach(function (k, i) { var p = at[k[1]] || near[i]; s.spawn(k[0], k[1], p[0], p[1], p[2] || 'down'); });
+      await s.walkTo('player', 15, 30); s.face('player', 'down');
+      await s.say('liutang', 'There — the camp fires! We\'re through, Brother!');
+      s.spawn('swg', 'shiwengong', 21, 30, 'left');
+      ['player', 'lt', 'bs', 'hy', 'rx'].forEach(function (k) { s.face(k, 'right'); });
+      await s.emote('rx', '!');
+      await s.say('shiwengong', 'Bandit king! Shi Wengong of Zengtou sends you this!');
       s.sfx('arrow'); await s.flash();
-      await s.shake(3, 0.3); s.lie('player');
+      await s.jump('player'); await s.shake(3, 0.3); s.lie('player');
+      s.music('sad');
+      s.emote('lt', '!'); s.emote('bs', '!'); s.emote('hy', 'anger'); await s.emote('rx', '!');
+      s.despawn('swg', { leave: true });
       await s.say('liutang:shock', 'BROTHER! An arrow — in his face! Bai Sheng, help me lift him!');
-      s.walkTo('lt', 3, 22, { run: true }); await s.walkTo('bs', 4, 22, { run: true });
-      await s.say('baisheng', 'I\'ve got him! Huyan Zhuo, the Ruans — hold the road behind us!');
+      s.walkTo('lt', 15, 29, { run: true }); await s.walkTo('bs', 16, 30, { run: true });
+      s.face('lt', 'down'); s.face('bs', 'left');
+      await s.emote('bs', 'sweat');
+      await s.say('baisheng', 'I\'ve got him! Huyan Zhuo, Ruan Xiao\'er — hold the road behind us!');
+      s.walkTo('rx', 19, 30, { run: true }); await s.walkTo('hy', 18, 29, { run: true });
+      s.face('hy', 'right'); s.face('rx', 'right');
+      await s.emote('hy', 'anger');
+      await s.say('huyanzhuo', 'Go! Any Zeng dog who comes out of those trees answers to my whips!');
       await s.fadeOut(1);
-      WM.data.clear(s, ['lt', 'bs']);
+      WM.data.clear(s, ['lt', 'bs', 'hy', 'rx']);
       s.lie('player', false);
       s.place('player', 25, 33, 'down'); s.hide('player');
       s.night(false);
@@ -135,35 +188,56 @@
       await s.say('linchong', 'The arrow is out. There are characters cut into the shaft: "Shi Wengong."');
       await s.say('liutang:sad', 'Brother Chao Gai... can you hear me? ...He can\'t speak. The arrow was poisoned.');
       await s.say('linchong:sad', 'Back to the mountain. Now.');
-      WM.data.clear(s, ['cg2', 'lc2', 'lt2']);
-      s.show('player');
       s.flag('ch16_shot');
       await s.fadeOut(1.5);
+      WM.data.clear(s, ['cg2', 'lc2', 'lt2']);
+      s.show('player');
       s.party(['songjiang']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
-      await s.warp('liangshan_in', 16, 9, 'up', { noFade: true });
+      await s.warp('liangshan_in', 15, 9, 'up', { noFade: true });
+      var stood = clearAround(15, 6);   // (the hall's own people step out of the way of the bier)
       s.spawn('cg', 'chaogai', 15, 6, 'down'); s.lie('cg');
       s.spawn('wy', 'wuyong', 13, 7, 'right'); s.spawn('lc', 'linchong', 17, 7, 'left');
       await s.fadeIn(1.5);
+      await s.walkTo('player', 15, 7, { run: true }); s.face('player', 'up');
       await s.say('songjiang:sad', 'Brother! Brother Chao Gai!');
       await s.say('chaogai:sad', 'Brother Song Jiang... take care of yourself. Whoever captures the man who shot me... let him be the lord of Liangshan.');
+      await s.wait(0.8);
+      s.sfx('gong');
+      await s.jump('player'); s.emote('player', 'tears', 9);
+      s.emote('wy', 'tears', 9); s.emote('lc', 'tears', 9);
+      mourn(15, 6);   // the whole hall: some run to the bier, some turn away weeping
+      await s.wait(2.2);
       await s.narrate('Then Chao Gai closed his eyes and died. Song Jiang wept as if he had lost his own father, and the whole mountain wept with him.');
-      s.lie('cg');
       s.flag('chaogai_dead');
       S.removeFromParty('chaogai');
+      await s.walkTo('wy', 14, 8); s.faceEach('wy', 'player');
       await s.say('wuyong', 'Brother, the mountain cannot be without a lord. Brother Chao Gai\'s words will be honoured when his enemy is taken. Until then, sit in the seat — for the sake of all of us.');
-      await s.say('linchong', 'We all ask it.');
+      await s.emote('player', '...');
+      await s.walkTo('lc', 16, 8); s.faceEach('lc', 'player');
+      await s.say('linchong', 'We all ask it, Brother. Every man in this hall.');
+      s.face('player', 'down');
+      await s.emote('player', 'sweat');
       await s.say('songjiang:sad', '...Until Shi Wengong is taken, I will sit in it — for a time. When he is taken, whoever took him shall be our lord, as our brother wished.');
+      s.emote('wy', '...'); await s.emote('lc', '...');
+      await s.fadeOut(1);
+      WM.data.clear(s, ['cg', 'lc']);
+      stood.forEach(function (a) { a.visible = true; });
+      s.place('player', 15, 8, 'down'); s.place('wy', 14, 8, 'right');
+      await s.fadeIn(1);
       await s.narrate('Song Jiang changed the name of the Hall of Gathered Righteousness to the Hall of Loyalty and Righteousness, and before it raised a great apricot-yellow banner: "Act on Heaven\'s Behalf." He divided the mountain into camps and set a captain over each.');
       s.flag('loyaltyhall');
-      s.despawn('wy', { leave: true }); s.despawn('lc');
       await s.join('duanjingzhu');
       await s.narrate('Song Jiang wanted to march on Zengtou at once. Wu Yong held him back: they were in mourning, and an army in mourning goes out under a bad star.');
-      s.spawn('dmk', 'monk', 16, 12, 'up');
-      await s.walkTo('dmk', 16, 10);
-      await s.say('monk', '(come from Daming to chant at Chao Gai\'s memorial) Amitabha. Lord Song, in Daming there lives the richest man in the north, Lu Junyi — the Jade Qilin. With the spear and the staff he has no equal in the land.');
+      await s.narrate('A monk came from Daming to chant at Chao Gai\'s memorial.');
+      s.spawn('dmk', 'monk', 15, 12, 'up');
+      await s.walkTo('dmk', 15, 10); s.faceEach('dmk', 'player');
+      await s.say('monk', 'Amitabha. Lord Song, in Daming there lives the richest man in the north, Lu Junyi — the Jade Qilin. With the spear and the staff he has no equal in the land.');
       s.despawn('dmk', { leave: true });
+      await s.emote('player', '!');
       await s.say('songjiang', 'If only we had such a man on Liangshan, what would we fear from any army?');
+      s.faceEach('wy', 'player');
       await s.say('wuyong:smile', 'Then let me go to Daming, and bring him here.');
+      s.despawn('wy', { leave: true });
       s.flag('ch16_done');
       await s.endChapter();
       if (WM.data.chapters[17].begin) await WM.data.chapters[17].begin(s);

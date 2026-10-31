@@ -209,7 +209,7 @@
       s.night(true);
       s.party(['songjiang', 'huarong', 'likui', 'yangxiong', 'huangxin']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       await s.narrate('But Song Jiang, with no word from his scouts, had grown anxious. At dusk he led the army into the village himself, along the widest road, up to the very moat of the Zhu manor.');
-      await s.warp('zhujia', 30, 15, 'up', { noFade: true });
+      await s.warp('zhujia', 24, 24, 'up', { noFade: true });   // (they come up the road from the south)
       await s.fadeIn(1);
     } }
   ]);
@@ -218,7 +218,12 @@
       s.music('tense');
       // Song Jiang's men strung out along the narrow road behind him, between the bamboo
       var D = WM.data;
-      var ours1 = D.troop(s, 'l1', 'outlaw', [[30, 16], [30, 17], [31, 17], [31, 18], [29, 18], [27, 18], [26, 19], [28, 19], [24, 18], [25, 19]], 'up');
+      // they march up the road from the south behind him, round the bend and up to the moat
+      var goal = [[30, 16], [30, 17], [31, 17], [31, 18], [29, 18], [27, 18], [26, 19], [28, 19], [24, 18], [25, 19]];
+      var ours1 = goal.map(function (g, n) { var k = 'l1' + n; s.spawn(k, 'outlaw', 26 + (n % 5) * 2, 24 + (n % 2), 'left'); return k; });
+      s.walkTo('player', 30, 15);
+      var lastWalk = null; ours1.forEach(function (k, n) { lastWalk = s.walkTo(k, goal[n][0], goal[n][1]); });
+      await lastWalk; ours1.forEach(function (k) { s.face(k, 'up'); }); s.face('player', 'up');
       await s.say('likui', 'The bridge is up and the gate\'s shut! Not a man on the walls! They\'re scared of us!');
       await s.say('songjiang:shock', '...No. Not a soldier, not a light — this is a trap. Turn back! Turn back at once!');
       s.sfx('cannon'); await s.shake(6, 0.5);
@@ -228,7 +233,8 @@
       ours1.forEach(function (k) { s.face(k, 'left'); });
       s.sfx('arrow'); await s.flash('#ffffff', 0.15);
       await s.narrate('A signal bomb burst over the manor. Arrows poured down from the wall, and behind them the roads they had come by were full of torches and shouting.');
-      s.spawn('sx', 'shixiu', 30, 18, 'up');
+      s.spawn('sx', 'shixiu', 36, 25, 'up');   // (running up the road from the south)
+      await s.walkTo('sx', 30, 18, { run: true }); s.faceEach('sx', 'player');
       await s.say('shixiu', 'Brother! I found you! Don\'t take the wide roads — wherever you see a white poplar, turn there! That\'s the living road!');
       await s.say('huarong', 'And look — wherever that red lantern on the pole goes, their men follow it.');
       s.sfx('arrow'); await s.flash('#ffffff', 0.2);
@@ -254,12 +260,39 @@
   ]);
   WM.defEvents('lijia', [
     { id: 'ch12_liying', x: 20, y: 16, w: 5, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch12_first'); }, run: async function (s) {
-      s.spawn('dx', 'duxing', 22, 16, 'down');
-      await s.say('duxing', 'Brother Song Jiang. My master thanks you for the gifts, but he is in bed with his wound, and dares not meet you.');
-      await s.say('songjiang', 'I understand. He fears to be seen with us. Then tell me about the Zhu Village.');
-      await s.say('duxing', 'The three villages swore an oath to stand together. The Zhu manor is on the ridge, with a moat and a drawbridge, and a front gate and a back gate. Their instructor is Luan Tingyu, the Iron Staff — he cannot be beaten by ten men. And the Hu family to the west have a daughter, Hu Sanniang, "Ten Feet of Blue." Her twin sabres are very fast. She is betrothed to Zhu Biao.');
-      await s.say('songjiang', 'I thank you. The road we came in by is the wrong road, then. Next time we\'ll come at them from the front.');
-      s.despawn('dx');
+      // Song Jiang has come with gifts — a fine horse and bolts of silk — and Yang Xiong and Shi Xiu, who know the steward
+      await s.walkTo('player', 22, 18);
+      s.spawn('yx', 'yangxiong', 21, 20, 'up'); s.spawn('sx', 'shixiu', 23, 20, 'up'); s.spawn('gc', 'outlaw', 22, 21, 'up');
+      s.walkTo('yx', 21, 19); await s.walkTo('sx', 23, 19);
+      s.face('player', 'up');
+      await s.say('yangxiong', 'Brother, this is the manor. The steward is Du Xing — he got me out of trouble in Jizhou once. He will speak for us.');
+      // the gate across the moat opens, and the steward comes out over the drawbridge
+      s.sfx('door');
+      s.spawn('dx', 'duxing', 22, 14, 'down');
+      await s.walkTo('dx', 22, 16);
+      s.faceEach('dx', 'player');
+      await s.say('duxing', 'Brother Yang Xiong, Brother Shi Xiu! And this must be the great Song Jiang. Welcome to the Li family manor.');
+      await s.say('songjiang', 'Steward Du. Your master was wounded by the Zhu sons for our brother Shi Qian\'s sake. I have brought him a horse and some silk — a small thanks. May I pay my respects to him?');
+      s.face('dx', 'up'); await s.emote('dx', 'sweat', 1);
+      // up on the wall above the gate, a figure watches, then turns away
+      s.spawn('ly', 'liying', 21, 14, 'down');
+      await s.wait(0.6);
+      s.face('ly', 'up'); await s.wait(0.4); WM.data.clear(s, ['ly']);
+      s.faceEach('dx', 'player');
+      await s.say('duxing:sad', 'Brother Song... my master thanks you for the gifts, with all his heart. But he is in bed with his wound, and dares not meet you.');
+      await s.say('shixiu', 'Dares not? Li Ying is no coward. He took an arrow for us.');
+      await s.say('duxing:sad', 'He is no coward, brother. But he is a landowner with a family and a village. If it were known he met the chief of Liangshan face to face, the court would call him a bandit too.');
+      await s.say('songjiang', 'I understand. He fears to be seen with us, and I will not shame him. Then tell me about the Zhu Village, Steward — so we do not lose more men in that bamboo.');
+      await s.say('duxing', 'The three villages swore an oath to stand together: the Zhu in the middle, the Hu to the west, and us to the east. The Zhu manor is on the ridge, with a moat and a drawbridge, and a front gate and a back gate.');
+      await s.say('duxing', 'Their instructor is Luan Tingyu, the Iron Staff — ten men cannot beat him. And the Hu family to the west has a daughter, Hu Sanniang, the Ten Feet of Blue. She fights with two sabres and a red lasso, and she is promised to Zhu Biao.');
+      await s.say('duxing', 'Inside the village every road twists back on itself. Only where a white poplar stands is the road a living one — every other road dead-ends in pits and ambushes.');
+      s.face('yx', 'right'); s.face('sx', 'left');
+      await s.say('yangxiong', 'The white poplars. Shi Xiu found the same thing.');
+      await s.say('songjiang', 'I thank you, Steward, and your master. The road we came in by was the wrong road. Next time we will come at them from the front.');
+      await s.say('duxing', 'Go carefully, brother. My master will not fight beside you — but he will not fight against you, either.');
+      s.walkTo('dx', 22, 14); await s.wait(0.8); WM.data.clear(s, ['dx']);
+      s.sfx('door');
+      WM.data.clear(s, ['yx', 'sx', 'gc']);
       s.flag('ch12_duxing');
       await s.say(null, '(Return to the camp before Zhu Village.)');
     } }
@@ -268,14 +301,17 @@
     { id: 'ch12_second', x: 0, y: 42, w: 60, h: 8, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch12_duxing'); }, run: async function (s) {
       // the field before the Zhu manor: Song Jiang's army on the east of the road, and out of the west, Hu Sanniang's riders
       var D = WM.data;
+      await s.fadeOut(0.5);   // (the army drawn up while the screen is dark: no one appears out of thin air)
       s.place('player', 31, 45, 'left');
       s.spawn('wy1', 'wangying', 29, 46, 'left'); s.spawn('lc', 'linchong', 33, 46, 'left'); s.spawn('lk1', 'likui', 32, 44, 'left'); s.spawn('hr1', 'huarong', 30, 46, 'left');
       var ours = D.troop(s, 'ls', 'outlaw', D.block(34, 38, [44, 45]).concat(D.block(35, 38, [46])), 'left');   // on the road, clear of the tents
-      s.spawn('hu', 'husanniang', 9, 45, 'right');
-      var hus = D.troop(s, 'hm', 'guard', D.block(8, 11, [44, 46]).concat(D.block(5, 7, [45])), 'right');   // behind her, clear of the tents
+      await s.fadeIn(0.5);
+      // out of the west, riding in from beyond the edge of sight
+      s.spawn('hu', 'husanniang', 4, 45, 'right');
+      var hus = D.troop(s, 'hm', 'guard', D.block(1, 4, [44, 46]).concat(D.block(0, 2, [45])), 'right');   // behind her, clear of the tents
       s.music('boss');
-      hus.forEach(function (k) { s.move(k, 'R10', { run: true, wait: false }); });
-      s.move('hu', 'R16', { run: true, wait: false });
+      hus.forEach(function (k) { s.move(k, 'R17', { run: true, wait: false }); });
+      s.move('hu', 'R21', { run: true, wait: false });
       await s.narrate('Song Jiang divided his army and attacked again. Out of the west came a troop of horsemen, and at their head, on a red-maned horse, a young woman with a sabre in each hand: Hu Sanniang.');
       await s.say('wangying', 'Ha! A girl? Leave her to me, brother!');
       await s.move('wy1', 'L2');

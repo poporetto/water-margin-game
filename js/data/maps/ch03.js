@@ -25,7 +25,8 @@
   m.rect(16, 23, 3, 5, ':');
   var hall = m.house(10, 4, 16, 7, { roof: '^', door: 8, windows: [2, 5, 10, 13] });
   m.rect(14, 11, 8, 10, '=');                                  // the courtyard where Lin fights Hong
-  m.set(13, 12, 'L'); m.set(22, 12, 'L'); m.set(13, 19, 'L'); m.set(22, 19, 'L');
+  [12, 15, 17, 19].forEach(function (ly) { m.set(13, ly, 'L'); m.set(22, ly, 'L'); });   // lanterns all down both sides of the courtyard
+  m.rect(16, 21, 3, 1, ':'); m.set(15, 21, 'L'); m.set(19, 21, 'L');   // and a pair inside the gate, either side of the way in
   m.house(5, 13, 7, 5, { roof: '^', door: false, windows: [2, 5] });
   m.house(24, 13, 7, 5, { roof: '^', door: false, windows: [2, 5] });
   m.stamp(5, 19, ['f.T.f', 'T.f.T']); m.stamp(26, 19, ['f.T.f', 'T.f.T']);

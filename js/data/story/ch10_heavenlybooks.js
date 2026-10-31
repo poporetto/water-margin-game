@@ -64,13 +64,21 @@
   // ---------------- Huandao: the Mysterious Lady ----------------
   WM.defEvents('huandao', [
     { id: 'ch10_chase', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 10; }, run: async function (s) {
-      s.spawn('c1', 'zhaoneng', 15, 25, 'up'); s.spawn('c2', 'constable', 16, 25, 'up');
-      await s.say('zhaoneng', 'He went into the village! Search every house! There\'s no way out of Huandao — the hills close it in on three sides!');
-      s.face('player', 'down');
+      // shouts on the road behind: he ducks behind a tree by the lane
+      await s.say('zhaoneng', '(from the road) He went into the village! After him!');
+      s.face('player', 'down'); await s.emote('player', '!', 0.6);
+      await s.walkTo('player', 11, 21, { run: true }); s.face('player', 'down');   // (behind the tree, its trunk and leaves between him and the lane)
+      var cx0 = 15, cy0 = 25;
+      s.spawn('c1', 'zhaoneng', cx0, cy0, 'up'); s.spawn('c2', 'constable', cx0 + 1, cy0, 'up');
+      s.walkTo('c1', 15, 21, { run: true }); await s.walkTo('c2', 16, 21, { run: true });
+      s.face('c1', 'left'); s.face('c2', 'right'); await s.wait(0.5);
+      s.face('c1', 'up'); s.face('c2', 'up'); await s.emote('c1', '?', 0.8);
+      await s.say('zhaoneng', 'Gone... Search every house! There\'s no way out of Huandao — the hills close it in on three sides!');
+      s.despawn('c1', { to: [1, 13] }); s.despawn('c2', { to: [23, 21] });
+      await s.wait(1.2);
       await s.emote('player', 'sweat');
       await s.say('songjiang:sad', '(The village is a dead end. The only shelter is the old temple at the top of the slope...)');
       s.face('player', 'up');
-      s.despawn('c1', { to: [1, 13] }); s.despawn('c2', { to: [23, 21] });
       await s.say(null, '(Run to the temple at the north of the village.)');
     } }
   ]);
@@ -78,13 +86,16 @@
     { id: 'ch10_temple', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 10; }, run: async function (s) {
       await s.emote('player', '?');
       await s.say('songjiang', '(Empty... no priest, no lamp. Only the shrine cabinet behind the altar, with its curtain.)');
-      await s.walkTo('player', 7, 5);
+      await s.walkTo('player', 7, 4);   // (round the altar table, to the shrine behind it)
       s.face('player', 'up');
       await s.say('songjiang:sad', '(Forgive me, whatever spirit lives here. Hide me tonight.)');
-      s.hide('player');
+      // and the shrine takes him in: a glow, and he fades from sight
+      s.sfx('magic'); s.emote('player', '...', 0.8);
+      for (var fa = 10; fa >= 0; fa--) { s.actor('player').alpha = fa / 10; await s.wait(0.06); }
+      s.hide('player'); s.actor('player').alpha = null; await s.flash();
       await s.wait(0.6);
       s.spawn('c1', 'zhaoneng', 7, 9, 'up'); s.spawn('c2', 'constable', 6, 8, 'up');
-      s.walkTo('c2', 5, 7); await s.walkTo('c1', 7, 7);
+      s.walkTo('c2', 5, 7); await s.walkTo('c1', 7, 6);
       await s.say('zhaoneng', 'Bring the torches here! Look in the shrine!');
       s.sfx('wind'); await s.shake(4, 0.6);
       await s.narrate('As the torch came near the curtain, a black wind rushed out of the cabinet, blew out every torch, and filled the temple with flying sand.');
@@ -97,9 +108,8 @@
       s.hide('c1'); s.hide('c2'); s.despawn('c1'); s.despawn('c2');
       await s.wait(0.8);
       await s.narrate('Song Jiang, trembling, sat in the dark cabinet. And then two maidens in blue robes stood before him, and bowed.');
-      s.show('player');
-      s.place('player', 7, 6, 'down');
-      s.spawn('m1', 'jademaiden', 6, 7, 'up'); s.spawn('m2', 'jademaiden', 8, 7, 'up');
+      s.place('player', 7, 4, 'down'); s.show('player');
+      s.spawn('m1', 'jademaiden', 6, 6, 'up'); s.spawn('m2', 'jademaiden', 8, 6, 'up');
       await s.say('jademaiden', 'Star Lord, our Mistress invites you.');
       await s.say('songjiang', '..."Star Lord"? Your Mistress? Who is she?');
       await s.say('jademaiden', 'Come and see.');
@@ -119,9 +129,12 @@
       await s.give('heavenbook', 1);
       WM.state.chars.songjiang.tal.head = 'heavenbook';
       await s.notice('Song Jiang received the Heavenly Books.', { auto: 2.2 });
+      s.flag('ch10_books'); S.restore('songjiang');   // (the skill opens with them)
+      s.sfx('levelup');
+      await s.notice('Song Jiang learned the signature skill: Thirty-Six Spirits!', { auto: 2.4 });
       s.despawn('lady'); s.despawn('m1'); s.despawn('m2');
       await s.fadeOut(1, '#ffffff');
-      await s.warp('huandao_in', 7, 6, 'down', { noFade: true });
+      await s.warp('huandao_in', 7, 4, 'down', { noFade: true });
       s.music('tense');
       await s.fadeIn(1);
       await s.narrate('Song Jiang woke in the shrine cabinet with a start. It had been a dream — but in his sleeve were three scrolls bound in yellow silk, smelling of strange incense. Outside, it was dawn, and he heard shouting and the clash of weapons.');
@@ -131,14 +144,25 @@
   WM.defEvents('huandao', [
     { id: 'ch10_rescue', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch10_books'); }, run: async function (s) {
       s.night(false);
-      s.spawn('likui', 'likui', 15, 18, 'up'); s.spawn('oupeng', 'oupeng', 14, 19, 'up');
-      s.spawn('c1', 'zhaoneng', 15, 14, 'down');
-      await s.say('zhaoneng:shock', 'Who are you — ?!');
-      s.sfx('slash'); s.despawn('c1');
-      await s.say('likui', 'Brother! Brother Song! Are you in there? That was Zhao Neng — one chop! Ou Peng and Tao Zongwang are at the gate, and Liu Tang, Shi Yong and Li Li are coming with more men!');
+      // dawn: Zhao Neng comes up the slope with his men to drag Song Jiang out of the temple
+      var p0 = s.actor('player').tile();
+      s.spawn('c1', 'zhaoneng', 15, 20, 'up'); s.spawn('c2', 'constable', 14, 21, 'up'); s.spawn('c3', 'constable', 16, 21, 'up');
+      s.walkTo('c2', p0.x - 1, p0.y + 2); s.walkTo('c3', p0.x + 1, p0.y + 2); await s.walkTo('c1', p0.x, p0.y + 1);
+      s.face('player', 'down'); await s.emote('player', 'sweat', 0.8);
+      await s.say('zhaoneng:smile', 'There he is! No black wind this morning, Song Jiang. Seize him!');
+      // and from the lane below, a roar
+      s.spawn('likui', 'likui', 15, 25, 'up'); s.spawn('oupeng', 'oupeng', 16, 25, 'up');
+      await s.say('likui:angry', '(from below) ZHAO NENG! Turn round!', { top: true });
+      s.face('c1', 'down'); await s.emote('c1', '!', 0.6);
+      await s.walkTo('likui', p0.x, p0.y + 2, { run: true });
+      s.sfx('slash'); await s.flash(); s.lie('c1'); await s.shake(4, 0.3);
+      s.walkTo('oupeng', p0.x, p0.y + 3, { run: true });
+      await s.say('likui', 'Brother Song! It\'s me, Iron Ox! That dog Zhao Neng won\'t hunt anyone again. Ou Peng and Tao Zongwang are holding the mouth of the village, and Liu Tang, Shi Yong and Li Li are coming with more men!');
+      s.face('c2', 'right'); s.face('c3', 'left'); await s.emote('c2', 'anger', 0.6);
       s.addParty('likui'); s.addParty('oupeng'); s.level('likui', 23); s.level('oupeng', 22);
-      s.despawn('likui'); s.despawn('oupeng');
+      WM.data.clear(s, ['likui', 'oupeng']);
       await s.battle('ch10_constables', { bg: 'night' });
+      s.lie('c2'); s.lie('c3');
       await s.say('songjiang', 'Iron Ox... Brothers. How did you know where to find me?');
       await s.say('oupeng', 'Lord Chao and Mister Wu sent us down the hill the moment you were missed, brother. They guessed where you\'d gone.');
       s.flag('ch10_back');
@@ -170,7 +194,10 @@
       await s.say('songjiang', 'Brother, you are hot-headed, and the roads are watched. If you go, there are three things you must promise. Do not drink. Go alone, and quietly. And do not take your axes.');
       await s.say('likui', 'No wine — I promise. Alone — fine. My axes... all right. All right! I\'ll take a waist sabre and a pudao.');
       await s.say('songjiang', 'Then go, and come back quickly.');
-      s.despawn('likui', { leave: true }); s.despawn('chaogai', { leave: true });
+      await s.say('likui:smile', 'Ha! I\'ll be back with Mother before you know it!');
+      // off down the hall at a run and out of the doors
+      await s.walkTo('likui', 16, 16, { run: true }); WM.data.clear(s, ['likui']);
+      s.despawn('chaogai', { leave: true });
       s.spawn('zg', 'zhugui', 12, 10, 'right');
       await s.walkTo('zg', 14, 10);
       s.face('player', 'left');
@@ -182,7 +209,13 @@
       s.flag('protagonist', 'likui');
       s.give('medicine', 3, true);
       s.flag('ch10_likui');
+      // out of the hall, down to the boats, and away across the marsh: from here the road is Li Kui's
+      await s.fadeOut(0.8);
+      var lw = WM.worldAt('zhugui');   // (ferried across the marsh to the shore by Zhu Gui's tavern)
+      await s.warp('world', lw[0], lw[1], 'down', { noFade: true });
+      await s.fadeIn(0.8);
       await s.narrate('Li Kui set off for Yishui with a sabre at his waist and a pudao in his hand, and never knew that Zhu Gui was a day behind him on the road.');
+      await s.say('likui', 'Mother, wait for me! Iron Ox is coming home!');
       await s.say(null, '(Yishui lies to the east. Go home to Li Kui\'s mother.)');
     } }
   ]);
@@ -209,7 +242,8 @@
       await s.say('woman', 'Rice? ...I suppose I can cook you some. Wait here by the road, big fellow. It won\'t be long.');
       await s.walkTo('lgw', 18, 25); s.face('lgw', 'down');
       await s.say('likui', '(Can\'t sit still. I\'ll go round the back and wait in the shade.)');
-      await s.walkTo('player', 18, 23); s.face('player', 'down');
+      await s.move('player', 'L3 U6 R7 D3');   // (round the west end of the cottage, along behind it, to the corner by the back door)
+      s.face('player', 'down');
       s.place('ligui', 22, 26, 'left'); s.show('ligui');
       await s.walkTo('ligui', 18, 26);
       s.face('lgw', 'down'); s.face('ligui', 'up');
@@ -390,13 +424,12 @@
       await s.emote('cao', '!');
       await s.say('squirecao:shock', 'He\'s loose! RUN!');
       s.walkTo('cao', 20, 26, { run: true }); s.walkTo('widow', 21, 27, { run: true }); s.walkTo('hm', 22, 26, { run: true });
-      await s.walkTo('player', 18, 26, { run: true });
-      s.hide('cao'); s.hide('widow'); s.hide('hm');
-      s.hide('player');
-      s.sfx('slash'); await s.wait(0.4); s.sfx('slash'); await s.wait(0.4); s.sfx('slash'); await s.shake(2, 0.3);
-      s.despawn('cao'); s.despawn('widow'); s.despawn('hm');
+      await s.walkTo('player', 19, 26, { run: true });
+      // he runs them down one after another, and they fall where he catches them
+      s.face('player', 'right'); s.sfx('slash'); await s.flash(); s.lie('cao'); await s.shake(2, 0.2);
+      await s.walkTo('player', 20, 27, { run: true }); s.face('player', 'right'); s.sfx('slash'); s.lie('widow'); await s.shake(2, 0.2);
+      await s.walkTo('player', 21, 26, { run: true }); s.face('player', 'right'); s.sfx('slash'); s.lie('hm'); await s.shake(3, 0.3);
       await s.wait(0.6);
-      s.show('player');
       await s.walkTo('player', 7, 26);
       await s.say('zhugui', 'Brother Song sent me after you. He knew.');
       await s.say('likui:angry', '...I broke my promise and drank. And my mother... Now let me kill that green-eyed constable too!');

@@ -14,8 +14,7 @@
     G.window(x, y, 560, 6 * 92 + 28);
     for (var i = 0; i < 6; i++) {
       var id = p[i], yy = y + 16 + i * 92;
-      if (i === 3) { G.ctx.fillStyle = 'rgba(216,179,106,0.35)'; G.ctx.fillRect(x + 20, yy - 6, 520, 1); }
-      if (!id) { G.text(i < 3 ? '— front —' : '— back —', x + 280, yy + 30, { size: 18, align: 'center', color: '#555' }); continue; }
+      if (!id) continue;   // (no front and back rows any more: an empty place is simply empty)
       var c = WM.state.chars[id], d = S.def(id), st = S.stats(id);
       if (selIdx === i) { G.ctx.fillStyle = G.COL.select; G.ctx.fillRect(x + 12, yy - 4, 536, 86); }
       var img = WM.portraits.get(id, c.hp <= 0 ? 'sad' : 'normal');
@@ -25,7 +24,6 @@
       cx.restore();
       G.text(d.name, x + 100, yy + 2, { size: 22, bold: true, color: c.hp <= 0 ? '#c06050' : G.COL.text });
       G.text('LV ' + c.lv, x + 330, yy + 4, { size: 20 });
-      G.text(i < 3 ? 'Front' : 'Back', x + 530, yy + 4, { size: 18, align: 'right', color: G.COL.dim });
       G.text('HP ' + c.hp + '/' + st.mhp, x + 100, yy + 34, { size: 19, color: G.hpColor(c.hp / st.mhp) });
       G.bar(x + 100, y + 16 + i * 92 + 60, 220, 8, c.hp / st.mhp, G.hpColor(c.hp / st.mhp));
       G.text('EXP ' + c.exp, x + 330, yy + 34, { size: 18, color: G.COL.dim });
@@ -278,7 +276,7 @@
               var arr = []; for (var i = 0; i < 6; i++) arr[i] = p[i] || null;
               arr[picked] = b || null; arr[idx] = a;
               WM.state.party = arr.filter(function (x) { return x; });
-              // keep explicit gaps impossible: front row fills first
+              // (no gaps: the party closes up)
               p = WM.state.party; picked = -1; WM.audio.sfx('ok');
             }
           }
@@ -288,9 +286,9 @@
           partyPanel(idx, 16, 16);
           G.window(600, 20, 344, 150);
           G.text('Formation', 620, 36, { size: 22, bold: true, color: G.COL.gold });
-          G.text('Slots 1–3 fight in the front row.', 620, 72, { size: 18, color: G.COL.dim });
-          G.text('S weapons cannot reach', 620, 98, { size: 18, color: G.COL.dim });
-          G.text('from the back row.', 620, 122, { size: 18, color: G.COL.dim });
+          G.text('Choose two to swap.', 620, 72, { size: 18, color: G.COL.dim });
+          G.text('The first in line leads', 620, 98, { size: 18, color: G.COL.dim });
+          G.text('the party on the road.', 620, 122, { size: 18, color: G.COL.dim });
           if (picked >= 0) { G.ctx.strokeStyle = G.COL.gold; G.ctx.lineWidth = 3; G.ctx.strokeRect(26, 16 + 12 + picked * 92, 536, 86); }
           G.cursor(24, 16 + 16 + idx * 92 + 38);
         }
@@ -311,7 +309,8 @@
         var ids = pool();
         return new UI.List(ids.map(function (id) {
           var d = S.def(id), inP = st.party.indexOf(id) >= 0;
-          return { label: (inP ? '★ ' : '   ') + d.name, right: 'LV ' + st.chars[id].lv, id: id, help: d.nick ? '“' + d.nick + '”  ' + S.weapon(id).name : '' };
+          var lead = id === st.flags.protagonist;
+          return { label: (inP ? '★ ' : '   ') + d.name, right: 'LV ' + st.chars[id].lv, id: id, help: (d.nick ? '“' + d.nick + '”  ' + S.weapon(id).name + '\n' : '') + (lead ? 'Leads the party: cannot be left behind.' : inP ? 'Z: send back to the fortress.' : st.party.length < 6 ? 'Z: add to the party.' : 'The party is full — send someone back first.') };
         }), { x: 600, y: 20, w: 344, rows: 13, rowH: 36, help: true, size: 20 });
       };
       var list = mkList();
@@ -325,7 +324,8 @@
           var id = r.ok.id;
           if (st.party.indexOf(id) >= 0) {
             if (id === st.flags.protagonist) { WM.audio.sfx('buzz'); WM.ui.toast(S.def(id).name + ' must lead the party.'); return; }
-            S.removeFromParty(id);
+            if (st.party.length <= 1) { WM.audio.sfx('buzz'); return; }
+            S.removeFromParty(id); WM.audio.sfx('cancel'); WM.ui.toast(S.def(id).name + ' stays at the fortress.');
           } else if (st.party.length < 6) { S.addToParty(id); S.restore(id); }
           else { WM.audio.sfx('buzz'); WM.ui.toast('The party is full (six heroes).'); return; }
           var k = list.idx; list = mkList(); list.idx = k;

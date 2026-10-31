@@ -5,6 +5,7 @@
 'use strict';
 (function () {
   var S = WM.S;
+  WM.npc('caijing', 'Cai Jing', { skin: '#ecc4a0', hairStyle: 'futou', beard: 'long', beardColor: '#cfcfcf', body: '#3a2a5a', trim: '#d8b36a', face: 'long', eyes: 'narrow', brows: 'angled' }, { face: true });   // the Grand Tutor, Governor Liang's father-in-law
   WM.npc('ligu', 'Li Gu', { skin: '#f0c49a', hairStyle: 'scarf', band: '#2a2a2a', beard: 'mustache', body: '#5a4a3a', trim: '#c8b890', face: 'narrow', eyes: 'sharp', brows: 'angled' }, { face: true });
   WM.npc('jiashi', 'Lady Jia', { skin: '#f6e2cc', hairStyle: 'woman', body: '#8a3a6a', trim: '#f0d8a0', dress: true, build: 'slim', face: 'narrow', eyes: 'sharp', flower: '#f0a0c0', lips: '#c03040' }, { face: true });
   WM.npc('zhangwang', 'Zhang Wang', { skin: '#a8784e', hairStyle: 'headband', band: '#2a2a2a', beard: 'stubble', body: '#3a3a3a', trim: '#5a4a3a', weapon: 'dao', face: 'square', eyes: 'narrow' }, { face: true });
@@ -70,6 +71,8 @@
     events: [{ turn: 3, run: async function (s, api) {
       await s.say(null, 'Han Tao\'s arrow took Suo Chao, the Vanguard Hothead, in the arm, and he fell back behind the gates.');
       var u = api.unit('Suo Chao'); if (u) u.losses = Math.max(u.losses, 1);
+      await api.moveTo('Suo Chao', 12, 3);   // back to the foot of the gates, nursing his arm
+      if (u) u.hold = true;                   // and there he stays, unless the enemy comes to the gate
     } }],
     win: [['songjiang', 'They\'ve shut the gates. Surround the city!']], lose: [['songjiang:sad', 'Fall back!']]
   };
@@ -166,31 +169,61 @@
       await s.say('lujunyi', 'Wait, wait! Master, forgive me. Is there a way to escape it?');
       await s.say('wuyong', 'Only one. Go more than a thousand li to the south-east. There the disaster will pass you by. And let me leave four lines on your wall, as a charm. In time you will understand them.');
       await s.walkTo('lu', 31, 3); s.face('lu', 'up');
-      await s.say('wuyong', '"A little boat among the reeds; / a hero passing through these parts; / a righteous man who knows the way / turns back from danger, free of care."');
+      await s.say('wuyong', '"A little boat among the reeds; a hero passing through these parts; a righteous man who knows the way turns back from danger, free of care."');
       await s.emote('lu', 'note');
       await s.say('lujunyi', '(writing it on the white wall) ...There. Every word.');
       await s.narrate('No one noticed that the first characters of the four lines, read downwards, said: "Lu Junyi rebels."');
       s.face('lu', 'down');
+      await s.say('wuyong', 'The charm is written; my work is done. Farewell, Squire — remember: a thousand li to the south-east.');
+      s.face('player', 'down');
+      await s.move('player', 'D2', { run: true });   // the fortune-teller is gone before anyone thinks to stop him
+      s.hide('player');
       s.despawn('lg', { leave: true });
+      await s.emote('yq', '!');
+      s.faceEach('yq', 'lu');
       await s.say('yanqing', 'Master, that fortune-teller is a Liangshan spy. The south-east road goes right past Liangshan. Let me go after him and deal with him.');
       await s.say('lujunyi', 'Nonsense, Little Yi. I am going to burn incense at Mount Tai and escape my fate. And if the bandits come, I\'ll take them all.');
       s.despawn('lu', { leave: true }); s.despawn('yq', { leave: true });
       s.flag('ch17_fortune');
       await s.fadeOut(0.8);
-      await s.warp('daming', 28, 44, 'down', { noFade: true });
-      s.spawn('lk', 'likui', 29, 43, 'down');
+      s.show('player');
+      // on the road home through the woods outside Daming, Li Kui finds his tongue again
+      await s.warp('shamenroad', 1, 9, 'right', { noFade: true });
+      s.spawn('lk', 'likui', 0, 9, 'right');
       await s.fadeIn(0.8);
-      await s.walkTo('lk', 29, 45);
+      s.walkTo('lk', 9, 9); await s.walkTo('player', 11, 9);
       s.sfx('coins'); await s.jump('lk');
+      s.faceEach('player', 'lk');
+      await s.emote('lk', 'anger');
       await s.say('likui:angry', 'PTAH! There goes the coin! Professor — "mute"! "Simple"! Children chasing me! My jaw\'s set like a mule\'s! You, you —');
+      s.jump('lk'); await s.emote('player', 'sweat');
       await s.say('likui:angry', '— and that guard, "looks like a murderer"! I AM a murderer! I should have chopped him! And another thing —');
-      await s.say('wuyong:smile', '(He swore for a whole li without stopping.)');
-      s.hide('lk'); s.despawn('lk');
+      s.face('player', 'right');
+      await s.emote('player', '...', 1.2);
+      await s.narrate('Li Kui swore for a whole li without stopping.');
+      s.walkTo('lk', 20, 9); await s.walkTo('player', 22, 9);
+      s.jump('lk'); await s.emote('lk', 'anger');
       await s.fadeOut(1);
+      s.hide('lk'); s.despawn('lk');
       s.party(['lujunyi']); s.setLeader('lujunyi'); s.level('lujunyi', 31); s.flag('protagonist', 'lujunyi');
       await s.narrate('Lu Junyi set out with ten carts of goods and forty porters, his steward Li Gu going ahead. Yan Qing, his foundling servant — a tattooed youth who could sing, play, wrestle, and shoot a crossbow better than any man in Daming — he left at home. At the last inn before the marsh, Lu had four white banners made, and wrote on them: "Lu Junyi of Daming, mighty in arms, comes to take the bandits of Liangshan."');
-      await s.warp('lsroad', 0, 12, 'right', { noFade: true });
+      await s.warp('lsroad', 2, 12, 'right', { noFade: true });
+      s.spawn('lg2', 'ligu', 1, 11, 'right'); s.spawn('pt1', 'servant', 0, 13, 'right'); s.spawn('pt2', 'servant', 1, 13, 'up');   // (the carts and porters, halted where the forest begins)
       await s.fadeIn(1);
+      await s.say('lujunyi', 'So this is the forest below Liangshan. Quiet enough. Too quiet, for a robbers\' road.');
+      s.faceEach('lg2', 'player');
+      await s.emote('lg2', 'sweat');
+      await s.say('ligu', 'Master, every traveller between here and Jizhou says the same: no one goes through these trees with goods and comes out with them. Let us go round — it is only another forty li.');
+      await s.emote('pt1', 'sweat');
+      await s.say('servant', 'Squire, the men are frightened half to death. They read your banners and asked if you meant us to die on this road.');
+      s.face('player', 'left');
+      await s.say('lujunyi:smile', 'Frightened of a few marsh thieves? I have practised the spear and the staff since I was a boy. Let them come — I have sacks enough to carry them all to the magistrate.');
+      await s.say('lujunyi', 'Wait here with the carts. I will go ahead and look at the road myself.');
+      s.face('player', 'right');
+      s.idle('lg2', ['Master, I beg you — not too far ahead. These trees have eyes.']);
+      s.idle('pt1', ['If the bandits come, Squire, we are porters, not soldiers.']);
+      s.idle('pt2', ['(He is counting the carts over and over, as if one might have gone already.)']);
+      await s.say(null, '(Scout the forest road ahead.)');
     } }
   ]);
 
@@ -198,35 +231,74 @@
   // one Liangshan hero after another steps out of the trees onto the road, a little way ahead of Lu Junyi
   function stepOut(s, key, who) {
     var st = WM.state, m = WM.data.maps[st.map], rows = typeof m.rows === 'function' ? m.rows(WM.S) : m.rows;
+    var pl = WM.field && WM.field.player && WM.field.map ? WM.field.player.tile() : null;
+    if (pl) st = { x: pl.x, y: pl.y };   // (where the leader actually stands, not where the last save put him)
     var free = function (x, y) { var c = (rows[y] || '')[x]; return c != null && !WM.tiles.solid(c); };
     var spot = [[2, 0, 'left'], [0, -2, 'down'], [-2, 0, 'right'], [0, 2, 'up'], [1, -1, 'down'], [1, 1, 'up']].filter(function (d) { return free(st.x + d[0], st.y + d[1]); })[0] || [1, 0, 'left'];
     s.spawn(key, who, st.x + spot[0], st.y + spot[1], spot[2]);
   }
+  // a leap from one tile to another, over whatever is between (a gunwale, a strip of water): the arc, then set down
+  async function leap(s, key, tx, ty, h) {
+    var f = WM.field, a = f && f.map && Array.isArray(f.actors) ? (key === 'player' ? f.player : f.findActor(key)) : null;
+    if (a) { var d = Math.abs(tx * WM.TILE + 8 - a.x) + Math.abs(ty * WM.TILE + 15 - a.y); a.path = [{ x: tx * WM.TILE + 8, y: ty * WM.TILE + 15 }]; a.speed = Math.max(60, d / 0.35); }
+    var dir = a ? a.dir : null;
+    await s.jump(key, h || 10);
+    s.place(key, tx, ty, dir);
+  }
+  // the five who close the road west behind Lu Junyi, and stay there until he is taken: a wall he cannot pass
+  var BLOCK = [
+    ['linchong', 34, 14, ['Squire, I was an instructor of the Imperial Guard once, and the court sent me to die for nothing. Liangshan took me in. It will take you in too.']],
+    ['qinming', 34, 13, ['Not this way, Squire. Your carts and your men are safe on the mountain — no one has touched a single coin.']],
+    ['huyanzhuo', 34, 15, ['I came to this marsh to destroy it, with the emperor\'s own chained horses. Now I hold its roads. Think on that, Squire.']],
+    ['xuning', 33, 13, ['My hooked lances broke the chained horses on a road like this one. We will not let you pass.']],
+    ['yangzhi', 33, 15, ['I lost the birthday gifts on Yellow Mud Ridge and could never go home. You still can, Squire — by way of the mountain.']]
+  ];
+  BLOCK.forEach(function (b, i) {
+    WM.defEvents('lsroad', [{ id: 'ch17_block' + i, x: b[1], y: b[2], char: b[0], dir: 'right', cond: function (S2) { return S2.has('ch17_flee') && !S2.has('ch17_taken'); }, text: b[3] }]);
+  });
+  // anyone of the hall's own people standing on the given spots steps out of sight while a scene uses them
+  function standAside(spots) {
+    var f = WM.field; if (!f || !f.map || !Array.isArray(f.actors)) return [];
+    var gone = f.actors.filter(function (a) { if (a.visible === false || !a.ev || a.ev.temp) return false; var t = a.tile(); for (var i = 0; i < spots.length; i += 2) if (t.x === spots[i] && t.y === spots[i + 1]) return true; return false; });
+    gone.forEach(function (a) { a.visible = false; });
+    return gone;
+  }
   WM.defEvents('lsroad', [
-    { id: 'ch17_g1', x: 9, y: 10, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_fortune'); }, run: async function (s) {
+    { id: 'ch17_g1', x: 15, y: 7, w: 4, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_fortune'); }, run: async function (s) {
+      await s.emote('player', '?');
+      await s.say('lujunyi', '...Footprints. Big ones, bare, and fresh — right across the road.');
       s.sfx('gong'); await s.shake(3, 0.3);
-      await s.say(null, '(A gong in the forest — and the carts are surrounded!)');
-      stepOut(s, 'lk', 'likui'); await s.jump('lk', 8);
+      await s.emote('player', '!');
+      await s.say(null, '(A gong in the forest behind him — and shouting back where the carts were left!)');
+      WM.data.clear(s, ['lg2', 'pt1', 'pt2']);   // (the carts and porters are taken while he fights)
+      stepOut(s, 'lk', 'likui'); s.faceEach('lk', 'player'); await s.jump('lk', 8);
       await s.say('likui:smile', 'Squire Lu! Do you know me? I\'m the Black Whirlwind of Liangshan, and the fortune-teller sent me to fetch you!');
       await s.say('lujunyi:angry', 'I came all this way to catch you bandits. Kneel, and I\'ll take you to the magistrate myself!');
       await s.duel('lu_likui', { hero: 'lujunyi', canLose: true });
       await s.say('likui:smile', 'Ha ha! Too strong for me, Squire! Catch me if you can!');
-      s.despawn('lk', { to: [16, 8] });
+      s.despawn('lk', { to: [25, 8] });
       await s.say('lujunyi:angry', 'Come back here, you black devil!');
       s.flag('ch17_g1');
     } },
-    { id: 'ch17_g2', x: 19, y: 7, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g1'); }, run: async function (s) {
-      stepOut(s, 'lz', 'luzhishen');
+    { id: 'ch17_g2', x: 22, y: 7, w: 3, h: 3, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g1'); }, run: async function (s) {
+      s.sfx('step'); await s.emote('player', '!');
+      stepOut(s, 'lz', 'luzhishen'); s.faceEach('lz', 'player');
+      await s.jump('lz', 8); await s.emote('lz', 'note');
       await s.say('luzhishen', 'Amitabha! Squire, I am Lu Zhishen, the Flowery Monk. By Brother Song Jiang\'s orders I have come to welcome you up the mountain.');
+      await s.emote('player', 'anger');
       await s.say('lujunyi:angry', 'A bald thief in a monk\'s robe! Stand and fight!');
       await s.duel('lu_luzhishen', { hero: 'lujunyi', canLose: true });
       await s.say('luzhishen:smile', 'Hah! Good spear, Squire. Good spear! We\'ll drink together on the mountain.');
-      s.despawn('lz', { to: [24, 8] });
+      s.despawn('lz', { to: [27, 10] });
       s.flag('ch17_g2');
     } },
-    { id: 'ch17_g3', x: 28, y: 12, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g2'); }, run: async function (s) {
-      stepOut(s, 'ws', 'wusong');
+    { id: 'ch17_g3', x: 28, y: 11, w: 3, h: 4, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_g2'); }, run: async function (s) {
+      await s.say('lujunyi', '(breathing hard) Run, monk! ...How many of them are hiding in these trees?');
+      stepOut(s, 'ws', 'wusong'); s.faceEach('ws', 'player');
+      await s.emote('player', '!');
+      await s.emote('ws', '...');
       await s.say('wusong', 'Squire Lu. I am Wu Song, the Pilgrim, who killed the tiger on Jingyang Ridge. You have come far enough on this road. The mountain is waiting for you.');
+      await s.emote('player', 'anger');
       await s.say('lujunyi:angry', 'The tiger-killer? Then let us see if you can kill a man!');
       await s.duel('lu_wusong', { hero: 'lujunyi', canLose: true });
       await s.jump('ws', 8);
@@ -242,7 +314,7 @@
       s.sfx('gong');
       s.despawn('t1', { leave: true }); s.despawn('t2', { leave: true }); s.despawn('t3', { leave: true });
       await s.camera(37, 4, 0.8);
-      await s.say(null, '(A gong on the hill, and the three wheel away. Above the trees, a great yellow banner: "Act on Heaven\'s Behalf.")');
+      await s.say(null, '(A gong on the hill, and the three wheel away. Up on the hilltop, among the tents, men are waiting for him.)');
       s.cameraReset();
       s.flag('ch17_hill');
     } },
@@ -256,25 +328,40 @@
       await s.emote('player', '!'); await s.jump('player', 3);
       await s.say('lujunyi:shock', '(The red tassel — cut clean from my hat!)');
       ['sj', 'wy', 'gs', 'hr'].forEach(function (k) { s.despawn(k, { leave: true }); });   // the chiefs melt back into the hill as the others close in
-      s.spawn('c1', 'qinming', 37, 10, 'up'); s.spawn('c2', 'linchong', 39, 11, 'left'); s.spawn('c3', 'huyanzhuo', 41, 11, 'left'); s.spawn('c4', 'xuning', 38, 12, 'up');
+      // five more come up the road behind him from the west, and close it
+      s.sfx('drum');
+      var from = [[28, 12], [29, 12], [29, 13], [30, 13], [31, 14]];   // (up the road from the west)
+      BLOCK.forEach(function (b, i) { s.spawn('c' + i, b[0], from[i][0], from[i][1], 'right'); });
+      await s.emote('player', '!');
+      s.face('player', 'down');
+      BLOCK.forEach(function (b, i) { s.walkTo('c' + i, b[1], b[2], { run: true }); });
+      await s.wait(1.4);
+      BLOCK.forEach(function (b, i) { s.face('c' + i, 'right'); });
       await s.say('linchong', 'Lin Chong of Liangshan! Squire, you have fought since dawn on an empty belly. Put down your spear.');
-      await s.say('lujunyi:angry', '(Four more... and my arms are lead. The water — east, to the water!)');
-      ['c1', 'c2', 'c3', 'c4'].forEach(function (k) { s.despawn(k, { leave: true }); });
-      s.night(true);
-      s.flag('ch17_flee');
+      await s.say('qinming', 'The road back to Daming is closed. Qin Ming, Huyan Zhuo, Xu Ning, Yang Zhi — and every one of us will hold it.');
+      await s.emote('player', 'sweat');
+      await s.say('lujunyi:angry', '(Five more... and my arms are lead. Not back the way I came — east, to the water!)');
+      s.flag('ch17_flee');   // (they stay on the road: see the standing guards below)
+      WM.data.clear(s, BLOCK.map(function (b, i) { return 'c' + i; }));   // (the map's standing guards take their places)
     } },
     { id: 'ch17_boat', x: 50, y: 10, w: 5, h: 5, trigger: 'touch', once: true, cond: function (S2) { return S2.has('ch17_flee'); }, run: async function (s) {
-      s.spawn('lj', 'lijun', 54, 12, 'left');
+      s.spawn('lj', 'lijun', 58, 12, 'left'); s.boat('lj', 4);   // a long fishing sampan, idling off the point
       await s.say('lujunyi', 'Boatman! Take me across and I\'ll pay you whatever you ask!');
-      await s.walkTo('player', 53, 12); s.face('player', 'right');
-      await s.say('lijun', 'Get in. ...Do you know who I am? Li Jun, the Dragon of the Turbulent River. Squire Lu, you\'ll come up the mountain.');
+      await s.walkTo('player', 54, 12); s.face('player', 'right');
+      await s.say('lijun', 'Get in, then, Squire. Mind your feet.');
+      s.boat('player', 'ride'); await leap(s, 'player', 57, 12); s.face('player', 'right');
+      s.faceEach('player', 'lj');
+      await s.say('lijun', '...Do you know who I am? Li Jun, the Dragon of the Turbulent River. Squire Lu, you\'ll come up the mountain.');
+      await s.emote('player', '!');
       s.sfx('slash'); await s.flash();
-      await s.jump('lj', 10); s.splash('lj'); s.hide('lj');
+      // a somersault backwards off the stern, into the water two lengths behind the boat
+      s.boat('lj', false); s.boat('player', 4);   // (the boat stays under the Squire)
+      await leap(s, 'lj', 58, 10, 16); s.splash('lj'); s.hide('lj');
       await s.say('lujunyi:shock', '(A somersault, backwards, into the water — he\'s gone!)');
-      s.spawn('zs', 'zhangshun', 55, 13, 'up'); s.splash('zs');
+      s.spawn('zs', 'zhangshun', 56, 13, 'up'); s.swim('zs', true); s.splash('zs');
       await s.say('zhangshun:smile', 'Zhang Shun, the White Streak in the Waves! Mind the boat, Squire!');
       s.sfx('splash'); await s.shake(3, 0.3);
-      s.splash('player'); s.hide('player');
+      s.splash('player'); s.boat('player', false); s.hide('player');
       await s.wait(0.8);
       s.hide('zs'); s.despawn('zs'); s.despawn('lj');
       s.show('player');
@@ -297,11 +384,22 @@
   ]);
   WM.defEvents('daming', [
     { id: 'ch17_beggar', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_released'); }, run: async function (s) {
-      s.spawn('yq', 'yanqing', 28, 40, 'down');
-      await s.say('yanqing:sad', 'Master! Master, it\'s me, Little Yi. Don\'t go into the city! Li Gu came back and went to the prefecture and denounced you as a rebel — the poem on the wall. He and the mistress... they have been together a long time. He threw me out of the house, and I\'ve been begging in the streets.');
+      // a ragged figure comes running down the street from the east, and throws himself in the Squire's path
+      s.spawn('yq', 'yanqing', 38, 37, 'left');
+      await s.say('yanqing:sad', 'Master! MASTER!');
+      await s.moveTo('yq', 28, 41, { run: true });
+      s.faceEach('yq', 'player');
+      await s.jump('yq'); await s.emote('yq', 'tears', 2);
+      await s.emote('player', '?');
+      await s.say('lujunyi', '...Little Yi? In rags? What has happened to you?');
+      await s.say('yanqing:sad', 'Master, it\'s me, Little Yi. Don\'t go into the city! Li Gu came back and went to the prefecture and denounced you as a rebel — the poem on the wall. He and the mistress... they have been together a long time. He threw me out of the house, and I\'ve been begging in the streets.');
+      await s.emote('player', 'anger');
       await s.say('lujunyi:angry', 'Lies! My wife has been with me five years, and Li Gu owes me everything. You beggar — you\'re the one who\'s been up to something!');
-      s.sfx('hit'); await s.jump('yq'); await s.emote('yq', 'sweat');
-      await s.walkTo('player', 28, 36);
+      s.sfx('hit'); await leap(s, 'yq', 27, 41, 6); s.lie('yq');   // he kicks him out of the way
+      await s.emote('yq', 'sweat');
+      await s.walkTo('player', 28, 36); s.face('player', 'up');
+      s.lie('yq', false); s.face('yq', 'up');
+      await s.emote('yq', 'tears', 2);
       await s.say('yanqing:sad', 'Master...!');
       s.despawn('yq', { leave: true });
       s.flag('ch17_home');
@@ -316,6 +414,7 @@
       await s.say('ligu', 'Don\'t ask about him now, master. Eat first.');
       s.spawn('c1', 'constable', 28, 8, 'up'); s.spawn('c2', 'constable', 34, 8, 'up');
       s.moveTo('c1', 31, 6, { run: true, wait: false }); await s.moveTo('c2', 33, 6, { run: true });
+      s.faceEach('c1', 'player'); s.faceEach('c2', 'player'); s.face('player', 'up');
       await s.say('constable', 'Lu Junyi! By order of Governor Liang, you are under arrest for dealings with the bandits of Liangshan!');
       await s.say('lujunyi:shock', '...Li Gu? What is this? Li Gu!');
       s.emote('lg', '...', 1.2); s.face('lg', 'left'); s.face('js', 'up');
@@ -331,18 +430,18 @@
       s.spawn('cf', 'caifu', 4, 19, 'up'); s.spawn('cq', 'caiqing', 7, 19, 'left');   // in the corridor outside his cell door
       s.spawn('lg2', 'ligu', 10, 22, 'up');
       await s.fadeIn(0.8);
-      await s.walkTo('lg2', 4, 20); s.face('lg2', 'up');
+      await s.walkTo('lg2', 4, 20); s.faceEach('cf', 'lg2');
       await s.say('ligu', 'Jailer Cai. Five hundred taels — for you and your brother. Lu Junyi has no need to see another morning. You understand me.');
       await s.say('caifu', '...Five hundred taels for a man\'s life. Leave it on the table, Steward Li, and go home.');
       s.despawn('lg2', { to: [10, 22] });
       await s.wait(0.8);
       s.night(true);
       s.spawn('cj', 'chaijin', 10, 22, 'up');
-      await s.walkTo('cj', 4, 20); s.face('cj', 'up');
+      await s.walkTo('cj', 4, 20); s.faceEach('cf', 'cj'); s.face('cq', 'left');
       await s.say('chaijin', 'Jailer Cai Fu. I am Chai Jin of Cangzhou — you will have heard the name. Here are a thousand taels of gold.');
       await s.say('chaijin', 'If Lu Junyi dies in this prison, Liangshan will come to Daming, and nobody in the city will be spared: not the governor, not you, not your brother. If he lives, you have a friend on the mountain.');
       await s.say('caifu:shock', '...Lord Chai. I hear you. He will live.');
-      s.despawn('cj', { to: [10, 22] });
+      s.despawn('cj', { to: [10, 22] }); s.face('cf', 'up');
       await s.narrate('Cai Fu kept Lu Junyi alive, and the court of the prefecture, softened by the same gold, sentenced him to exile on Shamen Island instead. His escorts were Dong Chao and Xue Ba.');
       await s.fadeOut(0.8);
       s.hide('cf'); s.despawn('cf'); s.hide('cq'); s.despawn('cq');
@@ -385,21 +484,35 @@
   ]);
   WM.defEvents('daming_in', [
     { id: 'ch17_shixiu', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_leap') && WM.state.x >= 51 && WM.state.y >= 10; }, run: async function (s) {
+      // the Cuiyun Tower, over the crossroads where the execution ground is set up
+      s.face('player', 'up');
+      await s.say('waiter', 'Welcome to the Cuiyun Tower, sir! Wine? Something to eat?');
+      await s.say('shixiu', 'A jug of wine. And a seat upstairs — at the window over the crossroads.');
+      await s.emote('dmwaiter', 'sweat');
+      await s.say('waiter', 'Ah — come for the beheading too, sir? Half of Daming wants that window today. They take the rebel Lu Junyi out at noon.');
+      await s.emote('player', '...', 1.2);
+      await s.say('shixiu', '...Then I will drink until noon.');
       await s.walkTo('player', 52, 14); s.face('player', 'up');
-      await s.say('shixiu', '(A jug of wine at the upstairs window, over the crossroads. Wait.)');
+      await s.narrate('Shi Xiu sat at the upstairs window with his jug, his hand never far from his sword, and watched the crossroads below fill with soldiers and people come to see a man die.');
       await s.fadeOut(0.6);
       await s.warp('daming', 22, 37, 'down', { noFade: true });
       s.hide('player');
       s.spawn('lu', 'lujunyi', 22, 40, 'down'); s.spawn('ex', 'executioner', 23, 40, 'left');
       var eg = WM.data.troop(s, 'eg', 'soldier', [[20, 41], [24, 41], [21, 42], [23, 42]], 'up');
       var crowd = WM.data.troop(s, 'ec', 'villager', [[18, 39], [18, 41], [27, 39], [26, 41]], 'left');
+      s.camera(22, 39, 0.05);   // (the view stays on the execution ground)
       await s.fadeIn(0.6);
       await s.say('soldier', 'Noon! The rebel Lu Junyi, for dealings with the bandits of Liangshan — death by the sword!');
       await s.walkTo('ex', 23, 39); s.face('ex', 'down');
       await s.emote('ex', '!');
-      s.show('player');
+      // down the street from the north, at a dead run, shouting
+      s.place('player', 22, 29, 'down'); s.show('player');
+      var dash = s.walkTo('player', 22, 37, { run: true });
       await s.say('shixiu:angry', 'THE HEROES OF LIANGSHAN ARE ALL HERE!');
+      await dash;
+      crowd.forEach(function (k) { s.emote(k, '!', 0.6); }); s.emote('ex', '!', 0.6);
       await s.jump('player', 14); await s.move('player', 'D2', { run: true });
+      s.cameraReset();
       s.sfx('slash'); await s.flash(); s.lie('ex'); await s.shake(6, 0.4);
       crowd.forEach(function (k, i) { s.emote(k, '!', 0.8); s.move(k, i < 2 ? 'L2' : 'R3', { run: true, wait: false }); });
       await s.say('shixiu', 'Squire Lu — on your feet! Run!');
@@ -407,10 +520,11 @@
       await s.say('soldier', 'Shut the gates! They don\'t know the streets — they\'re trapped!');
       await s.fadeOut(0.8);
       WM.data.clear(s, eg.concat(crowd, ['lu', 'ex']));
-      await s.fadeIn(0.6);
       await s.narrate('They were taken together. Shi Xiu, in chains, cursed Governor Liang to his face as a slave of Cai Jing\'s. The next morning, notices were found all over Daming, pasted up in the night: if Lu Junyi and Shi Xiu were harmed, Liangshan would come and burn the city to the ground.');
       s.flag('ch17_caught');
-      await s.warp('liangshan_in', 16, 12, 'up');
+      s.party(['songjiang', 'wuyong', 'linchong', 'qinming', 'huarong', 'likui']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');   // (Song Jiang from the first frame in the hall)
+      await s.warp('liangshan_in', 16, 12, 'up', { noFade: true });   // (told over black, straight into the hall)
+      await s.fadeIn(0.8);
     } }
   ]);
 
@@ -418,7 +532,8 @@
   WM.defEvents('liangshan_in', [
     { id: 'ch17_march', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch17_caught') && WM.state.x < 31 && WM.state.y < 17; }, run: async function (s) {
       s.party(['songjiang', 'wuyong', 'linchong', 'qinming', 'huarong', 'likui']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
-      s.spawn('wy0', 'wuyong', 15, 7, 'up');
+      s.spawn('wy0', 'wuyong', 15, 7, 'down');
+      await s.walkTo('wy0', 16, 11); s.faceEach('wy0', 'player');
       await s.say('wuyong', 'Brother Lu Junyi and Shi Xiu are in the death cell of Daming, and Governor Liang only waits for word from his father-in-law to cut off their heads. There is nothing left to try but the army.');
       await s.say('songjiang', 'Then sound the drums. We march on Daming.');
       s.despawn('wy0');
@@ -428,11 +543,62 @@
         lines: [['wuyong', 'Let Suo Chao come on: he charges at everything. Qin Ming will meet him in front; Hua Rong and Lin Chong wait on the wings. When his vanguard breaks, the rest will run for the walls.'], ['likui:angry', 'And me?'], ['songjiang', 'You, Iron Ox, stay at my side until I let you go.']]
       });
       await s.war('ch17_daming');
-      await s.narrate('Song Jiang surrounded Daming. Governor Liang wrote to his father-in-law, Cai Jing, and Cai Jing\'s clerk Xuan Zan, the Ugly Prince Consort, recommended a descendant of Guan Yu — Guan Sheng of Pudong, who carried a green-dragon blade like his ancestor\'s, with his sworn brother Hao Siwen. Guan Sheng did not march to Daming. He marched on Liangshan itself — "besiege Wei to save Zhao" — and Song Jiang had to raise the siege and hurry home.');
-      await s.warp('liangshan_in', 16, 12, 'up');   // home to the mountain, with Guan Sheng behind them
-      await s.say('linchong', 'Brother, Guan Sheng is on the shore with his green-dragon blade, calling for you by name. Let me go down to him.');
-      await s.say('songjiang', 'Go — but take him alive, Brother Lin Chong. A man like that should be one of us.');
+      // Daming besieged: the governor's rider reaches the capital
+      await s.fadeOut(0.8);
+      await s.narrate('Song Jiang surrounded Daming, and Governor Liang sent a rider galloping to the capital, to his father-in-law, the Grand Tutor Cai Jing.');
+      await s.warp('kaifeng_in', 46, 18, 'up', { noFade: true });
+      s.hide('player');
+      s.spawn('cjg', 'caijing', 43, 15, 'down'); s.spawn('xz', 'xuanzan', 41, 16, 'right');
+      s.camera(43, 16, 0.05);
+      await s.fadeIn(0.8);
+      await s.say('caijing:angry', 'Bandits at the walls of Daming, and my son-in-law begging for an army! Who in this whole court can break Liangshan?');
+      await s.walkTo('xz', 42, 16); s.faceEach('xz', 'cjg');
+      await s.say('xuanzan', 'Grand Tutor, I know the man. Guan Sheng of Pudong — a descendant of Guan Yu himself, who carries a green-dragon blade like his ancestor\'s. He wastes away as an inspector in a frontier town.');
+      await s.say('caijing', 'Then send for him tonight.');
+      await s.fadeOut(0.5);
+      s.spawn('gsh0', 'guansheng', 43, 18, 'up'); s.spawn('hsw0', 'haosiwen', 44, 18, 'up');
+      await s.fadeIn(0.5);
+      s.walkTo('hsw0', 44, 17); await s.walkTo('gsh0', 43, 17);
+      await s.say('caijing', 'General Guan. Daming is besieged. Take an army and relieve it.');
+      await s.say('guansheng', 'Grand Tutor, if I march to Daming, Song Jiang will only meet me under its walls. But if I march on Liangshan itself, he must abandon the siege and run home to save his nest. "Besiege Wei to save Zhao."');
+      await s.say('haosiwen', 'My sworn brother and I ask fifteen thousand men. The siege of Daming will lift by itself.');
+      await s.say('caijing:smile', 'Ha! A true son of Guan Yu. Take them, and go.');
+      await s.fadeOut(0.8);
+      WM.data.clear(s, ['cjg', 'xz', 'gsh0', 'hsw0']); s.cameraReset();
+      // the camp before Daming: word from the mountain
+      await s.warp('armycamp', 16, 12, 'down', { noFade: true });
+      s.show('player');
+      s.spawn('wyc', 'wuyong', 17, 13, 'left'); s.spawn('lcc', 'linchong', 15, 13, 'right');
+      s.spawn('msg', 'outlaw', 16, 20, 'up');
+      await s.fadeIn(0.8);
+      await s.walkTo('msg', 16, 14, { run: true });
+      await s.say('outlaw', 'Brother! A rider from the mountain — Guan Sheng of Pudong, with fifteen thousand men, is marching on Liangshan itself!');
+      await s.emote('player', '!');
+      await s.say('songjiang:shock', 'On Liangshan? While we sit here before Daming...');
+      s.faceEach('wyc', 'player');
+      await s.say('wuyong', '"Besiege Wei to save Zhao." A clever general. If we stay, we lose the mountain. Lift the siege tonight, Brother; leave an ambush on the road behind us, and go home.');
+      s.faceEach('lcc', 'player');
+      await s.say('linchong', 'Let Guan Sheng come to the shore. I will be waiting for him.');
+      await s.say('songjiang', 'Strike the camp. We go home.');
+      await s.fadeOut(0.8);
+      WM.data.clear(s, ['wyc', 'lcc', 'msg']);
+      // home to the mountain, with Guan Sheng at the shore behind them
+      await s.warp('zhugui', 16, 13, 'down', { noFade: true });
+      s.spawn('lc9', 'linchong', 15, 13, 'down'); s.spawn('qm9', 'qinming', 17, 13, 'down'); s.spawn('wy9', 'wuyong', 18, 12, 'down');
+      s.spawn('gs9', 'guansheng', 16, 19, 'up'); s.spawn('hw9', 'haosiwen', 18, 20, 'up');
+      var gtr = WM.data.troop(s, 'gt9', 'soldier', [[13, 21], [15, 21], [17, 21], [19, 21]], 'up');
+      await s.fadeIn(0.8);
+      s.sfx('gong'); await s.shake(2, 0.3);
+      await s.say('guansheng', 'Song Jiang! I am Guan Sheng of Pudong. Come down from your marsh and surrender, and I will spare your men.');
+      await s.say('songjiang', '(A face like a ripe date, a beard to his chest, the green-dragon blade... he is Guan Yu come again.) Brother Lin Chong — take him alive. A man like that should be one of us.');
+      await s.walkTo('lc9', 16, 16); s.faceEach('lc9', 'gs9');
+      await s.say('linchong:angry', 'Guan Sheng! Your ancestor kept faith with his sworn brothers. You serve Cai Jing, the worst traitor in the empire. Do you think Guan Yu would know you?');
+      await s.emote('gs9', 'anger');
+      await s.say('guansheng:angry', 'A runaway prisoner lectures me on loyalty? Lin Chong of the Imperial Guard — I know you. Come and be taken!');
       await s.duel('linchong_guansheng', { hero: 'linchong', canLose: true });
+      await s.fadeOut(0.6);
+      WM.data.clear(s, ['lc9', 'qm9', 'wy9', 'gs9', 'hw9'].concat(gtr));
+      s.hide('player');   // (told over black)
       await s.narrate('Zhang Heng tried to raid Guan Sheng\'s camp at night and was taken; Ruan Xiaoqi went to rescue him without orders and was taken too. Then Huyan Zhuo rode into Guan Sheng\'s camp, saying he had come over, and offered to lead him by night to take Song Jiang.');
       await s.fadeOut(0.8);
       s.night(true);
@@ -452,13 +618,24 @@
       await s.fadeOut(0.8);
       WM.data.clear(s, hk2.concat(['hy', 'gsh']));
       s.night(false); s.show('player');
-      await s.warp('liangshan_in', 16, 9, 'up', { noFade: true });
+      // Song Jiang on the dais before the chairs; Guan Sheng is brought up the hall to him
+      await s.warp('liangshan_in', 15, 4, 'down', { noFade: true });
+      var aside = standAside([16, 6]);   // (the roster clerk by the dais)
+      s.spawn('qm', 'qinming', 14, 11, 'up'); s.spawn('gs', 'guansheng', 15, 11, 'up');
       await s.fadeIn(0.8);
-      await s.say('qinming', 'Brother — Sun Li and I took Xuan Zan, and Hu Sanniang lassoed Hao Siwen. Guan Sheng is bound outside.');
-      s.spawn('gs', 'guansheng', 15, 7, 'up');
-      await s.say('songjiang', 'General, forgive us. Huyan Zhuo only did what I asked. We are waiting for the emperor\'s pardon; until then, we are men driven here by injustice. Will you stay with us?');
-      await s.say('guansheng', 'I am a beaten general. If you will have me, I will serve you as a common soldier.');
-      s.despawn('gs', { leave: true });
+      s.walkTo('qm', 14, 8); await s.walkTo('gs', 15, 8);
+      s.faceEach('qm', 'player');
+      await s.say('qinming', 'Brother — Sun Li and I took Xuan Zan, and Hu Sanniang lassoed Hao Siwen. Here is Guan Sheng.');
+      await s.emote('gs', 'anger');
+      await s.walkTo('player', 15, 7); s.faceEach('player', 'gs');
+      await s.say('songjiang', 'Untie him! ...General, forgive us. Huyan Zhuo only did what I asked. We are waiting for the emperor\'s pardon; until then, we are men driven here by injustice. Will you stay with us?');
+      s.sfx('item');
+      await s.emote('gs', '...', 1.2);
+      await s.say('guansheng', 'You untie a beaten enemy with your own hands... I am a beaten general. If you will have me, I will serve you as a common soldier.');
+      await s.jump('gs');
+      await s.say('songjiang:smile', 'Not as a soldier. As a brother.');
+      s.despawn('gs', { leave: true }); s.despawn('qm', { leave: true });
+      aside.forEach(function (a) { a.visible = true; });
       await s.joinMany(['guansheng', 'xuanzan', 'haosiwen']);
       await s.narrate('It was winter when they marched on Daming again, and Wu Yong had had pits dug along the river road and covered with the snow.');
       await s.fadeOut(0.8);

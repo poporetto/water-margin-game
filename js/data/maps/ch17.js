@@ -11,9 +11,9 @@
   var rp = [[0, 12], [10, 12], [16, 8], [24, 8], [30, 14], [38, 14], [44, 9], [50, 12], [59, 12]];
   walk(rp, function (x, y) { r.rect(x - 1, y - 1, 3, 3, '.'); });
   walk(rp, function (x, y) { r.set(x, y, ':'); r.set(x + 1, y, ':'); });   // (two tiles wide, so the road stays joined where it climbs on the slant)
-  r.rect(34, 2, 8, 5, '.'); r.set(37, 3, 'Y'); r.set(34, 3, 'V'); r.set(39, 3, 'V'); r.vline(37, 7, 13, '.');   // the hill with the yellow banner (each tent on its own 3x2 of ground)
+  r.rect(34, 2, 8, 5, '.'); r.set(34, 3, 'V'); r.set(39, 3, 'V'); r.vline(37, 7, 13, '.');   // the hill where the chiefs wait (each tent on its own 3x2 of ground)
   for (var y = 0; y < 24; y++) for (var x = 52; x < 60; x++) if (r.get(x, y) !== ':' && r.get(x, y) !== '.') r.set(x, y, y % 3 ? 'r' : '~');
-  r.rect(52, 10, 8, 5, '~'); r.rect(52, 11, 3, 3, '.'); r.set(55, 12, 'o');
+  r.rect(52, 10, 8, 5, '~'); r.rect(52, 11, 3, 3, '.');   // (Li Jun's sampan is brought in by the scene)
   r.scatter('b', 0.06, 541, 'T');
   WM.defMap('lsroad', { name: 'Forest Road below Liangshan', theme: 'spring', music: 'tense', rows: r.rows(), spawn: [0, 12], battleBg: 'forest' });
 

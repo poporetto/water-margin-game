@@ -144,6 +144,18 @@
     ]
   });
 
+  // a major battle won: war drums rolling up to a bright suona-and-dizi call, a gong crash, and the drums again
+  A.defTrack('warvictory', {
+    bpm: 150, key: 'D', once: true,
+    ch: [
+      { inst: 'drum', perc: true, vol: 0.32, f: 70, notes: 'x.x.xxx.x.x.xxx.xxxxxxxxx.......x.x.xxx.x.x.xxx.x...x...x.......' },
+      { inst: 'clap', perc: true, vol: 0.08, notes: '....x.......x.......x.x.x...............x.......x.......x.......' },
+      { inst: 'gong', perc: true, vol: 0.26, f: 100, notes: '................................x.......................x.......' },
+      { inst: 'dizi', oct: 5, vol: 0.22, notes: "- - - - - - - - | - - - - 5 6 1' 2' | 3' - 2' 1' 2' - 5 - | 6 1' 2' 3' 5' - - - | 3' 2' 1' 6 1' - - - | 1' - - - - - - -" },
+      { inst: 'zheng', oct: 4, vol: 0.14, notes: "- - - - - - - - | 1 5 1' 5 1 5 1' 5 | 6, 3 6 1' 5, 2 5 7 | 1 5 1' 3' 5' 3' 1' 5 | 4, 1 4 6 5, 2 5 7 | 1 5 1' 3' 5' - - -" }
+    ]
+  });
+
   A.defTrack('castle', {
     bpm: 92, key: 'F',
     ch: [
@@ -274,6 +286,17 @@
     ]
   });
 
+  // Bai Xiuying sings in the Yuncheng theatre: an erhu carrying the voice in slides over a plucked pipa and the clappers
+  A.defTrack('opera', {
+    bpm: 76, key: 'G', once: true,
+    ch: [
+      { inst: 'erhu', oct: 4, vol: 0.2, notes: "3 5 6 1' 6 - 5 3 | 5 6 5 3 2 - - - | 3 5 3 2 1 2 6, 1 | 2 3 1 6, 1 - - -" },
+      { inst: 'pipa', oct: 3, vol: 0.13, notes: "1 5 1' 5 6, 3 6 3 | 4, 1 4 6 5, 2 5 2 | 6, 3 6 3 4, 1 4 1 | 5, 2 5 2 1 5 1 -" },
+      { inst: 'clap', perc: true, vol: 0.1, notes: 'x.......x...x...x.......x...x.x.' },
+      { inst: 'gong', perc: true, vol: 0.16, f: 220, notes: 'x...............................' }
+    ]
+  });
+
   A.defTrack('tense', {
     bpm: 100, key: 'D',
     ch: [
@@ -323,6 +346,7 @@
     battle: ['Clash of Blades', 'Ordinary fights: fast and driving.'],
     boss: ['The Tiger Bares Its Teeth', 'Boss fights: faster and heavier, real danger.'],
     victory: ['Wine for the Victors', 'A short fanfare after a battle is won.'],
+    warvictory: ['Drums of Victory', 'War drums and a bright call when a great battle is won.'],
     castle: ['The Hall of Loyalty', 'Liangshan itself: home, brotherhood, pride.'],
     stronghold: ['Banners over the Marsh', 'Liangshan once it is yours: bustling, hopeful, home.'],
     sad: ['Rain on a Fresh Grave', 'Deaths and partings, Game Over: grief.'],
@@ -331,6 +355,7 @@
     dungeon: ['Into the Darkened Halls', 'Caves, deep woods and closed halls: wary and dark.'],
     snow: ['Snow on the Mountain God\'s Temple', 'Lin Chong in the snow: cold and alone.'],
     inn: ['Lamplight at the Inn', 'Inns and rest: cosy and quiet.'],
+    opera: ['Shuang Jian Chases Su Qing', 'Bai Xiuying sings on the Yuncheng stage.'],
     tense: ['Footsteps in the Dark', 'Plots, ambushes and chases: suspense.'],
     heroic: ['Bare Fists on Jingyang Ridge', 'Heroic deeds: rousing and triumphant.'],
     palace: ['Incense in the Jade Hall', 'The court and great ceremonies: stately.'],

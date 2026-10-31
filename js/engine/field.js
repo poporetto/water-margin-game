@@ -201,6 +201,7 @@
       if (a.ev && (a.ev.id === key || a.ev.char === key || a.ev.npc === key)) return a;
     }
     if (key === 'player' || key === WM.state.leader) return F.player;
+    for (var j = 0; j < F.actors.length; j++) if ((F.actors[j].following || F.actors[j].autoShown) && F.actors[j].sheetWho === key) return F.actors[j];   // (a companion walking behind the leader, or stepped out beside him to speak, by name)
     return null;
   };
 
@@ -366,7 +367,7 @@
 
     // player control
     var p = F.player;
-    p.moving = false;
+    p.moving = false; F.divineRun = false;
     if (!scripting && !F.transitioning) {
       if (I.pressed('menu') || I.pressed('cancel')) { I.clear(); WM.menu.open(); return; }
       if (I.pressed('debug') && WM.debug) { I.clear(); WM.debug.open(); return; }
@@ -374,7 +375,9 @@
       var my = (I.down('down') ? 1 : 0) - (I.down('up') ? 1 : 0);
       if (mx || my) {
         var spd = (I.down('dash') ? 128 : 72) * (F.map.def.world ? 0.8 : 1);
-        var divine = WM.state.leader === 'daizong' && I.down('dash');   // the Magic Traveller's Divine March: running, his charms carry him twice as fast as any other man
+        // the Magic Traveller's Divine March: running, his charms carry twice as fast as any other man — and with Dai Zong
+        // in the party he ties them on the others' legs too, so whoever leads has the March
+        var divine = I.down('dash') && (WM.state.leader === 'daizong' || (WM.state.party || []).indexOf('daizong') >= 0);
         if (divine) spd *= 2;
         var len = Math.sqrt(mx * mx + my * my);
         var vx = mx / len * spd * dt, vy = my / len * spd * dt;
@@ -394,6 +397,7 @@
         }
         p.moving = true;
         p.animSpeed = I.down('dash') ? (divine ? 2.4 : 1.6) : 1;
+        F.divineRun = moved && divine;
         if (moved && divine && !F.map.def.world) kickDust(p, dt);
         if (moved) {
           st.steps += 1 / 16;
@@ -428,7 +432,7 @@
           var far = Math.abs(ft.x - at.x) + Math.abs(ft.y - at.y) > 1;
           if (far && Math.abs(ft.x - at.x) && Math.abs(ft.y - at.y)) a.path.push({ x: ft.x * TS + 8, y: at.y * TS + 15 });   // round the corner, never through it
           a.path.push({ x: ft.x * TS + 8, y: ft.y * TS + 15 });
-          a.speed = far ? 110 : 80;
+          a.speed = F.divineRun ? 260 : far ? 110 : 80;   // (on the Divine March they keep pace, charms and dust and all)
         }
       }
       if (a.path.length) {
@@ -440,6 +444,7 @@
         if (d <= step) { a.x = tgt.x; a.y = tgt.y; a.path.shift(); if (!a.path.length && a.onArrive) { var cb = a.onArrive; a.onArrive = null; cb(); } }
         else { a.x += dx / d * step; a.y += dy / d * step; }
         a.moving = true;
+        if (a.speed >= 200 && !F.map.def.world) kickDust(a, dt);   // (anyone sent running on the charms raises the same dust as the Divine March)
       } else if (a.wander && !WM.script.running && !frozen && !a.isPlayer) {
         a.wanderT -= dt;
         if (a.wanderT <= 0) {
@@ -712,6 +717,8 @@
     });
     drawMarks(c, cx, cy);
     drawSplashes(c, cx, cy);
+    drawFlames(c, cx, cy);
+    drawClouds(c, cx, cy);
     if (room >= 0) {
       c.fillStyle = '#000';
       var x0 = Math.max(0, Math.floor(cx / TS)), y0 = Math.max(0, Math.floor(cy / TS));
@@ -737,6 +744,7 @@
     }
     else if (tint === 'dusk') { c.fillStyle = 'rgba(120,50,20,0.18)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }
     else if (tint === 'fire') { c.fillStyle = 'rgba(160,40,10,' + (0.22 + Math.sin(WM.time * 7) * 0.04).toFixed(3) + ')'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }
+    else if (tint === 'burnt') { c.fillStyle = 'rgba(40,24,14,0.5)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); c.fillStyle = 'rgba(90,90,90,0.18)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }   // the morning after a fire: everything charred and grey
     else if (tint === 'dark') { c.fillStyle = 'rgba(0,0,10,0.5)'; c.fillRect(0, 0, WM.LOW_W, WM.LOW_H); }
     G.present();
 
@@ -905,6 +913,7 @@
     goalCache.at = WM.time || 0;
     return (goalCache.list = findGoals());
   };
+  var SPOTS = []; for (var gy = 0; gy <= 96; gy += 6) for (var gx = 0; gx <= 96; gx += 3) SPOTS.push([gx, gy]);
   function findGoals() {
     var st = WM.state, ch = st.chapter || 0, out = [], R = regions(), evs = WM.data.events || {}, sm = st.map;
     for (var map in evs) {
@@ -913,7 +922,7 @@
         var cm = /^ch(\d+)_/.exec(ev.id);
         if (!ev.run || ev.aside || !cm || +cm[1] !== ch || (ev.once ? S.has('ev:' + map + ':' + ev.id) : !(ev.cond && /!\s*\w+\.has\(/.test(ev.cond.toString())))) return;   // a repeatable scene counts only while flags of its own keep it open (it closes when the story moves on)
         // a scene that waits for the player to reach part of its map counts if it would fire anywhere there
-        var sx0 = st.x, sy0 = st.y, ok = false, spots = ev.cond && /\.x\b|\.y\b/.test(ev.cond.toString()) ? [[sx0, sy0], [0, 0], [400, 400], [0, 400], [400, 0]] : [[sx0, sy0]];
+        var sx0 = st.x, sy0 = st.y, ok = false, spots = ev.cond && /\.x\b|\.y\b/.test(ev.cond.toString()) ? SPOTS.concat([[sx0, sy0]]) : [[sx0, sy0]];   // (spread over the map, so a scene that waits in one room of an interior is found too)
         st.map = map;
         for (var i = 0; i < spots.length && !ok; i++) { st.x = spots[i][0]; st.y = spots[i][1]; try { ok = !ev.cond || !!ev.cond(S, st); } catch (e2) { ok = false; } }
         st.map = sm; st.x = sx0; st.y = sy0;
@@ -1011,9 +1020,11 @@
     if (a.boat) y += Math.round(Math.sin(WM.time * 2 + a.x) * 0.8);   // riding the swell
     else SP.shadow(c, x, Math.round(a.y - cy), a.big ? 7 : 5);
     if (a.alpha != null) c.globalAlpha = a.alpha;
+    if (a.boat === 'ride') { c.save(); c.beginPath(); c.rect(x - 24, y - 80, 48, 74); c.clip(); }   // (riding in someone else's sampan: his hull hides the legs)
     SP.draw(c, a.sheet(), a.dir, a.anim, x, y);
+    if (a.boat === 'ride') c.restore();
     c.globalAlpha = 1;
-    if (a.boat) drawBoat(c, x, y);
+    if (a.boat && a.boat !== 'ride') drawBoat(c, x, y, typeof a.boat === 'number' ? a.boat : 1);
   }
   // the colour of a figure's robe at the waist (front-facing frame), for drawing them seated
   function robeColour(sh) {
@@ -1027,12 +1038,15 @@
     return (sh.robeColour = col);
   }
   // a small boat around a character's legs, for scenes on the water
-  function drawBoat(c, x, y) {
-    c.fillStyle = 'rgba(255,255,255,0.35)'; c.fillRect(x - 14, y + 2, 28, 1);
-    c.fillStyle = '#3a200e'; c.fillRect(x - 13, y - 9, 26, 3);
-    c.fillStyle = '#8a5a2c'; c.fillRect(x - 13, y - 9, 26, 1);
-    c.fillStyle = '#5a3418'; c.fillRect(x - 12, y - 6, 24, 6); c.fillRect(x - 10, y, 20, 2);
-    c.fillStyle = '#6e4220'; c.fillRect(x - 12, y - 6, 24, 1);
+  // (n tiles long: 1 is a skiff for one, 3 or 4 a sampan others can ride in, centred on the one who 'owns' it)
+  function drawBoat(c, x, y, n) {
+    var h = n > 1 ? Math.round(n * 8) : 13;
+    c.fillStyle = 'rgba(255,255,255,0.35)'; c.fillRect(x - h - 1, y + 2, 2 * h + 2, 1);
+    c.fillStyle = '#3a200e'; c.fillRect(x - h, y - 9, 2 * h, 3);
+    c.fillStyle = '#8a5a2c'; c.fillRect(x - h, y - 9, 2 * h, 1);
+    c.fillStyle = '#5a3418'; c.fillRect(x - h + 1, y - 6, 2 * h - 2, 6); c.fillRect(x - h + 3, y, 2 * h - 6, 2);
+    c.fillStyle = '#6e4220'; c.fillRect(x - h + 1, y - 6, 2 * h - 2, 1);
+    if (n > 1) { c.fillStyle = '#4a2a12'; for (var bx = x - h + 6; bx < x + h - 4; bx += 10) c.fillRect(bx, y - 6, 1, 6); }   // the thwarts
   }
 
   var EMOTES = {
@@ -1043,14 +1057,18 @@
     'anger': function (c, x, y) { c.fillStyle = '#e03a2a'; c.fillRect(x - 3, y - 5, 2, 2); c.fillRect(x + 1, y - 5, 2, 2); c.fillRect(x - 3, y - 1, 2, 2); c.fillRect(x + 1, y - 1, 2, 2); },
     'sweat': function (c, x, y) { c.fillStyle = '#5aa0e0'; c.fillRect(x, y - 4, 2, 3); c.fillRect(x - 1, y - 2, 4, 2); },
     'heart': function (c, x, y) { c.fillStyle = '#e04a7a'; c.fillRect(x - 3, y - 5, 2, 2); c.fillRect(x + 1, y - 5, 2, 2); c.fillRect(x - 3, y - 4, 6, 2); c.fillRect(x - 2, y - 2, 4, 1); c.fillRect(x - 1, y - 1, 2, 1); },
+    'tears': function (c, x, y) {   // weeping: two drops that fall and fall again
+      var k = Math.floor(Date.now() / 110) % 5; c.fillStyle = '#5aa0e0';
+      c.fillRect(x - 4, y - 6 + k, 2, 2); c.fillRect(x - 4, y - 5 + k, 1, 2);
+      c.fillRect(x + 2, y - 6 + (k + 2) % 5, 2, 2); c.fillRect(x + 3, y - 5 + (k + 2) % 5, 1, 2);
+    },
     'zzz': function (c, x, y) { c.fillStyle = '#5a5a8a'; c.fillRect(x - 3, y - 5, 4, 1); c.fillRect(x - 1, y - 4, 1, 1); c.fillRect(x - 2, y - 3, 1, 1); c.fillRect(x - 3, y - 2, 4, 1); }
   };
   // the Divine March: Dai Zong running on his charms kicks up a trail of dust behind his heels
   F.dust = [];
-  var dustT = 0;
   function kickDust(p, dt) {
-    dustT -= dt; if (dustT > 0) return;
-    dustT = 0.025;
+    p.dustT = (p.dustT || 0) - dt; if (p.dustT > 0) return;
+    p.dustT = 0.025;
     var back = { left: [1, 0], right: [-1, 0], up: [0, 1], down: [0, -1] }[p.dir] || [0, 0];
     for (var i = 0; i < 3; i++) {
       F.dust.push({ x: p.x + back[0] * 5 + (Math.random() - 0.5) * 6, y: p.y - 1 + back[1] * 3 + (Math.random() - 0.5) * 3,
@@ -1071,6 +1089,44 @@
       if (sz > 2) { c.fillStyle = '#a89068'; c.fillRect(x, y + sz - 1, sz, 1); }
     }
     c.globalAlpha = 1;
+  }
+  // a magic cloud under someone's feet (Luo Zhenren's handkerchief): soft white puffs that follow them as they rise
+  F.clouds = [];
+  function drawClouds(c, cx, cy) {
+    if (!F.clouds.length) return;
+    var t = WM.time || 0;
+    F.clouds = F.clouds.filter(function (cl) { return F.actors && F.actors.indexOf(cl.a) >= 0 && cl.a.visible !== false; });
+    F.clouds.forEach(function (cl) {
+      var x = Math.round(cl.a.x - cx), y = Math.round(cl.a.y - cy + (cl.a.offY || 0));
+      [[-9, 1, 6], [-3, 3, 7], [4, 2, 7], [10, 0, 5], [0, -1, 6]].forEach(function (p, i) {
+        var bob = Math.sin(t * 3 + i) * 1.2, r = p[2] + Math.sin(t * 2 + i * 1.7) * 0.8;
+        c.fillStyle = 'rgba(200,210,235,0.75)'; c.beginPath(); c.ellipse(x + p[0], y + p[1] + bob + 1, r + 1, (r + 1) * 0.55, 0, 0, Math.PI * 2); c.fill();
+        c.fillStyle = 'rgba(255,255,255,0.92)'; c.beginPath(); c.ellipse(x + p[0], y + p[1] + bob - 1, r, r * 0.55, 0, 0, Math.PI * 2); c.fill();
+      });
+      if (Math.sin(t * 9) > 0.7) { c.fillStyle = '#fff8c0'; c.fillRect(x - 12 + Math.round((t * 37) % 24), y - 4, 1, 1); }   // a glint of magic
+    });
+  }
+  // a building on fire: tongues of flame licking up over a rectangle of tiles, sparks and smoke rising (s.flames)
+  F.flames = [];
+  function drawFlames(c, cx, cy) {
+    if (!F.flames.length) return;
+    var t = WM.time || 0;
+    F.flames.forEach(function (fl) {
+      if (fl.map !== F.map.id) return;
+      for (var ty = fl.y; ty < fl.y + fl.h; ty++) for (var tx = fl.x; tx < fl.x + fl.w; tx++) {
+        var h0 = U.hash2(tx, ty, 77), x = tx * TS - cx, y = ty * TS - cy;
+        if (x < -16 || y < -40 || x > WM.LOW_W || y > WM.LOW_H + 16) continue;
+        for (var k = 0; k < 3; k++) {
+          var ph = t * (5 + k) + h0 * 9 + k * 2.1, fh = 8 + Math.round((Math.sin(ph) * 0.5 + 0.5) * 9), fx = x + 2 + k * 5 + Math.round(Math.sin(ph * 1.7) * 1);
+          c.fillStyle = '#c8301a'; c.fillRect(fx, y + 14 - fh, 4, fh);
+          c.fillStyle = '#f08a1a'; c.fillRect(fx + 1, y + 14 - fh + 3, 2, fh - 3);
+          c.fillStyle = '#ffe070'; c.fillRect(fx + 1, y + 12 - Math.round(fh / 3), 2, Math.round(fh / 3));
+        }
+        var sp = (t * 22 + h0 * 40) % 30;   // a spark drifting up
+        c.fillStyle = 'rgba(255,200,90,' + (1 - sp / 30).toFixed(2) + ')'; c.fillRect(x + 6 + Math.round(Math.sin(t * 3 + h0 * 6) * 3), y - sp, 1, 1);
+        if (h0 > 0.6) { var sm = (t * 10 + h0 * 50) % 40; c.fillStyle = 'rgba(40,30,30,' + (0.35 * (1 - sm / 40)).toFixed(2) + ')'; c.fillRect(x + 4, y - 6 - sm, 6, 4); }   // and smoke
+      }
+    });
   }
   // someone going into the water: a ring spreading on the surface, and spray thrown up and falling back
   F.splashes = [];

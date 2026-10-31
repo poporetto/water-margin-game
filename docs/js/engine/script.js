@@ -93,7 +93,7 @@
     if (!arrivals.length) batch = {};
     var k = path[0][0] + ',' + path[0][1]; batch[k] = (batch[k] || 0) + 1;
     a.hold = (batch[k] - 1) * 0.35;   // single file, not all at once on top of each other
-    a.finalDir = dir || 'down';
+    a.finalDir = dir || 'down'; a.enterTo = { x: tx * TS + 8, y: ty * TS + 15 };
     a.entering = new Promise(function (res) {
       a.finishEntrance = function () { a.x = tx * TS + 8; a.y = ty * TS + 15; a.path = []; a.onArrive = null; a.dir = a.finalDir; a.entering = null; a.finishEntrance = null; a.hold = 0; res(); };
       walk(a, path, function () { if (a.finishEntrance) a.finishEntrance(); });
@@ -234,9 +234,10 @@
       face: function (key, dir) { var a = actor(key); a.faced = true; if (a.entering) a.finalDir = dir; else a.dir = dir; },   // (turned on purpose: a line they speak will not turn them back to the leader)
       faceEach: function (k1, k2) {
         var a = actor(k1), b = actor(k2);
-        var dx = b.x - a.x, dy = b.y - a.y;
-        if (Math.abs(dx) > Math.abs(dy)) { a.dir = dx > 0 ? 'right' : 'left'; b.dir = dx > 0 ? 'left' : 'right'; }
-        else { a.dir = dy > 0 ? 'down' : 'up'; b.dir = dy > 0 ? 'up' : 'down'; }
+        var at = function (o) { return o.entering && o.enterTo ? o.enterTo : o; }, turn = function (o, d) { if (o.entering) o.finalDir = d; else o.dir = d; };   // (someone still walking on: where they will stand)
+        var dx = at(b).x - at(a).x, dy = at(b).y - at(a).y;
+        if (Math.abs(dx) > Math.abs(dy)) { turn(a, dx > 0 ? 'right' : 'left'); turn(b, dx > 0 ? 'left' : 'right'); }
+        else { turn(a, dy > 0 ? 'down' : 'up'); turn(b, dy > 0 ? 'up' : 'down'); }
         a.faced = b.faced = true;
       },
       emote: function (key, type, dur) { snap(key); var a = actor(key); a.emote = type; a.emoteT = dur || 1.2; WM.audio.sfx(type === '!' ? 'cursor' : 'blip'); return WM.wait(Math.min(0.6, dur || 0.6)); },
@@ -248,10 +249,11 @@
       swim: function (key, on) { snap(key); var a = actor(key); a.static = on === false ? null : 'swim'; if (on !== false) a.boat = false; },   // in the water, head and shoulders above it
       sit: function (key, on) { snap(key); actor(key).static = on === false ? null : 'sit'; },   // seated cross-legged (a monk at his meditation)
       splash: function (key) { var a = actor(key); F().splash(a.x, a.y - 3); WM.audio.sfx('splash'); },   // someone goes into the water
-      boat: function (key, on) { actor(key).boat = on !== false; },   // seat a character in a small boat (on water)
+      boat: function (key, on) { actor(key).boat = on === false ? false : (on == null || on === true ? true : on); },   // seat a character in a small boat (on water); a number is a sampan that many tiles long, 'ride' is a seat in someone else's
       spawn: function (key, who, tx, ty, dir) {
         // the same character still walking off from an earlier despawn turns round and walks to the new spot
         var f = F(), ex = f.findActor(key);
+        if (typeof who === 'string') f.actors = (f.actors || []).filter(function (o) { return !(o.ev && o.ev.resident && o.ev.char === who); });   // (a hero standing about the fortress steps aside while the scene has him: no double)
         // already standing there since the scene was set (see Field.stage)
         if (ex && ex.ev && ex.ev.staged) {
           var et = ex.tile();
@@ -315,6 +317,8 @@
       music: function (id) { WM.audio.play(id); },
       stopMusic: function () { WM.audio.stop(); },
       tint: function (t) { WM.state.flags.tintOverride = t; },
+      cloud: function (key, on) { var f = F(), a = actor(key); f.clouds = (f.clouds || []).filter(function (c) { return c.a !== a; }); if (on !== false) { f.clouds.push({ a: a }); WM.audio.sfx('wind'); } },   // a magic cloud under someone's feet
+      flames: function (x, y, w, h) { var f = F(); if (x == null) { f.flames = []; return; } f.flames.push({ map: f.map.id, x: x, y: y, w: w || 1, h: h || 1 }); WM.audio.sfx('fire'); },   // set a block of tiles alight (no arguments: put every fire out)
       night: function (on) { WM.state.flags.night = on !== false; },
       weather: function (w) { WM.state.flags.weather = w || null; },
       camera: function (tx, ty, dur) {
@@ -368,9 +372,9 @@
         ids.forEach(function (id) { chain = chain.then(function () { return s.join(id, opt); }); });
         return chain;
       },
-      party: function (ids) { S.setParty(ids); if (F().player) F().setLeader(WM.state.leader); },
+      party: function (ids) { S.setParty(ids); if (F().player) F().setLeader(WM.state.leader); dropFollowers(); },
       addParty: function (id) { if (!WM.state.chars[id]) S.initChar(id); S.addToParty(id); },
-      removeParty: function (id) { S.removeFromParty(id); if (WM.state.leader === id && WM.state.party.length) F().setLeader(WM.state.party[0]); },
+      removeParty: function (id) { S.removeFromParty(id); if (WM.state.leader === id && WM.state.party.length) F().setLeader(WM.state.party[0]); dropFollowers(); },
       setLeader: function (id) { WM.state.leader = id; if (F().player) F().setLeader(id); },
       inParty: function (id) { return WM.state.party.indexOf(id) >= 0; },
       level: function (id, lv) { var c = WM.state.chars[id] || S.initChar(id, lv); if (c.lv < lv) { c.lv = lv; S.catchUp(id); S.restore(id); } },
@@ -457,6 +461,16 @@
       var dx = pl.x - a.x, dy = pl.y - a.y;
       a.dir = Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
     };
+    // a hero walking at the leader's heels leaves him once he is no longer in the party (townsfolk and escorts stay)
+    // (one set aside while the party is changed for a fight comes back when the party is restored)
+    var dropFollowers = function () {
+      var st = WM.state, fl = st.followers || [], inP = function (w) { return st.party.indexOf(w) >= 0 && w !== st.leader; };
+      var away = (st.followersAway || []).filter(function (a) { return a.ch === st.chapter; });   // (only within the same chapter)
+      var keep = fl.filter(function (w) { return !WM.data.chars[w] || inP(w); }), gone = fl.filter(function (w) { return keep.indexOf(w) < 0; });
+      var back = away.filter(function (a) { return inP(a.w) && keep.indexOf(a.w) < 0; }).map(function (a) { return a.w; });
+      st.followersAway = away.filter(function (a) { return back.indexOf(a.w) < 0; }).concat(gone.map(function (w) { return { w: w, ch: st.chapter }; }));
+      if (gone.length || back.length) { st.followers = keep.concat(back); if (F().refreshFollowers) F().refreshFollowers(); }
+    };
     var showSpeaker = function (who) {
       var id = typeof who === 'string' ? who.split(':')[0] : null, f = F();
       // one who has since become the leader, or left the party, is no longer a stand-in at the leader's side
@@ -464,7 +478,7 @@
       if (!id || WM.scene !== f || !f.map || f.map.def.world || !f.player || f.player.hiddenPlayer || f.transitioning) return;
       if (id === WM.state.leader || WM.state.party.indexOf(id) < 0 || WM.state.flags['ghost:' + id]) return;
       var here = (f.actors || []).filter(function (o) { return o.sheetWho === id && o.visible; })[0];
-      if (here) { if (here.autoShown && !here.path.length) faceLeader(here); return; }
+      if (here) { if (here.autoShown && !here.path.length && !here.faced) faceLeader(here); return; }
       var p = f.player.tile(), room = f.roomAt(p.x, p.y), taken = function (x, y) { return (f.actors || []).some(function (o) { var t = o.standTo || o.tile(); return o.visible && t.x === x && t.y === y; }) || (x === p.x && y === p.y); };   // (one still stepping out counts where they are going)
       var back = { up: [0, 1], down: [0, -1], left: [1, 0], right: [-1, 0] }[f.player.dir] || [0, 1];
       var spots = [[-1, 0], [1, 0], back, [-1, back[1] || 1], [1, back[1] || 1], [-2, 0], [2, 0], [back[0] * 2, back[1] * 2]];

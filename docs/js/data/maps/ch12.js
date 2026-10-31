@@ -35,7 +35,7 @@
   z.rect(0, 2, 11, 9, '.'); z.frame(1, 3, 9, 7, 'F'); var hu = z.house(2, 4, 7, 4, { roof: '^', door: 3, windows: [1, 5] }); z.set(5, 9, '.');
   z.scatter('T', 0.06, 462, '.', [12, 0, 38, 14]);
   WM.defMap('zhujia', { name: 'Zhu Family Village', theme: 'autumn', music: 'tense', rows: z.rows(), spawn: [30, 46], battleBg: 'forest',
-    exits: [WM.toWorld('zhujia', 0, 45, 1, 2)] });
+    exits: [WM.toWorld('zhujia', 0, 45, 1, 2), WM.toWorld('zhujia', 59, 45, 1, 2)] });   // (the road runs out east as well as west)
   WM.data.zhujia = { road: road, dead: dead, doors: { hall: hall, zhongli: zhongli, hu: hu } };
   var zi = L.grid(40, 12, 'x');
   var zR = { hall: zi.room(1, 1, 18, 10, { floor: 'N' }), prison: zi.room(20, 1, 12, 9, { floor: 'N' }), cottage: zi.room(33, 1, 6, 6) };

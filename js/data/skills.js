@@ -24,527 +24,527 @@
 
   // ===================== The thirty-six Heavenly Spirits =====================
   sk('songjiang', [
-    H('Timely Rain', 60, 'allyAll', 'Song Jiang\'s generosity falls like rain in a drought: restores the party.'),
-    BF('Act on Heaven\'s Behalf', 'atkUp', 'allyAll', 'He raises the apricot-yellow banner: the party\'s attack rises.'),
-    M('Thirty-Six Spirits', 230, 'magic', 'enemyAll', 'The Heavenly Book of the Mysterious Lady: the Heavenly Spirits descend on the enemy.', { screen: true })
+    H('Timely Rain', 60, 'allyAll', 'His generosity falls on the brothers like rain in a drought, restoring everyone\'s strength.'),
+    BF('Act on Heaven\'s Behalf', 'atkUp', 'allyAll', 'He raises the apricot-yellow banner, and every brother strikes harder.'),
+    M('Thirty-Six Spirits', 230, 'magic', 'enemyAll', 'He opens the Heavenly Book, and the thirty-six Heavenly Spirits come down on the whole enemy line.', { screen: true })
   ]);
   sk('lujunyi', [
-    P('Jade Qilin Thrust', 1.9, 'The spear-thrust that no man of Hebei could turn aside.'),
-    PA('Peerless Staff', 1.15, 'Lu Junyi\'s staff, unmatched in the land, sweeps the whole enemy line.', BL),
-    P('Pillar of Hebei', 4.0, 'All the art of the richest and greatest fighter of Daming in a single blow.', { sure: true })
+    P('Jade Qilin Thrust', 1.9, 'One heavy spear-thrust, driven home so hard no guard can turn it.'),
+    PA('Peerless Staff', 1.15, 'He swings his staff in a long arc that knocks down the whole enemy line.', BL),
+    P('Pillar of Hebei', 4.0, 'All his art in a single blow on one foe — it cannot miss.', { sure: true })
   ]);
   sk('wuyong', [
-    M('Copper Chains', 70, 'wind', 'enemy1', 'The schoolmaster\'s copper chains lash out like a whip of wind.'),
-    ST('Drugged Wine', 'sleep', 0.6, 'enemyAll', 'The trick of Yellow Earth Ridge: the enemy drinks, and drops where they stand.'),
-    BF('Stratagem of Zhuge', 'atkUp', 'allyAll', 'A plan to rival Zhuge Liang\'s: every brother knows where to strike.', { also: 'defUp' })
+    M('Copper Chains', 70, 'wind', 'enemy1', 'He lashes his copper chains at one foe like a whip of wind.'),
+    ST('Drugged Wine', 'sleep', 0.6, 'enemyAll', 'The trick of Yellow Earth Ridge: drugged wine that may put the whole enemy to sleep.'),
+    BF('Stratagem of Zhuge', 'atkUp', 'allyAll', 'He lays out a plan worthy of Zhuge Liang: the party\'s attack and defence both rise.', { also: 'defUp' })
   ]);
   sk('gongsunsheng', [
-    M('Thunderclap', 80, 'thunder', 'enemy1', 'Lightning answers the pine-pattern sword.'),
-    M('Five Thunders', 135, 'thunder', 'enemyAll', 'The Five Thunders of Heaven\'s True Law, taught by Luo Zhenren.', { screen: true }),
-    M('Dragon Entering the Clouds', 270, 'thunder', 'enemyAll', 'The Daoist rides the storm itself down upon the enemy.', { screen: true })
+    M('Thunderclap', 80, 'thunder', 'enemy1', 'He points the pine-pattern sword and a bolt of lightning strikes one foe.'),
+    M('Five Thunders', 135, 'thunder', 'enemyAll', 'He calls the Five Thunders of Heaven down on every enemy at once.', { screen: true }),
+    M('Dragon Entering the Clouds', 270, 'thunder', 'enemyAll', 'He rides the storm itself down upon the enemy: thunder over the whole field.', { screen: true })
   ]);
   sk('guansheng', [
-    P('Green Dragon Slash', 2.0, 'The crescent blade of his ancestor Guan Yu comes down like a falling moon.'),
-    PA('Crescent Moon Sweep', 1.2, 'The Green Dragon Blade sweeps the whole line.'),
-    P('Spirit of Guan Yu', 4.0, 'The red face, the long beard, the blade: for a moment, the god of war himself.', { pierce: true })
+    P('Green Dragon Slash', 2.0, 'The Green Dragon blade comes down on one foe like a falling moon.'),
+    PA('Crescent Moon Sweep', 1.2, 'He sweeps the crescent blade along the whole enemy line.'),
+    P('Spirit of Guan Yu', 4.0, 'For one blow he is Guan Yu himself — the blade cleaves straight through armour.', { pierce: true })
   ]);
   sk('linchong', [
-    P('Serpent Spear', 1.9, 'The eighteen-foot serpent spear of the Imperial Instructor finds the gap in any guard.', { pierce: true }),
-    P('Wind and Snow at the Temple', 1.0, 'The night of the Mountain God temple: three thrusts, three dead men.', { hits: 3 }),
-    P('Panther Head Charge', 3.9, 'Every insult swallowed since the White Tiger Hall, paid back at once.', { sure: true })
+    P('Serpent Spear', 1.9, 'The eighteen-foot serpent spear finds the gap in one foe\'s guard and pierces armour.', { pierce: true }),
+    P('Wind and Snow at the Temple', 1.0, 'Three quick spear-thrusts at one foe, as on the snowy night at the temple.', { hits: 3 }),
+    P('Panther Head Charge', 3.9, 'Every insult he swallowed, paid back in one charge that cannot miss.', { sure: true })
   ]);
   sk('qinming', [
-    P('Wolf-Tooth Mace', 2.0, 'A blow like a thunderbolt. It may leave the foe senseless.', o({ status: 'sleep', statusChance: 0.3 }, BL)),
-    PA('Thunder Roar', 1.1, 'Qin Ming\'s voice like thunder before the charge.', BL),
-    P('Thunderbolt', 3.9, 'The fury of the commander of Qingzhou.', BL)
+    P('Wolf-Tooth Mace', 2.0, 'A thunderbolt blow of the wolf-tooth mace that may leave the foe stunned.', o({ status: 'sleep', statusChance: 0.3 }, BL)),
+    PA('Thunder Roar', 1.1, 'He roars like thunder and smashes into the whole enemy line.', BL),
+    P('Thunderbolt', 3.9, 'One crushing blow of the mace, with all the fury of Qingzhou\'s commander behind it.', BL)
   ]);
   sk('huyanzhuo', [
-    P('Twin Steel Whips', 1.05, 'Left whip, right whip.', o({ hits: 2 }, BL)),
-    PA('Chained Cavalry', 1.25, 'The armoured horses, chained ten abreast, ride down the enemy.'),
-    P('Legacy of Huyan Zan', 1.3, 'The whips of the founding general\'s house.', o({ hits: 3 }, BL))
+    P('Twin Steel Whips', 1.05, 'Two blows on one foe: the left steel whip, then the right.', o({ hits: 2 }, BL)),
+    PA('Chained Cavalry', 1.25, 'His chained cavalry, ten horses abreast, ride down the whole enemy line.'),
+    P('Legacy of Huyan Zan', 1.3, 'Three blows of the twin whips in the style of his ancestor Huyan Zan.', o({ hits: 3 }, BL))
   ]);
   sk('huarong', [
-    P('Little Li Guang', 2.0, 'An arrow that never misses its mark.', AR),
-    PA('Rain of Arrows', 1.1, 'Arrow after arrow, faster than the eye.', AR),
-    P('The Wild Goose', 1.35, 'He named the goose before he loosed. Three arrows, three in the head.', o({ hits: 3 }, AR))
+    P('Little Li Guang', 2.0, 'One arrow at one foe; it never misses.', AR),
+    PA('Rain of Arrows', 1.1, 'Arrow after arrow rains down on every enemy, never missing.', AR),
+    P('The Wild Goose', 1.35, 'He names the target before he looses: three arrows into one foe, never missing.', o({ hits: 3 }, AR))
   ]);
   sk('chaijin', [
-    P('Little Whirlwind', 0.95, 'A noble\'s swordsmanship, quick as a whirl of wind.', { hits: 2 }),
-    BF('Iron Writ', 'defUp', 'allyAll', 'The founding emperor\'s pledge of immunity shields the party.'),
-    H('Welcome of the Chai Manor', 160, 'allyAll', 'Every wanderer under heaven finds food and rest at Chai Jin\'s gate.', { cure: true })
+    P('Little Whirlwind', 0.95, 'Two quick sword-cuts at one foe, light as a whirl of wind.', { hits: 2 }),
+    BF('Iron Writ', 'defUp', 'allyAll', 'He holds up the emperor\'s iron writ: the party\'s defence rises.'),
+    H('Welcome of the Chai Manor', 160, 'allyAll', 'The welcome of the Chai manor: the whole party is healed and cured of ailments.', { cure: true })
   ]);
   sk('liying', [
-    P('Flying Knife', 1.8, 'One of the five knives on his back.', { shot: 'arrow' }),
-    PA('Five Flying Knives', 1.0, 'All five knives at once.', { shot: 'arrow' }),
-    P('Sky-Striking Eagle', 3.6, 'He drops on his prey like an eagle from the sky.', { sure: true })
+    P('Flying Knife', 1.8, 'He throws one of the five knives on his back at one foe.', { shot: 'arrow' }),
+    PA('Five Flying Knives', 1.0, 'All five flying knives at once, spread across the enemy line.', { shot: 'arrow' }),
+    P('Sky-Striking Eagle', 3.6, 'He drops on one foe like an eagle from the sky — a blow that cannot miss.', { sure: true })
   ]);
   sk('zhutong', [
-    P('Beautiful Beard Halberd', 1.9, 'The constable of Yuncheng with Guan Yu\'s beard and Guan Yu\'s strength.'),
-    PA('Halberd Sweep', 1.15, 'A long sweep of the halberd.'),
-    P('Lord of the Beautiful Beard', 3.6, 'The constable who let Chao Gai and Song Jiang go free does not let this one go.')
+    P('Beautiful Beard Halberd', 1.9, 'A heavy sweep of the halberd at one foe, with Guan Yu\'s strength in it.'),
+    PA('Halberd Sweep', 1.15, 'A long halberd sweep that cuts across the whole enemy line.'),
+    P('Lord of the Beautiful Beard', 3.6, 'One mighty halberd blow; this foe he does not let go.')
   ]);
   sk('luzhishen', [
-    P('Three Punches', 0.85, 'Three punches killed the Lord of the West. Nose, eye, temple.', o({ hits: 3 }, BL)),
-    PA('Uproot the Willow', 1.3, 'He pulls a willow tree up by the roots and swings it.', BL),
-    P('Chan Staff of Wutai', 4.2, 'Sixty-two catties of iron in the hands of the Flowery Monk.', BL)
+    P('Three Punches', 0.85, 'Three punches at one foe — nose, eye, temple — as on the Lord of the West.', o({ hits: 3 }, BL)),
+    PA('Uproot the Willow', 1.3, 'He pulls up a willow by the roots and swings it through the whole enemy line.', BL),
+    P('Chan Staff of Wutai', 4.2, 'Sixty-two catties of iron staff brought down on one foe in a single crushing blow.', BL)
   ]);
   sk('wusong', [
-    P('Tiger-Slaying Fists', 0.85, 'The fists that beat the tiger of Jingyang Ridge to death.', o({ hits: 3 }, BL)),
-    PA('Drunken Fist', 1.2, 'The more he drinks, the better he fights: the Happy Forest all over again.', BL),
-    PA('Mandarin Duck Tower', 1.8, 'The night of vengeance: blood on the walls, and his name written in it.')
+    P('Tiger-Slaying Fists', 0.85, 'Three blows of the fists that beat the tiger to death, on one foe.', o({ hits: 3 }, BL)),
+    PA('Drunken Fist', 1.2, 'The more he drinks, the better he fights: a drunken flurry that hits every enemy.', BL),
+    PA('Mandarin Duck Tower', 1.8, 'The night of vengeance at the Mandarin Duck Tower: a heavy blow on every enemy.')
   ]);
   sk('dongping', [
-    P('Twin Spears', 1.0, 'A spear in each hand.', { hits: 2 }),
-    PA('General of Myriad Households', 1.15, 'The commander of Dongping charges the line.'),
-    P('Double Spear Storm', 0.95, 'The spears come from everywhere at once.', { hits: 4, scatter: true })
+    P('Twin Spears', 1.0, 'Two thrusts at one foe, a spear in each hand.', { hits: 2 }),
+    PA('General of Myriad Households', 1.15, 'He charges the whole enemy line with both spears.'),
+    P('Double Spear Storm', 0.95, 'Four spear-thrusts flying at random foes from everywhere at once.', { hits: 4, scatter: true })
   ]);
   sk('zhangqing', [
-    P('Featherless Arrow', 1.8, 'A thrown stone, true as an arrow.', o({ sure: true }, STN)),
-    PA('Volley of Stones', 1.0, 'Stone after stone from the pouch.', STN),
-    P('Fifteen Generals Felled', 0.85, 'One after another, fifteen generals of Liangshan fell to his stones.', o({ hits: 5, scatter: true, sure: true }, STN))
+    P('Featherless Arrow', 1.8, 'He throws a stone at one foe, true as an arrow — it never misses.', o({ sure: true }, STN)),
+    PA('Volley of Stones', 1.0, 'Stone after stone from his pouch, at every enemy.', STN),
+    P('Fifteen Generals Felled', 0.85, 'Five stones in quick succession at random foes, never missing — as when fifteen generals fell.', o({ hits: 5, scatter: true, sure: true }, STN))
   ]);
   sk('yangzhi', [
-    P('Heirloom Sabre', 2.0, 'It cuts iron like mud and a hair blown across its edge.', { pierce: true }),
-    PA('Yang Family Blade', 1.15, 'The sabre-art of the great Yang generals.'),
-    P('Blue-Faced Beast', 3.8, 'All the bad luck of his life comes down on one enemy.')
+    P('Heirloom Sabre', 2.0, 'The heirloom sabre that cuts iron like mud slices through one foe\'s armour.', { pierce: true }),
+    PA('Yang Family Blade', 1.15, 'The sabre-art of the Yang generals: one cut across the whole enemy line.'),
+    P('Blue-Faced Beast', 3.8, 'All the bad luck of his life comes down on one foe in a single crushing stroke.')
   ]);
   sk('xuning', [
-    P('Hooked Lance', 1.8, 'The hook pulls the foe off balance; he may not rise in time.', { status: 'sleep', statusChance: 0.3 }),
-    PA('Break the Chained Horses', 1.3, 'The lance that hooked the legs of Huyan Zhuo\'s armoured cavalry.'),
-    P('Golden Lance Guard', 3.6, 'The sole master of the hooked lance.', { sure: true })
+    P('Hooked Lance', 1.8, 'The hooked lance pulls one foe off balance and may leave them stunned.', { status: 'sleep', statusChance: 0.3 }),
+    PA('Break the Chained Horses', 1.3, 'The lance that broke the chained cavalry hooks the legs of the whole enemy line.'),
+    P('Golden Lance Guard', 3.6, 'The sole master of the hooked lance strikes one foe — a thrust that cannot miss.', { sure: true })
   ]);
   sk('suochao', [
-    P('Golden Battle-Axe', 2.0, 'Suo Chao always strikes first.'),
-    PA('Vanguard Charge', 1.2, 'Straight into the enemy, as always, without waiting for anyone.'),
-    P('Impatient Vanguard', 4.1, 'One enormous blow of the golden axe.')
+    P('Golden Battle-Axe', 2.0, 'A heavy blow of the golden battle-axe at one foe.'),
+    PA('Vanguard Charge', 1.2, 'He charges into the enemy without waiting, striking the whole line.'),
+    P('Impatient Vanguard', 4.1, 'One enormous, impatient blow of the golden axe on one foe.')
   ]);
   sk('daizong', [
-    P('Swift Sword', 0.95, 'Too fast to see.', { hits: 2 }),
-    { name: 'Divine March', effect: 'escape', target: 'self', element: 'wind', vfx: 'rush', desc: 'He ties his paper charms to the brothers\' legs, and the whole party is gone before the enemy can blink. Always escapes (not from battles that cannot be fled).' },
-    P('Eight Hundred Li a Day', 0.95, 'He is everywhere at once.', { hits: 5, scatter: true })
+    P('Swift Sword', 0.95, 'Two sword-cuts at one foe, too fast to see.', { hits: 2 }),
+    { name: 'Divine March', effect: 'escape', target: 'self', element: 'wind', vfx: 'rush', desc: 'He ties his paper charms to the brothers\' legs and the whole party flees at once. (Not from battles that cannot be fled.)' },
+    P('Eight Hundred Li a Day', 0.95, 'Eight hundred li a day: five sword-cuts at random foes, here, there and everywhere.', { hits: 5, scatter: true })
   ]);
   sk('liutang', [
-    P('Red-Haired Devil', 1.9, 'The long-handled sabre of the man with the red birthmark.'),
-    PA('Long Sabre Sweep', 1.15, 'A great sweep of the long sabre.'),
-    P('Raid on the Birthday Gifts', 3.6, 'The blow that began the brotherhood of Liangshan.')
+    P('Red-Haired Devil', 1.9, 'A heavy cut of the long-handled sabre at one foe.'),
+    PA('Long Sabre Sweep', 1.15, 'He sweeps the long sabre across the whole enemy line.'),
+    P('Raid on the Birthday Gifts', 3.6, 'One great sabre stroke on one foe, like the raid that began the brotherhood.')
   ]);
   sk('likui', [
-    P('Twin Axes', 1.05, 'One axe, then the other.', { hits: 2 }),
-    PA('Black Whirlwind', 1.35, 'Stripped to the waist, he spins through the enemy with both axes.'),
-    P('Killing Frenzy', 0.95, 'He cuts down everything in his path and does not stop to look.', { hits: 6, scatter: true })
+    P('Twin Axes', 1.05, 'Two blows on one foe: one axe, then the other.', { hits: 2 }),
+    PA('Black Whirlwind', 1.35, 'Stripped to the waist, he spins through every enemy with both axes.'),
+    P('Killing Frenzy', 0.95, 'Six axe-blows at random foes — he cuts down whatever is in his path.', { hits: 6, scatter: true })
   ]);
   sk('shijin', [
-    P('Three-Pointed Blade', 1.8, 'The blade Wang Jin taught him to use properly.'),
-    PA('Nine Dragons', 1.15, 'The nine blue dragons on his back seem to move as he fights.'),
-    P('Wang Jin\'s Lesson', 3.6, 'Strength with method at last.', { sure: true })
+    P('Three-Pointed Blade', 1.8, 'A heavy cut of the three-pointed blade at one foe.'),
+    PA('Nine Dragons', 1.15, 'The nine dragons on his back seem to move as he cuts across the whole line.'),
+    P('Wang Jin\'s Lesson', 3.6, 'Strength with method at last: one great blow that cannot miss.', { sure: true })
   ]);
   sk('muhong', [
-    P('Tyrant of Jieyang', 1.8, 'The spear of the man who rules the town.'),
-    PA('Unrestrained', 1.1, 'He fights as he lives, with no restraint at all.'),
-    P('Chase to the River', 3.4, 'He chased Song Jiang to the water\'s edge; nothing escapes him.')
+    P('Tyrant of Jieyang', 1.8, 'A heavy spear-thrust at one foe from the man who rules Jieyang.'),
+    PA('Unrestrained', 1.1, 'He fights without restraint, laying into the whole enemy line.'),
+    P('Chase to the River', 3.4, 'He runs one foe down like a fugitive chased to the river — a crushing blow.')
   ]);
   sk('leiheng', [
-    P('Winged Tiger Leap', 1.9, 'He leaps a stream three zhang wide and lands sabre first.'),
-    PA('Constable\'s Sweep', 1.1, 'The strong constable clears the way.'),
-    P('Vengeance for His Mother', 3.4, 'The blow that killed the singer Bai Xiuying.')
+    P('Winged Tiger Leap', 1.9, 'He leaps three zhang and lands sabre-first on one foe.'),
+    PA('Constable\'s Sweep', 1.1, 'The strong constable clears the way with a sweep across the whole line.'),
+    P('Vengeance for His Mother', 3.4, 'One terrible sabre-stroke on one foe, as he struck for his mother\'s honour.')
   ]);
   sk('lijun', [
-    P('River Dragon Fork', 1.8, 'The steel fork of the Yangtze boatman.'),
-    PA('Capsize', 1.2, 'He overturns the boat with the enemy in it.'),
-    P('Lord of the Yangtze', 3.6, 'Of all the 108, the one who saw furthest.')
+    P('River Dragon Fork', 1.8, 'A heavy thrust of the boatman\'s steel fork at one foe.'),
+    PA('Capsize', 1.2, 'He overturns the boat: every enemy is thrown into the water.'),
+    P('Lord of the Yangtze', 3.6, 'The Lord of the Yangtze strikes one foe with all his strength.')
   ]);
   sk('ruanxiaoer', [
-    P('Fish Spear', 1.8, 'The spear of the Shijie fishermen.'),
-    PA('Net of Shijie Village', 1.1, 'The net comes down over all of them.'),
-    P('Tai Sui Stands His Ground', 3.4, 'The eldest Ruan does not give a step.')
+    P('Fish Spear', 1.8, 'A heavy thrust of the fish spear at one foe.'),
+    PA('Net of Shijie Village', 1.1, 'He casts his net over the whole enemy line and drags them down.'),
+    P('Tai Sui Stands His Ground', 3.4, 'The eldest Ruan stands his ground and drives one crushing thrust into one foe.')
   ]);
   sk('zhangheng', [
-    P('Knife-Noodles', 1.8, 'Dumplings, or knife-noodles? The knife is quicker.'),
-    PA('Ferry of the Xunyang', 1.1, 'Halfway across the river, the boatman turns on his passengers.'),
-    P('Into the River', 3.4, 'Over the side they go.', { status: 'sleep', statusChance: 0.4 })
+    P('Knife-Noodles', 1.8, '"Dumplings or knife-noodles?" A heavy knife-cut at one foe.'),
+    PA('Ferry of the Xunyang', 1.1, 'Halfway across the river the boatman turns: a cut at every enemy.'),
+    P('Into the River', 3.4, 'He heaves one foe over the side — a crushing blow that may leave them stunned.', { status: 'sleep', statusChance: 0.4 })
   ]);
   sk('ruanxiaowu', [
-    P('Leopard\'s Dagger', 1.0, 'The second Ruan, quick as the leopard on his chest.', { hits: 2 }),
-    PA('Gambler\'s Throw', 1.1, 'He bets everything on one throw.'),
-    P('Short-Lived Second Brother', 3.4, 'He fights as though he will die tomorrow.')
+    P('Leopard\'s Dagger', 1.0, 'Two quick dagger-stabs at one foe.', { hits: 2 }),
+    PA('Gambler\'s Throw', 1.1, 'He bets everything on one wild throw that hits every enemy.'),
+    P('Short-Lived Second Brother', 3.4, 'He fights as though he will die tomorrow: one crushing blow on one foe.')
   ]);
   sk('zhangshun', [
-    P('White Streak in the Waves', 1.0, 'In and out like a fish.', { hits: 2 }),
-    P('Drag Under', 2.2, 'He dragged Li Kui under until his eyes were white.', { status: 'sleep', statusChance: 0.45 }),
-    PA('Seven Days Beneath the Water', 1.6, 'He comes up from nowhere, among them all.')
+    P('White Streak in the Waves', 1.0, 'Two quick strikes at one foe, in and out like a fish.', { hits: 2 }),
+    P('Drag Under', 2.2, 'He drags one foe under the water — a heavy blow that may leave them senseless.', { status: 'sleep', statusChance: 0.45 }),
+    PA('Seven Days Beneath the Water', 1.6, 'He comes up from beneath the water among them all, striking every enemy.')
   ]);
   sk('ruanxiaoqi', [
-    P('Fish Spear', 1.85, 'The youngest and wildest of the Ruans.'),
-    PA('Living King of Hell', 1.15, 'He drinks the emperor\'s wine and fights like the king of the dead.'),
-    P('Insult to the Envoy', 3.6, 'He would not bow to the court, and he does not bow to this.')
+    P('Fish Spear', 1.85, 'A heavy thrust of the fish spear at one foe.'),
+    PA('Living King of Hell', 1.15, 'He fights like the king of the dead, laying into the whole enemy line.'),
+    P('Insult to the Envoy', 3.6, 'He would not bow to the court\'s envoy: one crushing thrust at one foe.')
   ]);
   sk('yangxiong', [
-    P('Executioner\'s Sabre', 1.9, 'The jailer of Jizhou has struck off many heads.', { pierce: true }),
-    PA('Sick Guan Suo', 1.15, 'Pale of face, terrible of blade.'),
-    P('Green Mountain Reckoning', 3.6, 'The vengeance on Cuiping Mountain.')
+    P('Executioner\'s Sabre', 1.9, 'The executioner\'s sabre falls on one foe and cuts straight through armour.', { pierce: true }),
+    PA('Sick Guan Suo', 1.15, 'Pale of face, terrible of blade: one cut across the whole enemy line.'),
+    P('Green Mountain Reckoning', 3.6, 'The reckoning of Cuiping Mountain: one crushing sabre-stroke on one foe.')
   ]);
   sk('shixiu', [
-    P('Daredevil\'s Sabre', 1.9, 'He can never pass by an injustice.'),
-    PA('Leap from the Tower', 1.2, 'Alone, he leapt from a tower onto the execution ground.'),
-    P('Daredevil Third Brother', 3.6, 'He does not count the enemy.', { sure: true })
+    P('Daredevil\'s Sabre', 1.9, 'A heavy sabre-cut at one foe; he can never pass by an injustice.'),
+    PA('Leap from the Tower', 1.2, 'He leaps down among the enemy as he leapt onto the execution ground, striking them all.'),
+    P('Daredevil Third Brother', 3.6, 'He does not count the enemy: one great blow on one foe that cannot miss.', { sure: true })
   ]);
   sk('xiezhen', [
-    P('Hunting Fork', 1.8, 'The steel fork of the Dengzhou hunters.'),
-    PA('Tiger Trap', 1.1, 'The poisoned arrows of the tiger trap.', { status: 'poison', statusChance: 0.4 }),
-    P('Two-Headed Snake', 3.4, 'He strikes from two sides at once.', { hits: 2, power: 1.7 })
+    P('Hunting Fork', 1.8, 'A heavy thrust of the hunting fork at one foe.'),
+    PA('Tiger Trap', 1.1, 'The poisoned arrows of the tiger trap: every enemy is hit and may be poisoned.', { status: 'poison', statusChance: 0.4 }),
+    P('Two-Headed Snake', 3.4, 'The Two-Headed Snake strikes one foe from both sides: two heavy blows.', { hits: 2, power: 1.7 })
   ]);
   sk('xiebao', [
-    P('Hunting Fork', 1.8, 'The younger hunter\'s fork.'),
-    PA('Twin-Tailed Scorpion', 1.1, 'A sting from behind.', { status: 'poison', statusChance: 0.4 }),
-    P('The Stolen Tiger', 3.4, 'The Mao family took their tiger. They paid for it.')
+    P('Hunting Fork', 1.8, 'A heavy thrust of the younger hunter\'s fork at one foe.'),
+    PA('Twin-Tailed Scorpion', 1.1, 'A scorpion\'s sting from behind: every enemy is hit and may be poisoned.', { status: 'poison', statusChance: 0.4 }),
+    P('The Stolen Tiger', 3.4, 'One crushing blow on one foe, for the tiger the Mao family stole.')
   ]);
   sk('yanqing', [
-    P('Crossbow Bolt', 1.8, 'His little crossbow never misses.', AR),
-    P('Wrestler\'s Throw', 2.2, 'The throw that beat Ren Yuan at Mount Tai.', o({ status: 'sleep', statusChance: 0.45 }, BL)),
-    P('The Prodigal', 1.4, 'Singer, wrestler, archer, tattooed and handsome: three bolts and he is gone.', o({ hits: 3 }, AR))
+    P('Crossbow Bolt', 1.8, 'One bolt from his little crossbow at one foe; it never misses.', AR),
+    P('Wrestler\'s Throw', 2.2, 'The throw that beat Ren Yuan at Mount Tai — one foe is slammed down and may be stunned.', o({ status: 'sleep', statusChance: 0.45 }, BL)),
+    P('The Prodigal', 1.4, 'Three crossbow bolts at one foe, never missing, and then he is gone.', o({ hits: 3 }, AR))
   ]);
 
   // ===================== The seventy-two Earthly Fiends =====================
   sk('zhuwu', [
-    M('Battle Formation', 60, 'earth', 'enemy1', 'The brains of Mount Shaohua arrange the ground against the enemy.'),
-    BF('Plea of Brotherhood', 'defUp', 'allyAll', 'His tearful plea saved Chen Da. Now it steels the party.'),
-    M('Landslide', 160, 'earth', 'enemyAll', 'The mountain itself falls on the enemy.', { screen: true })
+    M('Battle Formation', 60, 'earth', 'enemy1', 'He arranges the ground against one foe: the earth rises and strikes.'),
+    BF('Plea of Brotherhood', 'defUp', 'allyAll', 'His tearful plea of brotherhood steels the party: defence rises.'),
+    M('Landslide', 160, 'earth', 'enemyAll', 'The mountainside comes down on the whole enemy in a landslide.', { screen: true })
   ]);
   sk('huangxin', [
-    P('Mourning Sword', 1.8, 'The sword he boasted would suppress three mountains.'),
-    PA('Suppress Three Mountains', 1.1, 'He meant to sweep them all away.'),
-    P('Suppressor\'s Wrath', 3.3, 'Now he suppresses the enemy instead.')
+    P('Mourning Sword', 1.8, 'A heavy cut of the Mourning Sword at one foe.'),
+    PA('Suppress Three Mountains', 1.1, 'He swings the sword he boasted would suppress three mountains across the whole line.'),
+    P('Suppressor\'s Wrath', 3.3, 'One crushing blow on one foe: now he suppresses the enemy instead.')
   ]);
   sk('sunli', [
-    P('Spear and Whip', 1.0, 'Spear in one hand, steel whip in the other.', { hits: 2 }),
-    PA('Sick Yuchi', 1.1, 'Like the Tang general Yuchi Gong.'),
-    P('The Pretended Ally', 3.4, 'He came to the Zhu Village as a friend.', { sure: true })
+    P('Spear and Whip', 1.0, 'Two blows on one foe: the spear in one hand, the steel whip in the other.', { hits: 2 }),
+    PA('Sick Yuchi', 1.1, 'Like the Tang general Yuchi Gong, he lays into the whole enemy line.'),
+    P('The Pretended Ally', 3.4, 'He came as a friend and strikes as an enemy: one blow on one foe that cannot miss.', { sure: true })
   ]);
   sk('xuanzan', [
-    P('Steel Sabre', 1.8, 'The prince\'s son-in-law can fight.'),
-    PA('Ugly Face', 1.0, 'His face alone puts the enemy off their guard.', { status: 'sleep', statusChance: 0.25 }),
-    P('Prince Consort\'s Blow', 3.3, 'His bride died of the shock. So does this one.')
+    P('Steel Sabre', 1.8, 'A heavy cut of the steel sabre at one foe.'),
+    PA('Ugly Face', 1.0, 'His fearsome face throws the whole enemy line off guard; some may be stunned.', { status: 'sleep', statusChance: 0.25 }),
+    P('Prince Consort\'s Blow', 3.3, 'One crushing sabre-stroke on one foe from the prince\'s son-in-law.')
   ]);
   sk('haosiwen', [
-    P('Wood Dog Spear', 1.8, 'Born under the Wood Dog of the Well.'),
-    PA('Sworn Brother\'s Charge', 1.1, 'He rides at Guan Sheng\'s side.'),
-    P('Star of the Well', 3.3, 'The constellation of his mother\'s dream shines on his spear.')
+    P('Wood Dog Spear', 1.8, 'A heavy thrust of the Wood Dog spear at one foe.'),
+    PA('Sworn Brother\'s Charge', 1.1, 'He charges at Guan Sheng\'s side, striking the whole enemy line.'),
+    P('Star of the Well', 3.3, 'The star of his mother\'s dream shines on his spear: one crushing thrust.')
   ]);
   sk('hantao', [
-    P('Jujube-Wood Lance', 1.8, 'The vanguard of Huyan Zhuo.'),
-    PA('Hundred Victories', 1.1, 'A graduate of the military examinations knows how to charge.'),
-    P('General of a Hundred Victories', 3.3, 'One more victory.')
+    P('Jujube-Wood Lance', 1.8, 'A heavy thrust of the jujube-wood lance at one foe.'),
+    PA('Hundred Victories', 1.1, 'A trained cavalry charge that strikes the whole enemy line.'),
+    P('General of a Hundred Victories', 3.3, 'One more victory: a crushing lance-thrust at one foe.')
   ]);
   sk('pengqi', [
-    P('Three-Pointed Blade', 1.8, 'Huyan Zhuo\'s second.'),
-    PA('Heaven-Eyed Sweep', 1.1, 'He sees the whole line.'),
-    P('Heaven-Eyed General', 3.3, 'The third eye sees where to strike.', { sure: true })
+    P('Three-Pointed Blade', 1.8, 'A heavy cut of the three-pointed blade at one foe.'),
+    PA('Heaven-Eyed Sweep', 1.1, 'He sees the whole line, and sweeps his blade across it.'),
+    P('Heaven-Eyed General', 3.3, 'The third eye sees exactly where to strike: one blow that cannot miss.', { sure: true })
   ]);
   sk('shantinggui', [
-    M('Black Water', 70, 'water', 'enemy1', 'The commander of Lingzhou looses the waters.'),
-    H('Spring of Sacred Water', 120, 'allyAll', 'Clean water for the whole army.'),
-    M('Flood the Field', 190, 'water', 'enemyAll', 'He breaks the dikes and drowns the field.', { screen: true })
+    M('Black Water', 70, 'water', 'enemy1', 'He looses a rush of black water on one foe.'),
+    H('Spring of Sacred Water', 120, 'allyAll', 'Clean, sacred spring water restores the whole party.'),
+    M('Flood the Field', 190, 'water', 'enemyAll', 'He breaks the dikes and floods the field: water crashes over every enemy.', { screen: true })
   ]);
   sk('weidingguo', [
-    M('Fire Arrows', 70, 'fire', 'enemy1', 'The red army of Lingzhou shoots fire.'),
-    M('Fire-Carts', 120, 'fire', 'enemyAll', 'Burning carts roll into the enemy.'),
-    M('General of Holy Fire', 220, 'fire', 'enemyAll', 'All the field is fire.', { screen: true })
+    M('Fire Arrows', 70, 'fire', 'enemy1', 'Fire arrows streak into one foe.'),
+    M('Fire-Carts', 120, 'fire', 'enemyAll', 'Burning carts roll into the enemy, setting every one of them alight.'),
+    M('General of Holy Fire', 220, 'fire', 'enemyAll', 'The General of Holy Fire turns the whole field to flame.', { screen: true })
   ]);
   sk('oupeng', [
-    P('Golden-Winged Spear', 1.0, 'Swift as a bird.', { hits: 2 }),
-    PA('Swoop of the Eagle', 1.1, 'Down from Huangmen Mountain.'),
-    P('Golden-Winged Eagle', 3.3, 'He strikes from above.', { sure: true })
+    P('Golden-Winged Spear', 1.0, 'Two swift spear-thrusts at one foe, quick as a bird.', { hits: 2 }),
+    PA('Swoop of the Eagle', 1.1, 'He swoops down on the whole enemy line like an eagle.'),
+    P('Golden-Winged Eagle', 3.3, 'He strikes one foe from above, like an eagle — a blow that cannot miss.', { sure: true })
   ]);
   sk('dengfei', [
-    P('Iron Chain', 1.8, 'His iron chain swings wide.'),
-    PA('Fiery-Eyed Lion', 1.15, 'Red-eyed, he whirls the chain through the whole line.'),
-    P('Yinma River', 3.4, 'The master of Yinma River.')
+    P('Iron Chain', 1.8, 'A heavy blow of the swinging iron chain at one foe.'),
+    PA('Fiery-Eyed Lion', 1.15, 'Red-eyed with rage, he whirls the chain through the whole enemy line.'),
+    P('Yinma River', 3.4, 'The master of the Yinma River brings his chain down on one foe in a crushing blow.')
   ]);
   sk('yanshun', [
-    P('Brocade Tiger', 1.9, 'Red beard and the strength of a bull.'),
-    PA('Qingfeng Ambush', 1.15, 'Halt! Leave the carts and the silver!'),
-    P('Cattle Trader\'s Blow', 3.4, 'He could fell an ox with one stroke.', BL)
+    P('Brocade Tiger', 1.9, 'A heavy blow at one foe, with the strength of a bull.'),
+    PA('Qingfeng Ambush', 1.15, '"Halt! Leave the carts!" He springs an ambush on the whole enemy line.'),
+    P('Cattle Trader\'s Blow', 3.4, 'He could fell an ox with one stroke — and fells one foe.', BL)
   ]);
   sk('yanglin', [
-    P('Brush-Tipped Spear', 1.0, 'A wandering spear.', { hits: 2 }),
-    PA('Brocade Leopard', 1.1, 'A leopard\'s spring.'),
-    P('Road of Zhangde', 3.3, 'He met Dai Zong on the road and never looked back.')
+    P('Brush-Tipped Spear', 1.0, 'Two thrusts of the brush-tipped spear at one foe.', { hits: 2 }),
+    PA('Brocade Leopard', 1.1, 'A leopard\'s spring into the whole enemy line.'),
+    P('Road of Zhangde', 3.3, 'One crushing spear-thrust at one foe from the wandering Brocade Leopard.')
   ]);
   sk('lingzhen', [
-    P('Heaven-Shaking Thunder', 2.0, 'A thunderclap bomb from the finest artillerist in the realm.', { fx: 'fire', sure: true }),
-    PA('Mother-and-Son Bombs', 1.2, 'A great bomb that bursts into small ones over the enemy.', { fx: 'fire' }),
-    PA('Heaven-Shaking Thunder', 1.75, 'His shells reach fifteen li.', { fx: 'fire', screen: true })
+    P('Heaven-Shaking Thunder', 2.0, 'A thunderclap bomb lands on one foe — it never misses.', { fx: 'fire', sure: true }),
+    PA('Mother-and-Son Bombs', 1.2, 'A great shell bursts over the enemy into a shower of small bombs, hitting them all.', { fx: 'fire' }),
+    PA('Heaven-Shaking Thunder', 1.75, 'His great shells, that reach fifteen li, fall on the whole enemy line.', { fx: 'fire', screen: true })
   ]);
   sk('lufang', [
-    P('Red Halberd', 1.85, 'All in red, like Lü Bu.'),
-    PA('Little Marquis', 1.1, 'The halberd of a would-be Lü Bu.'),
-    P('Painted Halberd', 3.3, 'The duel that tangled their tassels.')
+    P('Red Halberd', 1.85, 'A heavy cut of the red halberd at one foe.'),
+    PA('Little Marquis', 1.1, 'He sweeps the halberd across the whole enemy line, like a would-be Lü Bu.'),
+    P('Painted Halberd', 3.3, 'One crushing blow of the painted halberd on one foe.')
   ]);
   sk('guosheng', [
-    P('White Halberd', 1.85, 'All in white, from Sichuan.'),
-    PA('Second Rengui', 1.1, 'Like the Tang general Xue Rengui.'),
-    P('Mercury-Seller\'s Challenge', 3.3, 'He came to take Lü Fang\'s mountain.')
+    P('White Halberd', 1.85, 'A heavy cut of the white halberd at one foe.'),
+    PA('Second Rengui', 1.1, 'Like the Tang general Xue Rengui, he sweeps across the whole enemy line.'),
+    P('Mercury-Seller\'s Challenge', 3.3, 'He issues a challenge and lands one crushing halberd-blow on one foe.')
   ]);
   sk('wangying', [
-    P('Stumpy Tiger', 1.7, 'Short and quick.'),
-    PA('Cart-Driver\'s Charge', 1.05, 'He drives straight through.'),
-    P('Low Blow', 3.2, 'Short men strike low.', { sure: true })
+    P('Stumpy Tiger', 1.7, 'A quick, heavy blow at one foe from below.'),
+    PA('Cart-Driver\'s Charge', 1.05, 'He drives straight through the whole enemy line like a runaway cart.'),
+    P('Low Blow', 3.2, 'Short men strike low: one crushing blow on one foe that cannot miss.', { sure: true })
   ]);
   sk('husanniang', [
-    P('Twin Sabres', 1.0, 'A sabre in each hand.', { hits: 2 }),
-    P('Red Lasso', 1.8, 'She hooks the enemy out of the saddle.', { status: 'sleep', statusChance: 0.5, sure: true }),
-    P('Ten Feet of Blue', 1.0, 'Unbeatable with sabres and lasso.', { hits: 4, scatter: true })
+    P('Twin Sabres', 1.0, 'Two cuts at one foe, a sabre in each hand.', { hits: 2 }),
+    P('Red Lasso', 1.8, 'Her red lasso hooks one foe out of the saddle — it never misses and may leave them stunned.', { status: 'sleep', statusChance: 0.5, sure: true }),
+    P('Ten Feet of Blue', 1.0, 'Twin sabres and lasso: four strikes at random foes.', { hits: 4, scatter: true })
   ]);
   sk('baoxu', [
-    P('Broad Sword', 1.9, 'He kills without blinking.'),
-    PA('God of Death', 1.2, 'Li Kui\'s kindred spirit.'),
-    P('Mount Kumu', 3.5, 'Death comes down the mountain.')
+    P('Broad Sword', 1.9, 'A heavy cut of the broad sword at one foe; he kills without blinking.'),
+    PA('God of Death', 1.2, 'The God of Death lays into the whole enemy line.'),
+    P('Mount Kumu', 3.5, 'Death comes down the mountain: one crushing blow on one foe.')
   ]);
   sk('fanrui', [
-    M('Black Wind', 70, 'wind', 'enemy1', 'The sorcerer of Mount Mangdang calls the wind.'),
-    ST('Sand and Stones', 'silence', 0.6, 'enemyAll', 'Flying sand blinds the enemy\'s sorcerers.'),
-    M('Demon King\'s Storm', 190, 'wind', 'enemyAll', 'Wind and rain at his command.', { screen: true })
+    M('Black Wind', 70, 'wind', 'enemy1', 'He calls up a black wind that tears at one foe.'),
+    ST('Sand and Stones', 'silence', 0.6, 'enemyAll', 'Flying sand and stones may silence every enemy, so they cannot use their skills.'),
+    M('Demon King\'s Storm', 190, 'wind', 'enemyAll', 'The Demon King\'s storm of wind and rain batters every enemy.', { screen: true })
   ]);
   sk('kongming', [
-    P('Comet Spear', 1.8, 'Song Jiang\'s pupil at White Tiger Mountain.'),
-    PA('Kong Family Charge', 1.1, 'The elder son leads.'),
-    P('Comet', 3.3, 'A bright streak across the field.')
+    P('Comet Spear', 1.8, 'A heavy spear-thrust at one foe from Song Jiang\'s pupil.'),
+    PA('Kong Family Charge', 1.1, 'The elder Kong leads a charge that strikes the whole enemy line.'),
+    P('Comet', 3.3, 'A bright streak across the field: one crushing thrust at one foe.')
   ]);
   sk('kongliang', [
-    P('Lone Fire', 1.8, 'The younger Kong brother.'),
-    PA('Set the Dog On', 1.0, 'He set his dog on Wu Song once.'),
-    P('Kong Liang\'s Sword', 3.2, 'Taught by Song Jiang himself.')
+    P('Lone Fire', 1.8, 'A heavy sword-cut at one foe.'),
+    PA('Set the Dog On', 1.0, 'He sets his dog on them: every enemy is bitten.'),
+    P('Kong Liang\'s Sword', 3.2, 'The sword Song Jiang taught him to use: one crushing blow on one foe.')
   ]);
   sk('xiangchong', [
-    P('Flying Knives', 1.6, 'From behind his round shield.', { shot: 'arrow' }),
-    PA('Twenty-Four Knives', 1.05, 'Twenty-four flying knives at once.', { shot: 'arrow' }),
-    P('Eight-Armed Nezha', 0.9, 'Knives from eight arms.', { hits: 5, scatter: true, shot: 'arrow' })
+    P('Flying Knives', 1.6, 'He hurls a flying knife at one foe from behind his round shield.', { shot: 'arrow' }),
+    PA('Twenty-Four Knives', 1.05, 'Twenty-four flying knives at once, hitting every enemy.', { shot: 'arrow' }),
+    P('Eight-Armed Nezha', 0.9, 'Like eight-armed Nezha he throws five knives at random foes.', { hits: 5, scatter: true, shot: 'arrow' })
   ]);
   sk('ligun', [
-    P('Javelin', 1.7, 'Over the rim of his shield.', { shot: 'arrow' }),
-    PA('Shield Wall', 1.05, 'Javelins from behind the shields.', { shot: 'arrow' }),
-    P('Sky-Soaring Sage', 3.3, 'A javelin from the sky.', { shot: 'arrow', sure: true })
+    P('Javelin', 1.7, 'He hurls a javelin over the rim of his shield at one foe.', { shot: 'arrow' }),
+    PA('Shield Wall', 1.05, 'Javelins fly from behind the shield wall at every enemy.', { shot: 'arrow' }),
+    P('Sky-Soaring Sage', 3.3, 'A javelin drops on one foe from the sky — a blow that cannot miss.', { shot: 'arrow', sure: true })
   ]);
   sk('malin', [
-    P('Twin Swords', 1.0, 'Two swords between bouts of the flute.', { hits: 2 }),
-    ST('Iron Flute', 'sleep', 0.5, 'enemyAll', 'The iron flute\'s song lulls the enemy.'),
-    P('Iron Flute Immortal', 1.0, 'The swords dance to his tune.', { hits: 4, scatter: true })
+    P('Twin Swords', 1.0, 'Two sword-cuts at one foe between bouts of the flute.', { hits: 2 }),
+    ST('Iron Flute', 'sleep', 0.5, 'enemyAll', 'The song of the iron flute may lull every enemy to sleep.'),
+    P('Iron Flute Immortal', 1.0, 'The swords dance to his tune: four cuts at random foes.', { hits: 4, scatter: true })
   ]);
   sk('tongwei', [
-    P('Dragon from the Cave', 1.0, 'Quick as an eel.', { hits: 2 }),
-    PA('River Ambush', 1.05, 'Out of the water, all around.'),
-    P('Smuggler\'s Knife', 3.2, 'Li Jun\'s follower strikes from below.')
+    P('Dragon from the Cave', 1.0, 'Two quick strikes at one foe, slippery as an eel.', { hits: 2 }),
+    PA('River Ambush', 1.05, 'He rises out of the water among them, striking the whole enemy line.'),
+    P('Smuggler\'s Knife', 3.2, 'The smuggler\'s knife strikes one foe from below in one crushing blow.')
   ]);
   sk('tongmeng', [
-    P('River-Churning Clam', 1.0, 'He churns the river.', { hits: 2 }),
-    PA('Overturned Boat', 1.05, 'Into the water with them.'),
-    P('Clam\'s Grip', 3.2, 'Once he holds, he does not let go.')
+    P('River-Churning Clam', 1.0, 'Two quick strikes at one foe as he churns the water.', { hits: 2 }),
+    PA('Overturned Boat', 1.05, 'He overturns the boat and throws every enemy into the water.'),
+    P('Clam\'s Grip', 3.2, 'Once the clam grips, it never lets go: one crushing blow on one foe.')
   ]);
   sk('mengkang', [
-    P('Jade Flagpole', 1.8, 'Tall as a flagpole.'),
-    PA('Flower-Rock Barge', 1.1, 'The builder of barges rams the line.'),
-    P('Flogging Repaid', 3.3, 'He killed the officer who flogged him.')
+    P('Jade Flagpole', 1.8, 'A heavy blow at one foe from the towering Jade Flagpole.'),
+    PA('Flower-Rock Barge', 1.1, 'He rams the whole enemy line like a great flower-and-rock barge.'),
+    P('Flogging Repaid', 3.3, 'As he repaid the officer who flogged him: one crushing blow on one foe.')
   ]);
   sk('chenda', [
-    P('Stream-Leaping Tiger', 1.7, 'He rode down to borrow grain.'),
-    PA('Shaohua Raid', 1.05, 'The bandits of Mount Shaohua.'),
-    P('Tiger\'s Leap', 3.2, 'Across the stream and onto the enemy.')
+    P('Stream-Leaping Tiger', 1.7, 'A heavy blow at one foe from the stream-leaping tiger.'),
+    PA('Shaohua Raid', 1.05, 'The bandits of Mount Shaohua raid the whole enemy line.'),
+    P('Tiger\'s Leap', 3.2, 'He leaps the stream onto one foe in one crushing blow.')
   ]);
   sk('yangchun', [
-    P('Long Blade', 1.7, 'Lean and quiet.'),
-    PA('White-Spotted Snake', 1.05, 'The long blade slides along the line.', { status: 'poison', statusChance: 0.3 }),
-    P('Snake\'s Strike', 3.2, 'Quiet, and then very fast.', { sure: true })
+    P('Long Blade', 1.7, 'A heavy cut of the long blade at one foe.'),
+    PA('White-Spotted Snake', 1.05, 'The long blade slides along the whole enemy line like a snake; some may be poisoned.', { status: 'poison', statusChance: 0.3 }),
+    P('Snake\'s Strike', 3.2, 'Quiet, and then very fast: one strike on one foe that cannot miss.', { sure: true })
   ]);
   sk('zhengtianshou', [
-    P('Fair-Faced Sword', 1.7, 'Pale and handsome, and deadly.'),
-    PA('Silversmith\'s Edge', 1.05, 'A silversmith\'s son knows fine edges.'),
-    P('Fair-Faced Gentleman', 3.2, 'Not as gentle as he looks.')
+    P('Fair-Faced Sword', 1.7, 'A heavy sword-cut at one foe — pale and handsome, and deadly.'),
+    PA('Silversmith\'s Edge', 1.05, 'A silversmith\'s fine edge cuts across the whole enemy line.'),
+    P('Fair-Faced Gentleman', 3.2, 'Not as gentle as he looks: one crushing blow on one foe.')
   ]);
   sk('taozongwang', [
-    P('Iron Spade', 1.8, 'A farmer\'s spade.', BL),
-    PA('Earthworks', 1.05, 'He digs the ground out from under them.', BL),
-    P('Nine-Tailed Turtle', 3.2, 'Slow, and impossible to stop.', BL)
+    P('Iron Spade', 1.8, 'A heavy blow of the farmer\'s iron spade at one foe.', BL),
+    PA('Earthworks', 1.05, 'He digs the ground out from under the whole enemy line.', BL),
+    P('Nine-Tailed Turtle', 3.2, 'Slow and impossible to stop: one crushing blow on one foe.', BL)
   ]);
   sk('gongwang', [
-    P('Flying Spear', 1.7, 'Zhang Qing\'s lieutenant hurls spears.', { shot: 'arrow' }),
-    PA('Flower-Necked Tiger', 1.05, 'Spears from the tattooed tiger.', { shot: 'arrow' }),
-    P('Dongchang Spear', 3.2, 'The spear of Dongchang.', { shot: 'arrow' })
+    P('Flying Spear', 1.7, 'He hurls a flying spear at one foe.', { shot: 'arrow' }),
+    PA('Flower-Necked Tiger', 1.05, 'Spears fly from the tattooed tiger at every enemy.', { shot: 'arrow' }),
+    P('Dongchang Spear', 3.2, 'The great Dongchang spear, hurled at one foe in one crushing blow.', { shot: 'arrow' })
   ]);
   sk('dingdesun', [
-    P('Flying Fork', 1.7, 'His face is pitted with scars; his forks fly true.', { shot: 'arrow' }),
-    PA('Arrow-Struck Tiger', 1.05, 'Forks in every direction.', { shot: 'arrow' }),
-    P('Scarred Fork', 3.2, 'He has been hit before. He hits back.', { shot: 'arrow' })
+    P('Flying Fork', 1.7, 'He throws a flying fork at one foe; it flies true.', { shot: 'arrow' }),
+    PA('Arrow-Struck Tiger', 1.05, 'Forks fly in every direction, hitting every enemy.', { shot: 'arrow' }),
+    P('Scarred Fork', 3.2, 'He has been hit before; now he hurls one crushing fork at one foe.', { shot: 'arrow' })
   ]);
   sk('muchun', [
-    P('Little Unrestrained', 1.7, 'He picked a fight in the Jieyang market.', BL),
-    PA('Market Brawl', 1.05, 'A brawl in the street.', BL),
-    P('Younger Brother\'s Staff', 3.2, 'Mu Hong\'s brother is no weakling.', BL)
+    P('Little Unrestrained', 1.7, 'A heavy blow at one foe, picking a fight as in the Jieyang market.', BL),
+    PA('Market Brawl', 1.05, 'A street brawl that sweeps up the whole enemy line.', BL),
+    P('Younger Brother\'s Staff', 3.2, 'One crushing blow of the staff on one foe — Mu Hong\'s brother is no weakling.', BL)
   ]);
   sk('caozheng', [
-    P('Butcher\'s Knife', 1.8, 'A butcher by trade.', { pierce: true }),
-    PA('Demon Carver', 1.1, 'He carves the line like a carcass.'),
-    P('Trick of Mount Erlong', 3.3, 'Lin Chong\'s apprentice won a mountain with a trick.', { sure: true })
+    P('Butcher\'s Knife', 1.8, 'The butcher\'s knife carves into one foe and cuts through armour.', { pierce: true }),
+    PA('Demon Carver', 1.1, 'He carves through the whole enemy line like a carcass.'),
+    P('Trick of Mount Erlong', 3.3, 'The trick that won Mount Erlong: one blow on one foe that cannot miss.', { sure: true })
   ]);
   sk('songwan', [
-    P('Giant in the Clouds', 1.8, 'A towering man.', BL),
-    PA('Founder\'s Charge', 1.05, 'One of the first chiefs of Liangshan.'),
-    P('Towering Blow', 3.2, 'From high above.', BL)
+    P('Giant in the Clouds', 1.8, 'A heavy blow at one foe from the towering giant.', BL),
+    PA('Founder\'s Charge', 1.05, 'One of the first chiefs of Liangshan charges the whole enemy line.'),
+    P('Towering Blow', 3.2, 'He brings a towering blow down on one foe from high above.', BL)
   ]);
   sk('duqian', [
-    P('Sky-Touching Giant', 1.8, 'He touches the sky.', BL),
-    PA('Founder\'s Sabre', 1.05, 'Who built the stronghold with Wang Lun.'),
-    P('Giant\'s Blow', 3.2, 'He falls on the enemy like a tree.', BL)
+    P('Sky-Touching Giant', 1.8, 'A heavy blow at one foe from the sky-touching giant.', BL),
+    PA('Founder\'s Sabre', 1.05, 'He sweeps the founder\'s sabre across the whole enemy line.'),
+    P('Giant\'s Blow', 3.2, 'He falls on one foe like a toppling tree in one crushing blow.', BL)
   ]);
   sk('xueyong', [
-    P('Sick Tiger Staff', 1.7, 'The street performer\'s staff.', BL),
-    H('Medicine-Seller', 90, 'allyAll', 'His plasters and pills for the brothers.'),
-    P('Street Performer', 1.0, 'The whole routine, for real this time.', o({ hits: 3 }, BL))
+    P('Sick Tiger Staff', 1.7, 'A heavy blow of the performer\'s staff at one foe.', BL),
+    H('Medicine-Seller', 90, 'allyAll', 'He hands out his plasters and pills: the whole party is healed.'),
+    P('Street Performer', 1.0, 'The whole street-performer\'s routine, for real: three staff-blows on one foe.', o({ hits: 3 }, BL))
   ]);
   sk('shien', [
-    P('Golden-Eyed Sword', 1.7, 'The warden\'s son.'),
-    BF('Happy Forest Tavern', 'atkUp', 'allyAll', 'Wine for the brothers before the fight.'),
-    P('Tiger Cub', 3.2, 'The cub has teeth.')
+    P('Golden-Eyed Sword', 1.7, 'A heavy cut of the golden-eyed sword at one foe.'),
+    BF('Happy Forest Tavern', 'atkUp', 'allyAll', 'Wine from the Happy Forest before the fight: the party\'s attack rises.'),
+    P('Tiger Cub', 3.2, 'The tiger cub has teeth: one crushing blow on one foe.')
   ]);
   sk('lizhong', [
-    P('Tiger-Slaying Staff', 1.7, 'Shi Jin\'s first teacher.', BL),
-    H('Plasters for Sale', 80, 'allyAll', 'He sells plasters on the street. They work.'),
-    P('Tiger-Slaying General', 3.2, 'The name is not only for show.', BL)
+    P('Tiger-Slaying Staff', 1.7, 'A heavy blow of the tiger-slaying staff at one foe.', BL),
+    H('Plasters for Sale', 80, 'allyAll', 'His street plasters actually work: the whole party is healed.'),
+    P('Tiger-Slaying General', 3.2, 'The name is not only for show: one crushing blow on one foe.', BL)
   ]);
   sk('zhoutong', [
-    P('Little Conqueror', 1.8, 'The bandit of Peach Blossom Mountain.'),
-    PA('Bridegroom\'s Charge', 1.05, 'He came to claim a bride.'),
-    P('Peach Blossom Spear', 3.2, 'And found Lu Zhishen in the bridal bed.')
+    P('Little Conqueror', 1.8, 'A heavy spear-thrust at one foe from the Little Conqueror.'),
+    PA('Bridegroom\'s Charge', 1.05, 'He charges the whole enemy line like a bridegroom come for his bride.'),
+    P('Peach Blossom Spear', 3.2, 'One crushing thrust of the Peach Blossom spear at one foe.')
   ]);
   sk('tanglong', [
-    P('Iron Hammer', 1.9, 'A blacksmith\'s hammer.', BL),
-    PA('Forge Fire', 1.1, 'Sparks from the anvil.', { fx: 'fire' }),
-    P('Gold-Spotted Leopard', 3.4, 'Xu Ning\'s cousin swings the hammer.', BL)
+    P('Iron Hammer', 1.9, 'A heavy blow of the blacksmith\'s iron hammer at one foe.', BL),
+    PA('Forge Fire', 1.1, 'Sparks fly from his hammer as he strikes the whole enemy line.', { fx: 'fire' }),
+    P('Gold-Spotted Leopard', 3.4, 'He swings the hammer down on one foe in one crushing blow.', BL)
   ]);
   sk('duxing', [
-    P('Demon Face', 1.7, 'A face that frightens children.', { status: 'sleep', statusChance: 0.2 }),
-    PA('Loyal Steward', 1.05, 'He fights for his master.'),
-    P('Loyal to the End', 3.2, 'He carried Li Ying home.')
+    P('Demon Face', 1.7, 'A heavy blow at one foe; his demon face may leave them frozen with fright.', { status: 'sleep', statusChance: 0.2 }),
+    PA('Loyal Steward', 1.05, 'The loyal steward fights for his master, striking the whole enemy line.'),
+    P('Loyal to the End', 3.2, 'Loyal to the end: one crushing blow on one foe.')
   ]);
   sk('zouyuan', [
-    P('Dragon from the Forest', 1.75, 'A gambler and bandit of Dengyun Mountain.'),
-    PA('Dengyun Ambush', 1.05, 'Out of the forest.'),
-    P('Uncle\'s Sabre', 3.2, 'Zou Run\'s uncle.')
+    P('Dragon from the Forest', 1.75, 'A heavy cut at one foe, straight out of the forest.'),
+    PA('Dengyun Ambush', 1.05, 'An ambush from the trees of Dengyun Mountain hits the whole enemy line.'),
+    P('Uncle\'s Sabre', 3.2, 'One crushing blow of the uncle\'s sabre on one foe.')
   ]);
   sk('zourun', [
-    P('Single Horn', 1.8, 'The lump on his head can butt a pine tree in two.', o({ status: 'sleep', statusChance: 0.35 }, BL)),
-    PA('Single-Horned Dragon', 1.1, 'He charges head first.', BL),
-    P('Pine-Splitting Butt', 3.4, 'Head first, through the enemy.', BL)
+    P('Single Horn', 1.8, 'He butts one foe with the horn on his head — they may be left stunned.', o({ status: 'sleep', statusChance: 0.35 }, BL)),
+    PA('Single-Horned Dragon', 1.1, 'He charges head-first through the whole enemy line.', BL),
+    P('Pine-Splitting Butt', 3.4, 'The head-butt that splits a pine tree, into one foe: a crushing blow.', BL)
   ]);
   sk('zhugui', [
-    P('Dry-Land Crocodile', 1.7, 'The tavern-keeper of the marsh shore.'),
-    ST('Drugged Meat', 'sleep', 0.5, 'enemyAll', 'Travellers are welcomed, robbed or recruited.'),
-    P('Whistling Arrow', 3.2, 'He signals the boats, and the boats come.', AR)
+    P('Dry-Land Crocodile', 1.7, 'A heavy blow at one foe from the crocodile of the marsh shore.'),
+    ST('Drugged Meat', 'sleep', 0.5, 'enemyAll', 'Drugged meat from his tavern may put every enemy to sleep.'),
+    P('Whistling Arrow', 3.2, 'He looses a whistling arrow into one foe — it never misses.', AR)
   ]);
   sk('zhufu', [
-    P('Smiling Tiger', 1.7, 'An easy smile, and a knife.'),
-    ST('Drugged Wine', 'sleep', 0.5, 'enemyAll', 'The wine that freed Li Kui.'),
-    P('Smile and Strike', 3.2, 'He smiles right up to the last moment.', { sure: true })
+    P('Smiling Tiger', 1.7, 'An easy smile, then a heavy knife-cut at one foe.'),
+    ST('Drugged Wine', 'sleep', 0.5, 'enemyAll', 'The drugged wine that freed Li Kui may put every enemy to sleep.'),
+    P('Smile and Strike', 3.2, 'He smiles right up to the last moment: one blow on one foe that cannot miss.', { sure: true })
   ]);
   sk('caifu', [
-    P('Iron Arm', 1.8, 'The executioner of Daming.', { pierce: true }),
-    PA('Executioner\'s Round', 1.1, 'He has a long list today.'),
-    P('Iron Arm Strikes', 3.3, 'One stroke.', { pierce: true })
+    P('Iron Arm', 1.8, 'The iron arm of the executioner cuts into one foe, straight through armour.', { pierce: true }),
+    PA('Executioner\'s Round', 1.1, 'He works through a long list today: a cut across the whole enemy line.'),
+    P('Iron Arm Strikes', 3.3, 'One clean executioner\'s stroke on one foe that cuts through armour.', { pierce: true })
   ]);
   sk('caiqing', [
-    P('Single Flower', 1.8, 'A flower over his ear, a sword in his hand.', { pierce: true }),
-    PA('Execution Ground', 1.1, 'The square is full.'),
-    P('Falling Petal', 3.3, 'Neat and final.', { pierce: true })
+    P('Single Flower', 1.8, 'A heavy sword-cut at one foe that cuts through armour.', { pierce: true }),
+    PA('Execution Ground', 1.1, 'He clears the whole execution ground with one sweep of the sword.'),
+    P('Falling Petal', 3.3, 'Neat and final: one sword-stroke on one foe that cuts through armour.', { pierce: true })
   ]);
   sk('lili', [
-    P('Life-Taking Judge', 1.7, 'The keeper of the inn on Jieling Ridge.'),
-    ST('Drugged Dumplings', 'sleep', 0.55, 'enemyAll', 'He drugged Song Jiang before learning who he was.'),
-    P('Judge\'s Verdict', 3.3, 'The judgement is death.')
+    P('Life-Taking Judge', 1.7, 'A heavy blow at one foe from the life-taking judge of Jieling Ridge.'),
+    ST('Drugged Dumplings', 'sleep', 0.55, 'enemyAll', 'His drugged dumplings may put every enemy to sleep.'),
+    P('Judge\'s Verdict', 3.3, 'The judgement is death: one crushing blow on one foe.')
   ]);
   sk('liyun', [
-    P('Green-Eyed Tiger', 1.8, 'The constable of Yishui.'),
-    PA('Constable\'s Sabre', 1.05, 'He keeps order.'),
-    P('Tricked No Longer', 3.3, 'He was tricked once.')
+    P('Green-Eyed Tiger', 1.8, 'A heavy blow at one foe from the green-eyed constable.'),
+    PA('Constable\'s Sabre', 1.05, 'The constable\'s sabre keeps order across the whole enemy line.'),
+    P('Tricked No Longer', 3.3, 'He was tricked once and never again: one crushing blow on one foe.')
   ]);
   sk('jiaoting', [
-    P('Family Wrestling', 0.9, 'A family art that has no equal.', o({ hits: 3 }, BL)),
-    P('Faceless', 2.2, 'So rude no one will have him; so strong no one can throw him.', o({ status: 'sleep', statusChance: 0.4 }, BL)),
-    PA('Unwelcome Everywhere', 1.6, 'He throws them all.', BL)
+    P('Family Wrestling', 0.9, 'Three wrestling throws in a row on one foe.', o({ hits: 3 }, BL)),
+    P('Faceless', 2.2, 'He grabs one foe and slams them down — they may be stunned.', o({ status: 'sleep', statusChance: 0.4 }, BL)),
+    PA('Unwelcome Everywhere', 1.6, 'Unwelcome everywhere, he throws every enemy to the ground.', BL)
   ]);
   sk('shiyong', [
-    P('Stone General', 1.8, 'A gambler who killed a man over a game.'),
-    PA('Gambler\'s Fury', 1.1, 'Dice and blood.'),
-    P('The False Letter', 3.3, 'He carried Song Jiang\'s father\'s letter.')
+    P('Stone General', 1.8, 'A heavy blow at one foe from the Stone General.'),
+    PA('Gambler\'s Fury', 1.1, 'A gambler\'s fury that lashes out at the whole enemy line.'),
+    P('The False Letter', 3.3, 'One crushing blow on one foe from the man who carried the false letter.')
   ]);
   sk('sunxin', [
-    P('Steel Whip', 1.0, 'He learned the whip from his brother.', o({ hits: 2 }, BL)),
-    PA('Little Yuchi', 1.05, 'Like his brother, like Yuchi Gong.', BL),
-    P('Tavern Brawl', 3.2, 'He keeps a tavern with his wife.', BL)
+    P('Steel Whip', 1.0, 'Two blows of the steel whip at one foe.', o({ hits: 2 }, BL)),
+    PA('Little Yuchi', 1.05, 'Like his brother, like Yuchi Gong, he lays into the whole enemy line.', BL),
+    P('Tavern Brawl', 3.2, 'A tavern-brawler\'s crushing blow on one foe.', BL)
   ]);
   sk('gudasao', [
-    P('Female Tiger', 1.0, 'She can thrash twenty men.', { hits: 2 }),
-    PA('Thrash Twenty Men', 1.2, 'And does.'),
-    P('Prison Break', 3.4, 'She forced Sun Li to help break the prison.')
+    P('Female Tiger', 1.0, 'Two hard blows at one foe from the woman who can thrash twenty men.', { hits: 2 }),
+    PA('Thrash Twenty Men', 1.2, 'She thrashes the whole enemy line, twenty men or more.'),
+    P('Prison Break', 3.4, 'As she forced the prison open: one crushing blow on one foe.')
   ]);
   sk('zhangqing2', [
-    P('Gardener\'s Pole', 1.7, 'Once a monastery gardener.', BL),
-    PA('Cross Slope', 1.05, 'The inn where they spare monks and singers.', BL),
-    P('Vegetable Gardener', 3.2, 'He knows how to dig.', BL)
+    P('Gardener\'s Pole', 1.7, 'A heavy blow of the gardener\'s pole at one foe.', BL),
+    PA('Cross Slope', 1.05, 'The keeper of Cross Slope inn lays into the whole enemy line.', BL),
+    P('Vegetable Gardener', 3.2, 'He knows how to dig: one crushing blow on one foe.', BL)
   ]);
   sk('sunerniang', [
-    P('Female Yaksha', 1.0, 'Knives, quick and many.', { hits: 2 }),
-    ST('Drugged Wine of Cross Slope', 'sleep', 0.6, 'enemyAll', 'Her wine was no match for Wu Song — but it is for them.'),
-    P('Yaksha\'s Knives', 0.9, 'The mistress of Cross Slope at work.', { hits: 5, scatter: true })
+    P('Female Yaksha', 1.0, 'Two quick knife-strikes at one foe.', { hits: 2, vfx: 'knife' }),
+    ST('Drugged Wine of Cross Slope', 'sleep', 0.6, 'enemyAll', 'The drugged wine of Cross Slope may put every enemy to sleep.'),
+    P('Yaksha\'s Knives', 0.9, 'The mistress of Cross Slope at work: five knife-strikes at random foes.', { hits: 5, scatter: true })
   ]);
   sk('wangdingliu', [
-    P('Living Lightning God', 0.95, 'He runs like lightning.', o({ hits: 2 }, BL)),
-    PA('Lightning Dash', 1.05, 'Past them all before they turn.', BL),
-    P('Run Like Lightning', 0.9, 'He is everywhere.', o({ hits: 4, scatter: true }, BL))
+    P('Living Lightning God', 0.95, 'Two lightning-fast strikes at one foe.', o({ hits: 2 }, BL)),
+    PA('Lightning Dash', 1.05, 'He dashes past the whole enemy line, striking each before they can turn.', BL),
+    P('Run Like Lightning', 0.9, 'He runs like lightning: four strikes at random foes.', o({ hits: 4, scatter: true }, BL))
   ]);
   sk('yubaosi', [
-    P('Flagstaff', 1.9, 'A giant carrying the banner.', BL),
-    PA('Highwayman', 1.15, 'He stole the horses for Liangshan.', BL),
-    P('God of the Dangerous Road', 3.5, 'No one passes.', BL)
+    P('Flagstaff', 1.9, 'A heavy blow of the banner-pole at one foe from the giant who carries it.', BL),
+    PA('Highwayman', 1.15, 'The highwayman lays into the whole enemy line.', BL),
+    P('God of the Dangerous Road', 3.5, 'No one passes the God of the Dangerous Road: one crushing blow on one foe.', BL)
   ]);
   sk('baisheng', [
-    P('Carrying Pole', 1.6, 'The pole he carried the wine on.', BL),
-    ST('Wine on Yellow Earth Ridge', 'sleep', 0.6, 'enemyAll', 'He sang as he carried the drugged wine up the ridge.'),
-    P('Daylight Rat', 0.85, 'An idle gambler with quick hands.', { hits: 4, scatter: true })
+    P('Carrying Pole', 1.6, 'A blow of the carrying pole he took the wine up the ridge on, at one foe.', BL),
+    ST('Wine on Yellow Earth Ridge', 'sleep', 0.6, 'enemyAll', 'The drugged wine of Yellow Earth Ridge may put every enemy to sleep.'),
+    P('Daylight Rat', 0.85, 'Quick hands of the Daylight Rat: four strikes at random foes.', { hits: 4, scatter: true })
   ]);
   sk('shiqian', [
-    P('Flea on a Drum', 1.0, 'He leaps from roof to roof.', { hits: 2 }),
-    ST('Steal', 'silence', 0.6, 'enemy1', 'He can steal anything, even a voice.'),
-    P('The Stolen Rooster', 0.9, 'He stole the Zhu family\'s rooster, and started a war.', { hits: 5, scatter: true })
+    P('Flea on a Drum', 1.0, 'Two strikes at one foe as he leaps from roof to roof.', { hits: 2 }),
+    ST('Steal', 'silence', 0.6, 'enemy1', 'He steals one foe\'s voice: they may be silenced and unable to use skills.'),
+    P('The Stolen Rooster', 0.9, 'The thief who stole the rooster darts among them: five strikes at random foes.', { hits: 5, scatter: true })
   ]);
   sk('duanjingzhu', [
-    P('Golden-Haired Hound', 1.7, 'A horse thief from Zhuozhou.'),
-    PA('Stampede', 1.05, 'He brings the horses through.'),
-    P('Jade Lion That Lights the Night', 3.2, 'He stole the finest horse in the land.', { sure: true })
+    P('Golden-Haired Hound', 1.7, 'A heavy blow at one foe from the horse thief of Zhuozhou.'),
+    PA('Stampede', 1.05, 'He drives a stampede of horses through the whole enemy line.'),
+    P('Jade Lion That Lights the Night', 3.2, 'He rides the finest horse in the land into one foe — a blow that cannot miss.', { sure: true })
   ]);
 
   // ===================== companions who fight beside the 108 =====================
   sk('wangjin', [
-    P('Instructor\'s Staff', 1.8, 'Strength without method is a door without a bolt.', BL),
-    BF('Method', 'defUp', 'allyAll', 'He shows the party how to stand.'),
-    P('Eighteen Arms', 3.6, 'Master of the eighteen arms.', o({ sure: true }, BL))
+    P('Instructor\'s Staff', 1.8, 'A heavy blow of the instructor\'s staff at one foe, strength with method.', BL),
+    BF('Method', 'defUp', 'allyAll', 'He shows the party how to stand: defence rises.'),
+    P('Eighteen Arms', 3.6, 'The master of the eighteen arms strikes one foe — a blow that cannot miss.', o({ sure: true }, BL))
   ]);
   sk('luda', [
-    P('Three Punches', 0.85, 'Nose, eye, temple: the end of the Lord of the West.', o({ hits: 3 }, BL)),
-    PA('Major\'s Temper', 1.2, 'Loud, generous, quick with his fists.', BL),
-    P('For the Jins', 3.8, 'For the singer and her father.', BL)
+    P('Three Punches', 0.85, 'Three punches at one foe — nose, eye, temple — the end of the Lord of the West.', o({ hits: 3 }, BL)),
+    PA('Major\'s Temper', 1.2, 'Loud and quick with his fists, he lays into the whole enemy line.', BL),
+    P('For the Jins', 3.8, 'For the singer and her father: one crushing blow on one foe.', BL)
   ]);
   sk('chaogai', [
-    P('Stone Pagoda', 2.0, 'He once carried a stone pagoda across the stream.', BL),
-    PA('Heavenly King', 1.15, 'The headman of East Creek leads the charge.'),
-    P('Heavenly King Who Carries the Pagoda', 3.8, 'All the weight of the pagoda in one blow.', BL)
+    P('Stone Pagoda', 2.0, 'A heavy blow at one foe from the man who carried a stone pagoda across the stream.', BL),
+    PA('Heavenly King', 1.15, 'The headman of East Creek leads a charge that strikes the whole enemy line.'),
+    P('Heavenly King Who Carries the Pagoda', 3.8, 'All the weight of the pagoda in one crushing blow on one foe.', BL)
   ]);
   sk('qiongying', [
-    P('Flying Stone', 1.8, 'Taught in a dream to throw as Zhang Qing does.', o({ sure: true }, STN)),
-    PA('Feathered Arrow', 1.0, 'Stone after stone.', STN),
-    P('Vengeance of the Maiden', 0.85, 'She avenged her parents.', o({ hits: 5, scatter: true, sure: true }, STN))
+    P('Flying Stone', 1.8, 'She throws a stone at one foe, as Zhang Qing taught her in a dream — it never misses.', o({ sure: true }, STN)),
+    PA('Feathered Arrow', 1.0, 'Stone after stone, at every enemy.', STN),
+    P('Vengeance of the Maiden', 0.85, 'For her parents: five stones at random foes, never missing.', o({ hits: 5, scatter: true, sure: true }, STN))
   ]);
   sk('hongxin', [
-    P('Ceremonial Staff', 1.4, 'The Grand Marshal is not a fighter.', BL),
-    BF('Imperial Authority', 'defUp', 'self', 'He hides behind his rank.'),
-    P('Marshal\'s Pride', 2.4, 'His pride broke the seal; perhaps it breaks this too.', BL)
+    P('Ceremonial Staff', 1.4, 'A weak blow of the ceremonial staff at one foe; the Grand Marshal is no fighter.', BL),
+    BF('Imperial Authority', 'defUp', 'self', 'He hides behind his rank: his own defence rises.'),
+    P('Marshal\'s Pride', 2.4, 'His pride broke the demons\' seal; now he brings his staff down on one foe.', BL)
   ]);
 })();

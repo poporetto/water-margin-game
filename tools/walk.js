@@ -227,10 +227,12 @@ function mkApi(ctx) {
     emote(key) { if (!findActor(key)) err('emote: no actor "' + key + '"'); return resolved; },
     jump(key) { if (!findActor(key)) err('jump: no actor "' + key + '"'); return resolved; },
     show(key) { if (!findActor(key)) err('show: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = false; },
-    beside(id) { if (WM.state.party.indexOf(id) < 0) err('beside: "' + id + '" is not in the party'); },
+    beside(id) { if (WM.state.party.indexOf(id) < 0) err('beside: "' + id + '" is not in the party'); else if (!temp[id]) temp[id] = { x: cur.x - 1, y: cur.y, who: id, dir: cur.dir, idle: true }; },   // (out beside the leader, gone again when the scene ends: the scene can turn them by name)
     splash(key) { if (!findActor(key)) err('splash: no actor "' + key + '"'); },
     hide(key) { if (!findActor(key)) err('hide: no actor "' + key + '"'); if (temp[key]) temp[key].hidden = true; if (key === 'player') cur.hidden = true; },
     refreshMap() {},
+    flames() {},
+    cloud(key) { if (!findActor(key)) err('cloud: no actor "' + key + '"'); },
     swim(key) { if (!findActor(key)) err('swim: no actor "' + key + '"'); },
     sit(key) { if (!findActor(key)) err('sit: no actor "' + key + '"'); },
     lie(key, on) { if (!findActor(key)) err('lie: no actor "' + key + '"'); if (temp[key]) temp[key].lying = on !== false; },   // the dead and the fallen say nothing

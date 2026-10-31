@@ -121,7 +121,7 @@
 
   // hall spots (interior, two lines along the carpet) and the jetty spots
   var hallSpots = [];
-  for (var x = 4; x <= 27; x += 2) { hallSpots.push([x, 5]); hallSpots.push([x, 13]); }
+  for (var x = 4; x <= 27; x += 2) { if (x < 12 || x > 18) hallSpots.push([x, 5]); hallSpots.push([x, 13]); }   // (the carpet before the chairs is the chiefs' own: no one stands on it)
   for (x = 5; x <= 26; x += 3) hallSpots.push([x, 14]);
   var jettySpots = [[18, 40], [20, 40], [22, 40], [28, 40], [30, 40], [19, 41], [29, 41], [21, 41], [27, 41]];
 
@@ -164,7 +164,12 @@
     await s.say(id, LINES[id] || '...');
     if (d.combat === false || id === WM.state.flags.protagonist) return;
     var inParty = WM.state.party.indexOf(id) >= 0;
-    if (inParty) return;
+    if (inParty) {   // (one already riding with you can be asked to stay behind)
+      if (WM.state.party.length <= 1 || id === WM.state.leader) return;
+      var q = await s.ask(id, 'Shall I stay behind at the fortress?', ['Stay behind', 'Keep riding with me']);
+      if (q === 0) { S.removeFromParty(id); WM.audio.sfx('cancel'); await s.notice(d.name + ' left the party.', { auto: 1.2 }); }
+      return;
+    }
     if (WM.state.party.length >= 6) { await s.say(id, 'Your party is full. Make room, and I\'ll come.'); return; }
     var k = await s.ask(id, 'Shall I ride out with you?', ['Join the party', 'Not now']);
     if (k === 0) { S.addToParty(id); S.restore(id); WM.audio.sfx('ok'); await s.notice(d.name + ' joined the party.', { auto: 1.2 }); }

@@ -101,7 +101,7 @@
   loc('erxian', 'Erxian Mountain', 'temple', 'erxian', 10, 22);
   loc('zhujia', 'Zhu Family Village', 'fort', 'zhujia', 4, 24);
   loc('zhuinn', 'Inn below Dulong Ridge', 'inn', 'zhuinn', 0, 14);
-  loc('yinma', 'Yinma River', 'mountain', 'yinma', 0, 12);
+  loc('yinma', 'Yinma River', 'fort', 'yinma', 0, 12);   // (Pei Xuan's stockade on the river, not a mountain)
   loc('wugang', 'Wugang Market', 'village', 'wugang', 0, 10);
   loc('lingzhou', 'Lingzhou', 'city', 'lingzhou', 1, 14);
   loc('taishan', 'Mount Tai', 'temple', 'taishan', 17, 28);
@@ -132,13 +132,17 @@
     return (a * (1 - sx) + b * sx) * (1 - sy) + (c * (1 - sx) + d * sx) * sy;
   }
   function polyline(g, pts, ch, width, wob) {
+    polyline.px = polyline.py = null;
     for (var i = 0; i < pts.length - 1; i++) {
       var a = pts[i], b = pts[i + 1];
       var n = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])) * 2;
       for (var k = 0; k <= n; k++) {
         var t = k / n, x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t;
-        var off = wob ? Math.sin((x + y) * 0.35) * wob : 0;
-        for (var dy = 0; dy < width; dy++) for (var dx = 0; dx < width; dx++) g.set(Math.round(x + dx), Math.round(y + dy + off), ch);
+        var off = wob ? Math.sin((x + y) * 0.35) * wob : 0, cx = Math.round(x), cy = Math.round(y + off);
+        for (var dy = 0; dy < width; dy++) for (var dx = 0; dx < width; dx++) g.set(cx + dx, cy + dy, ch);
+        // a step on the diagonal leaves the river touching only at a corner: fill the corner so it runs on unbroken
+        if (polyline.px != null && polyline.px !== cx && polyline.py !== cy) for (dy = 0; dy < width; dy++) for (dx = 0; dx < width; dx++) g.set(polyline.px + dx, cy + dy, ch);
+        polyline.px = cx; polyline.py = cy;
       }
     }
   }
@@ -400,6 +404,17 @@
         });
       });
     }
+    // stray water: a scrap of river or pond a few tiles across, cut off from everything (left where roads and places
+    // were drawn over a river) becomes land again. Bridges count as joining the water they cross.
+    (function () {
+      var wet = function (c) { return c === '~' || c === 'w' || c === 'r' || c === 'B'; }, seen = {};
+      for (var sy = 0; sy < H; sy++) for (var sx = 0; sx < W; sx++) {
+        if (seen[sx + ',' + sy] || !wet(g.get(sx, sy))) continue;
+        var comp = [], st = [[sx, sy]]; seen[sx + ',' + sy] = 1;
+        while (st.length) { var p = st.pop(); comp.push(p); [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) { var nx = p[0] + d[0], ny = p[1] + d[1], k = nx + ',' + ny; if (!seen[k] && wet(g.get(nx, ny))) { seen[k] = 1; st.push([nx, ny]); } }); }
+        if (comp.length < 16) comp.forEach(function (c) { g.set(c[0], c[1], g.get(c[0], c[1]) === 'B' ? ':' : '.'); });   // (a bridge left over such water is just road)
+      }
+    })();
     return g.rows();
   }
 

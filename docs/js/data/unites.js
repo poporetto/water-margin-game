@@ -20,6 +20,7 @@
   U('couple2', 'Stumpy Tiger and Ten Feet of Blue', ['wangying', 'husanniang'], 'one', 1.5, 'Husband and wife.');
   U('halberds', 'Tangled Halberds', ['lufang', 'guosheng', 'huarong'], 'one', 1.9, 'Red and white halberds lock together — Hua Rong\'s arrow parts the tassels and strikes home.');
   U('mangdang', 'Shields of Mangdang', ['fanrui', 'xiangchong', 'ligun'], 'all', 0.75, 'Flying knives and javelins from behind the shields as Fan Rui calls the wind.', { fx: 'wind', sfx: 'wind' });
+  U('beards', 'Beautiful Beards', ['zhutong', 'guansheng'], 'one', 1.7, 'Two men with Guan Yu\'s beard — Zhu Tong\'s halberd and Guan Sheng\'s Green Dragon blade come down on one foe together.');
   U('jadeqilin', 'Master and Servant', ['lujunyi', 'yanqing'], 'one', 1.8, 'Lu Junyi\'s spear and Yan Qing\'s crossbow.');
   U('divinemarch', 'Eight Hundred Li a Day', ['daizong', 'likui'], 'one', 1.6, 'Dai Zong\'s charms carry Li Kui too fast to stop.');
   U('tigers2', 'Tiger-Slayers', ['wusong', 'likui'], 'one', 1.8, 'Two men who have killed tigers with their own hands.');

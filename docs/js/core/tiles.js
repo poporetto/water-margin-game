@@ -764,6 +764,13 @@
       deity(c, x + W / 2, y, k, kind, robe, hold);
     };
   }
+  function roadsideShrineTall(c, x, y) {
+    px(c, x + 2, y + 2, 12, 13, '#7a7068'); px(c, x + 2, y + 14, 12, 2, '#4a4440');              // the stone plinth
+    px(c, x + 3, y - 14, 10, 17, '#5a1e14'); px(c, x + 4, y - 13, 8, 15, '#2a0e08');              // the niche
+    deity(c, x + 8, y + 2, 0.32, 'king', '#c8a040', 'tablet');                                     // the god within, small
+    px(c, x, y - 17, 16, 3, '#3a3a3e'); px(c, x - 1, y - 15, 18, 1, '#6a6a70'); px(c, x + 1, y - 19, 14, 2, '#4a4a50');   // its little tiled roof
+    px(c, x - 1, y - 16, 2, 1, '#6a6a70'); px(c, x + 15, y - 16, 2, 1, '#6a6a70');
+  }
   function daoAltarTall(c, x, y, tx, ty, th, m) {
     if (m.get(tx - 1, ty) === '8') return;
     var n = runOf(m, tx, ty, '8').n, W = n * S, X = x, cx = X + W / 2, t = WM.time || 0;
@@ -1208,6 +1215,7 @@
     '[': { draw: sampanTile, tall: sampanTall, solid: true, water: true },
     '>': { draw: sampanTile, solid: true, water: true },
     'I': { draw: function (c, x, y, tx, ty, th, m) { grass(c, x, y, tx, ty, th); }, tall: signTall, solid: true },
+    '¡': { draw: function (c, x, y, tx, ty, th, m) { grass(c, x, y, tx, ty, th); }, tall: roadsideShrineTall, solid: true },   // a little roadside shrine: a clay god in a roofed niche (the Great Sage of Sizhou on the Yi stream)
     '⚔': { draw: function (c, x, y, tx, ty, th, m) { propGround(c,x,y,tx,ty,m); }, solid: true },   // (draw gets the theme before the map)
     'V': { draw: tent, solid: true },
     '%': { draw:function(c,x,y,tx,ty,th,m){
@@ -1357,7 +1365,7 @@
     var e = ART && (ART[ch + '@' + map.id] || (map.interior && map.theme === 'snow' && ch === 'L' && ART['L@spring']) || ART[ch + '@' + map.theme] || ART[ch]) || null;   // (indoors a lantern has no snow on it)
     if (!e || (e.indoors && !map.interior)) return null;
     var world = map.theme === 'world' || (map.def && map.def.world);
-    return (e.building && (world || (map.interior && !e.inside))) || (e.object && world) ? null : e;
+    return (e.building && (world || (map.interior && !e.inside && !(map.def && map.def.insideWalls)))) || (e.object && world) ? null : e;   // (insideWalls: a hall whose walls are drawn with the building art, the palace of the Ninth Heaven)
   }
   function sheetOf(e) { return SHEETS[e.sheet || 'tiles']; }
   function cellList(v) { return !v ? [] : typeof v[0] === 'number' ? [v] : v; }
@@ -1675,7 +1683,7 @@
   // It is the right of a pair when the nearest lantern on its row lies to the left, with road, paving or a door between.
   function lanternFaces(map, tx, ty) {
     var road = false;
-    for (var d = 1; d <= 8; d++) {
+    for (var d = 1; d <= 12; d++) {   // (a pair either side of a broad courtyard can stand a dozen tiles apart)
       var q = map.get(tx - d, ty);
       if (q == null) return false;
       if (q === 'L') return road;

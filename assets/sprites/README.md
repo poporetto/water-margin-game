@@ -29,3 +29,9 @@ Installed on 25 October 2026 from the Lei Heng batch (the review-ready ones): `l
 Installed later on 25 October 2026, completing the Lei Heng batch (motion-v1): `shixiu`, `yangxiong`, `shiqian` (deliberately short), `husanniang`, `guansheng`.
 
 Installed on 26 October 2026: `huyanzhuo` and `zhuwu` (motion-v1, the first two of the next-20 batch). Updated to the motion-v2 tone corrections: `guansheng`, `husanniang`, `lijun`, `qinming`, `shiqian`, `shixiu`, `yangxiong`, `zhangshun`.
+
+Installed on 31 October 2026, same layout and density, from `art/<id>-classic-motion-<v>/<id>-walking.png`:
+
+- motion-v2 (the next-20 tone and proportion revisions): `dongping`, `hantao`, `haosiwen`, `huangxin`, `liying`, `muhong`, `pengqi`, `shantinggui`, `sunli`, `suochao`, `weidingguo`, `xiaorang`, `xiebao`, `xiezhen`, `xuanzan`, `xuning`, `zhangheng`, `zhangqing`.
+- motion-v1 (the Pei Xuan batch): `andaoquan`, `baoxu`, `dengfei`, `fanrui`, `guosheng`, `huangfuduan`, `jiangjing`, `jindajian`, `kongliang`, `kongming`, `ligun`, `lingzhen`, `lufang`, `malin`, `oupeng`, `peixuan`, `wangying`, `xiangchong`, `yanglin`, `yanshun`.
+- Updated to motion-v2: `huyanzhuo`, `zhuwu`. `wusong.png` stays on its mirrored-left install.

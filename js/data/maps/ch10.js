@@ -16,7 +16,7 @@
   WM.defMap('huandao', { name: 'Huandao Village', theme: 'dusk', music: 'tense', rows: h.rows(), spawn: [15, 24], battleBg: 'forest', tint: 'night',
     exits: [WM.toWorld('huandao', 14, 25, 3, 1), WM.toWorld('huandao', 0, 12, 1, 3)] });
   var hi = L.grid(14, 10, 'x'); var hR = hi.room(1, 1, 12, 9, { floor: 'N' });
-  hi.stamp(2, 3, ['L..6666..L', '...8888...', '..........', 'j........j']);
+  hi.stamp(2, 3, ['L....6...L', '..........', '....888...', 'j........j']);   // one goddess in her shrine, the altar table set out before her with room behind it
   WM.defMap('huandao_in', { name: 'Temple of the Mysterious Lady', interior: true, theme: 'dusk', music: 'tense', rows: hi.rows(), spawn: [7, 8] });
   L.link({ map: 'huandao', x: temple.x, y: temple.y }, { map: 'huandao_in', x: hR.x, y: hR.y });
 
@@ -27,7 +27,7 @@
   p.rect(10, 18, 4, 4, 'K'); p.rect(10, 3, 4, 15, 'K');
   p.set(7, 5, 'L'); p.set(16, 5, 'L'); p.set(7, 12, 'L'); p.set(16, 12, 'L');
   p.rect(9, 3, 6, 1, 'A');
-  WM.defMap('xuannu', { name: 'Palace of the Ninth Heaven', interior: true, theme: 'snow', music: 'palace', rows: p.rows(), spawn: [11, 20], battleBg: 'palace' });
+  WM.defMap('xuannu', { name: 'Palace of the Ninth Heaven', interior: true, insideWalls: true, theme: 'snow', music: 'palace', rows: p.rows(), spawn: [11, 20], battleBg: 'palace' });
 
   // ---------------- Yishui: Li Kui's village and the Yi Ridge ----------------
   var y = L.grid(40, 34, 'P');
@@ -45,7 +45,7 @@
   y.rect(15, 13, 2, 1, '.'); y.hline(16, 25, 13, ':');
   y.rect(33, 2, 5, 4, 'M'); y.set(34, 5, '_'); y.set(35, 5, '_');            // the tigers' cave
   y.scatter('m', 0.03, 391, '.'); L.clearAround(y, ':', 'Pm', '.');
-  y.rect(18, 9, 3, 4, '.'); y.set(19, 10, 'A');                             // the little shrine to the Great Sage of Sizhou on the bank
+  y.rect(18, 9, 3, 4, '.'); y.set(19, 9, '¡'); y.set(19, 10, 'A');                             // the little shrine to the Great Sage of Sizhou on the bank
   walk(function (x, yy) { [x, x + 1].forEach(function (xx) { var rock = xx >= 29 && xx <= 30 && yy >= 9 && yy <= 10; if (!rock && '.:mP'.indexOf(y.get(xx, yy)) >= 0) y.set(xx, yy, ':'); }); });   // the ridge path, two tiles wide so it stays joined on the slant
   y.hline(0, 39, 26, ':'); y.hline(0, 39, 27, ':');                        // and the village road unbroken where the path leaves it
   WM.defMap('yishui', { name: 'Yishui — the Yi Ridge', theme: 'summer', music: 'field', rows: y.rows(), spawn: [1, 26], battleBg: 'forest',

@@ -45,6 +45,16 @@
   for (var py = 4; py < 14; py++) for (var px = 35; px < 47; px++) if (g.get(px, py) === 'T') g.set(px, py, '.');   // no trees in the prison yard
   WM.defMap('gaotang', { name: 'Gaotang', theme: 'summer', music: 'town_gaotang', rows: g.rows(), spawn: [24, 37], battleBg: 'town',
     exits: [WM.toWorld('gaotang', 23, 39, 4, 1)] });
+  // ---------------- before the south gate of Gaotang: the field where Gao Lian brings out his divine soldiers ----------------
+  var go = L.grid(40, 26, '.');
+  go.rect(0, 0, 40, 3, '='); go.hline(0, 39, 3, '#'); go.rect(18, 3, 4, 1, 'G');   // the city's south wall, and its gate
+  go.rect(18, 4, 4, 22, ':');                                                     // the road out to the Liangshan camp
+  [[6, 21], [11, 22], [28, 21], [33, 22]].forEach(function (p) { go.set(p[0], p[1], 'V'); });   // Liangshan's tents on the field to the south
+  go.set(15, 18, 'Y'); go.set(24, 18, 'Y');                                       // and its banners either side of the road
+  go.scatter('T', 0.05, 497, '.', [0, 5, 40, 12]); L.clearAround(go, ':', 'T', '.');
+  WM.defMap('gaotang_out', { name: 'Before Gaotang', theme: 'summer', music: 'war', rows: go.rows(), spawn: [20, 20], battleBg: 'field',
+    exits: [WM.toWorld('gaotang', 18, 25, 4, 1)] });   // (out onto the road, where Gaotang is on the map)
+
   var gi = L.grid(52, 11, 'x');
   var gR = { chai: gi.room(1, 1, 14, 9), yamen: gi.room(16, 1, 18, 10, { floor: 'N' }), jail: gi.room(35, 1, 14, 9, { floor: 'N' }) };
   gi.stamp(2, 3, ['h..A......kk', '..........kk', '..t.........', '............']);
@@ -57,7 +67,7 @@
   // ---------------- the bottom of the dry well ----------------
   var k = L.grid(22, 16, '_');
   walk([[3, 2], [3, 7], [9, 9], [14, 6], [18, 11], [12, 13]], function (x, y) { k.rect(x - 1, y - 1, 3, 3, 'N'); });
-  k.rect(2, 1, 3, 3, 'N'); k.set(6, 8, 'm'); k.set(15, 9, 'm'); k.set(10, 11, 'g'); k.set(17, 13, 'g'); k.set(5, 5, 'g');
+  k.rect(2, 1, 3, 3, 'N'); [[6, 8], [15, 9], [10, 11], [17, 13], [5, 5], [2, 7], [12, 5], [19, 10], [8, 10], [14, 13]].forEach(function (p) { if (k.get(p[0], p[1]) === 'N') k.set(p[0], p[1], 'm'); });   // loose rocks and rubble on the well floor
   WM.defMap('gaowell', { name: 'The Dry Well', interior: true, theme: 'summer', music: 'dungeon', rows: k.rows(), spawn: [3, 2], battleBg: 'cave', tint: 'dark' });
 
   // ---------------- Erxian Mountain ----------------

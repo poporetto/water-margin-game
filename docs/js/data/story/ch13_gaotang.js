@@ -62,16 +62,19 @@
       { turn: 2, run: async function (s, api) {
         await s.say('gaolian', 'Hah!');
         await s.say(null, 'Gao Lian struck his sword on his bronze shield. A black wind rose out of the ground, full of sand and flying stones, and the Liangshan men could not see their hands before their faces.');
-        s.sfx('wind'); api.weaken('player', 0.8);
+        s.sfx('wind'); api.weaken('player', 0.8); api.confuse('player');   // (blinded by the sand, every Liangshan unit is thrown into confusion)
       } },
       { turn: 3, run: async function (s, api) {
         await s.say('songjiang', 'The Heavenly Books — "to turn back wind and fire"!');
         await s.say(null, 'Song Jiang unrolled the scroll of the Mysterious Lady and read the spell. The wind turned and blew back into the faces of the Gaotang troops.');
         s.sfx('magic'); api.weaken('enemy', 0.8);
+        Object.keys(WM.data.chars).forEach(function (id) { var u = api.unit(id); if (u) u.confused = false; });   // (the wind lifts off the Liangshan men, whoever leads them...)
+        api.confuse('enemy');   // (...and blows back into the faces of Gaotang's)
       } },
       { turn: 4, run: async function (s, api) {
         await s.say(null, 'Gao Lian beat his bronze shield again. Out of a yellow mist came tigers and leopards, wolves and serpents, and the Liangshan horses reared and bolted.');
         s.sfx('roar'); api.weaken('player', 0.85);
+        Object.keys(WM.data.chars).forEach(function (id) { var u = api.unit(id); if (u && u.side === 'player' && u.type === 'cav' && u.losses < 2) u.confused = true; });   // (only the horses bolt: the cavalry are thrown into confusion)
       } }
     ],
     win: [['songjiang:sad', 'We held — but we cannot break his magic. Fall back to the camp.']], lose: [['songjiang:sad', 'We cannot fight sorcery with spears. Retreat to the camp!']]
@@ -136,13 +139,18 @@
     { id: 'ch13_theatre', trigger: 'auto', once: true, x: 0, y: 0, cond: function () { return WM.state.chapter === 13 && WM.state.x >= 67; }, run: async function (s) {
       s.spawn('bx', 'baixiuying', 72, 3, 'down'); s.spawn('by', 'baiyuqiao', 70, 4, 'right');
       s.spawn('a1', 'villager', 68, 6, 'up'); s.spawn('a2', 'merchant', 74, 6, 'up'); s.spawn('a3', 'villager2', 71, 8, 'up');
+      s.spawn('a4', 'woman2', 76, 6, 'up'); s.spawn('a5', 'oldman', 69, 8, 'up'); s.spawn('a6', 'farmer', 74, 8, 'up'); s.spawn('a7', 'scholar', 77, 8, 'up');   // (a full house)
       s.music('inn');
       await s.walkTo('player', 72, 5); s.face('player', 'up');
       await s.say('baiyuqiao', '(striking a gong) Ladies and gentlemen! My daughter Bai Xiuying, from the Eastern Capital, sings "Shuang Jian Chases Su Qing at Yuzhang"!');
-      s.sfx('gong');
+      s.music('opera');   // she sings: about thirteen seconds of erhu, pipa and clappers
       await s.emote('bx', 'note', 1.4); await s.emote('bx', 'note', 1.4);
+      s.emote('a4', 'heart'); s.emote('a5', 'note'); s.emote('a6', '!'); s.emote('a7', 'note');
       await s.emote('a1', 'heart'); await s.emote('a2', '!'); await s.emote('a3', 'note');
+      await s.emote('bx', 'note', 1.4); await s.emote('bx', 'note', 1.4);
+      await s.wait(1.5);
       await s.say('villager', 'Bravo! Bravo!');
+      s.music('inn');
       await s.say('baiyuqiao', 'Well sung, daughter! Now — "the drum of praise is beaten, and the purse should open." Go round, my girl.');
       s.sfx('coins');
       await s.walkTo('bx', 72, 4);
@@ -162,7 +170,7 @@
       await s.say('baixiuying:angry', 'You struck my father! We\'ll see what the magistrate says about that — and he will listen to me, Constable!');
       s.despawn('bx', { leave: true });
       await s.fadeOut(0.8);
-      ['by', 'a1', 'a2', 'a3'].forEach(function (k) { s.hide(k); s.despawn(k); });
+      ['by', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7'].forEach(function (k) { s.hide(k); s.despawn(k); });
       await s.narrate('Bai Xiuying had been the new magistrate\'s lover in the capital. The magistrate had Lei Heng put in the cangue and stood in the street before the theatre, for everyone to see.');
       WM.state.chars.leiheng.equip.acc = 'cangue';
       s.flag('ch13_pillory');
@@ -339,16 +347,22 @@
   ]);
   WM.defEvents('gaotang', [
     { id: 'ch13_yin', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_uncledead'); }, run: async function (s) {
-      s.spawn('yt', 'yintianxi', 9, 35, 'up'); s.spawn('cj', 'chaijin', 7, 31, 'down');
+      // Yin Tianxi comes through the garden gate with his bullies, and Chai Jin goes down the path to meet him
+      s.spawn('cj', 'chaijin', 7, 31, 'down');
+      s.spawn('yt', 'yintianxi', 9, 37, 'up'); s.spawn('yg1', 'gambler', 8, 38, 'up'); s.spawn('yg2', 'drunk', 10, 38, 'up');
+      s.walkTo('yg1', 8, 35); s.walkTo('yg2', 10, 35); await s.walkTo('yt', 9, 34);
+      await s.walkTo('cj', 8, 32); s.faceEach('cj', 'yt'); s.face('yg1', 'up'); s.face('yg2', 'up');
       await s.say('yintianxi', 'Out of the house, the lot of you! It\'s mine now!');
       await s.say('chaijin', 'I am Chai Jin, of the house of Chai. Our family holds the iron pledge from the founding emperor!');
+      s.emote('yg1', 'note'); await s.emote('yg2', 'note');
       await s.say('yintianxi', 'Bring me a pledge and I\'ll wipe my backside on it! Beat him!');
+      s.walkTo('yg1', 8, 33, { run: true }); await s.walkTo('yg2', 10, 33, { run: true });
       await s.say('likui:angry', 'Wipe your backside on THAT!');
       await s.battle('ch13_yin', { bg: 'town', guests: ['chaijin'] });
       await s.walkTo('player', 9, 34, { run: true });
       await s.say('yintianxi:shock', 'Get away from me, you black —', { top: true });
       s.sfx('hit'); await s.shake(3, 0.2); s.sfx('hit'); await s.shake(3, 0.2); s.sfx('crit'); await s.flash(); await s.shake(5, 0.3);
-      s.lie('yt');
+      s.lie('yt'); s.move('yg1', 'D5', { run: true }); s.move('yg2', 'D5', { run: true });   // (his bullies run for it)
       await s.say('chaijin:shock', 'Li Kui! He\'s — he\'s dead! You\'ve killed the prefect\'s brother-in-law!');
       await s.say('chaijin', 'Brother, run! Back to Liangshan, now! I\'ll face the prefecture — I have the iron pledge, they cannot touch me.');
       await s.say('likui', '...All right. But if they lay a finger on you, I\'ll be back with the whole mountain!');
@@ -369,10 +383,18 @@
   WM.defEvents('liangshan_in', [
     { id: 'ch13_attack', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_jailed') && WM.state.x < 31 && WM.state.y < 17; }, run: async function (s) {
       s.spawn('zt', 'zhutong', 13, 6, 'down'); s.spawn('sj', 'songjiang', 15, 5, 'down');
+      s.spawn('lkh', 'likui', 15, 10, 'up'); s.hide('player');
       await s.say('zhutong:angry', 'The black devil! I\'ll —');
+      // he flies at Li Kui down the hall
+      await s.walkTo('zt', 15, 9, { run: true }); s.faceEach('zt', 'lkh');
+      s.sfx('hit'); await s.shake(3, 0.3); await s.jump('lkh', 4); s.emote('lkh', 'anger', 0.8); await s.emote('zt', 'anger', 0.8);
+      s.face('sj', 'down');
       await s.say('songjiang', 'Brother Zhu Tong! He killed the child on our orders, not his own. The fault is ours. Li Kui — bow to him.');
+      await s.emote('lkh', 'sweat', 1);
       await s.say('likui', '...Fine. I\'m sorry, Beard. Er, brother.');
+      await s.emote('zt', '...', 1.4);   // (Zhu Tong has nothing to say to that)
       await s.say('songjiang', 'Chai Jin saved my life once, and Lin Chong\'s, and many more of ours. We go to Gaotang.');
+      WM.data.clear(s, ['lkh']); s.show('player');
       s.despawn('zt'); s.despawn('sj', { leave: true });
       s.party(['songjiang', 'likui', 'linchong', 'huarong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
       await WM.data.warCouncil(s, {
@@ -439,18 +461,25 @@
     } }
   ]);
   WM.defEvents('erxian_in', [
+    // after Dai Zong's visit, the old mother at home and the master in his hall are there to talk to
+    { id: 'ch13_gm_stay', x: 4, y: 4, npc: 'gongsunmother', dir: 'down', cond: function (S2) { return S2.has('ch13_gsfound') && WM.state.chapter === 13; }, text: ['My son was always going to go back to his brothers. Bring him home to me alive, big fellow, and I will forgive you for the shouting.'] },
+    { id: 'ch13_luo_stay', x: 18, y: 5, npc: 'luozhenren', dir: 'down', cond: function (S2) { return S2.has('ch13_gsback') && WM.state.chapter === 13; }, text: ['Go, Black Whirlwind, and kill fewer men than you would have. ...That is all the Way asks of you today.'] },
     { id: 'ch13_mothergs', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_erxian') && WM.state.x < 10; }, run: async function (s) {
       s.flag('present:gongsunsheng');
       s.spawn('gm', 'gongsunmother', 4, 4, 'down');
+      await s.camera(5, 4, 0.6);   // the whole cottage room in view
       await s.say('gongsunmother', 'My son? He has gone travelling. He isn\'t here.');
       await s.say('daizong', '(whispering) Li Kui — she\'s lying. Frighten her a little.');
       await s.say('likui:angry', 'Gongsun Sheng! Come out, or I\'ll chop this house to pieces, and the old lady with it!');
       await s.say('gongsunmother:shock', 'Help! Help!');
       s.spawn('gs', 'gongsunsheng', 6, 6, 'up');
+      s.faceEach('gs', 'player');
       await s.say('gongsunsheng', 'Stop! Don\'t frighten my mother. ...Brother Dai Zong. I knew it would be you.');
       await s.say('daizong', 'Chai Jin is in prison in Gaotang, and Gao Lian\'s sorcery has beaten us. Only you can break it.');
       await s.say('gongsunsheng:sad', 'My mother is old, and my master will not let me go. Come with me to the temple, and ask him yourself.');
+      s.idle('gm', ['My son was always going to go back to his brothers. Bring him home to me alive, big fellow, and I will forgive you for the shouting.']);
       s.despawn('gm'); s.despawn('gs');
+      s.cameraReset();
       s.flag('ch13_gsfound');
     } },
     { id: 'ch13_luo', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_gsfound') && WM.state.x >= 10; }, run: async function (s) {
@@ -460,10 +489,13 @@
       s.despawn('gs');
       await s.fadeOut(0.8);
       s.night(true);
-      s.hide('player');
+      WM.data.clear(s, ['gs']);
+      // Dai Zong asleep on his mat in the corner of the hall; Li Kui creeps out
+      s.place('player', 13, 8, 'down'); s.lie('player');
       s.place('luo', 18, 5, 'down');
       s.spawn('lk6', 'likui', 18, 8, 'up'); s.spawn('aco', 'daoist', 21, 6, 'left');
       await s.fadeIn(0.8);
+      s.emote('player', 'zzz', 3);
       await s.say('luozhenren', '(chanting alone before the lamp) ...the Way that can be told is not the eternal Way...');
       await s.walkTo('lk6', 18, 6);
       await s.say('likui', '(No master, no "won\'t go". Sorry, old man.)');
@@ -477,17 +509,19 @@
       WM.data.clear(s, ['lk6', 'luo', 'aco']);
       await s.fadeOut(0.8);
       s.night(false);
-      s.show('player');
+      s.lie('player', false); s.place('player', 16, 8, 'up');
       s.spawn('luo', 'luozhenren', 18, 5, 'down'); s.spawn('lk6', 'likui', 18, 7, 'up');
       await s.fadeIn(0.8);
       await s.emote('lk6', '!'); await s.jump('lk6', 8);
       await s.say('likui:shock', '...You — you\'re — I chopped your head off!');
       await s.say('luozhenren', 'Did you, now? Two gourds, Black Whirlwind. You split two gourds. ...Come, stand on this handkerchief.');
       await s.walkTo('lk6', 18, 6);
-      s.sfx('wind'); await s.shake(2, 0.6);
+      s.cloud('lk6'); s.sfx('magic'); await s.shake(2, 0.6);
       await s.say('likui:shock', 'It\'s — it\'s lifting! The cloth is a cloud! Put me down! PUT ME DOWN!');
-      await s.move('lk6', 'U3', { speed: 80 });
-      s.hide('lk6'); s.despawn('lk6');
+      s.actor('lk6').solid = false;
+      for (var up = 0; up < 24; up++) { s.actor('lk6').offY -= 1; await s.wait(0.04); }   // up off the floor on the cloud
+      s.sfx('wind'); await s.flash();
+      s.cloud('lk6', false); s.hide('lk6'); s.despawn('lk6');
       await s.narrate('The cloud carried him all the way to Jizhou, and dropped him through the roof of the prefecture into the courtyard. The officials took him for a demon, poured dog\'s blood and filth over him, and threw him in prison.');
       await s.say('daizong', 'Master — I beg you. He\'s a fool, but he\'s our brother.');
       await s.say('luozhenren', 'That one is the Killing Star of Heaven, come down into the world to slay men, for the sins of men. I could not kill him if I tried. ...Very well.');
@@ -497,6 +531,7 @@
       s.spawn('gs', 'gongsunsheng', 16, 5, 'right');
       await s.say('luozhenren', 'Go and save Song Jiang\'s brothers. I give you the method of the Five Thunders of the Heart of Heaven. And remember eight words: "Meet You, and stop. Meet Bian, and return." Do not forget them.');
       await s.say('gongsunsheng', 'I will not forget, Master.');
+      s.idle('luo', ['Go, Black Whirlwind, and kill fewer men than you would have. ...That is all the Way asks of you today.']);
       s.despawn('luo'); s.despawn('gs', { leave: true }); s.despawn('lk7', { leave: true });
       s.unflag('away:gongsunsheng');
       s.unflag('present:gongsunsheng');
@@ -528,23 +563,51 @@
   WM.defEvents('gaotang', [
     { id: 'ch13_fall', trigger: 'auto', once: true, x: 0, y: 0, cond: function (S2) { return S2.has('ch13_tanglong'); }, run: async function (s) {
       s.party(['songjiang', 'gongsunsheng', 'likui', 'linchong']); s.setLeader('songjiang'); s.flag('protagonist', 'songjiang');
-      await s.narrate('Gongsun Sheng came down from Erxian Mountain with Dai Zong and Li Kui, and the army went back before Gaotang. Gao Lian, his shoulder bound up, came out again with his divine soldiers, beating his bronze sword on his shield.');
+      // the field before the south gate: the army comes up the road from its camp
+      await s.fadeOut(0.6);
+      await s.warp('gaotang_out', 20, 24, 'up', { noFade: true });
+      var arm = [['gs8', 'gongsunsheng', 19, 25], ['lk8', 'likui', 21, 25], ['dz8', 'daizong', 18, 25], ['lc8', 'linchong', 22, 25], ['lh8', 'leiheng', 20, 25]];
+      arm.forEach(function (a) { s.spawn(a[0], a[1], a[2], a[3], 'up'); });
+      var men = WM.data.troop(s, 'om8', 'outlaw', [[16, 25], [17, 25], [23, 25], [24, 25]], 'up');
+      await s.fadeIn(0.6);
+      await s.narrate('Gongsun Sheng came down from Erxian Mountain with Dai Zong and Li Kui, and the army went back before Gaotang.');
+      var goal = { gs8: [19, 12], lk8: [21, 12], dz8: [18, 13], lc8: [22, 13], lh8: [20, 13] };
+      s.walkTo('player', 20, 11);
+      arm.forEach(function (a) { s.walkTo(a[0], goal[a[0]][0], goal[a[0]][1]); });
+      [[16, 14], [17, 14], [23, 14], [24, 14]].forEach(function (p, i) { s.walkTo(men[i], p[0], p[1]); });
+      await s.wait(2.6);
+      s.face('player', 'up'); arm.forEach(function (a) { s.face(a[0], 'up'); }); men.forEach(function (k) { s.face(k, 'up'); });
+      // the gate opens, and out come the divine soldiers in yellow, with Gao Lian at their head
+      s.sfx('door'); await s.shake(2, 0.3);
+      s.spawn('gl', 'gaolian', 20, 4, 'down'); await s.walkTo('gl', 20, 7);
+      var div = WM.data.troop(s, 'dv8', 'daoist', [[18, 4], [21, 4], [19, 4], [20, 4]], 'down');
+      [[17, 6], [22, 6], [18, 7], [21, 7]].forEach(function (p, i) { s.walkTo(div[i], p[0], p[1]); });
+      await s.wait(1.2);
+      await s.narrate('Gao Lian, his shoulder bound up, came out again with his divine soldiers, beating his bronze sword on his shield.');
+      for (var bt = 0; bt < 3; bt++) { s.sfx('block'); s.jump('gl', 3); await s.wait(0.35); }
+      await s.say('gaolian:angry', 'Bandits of Liangshan! You ran once from my black wind. Today you will not run fast enough!');
+      s.faceEach('gs8', 'player');
       await s.say('gongsunsheng', 'Let him call his wind, brother. Today it will blow back in his own face.');
+      s.face('gs8', 'up');
       await s.war('ch13_gaotang2');
-      s.spawn('gl', 'gaolian', 24, 33, 'down'); s.spawn('gs8', 'gongsunsheng', 23, 36, 'up'); s.spawn('lh8', 'leiheng', 26, 36, 'up');
+      WM.data.clear(s, div.concat(men, ['lk8', 'dz8', 'lc8']));
+      s.place('gl', 20, 8, 'down'); s.place('gs8', 19, 11, 'up'); s.place('lh8', 21, 11, 'up');
       s.sfx('wind'); await s.shake(3, 0.5);
       await s.say('gaolian:angry', 'Wind! Cloud! Bear me up!');
       await s.move('gl', 'U3', { speed: 40 });
       await s.say('gongsunsheng:angry', 'Five Thunders of the Heart of Heaven — come down!');
       s.sfx('thunder'); await s.flash(); await s.shake(6, 0.5);
       await s.move('gl', 'D4', { speed: 180 });
-      s.walkTo('lh8', 25, 35, { run: true }); await s.wait(0.3);
+      s.walkTo('lh8', 20, 9, { run: true }); await s.wait(0.3);
       s.sfx('slash'); await s.flash();
       s.lie('gl');
       await s.say('leiheng', 'The sorcerer of Gaotang is dead!');
       WM.data.clear(s, ['gs8', 'lh8', 'gl']);
+      await s.fadeOut(0.6);
+      await s.warp('gaotang', 24, 37, 'up', { noFade: true });
+      await s.fadeIn(0.6);
       await s.narrate('Song Jiang entered Gaotang and forbade his men to harm the people. But Chai Jin was not in the prison. The jailer Lin Ren came forward.');
-      s.spawn('lr', 'linren', 44, 13, 'left');
+      s.spawn('lr', 'linren', 40, 15, 'down'); await s.walkTo('lr', 25, 33, { run: true }); s.faceEach('lr', 'player');   // (the jailer hurries down from the prison yard to meet him at the gate)
       await s.say('linren', 'Gao Lian ordered me to kill Lord Chai. I couldn\'t do it. I let him down into the old dry well in the yard and told the prefect he was dead. I don\'t know if he\'s still alive.');
       await s.say('likui', 'I\'ll go down. Put me in a basket and let the rope out.');
       s.despawn('lr', { leave: true });
@@ -569,8 +632,8 @@
       await s.wait(1); await s.emote('player', '...'); await s.wait(1);
       await s.say('likui:angry', '(HEY!! DON\'T FORGET ME!!)');
       await s.emote('player', 'zzz', 1.6);
-      await s.warp('gaotang', 44, 13, 'down');
-      s.spawn('sj', 'songjiang', 43, 13, 'right'); s.face('player', 'left');
+      await s.warp('gaotang', 44, 12, 'down');   // (beside the well, inside the prison yard)
+      s.spawn('sj', 'songjiang', 43, 12, 'right'); s.face('player', 'left');
       await s.say('likui:angry', 'You FORGOT me! You left me down there with the bones!');
       await s.say('songjiang', 'Brother, we were seeing to Lord Chai. Forgive us.');
       s.despawn('sj', { leave: true });

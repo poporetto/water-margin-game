@@ -138,6 +138,7 @@
     if (lv < 8) out[1] = 0;
     if (lv < 18) out[2] = 0;
     if (lv < 30) out[3] = 0;
+    if (id === 'songjiang' && !(WM.state.flags && WM.state.flags.ch10_books)) out[2] = 0;   // Thirty-Six Spirits comes from the Heavenly Books of the Mysterious Lady
     return out;
   };
 
